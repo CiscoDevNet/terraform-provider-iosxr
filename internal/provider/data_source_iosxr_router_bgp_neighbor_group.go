@@ -154,6 +154,7 @@ func (d *RouterBGPNeighborGroupDataSource) Schema(ctx context.Context, req datas
 			"password": schema.StringAttribute{
 				MarkdownDescription: "Specifies an ENCRYPTED password will follow",
 				Computed:            true,
+				Sensitive:           true,
 			},
 			"password_inheritance_disable": schema.BoolAttribute{
 				MarkdownDescription: "Prevent password from being inherited from parent",

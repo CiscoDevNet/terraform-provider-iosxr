@@ -27,6 +27,7 @@ import (
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -94,12 +95,287 @@ func (r *L2VPNResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
 				},
 			},
+			"redundancy_iccp_groups": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Group configuration").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"group_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Group configuration").AddIntegerRangeDescription(1, 4294967295).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
+							},
+						},
+						"interfaces": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Interface name").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"interface_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Interface name").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+										},
+									},
+									"primary_vlan": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Assign primary VLANs").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 800),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+										},
+									},
+									"secondary_vlan": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Assign secondary VLANs").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 800),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+										},
+									},
+									"mac_flush_stp_tcn": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("STP topology change notification").String,
+										Optional:            true,
+									},
+									"recovery_delay": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Specify delay before recovery reversion after failure clears").AddIntegerRangeDescription(30, 3600).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(30, 3600),
+										},
+									},
+								},
+							},
+						},
+						"multi_homing_node_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enter multi-homing node ID").AddIntegerRangeDescription(0, 254).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 254),
+							},
+						},
+					},
+				},
+			},
+			"flexible_xconnect_service_vlan_unaware": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure in vlan-unaware mode").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"service_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure in vlan-unaware mode").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 23),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"interfaces": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify sub-interface name to attach to flexible xconnect service").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"interface_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Specify sub-interface name to attach to flexible xconnect service").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+										},
+									},
+								},
+							},
+						},
+						"neighbor_evpn_evis": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Ethernet VPN Identifier").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"vpn_id": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Ethernet VPN Identifier").AddIntegerRangeDescription(1, 65534).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65534),
+										},
+									},
+									"remote_ac_id": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Specify remote attachment circuit identifier").AddIntegerRangeDescription(1, 16777215).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 16777215),
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"flexible_xconnect_service_vlan_aware_evis": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Ethernet VPN Identifier").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vpn_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Ethernet VPN Identifier").AddIntegerRangeDescription(1, 65534).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65534),
+							},
+						},
+						"interfaces": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify sub-interface name to attach to flexible xconnect service").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"interface_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Specify sub-interface name to attach to flexible xconnect service").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"ignore_mtu_mismatch": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Ignore MTU mismatch for all L2VPN").String,
+				Optional:            true,
+			},
+			"ignore_mtu_mismatch_ad": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Ignore MTU mismatch for auto-discovered PWs").String,
+				Optional:            true,
+			},
+			"pw_status_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable PW status").String,
+				Optional:            true,
+			},
 			"load_balancing_flow_src_dst_mac": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Use source and destination MAC addresses for hashing").String,
 				Optional:            true,
 			},
 			"load_balancing_flow_src_dst_ip": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Use source and destination IP addresses for hashing").String,
+				Optional:            true,
+			},
+			"capability_single_mode": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable global capability re-computation").String,
+				Optional:            true,
+			},
+			"capability_high_mode": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Compute global capability as the highest node capability").String,
+				Optional:            true,
+			},
+			"pw_oam_refresh_transmit": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Transmit").AddIntegerRangeDescription(1, 4095).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4095),
+				},
+			},
+			"tcn_propagation": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable topology change notification propagation").String,
+				Optional:            true,
+			},
+			"pw_grouping": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable PW-Grouping").String,
+				Optional:            true,
+			},
+			"neighbors_all_ldp_flap": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Forcing targetted-sesion flapping").String,
+				Optional:            true,
+			},
+			"mac_limit_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Global MAC limit threshold").AddIntegerRangeDescription(1, 100).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 100),
+				},
+			},
+			"logging_pseudowire": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable pseudowire logging").String,
+				Optional:            true,
+			},
+			"logging_bridge_domain": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable bridge-domain logging").String,
+				Optional:            true,
+			},
+			"logging_vfi": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable VFI logging").String,
+				Optional:            true,
+			},
+			"logging_nsr": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable Non-Stop Routing logging").String,
+				Optional:            true,
+			},
+			"logging_pwhe_replication_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("disable PWHE replication failure/success logging").String,
+				Optional:            true,
+			},
+			"autodiscovery_bgp_signaling_protocol_bgp_mtu_mismatch_ignore": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Ignore MTU mismatch for auto-discovered PWs").String,
+				Optional:            true,
+			},
+			"pw_routing_global_id": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure l2vpn pseudowire routing global id").AddIntegerRangeDescription(1, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4294967295),
+				},
+			},
+			"pw_routing_bgp_rd_two_byte_as_number": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number").AddIntegerRangeDescription(1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
+				},
+			},
+			"pw_routing_bgp_rd_two_byte_as_assigned_number": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("AS:nn (hex or decimal format)").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"pw_routing_bgp_rd_four_byte_as_number": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number").AddIntegerRangeDescription(65536, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(65536, 4294967295),
+				},
+			},
+			"pw_routing_bgp_rd_four_byte_as_assigned_number": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("AS:nn (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 65535),
+				},
+			},
+			"pw_routing_bgp_rd_ipv4_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+				},
+			},
+			"pw_routing_bgp_rd_ipv4_address_assigned_number": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IP-address:nn (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 65535),
+				},
+			},
+			"snmp_mib_interface_format_external": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set MIB interface name output format to external using slash").String,
+				Optional:            true,
+			},
+			"snmp_mib_pseudowire_statistics": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable MIB pseudowire statistics (for low scale, <16K PWs)").String,
 				Optional:            true,
 			},
 			"xconnect_groups": schema.ListNestedAttribute{

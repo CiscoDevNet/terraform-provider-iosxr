@@ -79,20 +79,6 @@ func (r *SegmentRoutingResource) Schema(ctx context.Context, req resource.Schema
 					stringvalidator.OneOf("all", "attributes"),
 				},
 			},
-			"global_block_lower_bound": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("SRGB Lower Bound").AddIntegerRangeDescription(16000, 1048574).String,
-				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(16000, 1048574),
-				},
-			},
-			"global_block_upper_bound": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("SRGB Upper Bound").AddIntegerRangeDescription(16001, 1048575).String,
-				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(16001, 1048575),
-				},
-			},
 			"local_block_lower_bound": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("SRLB Lower Bound").AddIntegerRangeDescription(15000, 1048574).String,
 				Optional:            true,
@@ -105,6 +91,20 @@ func (r *SegmentRoutingResource) Schema(ctx context.Context, req resource.Schema
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(15001, 1048575),
+				},
+			},
+			"global_block_lower_bound": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SRGB Lower Bound").AddIntegerRangeDescription(16000, 1048574).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(16000, 1048574),
+				},
+			},
+			"global_block_upper_bound": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SRGB Upper Bound").AddIntegerRangeDescription(16001, 1048575).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(16001, 1048575),
 				},
 			},
 			"enable": schema.BoolAttribute{

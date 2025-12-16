@@ -3,20 +3,21 @@ resource "iosxr_policy_map_qos" "example" {
   description     = "My description"
   classes = [
     {
-      name                          = "class-default"
-      type                          = "qos"
-      set_mpls_experimental_topmost = 0
-      set_dscp                      = "0"
-      priority_level                = 1
+      name                   = "class-default"
+      type                   = "qos"
+      police_rate_value      = "5"
+      police_rate_unit       = "gbps"
+      police_peak_rate_value = "6"
+      police_peak_rate_unit  = "gbps"
+      priority_level         = 1
       queue_limits = [
         {
           value = "100"
-          unit  = "us"
+          unit  = "ms"
         }
       ]
-      service_policy_name = "SERVICEPOLICY"
-      police_rate_value   = "5"
-      police_rate_unit    = "gbps"
+      service_policy_name           = "CHILD_POLICY"
+      set_mpls_experimental_topmost = 5
     }
   ]
 }

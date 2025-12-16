@@ -75,12 +75,220 @@ func (d *L2VPNDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 				MarkdownDescription: "Global L2VPN Router ID",
 				Computed:            true,
 			},
+			"redundancy_iccp_groups": schema.ListNestedAttribute{
+				MarkdownDescription: "Group configuration",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"group_number": schema.Int64Attribute{
+							MarkdownDescription: "Group configuration",
+							Computed:            true,
+						},
+						"interfaces": schema.ListNestedAttribute{
+							MarkdownDescription: "Interface name",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"interface_name": schema.StringAttribute{
+										MarkdownDescription: "Interface name",
+										Computed:            true,
+									},
+									"primary_vlan": schema.StringAttribute{
+										MarkdownDescription: "Assign primary VLANs",
+										Computed:            true,
+									},
+									"secondary_vlan": schema.StringAttribute{
+										MarkdownDescription: "Assign secondary VLANs",
+										Computed:            true,
+									},
+									"mac_flush_stp_tcn": schema.BoolAttribute{
+										MarkdownDescription: "STP topology change notification",
+										Computed:            true,
+									},
+									"recovery_delay": schema.Int64Attribute{
+										MarkdownDescription: "Specify delay before recovery reversion after failure clears",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"multi_homing_node_id": schema.Int64Attribute{
+							MarkdownDescription: "Enter multi-homing node ID",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"flexible_xconnect_service_vlan_unaware": schema.ListNestedAttribute{
+				MarkdownDescription: "Configure in vlan-unaware mode",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"service_name": schema.StringAttribute{
+							MarkdownDescription: "Configure in vlan-unaware mode",
+							Computed:            true,
+						},
+						"interfaces": schema.ListNestedAttribute{
+							MarkdownDescription: "Specify sub-interface name to attach to flexible xconnect service",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"interface_name": schema.StringAttribute{
+										MarkdownDescription: "Specify sub-interface name to attach to flexible xconnect service",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"neighbor_evpn_evis": schema.ListNestedAttribute{
+							MarkdownDescription: "Ethernet VPN Identifier",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"vpn_id": schema.Int64Attribute{
+										MarkdownDescription: "Ethernet VPN Identifier",
+										Computed:            true,
+									},
+									"remote_ac_id": schema.Int64Attribute{
+										MarkdownDescription: "Specify remote attachment circuit identifier",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"flexible_xconnect_service_vlan_aware_evis": schema.ListNestedAttribute{
+				MarkdownDescription: "Ethernet VPN Identifier",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vpn_id": schema.Int64Attribute{
+							MarkdownDescription: "Ethernet VPN Identifier",
+							Computed:            true,
+						},
+						"interfaces": schema.ListNestedAttribute{
+							MarkdownDescription: "Specify sub-interface name to attach to flexible xconnect service",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"interface_name": schema.StringAttribute{
+										MarkdownDescription: "Specify sub-interface name to attach to flexible xconnect service",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"ignore_mtu_mismatch": schema.BoolAttribute{
+				MarkdownDescription: "Ignore MTU mismatch for all L2VPN",
+				Computed:            true,
+			},
+			"ignore_mtu_mismatch_ad": schema.BoolAttribute{
+				MarkdownDescription: "Ignore MTU mismatch for auto-discovered PWs",
+				Computed:            true,
+			},
+			"pw_status_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable PW status",
+				Computed:            true,
+			},
 			"load_balancing_flow_src_dst_mac": schema.BoolAttribute{
 				MarkdownDescription: "Use source and destination MAC addresses for hashing",
 				Computed:            true,
 			},
 			"load_balancing_flow_src_dst_ip": schema.BoolAttribute{
 				MarkdownDescription: "Use source and destination IP addresses for hashing",
+				Computed:            true,
+			},
+			"capability_single_mode": schema.BoolAttribute{
+				MarkdownDescription: "Disable global capability re-computation",
+				Computed:            true,
+			},
+			"capability_high_mode": schema.BoolAttribute{
+				MarkdownDescription: "Compute global capability as the highest node capability",
+				Computed:            true,
+			},
+			"pw_oam_refresh_transmit": schema.Int64Attribute{
+				MarkdownDescription: "Transmit",
+				Computed:            true,
+			},
+			"tcn_propagation": schema.BoolAttribute{
+				MarkdownDescription: "Enable topology change notification propagation",
+				Computed:            true,
+			},
+			"pw_grouping": schema.BoolAttribute{
+				MarkdownDescription: "Enable PW-Grouping",
+				Computed:            true,
+			},
+			"neighbors_all_ldp_flap": schema.BoolAttribute{
+				MarkdownDescription: "Forcing targetted-sesion flapping",
+				Computed:            true,
+			},
+			"mac_limit_threshold": schema.Int64Attribute{
+				MarkdownDescription: "Global MAC limit threshold",
+				Computed:            true,
+			},
+			"logging_pseudowire": schema.BoolAttribute{
+				MarkdownDescription: "Enable pseudowire logging",
+				Computed:            true,
+			},
+			"logging_bridge_domain": schema.BoolAttribute{
+				MarkdownDescription: "Enable bridge-domain logging",
+				Computed:            true,
+			},
+			"logging_vfi": schema.BoolAttribute{
+				MarkdownDescription: "Enable VFI logging",
+				Computed:            true,
+			},
+			"logging_nsr": schema.BoolAttribute{
+				MarkdownDescription: "Enable Non-Stop Routing logging",
+				Computed:            true,
+			},
+			"logging_pwhe_replication_disable": schema.BoolAttribute{
+				MarkdownDescription: "disable PWHE replication failure/success logging",
+				Computed:            true,
+			},
+			"autodiscovery_bgp_signaling_protocol_bgp_mtu_mismatch_ignore": schema.BoolAttribute{
+				MarkdownDescription: "Ignore MTU mismatch for auto-discovered PWs",
+				Computed:            true,
+			},
+			"pw_routing_global_id": schema.Int64Attribute{
+				MarkdownDescription: "Configure l2vpn pseudowire routing global id",
+				Computed:            true,
+			},
+			"pw_routing_bgp_rd_two_byte_as_number": schema.Int64Attribute{
+				MarkdownDescription: "Two Byte AS Number",
+				Computed:            true,
+			},
+			"pw_routing_bgp_rd_two_byte_as_assigned_number": schema.Int64Attribute{
+				MarkdownDescription: "AS:nn (hex or decimal format)",
+				Computed:            true,
+			},
+			"pw_routing_bgp_rd_four_byte_as_number": schema.Int64Attribute{
+				MarkdownDescription: "Four Byte AS number",
+				Computed:            true,
+			},
+			"pw_routing_bgp_rd_four_byte_as_assigned_number": schema.Int64Attribute{
+				MarkdownDescription: "AS:nn (hex or decimal format)",
+				Computed:            true,
+			},
+			"pw_routing_bgp_rd_ipv4_address": schema.StringAttribute{
+				MarkdownDescription: "IP address",
+				Computed:            true,
+			},
+			"pw_routing_bgp_rd_ipv4_address_assigned_number": schema.Int64Attribute{
+				MarkdownDescription: "IP-address:nn (hex or decimal format)",
+				Computed:            true,
+			},
+			"snmp_mib_interface_format_external": schema.BoolAttribute{
+				MarkdownDescription: "Set MIB interface name output format to external using slash",
+				Computed:            true,
+			},
+			"snmp_mib_pseudowire_statistics": schema.BoolAttribute{
+				MarkdownDescription: "Enable MIB pseudowire statistics (for low scale, <16K PWs)",
 				Computed:            true,
 			},
 			"xconnect_groups": schema.ListNestedAttribute{

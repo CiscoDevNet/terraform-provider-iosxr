@@ -309,6 +309,7 @@ func (r *RouterBGPVRFResource) Schema(ctx context.Context, req resource.SchemaRe
 						"password": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Specifies an ENCRYPTED password will follow").String,
 							Optional:            true,
+							Sensitive:           true,
 						},
 						"password_inheritance_disable": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Prevent password from being inherited from parent").String,

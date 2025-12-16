@@ -98,11 +98,19 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					stringvalidator.LengthBetween(1, 1024),
 				},
 			},
-			"vpn_id": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("VPN ID, (OUI:VPN-Index) format(hex), 4 bytes VPN_Index Part").String,
+			"fallback_vrf": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Fallback vrf for this VRF").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`([0-9a-f]{1,8}):([0-9a-f]{1,8})`), ""),
+					stringvalidator.LengthBetween(1, 32),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"evpn_route_sync": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure the EVPN Instance VPN ID for route synchronization").AddIntegerRangeDescription(1, 65534).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65534),
 				},
 			},
 			"ipv4_unicast": schema.BoolAttribute{
@@ -123,9 +131,151 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					stringvalidator.LengthBetween(1, 255),
 				},
 			},
+			"ipv4_unicast_import_from_bridge_domain_advertise_as_vpn": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Advertise local EVPN imported routes to PEs").String,
+				Optional:            true,
+			},
+			"ipv4_unicast_import_from_vrf_advertise_as_vpn": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Advertise imported routes to PEs").String,
+				Optional:            true,
+			},
+			"ipv4_unicast_import_from_vrf_allow_backup": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow import of backup path").String,
+				Optional:            true,
+			},
+			"ipv4_unicast_import_from_vrf_allow_best_external": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow import of best-external path").String,
+				Optional:            true,
+			},
+			"ipv4_unicast_import_from_default_vrf_advertise_as_vpn": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Advertise imported routes to PEs").String,
+				Optional:            true,
+			},
+			"ipv4_unicast_import_from_default_vrf_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use route-policy for import filtering").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"ipv4_unicast_export_to_vrf_allow_imported_vpn": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow export of imported VPN routes to non-default VRF").String,
+				Optional:            true,
+			},
+			"ipv4_unicast_export_to_vrf_allow_backup": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow Export of backup path").String,
+				Optional:            true,
+			},
+			"ipv4_unicast_export_to_vrf_allow_best_external": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow Export of best-external path").String,
+				Optional:            true,
+			},
+			"ipv4_unicast_export_to_default_vrf_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use route-policy for export").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"ipv4_unicast_export_to_default_vrf_allow_imported_vpn": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Export imported VPN routes to default VRF").String,
+				Optional:            true,
+			},
+			"ipv4_unicast_max_prefix_limit": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set table's maximum prefix limit").AddIntegerRangeDescription(32, 10000000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(32, 10000000),
+				},
+			},
+			"ipv4_unicast_max_prefix_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("mid-thresh (% of max)").AddIntegerRangeDescription(1, 100).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 100),
+				},
+			},
 			"ipv4_multicast": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Multicast topology").String,
 				Optional:            true,
+			},
+			"ipv4_multicast_import_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use route-policy for import filtering").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"ipv4_multicast_export_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use route-policy for export").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"ipv4_multicast_import_from_bridge_domain_advertise_as_vpn": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Advertise local EVPN imported routes to PEs").String,
+				Optional:            true,
+			},
+			"ipv4_multicast_import_from_vrf_advertise_as_vpn": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Advertise imported routes to PEs").String,
+				Optional:            true,
+			},
+			"ipv4_multicast_import_from_vrf_allow_backup": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow import of backup path").String,
+				Optional:            true,
+			},
+			"ipv4_multicast_import_from_vrf_allow_best_external": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow import of best-external path").String,
+				Optional:            true,
+			},
+			"ipv4_multicast_import_from_default_vrf_advertise_as_vpn": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Advertise imported routes to PEs").String,
+				Optional:            true,
+			},
+			"ipv4_multicast_import_from_default_vrf_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use route-policy for import filtering").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"ipv4_multicast_export_to_vrf_allow_imported_vpn": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow export of imported VPN routes to non-default VRF").String,
+				Optional:            true,
+			},
+			"ipv4_multicast_export_to_vrf_allow_backup": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow Export of backup path").String,
+				Optional:            true,
+			},
+			"ipv4_multicast_export_to_vrf_allow_best_external": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow Export of best-external path").String,
+				Optional:            true,
+			},
+			"ipv4_multicast_export_to_default_vrf_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use route-policy for export").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"ipv4_multicast_export_to_default_vrf_allow_imported_vpn": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Export imported VPN routes to default VRF").String,
+				Optional:            true,
+			},
+			"ipv4_multicast_max_prefix_limit": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set table's maximum prefix limit").AddIntegerRangeDescription(32, 10000000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(32, 10000000),
+				},
+			},
+			"ipv4_multicast_max_prefix_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("mid-thresh (% of max)").AddIntegerRangeDescription(1, 100).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 100),
+				},
 			},
 			"ipv4_flowspec": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Flowspec sub address family").String,
@@ -149,9 +299,151 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					stringvalidator.LengthBetween(1, 255),
 				},
 			},
+			"ipv6_unicast_import_from_bridge_domain_advertise_as_vpn": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Advertise local EVPN imported routes to PEs").String,
+				Optional:            true,
+			},
+			"ipv6_unicast_import_from_vrf_advertise_as_vpn": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Advertise imported routes to PEs").String,
+				Optional:            true,
+			},
+			"ipv6_unicast_import_from_vrf_allow_backup": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow import of backup path").String,
+				Optional:            true,
+			},
+			"ipv6_unicast_import_from_vrf_allow_best_external": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow import of best-external path").String,
+				Optional:            true,
+			},
+			"ipv6_unicast_import_from_default_vrf_advertise_as_vpn": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Advertise imported routes to PEs").String,
+				Optional:            true,
+			},
+			"ipv6_unicast_import_from_default_vrf_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use route-policy for import filtering").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"ipv6_unicast_export_to_vrf_allow_imported_vpn": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow export of imported VPN routes to non-default VRF").String,
+				Optional:            true,
+			},
+			"ipv6_unicast_export_to_vrf_allow_backup": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow Export of backup path").String,
+				Optional:            true,
+			},
+			"ipv6_unicast_export_to_vrf_allow_best_external": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow Export of best-external path").String,
+				Optional:            true,
+			},
+			"ipv6_unicast_export_to_default_vrf_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use route-policy for export").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"ipv6_unicast_export_to_default_vrf_allow_imported_vpn": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Export imported VPN routes to default VRF").String,
+				Optional:            true,
+			},
+			"ipv6_unicast_max_prefix_limit": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set table's maximum prefix limit").AddIntegerRangeDescription(32, 10000000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(32, 10000000),
+				},
+			},
+			"ipv6_unicast_max_prefix_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("mid-thresh (% of max)").AddIntegerRangeDescription(1, 100).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 100),
+				},
+			},
 			"ipv6_multicast": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Multicast topology").String,
 				Optional:            true,
+			},
+			"ipv6_multicast_import_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use route-policy for import filtering").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"ipv6_multicast_export_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use route-policy for export").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"ipv6_multicast_import_from_bridge_domain_advertise_as_vpn": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Advertise local EVPN imported routes to PEs").String,
+				Optional:            true,
+			},
+			"ipv6_multicast_import_from_vrf_advertise_as_vpn": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Advertise imported routes to PEs").String,
+				Optional:            true,
+			},
+			"ipv6_multicast_import_from_vrf_allow_backup": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow import of backup path").String,
+				Optional:            true,
+			},
+			"ipv6_multicast_import_from_vrf_allow_best_external": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow import of best-external path").String,
+				Optional:            true,
+			},
+			"ipv6_multicast_import_from_default_vrf_advertise_as_vpn": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Advertise imported routes to PEs").String,
+				Optional:            true,
+			},
+			"ipv6_multicast_import_from_default_vrf_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use route-policy for import filtering").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"ipv6_multicast_export_to_vrf_allow_imported_vpn": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow export of imported VPN routes to non-default VRF").String,
+				Optional:            true,
+			},
+			"ipv6_multicast_export_to_vrf_allow_backup": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow Export of backup path").String,
+				Optional:            true,
+			},
+			"ipv6_multicast_export_to_vrf_allow_best_external": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow Export of best-external path").String,
+				Optional:            true,
+			},
+			"ipv6_multicast_export_to_default_vrf_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use route-policy for export").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"ipv6_multicast_export_to_default_vrf_allow_imported_vpn": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Export imported VPN routes to default VRF").String,
+				Optional:            true,
+			},
+			"ipv6_multicast_max_prefix_limit": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set table's maximum prefix limit").AddIntegerRangeDescription(32, 10000000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(32, 10000000),
+				},
+			},
+			"ipv6_multicast_max_prefix_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("mid-thresh (% of max)").AddIntegerRangeDescription(1, 100).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 100),
+				},
 			},
 			"ipv6_flowspec": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Flowspec sub address family").String,
@@ -545,6 +837,369 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 						},
 					},
 				},
+			},
+			"ipv4_multicast_import_route_target_two_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("2-byte AS number").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"two_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("2-byte AS number").AddIntegerRangeDescription(1, 65535).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
+							},
+						},
+						"asn2_index": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 4294967295).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 4294967295),
+							},
+						},
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").AddStringEnumDescription("disable", "enable").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
+						},
+					},
+				},
+			},
+			"ipv4_multicast_import_route_target_four_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("4-byte AS number").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"four_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("4-byte AS number").AddIntegerRangeDescription(65536, 4294967295).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(65536, 4294967295),
+							},
+						},
+						"asn4_index": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ASN4:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").AddStringEnumDescription("disable", "enable").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
+						},
+					},
+				},
+			},
+			"ipv4_multicast_import_route_target_ip_address_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ipv4 address route target").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"ipv4_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4 address").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+						"ipv4_address_index": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4Address:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").AddStringEnumDescription("disable", "enable").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
+						},
+					},
+				},
+			},
+			"ipv4_multicast_export_route_target_two_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("2-byte AS number").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"two_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("2-byte AS number").AddIntegerRangeDescription(1, 65535).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
+							},
+						},
+						"asn2_index": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 4294967295).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 4294967295),
+							},
+						},
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").AddStringEnumDescription("disable", "enable").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
+						},
+					},
+				},
+			},
+			"ipv4_multicast_export_route_target_four_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("4-byte AS number").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"four_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("4-byte AS number").AddIntegerRangeDescription(65536, 4294967295).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(65536, 4294967295),
+							},
+						},
+						"asn4_index": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ASN4:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").AddStringEnumDescription("disable", "enable").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
+						},
+					},
+				},
+			},
+			"ipv4_multicast_export_route_target_ip_address_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ipv4 address route target").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"ipv4_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4 address").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+						"ipv4_address_index": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4Address:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").AddStringEnumDescription("disable", "enable").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
+						},
+					},
+				},
+			},
+			"ipv6_multicast_import_route_target_two_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("2-byte AS number").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"two_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("2-byte AS number").AddIntegerRangeDescription(1, 65535).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
+							},
+						},
+						"asn2_index": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 4294967295).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 4294967295),
+							},
+						},
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").AddStringEnumDescription("disable", "enable").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
+						},
+					},
+				},
+			},
+			"ipv6_multicast_import_route_target_four_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("4-byte AS number").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"four_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("4-byte AS number").AddIntegerRangeDescription(65536, 4294967295).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(65536, 4294967295),
+							},
+						},
+						"asn4_index": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ASN4:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").AddStringEnumDescription("disable", "enable").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
+						},
+					},
+				},
+			},
+			"ipv6_multicast_import_route_target_ip_address_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ipv4 address route target").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"ipv4_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4 address").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+						"ipv4_address_index": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4Address:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").AddStringEnumDescription("disable", "enable").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
+						},
+					},
+				},
+			},
+			"ipv6_multicast_export_route_target_two_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("2-byte AS number").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"two_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("2-byte AS number").AddIntegerRangeDescription(1, 65535).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
+							},
+						},
+						"asn2_index": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 4294967295).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 4294967295),
+							},
+						},
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").AddStringEnumDescription("disable", "enable").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
+						},
+					},
+				},
+			},
+			"ipv6_multicast_export_route_target_four_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("4-byte AS number").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"four_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("4-byte AS number").AddIntegerRangeDescription(65536, 4294967295).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(65536, 4294967295),
+							},
+						},
+						"asn4_index": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ASN4:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").AddStringEnumDescription("disable", "enable").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
+						},
+					},
+				},
+			},
+			"ipv6_multicast_export_route_target_ip_address_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ipv4 address route target").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"ipv4_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4 address").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+						"ipv4_address_index": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4Address:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").AddStringEnumDescription("disable", "enable").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
+						},
+					},
+				},
+			},
+			"vpn_id": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("VPN ID, (OUI:VPN-Index) format(hex), 4 bytes VPN_Index Part").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`([0-9a-f]{1,8}):([0-9a-f]{1,8})`), ""),
+				},
+			},
+			"remote_route_filtering_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable remote route filtering per VRF").String,
+				Optional:            true,
 			},
 		},
 	}

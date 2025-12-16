@@ -1,0 +1,1 @@
+terraform import iosxr_performance_measurement_delay_profile.example ""

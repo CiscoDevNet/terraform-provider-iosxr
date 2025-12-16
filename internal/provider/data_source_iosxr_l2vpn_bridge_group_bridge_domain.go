@@ -75,6 +75,14 @@ func (d *L2VPNBridgeGroupBridgeDomainDataSource) Schema(ctx context.Context, req
 				MarkdownDescription: "Configure bridge domain",
 				Required:            true,
 			},
+			"mtu": schema.Int64Attribute{
+				MarkdownDescription: "Maximum transmission unit (payload) for this Bridge Domain",
+				Computed:            true,
+			},
+			"description": schema.StringAttribute{
+				MarkdownDescription: "Description for Bridge-Domain",
+				Computed:            true,
+			},
 			"evis": schema.ListNestedAttribute{
 				MarkdownDescription: "Ethernet VPN identifier",
 				Computed:            true,
@@ -82,6 +90,18 @@ func (d *L2VPNBridgeGroupBridgeDomainDataSource) Schema(ctx context.Context, req
 					Attributes: map[string]schema.Attribute{
 						"vpn_id": schema.Int64Attribute{
 							MarkdownDescription: "Ethernet VPN identifier",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"srv6_evis": schema.ListNestedAttribute{
+				MarkdownDescription: "Ethernet VPN identifier for srv6",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vpn_id": schema.Int64Attribute{
+							MarkdownDescription: "Ethernet VPN identifier for srv6",
 							Computed:            true,
 						},
 					},
@@ -99,8 +119,56 @@ func (d *L2VPNBridgeGroupBridgeDomainDataSource) Schema(ctx context.Context, req
 					},
 				},
 			},
-			"mtu": schema.Int64Attribute{
-				MarkdownDescription: "Maximum transmission unit (payload) for this Bridge Domain",
+			"coupled_mode": schema.BoolAttribute{
+				MarkdownDescription: "Enable coupled mode for the Bridge Domain",
+				Computed:            true,
+			},
+			"transport_mode_vlan_passthrough": schema.BoolAttribute{
+				MarkdownDescription: "passthrough incoming tags",
+				Computed:            true,
+			},
+			"flooding_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable flooding",
+				Computed:            true,
+			},
+			"dynamic_arp_inspection": schema.BoolAttribute{
+				MarkdownDescription: "Dynamic ARP Inspection",
+				Computed:            true,
+			},
+			"dynamic_arp_inspection_logging": schema.BoolAttribute{
+				MarkdownDescription: "Enable Logging",
+				Computed:            true,
+			},
+			"dynamic_arp_inspection_address_validation_src_mac": schema.BoolAttribute{
+				MarkdownDescription: "Match Source MAC Address",
+				Computed:            true,
+			},
+			"dynamic_arp_inspection_address_validation_dst_mac": schema.BoolAttribute{
+				MarkdownDescription: "Match Destination MAC Address",
+				Computed:            true,
+			},
+			"dynamic_arp_inspection_address_validation_ipv4": schema.BoolAttribute{
+				MarkdownDescription: "Match IPv4 Address",
+				Computed:            true,
+			},
+			"ip_source_guard": schema.BoolAttribute{
+				MarkdownDescription: "IP Source Guard",
+				Computed:            true,
+			},
+			"ip_source_guard_logging": schema.BoolAttribute{
+				MarkdownDescription: "Enable Logging",
+				Computed:            true,
+			},
+			"igmp_snooping_profile": schema.StringAttribute{
+				MarkdownDescription: "Attach an IGMP profile",
+				Computed:            true,
+			},
+			"igmp_snooping_disable": schema.BoolAttribute{
+				MarkdownDescription: "disable IGMP snooping for the current bridge domain",
+				Computed:            true,
+			},
+			"mld_snooping_profile": schema.StringAttribute{
+				MarkdownDescription: "Attach a MLD profile",
 				Computed:            true,
 			},
 			"storm_control_broadcast_pps": schema.Int64Attribute{
@@ -127,6 +195,18 @@ func (d *L2VPNBridgeGroupBridgeDomainDataSource) Schema(ctx context.Context, req
 				MarkdownDescription: "Set the storm control kbps",
 				Computed:            true,
 			},
+			"multicast_source_ipv4": schema.BoolAttribute{
+				MarkdownDescription: "Traffic Type IPv4",
+				Computed:            true,
+			},
+			"multicast_source_ipv6": schema.BoolAttribute{
+				MarkdownDescription: "Traffic Type IPv6",
+				Computed:            true,
+			},
+			"multicast_source_ipv4_ipv6": schema.BoolAttribute{
+				MarkdownDescription: "Traffic Type IPv4 and IPv6",
+				Computed:            true,
+			},
 			"interfaces": schema.ListNestedAttribute{
 				MarkdownDescription: "Specify interface name",
 				Computed:            true,
@@ -136,21 +216,385 @@ func (d *L2VPNBridgeGroupBridgeDomainDataSource) Schema(ctx context.Context, req
 							MarkdownDescription: "Specify interface name",
 							Computed:            true,
 						},
+						"dynamic_arp_inspection_logging": schema.BoolAttribute{
+							MarkdownDescription: "Enable Logging",
+							Computed:            true,
+						},
+						"dynamic_arp_inspection_logging_disable": schema.BoolAttribute{
+							MarkdownDescription: "disable logging",
+							Computed:            true,
+						},
+						"dynamic_arp_inspection_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable Dynamic Arp Inspection",
+							Computed:            true,
+						},
+						"dynamic_arp_inspection_address_validation_src_mac": schema.BoolAttribute{
+							MarkdownDescription: "Match Source MAC Address",
+							Computed:            true,
+						},
+						"dynamic_arp_inspection_address_validation_src_mac_disable": schema.BoolAttribute{
+							MarkdownDescription: "disable Source MAC Address check",
+							Computed:            true,
+						},
+						"dynamic_arp_inspection_address_validation_dst_mac": schema.BoolAttribute{
+							MarkdownDescription: "Match Destination MAC Address",
+							Computed:            true,
+						},
+						"dynamic_arp_inspection_address_validation_dst_mac_disable": schema.BoolAttribute{
+							MarkdownDescription: "disable Destimation MAC Address check",
+							Computed:            true,
+						},
+						"dynamic_arp_inspection_address_validation_ipv4": schema.BoolAttribute{
+							MarkdownDescription: "Match IPv4 Address",
+							Computed:            true,
+						},
+						"dynamic_arp_inspection_address_validation_ipv4_disable": schema.BoolAttribute{
+							MarkdownDescription: "disable IPV4 Address check",
+							Computed:            true,
+						},
+						"flooding_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable flooding",
+							Computed:            true,
+						},
+						"igmp_snooping_profile": schema.StringAttribute{
+							MarkdownDescription: "Attach an IGMP profile",
+							Computed:            true,
+						},
+						"ip_source_guard": schema.BoolAttribute{
+							MarkdownDescription: "IP Source Guard",
+							Computed:            true,
+						},
+						"ip_source_guard_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable IP Source Guard",
+							Computed:            true,
+						},
+						"ip_source_guard_logging": schema.BoolAttribute{
+							MarkdownDescription: "Enable Logging",
+							Computed:            true,
+						},
+						"ip_source_guard_logging_disable": schema.BoolAttribute{
+							MarkdownDescription: "disable logging",
+							Computed:            true,
+						},
+						"mac_aging_time": schema.Int64Attribute{
+							MarkdownDescription: "Mac aging",
+							Computed:            true,
+						},
+						"mac_aging_type_absolute": schema.BoolAttribute{
+							MarkdownDescription: "Absolute aging type",
+							Computed:            true,
+						},
+						"mac_aging_type_inactivity": schema.BoolAttribute{
+							MarkdownDescription: "Inactivity aging type",
+							Computed:            true,
+						},
+						"mac_learning": schema.BoolAttribute{
+							MarkdownDescription: "MAC learning",
+							Computed:            true,
+						},
+						"mac_learning_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable MAC learning",
+							Computed:            true,
+						},
+						"mac_limit_maximum": schema.Int64Attribute{
+							MarkdownDescription: "Number of MAC addresses after which MAC limit action is taken",
+							Computed:            true,
+						},
+						"mac_limit_action_flood": schema.BoolAttribute{
+							MarkdownDescription: "Stop learning but continue flooding",
+							Computed:            true,
+						},
+						"mac_limit_action_no_flood": schema.BoolAttribute{
+							MarkdownDescription: "Stop learning and stop flooding",
+							Computed:            true,
+						},
+						"mac_limit_action_shutdown": schema.BoolAttribute{
+							MarkdownDescription: "Stop forwarding",
+							Computed:            true,
+						},
+						"mac_limit_action_none": schema.BoolAttribute{
+							MarkdownDescription: "No action",
+							Computed:            true,
+						},
+						"mac_limit_notification_trap": schema.BoolAttribute{
+							MarkdownDescription: "Generate SNMP trap",
+							Computed:            true,
+						},
+						"mac_limit_notification_both": schema.BoolAttribute{
+							MarkdownDescription: "Generate syslog message and SNMP trap",
+							Computed:            true,
+						},
+						"mac_limit_notification_none": schema.BoolAttribute{
+							MarkdownDescription: "No notification",
+							Computed:            true,
+						},
+						"mac_limit_notification_syslog": schema.BoolAttribute{
+							MarkdownDescription: "Generate syslog message",
+							Computed:            true,
+						},
+						"mac_port_down_flush_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable MAC flush when port goes down",
+							Computed:            true,
+						},
+						"mac_secure": schema.BoolAttribute{
+							MarkdownDescription: "MAC Secure configuration commands",
+							Computed:            true,
+						},
+						"mac_secure_logging": schema.BoolAttribute{
+							MarkdownDescription: "Enable Logging",
+							Computed:            true,
+						},
+						"mac_secure_logging_disable": schema.BoolAttribute{
+							MarkdownDescription: "disable logging",
+							Computed:            true,
+						},
+						"mac_secure_action_none": schema.BoolAttribute{
+							MarkdownDescription: "Forward the violating packet and allow the MAC to be relearned",
+							Computed:            true,
+						},
+						"mac_secure_action_shutdown": schema.BoolAttribute{
+							MarkdownDescription: "Shutdown the violating bridge port",
+							Computed:            true,
+						},
+						"mac_secure_action_restrict": schema.BoolAttribute{
+							MarkdownDescription: "Drop the violating packet and not allow the MAC to be relearned",
+							Computed:            true,
+						},
+						"mac_secure_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable MAC Secure",
+							Computed:            true,
+						},
+						"mac_secure_shutdown_recovery_timeout": schema.Int64Attribute{
+							MarkdownDescription: "Recovery timer in second",
+							Computed:            true,
+						},
+						"mac_secure_shutdown_recovery_timeout_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable shutdown recovery timer",
+							Computed:            true,
+						},
+						"mld_snooping_profile": schema.StringAttribute{
+							MarkdownDescription: "Attach a MLD profile",
+							Computed:            true,
+						},
+						"storm_control_broadcast_pps": schema.Int64Attribute{
+							MarkdownDescription: "Set the storm control pps",
+							Computed:            true,
+						},
+						"storm_control_broadcast_kbps": schema.Int64Attribute{
+							MarkdownDescription: "Set the storm control kbps",
+							Computed:            true,
+						},
+						"storm_control_multicast_pps": schema.Int64Attribute{
+							MarkdownDescription: "Set the storm control pps",
+							Computed:            true,
+						},
+						"storm_control_multicast_kbps": schema.Int64Attribute{
+							MarkdownDescription: "Set the storm control kbps",
+							Computed:            true,
+						},
+						"storm_control_unknown_unicast_pps": schema.Int64Attribute{
+							MarkdownDescription: "Set the storm control pps",
+							Computed:            true,
+						},
+						"storm_control_unknown_unicast_kbps": schema.Int64Attribute{
+							MarkdownDescription: "Set the storm control kbps",
+							Computed:            true,
+						},
 						"split_horizon_group": schema.BoolAttribute{
 							MarkdownDescription: "Configure split-horizon group",
+							Computed:            true,
+						},
+						"static_mac_addresses": schema.ListNestedAttribute{
+							MarkdownDescription: "Static MAC address",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"mac_address": schema.StringAttribute{
+										MarkdownDescription: "Static MAC address",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"routed_interface": schema.ListNestedAttribute{
+				MarkdownDescription: "Assign interface to bridge domain",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: "Assign interface to bridge domain",
+							Computed:            true,
+						},
+						"split_horizon_group_core": schema.BoolAttribute{
+							MarkdownDescription: "Configure BVI under SHG 1",
 							Computed:            true,
 						},
 					},
 				},
 			},
-			"srv6_evis": schema.ListNestedAttribute{
-				MarkdownDescription: "Ethernet VPN identifier for srv6",
+			"shutdown": schema.BoolAttribute{
+				MarkdownDescription: "shutdown the Bridge Domain",
+				Computed:            true,
+			},
+			"mac_aging_time": schema.Int64Attribute{
+				MarkdownDescription: "Mac aging",
+				Computed:            true,
+			},
+			"mac_aging_type_absolute": schema.BoolAttribute{
+				MarkdownDescription: "Absolute aging type",
+				Computed:            true,
+			},
+			"mac_static_addresses": schema.ListNestedAttribute{
+				MarkdownDescription: "Static MAC address for filtering",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"mac_address": schema.StringAttribute{
+							MarkdownDescription: "Static MAC address for filtering",
+							Computed:            true,
+						},
+						"drop": schema.BoolAttribute{
+							MarkdownDescription: "Drop matching packets",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"mac_learning_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable MAC learning",
+				Computed:            true,
+			},
+			"mac_withdraw_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable MAC withdraw",
+				Computed:            true,
+			},
+			"mac_withdraw_access_pw_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable MAC withdraw on Access PW",
+				Computed:            true,
+			},
+			"mac_withdraw_relay": schema.BoolAttribute{
+				MarkdownDescription: "MAC withdraw relayed to Access PWs ",
+				Computed:            true,
+			},
+			"mac_withdraw_state_down": schema.BoolAttribute{
+				MarkdownDescription: "MAC withdraw sent on bridge port down",
+				Computed:            true,
+			},
+			"mac_withdraw_optimize": schema.BoolAttribute{
+				MarkdownDescription: "Optimized LDP MAC withdraw (when port goes down)",
+				Computed:            true,
+			},
+			"mac_limit_maximum": schema.Int64Attribute{
+				MarkdownDescription: "Number of MAC addresses after which MAC limit action is taken",
+				Computed:            true,
+			},
+			"mac_limit_action_flood": schema.BoolAttribute{
+				MarkdownDescription: "Stop learning but continue flooding",
+				Computed:            true,
+			},
+			"mac_limit_action_no_flood": schema.BoolAttribute{
+				MarkdownDescription: "Stop learning and stop flooding",
+				Computed:            true,
+			},
+			"mac_limit_action_shutdown": schema.BoolAttribute{
+				MarkdownDescription: "Stop forwarding",
+				Computed:            true,
+			},
+			"mac_limit_notification_trap": schema.BoolAttribute{
+				MarkdownDescription: "Generate SNMP trap",
+				Computed:            true,
+			},
+			"mac_limit_notification_both": schema.BoolAttribute{
+				MarkdownDescription: "Generate syslog message and SNMP trap",
+				Computed:            true,
+			},
+			"mac_limit_notification_none": schema.BoolAttribute{
+				MarkdownDescription: "No notification",
+				Computed:            true,
+			},
+			"mac_port_down_flush_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable MAC flush when port goes down",
+				Computed:            true,
+			},
+			"mac_secure": schema.BoolAttribute{
+				MarkdownDescription: "MAC Secure configuration commands",
+				Computed:            true,
+			},
+			"mac_secure_logging": schema.BoolAttribute{
+				MarkdownDescription: "Enable Logging",
+				Computed:            true,
+			},
+			"mac_secure_threshold": schema.BoolAttribute{
+				MarkdownDescription: "Threshold based mac secure",
+				Computed:            true,
+			},
+			"mac_secure_action_none": schema.BoolAttribute{
+				MarkdownDescription: "Forward the violating packet and allow the MAC to be relearned",
+				Computed:            true,
+			},
+			"mac_secure_action_shutdown": schema.BoolAttribute{
+				MarkdownDescription: "Shutdown the violating bridge port",
+				Computed:            true,
+			},
+			"mac_secure_shutdown_recovery_timeout": schema.Int64Attribute{
+				MarkdownDescription: "Recovery-timer to automatically revert shutdown action",
+				Computed:            true,
+			},
+			"neighbors_evpn_evi": schema.ListNestedAttribute{
+				MarkdownDescription: "Ethernet VPN Identifier",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"vpn_id": schema.Int64Attribute{
-							MarkdownDescription: "Ethernet VPN identifier for srv6",
+							MarkdownDescription: "Configure EVPN Instance VPN ID",
 							Computed:            true,
+						},
+						"target": schema.Int64Attribute{
+							MarkdownDescription: "Specify remote attachment circuit identifier",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"efp_visibility": schema.BoolAttribute{
+				MarkdownDescription: "Enable multicast for multiple VLANs in the bridge of a BVI",
+				Computed:            true,
+			},
+			"etree": schema.BoolAttribute{
+				MarkdownDescription: "Configure Bridge Domain  EVPN E-Tree",
+				Computed:            true,
+			},
+			"etree_leaf": schema.BoolAttribute{
+				MarkdownDescription: "Designate Bridge Domain as EVPN E-Tree Leaf",
+				Computed:            true,
+			},
+			"member_vnis_vni": schema.ListNestedAttribute{
+				MarkdownDescription: "Assign VxLAN Network Identifier to bridge domain",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vni_id": schema.Int64Attribute{
+							MarkdownDescription: "Assign VxLAN Network Identifier to bridge domain",
+							Computed:            true,
+						},
+						"static_mac_addresses": schema.ListNestedAttribute{
+							MarkdownDescription: "Static MAC address",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"mac_address": schema.StringAttribute{
+										MarkdownDescription: "Static MAC address",
+										Computed:            true,
+									},
+									"next_hop": schema.StringAttribute{
+										MarkdownDescription: "Specify the next hop IP address",
+										Computed:            true,
+									},
+								},
+							},
 						},
 					},
 				},

@@ -100,6 +100,7 @@ func testAccIosxrRouterHSRPInterfaceConfig_minimum() string {
 
 func testAccIosxrRouterHSRPInterfaceConfig_all() string {
 	config := `resource "iosxr_router_hsrp_interface" "test" {` + "\n"
+	config += `	delete_mode = "all"` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	hsrp_use_bia = true` + "\n"
 	config += `	hsrp_redirects_disable = true` + "\n"

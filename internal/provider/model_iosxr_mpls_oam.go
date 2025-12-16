@@ -40,8 +40,13 @@ type MPLSOAM struct {
 	Oam                                           types.Bool   `tfsdk:"oam"`
 	OamEchoDisableVendorExtension                 types.Bool   `tfsdk:"oam_echo_disable_vendor_extension"`
 	OamEchoReplyModeControlChannelAllowReverseLsp types.Bool   `tfsdk:"oam_echo_reply_mode_control_channel_allow_reverse_lsp"`
+	OamEchoRevisionOne                            types.Bool   `tfsdk:"oam_echo_revision_one"`
+	OamEchoRevisionTwo                            types.Bool   `tfsdk:"oam_echo_revision_two"`
+	OamEchoRevisionThree                          types.Bool   `tfsdk:"oam_echo_revision_three"`
+	OamEchoRevisionFour                           types.Bool   `tfsdk:"oam_echo_revision_four"`
 	OamDpmPps                                     types.Int64  `tfsdk:"oam_dpm_pps"`
 	OamDpmInterval                                types.Int64  `tfsdk:"oam_dpm_interval"`
+	OamDpmDownstreamEcmpFaults                    types.Bool   `tfsdk:"oam_dpm_downstream_ecmp_faults"`
 }
 
 type MPLSOAMData struct {
@@ -50,8 +55,13 @@ type MPLSOAMData struct {
 	Oam                                           types.Bool   `tfsdk:"oam"`
 	OamEchoDisableVendorExtension                 types.Bool   `tfsdk:"oam_echo_disable_vendor_extension"`
 	OamEchoReplyModeControlChannelAllowReverseLsp types.Bool   `tfsdk:"oam_echo_reply_mode_control_channel_allow_reverse_lsp"`
+	OamEchoRevisionOne                            types.Bool   `tfsdk:"oam_echo_revision_one"`
+	OamEchoRevisionTwo                            types.Bool   `tfsdk:"oam_echo_revision_two"`
+	OamEchoRevisionThree                          types.Bool   `tfsdk:"oam_echo_revision_three"`
+	OamEchoRevisionFour                           types.Bool   `tfsdk:"oam_echo_revision_four"`
 	OamDpmPps                                     types.Int64  `tfsdk:"oam_dpm_pps"`
 	OamDpmInterval                                types.Int64  `tfsdk:"oam_dpm_interval"`
+	OamDpmDownstreamEcmpFaults                    types.Bool   `tfsdk:"oam_dpm_downstream_ecmp_faults"`
 }
 
 // End of section. //template:end types
@@ -87,11 +97,36 @@ func (data MPLSOAM) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "oam.echo.reply-mode.control-channel.allow-reverse-lsp", map[string]string{})
 		}
 	}
+	if !data.OamEchoRevisionOne.IsNull() && !data.OamEchoRevisionOne.IsUnknown() {
+		if data.OamEchoRevisionOne.ValueBool() {
+			body, _ = sjson.Set(body, "oam.echo.revision.one", map[string]string{})
+		}
+	}
+	if !data.OamEchoRevisionTwo.IsNull() && !data.OamEchoRevisionTwo.IsUnknown() {
+		if data.OamEchoRevisionTwo.ValueBool() {
+			body, _ = sjson.Set(body, "oam.echo.revision.two", map[string]string{})
+		}
+	}
+	if !data.OamEchoRevisionThree.IsNull() && !data.OamEchoRevisionThree.IsUnknown() {
+		if data.OamEchoRevisionThree.ValueBool() {
+			body, _ = sjson.Set(body, "oam.echo.revision.three", map[string]string{})
+		}
+	}
+	if !data.OamEchoRevisionFour.IsNull() && !data.OamEchoRevisionFour.IsUnknown() {
+		if data.OamEchoRevisionFour.ValueBool() {
+			body, _ = sjson.Set(body, "oam.echo.revision.four", map[string]string{})
+		}
+	}
 	if !data.OamDpmPps.IsNull() && !data.OamDpmPps.IsUnknown() {
 		body, _ = sjson.Set(body, "oam.dpm.pps", strconv.FormatInt(data.OamDpmPps.ValueInt64(), 10))
 	}
 	if !data.OamDpmInterval.IsNull() && !data.OamDpmInterval.IsUnknown() {
 		body, _ = sjson.Set(body, "oam.dpm.interval", strconv.FormatInt(data.OamDpmInterval.ValueInt64(), 10))
+	}
+	if !data.OamDpmDownstreamEcmpFaults.IsNull() && !data.OamDpmDownstreamEcmpFaults.IsUnknown() {
+		if data.OamDpmDownstreamEcmpFaults.ValueBool() {
+			body, _ = sjson.Set(body, "oam.dpm.downstream-ecmp-faults", map[string]string{})
+		}
 	}
 	return body
 }
@@ -128,6 +163,42 @@ func (data *MPLSOAM) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolNull()
 	}
+	if value := gjson.GetBytes(res, "oam.echo.revision.one"); !data.OamEchoRevisionOne.IsNull() {
+		if value.Exists() {
+			data.OamEchoRevisionOne = types.BoolValue(true)
+		} else {
+			data.OamEchoRevisionOne = types.BoolValue(false)
+		}
+	} else {
+		data.OamEchoRevisionOne = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "oam.echo.revision.two"); !data.OamEchoRevisionTwo.IsNull() {
+		if value.Exists() {
+			data.OamEchoRevisionTwo = types.BoolValue(true)
+		} else {
+			data.OamEchoRevisionTwo = types.BoolValue(false)
+		}
+	} else {
+		data.OamEchoRevisionTwo = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "oam.echo.revision.three"); !data.OamEchoRevisionThree.IsNull() {
+		if value.Exists() {
+			data.OamEchoRevisionThree = types.BoolValue(true)
+		} else {
+			data.OamEchoRevisionThree = types.BoolValue(false)
+		}
+	} else {
+		data.OamEchoRevisionThree = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "oam.echo.revision.four"); !data.OamEchoRevisionFour.IsNull() {
+		if value.Exists() {
+			data.OamEchoRevisionFour = types.BoolValue(true)
+		} else {
+			data.OamEchoRevisionFour = types.BoolValue(false)
+		}
+	} else {
+		data.OamEchoRevisionFour = types.BoolNull()
+	}
 	if value := gjson.GetBytes(res, "oam.dpm.pps"); value.Exists() && !data.OamDpmPps.IsNull() {
 		data.OamDpmPps = types.Int64Value(value.Int())
 	} else {
@@ -137,6 +208,15 @@ func (data *MPLSOAM) updateFromBody(ctx context.Context, res []byte) {
 		data.OamDpmInterval = types.Int64Value(value.Int())
 	} else {
 		data.OamDpmInterval = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "oam.dpm.downstream-ecmp-faults"); !data.OamDpmDownstreamEcmpFaults.IsNull() {
+		if value.Exists() {
+			data.OamDpmDownstreamEcmpFaults = types.BoolValue(true)
+		} else {
+			data.OamDpmDownstreamEcmpFaults = types.BoolValue(false)
+		}
+	} else {
+		data.OamDpmDownstreamEcmpFaults = types.BoolNull()
 	}
 }
 
@@ -160,11 +240,36 @@ func (data *MPLSOAM) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "oam.echo.revision.one"); value.Exists() {
+		data.OamEchoRevisionOne = types.BoolValue(true)
+	} else {
+		data.OamEchoRevisionOne = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "oam.echo.revision.two"); value.Exists() {
+		data.OamEchoRevisionTwo = types.BoolValue(true)
+	} else {
+		data.OamEchoRevisionTwo = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "oam.echo.revision.three"); value.Exists() {
+		data.OamEchoRevisionThree = types.BoolValue(true)
+	} else {
+		data.OamEchoRevisionThree = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "oam.echo.revision.four"); value.Exists() {
+		data.OamEchoRevisionFour = types.BoolValue(true)
+	} else {
+		data.OamEchoRevisionFour = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "oam.dpm.pps"); value.Exists() {
 		data.OamDpmPps = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "oam.dpm.interval"); value.Exists() {
 		data.OamDpmInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "oam.dpm.downstream-ecmp-faults"); value.Exists() {
+		data.OamDpmDownstreamEcmpFaults = types.BoolValue(true)
+	} else {
+		data.OamDpmDownstreamEcmpFaults = types.BoolValue(false)
 	}
 }
 
@@ -188,11 +293,36 @@ func (data *MPLSOAMData) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "oam.echo.revision.one"); value.Exists() {
+		data.OamEchoRevisionOne = types.BoolValue(true)
+	} else {
+		data.OamEchoRevisionOne = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "oam.echo.revision.two"); value.Exists() {
+		data.OamEchoRevisionTwo = types.BoolValue(true)
+	} else {
+		data.OamEchoRevisionTwo = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "oam.echo.revision.three"); value.Exists() {
+		data.OamEchoRevisionThree = types.BoolValue(true)
+	} else {
+		data.OamEchoRevisionThree = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "oam.echo.revision.four"); value.Exists() {
+		data.OamEchoRevisionFour = types.BoolValue(true)
+	} else {
+		data.OamEchoRevisionFour = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "oam.dpm.pps"); value.Exists() {
 		data.OamDpmPps = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "oam.dpm.interval"); value.Exists() {
 		data.OamDpmInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "oam.dpm.downstream-ecmp-faults"); value.Exists() {
+		data.OamDpmDownstreamEcmpFaults = types.BoolValue(true)
+	} else {
+		data.OamDpmDownstreamEcmpFaults = types.BoolValue(false)
 	}
 }
 
@@ -202,11 +332,26 @@ func (data *MPLSOAMData) fromBody(ctx context.Context, res []byte) {
 
 func (data *MPLSOAM) getDeletedItems(ctx context.Context, state MPLSOAM) []string {
 	deletedItems := make([]string, 0)
+	if !state.OamDpmDownstreamEcmpFaults.IsNull() && data.OamDpmDownstreamEcmpFaults.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/oam/dpm/downstream-ecmp-faults", state.getPath()))
+	}
 	if !state.OamDpmInterval.IsNull() && data.OamDpmInterval.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/oam/dpm/interval", state.getPath()))
 	}
 	if !state.OamDpmPps.IsNull() && data.OamDpmPps.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/oam/dpm/pps", state.getPath()))
+	}
+	if !state.OamEchoRevisionFour.IsNull() && data.OamEchoRevisionFour.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/oam/echo/revision/four", state.getPath()))
+	}
+	if !state.OamEchoRevisionThree.IsNull() && data.OamEchoRevisionThree.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/oam/echo/revision/three", state.getPath()))
+	}
+	if !state.OamEchoRevisionTwo.IsNull() && data.OamEchoRevisionTwo.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/oam/echo/revision/two", state.getPath()))
+	}
+	if !state.OamEchoRevisionOne.IsNull() && data.OamEchoRevisionOne.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/oam/echo/revision/one", state.getPath()))
 	}
 	if !state.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() && data.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/oam/echo/reply-mode/control-channel/allow-reverse-lsp", state.getPath()))
@@ -226,6 +371,21 @@ func (data *MPLSOAM) getDeletedItems(ctx context.Context, state MPLSOAM) []strin
 
 func (data *MPLSOAM) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.OamDpmDownstreamEcmpFaults.IsNull() && !data.OamDpmDownstreamEcmpFaults.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/oam/dpm/downstream-ecmp-faults", data.getPath()))
+	}
+	if !data.OamEchoRevisionFour.IsNull() && !data.OamEchoRevisionFour.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/oam/echo/revision/four", data.getPath()))
+	}
+	if !data.OamEchoRevisionThree.IsNull() && !data.OamEchoRevisionThree.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/oam/echo/revision/three", data.getPath()))
+	}
+	if !data.OamEchoRevisionTwo.IsNull() && !data.OamEchoRevisionTwo.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/oam/echo/revision/two", data.getPath()))
+	}
+	if !data.OamEchoRevisionOne.IsNull() && !data.OamEchoRevisionOne.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/oam/echo/revision/one", data.getPath()))
+	}
 	if !data.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() && !data.OamEchoReplyModeControlChannelAllowReverseLsp.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/oam/echo/reply-mode/control-channel/allow-reverse-lsp", data.getPath()))
 	}
@@ -244,11 +404,26 @@ func (data *MPLSOAM) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *MPLSOAM) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
+	if !data.OamDpmDownstreamEcmpFaults.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/oam/dpm/downstream-ecmp-faults", data.getPath()))
+	}
 	if !data.OamDpmInterval.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/oam/dpm/interval", data.getPath()))
 	}
 	if !data.OamDpmPps.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/oam/dpm/pps", data.getPath()))
+	}
+	if !data.OamEchoRevisionFour.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/oam/echo/revision/four", data.getPath()))
+	}
+	if !data.OamEchoRevisionThree.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/oam/echo/revision/three", data.getPath()))
+	}
+	if !data.OamEchoRevisionTwo.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/oam/echo/revision/two", data.getPath()))
+	}
+	if !data.OamEchoRevisionOne.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/oam/echo/revision/one", data.getPath()))
 	}
 	if !data.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/oam/echo/reply-mode/control-channel/allow-reverse-lsp", data.getPath()))

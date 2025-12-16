@@ -59,8 +59,8 @@ type BFD struct {
 	DampeningBundleMemberSecondaryWait     types.Int64             `tfsdk:"dampening_bundle_member_secondary_wait"`
 	DampeningBundleMemberMaximumWait       types.Int64             `tfsdk:"dampening_bundle_member_maximum_wait"`
 	BundleCoexistenceBobBlb                types.String            `tfsdk:"bundle_coexistence_bob_blb"`
-	Interfaces                             []BFDInterfaces         `tfsdk:"interfaces"`
 	Ipv6ChecksumDisable                    types.Bool              `tfsdk:"ipv6_checksum_disable"`
+	Interfaces                             []BFDInterfaces         `tfsdk:"interfaces"`
 }
 
 type BFDData struct {
@@ -87,8 +87,8 @@ type BFDData struct {
 	DampeningBundleMemberSecondaryWait     types.Int64             `tfsdk:"dampening_bundle_member_secondary_wait"`
 	DampeningBundleMemberMaximumWait       types.Int64             `tfsdk:"dampening_bundle_member_maximum_wait"`
 	BundleCoexistenceBobBlb                types.String            `tfsdk:"bundle_coexistence_bob_blb"`
-	Interfaces                             []BFDInterfaces         `tfsdk:"interfaces"`
 	Ipv6ChecksumDisable                    types.Bool              `tfsdk:"ipv6_checksum_disable"`
+	Interfaces                             []BFDInterfaces         `tfsdk:"interfaces"`
 }
 type BFDMultipathLocations struct {
 	LocationId types.String `tfsdk:"location_id"`
@@ -411,6 +411,15 @@ func (data *BFD) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.BundleCoexistenceBobBlb = types.StringNull()
 	}
+	if value := gjson.GetBytes(res, "ipv6.checksum.disable"); !data.Ipv6ChecksumDisable.IsNull() {
+		if value.Exists() {
+			data.Ipv6ChecksumDisable = types.BoolValue(true)
+		} else {
+			data.Ipv6ChecksumDisable = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv6ChecksumDisable = types.BoolNull()
+	}
 	for i := range data.Interfaces {
 		keys := [...]string{"interface-name"}
 		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
@@ -487,15 +496,6 @@ func (data *BFD) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Interfaces[i].Multiplier = types.Int64Null()
 		}
-	}
-	if value := gjson.GetBytes(res, "ipv6.checksum.disable"); !data.Ipv6ChecksumDisable.IsNull() {
-		if value.Exists() {
-			data.Ipv6ChecksumDisable = types.BoolValue(true)
-		} else {
-			data.Ipv6ChecksumDisable = types.BoolValue(false)
-		}
-	} else {
-		data.Ipv6ChecksumDisable = types.BoolNull()
 	}
 }
 
@@ -589,6 +589,11 @@ func (data *BFD) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "bundle.coexistence.bob-blb"); value.Exists() {
 		data.BundleCoexistenceBobBlb = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "ipv6.checksum.disable"); value.Exists() {
+		data.Ipv6ChecksumDisable = types.BoolValue(true)
+	} else {
+		data.Ipv6ChecksumDisable = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "interfaces.interface"); value.Exists() {
 		data.Interfaces = make([]BFDInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -627,11 +632,6 @@ func (data *BFD) fromBody(ctx context.Context, res []byte) {
 			data.Interfaces = append(data.Interfaces, item)
 			return true
 		})
-	}
-	if value := gjson.GetBytes(res, "ipv6.checksum.disable"); value.Exists() {
-		data.Ipv6ChecksumDisable = types.BoolValue(true)
-	} else {
-		data.Ipv6ChecksumDisable = types.BoolValue(false)
 	}
 }
 
@@ -725,6 +725,11 @@ func (data *BFDData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "bundle.coexistence.bob-blb"); value.Exists() {
 		data.BundleCoexistenceBobBlb = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "ipv6.checksum.disable"); value.Exists() {
+		data.Ipv6ChecksumDisable = types.BoolValue(true)
+	} else {
+		data.Ipv6ChecksumDisable = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "interfaces.interface"); value.Exists() {
 		data.Interfaces = make([]BFDInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -764,11 +769,6 @@ func (data *BFDData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "ipv6.checksum.disable"); value.Exists() {
-		data.Ipv6ChecksumDisable = types.BoolValue(true)
-	} else {
-		data.Ipv6ChecksumDisable = types.BoolValue(false)
-	}
 }
 
 // End of section. //template:end fromBodyData
@@ -777,9 +777,6 @@ func (data *BFDData) fromBody(ctx context.Context, res []byte) {
 
 func (data *BFD) getDeletedItems(ctx context.Context, state BFD) []string {
 	deletedItems := make([]string, 0)
-	if !state.Ipv6ChecksumDisable.IsNull() && data.Ipv6ChecksumDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/checksum/disable", state.getPath()))
-	}
 	for i := range state.Interfaces {
 		keys := [...]string{"interface-name"}
 		stateKeyValues := [...]string{state.Interfaces[i].InterfaceName.ValueString()}
@@ -833,6 +830,9 @@ func (data *BFD) getDeletedItems(ctx context.Context, state BFD) []string {
 		if !found {
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v", state.getPath(), keyString))
 		}
+	}
+	if !state.Ipv6ChecksumDisable.IsNull() && data.Ipv6ChecksumDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/checksum/disable", state.getPath()))
 	}
 	if !state.BundleCoexistenceBobBlb.IsNull() && data.BundleCoexistenceBobBlb.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bundle/coexistence/bob-blb", state.getPath()))
@@ -933,9 +933,6 @@ func (data *BFD) getDeletedItems(ctx context.Context, state BFD) []string {
 
 func (data *BFD) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	if !data.Ipv6ChecksumDisable.IsNull() && !data.Ipv6ChecksumDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv6/checksum/disable", data.getPath()))
-	}
 	for i := range data.Interfaces {
 		keys := [...]string{"interface-name"}
 		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
@@ -949,6 +946,9 @@ func (data *BFD) getEmptyLeafsDelete(ctx context.Context) []string {
 		if !data.Interfaces[i].Ipv6ChecksumDisable.IsNull() && !data.Interfaces[i].Ipv6ChecksumDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/interface%v/ipv6/checksum", data.getPath(), keyString))
 		}
+	}
+	if !data.Ipv6ChecksumDisable.IsNull() && !data.Ipv6ChecksumDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv6/checksum/disable", data.getPath()))
 	}
 	if !data.DampeningBundleMemberL3OnlyMode.IsNull() && !data.DampeningBundleMemberL3OnlyMode.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/dampening/bundle-member/l3-only-mode", data.getPath()))
@@ -988,9 +988,6 @@ func (data *BFD) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *BFD) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.Ipv6ChecksumDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/checksum/disable", data.getPath()))
-	}
 	for i := range data.Interfaces {
 		keys := [...]string{"interface-name"}
 		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
@@ -1000,6 +997,9 @@ func (data *BFD) getDeletePaths(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/interface%v", data.getPath(), keyString))
+	}
+	if !data.Ipv6ChecksumDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/checksum/disable", data.getPath()))
 	}
 	if !data.BundleCoexistenceBobBlb.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bundle/coexistence/bob-blb", data.getPath()))

@@ -267,6 +267,7 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 						"password": schema.StringAttribute{
 							MarkdownDescription: "Specifies an ENCRYPTED password will follow",
 							Computed:            true,
+							Sensitive:           true,
 						},
 						"password_inheritance_disable": schema.BoolAttribute{
 							MarkdownDescription: "Prevent password from being inherited from parent",

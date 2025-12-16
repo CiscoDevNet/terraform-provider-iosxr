@@ -116,6 +116,40 @@ func (r *FlowExporterMapResource) Schema(ctx context.Context, req resource.Schem
 					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
 				},
 			},
+			"source_address_ipv4_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Source IPv4 address").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+				},
+			},
+			"source_address_ipv6_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Source IPv6 address").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+				},
+			},
+			"router_id_ipv4_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("router-id in IPv4 address format").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+				},
+			},
+			"router_id_ipv6_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("router-id in IPv6 address format").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+				},
+			},
 			"dscp": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specify DSCP value for ipv4 export packets or traffic-class for ipv6 export packets").AddIntegerRangeDescription(0, 63).String,
 				Optional:            true,
@@ -123,18 +157,18 @@ func (r *FlowExporterMapResource) Schema(ctx context.Context, req resource.Schem
 					int64validator.Between(0, 63),
 				},
 			},
-			"packet_length": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Export Packet maximum L3 length, should conform to outgoing interface mtu").AddIntegerRangeDescription(512, 9000).String,
-				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(512, 9000),
-				},
-			},
 			"transport_udp": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Use UDP as transport protocol").AddIntegerRangeDescription(1024, 65535).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1024, 65535),
+				},
+			},
+			"packet_length": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Export Packet maximum L3 length, should conform to outgoing interface mtu").AddIntegerRangeDescription(512, 9000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(512, 9000),
 				},
 			},
 			"dfbit_set": schema.BoolAttribute{

@@ -67,13 +67,301 @@ func (d *LoggingDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				MarkdownDescription: "The path of the retrieved object.",
 				Computed:            true,
 			},
-			"ipv4_dscp": schema.StringAttribute{
-				MarkdownDescription: "Set IP DSCP (DiffServ CodePoint)",
+			"console": schema.StringAttribute{
+				MarkdownDescription: "Set console logging",
 				Computed:            true,
 			},
 			"trap": schema.StringAttribute{
 				MarkdownDescription: "Set trap logging",
 				Computed:            true,
+			},
+			"monitor": schema.StringAttribute{
+				MarkdownDescription: "Set monitor logging",
+				Computed:            true,
+			},
+			"console_facility": schema.StringAttribute{
+				MarkdownDescription: "Console message logging facilities",
+				Computed:            true,
+			},
+			"monitor_discriminator_match1": schema.StringAttribute{
+				MarkdownDescription: "Set match discriminator 1",
+				Computed:            true,
+			},
+			"monitor_discriminator_match2": schema.StringAttribute{
+				MarkdownDescription: "Set match discriminator 2",
+				Computed:            true,
+			},
+			"monitor_discriminator_match3": schema.StringAttribute{
+				MarkdownDescription: "Set match discriminator 3",
+				Computed:            true,
+			},
+			"monitor_discriminator_nomatch1": schema.StringAttribute{
+				MarkdownDescription: "Set no-match discriminator 1",
+				Computed:            true,
+			},
+			"monitor_discriminator_nomatch2": schema.StringAttribute{
+				MarkdownDescription: "Set no-match discriminator 2",
+				Computed:            true,
+			},
+			"monitor_discriminator_nomatch3": schema.StringAttribute{
+				MarkdownDescription: "Set no-match discriminator 3",
+				Computed:            true,
+			},
+			"archive_disk0": schema.BoolAttribute{
+				MarkdownDescription: "Use disk0 as the archive device",
+				Computed:            true,
+			},
+			"archive_disk1": schema.BoolAttribute{
+				MarkdownDescription: "Use disk1 as the archive device",
+				Computed:            true,
+			},
+			"archive_harddisk": schema.BoolAttribute{
+				MarkdownDescription: "Use harddisk as the archive device",
+				Computed:            true,
+			},
+			"archive_frequency_daily": schema.BoolAttribute{
+				MarkdownDescription: "Collect log in files on a daily basis",
+				Computed:            true,
+			},
+			"archive_frequency_weekly": schema.BoolAttribute{
+				MarkdownDescription: "Collect log in files on a weekly basis",
+				Computed:            true,
+			},
+			"archive_filesize": schema.Int64Attribute{
+				MarkdownDescription: "The maximum file size for a single log file.",
+				Computed:            true,
+			},
+			"archive_size": schema.Int64Attribute{
+				MarkdownDescription: "The total size of the archive",
+				Computed:            true,
+			},
+			"archive_length": schema.Int64Attribute{
+				MarkdownDescription: "The maximum no of weeks of log to maintain",
+				Computed:            true,
+			},
+			"archive_severity": schema.StringAttribute{
+				MarkdownDescription: "The minimum severity of log messages to archive",
+				Computed:            true,
+			},
+			"archive_threshold": schema.Int64Attribute{
+				MarkdownDescription: "The size threshold at which a syslog is generated",
+				Computed:            true,
+			},
+			"ipv4_dscp": schema.StringAttribute{
+				MarkdownDescription: "Set IP DSCP (DiffServ CodePoint)",
+				Computed:            true,
+			},
+			"ipv4_precedence": schema.StringAttribute{
+				MarkdownDescription: "Set precedence",
+				Computed:            true,
+			},
+			"ipv6_dscp": schema.StringAttribute{
+				MarkdownDescription: "Set IP DSCP (DiffServ CodePoint)",
+				Computed:            true,
+			},
+			"ipv6_precedence": schema.StringAttribute{
+				MarkdownDescription: "Set precedence",
+				Computed:            true,
+			},
+			"facility_level": schema.StringAttribute{
+				MarkdownDescription: "configure this node",
+				Computed:            true,
+			},
+			"buffered_entries_count": schema.Int64Attribute{
+				MarkdownDescription: "Number of syslog entries in buffer",
+				Computed:            true,
+			},
+			"buffered_size": schema.Int64Attribute{
+				MarkdownDescription: "Logging buffer size",
+				Computed:            true,
+			},
+			"buffered_level": schema.StringAttribute{
+				MarkdownDescription: "configure this node",
+				Computed:            true,
+			},
+			"buffered_discriminator_match1": schema.StringAttribute{
+				MarkdownDescription: "Set match discriminator 1",
+				Computed:            true,
+			},
+			"buffered_discriminator_match2": schema.StringAttribute{
+				MarkdownDescription: "Set match discriminator 2",
+				Computed:            true,
+			},
+			"buffered_discriminator_match3": schema.StringAttribute{
+				MarkdownDescription: "Set match discriminator 3",
+				Computed:            true,
+			},
+			"buffered_discriminator_nomatch1": schema.StringAttribute{
+				MarkdownDescription: "Set no-match discriminator 1",
+				Computed:            true,
+			},
+			"buffered_discriminator_nomatch2": schema.StringAttribute{
+				MarkdownDescription: "Set no-match discriminator 2",
+				Computed:            true,
+			},
+			"buffered_discriminator_nomatch3": schema.StringAttribute{
+				MarkdownDescription: "Set no-match discriminator 3",
+				Computed:            true,
+			},
+			"container_all": schema.BoolAttribute{
+				MarkdownDescription: "Enables log collection from all containers",
+				Computed:            true,
+			},
+			"container_fetch_timestamp": schema.BoolAttribute{
+				MarkdownDescription: "Fetch logs with container timestamp for all containers",
+				Computed:            true,
+			},
+			"file": schema.ListNestedAttribute{
+				MarkdownDescription: "Set file logging",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"file_name": schema.StringAttribute{
+							MarkdownDescription: "Set file logging",
+							Computed:            true,
+						},
+						"path": schema.StringAttribute{
+							MarkdownDescription: "Set file path ",
+							Computed:            true,
+						},
+						"maxfilesize": schema.Int64Attribute{
+							MarkdownDescription: "Set max file size",
+							Computed:            true,
+						},
+						"severity": schema.StringAttribute{
+							MarkdownDescription: "Set severity level",
+							Computed:            true,
+						},
+						"local_accounting_send_to_remote_facility_level": schema.StringAttribute{
+							MarkdownDescription: "configure this node",
+							Computed:            true,
+						},
+						"discriminator_match1": schema.StringAttribute{
+							MarkdownDescription: "Set match discriminator 1",
+							Computed:            true,
+						},
+						"discriminator_match2": schema.StringAttribute{
+							MarkdownDescription: "Set match discriminator 2",
+							Computed:            true,
+						},
+						"discriminator_match3": schema.StringAttribute{
+							MarkdownDescription: "Set match discriminator 3",
+							Computed:            true,
+						},
+						"discriminator_nomatch1": schema.StringAttribute{
+							MarkdownDescription: "Set no-match discriminator 1",
+							Computed:            true,
+						},
+						"discriminator_nomatch2": schema.StringAttribute{
+							MarkdownDescription: "Set no-match discriminator 2",
+							Computed:            true,
+						},
+						"discriminator_nomatch3": schema.StringAttribute{
+							MarkdownDescription: "Set no-match discriminator 3",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"history": schema.StringAttribute{
+				MarkdownDescription: "Set history logging",
+				Computed:            true,
+			},
+			"history_size": schema.Int64Attribute{
+				MarkdownDescription: "Logging history size",
+				Computed:            true,
+			},
+			"hostnameprefix": schema.StringAttribute{
+				MarkdownDescription: "Hostname prefix to add on msgs to servers",
+				Computed:            true,
+			},
+			"localfilesize": schema.Int64Attribute{
+				MarkdownDescription: "Set size of the local log file",
+				Computed:            true,
+			},
+			"suppress_duplicates": schema.BoolAttribute{
+				MarkdownDescription: "Suppress consecutive duplicate messages",
+				Computed:            true,
+			},
+			"format_rfc5424": schema.BoolAttribute{
+				MarkdownDescription: "Enable to send the syslog message rfc5424 format ",
+				Computed:            true,
+			},
+			"format_bsd": schema.BoolAttribute{
+				MarkdownDescription: "Enable to send the syslog message as BSD format ",
+				Computed:            true,
+			},
+			"yang": schema.StringAttribute{
+				MarkdownDescription: "Set yang logging parameters",
+				Computed:            true,
+			},
+			"suppress_rules": schema.ListNestedAttribute{
+				MarkdownDescription: "Configure a specified suppression rule",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"rule_name": schema.StringAttribute{
+							MarkdownDescription: "Rule name",
+							Computed:            true,
+						},
+						"alarms": schema.ListNestedAttribute{
+							MarkdownDescription: "Specify alarm: Category/Group/Code combos",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"message_category": schema.StringAttribute{
+										MarkdownDescription: "Message category of the suppressed message",
+										Computed:            true,
+									},
+									"group_name": schema.StringAttribute{
+										MarkdownDescription: "Group name of suppressed message",
+										Computed:            true,
+									},
+									"message_code": schema.StringAttribute{
+										MarkdownDescription: "Message code of suppressed message",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"all_alarms": schema.BoolAttribute{
+							MarkdownDescription: "Specify all alarms",
+							Computed:            true,
+						},
+						"apply_all_of_router": schema.BoolAttribute{
+							MarkdownDescription: "Apply the rule to all of the router",
+							Computed:            true,
+						},
+						"apply_source_locations": schema.ListNestedAttribute{
+							MarkdownDescription: "Apply the rule to specified location",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"location_name": schema.StringAttribute{
+										MarkdownDescription: "Location name",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"events_buffer_size": schema.Int64Attribute{
+				MarkdownDescription: "Set size of the local event buffer",
+				Computed:            true,
+			},
+			"filter_matches": schema.ListNestedAttribute{
+				MarkdownDescription: " Configure match string to filter",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"match": schema.StringAttribute{
+							MarkdownDescription: " Configure match string to filter",
+							Computed:            true,
+						},
+					},
+				},
 			},
 			"events_display_location": schema.BoolAttribute{
 				MarkdownDescription: "Include alarm source location in message text",
@@ -83,32 +371,16 @@ func (d *LoggingDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				MarkdownDescription: "Log all events with equal or higher (lower level) severity",
 				Computed:            true,
 			},
-			"console": schema.StringAttribute{
-				MarkdownDescription: "Set console logging",
+			"events_threshold": schema.Int64Attribute{
+				MarkdownDescription: "Configure threshold (%) for capacity alarm",
 				Computed:            true,
 			},
-			"monitor": schema.StringAttribute{
-				MarkdownDescription: "Set monitor logging",
+			"events_precfg_suppression": schema.StringAttribute{
+				MarkdownDescription: "Suppress events from a card/VM till its configuration is complete",
 				Computed:            true,
 			},
-			"buffered_logging_buffer_size": schema.Int64Attribute{
-				MarkdownDescription: "Logging buffer size",
-				Computed:            true,
-			},
-			"buffered_level": schema.StringAttribute{
-				MarkdownDescription: "configure this node",
-				Computed:            true,
-			},
-			"facility_level": schema.StringAttribute{
-				MarkdownDescription: "configure this node",
-				Computed:            true,
-			},
-			"hostnameprefix": schema.StringAttribute{
-				MarkdownDescription: "Hostname prefix to add on msgs to servers",
-				Computed:            true,
-			},
-			"suppress_duplicates": schema.BoolAttribute{
-				MarkdownDescription: "Suppress consecutive duplicate messages",
+			"events_precfg_suppression_timeout": schema.Int64Attribute{
+				MarkdownDescription: "Timeout (in minutes) for pre-config events suppression (default 15)",
 				Computed:            true,
 			},
 		},

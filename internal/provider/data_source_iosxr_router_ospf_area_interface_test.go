@@ -74,6 +74,14 @@ resource "iosxr_gnmi" "PreReq1" {
 	depends_on = [iosxr_gnmi.PreReq0, ]
 }
 
+resource "iosxr_gnmi" "PreReq2" {
+	path = "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]/areas/area[area-id=0]/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]"
+	attributes = {
+		"interface-name" = "GigabitEthernet0/0/0/1"
+	}
+	depends_on = [iosxr_gnmi.PreReq1, ]
+}
+
 `
 
 // End of section. //template:end testPrerequisites
@@ -97,7 +105,7 @@ func testAccDataSourceIosxrRouterOSPFAreaInterfaceConfig() string {
 	config += `	fast_reroute_per_prefix_ti_lfa = true` + "\n"
 	config += `	fast_reroute_per_prefix_tiebreaker_srlg_disjoint = 22` + "\n"
 	config += `	fast_reroute_per_prefix_tiebreaker_node_protecting = 33` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

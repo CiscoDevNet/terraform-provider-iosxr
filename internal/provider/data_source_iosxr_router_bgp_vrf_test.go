@@ -57,7 +57,6 @@ func TestAccDataSourceIosxrRouterBGPVRF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.local_as_no_prepend", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.local_as_no_prepend_replace_as", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.local_as_no_prepend_replace_as_dual_as", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.password", "12341C2713181F13253920"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.password_inheritance_disable", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.shutdown", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.timers_keepalive_interval", "0"))

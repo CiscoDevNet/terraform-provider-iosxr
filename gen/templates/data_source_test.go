@@ -221,7 +221,7 @@ func testAccDataSourceIosxr{{camelCase .Name}}Config() string {
 	config += `	depends_on = [{{range $index, $item := .TestPrerequisites}}iosxr_gnmi.PreReq{{$index}}, {{end}}]` + "\n"
 	{{- end}}
 	config += `}` + "\n"
-	
+
 	config += `
 		data "iosxr_{{snakeCase .Name}}" "test" {
 			{{- range .Attributes}}

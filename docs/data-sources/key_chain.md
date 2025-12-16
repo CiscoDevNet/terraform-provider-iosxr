@@ -48,7 +48,8 @@ Read-Only:
 - `accept_lifetime_start_time_year` (Number) Year
 - `cryptographic_algorithm` (String) Choose cryptographic algorithm
 - `key_name` (String) Configure a Key
-- `key_string_password` (String) Encrypted key string (even number of characters with first two as digits and sum less than 53, and rest of the characters should be hex digits)
+- `key_string_password` (String, Sensitive) Encrypted key string (even number of characters with first two as digits and sum less than 53, and rest of the characters should be hex digits)
+- `key_string_password6` (String, Sensitive) Enter encrypted type6 password
 - `send_lifetime_infinite` (Boolean) Never expires
 - `send_lifetime_start_time_day_of_month` (Number) Day of the month
 - `send_lifetime_start_time_hour` (Number) Start time hour

@@ -67,12 +67,20 @@ func (d *L2VPNPWClassDataSource) Schema(ctx context.Context, req datasource.Sche
 				MarkdownDescription: "The path of the retrieved object.",
 				Computed:            true,
 			},
-			"name": schema.StringAttribute{
+			"pw_class_name": schema.StringAttribute{
 				MarkdownDescription: "Pseudowire class template",
 				Required:            true,
 			},
 			"encapsulation_mpls": schema.BoolAttribute{
 				MarkdownDescription: "Set pseudowire encapsulation to MPLS",
+				Computed:            true,
+			},
+			"encapsulation_mpls_protocol_ldp": schema.BoolAttribute{
+				MarkdownDescription: "Set LDP as the signaling protocol for this pseudowire class",
+				Computed:            true,
+			},
+			"encapsulation_mpls_control_word": schema.BoolAttribute{
+				MarkdownDescription: "Enable Control word",
 				Computed:            true,
 			},
 			"encapsulation_mpls_transport_mode_ethernet": schema.BoolAttribute{
@@ -83,8 +91,76 @@ func (d *L2VPNPWClassDataSource) Schema(ctx context.Context, req datasource.Sche
 				MarkdownDescription: "Vlan tagged mode",
 				Computed:            true,
 			},
-			"encapsulation_mpls_transport_mode_passthrough": schema.BoolAttribute{
+			"encapsulation_mpls_transport_mode_vlan_passthrough": schema.BoolAttribute{
 				MarkdownDescription: "passthrough incoming tags",
+				Computed:            true,
+			},
+			"encapsulation_mpls_vccv_verification_type_none": schema.BoolAttribute{
+				MarkdownDescription: "No VCCV verification",
+				Computed:            true,
+			},
+			"encapsulation_mpls_sequencing_transmit": schema.BoolAttribute{
+				MarkdownDescription: "Sequencing on transmit side",
+				Computed:            true,
+			},
+			"encapsulation_mpls_sequencing_transmit_resync": schema.Int64Attribute{
+				MarkdownDescription: "Set the threshold for out-of-sequence packets before resync",
+				Computed:            true,
+			},
+			"encapsulation_mpls_sequencing_receive": schema.BoolAttribute{
+				MarkdownDescription: "Sequencing on receive side",
+				Computed:            true,
+			},
+			"encapsulation_mpls_sequencing_receive_resync": schema.Int64Attribute{
+				MarkdownDescription: "Set the threshold for out-of-sequence packets before resync",
+				Computed:            true,
+			},
+			"encapsulation_mpls_sequencing_both": schema.BoolAttribute{
+				MarkdownDescription: "Sequencing on both transmit and receive side",
+				Computed:            true,
+			},
+			"encapsulation_mpls_sequencing_both_resync": schema.Int64Attribute{
+				MarkdownDescription: "Set the threshold for out-of-sequence packets before resync",
+				Computed:            true,
+			},
+			"encapsulation_mpls_preferred_path_interface_tunnel_te_tunnel_number": schema.Int64Attribute{
+				MarkdownDescription: "Specify tunnel number for preferred path",
+				Computed:            true,
+			},
+			"encapsulation_mpls_preferred_path_interface_tunnel_te_tunnel_name": schema.StringAttribute{
+				MarkdownDescription: "Specify named tunnel for preferred path",
+				Computed:            true,
+			},
+			"encapsulation_mpls_preferred_path_interface_tunnel_ip": schema.Int64Attribute{
+				MarkdownDescription: "Specify IP tunnel interface name for preferred path",
+				Computed:            true,
+			},
+			"encapsulation_mpls_preferred_path_interface_tunnel_tp": schema.Int64Attribute{
+				MarkdownDescription: "Specify TP tunnel interface name for preferred path",
+				Computed:            true,
+			},
+			"encapsulation_mpls_preferred_path_sr_te_policy": schema.StringAttribute{
+				MarkdownDescription: "Specify SR TE policy for preferred path",
+				Computed:            true,
+			},
+			"encapsulation_mpls_preferred_path_fallback_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable fallback for preferred path",
+				Computed:            true,
+			},
+			"encapsulation_mpls_switching_tlv_hide": schema.BoolAttribute{
+				MarkdownDescription: "Hide TLV",
+				Computed:            true,
+			},
+			"encapsulation_mpls_tag_rewrite_ingress_vlan": schema.Int64Attribute{
+				MarkdownDescription: "vlan tagged mode",
+				Computed:            true,
+			},
+			"encapsulation_mpls_redundancy_one_way": schema.BoolAttribute{
+				MarkdownDescription: "Force one-way PW redundancy behavior in Redundancy Group",
+				Computed:            true,
+			},
+			"encapsulation_mpls_redundancy_initial_delay": schema.Int64Attribute{
+				MarkdownDescription: "Initial delay before activating the redundant PW",
 				Computed:            true,
 			},
 			"encapsulation_mpls_load_balancing_pw_label": schema.BoolAttribute{
@@ -115,12 +191,28 @@ func (d *L2VPNPWClassDataSource) Schema(ctx context.Context, req datasource.Sche
 				MarkdownDescription: "Set Flow label parameters statically",
 				Computed:            true,
 			},
-			"encapsulation_mpls_load_balancing_flow_label_code_one7": schema.BoolAttribute{
+			"encapsulation_mpls_load_balancing_flow_label_code_17": schema.BoolAttribute{
 				MarkdownDescription: "Legacy code value",
 				Computed:            true,
 			},
-			"encapsulation_mpls_load_balancing_flow_label_code_one7_disable": schema.BoolAttribute{
+			"encapsulation_mpls_load_balancing_flow_label_code_17_disable": schema.BoolAttribute{
 				MarkdownDescription: "Disables sending code 17 TLV",
+				Computed:            true,
+			},
+			"encapsulation_mpls_ipv4_source": schema.StringAttribute{
+				MarkdownDescription: "The local source IPv4 address",
+				Computed:            true,
+			},
+			"backup_disable_delay": schema.Int64Attribute{
+				MarkdownDescription: "Disable backup after a specified delay",
+				Computed:            true,
+			},
+			"backup_disable_never": schema.BoolAttribute{
+				MarkdownDescription: "Never disable backup",
+				Computed:            true,
+			},
+			"mac_withdraw": schema.BoolAttribute{
+				MarkdownDescription: "Send MAC withdraw message when PW becomes active",
 				Computed:            true,
 			},
 		},

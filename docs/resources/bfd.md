@@ -32,6 +32,7 @@ resource "iosxr_bfd" "example" {
   dampening_bundle_member_secondary_wait       = 6184
   dampening_bundle_member_maximum_wait         = 7184
   bundle_coexistence_bob_blb                   = "inherit"
+  ipv6_checksum_disable                        = true
   interfaces = [
     {
       interface_name        = "GigabitEthernet0/0/0/0"
@@ -43,7 +44,6 @@ resource "iosxr_bfd" "example" {
       multiplier            = 40
     }
   ]
-  ipv6_checksum_disable = true
 }
 ```
 

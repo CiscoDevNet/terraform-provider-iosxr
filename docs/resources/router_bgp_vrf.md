@@ -129,7 +129,7 @@ Optional:
 - `local_as_no_prepend` (Boolean) Do not prepend local AS to announcements from this neighbor
 - `local_as_no_prepend_replace_as` (Boolean) Prepend only local AS to announcements to this neighbor
 - `local_as_no_prepend_replace_as_dual_as` (Boolean) Dual-AS mode
-- `password` (String) Specifies an ENCRYPTED password will follow
+- `password` (String, Sensitive) Specifies an ENCRYPTED password will follow
 - `password_inheritance_disable` (Boolean) Prevent password from being inherited from parent
 - `remote_as` (String) Set remote AS
 - `shutdown` (Boolean) Administratively shut down this neighbor

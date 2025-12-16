@@ -134,6 +134,7 @@ func testAccIosxrRouterOSPFConfig_minimum() string {
 
 func testAccIosxrRouterOSPFConfig_all() string {
 	config := `resource "iosxr_router_ospf" "test" {` + "\n"
+	config += `	delete_mode = "all"` + "\n"
 	config += `	process_name = "OSPF1"` + "\n"
 	config += `	mpls_ldp_sync = false` + "\n"
 	config += `	hello_interval = 10` + "\n"

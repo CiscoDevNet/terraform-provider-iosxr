@@ -71,28 +71,36 @@ func (d *SSHDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "Set timeout value for SSH",
 				Computed:            true,
 			},
-			"server_dscp": schema.Int64Attribute{
-				MarkdownDescription: "Cisco ssh server DSCP",
+			"server_vrfs": schema.ListNestedAttribute{
+				MarkdownDescription: "Cisco sshd VRF name",
 				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vrf_name": schema.StringAttribute{
+							MarkdownDescription: "Cisco sshd VRF name",
+							Computed:            true,
+						},
+						"ipv4_access_list": schema.StringAttribute{
+							MarkdownDescription: "Configure IPv4 access-list",
+							Computed:            true,
+						},
+						"ipv6_access_list": schema.StringAttribute{
+							MarkdownDescription: "Configure IPv6 access-list",
+							Computed:            true,
+						},
+					},
+				},
 			},
-			"server_logging": schema.BoolAttribute{
-				MarkdownDescription: "Enable ssh server logging",
-				Computed:            true,
-			},
-			"server_rate_limit": schema.Int64Attribute{
-				MarkdownDescription: "Cisco sshd rate-limit of service requests",
-				Computed:            true,
-			},
-			"server_session_limit": schema.Int64Attribute{
-				MarkdownDescription: "Cisco sshd session-limit of service requests",
+			"server_v1": schema.BoolAttribute{
+				MarkdownDescription: "Cisco sshd protocol version 1 ",
 				Computed:            true,
 			},
 			"server_v2": schema.BoolAttribute{
 				MarkdownDescription: "Cisco sshd protocol version 2 ",
 				Computed:            true,
 			},
-			"server_v1": schema.BoolAttribute{
-				MarkdownDescription: "Cisco sshd protocol version 1 ",
+			"server_rate_limit": schema.Int64Attribute{
+				MarkdownDescription: "Cisco sshd rate-limit of service requests",
 				Computed:            true,
 			},
 			"server_disable_hmac_sha2_512": schema.BoolAttribute{
@@ -115,6 +123,42 @@ func (d *SSHDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "Enable ssh server 3des-cbc algorithm",
 				Computed:            true,
 			},
+			"server_session_limit": schema.Int64Attribute{
+				MarkdownDescription: "Cisco sshd session-limit of service requests",
+				Computed:            true,
+			},
+			"server_logging": schema.BoolAttribute{
+				MarkdownDescription: "Enable ssh server logging",
+				Computed:            true,
+			},
+			"server_dscp": schema.Int64Attribute{
+				MarkdownDescription: "Cisco ssh server DSCP",
+				Computed:            true,
+			},
+			"server_netconf_port": schema.Int64Attribute{
+				MarkdownDescription: "Port to start ssh netconf subsystem service (Default 830)",
+				Computed:            true,
+			},
+			"server_netconf_vrfs": schema.ListNestedAttribute{
+				MarkdownDescription: "Cisco netconf VRF name",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vrf_name": schema.StringAttribute{
+							MarkdownDescription: "Cisco netconf VRF name",
+							Computed:            true,
+						},
+						"ipv4_access_list": schema.StringAttribute{
+							MarkdownDescription: "Configure IPv4 access-list",
+							Computed:            true,
+						},
+						"ipv6_access_list": schema.StringAttribute{
+							MarkdownDescription: "Configure IPv6 access-list",
+							Computed:            true,
+						},
+					},
+				},
+			},
 			"server_netconf_xml": schema.BoolAttribute{
 				MarkdownDescription: "Use Netconf XML stack",
 				Computed:            true,
@@ -125,22 +169,6 @@ func (d *SSHDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 			},
 			"server_rekey_volume": schema.Int64Attribute{
 				MarkdownDescription: "Configures volume-based rekey (default 1024MB)",
-				Computed:            true,
-			},
-			"server_tcp_window_scale": schema.Int64Attribute{
-				MarkdownDescription: "Set tcp window-scale factor for High Latency links",
-				Computed:            true,
-			},
-			"server_max_auth_limit": schema.Int64Attribute{
-				MarkdownDescription: "User Configurable max authentication attempts",
-				Computed:            true,
-			},
-			"server_port": schema.Int64Attribute{
-				MarkdownDescription: "User Configurable ssh port (Default 22)",
-				Computed:            true,
-			},
-			"server_port_forwarding_local": schema.BoolAttribute{
-				MarkdownDescription: "Enable local port forwarding for ssh server",
 				Computed:            true,
 			},
 			"server_algorithms_key_exchanges": schema.ListAttribute{
@@ -193,6 +221,22 @@ func (d *SSHDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				ElementType:         types.StringType,
 				Computed:            true,
 			},
+			"server_max_auth_limit": schema.Int64Attribute{
+				MarkdownDescription: "User Configurable max authentication attempts",
+				Computed:            true,
+			},
+			"server_tcp_window_scale": schema.Int64Attribute{
+				MarkdownDescription: "Set tcp window-scale factor for High Latency links",
+				Computed:            true,
+			},
+			"server_port_forwarding_local": schema.BoolAttribute{
+				MarkdownDescription: "Enable local port forwarding for ssh server",
+				Computed:            true,
+			},
+			"server_port": schema.Int64Attribute{
+				MarkdownDescription: "User Configurable ssh port (Default 22)",
+				Computed:            true,
+			},
 			"server_usernames": schema.ListNestedAttribute{
 				MarkdownDescription: "ssh user",
 				Computed:            true,
@@ -205,50 +249,7 @@ func (d *SSHDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 						"keystring": schema.StringAttribute{
 							MarkdownDescription: "Enter public key in ssh format",
 							Computed:            true,
-						},
-					},
-				},
-			},
-			"server_vrfs": schema.ListNestedAttribute{
-				MarkdownDescription: "Cisco sshd VRF name",
-				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"vrf_name": schema.StringAttribute{
-							MarkdownDescription: "Cisco sshd VRF name",
-							Computed:            true,
-						},
-						"ipv4_access_list": schema.StringAttribute{
-							MarkdownDescription: "Configure IPv4 access-list",
-							Computed:            true,
-						},
-						"ipv6_access_list": schema.StringAttribute{
-							MarkdownDescription: "Configure IPv6 access-list",
-							Computed:            true,
-						},
-					},
-				},
-			},
-			"server_netconf_port": schema.Int64Attribute{
-				MarkdownDescription: "Port to start ssh netconf subsystem service (Default 830)",
-				Computed:            true,
-			},
-			"server_netconf_vrfs": schema.ListNestedAttribute{
-				MarkdownDescription: "Cisco netconf VRF name",
-				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"vrf_name": schema.StringAttribute{
-							MarkdownDescription: "Cisco netconf VRF name",
-							Computed:            true,
-						},
-						"ipv4_access_list": schema.StringAttribute{
-							MarkdownDescription: "Configure IPv4 access-list",
-							Computed:            true,
-						},
-						"ipv6_access_list": schema.StringAttribute{
-							MarkdownDescription: "Configure IPv6 access-list",
-							Computed:            true,
+							Sensitive:           true,
 						},
 					},
 				},
@@ -275,18 +276,6 @@ func (d *SSHDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 			},
 			"client_rekey_volume": schema.Int64Attribute{
 				MarkdownDescription: "Configures volume-based rekey (default 1024MB)",
-				Computed:            true,
-			},
-			"client_tcp_window_scale": schema.Int64Attribute{
-				MarkdownDescription: "Set tcp window-scale factor for High Latency links",
-				Computed:            true,
-			},
-			"client_v2": schema.BoolAttribute{
-				MarkdownDescription: "Set ssh client to use version 2 ",
-				Computed:            true,
-			},
-			"client_v1": schema.BoolAttribute{
-				MarkdownDescription: "Set ssh client to use version 1 ",
 				Computed:            true,
 			},
 			"client_disable_hmac_sha1": schema.BoolAttribute{
@@ -317,6 +306,18 @@ func (d *SSHDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 			"client_algorithms_ciphers": schema.ListAttribute{
 				MarkdownDescription: "Cipher algorithms",
 				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"client_tcp_window_scale": schema.Int64Attribute{
+				MarkdownDescription: "Set tcp window-scale factor for High Latency links",
+				Computed:            true,
+			},
+			"client_v2": schema.BoolAttribute{
+				MarkdownDescription: "Set ssh client to use version 2 ",
+				Computed:            true,
+			},
+			"client_v1": schema.BoolAttribute{
+				MarkdownDescription: "Set ssh client to use version 1 ",
 				Computed:            true,
 			},
 		},

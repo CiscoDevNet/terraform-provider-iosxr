@@ -127,6 +127,7 @@ func testAccIosxrEVPNEVIConfig_minimum() string {
 
 func testAccIosxrEVPNEVIConfig_all() string {
 	config := `resource "iosxr_evpn_evi" "test" {` + "\n"
+	config += `	delete_mode = "all"` + "\n"
 	config += `	vpn_id = 1234` + "\n"
 	config += `	description = "My Description"` + "\n"
 	config += `	load_balancing = true` + "\n"

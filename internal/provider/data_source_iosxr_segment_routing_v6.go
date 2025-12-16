@@ -71,9 +71,37 @@ func (d *SegmentRoutingV6DataSource) Schema(ctx context.Context, req datasource.
 				MarkdownDescription: "Enable SRv6",
 				Computed:            true,
 			},
-			"encapsulation_source_address": schema.StringAttribute{
-				MarkdownDescription: "Configure a source address",
+			"sid_holdtime": schema.Int64Attribute{
+				MarkdownDescription: "Configure SID holdtime for a stale/freed SID",
 				Computed:            true,
+			},
+			"logging_locator_status": schema.BoolAttribute{
+				MarkdownDescription: "Enable logging for locator status changes",
+				Computed:            true,
+			},
+			"formats": schema.ListNestedAttribute{
+				MarkdownDescription: "Configure a SRv6 format",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: "Format name",
+							Computed:            true,
+						},
+						"usid_local_id_block_ranges_lib_start": schema.Int64Attribute{
+							MarkdownDescription: "Start of LIB",
+							Computed:            true,
+						},
+						"usid_local_id_block_ranges_explict_lib_start": schema.Int64Attribute{
+							MarkdownDescription: "Start of Explicit LIB",
+							Computed:            true,
+						},
+						"usid_wide_local_id_block_explicit_range": schema.Int64Attribute{
+							MarkdownDescription: "Specify uSID WLIB explicit range",
+							Computed:            true,
+						},
+					},
+				},
 			},
 			"locators": schema.ListNestedAttribute{
 				MarkdownDescription: "Configure a SRv6 locator",
@@ -100,36 +128,36 @@ func (d *SegmentRoutingV6DataSource) Schema(ctx context.Context, req datasource.
 							MarkdownDescription: "Prefix length",
 							Computed:            true,
 						},
+						"anycast": schema.BoolAttribute{
+							MarkdownDescription: "Specify locator to be anycast type",
+							Computed:            true,
+						},
+						"algorithm": schema.Int64Attribute{
+							MarkdownDescription: "Specify locator algorithm",
+							Computed:            true,
+						},
 					},
 				},
 			},
-			"formats": schema.ListNestedAttribute{
-				MarkdownDescription: "Configure a SRv6 format",
+			"encapsulation_traffic_class_option": schema.StringAttribute{
+				MarkdownDescription: "Config option",
 				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: "Format name",
-							Computed:            true,
-						},
-						"format_enable": schema.BoolAttribute{
-							MarkdownDescription: "Enable a SRv6 format",
-							Computed:            true,
-						},
-						"usid_local_id_block_ranges_lib_start": schema.Int64Attribute{
-							MarkdownDescription: "Start of LIB",
-							Computed:            true,
-						},
-						"usid_local_id_block_ranges_explict_lib_start": schema.Int64Attribute{
-							MarkdownDescription: "Start of Explicit LIB",
-							Computed:            true,
-						},
-						"usid_wide_local_id_block_explicit_range": schema.Int64Attribute{
-							MarkdownDescription: "Specify uSID WLIB explicit range",
-							Computed:            true,
-						},
-					},
-				},
+			},
+			"encapsulation_traffic_class_value": schema.Int64Attribute{
+				MarkdownDescription: "Field Value",
+				Computed:            true,
+			},
+			"encapsulation_hop_limit_option": schema.StringAttribute{
+				MarkdownDescription: "Hop-Limit config option",
+				Computed:            true,
+			},
+			"encapsulation_hop_limit_value": schema.Int64Attribute{
+				MarkdownDescription: "Count for Hop-limit",
+				Computed:            true,
+			},
+			"encapsulation_source_address": schema.StringAttribute{
+				MarkdownDescription: "Configure a source address",
+				Computed:            true,
 			},
 		},
 	}

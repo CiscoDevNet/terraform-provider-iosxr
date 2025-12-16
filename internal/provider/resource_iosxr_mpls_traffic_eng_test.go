@@ -91,6 +91,7 @@ func testAccIosxrMPLSTrafficEngConfig_minimum() string {
 
 func testAccIosxrMPLSTrafficEngConfig_all() string {
 	config := `resource "iosxr_mpls_traffic_eng" "test" {` + "\n"
+	config += `	delete_mode = "all"` + "\n"
 	config += `	traffic_eng = true` + "\n"
 	config += `}` + "\n"
 	return config

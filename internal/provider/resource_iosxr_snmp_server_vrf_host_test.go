@@ -36,8 +36,8 @@ import (
 func TestAccIosxrSNMPServerVRFHost(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server_vrf_host.test", "address", "11.11.11.11"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server_vrf_host.test", "unencrypted_strings.0.community_string", "COMMUNITY1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server_vrf_host.test", "unencrypted_strings.0.version_v3_security_level", "auth"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server_vrf_host.test", "traps_unencrypted_strings.0.version_v3_security_level", "auth"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server_vrf_host.test", "informs_unencrypted_strings.0.version_v3_security_level", "auth"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -96,8 +96,12 @@ func testAccIosxrSNMPServerVRFHostConfig_minimum() string {
 	config := `resource "iosxr_snmp_server_vrf_host" "test" {` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	address = "11.11.11.11"` + "\n"
-	config += `	unencrypted_strings = [{` + "\n"
+	config += `	traps_unencrypted_strings = [{` + "\n"
 	config += `		community_string = "COMMUNITY1"` + "\n"
+	config += `		version_v3_security_level = "auth"` + "\n"
+	config += `		}]` + "\n"
+	config += `	informs_unencrypted_strings = [{` + "\n"
+	config += `		community_string = "COMMUNITY2"` + "\n"
 	config += `		version_v3_security_level = "auth"` + "\n"
 	config += `		}]` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
@@ -111,10 +115,15 @@ func testAccIosxrSNMPServerVRFHostConfig_minimum() string {
 
 func testAccIosxrSNMPServerVRFHostConfig_all() string {
 	config := `resource "iosxr_snmp_server_vrf_host" "test" {` + "\n"
+	config += `	delete_mode = "all"` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	address = "11.11.11.11"` + "\n"
-	config += `	unencrypted_strings = [{` + "\n"
+	config += `	traps_unencrypted_strings = [{` + "\n"
 	config += `		community_string = "COMMUNITY1"` + "\n"
+	config += `		version_v3_security_level = "auth"` + "\n"
+	config += `		}]` + "\n"
+	config += `	informs_unencrypted_strings = [{` + "\n"
+	config += `		community_string = "COMMUNITY2"` + "\n"
 	config += `		version_v3_security_level = "auth"` + "\n"
 	config += `		}]` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"

@@ -14,9 +14,86 @@ This resource can manage the Router ISIS Address Family configuration.
 
 ```terraform
 resource "iosxr_router_isis_address_family" "example" {
-  process_id                   = "P1"
-  af_name                      = "ipv4"
-  saf_name                     = "unicast"
+  process_id = "P1"
+  af_name    = "ipv4"
+  saf_name   = "unicast"
+  distance   = 100
+  distance_sources = [
+    {
+      address      = "192.168.1.1"
+      prefix       = 32
+      distance     = 101
+      route_filter = "ROUTE_POLICY_1"
+    }
+  ]
+  distribute_list_prefix_list_in      = "PREFIX_LIST_1"
+  redistribute_connected              = true
+  redistribute_connected_level        = "level-2"
+  redistribute_connected_metric       = 100
+  redistribute_connected_route_policy = "ROUTE_POLICY_1"
+  redistribute_connected_metric_type  = "internal"
+  redistribute_static                 = true
+  redistribute_static_level           = "level-2"
+  redistribute_static_metric          = 100
+  redistribute_static_route_policy    = "ROUTE_POLICY_1"
+  redistribute_static_metric_type     = "internal"
+  redistribute_isis = [
+    {
+      instance_id     = "CORE"
+      level           = "level-2"
+      metric          = 10
+      route_policy    = "ROUTE_POLICY_1"
+      metric_type     = "internal"
+      down_flag_clear = true
+    }
+  ]
+  redistribute_bgp = [
+    {
+      as_number    = "65001"
+      level        = "level-2"
+      metric       = 100
+      route_policy = "ROUTE_POLICY_1"
+      metric_type  = "internal"
+    }
+  ]
+  redistribute_ospf = [
+    {
+      instance_id    = "OSPF1"
+      match_external = true
+      level          = "level-2"
+      metric         = 100
+      route_policy   = "ROUTE_POLICY_1"
+      metric_type    = "internal"
+    }
+  ]
+  maximum_paths                        = 10
+  router_id_ip_address                 = "192.168.1.1"
+  advertise_passive_only               = true
+  advertise_link_attributes            = true
+  microloop_avoidance                  = true
+  microloop_avoidance_protected        = true
+  microloop_avoidance_rib_update_delay = 5000
+  summary_prefixes = [
+    {
+      address                          = "192.168.2.0"
+      prefix                           = 24
+      tag                              = 100
+      level                            = 1
+      algorithm                        = 128
+      explicit                         = true
+      adv_unreachable                  = true
+      unreachable_tag                  = 200
+      unreachable_tag_exclude_prefixes = true
+      partition_repair                 = true
+    }
+  ]
+  metric = 100
+  metric_levels = [
+    {
+      level_number = 1
+      metric       = 100
+    }
+  ]
   metric_style_wide_transition = true
   metric_style_levels = [
     {
@@ -24,54 +101,9 @@ resource "iosxr_router_isis_address_family" "example" {
       wide_transition = true
     }
   ]
-  router_id_ip_address                   = "192.168.1.1"
-  default_information_originate          = true
-  fast_reroute_delay_interval            = 300
-  fast_reroute_per_prefix_priority_limit = "critical"
-  fast_reroute_per_prefix_priority_limit_levels = [
-    {
-      level_number   = 1
-      priority_limit = "critical"
-    }
-  ]
-  fast_reroute_per_prefix_use_candidate_only              = true
-  fast_reroute_per_prefix_srlg_protection_weighted_global = true
-  fast_reroute_per_prefix_srlg_protection_weighted_global_levels = [
-    {
-      level_number = 1
-    }
-  ]
-  fast_reroute_per_prefix_load_sharing_disable = true
-  fast_reroute_per_prefix_load_sharing_disable_levels = [
-    {
-      level_number = 1
-    }
-  ]
-  fast_reroute_per_prefix_tiebreaker_downstream_index           = 10
-  fast_reroute_per_prefix_tiebreaker_lc_disjoint_index          = 20
-  fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_index = 30
-  fast_reroute_per_prefix_tiebreaker_node_protecting_index      = 40
-  fast_reroute_per_prefix_tiebreaker_primary_path_index         = 50
-  fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index        = 70
-  fast_reroute_per_link_priority_limit                          = "critical"
-  fast_reroute_per_link_priority_limit_levels = [
-    {
-      level_number   = 1
-      priority_limit = "critical"
-    }
-  ]
-  fast_reroute_per_link_use_candidate_only = true
-  microloop_avoidance                      = true
-  microloop_avoidance_protected            = true
-  microloop_avoidance_rib_update_delay     = 5000
-  advertise_passive_only                   = true
-  advertise_link_attributes                = true
-  mpls_ldp_auto_config                     = false
-  mpls_traffic_eng_router_id_ipv4_address  = "1.2.3.4"
-  mpls_traffic_eng_level_1_2               = true
-  spf_interval_maximum_wait                = 5000
-  spf_interval_initial_wait                = 50
-  spf_interval_secondary_wait              = 200
+  spf_interval_maximum_wait   = 5000
+  spf_interval_initial_wait   = 50
+  spf_interval_secondary_wait = 200
   spf_interval_levels = [
     {
       level_number   = 1
@@ -101,7 +133,6 @@ resource "iosxr_router_isis_address_family" "example" {
       tag          = 300
     }
   ]
-  segment_routing_mpls_sr_prefer = true
   maximum_redistributed_prefixes = 100
   maximum_redistributed_prefixes_levels = [
     {
@@ -109,16 +140,131 @@ resource "iosxr_router_isis_address_family" "example" {
       maximum_redistributed_prefixes = 1000
     }
   ]
-  redistribute_isis = [
+  propagate_levels = [
     {
-      instance_id     = "CORE"
-      level           = "level-2"
-      metric          = 10
-      route_policy    = "ROUTE_POLICY_1"
-      metric_type     = "internal"
-      down_flag_clear = true
+      source_level      = 1
+      destination_level = 2
+      route_policy      = "ROUTE_POLICY_1"
     }
   ]
+  adjacency_check_disable                = true
+  route_source_first_hop                 = true
+  attached_bit_receive_ignore            = true
+  attached_bit_send                      = "always-set"
+  fast_reroute_delay_interval            = 300
+  fast_reroute_per_prefix_priority_limit = "critical"
+  fast_reroute_per_prefix_priority_limit_levels = [
+    {
+      level_number   = 1
+      priority_limit = "critical"
+    }
+  ]
+  fast_reroute_per_prefix_use_candidate_only              = true
+  fast_reroute_per_prefix_srlg_protection_weighted_global = true
+  fast_reroute_per_prefix_srlg_protection_weighted_global_levels = [
+    {
+      level_number = 1
+    }
+  ]
+  fast_reroute_per_prefix_load_sharing_disable = true
+  fast_reroute_per_prefix_load_sharing_disable_levels = [
+    {
+      level_number = 1
+    }
+  ]
+  fast_reroute_per_prefix_tiebreaker_downstream_index           = 10
+  fast_reroute_per_prefix_tiebreaker_lc_disjoint_index          = 20
+  fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_index = 30
+  fast_reroute_per_prefix_tiebreaker_node_protecting_index      = 40
+  fast_reroute_per_prefix_tiebreaker_primary_path_index         = 50
+  fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index        = 70
+  fast_reroute_per_link_use_candidate_only                      = true
+  fast_reroute_per_link_use_candidate_only_levels = [
+    {
+      level_number = 1
+    }
+  ]
+  fast_reroute_per_link_priority_limit = "critical"
+  fast_reroute_per_link_priority_limit_levels = [
+    {
+      level_number   = 1
+      priority_limit = "critical"
+    }
+  ]
+  default_information_originate                                   = true
+  default_information_originate_route_policy                      = "ROUTE_POLICY_1"
+  segment_routing_bundle_member_adj_sid                           = true
+  segment_routing_labeled_only                                    = true
+  segment_routing_protected_adjacency_sid_delay                   = 60
+  segment_routing_mpls_sr_prefer                                  = true
+  segment_routing_mpls_unlabeled_protection_route_policy          = "ROUTE_POLICY_1"
+  segment_routing_mpls_prefix_sid_map_receive_disable             = true
+  segment_routing_mpls_prefix_sid_map_advertise_local_domain_wide = true
+  segment_routing_mpls_connected_prefix_sid_map                   = true
+  segment_routing_mpls_connected_prefix_sid_map_addresses = [
+    {
+      ip_address          = "10.1.1.1"
+      prefix              = 32
+      index_id            = 400
+      index_interface     = "GigabitEthernet0/0/0/3"
+      index_php_disable   = true
+      index_explicit_null = true
+    }
+  ]
+  segment_routing_mpls_connected_prefix_sid_map_flex_algo_addresses = [
+    {
+      ip_address          = "10.1.1.2"
+      prefix              = 32
+      flex_algo           = 128
+      index_id            = 500
+      index_interface     = "GigabitEthernet0/0/0/3"
+      index_php_disable   = true
+      index_explicit_null = true
+    }
+  ]
+  segment_routing_mpls_connected_prefix_sid_map_strict_spf_addresses = [
+    {
+      ip_address          = "10.1.1.3"
+      prefix              = 32
+      index_id            = 600
+      index_interface     = "GigabitEthernet0/0/0/3"
+      index_php_disable   = true
+      index_explicit_null = true
+    }
+  ]
+  partition_detect = true
+  partition_detect_tracks = [
+    {
+      address = "192.168.3.1"
+      ipv4    = true
+    }
+  ]
+  partition_detect_external_address_tracks = [
+    {
+      address          = "192.168.3.2"
+      external_address = "10.10.10.1"
+    }
+  ]
+  mpls_ldp_auto_config                            = false
+  mpls_traffic_eng_router_id_ipv4_address         = "1.2.3.4"
+  mpls_traffic_eng_igp_intact                     = true
+  mpls_traffic_eng_multicast_intact               = true
+  mpls_traffic_eng_tunnel_restricted              = true
+  mpls_traffic_eng_tunnel_preferred               = true
+  mpls_traffic_eng_tunnel_metric                  = 100
+  mpls_traffic_eng_tunnel_anycast_prefer_igp_cost = true
+  mpls_traffic_eng_tunnel_metric_levels = [
+    {
+      level_number = 1
+      metric       = 100
+    }
+  ]
+  mpls_traffic_eng_level_1_2           = true
+  prefix_unreachable                   = true
+  prefix_unreachable_adv_maximum       = 60
+  prefix_unreachable_adv_lifetime      = 120
+  prefix_unreachable_adv_metric        = 4261412865
+  prefix_unreachable_rx_process_enable = true
 }
 ```
 
@@ -129,24 +275,35 @@ resource "iosxr_router_isis_address_family" "example" {
 
 - `af_name` (String) af-name
   - Choices: `ipv4`, `ipv6`
+- `default_information_originate_route_policy` (String) text
 - `process_id` (String) Process ID
 - `saf_name` (String) saf-name
   - Choices: `multicast`, `unicast`
 
 ### Optional
 
+- `adjacency_check_disable` (Boolean) Disable adjacency-checking
 - `advertise_link_attributes` (Boolean) Advertise additional link attributes
 - `advertise_passive_only` (Boolean) Advertise prefixes of passive interfaces only
+- `attached_bit_receive_ignore` (Boolean) Ignore the attached bit in received LSPs
+- `attached_bit_send` (String) Modify how we set the attached bit
+  - Choices: `always-set`, `never-set`
 - `default_information_originate` (Boolean) Distribute a default route
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
+- `distance` (Number) Configure IS-IS administrative distances
+  - Range: `1`-`255`
+- `distance_sources` (Attributes List) Route source for this distance (see [below for nested schema](#nestedatt--distance_sources))
+- `distribute_list_prefix_list_in` (String) Filter routes based on a prefix list
+- `distribute_list_route_policy_in` (String) Filter routes based on a route policy
 - `fast_reroute_delay_interval` (Number) Delay before running FRR computation
   - Range: `100`-`60000`
 - `fast_reroute_per_link_priority_limit` (String) Limit backup computation upto the prefix priority
   - Choices: `critical`, `high`, `medium`
 - `fast_reroute_per_link_priority_limit_levels` (Attributes List) Set priority-limit for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_link_priority_limit_levels))
 - `fast_reroute_per_link_use_candidate_only` (Boolean) Exclude all interfaces from computation
+- `fast_reroute_per_link_use_candidate_only_levels` (Attributes List) Exclude all interfaces for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_link_use_candidate_only_levels))
 - `fast_reroute_per_prefix_load_sharing_disable` (Boolean) Disable load sharing
 - `fast_reroute_per_prefix_load_sharing_disable_levels` (Attributes List) Disable load sharing for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_load_sharing_disable_levels))
 - `fast_reroute_per_prefix_priority_limit` (String) Limit backup computation upto the prefix priority
@@ -171,9 +328,14 @@ resource "iosxr_router_isis_address_family" "example" {
 - `fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index` (Number) Set preference order among tiebreakers
   - Range: `1`-`255`
 - `fast_reroute_per_prefix_use_candidate_only` (Boolean) Exclude all interfaces from computation
+- `maximum_paths` (Number) Maximum number of active parallel paths per route
+  - Range: `1`-`64`
 - `maximum_redistributed_prefixes` (Number) Maximum number of redistributed prefixes
   - Range: `1`-`28000`
 - `maximum_redistributed_prefixes_levels` (Attributes List) Set maximum redistributed prefixes for one level only (see [below for nested schema](#nestedatt--maximum_redistributed_prefixes_levels))
+- `metric` (Number) Configure default metric
+  - Range: `1`-`16777214`
+- `metric_levels` (Attributes List) Set metric for one level only (see [below for nested schema](#nestedatt--metric_levels))
 - `metric_style_levels` (Attributes List) Set metric-style for one level only (see [below for nested schema](#nestedatt--metric_style_levels))
 - `metric_style_narrow` (Boolean) Use old style of TLVs with narrow metric
 - `metric_style_narrow_transition` (Boolean) Accept both styles of TLVs during transition
@@ -186,16 +348,70 @@ resource "iosxr_router_isis_address_family" "example" {
   - Range: `1000`-`65535`
 - `microloop_avoidance_segment_routing_route_policy` (String) Provide Uloop protection based on a route policy
 - `mpls_ldp_auto_config` (Boolean) Enable LDP IGP interface auto-configuration
+- `mpls_traffic_eng_igp_intact` (Boolean) Install both TE and non-TE nexthops in the RIB.
 - `mpls_traffic_eng_level_1` (Boolean) Enable mpls traffic-eng at level 1
 - `mpls_traffic_eng_level_1_2` (Boolean) Enable mpls traffic-eng at both level 1 and 2
 - `mpls_traffic_eng_level_2_only` (Boolean) Enable mpls traffic-eng at level 2
+- `mpls_traffic_eng_multicast_intact` (Boolean) Install non-TE nexthops in the RIB for use by multicast
 - `mpls_traffic_eng_router_id_interface_name` (String) interface-name
 - `mpls_traffic_eng_router_id_ipv4_address` (String) ipv4-address
+- `mpls_traffic_eng_tunnel_anycast_prefer_igp_cost` (Boolean) Prefer anycast prefix with lowest IGP cost
+- `mpls_traffic_eng_tunnel_metric` (Number) Default metric for forwarding-adjacency tunnels
+  - Range: `1`-`16777214`
+- `mpls_traffic_eng_tunnel_metric_levels` (Attributes List) Set metric for one level only (see [below for nested schema](#nestedatt--mpls_traffic_eng_tunnel_metric_levels))
+- `mpls_traffic_eng_tunnel_preferred` (Boolean) Prefer TE tunnels over equal-cost physical paths
+- `mpls_traffic_eng_tunnel_restricted` (Boolean) Use only primary tunnel for destination IP address
+- `partition_detect` (Boolean) Detect area or domain partition
+- `partition_detect_external_address_tracks` (Attributes List) Track ABR or ASBR reachability (see [below for nested schema](#nestedatt--partition_detect_external_address_tracks))
+- `partition_detect_tracks` (Attributes List) Track ABR or ASBR reachability (see [below for nested schema](#nestedatt--partition_detect_tracks))
+- `prefix_unreachable` (Boolean) Prefix Unreachablity
+- `prefix_unreachable_adv_lifetime` (Number) Lifetime of the prefix-unreachable advertisements
+  - Range: `30`-`65535`
+- `prefix_unreachable_adv_maximum` (Number) Maximum number of prefix-unreachable advertisements
+  - Range: `1`-`65535`
+- `prefix_unreachable_adv_metric` (Number) Metric of the prefix-unreachable advertisements
+  - Range: `4261412865`-`4294967294`
+- `prefix_unreachable_rx_process_enable` (Boolean) Enable processing of received prefix-unreachable advertisements
+- `propagate_levels` (Attributes List) Propagate routes between IS-IS levels (see [below for nested schema](#nestedatt--propagate_levels))
+- `redistribute_bgp` (Attributes List) Border Gateway Protocol (BGP) (see [below for nested schema](#nestedatt--redistribute_bgp))
+- `redistribute_connected` (Boolean) Connected routes
+- `redistribute_connected_level` (String) Redistribute routes into both levels
+  - Choices: `level-1`, `level-1-2`, `level-2`
+- `redistribute_connected_metric` (Number) Metric for redistributed routes
+  - Range: `0`-`16777215`
+- `redistribute_connected_metric_type` (String) IS-IS metric type for redistributed routes
+  - Choices: `external`, `internal`, `rib-metric-as-external`, `rib-metric-as-internal`
+- `redistribute_connected_route_policy` (String) Route policy reference
 - `redistribute_isis` (Attributes List) Redistribute ISIS routes (see [below for nested schema](#nestedatt--redistribute_isis))
+- `redistribute_ospf` (Attributes List) Open Shortest Path First (OSPF) (see [below for nested schema](#nestedatt--redistribute_ospf))
+- `redistribute_static` (Boolean) Static routes
+- `redistribute_static_level` (String) Redistribute routes into both levels
+  - Choices: `level-1`, `level-1-2`, `level-2`
+- `redistribute_static_metric` (Number) Metric for redistributed routes
+  - Range: `0`-`16777215`
+- `redistribute_static_metric_type` (String) IS-IS metric type for redistributed routes
+  - Choices: `external`, `internal`, `rib-metric-as-external`, `rib-metric-as-internal`
+- `redistribute_static_route_policy` (String) Route policy reference
+- `route_source_first_hop` (Boolean) Use the IP address of the first-hop
 - `router_id_interface_name` (String) Router ID Interface
 - `router_id_ip_address` (String) Router ID address
+- `segment_routing_bundle_member_adj_sid` (Boolean) Enable per bundle member adjacency SID
+- `segment_routing_labeled_only` (Boolean) Only install SR labeled paths
+- `segment_routing_mpls_connected_prefix_sid_map` (Boolean) Enter connected prefix sid map submode
+- `segment_routing_mpls_connected_prefix_sid_map_addresses` (Attributes List) Specify prefix associated with this Prefix Segement ID (see [below for nested schema](#nestedatt--segment_routing_mpls_connected_prefix_sid_map_addresses))
+- `segment_routing_mpls_connected_prefix_sid_map_flex_algo_addresses` (Attributes List) Specify prefix associated with this Prefix Segement ID (see [below for nested schema](#nestedatt--segment_routing_mpls_connected_prefix_sid_map_flex_algo_addresses))
+- `segment_routing_mpls_connected_prefix_sid_map_strict_spf_addresses` (Attributes List) Specify prefix associated with this Prefix Segement ID (see [below for nested schema](#nestedatt--segment_routing_mpls_connected_prefix_sid_map_strict_spf_addresses))
 - `segment_routing_mpls_enable` (Boolean) Enable Segment Routing using MPLS encapsulation
+- `segment_routing_mpls_prefix_sid_map_advertise_local` (Boolean) Advertise active local prefix-SID mappings
+- `segment_routing_mpls_prefix_sid_map_advertise_local_domain_wide` (Boolean) Domain wide prefix-SID mappings
+- `segment_routing_mpls_prefix_sid_map_receive` (Boolean) Use remote mapping server advertisements
+- `segment_routing_mpls_prefix_sid_map_receive_disable` (Boolean) disable
 - `segment_routing_mpls_sr_prefer` (Boolean) Prefer segment routing labels over LDP labels
+- `segment_routing_mpls_unlabeled_protection_disable` (Boolean) Disable TI-LFA and microloop protection
+- `segment_routing_mpls_unlabeled_protection_prefix_list` (String) Enable TI-LFA and microloop protection based on a prefix list
+- `segment_routing_mpls_unlabeled_protection_route_policy` (String) Enable TI-LFA and microloop protection based on a route policy
+- `segment_routing_protected_adjacency_sid_delay` (Number) Protected Adjacency SID deletion delay (seconds)
+  - Range: `30`-`3600`
 - `segment_routing_srv6_locators` (Attributes List) Enter SRv6 Locator submode (see [below for nested schema](#nestedatt--segment_routing_srv6_locators))
 - `spf_interval_ietf` (Boolean) Use RFC 8405 backoff algorithm
 - `spf_interval_ietf_holddown_interval` (Number) Holddown interval for running a route calculation [10000]
@@ -227,10 +443,27 @@ resource "iosxr_router_isis_address_family" "example" {
 - `spf_prefix_priority_medium_prefix_list_name` (String) Prefix-list name
 - `spf_prefix_priority_medium_tag` (Number) Specify a tag to indicate priority
   - Range: `1`-`4294967295`
+- `summary_prefixes` (Attributes List) Summary prefix (see [below for nested schema](#nestedatt--summary_prefixes))
 
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--distance_sources"></a>
+### Nested Schema for `distance_sources`
+
+Required:
+
+- `address` (String) IP address
+- `distance` (Number) Administrative distance
+  - Range: `1`-`255`
+- `prefix` (Number) IP address prefix
+  - Range: `0`-`128`
+
+Optional:
+
+- `route_filter` (String) Prefix-list or access-list to filter routes for this distance
+
 
 <a id="nestedatt--fast_reroute_per_link_priority_limit_levels"></a>
 ### Nested Schema for `fast_reroute_per_link_priority_limit_levels`
@@ -241,6 +474,15 @@ Required:
   - Range: `1`-`2`
 - `priority_limit` (String) Limit backup computation upto the prefix priority
   - Choices: `critical`, `high`, `medium`
+
+
+<a id="nestedatt--fast_reroute_per_link_use_candidate_only_levels"></a>
+### Nested Schema for `fast_reroute_per_link_use_candidate_only_levels`
+
+Required:
+
+- `level_number` (Number) Level
+  - Range: `1`-`2`
 
 
 <a id="nestedatt--fast_reroute_per_prefix_load_sharing_disable_levels"></a>
@@ -293,6 +535,17 @@ Required:
   - Range: `1`-`28000`
 
 
+<a id="nestedatt--metric_levels"></a>
+### Nested Schema for `metric_levels`
+
+Required:
+
+- `level_number` (Number) Set metric for one level only
+  - Range: `1`-`2`
+- `metric` (Number) Configure default metric
+  - Range: `1`-`16777214`
+
+
 <a id="nestedatt--metric_style_levels"></a>
 ### Nested Schema for `metric_style_levels`
 
@@ -308,6 +561,72 @@ Optional:
 - `transition` (Boolean) Send and accept both styles of TLVs during transition
 - `wide` (Boolean) Use new style of TLVs to carry wider metric
 - `wide_transition` (Boolean) Accept both styles of TLVs during transition
+
+
+<a id="nestedatt--mpls_traffic_eng_tunnel_metric_levels"></a>
+### Nested Schema for `mpls_traffic_eng_tunnel_metric_levels`
+
+Required:
+
+- `level_number` (Number) Set metric at this level only
+  - Range: `1`-`2`
+- `metric` (Number) Default metric for forwarding-adjacency tunnels
+  - Range: `1`-`16777214`
+
+
+<a id="nestedatt--partition_detect_external_address_tracks"></a>
+### Nested Schema for `partition_detect_external_address_tracks`
+
+Required:
+
+- `address` (String) IPaddress
+- `external_address` (String) External ASBR address to track
+
+
+<a id="nestedatt--partition_detect_tracks"></a>
+### Nested Schema for `partition_detect_tracks`
+
+Required:
+
+- `address` (String) IPaddress
+
+Optional:
+
+- `ipv4` (Boolean) Ipv4 Track
+- `ipv6` (Boolean) Ipv6 Track
+
+
+<a id="nestedatt--propagate_levels"></a>
+### Nested Schema for `propagate_levels`
+
+Required:
+
+- `destination_level` (Number) Destination level
+  - Range: `1`-`2`
+- `source_level` (Number) Source level
+  - Range: `1`-`2`
+
+Optional:
+
+- `route_policy` (String) Propagate only specified routes
+
+
+<a id="nestedatt--redistribute_bgp"></a>
+### Nested Schema for `redistribute_bgp`
+
+Required:
+
+- `as_number` (String) as-number
+
+Optional:
+
+- `level` (String) Redistribute routes into both levels
+  - Choices: `level-1`, `level-1-2`, `level-2`
+- `metric` (Number) Metric for redistributed routes
+  - Range: `0`-`16777215`
+- `metric_type` (String) IS-IS metric type for redistributed routes
+  - Choices: `external`, `internal`, `rib-metric-as-external`, `rib-metric-as-internal`
+- `route_policy` (String) Route policy reference
 
 
 <a id="nestedatt--redistribute_isis"></a>
@@ -327,6 +646,97 @@ Optional:
 - `metric_type` (String) IS-IS metric type for redistributed routes
   - Choices: `external`, `internal`, `rib-metric-as-external`, `rib-metric-as-internal`
 - `route_policy` (String) Route policy reference
+
+
+<a id="nestedatt--redistribute_ospf"></a>
+### Nested Schema for `redistribute_ospf`
+
+Required:
+
+- `instance_id` (String) OSPF process ID
+
+Optional:
+
+- `level` (String) Redistribute routes into both levels
+  - Choices: `level-1`, `level-1-2`, `level-2`
+- `match_external` (Boolean) Redistribute OSPF external routes
+- `match_internal` (Boolean) Redistribute OSPF internal routes
+- `metric` (Number) Metric for redistributed routes
+  - Range: `0`-`16777215`
+- `metric_type` (String) IS-IS metric type for redistributed routes
+  - Choices: `external`, `internal`, `rib-metric-as-external`, `rib-metric-as-internal`
+- `route_policy` (String) Route policy reference
+
+
+<a id="nestedatt--segment_routing_mpls_connected_prefix_sid_map_addresses"></a>
+### Nested Schema for `segment_routing_mpls_connected_prefix_sid_map_addresses`
+
+Required:
+
+- `ip_address` (String) IP address
+- `prefix` (Number) IP address prefix
+  - Range: `0`-`128`
+
+Optional:
+
+- `absolute_explicit_null` (Boolean) Upstream neighbor must replace prefix-sid with explicit null label
+- `absolute_id` (Number) The Prefix Segment ID value
+  - Range: `16000`-`1048575`
+- `absolute_interface` (String) Specify the interface associated with the prefix sid
+- `absolute_php_disable` (Boolean) Disable Penultimate Hop Popping
+- `index_explicit_null` (Boolean) Upstream neighbor must replace prefix-sid with explicit null label
+- `index_id` (Number) The Prefix Segment ID index
+  - Range: `0`-`1048575`
+- `index_interface` (String) Specify the interface associated with the prefix sid
+- `index_php_disable` (Boolean) Disable Penultimate Hop Popping
+
+
+<a id="nestedatt--segment_routing_mpls_connected_prefix_sid_map_flex_algo_addresses"></a>
+### Nested Schema for `segment_routing_mpls_connected_prefix_sid_map_flex_algo_addresses`
+
+Required:
+
+- `flex_algo` (Number) Specify the custom flex-algo algorithm to use
+  - Range: `128`-`255`
+- `ip_address` (String) IP address
+- `prefix` (Number) IP address prefix
+  - Range: `0`-`128`
+
+Optional:
+
+- `absolute_explicit_null` (Boolean) Upstream neighbor must replace prefix-sid with explicit null label
+- `absolute_id` (Number) The Prefix Segment ID value
+  - Range: `16000`-`1048575`
+- `absolute_interface` (String) Specify the interface associated with the prefix sid
+- `absolute_php_disable` (Boolean) Disable Penultimate Hop Popping
+- `index_explicit_null` (Boolean) Upstream neighbor must replace prefix-sid with explicit null label
+- `index_id` (Number) The Prefix Segment ID index
+  - Range: `0`-`1048575`
+- `index_interface` (String) Specify the interface associated with the prefix sid
+- `index_php_disable` (Boolean) Disable Penultimate Hop Popping
+
+
+<a id="nestedatt--segment_routing_mpls_connected_prefix_sid_map_strict_spf_addresses"></a>
+### Nested Schema for `segment_routing_mpls_connected_prefix_sid_map_strict_spf_addresses`
+
+Required:
+
+- `ip_address` (String) IP address
+- `prefix` (Number) IP address prefix
+  - Range: `0`-`128`
+
+Optional:
+
+- `absolute_explicit_null` (Boolean) Upstream neighbor must replace prefix-sid with explicit null label
+- `absolute_id` (Number) The Prefix Segment ID value
+  - Range: `16000`-`1048575`
+- `absolute_interface` (String) Specify the interface associated with the prefix sid
+- `absolute_php_disable` (Boolean) Disable Penultimate Hop Popping
+- `index_explicit_null` (Boolean) Upstream neighbor must replace prefix-sid with explicit null label
+- `index_id` (Number) The Prefix Segment ID index
+  - Range: `0`-`1048575`
+- `index_interface` (String) Specify the interface associated with the prefix sid
+- `index_php_disable` (Boolean) Disable Penultimate Hop Popping
 
 
 <a id="nestedatt--segment_routing_srv6_locators"></a>
@@ -442,6 +852,31 @@ Optional:
 - `prefix_list_name` (String) Prefix-list name
 - `tag` (Number) Specify a tag to indicate priority
   - Range: `1`-`4294967295`
+
+
+<a id="nestedatt--summary_prefixes"></a>
+### Nested Schema for `summary_prefixes`
+
+Required:
+
+- `address` (String) IP address
+- `prefix` (Number) IP address prefix
+  - Range: `0`-`128`
+
+Optional:
+
+- `adv_unreachable` (Boolean) Advertise unreachable summary components
+- `algorithm` (Number) Flex Algorithm number
+  - Range: `128`-`255`
+- `explicit` (Boolean) Strict flex-algo locator summarization mode
+- `level` (Number) Summarize routes in one level only
+  - Range: `1`-`2`
+- `partition_repair` (Boolean) React to area or domain partition - deaggregate by default
+- `tag` (Number) Set a tag
+  - Range: `1`-`4294967295`
+- `unreachable_tag` (Number) The tag value of the summary component
+  - Range: `1`-`4294967295`
+- `unreachable_tag_exclude_prefixes` (Boolean) Exclude unreachability advertisement for prefixes with a tag
 
 ## Import
 

@@ -41,9 +41,13 @@ type FlowExporterMap struct {
 	DestinationIpv6Address              types.String `tfsdk:"destination_ipv6_address"`
 	DestinationVrf                      types.String `tfsdk:"destination_vrf"`
 	Source                              types.String `tfsdk:"source"`
+	SourceAddressIpv4Address            types.String `tfsdk:"source_address_ipv4_address"`
+	SourceAddressIpv6Address            types.String `tfsdk:"source_address_ipv6_address"`
+	RouterIdIpv4Address                 types.String `tfsdk:"router_id_ipv4_address"`
+	RouterIdIpv6Address                 types.String `tfsdk:"router_id_ipv6_address"`
 	Dscp                                types.Int64  `tfsdk:"dscp"`
-	PacketLength                        types.Int64  `tfsdk:"packet_length"`
 	TransportUdp                        types.Int64  `tfsdk:"transport_udp"`
+	PacketLength                        types.Int64  `tfsdk:"packet_length"`
 	DfbitSet                            types.Bool   `tfsdk:"dfbit_set"`
 	VersionExportFormat                 types.String `tfsdk:"version_export_format"`
 	VersionTemplateDataTimeout          types.Int64  `tfsdk:"version_template_data_timeout"`
@@ -63,9 +67,13 @@ type FlowExporterMapData struct {
 	DestinationIpv6Address              types.String `tfsdk:"destination_ipv6_address"`
 	DestinationVrf                      types.String `tfsdk:"destination_vrf"`
 	Source                              types.String `tfsdk:"source"`
+	SourceAddressIpv4Address            types.String `tfsdk:"source_address_ipv4_address"`
+	SourceAddressIpv6Address            types.String `tfsdk:"source_address_ipv6_address"`
+	RouterIdIpv4Address                 types.String `tfsdk:"router_id_ipv4_address"`
+	RouterIdIpv6Address                 types.String `tfsdk:"router_id_ipv6_address"`
 	Dscp                                types.Int64  `tfsdk:"dscp"`
-	PacketLength                        types.Int64  `tfsdk:"packet_length"`
 	TransportUdp                        types.Int64  `tfsdk:"transport_udp"`
+	PacketLength                        types.Int64  `tfsdk:"packet_length"`
 	DfbitSet                            types.Bool   `tfsdk:"dfbit_set"`
 	VersionExportFormat                 types.String `tfsdk:"version_export_format"`
 	VersionTemplateDataTimeout          types.Int64  `tfsdk:"version_template_data_timeout"`
@@ -110,14 +118,26 @@ func (data FlowExporterMap) toBody(ctx context.Context) string {
 	if !data.Source.IsNull() && !data.Source.IsUnknown() {
 		body, _ = sjson.Set(body, "source", data.Source.ValueString())
 	}
+	if !data.SourceAddressIpv4Address.IsNull() && !data.SourceAddressIpv4Address.IsUnknown() {
+		body, _ = sjson.Set(body, "source-address.ipv4-address", data.SourceAddressIpv4Address.ValueString())
+	}
+	if !data.SourceAddressIpv6Address.IsNull() && !data.SourceAddressIpv6Address.IsUnknown() {
+		body, _ = sjson.Set(body, "source-address.ipv6-address", data.SourceAddressIpv6Address.ValueString())
+	}
+	if !data.RouterIdIpv4Address.IsNull() && !data.RouterIdIpv4Address.IsUnknown() {
+		body, _ = sjson.Set(body, "router-id.router-id-address.ipv4-address", data.RouterIdIpv4Address.ValueString())
+	}
+	if !data.RouterIdIpv6Address.IsNull() && !data.RouterIdIpv6Address.IsUnknown() {
+		body, _ = sjson.Set(body, "router-id.router-id-address.ipv6-address", data.RouterIdIpv6Address.ValueString())
+	}
 	if !data.Dscp.IsNull() && !data.Dscp.IsUnknown() {
 		body, _ = sjson.Set(body, "dscp", strconv.FormatInt(data.Dscp.ValueInt64(), 10))
 	}
-	if !data.PacketLength.IsNull() && !data.PacketLength.IsUnknown() {
-		body, _ = sjson.Set(body, "packet-length", strconv.FormatInt(data.PacketLength.ValueInt64(), 10))
-	}
 	if !data.TransportUdp.IsNull() && !data.TransportUdp.IsUnknown() {
 		body, _ = sjson.Set(body, "transport.udp", strconv.FormatInt(data.TransportUdp.ValueInt64(), 10))
+	}
+	if !data.PacketLength.IsNull() && !data.PacketLength.IsUnknown() {
+		body, _ = sjson.Set(body, "packet-length", strconv.FormatInt(data.PacketLength.ValueInt64(), 10))
 	}
 	if !data.DfbitSet.IsNull() && !data.DfbitSet.IsUnknown() {
 		if data.DfbitSet.ValueBool() {
@@ -176,20 +196,40 @@ func (data *FlowExporterMap) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Source = types.StringNull()
 	}
+	if value := gjson.GetBytes(res, "source-address.ipv4-address"); value.Exists() && !data.SourceAddressIpv4Address.IsNull() {
+		data.SourceAddressIpv4Address = types.StringValue(value.String())
+	} else {
+		data.SourceAddressIpv4Address = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "source-address.ipv6-address"); value.Exists() && !data.SourceAddressIpv6Address.IsNull() {
+		data.SourceAddressIpv6Address = types.StringValue(value.String())
+	} else {
+		data.SourceAddressIpv6Address = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "router-id.router-id-address.ipv4-address"); value.Exists() && !data.RouterIdIpv4Address.IsNull() {
+		data.RouterIdIpv4Address = types.StringValue(value.String())
+	} else {
+		data.RouterIdIpv4Address = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "router-id.router-id-address.ipv6-address"); value.Exists() && !data.RouterIdIpv6Address.IsNull() {
+		data.RouterIdIpv6Address = types.StringValue(value.String())
+	} else {
+		data.RouterIdIpv6Address = types.StringNull()
+	}
 	if value := gjson.GetBytes(res, "dscp"); value.Exists() && !data.Dscp.IsNull() {
 		data.Dscp = types.Int64Value(value.Int())
 	} else {
 		data.Dscp = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "packet-length"); value.Exists() && !data.PacketLength.IsNull() {
-		data.PacketLength = types.Int64Value(value.Int())
-	} else {
-		data.PacketLength = types.Int64Null()
-	}
 	if value := gjson.GetBytes(res, "transport.udp"); value.Exists() && !data.TransportUdp.IsNull() {
 		data.TransportUdp = types.Int64Value(value.Int())
 	} else {
 		data.TransportUdp = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "packet-length"); value.Exists() && !data.PacketLength.IsNull() {
+		data.PacketLength = types.Int64Value(value.Int())
+	} else {
+		data.PacketLength = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "dfbit.set"); !data.DfbitSet.IsNull() {
 		if value.Exists() {
@@ -259,14 +299,26 @@ func (data *FlowExporterMap) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "source"); value.Exists() {
 		data.Source = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "source-address.ipv4-address"); value.Exists() {
+		data.SourceAddressIpv4Address = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "source-address.ipv6-address"); value.Exists() {
+		data.SourceAddressIpv6Address = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "router-id.router-id-address.ipv4-address"); value.Exists() {
+		data.RouterIdIpv4Address = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "router-id.router-id-address.ipv6-address"); value.Exists() {
+		data.RouterIdIpv6Address = types.StringValue(value.String())
+	}
 	if value := gjson.GetBytes(res, "dscp"); value.Exists() {
 		data.Dscp = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "packet-length"); value.Exists() {
-		data.PacketLength = types.Int64Value(value.Int())
-	}
 	if value := gjson.GetBytes(res, "transport.udp"); value.Exists() {
 		data.TransportUdp = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "packet-length"); value.Exists() {
+		data.PacketLength = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "dfbit.set"); value.Exists() {
 		data.DfbitSet = types.BoolValue(true)
@@ -316,14 +368,26 @@ func (data *FlowExporterMapData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "source"); value.Exists() {
 		data.Source = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "source-address.ipv4-address"); value.Exists() {
+		data.SourceAddressIpv4Address = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "source-address.ipv6-address"); value.Exists() {
+		data.SourceAddressIpv6Address = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "router-id.router-id-address.ipv4-address"); value.Exists() {
+		data.RouterIdIpv4Address = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "router-id.router-id-address.ipv6-address"); value.Exists() {
+		data.RouterIdIpv6Address = types.StringValue(value.String())
+	}
 	if value := gjson.GetBytes(res, "dscp"); value.Exists() {
 		data.Dscp = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "packet-length"); value.Exists() {
-		data.PacketLength = types.Int64Value(value.Int())
-	}
 	if value := gjson.GetBytes(res, "transport.udp"); value.Exists() {
 		data.TransportUdp = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "packet-length"); value.Exists() {
+		data.PacketLength = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "dfbit.set"); value.Exists() {
 		data.DfbitSet = types.BoolValue(true)
@@ -389,14 +453,26 @@ func (data *FlowExporterMap) getDeletedItems(ctx context.Context, state FlowExpo
 	if !state.DfbitSet.IsNull() && data.DfbitSet.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/dfbit/set", state.getPath()))
 	}
-	if !state.TransportUdp.IsNull() && data.TransportUdp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/transport/udp", state.getPath()))
-	}
 	if !state.PacketLength.IsNull() && data.PacketLength.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/packet-length", state.getPath()))
 	}
+	if !state.TransportUdp.IsNull() && data.TransportUdp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/transport/udp", state.getPath()))
+	}
 	if !state.Dscp.IsNull() && data.Dscp.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/dscp", state.getPath()))
+	}
+	if !state.RouterIdIpv6Address.IsNull() && data.RouterIdIpv6Address.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/router-id/router-id-address/ipv6-address", state.getPath()))
+	}
+	if !state.RouterIdIpv4Address.IsNull() && data.RouterIdIpv4Address.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/router-id/router-id-address/ipv4-address", state.getPath()))
+	}
+	if !state.SourceAddressIpv6Address.IsNull() && data.SourceAddressIpv6Address.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/source-address/ipv6-address", state.getPath()))
+	}
+	if !state.SourceAddressIpv4Address.IsNull() && data.SourceAddressIpv4Address.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/source-address/ipv4-address", state.getPath()))
 	}
 	if !state.Source.IsNull() && data.Source.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/source", state.getPath()))
@@ -458,14 +534,26 @@ func (data *FlowExporterMap) getDeletePaths(ctx context.Context) []string {
 	if !data.DfbitSet.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/dfbit/set", data.getPath()))
 	}
-	if !data.TransportUdp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/transport/udp", data.getPath()))
-	}
 	if !data.PacketLength.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/packet-length", data.getPath()))
 	}
+	if !data.TransportUdp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/transport/udp", data.getPath()))
+	}
 	if !data.Dscp.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/dscp", data.getPath()))
+	}
+	if !data.RouterIdIpv6Address.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id/router-id-address/ipv6-address", data.getPath()))
+	}
+	if !data.RouterIdIpv4Address.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id/router-id-address/ipv4-address", data.getPath()))
+	}
+	if !data.SourceAddressIpv6Address.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/source-address/ipv6-address", data.getPath()))
+	}
+	if !data.SourceAddressIpv4Address.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/source-address/ipv4-address", data.getPath()))
 	}
 	if !data.Source.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/source", data.getPath()))

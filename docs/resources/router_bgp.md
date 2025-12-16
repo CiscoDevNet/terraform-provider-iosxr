@@ -150,7 +150,7 @@ Optional:
 - `ebgp_multihop_maximum_hop_count` (Number) maximum hop count
   - Range: `1`-`255`
 - `ignore_connected_check` (Boolean) Bypass the directly connected nexthop check for single-hop eBGP peering
-- `password` (String) Specifies an ENCRYPTED password will follow
+- `password` (String, Sensitive) Specifies an ENCRYPTED password will follow
 - `password_inheritance_disable` (Boolean) Prevent password from being inherited from parent
 - `remote_as` (String) Set remote AS
 - `shutdown` (Boolean) Administratively shut down this neighbor

@@ -33,10 +33,56 @@ data "iosxr_l2vpn_bridge_group_bridge_domain" "example" {
 
 ### Read-Only
 
+- `coupled_mode` (Boolean) Enable coupled mode for the Bridge Domain
+- `description` (String) Description for Bridge-Domain
+- `dynamic_arp_inspection` (Boolean) Dynamic ARP Inspection
+- `dynamic_arp_inspection_address_validation_dst_mac` (Boolean) Match Destination MAC Address
+- `dynamic_arp_inspection_address_validation_ipv4` (Boolean) Match IPv4 Address
+- `dynamic_arp_inspection_address_validation_src_mac` (Boolean) Match Source MAC Address
+- `dynamic_arp_inspection_logging` (Boolean) Enable Logging
+- `efp_visibility` (Boolean) Enable multicast for multiple VLANs in the bridge of a BVI
+- `etree` (Boolean) Configure Bridge Domain  EVPN E-Tree
+- `etree_leaf` (Boolean) Designate Bridge Domain as EVPN E-Tree Leaf
 - `evis` (Attributes List) Ethernet VPN identifier (see [below for nested schema](#nestedatt--evis))
+- `flooding_disable` (Boolean) Disable flooding
 - `id` (String) The path of the retrieved object.
+- `igmp_snooping_disable` (Boolean) disable IGMP snooping for the current bridge domain
+- `igmp_snooping_profile` (String) Attach an IGMP profile
 - `interfaces` (Attributes List) Specify interface name (see [below for nested schema](#nestedatt--interfaces))
+- `ip_source_guard` (Boolean) IP Source Guard
+- `ip_source_guard_logging` (Boolean) Enable Logging
+- `mac_aging_time` (Number) Mac aging
+- `mac_aging_type_absolute` (Boolean) Absolute aging type
+- `mac_learning_disable` (Boolean) Disable MAC learning
+- `mac_limit_action_flood` (Boolean) Stop learning but continue flooding
+- `mac_limit_action_no_flood` (Boolean) Stop learning and stop flooding
+- `mac_limit_action_shutdown` (Boolean) Stop forwarding
+- `mac_limit_maximum` (Number) Number of MAC addresses after which MAC limit action is taken
+- `mac_limit_notification_both` (Boolean) Generate syslog message and SNMP trap
+- `mac_limit_notification_none` (Boolean) No notification
+- `mac_limit_notification_trap` (Boolean) Generate SNMP trap
+- `mac_port_down_flush_disable` (Boolean) Disable MAC flush when port goes down
+- `mac_secure` (Boolean) MAC Secure configuration commands
+- `mac_secure_action_none` (Boolean) Forward the violating packet and allow the MAC to be relearned
+- `mac_secure_action_shutdown` (Boolean) Shutdown the violating bridge port
+- `mac_secure_logging` (Boolean) Enable Logging
+- `mac_secure_shutdown_recovery_timeout` (Number) Recovery-timer to automatically revert shutdown action
+- `mac_secure_threshold` (Boolean) Threshold based mac secure
+- `mac_static_addresses` (Attributes List) Static MAC address for filtering (see [below for nested schema](#nestedatt--mac_static_addresses))
+- `mac_withdraw_access_pw_disable` (Boolean) Disable MAC withdraw on Access PW
+- `mac_withdraw_disable` (Boolean) Disable MAC withdraw
+- `mac_withdraw_optimize` (Boolean) Optimized LDP MAC withdraw (when port goes down)
+- `mac_withdraw_relay` (Boolean) MAC withdraw relayed to Access PWs
+- `mac_withdraw_state_down` (Boolean) MAC withdraw sent on bridge port down
+- `member_vnis_vni` (Attributes List) Assign VxLAN Network Identifier to bridge domain (see [below for nested schema](#nestedatt--member_vnis_vni))
+- `mld_snooping_profile` (String) Attach a MLD profile
 - `mtu` (Number) Maximum transmission unit (payload) for this Bridge Domain
+- `multicast_source_ipv4` (Boolean) Traffic Type IPv4
+- `multicast_source_ipv4_ipv6` (Boolean) Traffic Type IPv4 and IPv6
+- `multicast_source_ipv6` (Boolean) Traffic Type IPv6
+- `neighbors_evpn_evi` (Attributes List) Ethernet VPN Identifier (see [below for nested schema](#nestedatt--neighbors_evpn_evi))
+- `routed_interface` (Attributes List) Assign interface to bridge domain (see [below for nested schema](#nestedatt--routed_interface))
+- `shutdown` (Boolean) shutdown the Bridge Domain
 - `srv6_evis` (Attributes List) Ethernet VPN identifier for srv6 (see [below for nested schema](#nestedatt--srv6_evis))
 - `storm_control_broadcast_kbps` (Number) Set the storm control kbps
 - `storm_control_broadcast_pps` (Number) Set the storm control pps
@@ -44,6 +90,7 @@ data "iosxr_l2vpn_bridge_group_bridge_domain" "example" {
 - `storm_control_multicast_pps` (Number) Set the storm control pps
 - `storm_control_unknown_unicast_kbps` (Number) Set the storm control kbps
 - `storm_control_unknown_unicast_pps` (Number) Set the storm control pps
+- `transport_mode_vlan_passthrough` (Boolean) passthrough incoming tags
 - `vnis` (Attributes List) VxLAN VPN identifier (see [below for nested schema](#nestedatt--vnis))
 
 <a id="nestedatt--evis"></a>
@@ -59,8 +106,108 @@ Read-Only:
 
 Read-Only:
 
+- `dynamic_arp_inspection_address_validation_dst_mac` (Boolean) Match Destination MAC Address
+- `dynamic_arp_inspection_address_validation_dst_mac_disable` (Boolean) disable Destimation MAC Address check
+- `dynamic_arp_inspection_address_validation_ipv4` (Boolean) Match IPv4 Address
+- `dynamic_arp_inspection_address_validation_ipv4_disable` (Boolean) disable IPV4 Address check
+- `dynamic_arp_inspection_address_validation_src_mac` (Boolean) Match Source MAC Address
+- `dynamic_arp_inspection_address_validation_src_mac_disable` (Boolean) disable Source MAC Address check
+- `dynamic_arp_inspection_disable` (Boolean) Disable Dynamic Arp Inspection
+- `dynamic_arp_inspection_logging` (Boolean) Enable Logging
+- `dynamic_arp_inspection_logging_disable` (Boolean) disable logging
+- `flooding_disable` (Boolean) Disable flooding
+- `igmp_snooping_profile` (String) Attach an IGMP profile
 - `interface_name` (String) Specify interface name
+- `ip_source_guard` (Boolean) IP Source Guard
+- `ip_source_guard_disable` (Boolean) Disable IP Source Guard
+- `ip_source_guard_logging` (Boolean) Enable Logging
+- `ip_source_guard_logging_disable` (Boolean) disable logging
+- `mac_aging_time` (Number) Mac aging
+- `mac_aging_type_absolute` (Boolean) Absolute aging type
+- `mac_aging_type_inactivity` (Boolean) Inactivity aging type
+- `mac_learning` (Boolean) MAC learning
+- `mac_learning_disable` (Boolean) Disable MAC learning
+- `mac_limit_action_flood` (Boolean) Stop learning but continue flooding
+- `mac_limit_action_no_flood` (Boolean) Stop learning and stop flooding
+- `mac_limit_action_none` (Boolean) No action
+- `mac_limit_action_shutdown` (Boolean) Stop forwarding
+- `mac_limit_maximum` (Number) Number of MAC addresses after which MAC limit action is taken
+- `mac_limit_notification_both` (Boolean) Generate syslog message and SNMP trap
+- `mac_limit_notification_none` (Boolean) No notification
+- `mac_limit_notification_syslog` (Boolean) Generate syslog message
+- `mac_limit_notification_trap` (Boolean) Generate SNMP trap
+- `mac_port_down_flush_disable` (Boolean) Disable MAC flush when port goes down
+- `mac_secure` (Boolean) MAC Secure configuration commands
+- `mac_secure_action_none` (Boolean) Forward the violating packet and allow the MAC to be relearned
+- `mac_secure_action_restrict` (Boolean) Drop the violating packet and not allow the MAC to be relearned
+- `mac_secure_action_shutdown` (Boolean) Shutdown the violating bridge port
+- `mac_secure_disable` (Boolean) Disable MAC Secure
+- `mac_secure_logging` (Boolean) Enable Logging
+- `mac_secure_logging_disable` (Boolean) disable logging
+- `mac_secure_shutdown_recovery_timeout` (Number) Recovery timer in second
+- `mac_secure_shutdown_recovery_timeout_disable` (Boolean) Disable shutdown recovery timer
+- `mld_snooping_profile` (String) Attach a MLD profile
 - `split_horizon_group` (Boolean) Configure split-horizon group
+- `static_mac_addresses` (Attributes List) Static MAC address (see [below for nested schema](#nestedatt--interfaces--static_mac_addresses))
+- `storm_control_broadcast_kbps` (Number) Set the storm control kbps
+- `storm_control_broadcast_pps` (Number) Set the storm control pps
+- `storm_control_multicast_kbps` (Number) Set the storm control kbps
+- `storm_control_multicast_pps` (Number) Set the storm control pps
+- `storm_control_unknown_unicast_kbps` (Number) Set the storm control kbps
+- `storm_control_unknown_unicast_pps` (Number) Set the storm control pps
+
+<a id="nestedatt--interfaces--static_mac_addresses"></a>
+### Nested Schema for `interfaces.static_mac_addresses`
+
+Read-Only:
+
+- `mac_address` (String) Static MAC address
+
+
+
+<a id="nestedatt--mac_static_addresses"></a>
+### Nested Schema for `mac_static_addresses`
+
+Read-Only:
+
+- `drop` (Boolean) Drop matching packets
+- `mac_address` (String) Static MAC address for filtering
+
+
+<a id="nestedatt--member_vnis_vni"></a>
+### Nested Schema for `member_vnis_vni`
+
+Read-Only:
+
+- `static_mac_addresses` (Attributes List) Static MAC address (see [below for nested schema](#nestedatt--member_vnis_vni--static_mac_addresses))
+- `vni_id` (Number) Assign VxLAN Network Identifier to bridge domain
+
+<a id="nestedatt--member_vnis_vni--static_mac_addresses"></a>
+### Nested Schema for `member_vnis_vni.static_mac_addresses`
+
+Read-Only:
+
+- `mac_address` (String) Static MAC address
+- `next_hop` (String) Specify the next hop IP address
+
+
+
+<a id="nestedatt--neighbors_evpn_evi"></a>
+### Nested Schema for `neighbors_evpn_evi`
+
+Read-Only:
+
+- `target` (Number) Specify remote attachment circuit identifier
+- `vpn_id` (Number) Configure EVPN Instance VPN ID
+
+
+<a id="nestedatt--routed_interface"></a>
+### Nested Schema for `routed_interface`
+
+Read-Only:
+
+- `interface_name` (String) Assign interface to bridge domain
+- `split_horizon_group_core` (Boolean) Configure BVI under SHG 1
 
 
 <a id="nestedatt--srv6_evis"></a>

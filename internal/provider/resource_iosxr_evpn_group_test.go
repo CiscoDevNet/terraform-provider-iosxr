@@ -103,6 +103,7 @@ func testAccIosxrEVPNGroupConfig_minimum() string {
 
 func testAccIosxrEVPNGroupConfig_all() string {
 	config := `resource "iosxr_evpn_group" "test" {` + "\n"
+	config += `	delete_mode = "all"` + "\n"
 	config += `	group_id = 1` + "\n"
 	config += `	core_interfaces = [{` + "\n"
 	config += `		interface_name = "Bundle-Ether111"` + "\n"

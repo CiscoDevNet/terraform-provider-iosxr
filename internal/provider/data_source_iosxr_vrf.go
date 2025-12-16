@@ -75,8 +75,12 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "A description for the VRF",
 				Computed:            true,
 			},
-			"vpn_id": schema.StringAttribute{
-				MarkdownDescription: "VPN ID, (OUI:VPN-Index) format(hex), 4 bytes VPN_Index Part",
+			"fallback_vrf": schema.StringAttribute{
+				MarkdownDescription: "Fallback vrf for this VRF",
+				Computed:            true,
+			},
+			"evpn_route_sync": schema.Int64Attribute{
+				MarkdownDescription: "Configure the EVPN Instance VPN ID for route synchronization",
 				Computed:            true,
 			},
 			"ipv4_unicast": schema.BoolAttribute{
@@ -91,8 +95,120 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "Use route-policy for export",
 				Computed:            true,
 			},
+			"ipv4_unicast_import_from_bridge_domain_advertise_as_vpn": schema.BoolAttribute{
+				MarkdownDescription: "Advertise local EVPN imported routes to PEs",
+				Computed:            true,
+			},
+			"ipv4_unicast_import_from_vrf_advertise_as_vpn": schema.BoolAttribute{
+				MarkdownDescription: "Advertise imported routes to PEs",
+				Computed:            true,
+			},
+			"ipv4_unicast_import_from_vrf_allow_backup": schema.BoolAttribute{
+				MarkdownDescription: "Allow import of backup path",
+				Computed:            true,
+			},
+			"ipv4_unicast_import_from_vrf_allow_best_external": schema.BoolAttribute{
+				MarkdownDescription: "Allow import of best-external path",
+				Computed:            true,
+			},
+			"ipv4_unicast_import_from_default_vrf_advertise_as_vpn": schema.BoolAttribute{
+				MarkdownDescription: "Advertise imported routes to PEs",
+				Computed:            true,
+			},
+			"ipv4_unicast_import_from_default_vrf_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Use route-policy for import filtering",
+				Computed:            true,
+			},
+			"ipv4_unicast_export_to_vrf_allow_imported_vpn": schema.BoolAttribute{
+				MarkdownDescription: "Allow export of imported VPN routes to non-default VRF",
+				Computed:            true,
+			},
+			"ipv4_unicast_export_to_vrf_allow_backup": schema.BoolAttribute{
+				MarkdownDescription: "Allow Export of backup path",
+				Computed:            true,
+			},
+			"ipv4_unicast_export_to_vrf_allow_best_external": schema.BoolAttribute{
+				MarkdownDescription: "Allow Export of best-external path",
+				Computed:            true,
+			},
+			"ipv4_unicast_export_to_default_vrf_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Use route-policy for export",
+				Computed:            true,
+			},
+			"ipv4_unicast_export_to_default_vrf_allow_imported_vpn": schema.BoolAttribute{
+				MarkdownDescription: "Export imported VPN routes to default VRF",
+				Computed:            true,
+			},
+			"ipv4_unicast_max_prefix_limit": schema.Int64Attribute{
+				MarkdownDescription: "Set table's maximum prefix limit",
+				Computed:            true,
+			},
+			"ipv4_unicast_max_prefix_threshold": schema.Int64Attribute{
+				MarkdownDescription: "mid-thresh (% of max)",
+				Computed:            true,
+			},
 			"ipv4_multicast": schema.BoolAttribute{
 				MarkdownDescription: "Multicast topology",
+				Computed:            true,
+			},
+			"ipv4_multicast_import_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Use route-policy for import filtering",
+				Computed:            true,
+			},
+			"ipv4_multicast_export_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Use route-policy for export",
+				Computed:            true,
+			},
+			"ipv4_multicast_import_from_bridge_domain_advertise_as_vpn": schema.BoolAttribute{
+				MarkdownDescription: "Advertise local EVPN imported routes to PEs",
+				Computed:            true,
+			},
+			"ipv4_multicast_import_from_vrf_advertise_as_vpn": schema.BoolAttribute{
+				MarkdownDescription: "Advertise imported routes to PEs",
+				Computed:            true,
+			},
+			"ipv4_multicast_import_from_vrf_allow_backup": schema.BoolAttribute{
+				MarkdownDescription: "Allow import of backup path",
+				Computed:            true,
+			},
+			"ipv4_multicast_import_from_vrf_allow_best_external": schema.BoolAttribute{
+				MarkdownDescription: "Allow import of best-external path",
+				Computed:            true,
+			},
+			"ipv4_multicast_import_from_default_vrf_advertise_as_vpn": schema.BoolAttribute{
+				MarkdownDescription: "Advertise imported routes to PEs",
+				Computed:            true,
+			},
+			"ipv4_multicast_import_from_default_vrf_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Use route-policy for import filtering",
+				Computed:            true,
+			},
+			"ipv4_multicast_export_to_vrf_allow_imported_vpn": schema.BoolAttribute{
+				MarkdownDescription: "Allow export of imported VPN routes to non-default VRF",
+				Computed:            true,
+			},
+			"ipv4_multicast_export_to_vrf_allow_backup": schema.BoolAttribute{
+				MarkdownDescription: "Allow Export of backup path",
+				Computed:            true,
+			},
+			"ipv4_multicast_export_to_vrf_allow_best_external": schema.BoolAttribute{
+				MarkdownDescription: "Allow Export of best-external path",
+				Computed:            true,
+			},
+			"ipv4_multicast_export_to_default_vrf_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Use route-policy for export",
+				Computed:            true,
+			},
+			"ipv4_multicast_export_to_default_vrf_allow_imported_vpn": schema.BoolAttribute{
+				MarkdownDescription: "Export imported VPN routes to default VRF",
+				Computed:            true,
+			},
+			"ipv4_multicast_max_prefix_limit": schema.Int64Attribute{
+				MarkdownDescription: "Set table's maximum prefix limit",
+				Computed:            true,
+			},
+			"ipv4_multicast_max_prefix_threshold": schema.Int64Attribute{
+				MarkdownDescription: "mid-thresh (% of max)",
 				Computed:            true,
 			},
 			"ipv4_flowspec": schema.BoolAttribute{
@@ -111,8 +227,120 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "Use route-policy for export",
 				Computed:            true,
 			},
+			"ipv6_unicast_import_from_bridge_domain_advertise_as_vpn": schema.BoolAttribute{
+				MarkdownDescription: "Advertise local EVPN imported routes to PEs",
+				Computed:            true,
+			},
+			"ipv6_unicast_import_from_vrf_advertise_as_vpn": schema.BoolAttribute{
+				MarkdownDescription: "Advertise imported routes to PEs",
+				Computed:            true,
+			},
+			"ipv6_unicast_import_from_vrf_allow_backup": schema.BoolAttribute{
+				MarkdownDescription: "Allow import of backup path",
+				Computed:            true,
+			},
+			"ipv6_unicast_import_from_vrf_allow_best_external": schema.BoolAttribute{
+				MarkdownDescription: "Allow import of best-external path",
+				Computed:            true,
+			},
+			"ipv6_unicast_import_from_default_vrf_advertise_as_vpn": schema.BoolAttribute{
+				MarkdownDescription: "Advertise imported routes to PEs",
+				Computed:            true,
+			},
+			"ipv6_unicast_import_from_default_vrf_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Use route-policy for import filtering",
+				Computed:            true,
+			},
+			"ipv6_unicast_export_to_vrf_allow_imported_vpn": schema.BoolAttribute{
+				MarkdownDescription: "Allow export of imported VPN routes to non-default VRF",
+				Computed:            true,
+			},
+			"ipv6_unicast_export_to_vrf_allow_backup": schema.BoolAttribute{
+				MarkdownDescription: "Allow Export of backup path",
+				Computed:            true,
+			},
+			"ipv6_unicast_export_to_vrf_allow_best_external": schema.BoolAttribute{
+				MarkdownDescription: "Allow Export of best-external path",
+				Computed:            true,
+			},
+			"ipv6_unicast_export_to_default_vrf_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Use route-policy for export",
+				Computed:            true,
+			},
+			"ipv6_unicast_export_to_default_vrf_allow_imported_vpn": schema.BoolAttribute{
+				MarkdownDescription: "Export imported VPN routes to default VRF",
+				Computed:            true,
+			},
+			"ipv6_unicast_max_prefix_limit": schema.Int64Attribute{
+				MarkdownDescription: "Set table's maximum prefix limit",
+				Computed:            true,
+			},
+			"ipv6_unicast_max_prefix_threshold": schema.Int64Attribute{
+				MarkdownDescription: "mid-thresh (% of max)",
+				Computed:            true,
+			},
 			"ipv6_multicast": schema.BoolAttribute{
 				MarkdownDescription: "Multicast topology",
+				Computed:            true,
+			},
+			"ipv6_multicast_import_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Use route-policy for import filtering",
+				Computed:            true,
+			},
+			"ipv6_multicast_export_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Use route-policy for export",
+				Computed:            true,
+			},
+			"ipv6_multicast_import_from_bridge_domain_advertise_as_vpn": schema.BoolAttribute{
+				MarkdownDescription: "Advertise local EVPN imported routes to PEs",
+				Computed:            true,
+			},
+			"ipv6_multicast_import_from_vrf_advertise_as_vpn": schema.BoolAttribute{
+				MarkdownDescription: "Advertise imported routes to PEs",
+				Computed:            true,
+			},
+			"ipv6_multicast_import_from_vrf_allow_backup": schema.BoolAttribute{
+				MarkdownDescription: "Allow import of backup path",
+				Computed:            true,
+			},
+			"ipv6_multicast_import_from_vrf_allow_best_external": schema.BoolAttribute{
+				MarkdownDescription: "Allow import of best-external path",
+				Computed:            true,
+			},
+			"ipv6_multicast_import_from_default_vrf_advertise_as_vpn": schema.BoolAttribute{
+				MarkdownDescription: "Advertise imported routes to PEs",
+				Computed:            true,
+			},
+			"ipv6_multicast_import_from_default_vrf_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Use route-policy for import filtering",
+				Computed:            true,
+			},
+			"ipv6_multicast_export_to_vrf_allow_imported_vpn": schema.BoolAttribute{
+				MarkdownDescription: "Allow export of imported VPN routes to non-default VRF",
+				Computed:            true,
+			},
+			"ipv6_multicast_export_to_vrf_allow_backup": schema.BoolAttribute{
+				MarkdownDescription: "Allow Export of backup path",
+				Computed:            true,
+			},
+			"ipv6_multicast_export_to_vrf_allow_best_external": schema.BoolAttribute{
+				MarkdownDescription: "Allow Export of best-external path",
+				Computed:            true,
+			},
+			"ipv6_multicast_export_to_default_vrf_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Use route-policy for export",
+				Computed:            true,
+			},
+			"ipv6_multicast_export_to_default_vrf_allow_imported_vpn": schema.BoolAttribute{
+				MarkdownDescription: "Export imported VPN routes to default VRF",
+				Computed:            true,
+			},
+			"ipv6_multicast_max_prefix_limit": schema.Int64Attribute{
+				MarkdownDescription: "Set table's maximum prefix limit",
+				Computed:            true,
+			},
+			"ipv6_multicast_max_prefix_threshold": schema.Int64Attribute{
+				MarkdownDescription: "mid-thresh (% of max)",
 				Computed:            true,
 			},
 			"ipv6_flowspec": schema.BoolAttribute{
@@ -382,6 +610,254 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 						},
 					},
 				},
+			},
+			"ipv4_multicast_import_route_target_two_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: "2-byte AS number",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"two_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: "2-byte AS number",
+							Computed:            true,
+						},
+						"asn2_index": schema.Int64Attribute{
+							MarkdownDescription: "ASN2:index (hex or decimal format)",
+							Computed:            true,
+						},
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: "These are stitching RTs",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"ipv4_multicast_import_route_target_four_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: "4-byte AS number",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"four_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: "4-byte AS number",
+							Computed:            true,
+						},
+						"asn4_index": schema.Int64Attribute{
+							MarkdownDescription: "ASN4:index (hex or decimal format)",
+							Computed:            true,
+						},
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: "These are stitching RTs",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"ipv4_multicast_import_route_target_ip_address_format": schema.ListNestedAttribute{
+				MarkdownDescription: "ipv4 address route target",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"ipv4_address": schema.StringAttribute{
+							MarkdownDescription: "IPv4 address",
+							Computed:            true,
+						},
+						"ipv4_address_index": schema.Int64Attribute{
+							MarkdownDescription: "IPv4Address:index (hex or decimal format)",
+							Computed:            true,
+						},
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: "These are stitching RTs",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"ipv4_multicast_export_route_target_two_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: "2-byte AS number",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"two_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: "2-byte AS number",
+							Computed:            true,
+						},
+						"asn2_index": schema.Int64Attribute{
+							MarkdownDescription: "ASN2:index (hex or decimal format)",
+							Computed:            true,
+						},
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: "These are stitching RTs",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"ipv4_multicast_export_route_target_four_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: "4-byte AS number",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"four_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: "4-byte AS number",
+							Computed:            true,
+						},
+						"asn4_index": schema.Int64Attribute{
+							MarkdownDescription: "ASN4:index (hex or decimal format)",
+							Computed:            true,
+						},
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: "These are stitching RTs",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"ipv4_multicast_export_route_target_ip_address_format": schema.ListNestedAttribute{
+				MarkdownDescription: "ipv4 address route target",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"ipv4_address": schema.StringAttribute{
+							MarkdownDescription: "IPv4 address",
+							Computed:            true,
+						},
+						"ipv4_address_index": schema.Int64Attribute{
+							MarkdownDescription: "IPv4Address:index (hex or decimal format)",
+							Computed:            true,
+						},
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: "These are stitching RTs",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"ipv6_multicast_import_route_target_two_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: "2-byte AS number",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"two_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: "2-byte AS number",
+							Computed:            true,
+						},
+						"asn2_index": schema.Int64Attribute{
+							MarkdownDescription: "ASN2:index (hex or decimal format)",
+							Computed:            true,
+						},
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: "These are stitching RTs",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"ipv6_multicast_import_route_target_four_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: "4-byte AS number",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"four_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: "4-byte AS number",
+							Computed:            true,
+						},
+						"asn4_index": schema.Int64Attribute{
+							MarkdownDescription: "ASN4:index (hex or decimal format)",
+							Computed:            true,
+						},
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: "These are stitching RTs",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"ipv6_multicast_import_route_target_ip_address_format": schema.ListNestedAttribute{
+				MarkdownDescription: "ipv4 address route target",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"ipv4_address": schema.StringAttribute{
+							MarkdownDescription: "IPv4 address",
+							Computed:            true,
+						},
+						"ipv4_address_index": schema.Int64Attribute{
+							MarkdownDescription: "IPv4Address:index (hex or decimal format)",
+							Computed:            true,
+						},
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: "These are stitching RTs",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"ipv6_multicast_export_route_target_two_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: "2-byte AS number",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"two_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: "2-byte AS number",
+							Computed:            true,
+						},
+						"asn2_index": schema.Int64Attribute{
+							MarkdownDescription: "ASN2:index (hex or decimal format)",
+							Computed:            true,
+						},
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: "These are stitching RTs",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"ipv6_multicast_export_route_target_four_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: "4-byte AS number",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"four_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: "4-byte AS number",
+							Computed:            true,
+						},
+						"asn4_index": schema.Int64Attribute{
+							MarkdownDescription: "ASN4:index (hex or decimal format)",
+							Computed:            true,
+						},
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: "These are stitching RTs",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"ipv6_multicast_export_route_target_ip_address_format": schema.ListNestedAttribute{
+				MarkdownDescription: "ipv4 address route target",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"ipv4_address": schema.StringAttribute{
+							MarkdownDescription: "IPv4 address",
+							Computed:            true,
+						},
+						"ipv4_address_index": schema.Int64Attribute{
+							MarkdownDescription: "IPv4Address:index (hex or decimal format)",
+							Computed:            true,
+						},
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: "These are stitching RTs",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"vpn_id": schema.StringAttribute{
+				MarkdownDescription: "VPN ID, (OUI:VPN-Index) format(hex), 4 bytes VPN_Index Part",
+				Computed:            true,
+			},
+			"remote_route_filtering_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable remote route filtering per VRF",
+				Computed:            true,
 			},
 		},
 	}

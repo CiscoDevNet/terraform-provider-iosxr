@@ -37,7 +37,6 @@ func TestAccIosxrKeyChain(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "name", "KEY11"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.key_name", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.key_string_password", "00071A150754"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.cryptographic_algorithm", "hmac-md5"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.accept_lifetime_start_time_hour", "11"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.accept_lifetime_start_time_minute", "52"))
@@ -113,7 +112,7 @@ func testAccIosxrKeyChainConfig_all() string {
 	config += `	name = "KEY11"` + "\n"
 	config += `	keys = [{` + "\n"
 	config += `		key_name = "1"` + "\n"
-	config += `		key_string_password = "00071A150754"` + "\n"
+	config += `		key_string_password6 = "00071A150754"` + "\n"
 	config += `		cryptographic_algorithm = "hmac-md5"` + "\n"
 	config += `		accept_lifetime_start_time_hour = 11` + "\n"
 	config += `		accept_lifetime_start_time_minute = 52` + "\n"

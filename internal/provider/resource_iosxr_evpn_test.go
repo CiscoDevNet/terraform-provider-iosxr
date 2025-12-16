@@ -106,6 +106,7 @@ func testAccIosxrEVPNConfig_minimum() string {
 
 func testAccIosxrEVPNConfig_all() string {
 	config := `resource "iosxr_evpn" "test" {` + "\n"
+	config += `	delete_mode = "all"` + "\n"
 	config += `	source_interface = "Loopback0"` + "\n"
 	config += `	interfaces = [{` + "\n"
 	config += `		interface_name = "GigabitEthernet0/0/0/1"` + "\n"

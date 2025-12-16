@@ -79,6 +79,282 @@ func (d *RouterISISAddressFamilyDataSource) Schema(ctx context.Context, req data
 				MarkdownDescription: "saf-name",
 				Required:            true,
 			},
+			"distance": schema.Int64Attribute{
+				MarkdownDescription: "Configure IS-IS administrative distances",
+				Computed:            true,
+			},
+			"distance_sources": schema.ListNestedAttribute{
+				MarkdownDescription: "Route source for this distance",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "IP address",
+							Computed:            true,
+						},
+						"prefix": schema.Int64Attribute{
+							MarkdownDescription: "IP address prefix",
+							Computed:            true,
+						},
+						"distance": schema.Int64Attribute{
+							MarkdownDescription: "Administrative distance",
+							Computed:            true,
+						},
+						"route_filter": schema.StringAttribute{
+							MarkdownDescription: "Prefix-list or access-list to filter routes for this distance",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"distribute_list_prefix_list_in": schema.StringAttribute{
+				MarkdownDescription: "Filter routes based on a prefix list",
+				Computed:            true,
+			},
+			"distribute_list_route_policy_in": schema.StringAttribute{
+				MarkdownDescription: "Filter routes based on a route policy",
+				Computed:            true,
+			},
+			"redistribute_connected": schema.BoolAttribute{
+				MarkdownDescription: "Connected routes",
+				Computed:            true,
+			},
+			"redistribute_connected_level": schema.StringAttribute{
+				MarkdownDescription: "Redistribute routes into both levels",
+				Computed:            true,
+			},
+			"redistribute_connected_metric": schema.Int64Attribute{
+				MarkdownDescription: "Metric for redistributed routes",
+				Computed:            true,
+			},
+			"redistribute_connected_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Route policy reference",
+				Computed:            true,
+			},
+			"redistribute_connected_metric_type": schema.StringAttribute{
+				MarkdownDescription: "IS-IS metric type for redistributed routes",
+				Computed:            true,
+			},
+			"redistribute_static": schema.BoolAttribute{
+				MarkdownDescription: "Static routes",
+				Computed:            true,
+			},
+			"redistribute_static_level": schema.StringAttribute{
+				MarkdownDescription: "Redistribute routes into both levels",
+				Computed:            true,
+			},
+			"redistribute_static_metric": schema.Int64Attribute{
+				MarkdownDescription: "Metric for redistributed routes",
+				Computed:            true,
+			},
+			"redistribute_static_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Route policy reference",
+				Computed:            true,
+			},
+			"redistribute_static_metric_type": schema.StringAttribute{
+				MarkdownDescription: "IS-IS metric type for redistributed routes",
+				Computed:            true,
+			},
+			"redistribute_isis": schema.ListNestedAttribute{
+				MarkdownDescription: "Redistribute ISIS routes",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"instance_id": schema.StringAttribute{
+							MarkdownDescription: "IS-IS instance identifier",
+							Computed:            true,
+						},
+						"level": schema.StringAttribute{
+							MarkdownDescription: "Redistribute routes into both levels",
+							Computed:            true,
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: "Metric for redistributed routes",
+							Computed:            true,
+						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: "Route policy reference",
+							Computed:            true,
+						},
+						"metric_type": schema.StringAttribute{
+							MarkdownDescription: "IS-IS metric type for redistributed routes",
+							Computed:            true,
+						},
+						"down_flag_clear": schema.BoolAttribute{
+							MarkdownDescription: "Set the up/down bit to 0 in prefix advertisements",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"redistribute_bgp": schema.ListNestedAttribute{
+				MarkdownDescription: "Border Gateway Protocol (BGP)",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"as_number": schema.StringAttribute{
+							MarkdownDescription: "as-number",
+							Computed:            true,
+						},
+						"level": schema.StringAttribute{
+							MarkdownDescription: "Redistribute routes into both levels",
+							Computed:            true,
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: "Metric for redistributed routes",
+							Computed:            true,
+						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: "Route policy reference",
+							Computed:            true,
+						},
+						"metric_type": schema.StringAttribute{
+							MarkdownDescription: "IS-IS metric type for redistributed routes",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"redistribute_ospf": schema.ListNestedAttribute{
+				MarkdownDescription: "Open Shortest Path First (OSPF)",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"instance_id": schema.StringAttribute{
+							MarkdownDescription: "OSPF process ID",
+							Computed:            true,
+						},
+						"match_internal": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF internal routes",
+							Computed:            true,
+						},
+						"match_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF external routes",
+							Computed:            true,
+						},
+						"level": schema.StringAttribute{
+							MarkdownDescription: "Redistribute routes into both levels",
+							Computed:            true,
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: "Metric for redistributed routes",
+							Computed:            true,
+						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: "Route policy reference",
+							Computed:            true,
+						},
+						"metric_type": schema.StringAttribute{
+							MarkdownDescription: "IS-IS metric type for redistributed routes",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"maximum_paths": schema.Int64Attribute{
+				MarkdownDescription: "Maximum number of active parallel paths per route",
+				Computed:            true,
+			},
+			"router_id_interface_name": schema.StringAttribute{
+				MarkdownDescription: "Router ID Interface",
+				Computed:            true,
+			},
+			"router_id_ip_address": schema.StringAttribute{
+				MarkdownDescription: "Router ID address",
+				Computed:            true,
+			},
+			"advertise_passive_only": schema.BoolAttribute{
+				MarkdownDescription: "Advertise prefixes of passive interfaces only",
+				Computed:            true,
+			},
+			"advertise_link_attributes": schema.BoolAttribute{
+				MarkdownDescription: "Advertise additional link attributes",
+				Computed:            true,
+			},
+			"microloop_avoidance": schema.BoolAttribute{
+				MarkdownDescription: "Enable local microloop avoidance",
+				Computed:            true,
+			},
+			"microloop_avoidance_protected": schema.BoolAttribute{
+				MarkdownDescription: "Enable microloop avoidance for only protected prefixes",
+				Computed:            true,
+			},
+			"microloop_avoidance_segment_routing_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Provide Uloop protection based on a route policy",
+				Computed:            true,
+			},
+			"microloop_avoidance_rib_update_delay": schema.Int64Attribute{
+				MarkdownDescription: "Delay in milliseconds",
+				Computed:            true,
+			},
+			"summary_prefixes": schema.ListNestedAttribute{
+				MarkdownDescription: "Summary prefix",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "IP address",
+							Computed:            true,
+						},
+						"prefix": schema.Int64Attribute{
+							MarkdownDescription: "IP address prefix",
+							Computed:            true,
+						},
+						"tag": schema.Int64Attribute{
+							MarkdownDescription: "Set a tag",
+							Computed:            true,
+						},
+						"level": schema.Int64Attribute{
+							MarkdownDescription: "Summarize routes in one level only",
+							Computed:            true,
+						},
+						"algorithm": schema.Int64Attribute{
+							MarkdownDescription: "Flex Algorithm number",
+							Computed:            true,
+						},
+						"explicit": schema.BoolAttribute{
+							MarkdownDescription: "Strict flex-algo locator summarization mode",
+							Computed:            true,
+						},
+						"adv_unreachable": schema.BoolAttribute{
+							MarkdownDescription: "Advertise unreachable summary components",
+							Computed:            true,
+						},
+						"unreachable_tag": schema.Int64Attribute{
+							MarkdownDescription: "The tag value of the summary component",
+							Computed:            true,
+						},
+						"unreachable_tag_exclude_prefixes": schema.BoolAttribute{
+							MarkdownDescription: "Exclude unreachability advertisement for prefixes with a tag",
+							Computed:            true,
+						},
+						"partition_repair": schema.BoolAttribute{
+							MarkdownDescription: "React to area or domain partition - deaggregate by default",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"metric": schema.Int64Attribute{
+				MarkdownDescription: "Configure default metric",
+				Computed:            true,
+			},
+			"metric_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set metric for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Set metric for one level only",
+							Computed:            true,
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: "Configure default metric",
+							Computed:            true,
+						},
+					},
+				},
+			},
 			"metric_style_narrow": schema.BoolAttribute{
 				MarkdownDescription: "Use old style of TLVs with narrow metric",
 				Computed:            true,
@@ -130,198 +406,6 @@ func (d *RouterISISAddressFamilyDataSource) Schema(ctx context.Context, req data
 						},
 					},
 				},
-			},
-			"router_id_interface_name": schema.StringAttribute{
-				MarkdownDescription: "Router ID Interface",
-				Computed:            true,
-			},
-			"router_id_ip_address": schema.StringAttribute{
-				MarkdownDescription: "Router ID address",
-				Computed:            true,
-			},
-			"default_information_originate": schema.BoolAttribute{
-				MarkdownDescription: "Distribute a default route",
-				Computed:            true,
-			},
-			"fast_reroute_delay_interval": schema.Int64Attribute{
-				MarkdownDescription: "Delay before running FRR computation",
-				Computed:            true,
-			},
-			"fast_reroute_per_prefix_priority_limit": schema.StringAttribute{
-				MarkdownDescription: "Limit backup computation upto the prefix priority",
-				Computed:            true,
-			},
-			"fast_reroute_per_prefix_priority_limit_levels": schema.ListNestedAttribute{
-				MarkdownDescription: "Set priority-limit for one level only",
-				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"level_number": schema.Int64Attribute{
-							MarkdownDescription: "Level",
-							Computed:            true,
-						},
-						"priority_limit": schema.StringAttribute{
-							MarkdownDescription: "Limit backup computation upto the prefix priority",
-							Computed:            true,
-						},
-					},
-				},
-			},
-			"fast_reroute_per_prefix_use_candidate_only": schema.BoolAttribute{
-				MarkdownDescription: "Exclude all interfaces from computation",
-				Computed:            true,
-			},
-			"fast_reroute_per_prefix_srlg_protection_weighted_global": schema.BoolAttribute{
-				MarkdownDescription: "Weighted global SRLG protection",
-				Computed:            true,
-			},
-			"fast_reroute_per_prefix_srlg_protection_weighted_global_levels": schema.ListNestedAttribute{
-				MarkdownDescription: "Set SRLG protection type for one level only",
-				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"level_number": schema.Int64Attribute{
-							MarkdownDescription: "Set SRLG protection type for one level only",
-							Computed:            true,
-						},
-					},
-				},
-			},
-			"fast_reroute_per_prefix_remote_lfa_prefix_list": schema.StringAttribute{
-				MarkdownDescription: "Filter PQ node router ID based on prefix list",
-				Computed:            true,
-			},
-			"fast_reroute_per_prefix_remote_lfa_prefix_list_levels": schema.ListNestedAttribute{
-				MarkdownDescription: "Enable router ID filtering for one level only",
-				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"level_number": schema.Int64Attribute{
-							MarkdownDescription: "Enable router ID filtering for one level only",
-							Computed:            true,
-						},
-						"prefix_list": schema.StringAttribute{
-							MarkdownDescription: "Filter PQ node router ID based on prefix list",
-							Computed:            true,
-						},
-					},
-				},
-			},
-			"fast_reroute_per_prefix_load_sharing_disable": schema.BoolAttribute{
-				MarkdownDescription: "Disable load sharing",
-				Computed:            true,
-			},
-			"fast_reroute_per_prefix_load_sharing_disable_levels": schema.ListNestedAttribute{
-				MarkdownDescription: "Disable load sharing for one level only",
-				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"level_number": schema.Int64Attribute{
-							MarkdownDescription: "Disable load sharing for one level only",
-							Computed:            true,
-						},
-					},
-				},
-			},
-			"fast_reroute_per_prefix_tiebreaker_downstream_index": schema.Int64Attribute{
-				MarkdownDescription: "Set preference order among tiebreakers",
-				Computed:            true,
-			},
-			"fast_reroute_per_prefix_tiebreaker_lc_disjoint_index": schema.Int64Attribute{
-				MarkdownDescription: "Set preference order among tiebreakers",
-				Computed:            true,
-			},
-			"fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_index": schema.Int64Attribute{
-				MarkdownDescription: "Set preference order among tiebreakers",
-				Computed:            true,
-			},
-			"fast_reroute_per_prefix_tiebreaker_node_protecting_index": schema.Int64Attribute{
-				MarkdownDescription: "Set preference order among tiebreakers",
-				Computed:            true,
-			},
-			"fast_reroute_per_prefix_tiebreaker_primary_path_index": schema.Int64Attribute{
-				MarkdownDescription: "Set preference order among tiebreakers",
-				Computed:            true,
-			},
-			"fast_reroute_per_prefix_tiebreaker_secondary_path_index": schema.Int64Attribute{
-				MarkdownDescription: "Set preference order among tiebreakers",
-				Computed:            true,
-			},
-			"fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index": schema.Int64Attribute{
-				MarkdownDescription: "Set preference order among tiebreakers",
-				Computed:            true,
-			},
-			"fast_reroute_per_link_priority_limit": schema.StringAttribute{
-				MarkdownDescription: "Limit backup computation upto the prefix priority",
-				Computed:            true,
-			},
-			"fast_reroute_per_link_priority_limit_levels": schema.ListNestedAttribute{
-				MarkdownDescription: "Set priority-limit for one level only",
-				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"level_number": schema.Int64Attribute{
-							MarkdownDescription: "Level",
-							Computed:            true,
-						},
-						"priority_limit": schema.StringAttribute{
-							MarkdownDescription: "Limit backup computation upto the prefix priority",
-							Computed:            true,
-						},
-					},
-				},
-			},
-			"fast_reroute_per_link_use_candidate_only": schema.BoolAttribute{
-				MarkdownDescription: "Exclude all interfaces from computation",
-				Computed:            true,
-			},
-			"microloop_avoidance": schema.BoolAttribute{
-				MarkdownDescription: "Enable local microloop avoidance",
-				Computed:            true,
-			},
-			"microloop_avoidance_protected": schema.BoolAttribute{
-				MarkdownDescription: "Enable microloop avoidance for only protected prefixes",
-				Computed:            true,
-			},
-			"microloop_avoidance_segment_routing_route_policy": schema.StringAttribute{
-				MarkdownDescription: "Provide Uloop protection based on a route policy",
-				Computed:            true,
-			},
-			"microloop_avoidance_rib_update_delay": schema.Int64Attribute{
-				MarkdownDescription: "Delay in milliseconds",
-				Computed:            true,
-			},
-			"advertise_passive_only": schema.BoolAttribute{
-				MarkdownDescription: "Advertise prefixes of passive interfaces only",
-				Computed:            true,
-			},
-			"advertise_link_attributes": schema.BoolAttribute{
-				MarkdownDescription: "Advertise additional link attributes",
-				Computed:            true,
-			},
-			"mpls_ldp_auto_config": schema.BoolAttribute{
-				MarkdownDescription: "Enable LDP IGP interface auto-configuration",
-				Computed:            true,
-			},
-			"mpls_traffic_eng_router_id_ipv4_address": schema.StringAttribute{
-				MarkdownDescription: "ipv4-address",
-				Computed:            true,
-			},
-			"mpls_traffic_eng_router_id_interface_name": schema.StringAttribute{
-				MarkdownDescription: "interface-name",
-				Computed:            true,
-			},
-			"mpls_traffic_eng_level_1_2": schema.BoolAttribute{
-				MarkdownDescription: "Enable mpls traffic-eng at both level 1 and 2",
-				Computed:            true,
-			},
-			"mpls_traffic_eng_level_1": schema.BoolAttribute{
-				MarkdownDescription: "Enable mpls traffic-eng at level 1",
-				Computed:            true,
-			},
-			"mpls_traffic_eng_level_2_only": schema.BoolAttribute{
-				MarkdownDescription: "Enable mpls traffic-eng at level 2",
-				Computed:            true,
 			},
 			"spf_interval_maximum_wait": schema.Int64Attribute{
 				MarkdownDescription: "Maximum delay before running a route calculation [5000]",
@@ -491,14 +575,6 @@ func (d *RouterISISAddressFamilyDataSource) Schema(ctx context.Context, req data
 					},
 				},
 			},
-			"segment_routing_mpls_enable": schema.BoolAttribute{
-				MarkdownDescription: "Enable Segment Routing using MPLS encapsulation",
-				Computed:            true,
-			},
-			"segment_routing_mpls_sr_prefer": schema.BoolAttribute{
-				MarkdownDescription: "Prefer segment routing labels over LDP labels",
-				Computed:            true,
-			},
 			"maximum_redistributed_prefixes": schema.Int64Attribute{
 				MarkdownDescription: "Maximum number of redistributed prefixes",
 				Computed:            true,
@@ -519,33 +595,389 @@ func (d *RouterISISAddressFamilyDataSource) Schema(ctx context.Context, req data
 					},
 				},
 			},
-			"redistribute_isis": schema.ListNestedAttribute{
-				MarkdownDescription: "Redistribute ISIS routes",
+			"propagate_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Propagate routes between IS-IS levels",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"instance_id": schema.StringAttribute{
-							MarkdownDescription: "IS-IS instance identifier",
+						"source_level": schema.Int64Attribute{
+							MarkdownDescription: "Source level",
 							Computed:            true,
 						},
-						"level": schema.StringAttribute{
-							MarkdownDescription: "Redistribute routes into both levels",
-							Computed:            true,
-						},
-						"metric": schema.Int64Attribute{
-							MarkdownDescription: "Metric for redistributed routes",
+						"destination_level": schema.Int64Attribute{
+							MarkdownDescription: "Destination level",
 							Computed:            true,
 						},
 						"route_policy": schema.StringAttribute{
-							MarkdownDescription: "Route policy reference",
+							MarkdownDescription: "Propagate only specified routes",
 							Computed:            true,
 						},
-						"metric_type": schema.StringAttribute{
-							MarkdownDescription: "IS-IS metric type for redistributed routes",
+					},
+				},
+			},
+			"adjacency_check_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable adjacency-checking",
+				Computed:            true,
+			},
+			"route_source_first_hop": schema.BoolAttribute{
+				MarkdownDescription: "Use the IP address of the first-hop",
+				Computed:            true,
+			},
+			"attached_bit_receive_ignore": schema.BoolAttribute{
+				MarkdownDescription: "Ignore the attached bit in received LSPs",
+				Computed:            true,
+			},
+			"attached_bit_send": schema.StringAttribute{
+				MarkdownDescription: "Modify how we set the attached bit",
+				Computed:            true,
+			},
+			"fast_reroute_delay_interval": schema.Int64Attribute{
+				MarkdownDescription: "Delay before running FRR computation",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_priority_limit": schema.StringAttribute{
+				MarkdownDescription: "Limit backup computation upto the prefix priority",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_priority_limit_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set priority-limit for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Level",
 							Computed:            true,
 						},
-						"down_flag_clear": schema.BoolAttribute{
-							MarkdownDescription: "Set the up/down bit to 0 in prefix advertisements",
+						"priority_limit": schema.StringAttribute{
+							MarkdownDescription: "Limit backup computation upto the prefix priority",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"fast_reroute_per_prefix_use_candidate_only": schema.BoolAttribute{
+				MarkdownDescription: "Exclude all interfaces from computation",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_srlg_protection_weighted_global": schema.BoolAttribute{
+				MarkdownDescription: "Weighted global SRLG protection",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_srlg_protection_weighted_global_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set SRLG protection type for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Set SRLG protection type for one level only",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"fast_reroute_per_prefix_remote_lfa_prefix_list": schema.StringAttribute{
+				MarkdownDescription: "Filter PQ node router ID based on prefix list",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_remote_lfa_prefix_list_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Enable router ID filtering for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Enable router ID filtering for one level only",
+							Computed:            true,
+						},
+						"prefix_list": schema.StringAttribute{
+							MarkdownDescription: "Filter PQ node router ID based on prefix list",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"fast_reroute_per_prefix_load_sharing_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable load sharing",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_load_sharing_disable_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Disable load sharing for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Disable load sharing for one level only",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"fast_reroute_per_prefix_tiebreaker_downstream_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_lc_disjoint_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_node_protecting_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_primary_path_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_secondary_path_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"fast_reroute_per_link_use_candidate_only": schema.BoolAttribute{
+				MarkdownDescription: "Exclude all interfaces from computation",
+				Computed:            true,
+			},
+			"fast_reroute_per_link_use_candidate_only_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Exclude all interfaces for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Level",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"fast_reroute_per_link_priority_limit": schema.StringAttribute{
+				MarkdownDescription: "Limit backup computation upto the prefix priority",
+				Computed:            true,
+			},
+			"fast_reroute_per_link_priority_limit_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set priority-limit for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Level",
+							Computed:            true,
+						},
+						"priority_limit": schema.StringAttribute{
+							MarkdownDescription: "Limit backup computation upto the prefix priority",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"default_information_originate": schema.BoolAttribute{
+				MarkdownDescription: "Distribute a default route",
+				Computed:            true,
+			},
+			"default_information_originate_route_policy": schema.StringAttribute{
+				MarkdownDescription: "text",
+				Computed:            true,
+			},
+			"segment_routing_bundle_member_adj_sid": schema.BoolAttribute{
+				MarkdownDescription: "Enable per bundle member adjacency SID",
+				Computed:            true,
+			},
+			"segment_routing_labeled_only": schema.BoolAttribute{
+				MarkdownDescription: "Only install SR labeled paths",
+				Computed:            true,
+			},
+			"segment_routing_protected_adjacency_sid_delay": schema.Int64Attribute{
+				MarkdownDescription: "Protected Adjacency SID deletion delay (seconds)",
+				Computed:            true,
+			},
+			"segment_routing_mpls_enable": schema.BoolAttribute{
+				MarkdownDescription: "Enable Segment Routing using MPLS encapsulation",
+				Computed:            true,
+			},
+			"segment_routing_mpls_sr_prefer": schema.BoolAttribute{
+				MarkdownDescription: "Prefer segment routing labels over LDP labels",
+				Computed:            true,
+			},
+			"segment_routing_mpls_unlabeled_protection_prefix_list": schema.StringAttribute{
+				MarkdownDescription: "Enable TI-LFA and microloop protection based on a prefix list",
+				Computed:            true,
+			},
+			"segment_routing_mpls_unlabeled_protection_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Enable TI-LFA and microloop protection based on a route policy",
+				Computed:            true,
+			},
+			"segment_routing_mpls_unlabeled_protection_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable TI-LFA and microloop protection",
+				Computed:            true,
+			},
+			"segment_routing_mpls_prefix_sid_map_receive": schema.BoolAttribute{
+				MarkdownDescription: "Use remote mapping server advertisements",
+				Computed:            true,
+			},
+			"segment_routing_mpls_prefix_sid_map_receive_disable": schema.BoolAttribute{
+				MarkdownDescription: "disable",
+				Computed:            true,
+			},
+			"segment_routing_mpls_prefix_sid_map_advertise_local": schema.BoolAttribute{
+				MarkdownDescription: "Advertise active local prefix-SID mappings",
+				Computed:            true,
+			},
+			"segment_routing_mpls_prefix_sid_map_advertise_local_domain_wide": schema.BoolAttribute{
+				MarkdownDescription: "Domain wide prefix-SID mappings",
+				Computed:            true,
+			},
+			"segment_routing_mpls_connected_prefix_sid_map": schema.BoolAttribute{
+				MarkdownDescription: "Enter connected prefix sid map submode",
+				Computed:            true,
+			},
+			"segment_routing_mpls_connected_prefix_sid_map_addresses": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify prefix associated with this Prefix Segement ID",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"ip_address": schema.StringAttribute{
+							MarkdownDescription: "IP address",
+							Computed:            true,
+						},
+						"prefix": schema.Int64Attribute{
+							MarkdownDescription: "IP address prefix",
+							Computed:            true,
+						},
+						"index_id": schema.Int64Attribute{
+							MarkdownDescription: "The Prefix Segment ID index",
+							Computed:            true,
+						},
+						"index_interface": schema.StringAttribute{
+							MarkdownDescription: "Specify the interface associated with the prefix sid",
+							Computed:            true,
+						},
+						"index_php_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable Penultimate Hop Popping",
+							Computed:            true,
+						},
+						"index_explicit_null": schema.BoolAttribute{
+							MarkdownDescription: "Upstream neighbor must replace prefix-sid with explicit null label",
+							Computed:            true,
+						},
+						"absolute_id": schema.Int64Attribute{
+							MarkdownDescription: "The Prefix Segment ID value",
+							Computed:            true,
+						},
+						"absolute_interface": schema.StringAttribute{
+							MarkdownDescription: "Specify the interface associated with the prefix sid",
+							Computed:            true,
+						},
+						"absolute_php_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable Penultimate Hop Popping",
+							Computed:            true,
+						},
+						"absolute_explicit_null": schema.BoolAttribute{
+							MarkdownDescription: "Upstream neighbor must replace prefix-sid with explicit null label",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"segment_routing_mpls_connected_prefix_sid_map_flex_algo_addresses": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify prefix associated with this Prefix Segement ID",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"ip_address": schema.StringAttribute{
+							MarkdownDescription: "IP address",
+							Computed:            true,
+						},
+						"prefix": schema.Int64Attribute{
+							MarkdownDescription: "IP address prefix",
+							Computed:            true,
+						},
+						"flex_algo": schema.Int64Attribute{
+							MarkdownDescription: "Specify the custom flex-algo algorithm to use",
+							Computed:            true,
+						},
+						"index_id": schema.Int64Attribute{
+							MarkdownDescription: "The Prefix Segment ID index",
+							Computed:            true,
+						},
+						"index_interface": schema.StringAttribute{
+							MarkdownDescription: "Specify the interface associated with the prefix sid",
+							Computed:            true,
+						},
+						"index_php_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable Penultimate Hop Popping",
+							Computed:            true,
+						},
+						"index_explicit_null": schema.BoolAttribute{
+							MarkdownDescription: "Upstream neighbor must replace prefix-sid with explicit null label",
+							Computed:            true,
+						},
+						"absolute_id": schema.Int64Attribute{
+							MarkdownDescription: "The Prefix Segment ID value",
+							Computed:            true,
+						},
+						"absolute_interface": schema.StringAttribute{
+							MarkdownDescription: "Specify the interface associated with the prefix sid",
+							Computed:            true,
+						},
+						"absolute_php_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable Penultimate Hop Popping",
+							Computed:            true,
+						},
+						"absolute_explicit_null": schema.BoolAttribute{
+							MarkdownDescription: "Upstream neighbor must replace prefix-sid with explicit null label",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"segment_routing_mpls_connected_prefix_sid_map_strict_spf_addresses": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify prefix associated with this Prefix Segement ID",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"ip_address": schema.StringAttribute{
+							MarkdownDescription: "IP address",
+							Computed:            true,
+						},
+						"prefix": schema.Int64Attribute{
+							MarkdownDescription: "IP address prefix",
+							Computed:            true,
+						},
+						"index_id": schema.Int64Attribute{
+							MarkdownDescription: "The Prefix Segment ID index",
+							Computed:            true,
+						},
+						"index_interface": schema.StringAttribute{
+							MarkdownDescription: "Specify the interface associated with the prefix sid",
+							Computed:            true,
+						},
+						"index_php_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable Penultimate Hop Popping",
+							Computed:            true,
+						},
+						"index_explicit_null": schema.BoolAttribute{
+							MarkdownDescription: "Upstream neighbor must replace prefix-sid with explicit null label",
+							Computed:            true,
+						},
+						"absolute_id": schema.Int64Attribute{
+							MarkdownDescription: "The Prefix Segment ID value",
+							Computed:            true,
+						},
+						"absolute_interface": schema.StringAttribute{
+							MarkdownDescription: "Specify the interface associated with the prefix sid",
+							Computed:            true,
+						},
+						"absolute_php_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable Penultimate Hop Popping",
+							Computed:            true,
+						},
+						"absolute_explicit_null": schema.BoolAttribute{
+							MarkdownDescription: "Upstream neighbor must replace prefix-sid with explicit null label",
 							Computed:            true,
 						},
 					},
@@ -606,6 +1038,130 @@ func (d *RouterISISAddressFamilyDataSource) Schema(ctx context.Context, req data
 						},
 					},
 				},
+			},
+			"partition_detect": schema.BoolAttribute{
+				MarkdownDescription: "Detect area or domain partition",
+				Computed:            true,
+			},
+			"partition_detect_tracks": schema.ListNestedAttribute{
+				MarkdownDescription: "Track ABR or ASBR reachability",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "IPaddress",
+							Computed:            true,
+						},
+						"ipv4": schema.BoolAttribute{
+							MarkdownDescription: "Ipv4 Track",
+							Computed:            true,
+						},
+						"ipv6": schema.BoolAttribute{
+							MarkdownDescription: "Ipv6 Track",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"partition_detect_external_address_tracks": schema.ListNestedAttribute{
+				MarkdownDescription: "Track ABR or ASBR reachability",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "IPaddress",
+							Computed:            true,
+						},
+						"external_address": schema.StringAttribute{
+							MarkdownDescription: "External ASBR address to track",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"mpls_ldp_auto_config": schema.BoolAttribute{
+				MarkdownDescription: "Enable LDP IGP interface auto-configuration",
+				Computed:            true,
+			},
+			"mpls_traffic_eng_router_id_ipv4_address": schema.StringAttribute{
+				MarkdownDescription: "ipv4-address",
+				Computed:            true,
+			},
+			"mpls_traffic_eng_router_id_interface_name": schema.StringAttribute{
+				MarkdownDescription: "interface-name",
+				Computed:            true,
+			},
+			"mpls_traffic_eng_igp_intact": schema.BoolAttribute{
+				MarkdownDescription: "Install both TE and non-TE nexthops in the RIB.",
+				Computed:            true,
+			},
+			"mpls_traffic_eng_multicast_intact": schema.BoolAttribute{
+				MarkdownDescription: "Install non-TE nexthops in the RIB for use by multicast",
+				Computed:            true,
+			},
+			"mpls_traffic_eng_tunnel_restricted": schema.BoolAttribute{
+				MarkdownDescription: "Use only primary tunnel for destination IP address",
+				Computed:            true,
+			},
+			"mpls_traffic_eng_tunnel_preferred": schema.BoolAttribute{
+				MarkdownDescription: "Prefer TE tunnels over equal-cost physical paths",
+				Computed:            true,
+			},
+			"mpls_traffic_eng_tunnel_metric": schema.Int64Attribute{
+				MarkdownDescription: "Default metric for forwarding-adjacency tunnels",
+				Computed:            true,
+			},
+			"mpls_traffic_eng_tunnel_anycast_prefer_igp_cost": schema.BoolAttribute{
+				MarkdownDescription: "Prefer anycast prefix with lowest IGP cost",
+				Computed:            true,
+			},
+			"mpls_traffic_eng_tunnel_metric_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set metric for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Set metric at this level only",
+							Computed:            true,
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: "Default metric for forwarding-adjacency tunnels",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"mpls_traffic_eng_level_1_2": schema.BoolAttribute{
+				MarkdownDescription: "Enable mpls traffic-eng at both level 1 and 2",
+				Computed:            true,
+			},
+			"mpls_traffic_eng_level_1": schema.BoolAttribute{
+				MarkdownDescription: "Enable mpls traffic-eng at level 1",
+				Computed:            true,
+			},
+			"mpls_traffic_eng_level_2_only": schema.BoolAttribute{
+				MarkdownDescription: "Enable mpls traffic-eng at level 2",
+				Computed:            true,
+			},
+			"prefix_unreachable": schema.BoolAttribute{
+				MarkdownDescription: "Prefix Unreachablity",
+				Computed:            true,
+			},
+			"prefix_unreachable_adv_maximum": schema.Int64Attribute{
+				MarkdownDescription: "Maximum number of prefix-unreachable advertisements",
+				Computed:            true,
+			},
+			"prefix_unreachable_adv_lifetime": schema.Int64Attribute{
+				MarkdownDescription: "Lifetime of the prefix-unreachable advertisements",
+				Computed:            true,
+			},
+			"prefix_unreachable_adv_metric": schema.Int64Attribute{
+				MarkdownDescription: "Metric of the prefix-unreachable advertisements",
+				Computed:            true,
+			},
+			"prefix_unreachable_rx_process_enable": schema.BoolAttribute{
+				MarkdownDescription: "Enable processing of received prefix-unreachable advertisements",
+				Computed:            true,
 			},
 		},
 	}

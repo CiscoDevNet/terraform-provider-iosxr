@@ -50,6 +50,7 @@ type KeyChainData struct {
 type KeyChainKeys struct {
 	KeyName                           types.String `tfsdk:"key_name"`
 	KeyStringPassword                 types.String `tfsdk:"key_string_password"`
+	KeyStringPassword6                types.String `tfsdk:"key_string_password6"`
 	CryptographicAlgorithm            types.String `tfsdk:"cryptographic_algorithm"`
 	AcceptLifetimeStartTimeHour       types.Int64  `tfsdk:"accept_lifetime_start_time_hour"`
 	AcceptLifetimeStartTimeMinute     types.Int64  `tfsdk:"accept_lifetime_start_time_minute"`
@@ -96,6 +97,9 @@ func (data KeyChain) toBody(ctx context.Context) string {
 			}
 			if !item.KeyStringPassword.IsNull() && !item.KeyStringPassword.IsUnknown() {
 				body, _ = sjson.Set(body, "keys.key"+"."+strconv.Itoa(index)+"."+"key-string.password", item.KeyStringPassword.ValueString())
+			}
+			if !item.KeyStringPassword6.IsNull() && !item.KeyStringPassword6.IsUnknown() {
+				body, _ = sjson.Set(body, "keys.key"+"."+strconv.Itoa(index)+"."+"key-string.password6", item.KeyStringPassword6.ValueString())
 			}
 			if !item.CryptographicAlgorithm.IsNull() && !item.CryptographicAlgorithm.IsUnknown() {
 				body, _ = sjson.Set(body, "keys.key"+"."+strconv.Itoa(index)+"."+"cryptographic-algorithm", item.CryptographicAlgorithm.ValueString())
@@ -183,11 +187,6 @@ func (data *KeyChain) updateFromBody(ctx context.Context, res []byte) {
 			data.Keys[i].KeyName = types.StringValue(value.String())
 		} else {
 			data.Keys[i].KeyName = types.StringNull()
-		}
-		if value := r.Get("key-string.password"); value.Exists() && !data.Keys[i].KeyStringPassword.IsNull() {
-			data.Keys[i].KeyStringPassword = types.StringValue(value.String())
-		} else {
-			data.Keys[i].KeyStringPassword = types.StringNull()
 		}
 		if value := r.Get("cryptographic-algorithm"); value.Exists() && !data.Keys[i].CryptographicAlgorithm.IsNull() {
 			data.Keys[i].CryptographicAlgorithm = types.StringValue(value.String())
@@ -287,9 +286,6 @@ func (data *KeyChain) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("key-name"); cValue.Exists() {
 				item.KeyName = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("key-string.password"); cValue.Exists() {
-				item.KeyStringPassword = types.StringValue(cValue.String())
-			}
 			if cValue := v.Get("cryptographic-algorithm"); cValue.Exists() {
 				item.CryptographicAlgorithm = types.StringValue(cValue.String())
 			}
@@ -356,9 +352,6 @@ func (data *KeyChainData) fromBody(ctx context.Context, res []byte) {
 			item := KeyChainKeys{}
 			if cValue := v.Get("key-name"); cValue.Exists() {
 				item.KeyName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("key-string.password"); cValue.Exists() {
-				item.KeyStringPassword = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("cryptographic-algorithm"); cValue.Exists() {
 				item.CryptographicAlgorithm = types.StringValue(cValue.String())
@@ -488,6 +481,9 @@ func (data *KeyChain) getDeletedItems(ctx context.Context, state KeyChain) []str
 				}
 				if !state.Keys[i].CryptographicAlgorithm.IsNull() && data.Keys[j].CryptographicAlgorithm.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/cryptographic-algorithm", state.getPath(), keyString))
+				}
+				if !state.Keys[i].KeyStringPassword6.IsNull() && data.Keys[j].KeyStringPassword6.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/key-string/password6", state.getPath(), keyString))
 				}
 				if !state.Keys[i].KeyStringPassword.IsNull() && data.Keys[j].KeyStringPassword.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/key-string/password", state.getPath(), keyString))

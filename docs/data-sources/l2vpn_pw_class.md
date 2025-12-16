@@ -14,7 +14,7 @@ This data source can read the L2VPN PW Class configuration.
 
 ```terraform
 data "iosxr_l2vpn_pw_class" "example" {
-  name = "PWC1"
+  pw_class_name = "PW-CLASS1"
 }
 ```
 
@@ -23,7 +23,7 @@ data "iosxr_l2vpn_pw_class" "example" {
 
 ### Required
 
-- `name` (String) Pseudowire class template
+- `pw_class_name` (String) Pseudowire class template
 
 ### Optional
 
@@ -31,17 +31,40 @@ data "iosxr_l2vpn_pw_class" "example" {
 
 ### Read-Only
 
+- `backup_disable_delay` (Number) Disable backup after a specified delay
+- `backup_disable_never` (Boolean) Never disable backup
 - `encapsulation_mpls` (Boolean) Set pseudowire encapsulation to MPLS
+- `encapsulation_mpls_control_word` (Boolean) Enable Control word
+- `encapsulation_mpls_ipv4_source` (String) The local source IPv4 address
 - `encapsulation_mpls_load_balancing_flow_label_both` (Boolean) Insert/Discard Flow label on transmit/recceive
 - `encapsulation_mpls_load_balancing_flow_label_both_static` (Boolean) Set Flow label parameters statically
-- `encapsulation_mpls_load_balancing_flow_label_code_one7` (Boolean) Legacy code value
-- `encapsulation_mpls_load_balancing_flow_label_code_one7_disable` (Boolean) Disables sending code 17 TLV
+- `encapsulation_mpls_load_balancing_flow_label_code_17` (Boolean) Legacy code value
+- `encapsulation_mpls_load_balancing_flow_label_code_17_disable` (Boolean) Disables sending code 17 TLV
 - `encapsulation_mpls_load_balancing_flow_label_receive` (Boolean) Discard Flow label on receive
 - `encapsulation_mpls_load_balancing_flow_label_receive_static` (Boolean) Set Flow label parameters statically
 - `encapsulation_mpls_load_balancing_flow_label_transmit` (Boolean) Insert Flow label on transmit
 - `encapsulation_mpls_load_balancing_flow_label_transmit_static` (Boolean) Set Flow label parameters statically
 - `encapsulation_mpls_load_balancing_pw_label` (Boolean) Enable PW VC label based load balancing
+- `encapsulation_mpls_preferred_path_fallback_disable` (Boolean) Disable fallback for preferred path
+- `encapsulation_mpls_preferred_path_interface_tunnel_ip` (Number) Specify IP tunnel interface name for preferred path
+- `encapsulation_mpls_preferred_path_interface_tunnel_te_tunnel_name` (String) Specify named tunnel for preferred path
+- `encapsulation_mpls_preferred_path_interface_tunnel_te_tunnel_number` (Number) Specify tunnel number for preferred path
+- `encapsulation_mpls_preferred_path_interface_tunnel_tp` (Number) Specify TP tunnel interface name for preferred path
+- `encapsulation_mpls_preferred_path_sr_te_policy` (String) Specify SR TE policy for preferred path
+- `encapsulation_mpls_protocol_ldp` (Boolean) Set LDP as the signaling protocol for this pseudowire class
+- `encapsulation_mpls_redundancy_initial_delay` (Number) Initial delay before activating the redundant PW
+- `encapsulation_mpls_redundancy_one_way` (Boolean) Force one-way PW redundancy behavior in Redundancy Group
+- `encapsulation_mpls_sequencing_both` (Boolean) Sequencing on both transmit and receive side
+- `encapsulation_mpls_sequencing_both_resync` (Number) Set the threshold for out-of-sequence packets before resync
+- `encapsulation_mpls_sequencing_receive` (Boolean) Sequencing on receive side
+- `encapsulation_mpls_sequencing_receive_resync` (Number) Set the threshold for out-of-sequence packets before resync
+- `encapsulation_mpls_sequencing_transmit` (Boolean) Sequencing on transmit side
+- `encapsulation_mpls_sequencing_transmit_resync` (Number) Set the threshold for out-of-sequence packets before resync
+- `encapsulation_mpls_switching_tlv_hide` (Boolean) Hide TLV
+- `encapsulation_mpls_tag_rewrite_ingress_vlan` (Number) vlan tagged mode
 - `encapsulation_mpls_transport_mode_ethernet` (Boolean) Ethernet port mode
-- `encapsulation_mpls_transport_mode_passthrough` (Boolean) passthrough incoming tags
 - `encapsulation_mpls_transport_mode_vlan` (Boolean) Vlan tagged mode
+- `encapsulation_mpls_transport_mode_vlan_passthrough` (Boolean) passthrough incoming tags
+- `encapsulation_mpls_vccv_verification_type_none` (Boolean) No VCCV verification
 - `id` (String) The path of the retrieved object.
+- `mac_withdraw` (Boolean) Send MAC withdraw message when PW becomes active

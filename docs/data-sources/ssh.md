@@ -94,7 +94,7 @@ Read-Only:
 
 Read-Only:
 
-- `keystring` (String) Enter public key in ssh format
+- `keystring` (String, Sensitive) Enter public key in ssh format
 - `username` (String) ssh user
 
 

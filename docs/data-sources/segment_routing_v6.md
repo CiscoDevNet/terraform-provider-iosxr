@@ -27,17 +27,22 @@ data "iosxr_segment_routing_v6" "example" {
 ### Read-Only
 
 - `enable` (Boolean) Enable SRv6
+- `encapsulation_hop_limit_option` (String) Hop-Limit config option
+- `encapsulation_hop_limit_value` (Number) Count for Hop-limit
 - `encapsulation_source_address` (String) Configure a source address
+- `encapsulation_traffic_class_option` (String) Config option
+- `encapsulation_traffic_class_value` (Number) Field Value
 - `formats` (Attributes List) Configure a SRv6 format (see [below for nested schema](#nestedatt--formats))
 - `id` (String) The path of the retrieved object.
 - `locators` (Attributes List) Configure a SRv6 locator (see [below for nested schema](#nestedatt--locators))
+- `logging_locator_status` (Boolean) Enable logging for locator status changes
+- `sid_holdtime` (Number) Configure SID holdtime for a stale/freed SID
 
 <a id="nestedatt--formats"></a>
 ### Nested Schema for `formats`
 
 Read-Only:
 
-- `format_enable` (Boolean) Enable a SRv6 format
 - `name` (String) Format name
 - `usid_local_id_block_ranges_explict_lib_start` (Number) Start of Explicit LIB
 - `usid_local_id_block_ranges_lib_start` (Number) Start of LIB
@@ -49,6 +54,8 @@ Read-Only:
 
 Read-Only:
 
+- `algorithm` (Number) Specify locator algorithm
+- `anycast` (Boolean) Specify locator to be anycast type
 - `locator_enable` (Boolean) Enable a SRv6 locator
 - `micro_segment_behavior` (String) Specify Locator's behavior
 - `name` (String) Locator name

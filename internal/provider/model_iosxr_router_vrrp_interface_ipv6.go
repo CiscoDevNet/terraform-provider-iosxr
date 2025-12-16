@@ -45,6 +45,7 @@ type RouterVRRPInterfaceIPv6 struct {
 	AddressLinklocalAutoconfig     types.Bool                               `tfsdk:"address_linklocal_autoconfig"`
 	Priority                       types.Int64                              `tfsdk:"priority"`
 	Name                           types.String                             `tfsdk:"name"`
+	UnicastPeer                    types.String                             `tfsdk:"unicast_peer"`
 	TimerAdvertisementSeconds      types.Int64                              `tfsdk:"timer_advertisement_seconds"`
 	TimerAdvertisementMilliseconds types.Int64                              `tfsdk:"timer_advertisement_milliseconds"`
 	TimerForce                     types.Bool                               `tfsdk:"timer_force"`
@@ -66,6 +67,7 @@ type RouterVRRPInterfaceIPv6Data struct {
 	AddressLinklocalAutoconfig     types.Bool                               `tfsdk:"address_linklocal_autoconfig"`
 	Priority                       types.Int64                              `tfsdk:"priority"`
 	Name                           types.String                             `tfsdk:"name"`
+	UnicastPeer                    types.String                             `tfsdk:"unicast_peer"`
 	TimerAdvertisementSeconds      types.Int64                              `tfsdk:"timer_advertisement_seconds"`
 	TimerAdvertisementMilliseconds types.Int64                              `tfsdk:"timer_advertisement_milliseconds"`
 	TimerForce                     types.Bool                               `tfsdk:"timer_force"`
@@ -122,6 +124,9 @@ func (data RouterVRRPInterfaceIPv6) toBody(ctx context.Context) string {
 	}
 	if !data.Name.IsNull() && !data.Name.IsUnknown() {
 		body, _ = sjson.Set(body, "name", data.Name.ValueString())
+	}
+	if !data.UnicastPeer.IsNull() && !data.UnicastPeer.IsUnknown() {
+		body, _ = sjson.Set(body, "unicast-peer", data.UnicastPeer.ValueString())
 	}
 	if !data.TimerAdvertisementSeconds.IsNull() && !data.TimerAdvertisementSeconds.IsUnknown() {
 		body, _ = sjson.Set(body, "timer.advertisement-time-in-seconds", strconv.FormatInt(data.TimerAdvertisementSeconds.ValueInt64(), 10))
@@ -240,6 +245,11 @@ func (data *RouterVRRPInterfaceIPv6) updateFromBody(ctx context.Context, res []b
 		data.Name = types.StringValue(value.String())
 	} else {
 		data.Name = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "unicast-peer"); value.Exists() && !data.UnicastPeer.IsNull() {
+		data.UnicastPeer = types.StringValue(value.String())
+	} else {
+		data.UnicastPeer = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "timer.advertisement-time-in-seconds"); value.Exists() && !data.TimerAdvertisementSeconds.IsNull() {
 		data.TimerAdvertisementSeconds = types.Int64Value(value.Int())
@@ -388,6 +398,9 @@ func (data *RouterVRRPInterfaceIPv6) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "name"); value.Exists() {
 		data.Name = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "unicast-peer"); value.Exists() {
+		data.UnicastPeer = types.StringValue(value.String())
+	}
 	if value := gjson.GetBytes(res, "timer.advertisement-time-in-seconds"); value.Exists() {
 		data.TimerAdvertisementSeconds = types.Int64Value(value.Int())
 	}
@@ -474,6 +487,9 @@ func (data *RouterVRRPInterfaceIPv6Data) fromBody(ctx context.Context, res []byt
 	}
 	if value := gjson.GetBytes(res, "name"); value.Exists() {
 		data.Name = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "unicast-peer"); value.Exists() {
+		data.UnicastPeer = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "timer.advertisement-time-in-seconds"); value.Exists() {
 		data.TimerAdvertisementSeconds = types.Int64Value(value.Int())
@@ -625,6 +641,9 @@ func (data *RouterVRRPInterfaceIPv6) getDeletedItems(ctx context.Context, state 
 	if !state.TimerAdvertisementSeconds.IsNull() && data.TimerAdvertisementSeconds.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/timer/advertisement-time-in-seconds", state.getPath()))
 	}
+	if !state.UnicastPeer.IsNull() && data.UnicastPeer.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/unicast-peer", state.getPath()))
+	}
 	if !state.Name.IsNull() && data.Name.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/name", state.getPath()))
 	}
@@ -761,6 +780,9 @@ func (data *RouterVRRPInterfaceIPv6) getDeletePaths(ctx context.Context) []strin
 	}
 	if !data.TimerAdvertisementSeconds.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/timer/advertisement-time-in-seconds", data.getPath()))
+	}
+	if !data.UnicastPeer.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/unicast-peer", data.getPath()))
 	}
 	if !data.Name.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/name", data.getPath()))

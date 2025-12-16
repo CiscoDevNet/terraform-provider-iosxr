@@ -1,3 +1,3 @@
 data "iosxr_l2vpn_pw_class" "example" {
-  name = "PWC1"
+  pw_class_name = "PW-CLASS1"
 }

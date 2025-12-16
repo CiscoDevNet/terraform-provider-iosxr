@@ -14,8 +14,9 @@ This resource can manage the Segment Routing V6 configuration.
 
 ```terraform
 resource "iosxr_segment_routing_v6" "example" {
-  enable                       = true
-  encapsulation_source_address = "fccc:0:214::1"
+  enable                 = true
+  sid_holdtime           = 10
+  logging_locator_status = true
   locators = [
     {
       locator_enable         = true
@@ -23,8 +24,11 @@ resource "iosxr_segment_routing_v6" "example" {
       micro_segment_behavior = "unode-psp-usd"
       prefix                 = "fccc:0:214::"
       prefix_length          = 48
+      anycast                = true
+      algorithm              = 128
     }
   ]
+  encapsulation_source_address = "fccc:0:214::1"
 }
 ```
 
@@ -37,9 +41,20 @@ resource "iosxr_segment_routing_v6" "example" {
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 - `enable` (Boolean) Enable SRv6
+- `encapsulation_hop_limit_option` (String) Hop-Limit config option
+  - Choices: `count`, `propagate`, `propagate-disable`
+- `encapsulation_hop_limit_value` (Number) Count for Hop-limit
+  - Range: `0`-`255`
 - `encapsulation_source_address` (String) Configure a source address
+- `encapsulation_traffic_class_option` (String) Config option
+  - Choices: `propagate`, `propagate-disable`, `value`
+- `encapsulation_traffic_class_value` (Number) Field Value
+  - Range: `0`-`255`
 - `formats` (Attributes List) Configure a SRv6 format (see [below for nested schema](#nestedatt--formats))
 - `locators` (Attributes List) Configure a SRv6 locator (see [below for nested schema](#nestedatt--locators))
+- `logging_locator_status` (Boolean) Enable logging for locator status changes
+- `sid_holdtime` (Number) Configure SID holdtime for a stale/freed SID
+  - Range: `0`-`60`
 
 ### Read-Only
 
@@ -54,7 +69,6 @@ Required:
 
 Optional:
 
-- `format_enable` (Boolean) Enable a SRv6 format
 - `usid_local_id_block_ranges_explict_lib_start` (Number) Start of Explicit LIB
   - Range: `57444`-`65279`
 - `usid_local_id_block_ranges_lib_start` (Number) Start of LIB
@@ -72,6 +86,9 @@ Required:
 
 Optional:
 
+- `algorithm` (Number) Specify locator algorithm
+  - Range: `128`-`255`
+- `anycast` (Boolean) Specify locator to be anycast type
 - `locator_enable` (Boolean) Enable a SRv6 locator
 - `micro_segment_behavior` (String) Specify Locator's behavior
   - Choices: `unode-psp-usd`, `unode-shift-only`

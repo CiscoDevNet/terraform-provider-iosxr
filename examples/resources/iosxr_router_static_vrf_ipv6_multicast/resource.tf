@@ -33,6 +33,16 @@ resource "iosxr_router_static_vrf_ipv6_multicast" "example" {
       metric          = 10
     }
   ]
+  sr_policies = [
+    {
+      sr_policy_name  = "sr_te_policy_1"
+      description     = "interface-description"
+      tag             = 103
+      distance_metric = 144
+      track           = "TRACK1"
+      metric          = 10
+    }
+  ]
   vrfs = [
     {
       vrf_name = "VRF1"
@@ -65,6 +75,16 @@ resource "iosxr_router_static_vrf_ipv6_multicast" "example" {
           description     = "ip-description"
           tag             = 104
           distance_metric = 155
+          track           = "TRACK1"
+          metric          = 10
+        }
+      ]
+      sr_policies = [
+        {
+          sr_policy_name  = "sr_te_policy_1"
+          description     = "interface-description"
+          tag             = 103
+          distance_metric = 144
           track           = "TRACK1"
           metric          = 10
         }

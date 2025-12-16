@@ -14,8 +14,18 @@ This resource can manage the Router ISIS configuration.
 
 ```terraform
 resource "iosxr_router_isis" "example" {
-  process_id                                    = "P1"
-  is_type                                       = "level-1"
+  process_id                                   = "P1"
+  segment_routing_global_block_lower_bound     = 16000
+  segment_routing_global_block_upper_bound     = 29999
+  receive_application_flex_algo_delay_app_only = true
+  lsp_refresh_interval                         = 16000
+  lsp_refresh_interval_levels = [
+    {
+      level_number         = 1
+      lsp_refresh_interval = 16000
+    }
+  ]
+  oor_set_overload_bit_disable                  = true
   set_overload_bit                              = true
   set_overload_bit_on_startup_time_to_advertise = 300
   set_overload_bit_advertise_external           = true
@@ -28,56 +38,191 @@ resource "iosxr_router_isis" "example" {
       advertise_interlevel         = true
     }
   ]
-  nsr                                 = true
-  nsf_ietf                            = true
-  nsf_lifetime                        = 10
-  nsf_interface_timer                 = 5
-  nsf_interface_expires               = 2
-  log_adjacency_changes               = true
-  lsp_gen_interval_maximum_wait       = 5000
-  lsp_gen_interval_initial_wait       = 50
-  lsp_gen_interval_secondary_wait     = 200
-  lsp_refresh_interval                = 65000
-  max_lsp_lifetime                    = 65535
+  lsp_mtu = 1400
+  lsp_mtu_levels = [
+    {
+      level_number = 1
+      lsp_mtu      = 1400
+    }
+  ]
+  extended_admin_group  = "both"
+  nsr                   = true
+  nsr_restart_time      = 240
+  nsf_ietf              = true
+  nsf_lifetime          = 10
+  nsf_interface_timer   = 5
+  nsf_interface_expires = 2
+  lsp_check_interval    = 20
+  lsp_check_interval_levels = [
+    {
+      level_number       = 1
+      lsp_check_interval = 20
+    }
+  ]
+  lsp_gen_interval_maximum_wait   = 5000
+  lsp_gen_interval_initial_wait   = 50
+  lsp_gen_interval_secondary_wait = 200
+  lsp_gen_interval_levels = [
+    {
+      level_number   = 1
+      initial_wait   = 50
+      secondary_wait = 200
+      maximum_wait   = 5000
+    }
+  ]
+  adjacency_stagger                        = true
+  adjacency_stagger_initial_neighbors      = 5
+  adjacency_stagger_max_neighbors          = 20
+  hostname_dynamic_disable                 = true
+  is_type                                  = "level-1"
+  multi_part_tlv_disable                   = true
+  multi_part_tlv_disable_neighbor          = true
+  multi_part_tlv_disable_prefix_tlvs       = true
+  multi_part_tlv_disable_router_capability = true
+  multi_part_tlv_disable_levels = [
+    {
+      level_number      = 1
+      neighbor          = true
+      prefix_tlvs       = true
+      router_capability = true
+    }
+  ]
+  log_adjacency_changes = true
+  log_pdu_drops         = true
+  log_format_brief      = true
+  log_sizes = [
+    {
+      log_type    = "adjacency"
+      size_number = 30
+    }
+  ]
   lsp_password_hmac_md5_encrypted     = "060506324F41584B564B0F49584B"
   lsp_password_hmac_md5_send_only     = true
   lsp_password_hmac_md5_snp_send_only = true
   lsp_password_hmac_md5_enable_poi    = true
-  distribute_link_state               = true
-  distribute_link_state_instance_id   = 32
-  distribute_link_state_throttle      = 1
-  distribute_link_state_level         = 2
+  lsp_password_levels = [
+    {
+      level_number           = 1
+      hmac_md5_encrypted     = "060506324F41584B564B0F49584B"
+      hmac_md5_send_only     = true
+      hmac_md5_snp_send_only = true
+      hmac_md5_enable_poi    = true
+    }
+  ]
+  authentication_check_disable   = true
+  iid_disable                    = true
+  mpls_ldp_sync                  = true
+  mpls_ldp_sync_level            = 1
+  protocol_shutdown              = true
+  min_lsp_arrival_initial_wait   = 40
+  min_lsp_arrival_secondary_wait = 100
+  min_lsp_arrival_maximum_wait   = 2000
+  min_lsp_arrival_levels = [
+    {
+      level_number   = 1
+      initial_wait   = 40
+      secondary_wait = 100
+      maximum_wait   = 2000
+    }
+  ]
+  max_metric                      = true
+  max_metric_on_startup_advertise = 300
+  max_metric_external             = true
+  max_metric_interlevel           = true
+  max_metric_default_route        = true
+  max_metric_srv6_locator         = true
+  max_metric_te                   = true
+  max_metric_delay                = true
+  max_metric_levels = [
+    {
+      level_number         = 1
+      on_startup_advertise = 300
+      external             = true
+      interlevel           = true
+      default_route        = true
+      srv6_locator         = true
+      te                   = true
+      delay                = true
+    }
+  ]
+  distribute_link_state                   = true
+  distribute_link_state_level             = 2
+  distribute_link_state_instance_id       = 32
+  distribute_link_state_throttle          = 1
+  distribute_link_state_exclude_interarea = true
+  distribute_link_state_exclude_external  = true
+  distribute_link_state_route_policy      = "ROUTE_POLICY_1"
+  max_lsp_lifetime                        = 1200
+  max_lsp_lifetime_levels = [
+    {
+      level_number     = 1
+      max_lsp_lifetime = 1200
+    }
+  ]
+  instance_id                         = 1
+  hello_padding                       = "adaptive"
+  lsp_fast_flooding                   = true
+  lsp_fast_flooding_max_lsp_tx        = 500
+  lsp_fast_flooding_remote_psnp_delay = 1000
+  psnp_interval                       = 100
+  nets = [
+    {
+      net_id = "49.0001.2222.2222.2222.00"
+    }
+  ]
   affinity_maps = [
     {
       name         = "22"
       bit_position = 4
     }
   ]
-  flex_algos = [
+  ignore_lsp_errors_disable          = true
+  purge_transmit_strict              = true
+  purge_transmit_strict_strict_value = "level-1"
+  srlg_admin_weight                  = 500
+  srlg_names = [
     {
-      number               = 128
-      advertise_definition = true
-      metric_type          = "delay"
-    }
-  ]
-  nets = [
-    {
-      net_id = "49.0001.2222.2222.2222.00"
-    }
-  ]
-  interfaces = [
-    {
-      interface_name = "GigabitEthernet0/0/0/1"
-      circuit_type   = "level-1"
-      hello_padding  = "always"
-      priority_levels = [
+      srlg_name    = "SRLG-1"
+      admin_weight = 500
+      static_ipv4_addresses = [
         {
-          level_number = 1
-          priority     = 10
+          local_end_point  = "10.0.0.1"
+          remote_end_point = "10.0.0.2"
         }
       ]
-      point_to_point = false
-      state          = "passive"
+    }
+  ]
+  flex_algos = [
+    {
+      number                                    = 128
+      minimum_bandwidth                         = 1000000000
+      maximum_delay                             = 1000000
+      priority                                  = 10
+      metric_type                               = "delay"
+      advertise_definition                      = true
+      prefix_metric                             = true
+      auto_cost_reference_bandwidth             = 1000000000
+      auto_cost_reference_bandwidth_granularity = 1000
+      auto_cost_reference_group_mode            = true
+      affinity_exclude_any                      = ["AFFINITY-2"]
+      affinity_include_any                      = ["AFFINITY-1"]
+      affinity_include_all                      = ["AFFINITY-1"]
+      affinity_reverse_exclude_any              = ["AFFINITY-2"]
+      affinity_reverse_include_any              = ["AFFINITY-1"]
+      affinity_reverse_include_all              = ["AFFINITY-1"]
+      srlg_exclude_any                          = ["SRLG-EXCLUDE-1"]
+      fast_reroute_disable                      = true
+      microloop_avoidance_disable               = true
+      data_plane_segment_routing                = true
+      data_plane_ip                             = false
+      ucmp_disable                              = true
+      address_families = [
+        {
+          af_name       = "ipv4"
+          saf_name      = "unicast"
+          maximum_paths = 10
+        }
+      ]
     }
   ]
 }
@@ -92,46 +237,107 @@ resource "iosxr_router_isis" "example" {
 
 ### Optional
 
+- `adjacency_stagger` (Boolean) Stagger ISIS adjacency bring up
+- `adjacency_stagger_initial_neighbors` (Number) Initial number of neighbors to bring up (default 2)
+  - Range: `2`-`65000`
+- `adjacency_stagger_max_neighbors` (Number) Maximum simultaneous neighbors to bring up (default 64)
+  - Range: `2`-`65000`
 - `affinity_maps` (Attributes List) Affinity map configuration (see [below for nested schema](#nestedatt--affinity_maps))
+- `authentication_check_disable` (Boolean) Disable authentication check
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 - `distribute_link_state` (Boolean) Distribute the link-state database to external services
+- `distribute_link_state_exclude_external` (Boolean) Don't distribute ISIS external prefixes
+- `distribute_link_state_exclude_interarea` (Boolean) Don't distribute ISIS inter-area prefixes
 - `distribute_link_state_instance_id` (Number) Set distribution process instance identifier
   - Range: `32`-`4294967295`
 - `distribute_link_state_level` (Number) Set distribution for one level only
   - Range: `1`-`2`
+- `distribute_link_state_route_policy` (String) Distribute prefixes based on a route policy
 - `distribute_link_state_throttle` (Number) Set throttle update in seconds
   - Range: `1`-`20`
+- `extended_admin_group` (String) Code-point for Extended Administrative Group subTLV
+  - Choices: `both`, `cisco`, `ietf`
 - `flex_algos` (Attributes List) Flex Algorithm definition (see [below for nested schema](#nestedatt--flex_algos))
-- `interfaces` (Attributes List) Enter the IS-IS interface configuration submode (see [below for nested schema](#nestedatt--interfaces))
+- `hello_padding` (String) Add padding to IS-IS hello packets
+  - Choices: `adaptive`, `disable`, `sometimes`
+- `hostname_dynamic_disable` (Boolean) Disable dynamic hostname resolution
+- `ignore_lsp_errors_disable` (Boolean) Purge LSPs with failed checksums
+- `iid_disable` (Boolean) Disable instance-id
+- `instance_id` (Number) ISIS-MI instance id
+  - Range: `1`-`65535`
 - `is_type` (String) Area type (level)
   - Choices: `level-1`, `level-1-2`, `level-2-only`
 - `log_adjacency_changes` (Boolean) Enable logging adjacency state changes
+- `log_format_brief` (Boolean) Don't add additional information to ISIS log messages
+- `log_pdu_drops` (Boolean) Enable logging PDU drops
+- `log_sizes` (Attributes List) Set size of the log buffer (see [below for nested schema](#nestedatt--log_sizes))
+- `lsp_check_interval` (Number) Set LSP checksum check interval
+  - Range: `10`-`65535`
+- `lsp_check_interval_levels` (Attributes List) Set LSP check interval for one level only (see [below for nested schema](#nestedatt--lsp_check_interval_levels))
+- `lsp_fast_flooding` (Boolean) Enable and enter LSP fast flooding submode
+- `lsp_fast_flooding_max_lsp_tx` (Number) Set maximum LSP transmit rate
+  - Range: `33`-`5000`
+- `lsp_fast_flooding_remote_psnp_delay` (Number) Set remote PSNP delay
+  - Range: `1`-`5000`
 - `lsp_gen_interval_initial_wait` (Number) Initial delay before generating an LSP [50]
   - Range: `0`-`120000`
+- `lsp_gen_interval_levels` (Attributes List) Set LSP generation interval for one level only (see [below for nested schema](#nestedatt--lsp_gen_interval_levels))
 - `lsp_gen_interval_maximum_wait` (Number) Maximum delay before generating an LSP [5000]
   - Range: `0`-`120000`
 - `lsp_gen_interval_secondary_wait` (Number) Secondary delay before generating an LSP [200]
   - Range: `0`-`120000`
-- `lsp_password_accept_encrypted` (String) Specifies a password will follow
+- `lsp_mtu` (Number) Set maximum LSP size
+  - Range: `128`-`8979`
+- `lsp_mtu_levels` (Attributes List) Set LSP size for one level only (see [below for nested schema](#nestedatt--lsp_mtu_levels))
+- `lsp_password_accept_encrypted` (String, Sensitive) Specifies a password will follow
+- `lsp_password_accept_levels` (Attributes List) Set lsp-password for one level only (see [below for nested schema](#nestedatt--lsp_password_accept_levels))
 - `lsp_password_hmac_md5_enable_poi` (Boolean) Enable purge originator identification
-- `lsp_password_hmac_md5_encrypted` (String) Specifies a password will follow
+- `lsp_password_hmac_md5_encrypted` (String, Sensitive) Specifies a password will follow
 - `lsp_password_hmac_md5_send_only` (Boolean) specify SNP packets authentication mode
 - `lsp_password_hmac_md5_snp_send_only` (Boolean) Authenticate outgoing SNPs, no check on incoming SNPs
 - `lsp_password_keychain` (String) Specifies a Key Chain name will follow
 - `lsp_password_keychain_enable_poi` (Boolean) Enable purge originator identification
 - `lsp_password_keychain_send_only` (Boolean) specify SNP packets authentication mode
 - `lsp_password_keychain_snp_send_only` (Boolean) Authenticate outgoing SNPs, no check on incoming SNPs
-- `lsp_password_levels` (Attributes List) Set lsp-password for one level only (see [below for nested schema](#nestedatt--lsp_password_levels))
+- `lsp_password_levels` (Attributes List) Configure the area password (see [below for nested schema](#nestedatt--lsp_password_levels))
 - `lsp_password_text_enable_poi` (Boolean) Enable purge originator identification
-- `lsp_password_text_encrypted` (String) Specifies a password will follow
+- `lsp_password_text_encrypted` (String, Sensitive) Specifies a password will follow
 - `lsp_password_text_send_only` (Boolean) specify SNP packets authentication mode
 - `lsp_password_text_snp_send_only` (Boolean) Authenticate outgoing SNPs, no check on incoming SNPs
 - `lsp_refresh_interval` (Number) Set LSP refresh interval
   - Range: `1`-`65535`
+- `lsp_refresh_interval_levels` (Attributes List) Set LSP refresh interval for one level only (see [below for nested schema](#nestedatt--lsp_refresh_interval_levels))
 - `max_lsp_lifetime` (Number) Set maximum LSP lifetime
   - Range: `1`-`65535`
+- `max_lsp_lifetime_levels` (Attributes List) Set LSP regeneration interval for one level only (see [below for nested schema](#nestedatt--max_lsp_lifetime_levels))
+- `max_metric` (Boolean) Signal other routers to use us as transit option of last resort
+- `max_metric_default_route` (Boolean) Override default route metric with maximum metric
+- `max_metric_delay` (Boolean) Apply max-metric to delay metric
+- `max_metric_external` (Boolean) Override metric of prefixes learned from another protocol with maximum metric
+- `max_metric_interlevel` (Boolean) Override metric of prefixes learned from another ISIS level with maximum metric
+- `max_metric_levels` (Attributes List) Set maximum metric for one level only (see [below for nested schema](#nestedatt--max_metric_levels))
+- `max_metric_on_startup_advertise` (Number) Time in seconds to advertise maximum metric after reboot
+  - Range: `5`-`86400`
+- `max_metric_on_startup_wait_for_bgp` (Boolean) Set maximum metric on startup until BGP signals convergence, or timeout
+- `max_metric_srv6_locator` (Boolean) Override segment routing ipv6 locator metric with maximum metric
+- `max_metric_te` (Boolean) Apply max-metric to TE metric
+- `min_lsp_arrival_initial_wait` (Number) Initial delay expected to take since last LSP [50]
+  - Range: `0`-`120000`
+- `min_lsp_arrival_levels` (Attributes List) Set LSP arrival time for one level only (see [below for nested schema](#nestedatt--min_lsp_arrival_levels))
+- `min_lsp_arrival_maximum_wait` (Number) Maximum delay expected to take since last LSP [5000]
+  - Range: `0`-`120000`
+- `min_lsp_arrival_secondary_wait` (Number) Secondary delay expected to take since last LSP [200]
+  - Range: `0`-`120000`
+- `mpls_ldp_sync` (Boolean) Configure LDP ISIS synchronization
+- `mpls_ldp_sync_level` (Number) Set LDP synchronization for one level only
+  - Range: `1`-`2`
+- `multi_part_tlv_disable` (Boolean) Disable advertising multi-part TLVs
+- `multi_part_tlv_disable_levels` (Attributes List) Disable advertising multi-part TLVs for one level only (see [below for nested schema](#nestedatt--multi_part_tlv_disable_levels))
+- `multi_part_tlv_disable_neighbor` (Boolean) Disable advertisement of multi-part neighbor TLVs
+- `multi_part_tlv_disable_prefix_tlvs` (Boolean) Disable advertisement of multi-part prefix TLVs
+- `multi_part_tlv_disable_router_capability` (Boolean) Disable advertisement of multi-part router capability TLVs
 - `nets` (Attributes List) A Network Entity Title (NET) for this process (see [below for nested schema](#nestedatt--nets))
 - `nsf_cisco` (Boolean) Checkpoint NSF restart
 - `nsf_ietf` (Boolean) IETF NSF restart
@@ -142,6 +348,20 @@ resource "iosxr_router_isis" "example" {
 - `nsf_lifetime` (Number) Maximum route lifetime following restart (seconds)
   - Range: `5`-`300`
 - `nsr` (Boolean) Enable NSR
+- `nsr_restart_time` (Number) Maximum time allowed to resync following NSR
+  - Range: `60`-`300`
+- `oor_set_overload_bit_disable` (Boolean) Disable setting of overload-bit when OOR. ISIS will continue to participate in forwarding but its decision will be based on an incomplete link-state database. It may lead to routing loops and other forwarding failures. NOT recommended.
+- `protocol_shutdown` (Boolean) Protocol Shutdown. ISIS will set overload-bit and isolate itself by not forming adjacencies.
+- `psnp_interval` (Number) Longest wait to send PSNP
+  - Range: `1`-`5000`
+- `purge_transmit_strict` (Boolean) Only authentication TLV is allowed
+- `purge_transmit_strict_strict_value` (String) Only authentication TLV is allowed
+  - Choices: `level-1`, `level-2`
+- `receive_application_flex_algo_delay_app_only` (Boolean) ASLA to take precedence
+- `segment_routing_global_block_lower_bound` (Number) The lower bound of the SRGB
+  - Range: `16000`-`1048575`
+- `segment_routing_global_block_upper_bound` (Number) The upper bound SRGB
+  - Range: `16001`-`1048575`
 - `set_overload_bit` (Boolean) Signal other routers not to use us in SPF
 - `set_overload_bit_advertise_external` (Boolean) If overload-bit set advertise IP prefixes learned from other protocols
 - `set_overload_bit_advertise_interlevel` (Boolean) If overload-bit set advertise IP prefixes learned from another ISIS level
@@ -149,6 +369,9 @@ resource "iosxr_router_isis" "example" {
 - `set_overload_bit_on_startup_time_to_advertise` (Number) Time in seconds to advertise ourself as overloaded after reboot
   - Range: `5`-`86400`
 - `set_overload_bit_on_startup_wait_for_bgp` (Boolean) Set overload bit on startup until BGP signals convergence, or timeout
+- `srlg_admin_weight` (Number) Administrative weight for all SRLGs, default is 1000
+  - Range: `0`-`16777215`
+- `srlg_names` (Attributes List) SRLG Name (see [below for nested schema](#nestedatt--srlg_names))
 
 ### Read-Only
 
@@ -169,43 +392,116 @@ Required:
 
 Required:
 
+- `auto_cost_reference_bandwidth` (Number) The reference bandwidth value (kbits/sec)
+  - Range: `1`-`4294967295`
 - `number` (Number) Algorithm number
   - Range: `128`-`255`
 
 Optional:
 
+- `address_families` (Attributes List) Enter the IS-IS Flex-Algo address-family configuration submode (see [below for nested schema](#nestedatt--flex_algos--address_families))
 - `advertise_definition` (Boolean) Advertise the Flex-Algo Definition
+- `affinity_exclude_any` (List of String) Affinity to exclude
+- `affinity_include_all` (List of String) Affinity to include
+- `affinity_include_any` (List of String) Affinity to include
+- `affinity_reverse_exclude_any` (List of String) Reverse affinity to exclude
+- `affinity_reverse_include_all` (List of String) Reverse affinity to include
+- `affinity_reverse_include_any` (List of String) Reverse affinity to include
+- `auto_cost_reference_bandwidth_granularity` (Number) Granularity
+  - Range: `1`-`4294967295`
+- `auto_cost_reference_group_mode` (Boolean) Enable Group mode for bandwidth metric computation
+- `data_plane_ip` (Boolean) IP
+- `data_plane_segment_routing` (Boolean) Segment Routing
+- `fast_reroute_disable` (Boolean) Disable Fast ReRoute for Flex-Algo
+- `maximum_delay` (Number) Specify maximum link delay
+  - Range: `1`-`10000000`
 - `metric_type` (String) Metric-type used by flex-algo calculation
+- `microloop_avoidance_disable` (Boolean) Disable Microloop Avoidance for Flex-Algo
+- `minimum_bandwidth` (Number) Specify minimum link bandwidth
+  - Range: `1`-`4294967295`
+- `prefix_metric` (Boolean) Use Flex-Algo Prefix Metric
+- `priority` (Number) Flex-Algo definition priority
+  - Range: `0`-`255`
+- `srlg_exclude_any` (List of String) SRLG to exclude
+- `ucmp_disable` (Boolean) Disable Unequal Cost Load Balancing (UCMP) for Flex-Algo
 
-
-<a id="nestedatt--interfaces"></a>
-### Nested Schema for `interfaces`
+<a id="nestedatt--flex_algos--address_families"></a>
+### Nested Schema for `flex_algos.address_families`
 
 Required:
 
-- `interface_name` (String) Interface to configure
+- `af_name` (String) af-name
+  - Choices: `ipv4`, `ipv6`
+- `saf_name` (String) saf-name
+  - Choices: `multicast`, `unicast`
 
 Optional:
 
-- `circuit_type` (String) Configure circuit type for interface
-  - Choices: `level-1`, `level-1-2`, `level-2-only`
-- `hello_padding` (String) Add padding to IS-IS hello packets
-  - Choices: `adaptive`, `always`, `disable`, `sometimes`
-- `point_to_point` (Boolean) Treat active LAN interface as point-to-point
-- `priority_levels` (Attributes List) Set priority for one level only (see [below for nested schema](#nestedatt--interfaces--priority_levels))
-- `state` (String) Do not establish adjacencies over this interface
-  - Choices: `passive`, `shutdown`, `suppressed`
+- `maximum_paths` (Number) Number of paths
+  - Range: `1`-`64`
+- `maximum_paths_route_policy` (String) Filter routes based on a route policy
 
-<a id="nestedatt--interfaces--priority_levels"></a>
-### Nested Schema for `interfaces.priority_levels`
+
+
+<a id="nestedatt--log_sizes"></a>
+### Nested Schema for `log_sizes`
 
 Required:
 
-- `level_number` (Number) Set priority for this level only
-  - Range: `1`-`2`
-- `priority` (Number) Set priority for Designated Router election
-  - Range: `0`-`127`
+- `log_type` (String) Log type
+  - Choices: `adjacency`, `database`, `error`, `lsp`, `microloop-avoidance`, `route`, `spf`
+- `size_number` (Number) Maximum number of log entries
+  - Range: `20`-`50000`
 
+
+<a id="nestedatt--lsp_check_interval_levels"></a>
+### Nested Schema for `lsp_check_interval_levels`
+
+Required:
+
+- `level_number` (Number) Level
+  - Range: `1`-`2`
+- `lsp_check_interval` (Number) LSP checksum check interval time in seconds
+  - Range: `10`-`65535`
+
+
+<a id="nestedatt--lsp_gen_interval_levels"></a>
+### Nested Schema for `lsp_gen_interval_levels`
+
+Required:
+
+- `level_number` (Number) Level
+  - Range: `1`-`2`
+
+Optional:
+
+- `initial_wait` (Number) Initial delay before generating an LSP [50]
+  - Range: `0`-`120000`
+- `maximum_wait` (Number) Maximum delay before generating an LSP [5000]
+  - Range: `0`-`120000`
+- `secondary_wait` (Number) Secondary delay before generating an LSP [200]
+  - Range: `0`-`120000`
+
+
+<a id="nestedatt--lsp_mtu_levels"></a>
+### Nested Schema for `lsp_mtu_levels`
+
+Required:
+
+- `level_number` (Number) Level
+  - Range: `1`-`2`
+- `lsp_mtu` (Number) Set maximum LSP size
+  - Range: `128`-`8979`
+
+
+<a id="nestedatt--lsp_password_accept_levels"></a>
+### Nested Schema for `lsp_password_accept_levels`
+
+Required:
+
+- `encrypted` (String, Sensitive) Specifies a password will follow
+- `level_number` (Number) Set lsp-password for LSPs/SNPs at this level only
+  - Range: `1`-`2`
 
 
 <a id="nestedatt--lsp_password_levels"></a>
@@ -213,9 +509,99 @@ Required:
 
 Required:
 
-- `encrypted` (String) Specifies a password will follow
-- `level_number` (Number) Set lsp-password for LSPs/SNPs at this level only
+- `level_number` (Number) Level
   - Range: `1`-`2`
+
+Optional:
+
+- `hmac_md5_enable_poi` (Boolean) Enable purge originator identification
+- `hmac_md5_encrypted` (String, Sensitive) Specifies a password will follow
+- `hmac_md5_send_only` (Boolean) specify SNP packets authentication mode
+- `hmac_md5_snp_send_only` (Boolean) Authenticate outgoing SNPs, no check on incoming SNPs
+- `keychain_enable_poi` (Boolean) Enable purge originator identification
+- `keychain_name` (String) Specifies a Key Chain name will follow
+- `keychain_send_only` (Boolean) specify SNP packets authentication mode
+- `keychain_snp_send_only` (Boolean) Authenticate outgoing SNPs, no check on incoming SNPs
+- `text_enable_poi` (Boolean) Enable purge originator identification
+- `text_encrypted` (String, Sensitive) Specifies a password will follow
+- `text_send_only` (Boolean) specify SNP packets authentication mode
+- `text_snp_send_only` (Boolean) Authenticate outgoing SNPs, no check on incoming SNPs
+
+
+<a id="nestedatt--lsp_refresh_interval_levels"></a>
+### Nested Schema for `lsp_refresh_interval_levels`
+
+Required:
+
+- `level_number` (Number) Level
+  - Range: `1`-`2`
+- `lsp_refresh_interval` (Number) Set LSP refresh interval
+  - Range: `1`-`65535`
+
+
+<a id="nestedatt--max_lsp_lifetime_levels"></a>
+### Nested Schema for `max_lsp_lifetime_levels`
+
+Required:
+
+- `level_number` (Number) Level
+  - Range: `1`-`2`
+- `max_lsp_lifetime` (Number) Set maximum LSP lifetime
+  - Range: `1`-`65535`
+
+
+<a id="nestedatt--max_metric_levels"></a>
+### Nested Schema for `max_metric_levels`
+
+Required:
+
+- `level_number` (Number) Level
+  - Range: `1`-`2`
+
+Optional:
+
+- `default_route` (Boolean) Override default route metric with maximum metric
+- `delay` (Boolean) Apply max-metric to delay metric
+- `external` (Boolean) Override metric of prefixes learned from another protocol with maximum metric
+- `interlevel` (Boolean) Override metric of prefixes learned from another ISIS level with maximum metric
+- `on_startup_advertise` (Number) Time in seconds to advertise maximum metric after reboot
+  - Range: `5`-`86400`
+- `on_startup_wait_for_bgp` (Boolean) Set maximum metric on startup until BGP signals convergence, or timeout
+- `srv6_locator` (Boolean) Override segment routing ipv6 locator metric with maximum metric
+- `te` (Boolean) Apply max-metric to TE metric
+
+
+<a id="nestedatt--min_lsp_arrival_levels"></a>
+### Nested Schema for `min_lsp_arrival_levels`
+
+Required:
+
+- `level_number` (Number) Level
+  - Range: `1`-`2`
+
+Optional:
+
+- `initial_wait` (Number) Initial delay expected to take since last LSP [50]
+  - Range: `0`-`120000`
+- `maximum_wait` (Number) Maximum delay expected to take since last LSP [5000]
+  - Range: `0`-`120000`
+- `secondary_wait` (Number) Secondary delay expected to take since last LSP [200]
+  - Range: `0`-`120000`
+
+
+<a id="nestedatt--multi_part_tlv_disable_levels"></a>
+### Nested Schema for `multi_part_tlv_disable_levels`
+
+Required:
+
+- `level_number` (Number) Level
+  - Range: `1`-`2`
+
+Optional:
+
+- `neighbor` (Boolean) Disable advertisement of multi-part neighbor TLVs
+- `prefix_tlvs` (Boolean) Disable advertisement of multi-part prefix TLVs
+- `router_capability` (Boolean) Disable advertisement of multi-part router capability TLVs
 
 
 <a id="nestedatt--nets"></a>
@@ -241,6 +627,28 @@ Optional:
 - `on_startup_time_to_advertise` (Number) Time in seconds to advertise ourself as overloaded after reboot
   - Range: `5`-`86400`
 - `on_startup_wait_for_bgp` (Boolean) Set overload bit on startup until BGP signals convergence, or timeout
+
+
+<a id="nestedatt--srlg_names"></a>
+### Nested Schema for `srlg_names`
+
+Required:
+
+- `srlg_name` (String) SRLG Name
+
+Optional:
+
+- `admin_weight` (Number) Administrative weight: default inherited from the global admin-weight
+  - Range: `0`-`16777215`
+- `static_ipv4_addresses` (Attributes List) IPv4 address (see [below for nested schema](#nestedatt--srlg_names--static_ipv4_addresses))
+
+<a id="nestedatt--srlg_names--static_ipv4_addresses"></a>
+### Nested Schema for `srlg_names.static_ipv4_addresses`
+
+Required:
+
+- `local_end_point` (String) IPv4 address of local end-point of the link
+- `remote_end_point` (String) IPv4 address of remote end-point of the link
 
 ## Import
 

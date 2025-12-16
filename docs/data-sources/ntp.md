@@ -46,8 +46,18 @@ data "iosxr_ntp" "example" {
 - `authentication_keys` (Attributes List) Authentication key for trusted time sources (see [below for nested schema](#nestedatt--authentication_keys))
 - `broadcastdelay` (Number) Estimated round-trip delay
 - `cmac_authentication_keys` (Attributes List) CMAC Authentication key for trusted time sources (see [below for nested schema](#nestedatt--cmac_authentication_keys))
+- `drift_aging_time` (Number) Aging time
+- `drift_file_bootflash` (Boolean) drift in bootflash: file system
+- `drift_file_compactflash` (Boolean) drift in compactflash: file system
+- `drift_file_disk0` (Boolean) drift in disk0: file system
+- `drift_file_disk1` (Boolean) drift in disk1: file system
+- `drift_file_disk2` (Boolean) drift in disk2: file system
+- `drift_file_harddisk` (Boolean) drift in harddisk: file system
+- `drift_file_usb` (Boolean) drift in usb: file system
+- `drift_filename` (String) drift in file
 - `hmac_sha1_authentication_keys` (Attributes List) HMA-SHA1 Authentication key for trusted time sources (see [below for nested schema](#nestedatt--hmac_sha1_authentication_keys))
 - `hmac_sha2_authentication_keys` (Attributes List) HMA-SHA2 Authentication key for trusted time sources (see [below for nested schema](#nestedatt--hmac_sha2_authentication_keys))
+- `hostname_peers_servers` (Attributes List) FQDN hostname (see [below for nested schema](#nestedatt--hostname_peers_servers))
 - `id` (String) The path of the retrieved object.
 - `interface_vrfs` (Attributes List) Specify non-default VRF (see [below for nested schema](#nestedatt--interface_vrfs))
 - `interfaces` (Attributes List) Configure NTP on an interface (see [below for nested schema](#nestedatt--interfaces))
@@ -90,7 +100,7 @@ Read-Only:
 Read-Only:
 
 - `key_number` (Number) Authentication key for trusted time sources
-- `md5_encrypted` (String) Specify an encrypted key
+- `md5_encrypted` (String, Sensitive) Specify an encrypted key
 
 
 <a id="nestedatt--cmac_authentication_keys"></a>
@@ -98,7 +108,7 @@ Read-Only:
 
 Read-Only:
 
-- `cmac_encrypted` (String) Specify an encrypted key
+- `cmac_encrypted` (String, Sensitive) Specify an encrypted key
 - `key_number` (Number) Authentication key for trusted time sources
 
 
@@ -107,7 +117,7 @@ Read-Only:
 
 Read-Only:
 
-- `hmac_sha1_encrypted` (String) Specify an encrypted key
+- `hmac_sha1_encrypted` (String, Sensitive) Specify an encrypted key
 - `key_number` (Number) Authentication key for trusted time sources
 
 
@@ -116,8 +126,25 @@ Read-Only:
 
 Read-Only:
 
-- `hmac_sha2_encrypted` (String) Specify an encrypted key
+- `hmac_sha2_encrypted` (String, Sensitive) Specify an encrypted key
 - `key_number` (Number) Authentication key for trusted time sources
+
+
+<a id="nestedatt--hostname_peers_servers"></a>
+### Nested Schema for `hostname_peers_servers`
+
+Read-Only:
+
+- `burst` (Boolean) Use burst mode
+- `fqdn_hostname` (String) Peer/server hostname
+- `iburst` (Boolean) Use initial burst mode
+- `key` (Number) Configure peer authentication key
+- `maxpoll` (Number) Configure maximum polling rate
+- `minpoll` (Number) Configure minimum polling rate
+- `prefer` (Boolean) Prefer this peer when possible
+- `source` (String) Interface for source address
+- `type` (String) Specify peer/server
+- `version` (Number) Configure NTP version
 
 
 <a id="nestedatt--interface_vrfs"></a>
@@ -147,6 +174,7 @@ Read-Only:
 
 Read-Only:
 
+- `broadcast_client` (Boolean) Listen to NTP broadcasts
 - `broadcast_destination` (String) Configure broadcast destination address
 - `broadcast_key` (Number) Configure broadcast authentication key
 - `broadcast_version` (Number) Configure NTP version
@@ -194,9 +222,27 @@ Read-Only:
 
 Read-Only:
 
+- `hostname_peers_servers` (Attributes List) FQDN hostname (see [below for nested schema](#nestedatt--peers_servers_vrfs--hostname_peers_servers))
 - `ipv4_peers_servers` (Attributes List) Specify IPv4 address (see [below for nested schema](#nestedatt--peers_servers_vrfs--ipv4_peers_servers))
 - `ipv6_peers_servers` (Attributes List) Specify IPv6 address (see [below for nested schema](#nestedatt--peers_servers_vrfs--ipv6_peers_servers))
 - `vrf_name` (String) Specify non-default VRF
+
+<a id="nestedatt--peers_servers_vrfs--hostname_peers_servers"></a>
+### Nested Schema for `peers_servers_vrfs.hostname_peers_servers`
+
+Read-Only:
+
+- `burst` (Boolean) Use burst mode
+- `fqdn_hostname` (String) Peer/server hostname
+- `iburst` (Boolean) Use initial burst mode
+- `key` (Number) Configure peer authentication key
+- `maxpoll` (Number) Configure maximum polling rate
+- `minpoll` (Number) Configure minimum polling rate
+- `prefer` (Boolean) Prefer this peer when possible
+- `source` (String) Interface for source address
+- `type` (String) Specify peer/server
+- `version` (Number) Configure NTP version
+
 
 <a id="nestedatt--peers_servers_vrfs--ipv4_peers_servers"></a>
 ### Nested Schema for `peers_servers_vrfs.ipv4_peers_servers`

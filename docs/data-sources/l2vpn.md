@@ -26,12 +26,106 @@ data "iosxr_l2vpn" "example" {
 
 ### Read-Only
 
+- `autodiscovery_bgp_signaling_protocol_bgp_mtu_mismatch_ignore` (Boolean) Ignore MTU mismatch for auto-discovered PWs
+- `capability_high_mode` (Boolean) Compute global capability as the highest node capability
+- `capability_single_mode` (Boolean) Disable global capability re-computation
 - `description` (String) Multi segment psedowire global description
+- `flexible_xconnect_service_vlan_aware_evis` (Attributes List) Ethernet VPN Identifier (see [below for nested schema](#nestedatt--flexible_xconnect_service_vlan_aware_evis))
+- `flexible_xconnect_service_vlan_unaware` (Attributes List) Configure in vlan-unaware mode (see [below for nested schema](#nestedatt--flexible_xconnect_service_vlan_unaware))
 - `id` (String) The path of the retrieved object.
+- `ignore_mtu_mismatch` (Boolean) Ignore MTU mismatch for all L2VPN
+- `ignore_mtu_mismatch_ad` (Boolean) Ignore MTU mismatch for auto-discovered PWs
 - `load_balancing_flow_src_dst_ip` (Boolean) Use source and destination IP addresses for hashing
 - `load_balancing_flow_src_dst_mac` (Boolean) Use source and destination MAC addresses for hashing
+- `logging_bridge_domain` (Boolean) Enable bridge-domain logging
+- `logging_nsr` (Boolean) Enable Non-Stop Routing logging
+- `logging_pseudowire` (Boolean) Enable pseudowire logging
+- `logging_pwhe_replication_disable` (Boolean) disable PWHE replication failure/success logging
+- `logging_vfi` (Boolean) Enable VFI logging
+- `mac_limit_threshold` (Number) Global MAC limit threshold
+- `neighbors_all_ldp_flap` (Boolean) Forcing targetted-sesion flapping
+- `pw_grouping` (Boolean) Enable PW-Grouping
+- `pw_oam_refresh_transmit` (Number) Transmit
+- `pw_routing_bgp_rd_four_byte_as_assigned_number` (Number) AS:nn (hex or decimal format)
+- `pw_routing_bgp_rd_four_byte_as_number` (Number) Four Byte AS number
+- `pw_routing_bgp_rd_ipv4_address` (String) IP address
+- `pw_routing_bgp_rd_ipv4_address_assigned_number` (Number) IP-address:nn (hex or decimal format)
+- `pw_routing_bgp_rd_two_byte_as_assigned_number` (Number) AS:nn (hex or decimal format)
+- `pw_routing_bgp_rd_two_byte_as_number` (Number) Two Byte AS Number
+- `pw_routing_global_id` (Number) Configure l2vpn pseudowire routing global id
+- `pw_status_disable` (Boolean) Disable PW status
+- `redundancy_iccp_groups` (Attributes List) Group configuration (see [below for nested schema](#nestedatt--redundancy_iccp_groups))
 - `router_id` (String) Global L2VPN Router ID
+- `snmp_mib_interface_format_external` (Boolean) Set MIB interface name output format to external using slash
+- `snmp_mib_pseudowire_statistics` (Boolean) Enable MIB pseudowire statistics (for low scale, <16K PWs)
+- `tcn_propagation` (Boolean) Enable topology change notification propagation
 - `xconnect_groups` (Attributes List) Specify the group the cross connects belong to (see [below for nested schema](#nestedatt--xconnect_groups))
+
+<a id="nestedatt--flexible_xconnect_service_vlan_aware_evis"></a>
+### Nested Schema for `flexible_xconnect_service_vlan_aware_evis`
+
+Read-Only:
+
+- `interfaces` (Attributes List) Specify sub-interface name to attach to flexible xconnect service (see [below for nested schema](#nestedatt--flexible_xconnect_service_vlan_aware_evis--interfaces))
+- `vpn_id` (Number) Ethernet VPN Identifier
+
+<a id="nestedatt--flexible_xconnect_service_vlan_aware_evis--interfaces"></a>
+### Nested Schema for `flexible_xconnect_service_vlan_aware_evis.interfaces`
+
+Read-Only:
+
+- `interface_name` (String) Specify sub-interface name to attach to flexible xconnect service
+
+
+
+<a id="nestedatt--flexible_xconnect_service_vlan_unaware"></a>
+### Nested Schema for `flexible_xconnect_service_vlan_unaware`
+
+Read-Only:
+
+- `interfaces` (Attributes List) Specify sub-interface name to attach to flexible xconnect service (see [below for nested schema](#nestedatt--flexible_xconnect_service_vlan_unaware--interfaces))
+- `neighbor_evpn_evis` (Attributes List) Ethernet VPN Identifier (see [below for nested schema](#nestedatt--flexible_xconnect_service_vlan_unaware--neighbor_evpn_evis))
+- `service_name` (String) Configure in vlan-unaware mode
+
+<a id="nestedatt--flexible_xconnect_service_vlan_unaware--interfaces"></a>
+### Nested Schema for `flexible_xconnect_service_vlan_unaware.interfaces`
+
+Read-Only:
+
+- `interface_name` (String) Specify sub-interface name to attach to flexible xconnect service
+
+
+<a id="nestedatt--flexible_xconnect_service_vlan_unaware--neighbor_evpn_evis"></a>
+### Nested Schema for `flexible_xconnect_service_vlan_unaware.neighbor_evpn_evis`
+
+Read-Only:
+
+- `remote_ac_id` (Number) Specify remote attachment circuit identifier
+- `vpn_id` (Number) Ethernet VPN Identifier
+
+
+
+<a id="nestedatt--redundancy_iccp_groups"></a>
+### Nested Schema for `redundancy_iccp_groups`
+
+Read-Only:
+
+- `group_number` (Number) Group configuration
+- `interfaces` (Attributes List) Interface name (see [below for nested schema](#nestedatt--redundancy_iccp_groups--interfaces))
+- `multi_homing_node_id` (Number) Enter multi-homing node ID
+
+<a id="nestedatt--redundancy_iccp_groups--interfaces"></a>
+### Nested Schema for `redundancy_iccp_groups.interfaces`
+
+Read-Only:
+
+- `interface_name` (String) Interface name
+- `mac_flush_stp_tcn` (Boolean) STP topology change notification
+- `primary_vlan` (String) Assign primary VLANs
+- `recovery_delay` (Number) Specify delay before recovery reversion after failure clears
+- `secondary_vlan` (String) Assign secondary VLANs
+
+
 
 <a id="nestedatt--xconnect_groups"></a>
 ### Nested Schema for `xconnect_groups`

@@ -38,8 +38,10 @@ func TestAccIosxrMPLSOAM(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_echo_disable_vendor_extension", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_echo_reply_mode_control_channel_allow_reverse_lsp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_echo_revision_four", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_dpm_pps", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_dpm_interval", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_dpm_downstream_ecmp_faults", "true"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -95,11 +97,14 @@ func testAccIosxrMPLSOAMConfig_minimum() string {
 
 func testAccIosxrMPLSOAMConfig_all() string {
 	config := `resource "iosxr_mpls_oam" "test" {` + "\n"
+	config += `	delete_mode = "all"` + "\n"
 	config += `	oam = true` + "\n"
 	config += `	oam_echo_disable_vendor_extension = true` + "\n"
 	config += `	oam_echo_reply_mode_control_channel_allow_reverse_lsp = true` + "\n"
+	config += `	oam_echo_revision_four = true` + "\n"
 	config += `	oam_dpm_pps = 10` + "\n"
 	config += `	oam_dpm_interval = 60` + "\n"
+	config += `	oam_dpm_downstream_ecmp_faults = true` + "\n"
 	config += `}` + "\n"
 	return config
 }

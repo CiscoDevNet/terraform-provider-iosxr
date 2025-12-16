@@ -92,6 +92,7 @@ func testAccIosxrIPv6AccessListOptionsConfig_minimum() string {
 
 func testAccIosxrIPv6AccessListOptionsConfig_all() string {
 	config := `resource "iosxr_ipv6_access_list_options" "test" {` + "\n"
+	config += `	delete_mode = "all"` + "\n"
 	config += `	log_update_threshold = 214748` + "\n"
 	config += `	log_update_rate = 1000` + "\n"
 	config += `}` + "\n"

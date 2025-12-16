@@ -83,6 +83,12 @@ func (d *KeyChainDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 						"key_string_password": schema.StringAttribute{
 							MarkdownDescription: "Encrypted key string (even number of characters with first two as digits and sum less than 53, and rest of the characters should be hex digits)",
 							Computed:            true,
+							Sensitive:           true,
+						},
+						"key_string_password6": schema.StringAttribute{
+							MarkdownDescription: "Enter encrypted type6 password",
+							Computed:            true,
+							Sensitive:           true,
 						},
 						"cryptographic_algorithm": schema.StringAttribute{
 							MarkdownDescription: "Choose cryptographic algorithm",

@@ -27,6 +27,7 @@ import (
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -79,7 +80,7 @@ func (r *L2VPNPWClassResource) Schema(ctx context.Context, req resource.SchemaRe
 					stringvalidator.OneOf("all", "attributes"),
 				},
 			},
-			"name": schema.StringAttribute{
+			"pw_class_name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Pseudowire class template").String,
 				Required:            true,
 				Validators: []validator.String{
@@ -94,6 +95,14 @@ func (r *L2VPNPWClassResource) Schema(ctx context.Context, req resource.SchemaRe
 				MarkdownDescription: helpers.NewAttributeDescription("Set pseudowire encapsulation to MPLS").String,
 				Optional:            true,
 			},
+			"encapsulation_mpls_protocol_ldp": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set LDP as the signaling protocol for this pseudowire class").String,
+				Optional:            true,
+			},
+			"encapsulation_mpls_control_word": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable Control word").String,
+				Optional:            true,
+			},
 			"encapsulation_mpls_transport_mode_ethernet": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Ethernet port mode").String,
 				Optional:            true,
@@ -102,9 +111,109 @@ func (r *L2VPNPWClassResource) Schema(ctx context.Context, req resource.SchemaRe
 				MarkdownDescription: helpers.NewAttributeDescription("Vlan tagged mode").String,
 				Optional:            true,
 			},
-			"encapsulation_mpls_transport_mode_passthrough": schema.BoolAttribute{
+			"encapsulation_mpls_transport_mode_vlan_passthrough": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("passthrough incoming tags").String,
 				Optional:            true,
+			},
+			"encapsulation_mpls_vccv_verification_type_none": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("No VCCV verification").String,
+				Optional:            true,
+			},
+			"encapsulation_mpls_sequencing_transmit": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Sequencing on transmit side").String,
+				Optional:            true,
+			},
+			"encapsulation_mpls_sequencing_transmit_resync": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set the threshold for out-of-sequence packets before resync").AddIntegerRangeDescription(5, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(5, 65535),
+				},
+			},
+			"encapsulation_mpls_sequencing_receive": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Sequencing on receive side").String,
+				Optional:            true,
+			},
+			"encapsulation_mpls_sequencing_receive_resync": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set the threshold for out-of-sequence packets before resync").AddIntegerRangeDescription(5, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(5, 65535),
+				},
+			},
+			"encapsulation_mpls_sequencing_both": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Sequencing on both transmit and receive side").String,
+				Optional:            true,
+			},
+			"encapsulation_mpls_sequencing_both_resync": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set the threshold for out-of-sequence packets before resync").AddIntegerRangeDescription(5, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(5, 65535),
+				},
+			},
+			"encapsulation_mpls_preferred_path_interface_tunnel_te_tunnel_number": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify tunnel number for preferred path").AddIntegerRangeDescription(0, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 65535),
+				},
+			},
+			"encapsulation_mpls_preferred_path_interface_tunnel_te_tunnel_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify named tunnel for preferred path").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 60),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"encapsulation_mpls_preferred_path_interface_tunnel_ip": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify IP tunnel interface name for preferred path").AddIntegerRangeDescription(0, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 65535),
+				},
+			},
+			"encapsulation_mpls_preferred_path_interface_tunnel_tp": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify TP tunnel interface name for preferred path").AddIntegerRangeDescription(0, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 65535),
+				},
+			},
+			"encapsulation_mpls_preferred_path_sr_te_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify SR TE policy for preferred path").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 60),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"encapsulation_mpls_preferred_path_fallback_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable fallback for preferred path").String,
+				Optional:            true,
+			},
+			"encapsulation_mpls_switching_tlv_hide": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Hide TLV").String,
+				Optional:            true,
+			},
+			"encapsulation_mpls_tag_rewrite_ingress_vlan": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("vlan tagged mode").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"encapsulation_mpls_redundancy_one_way": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Force one-way PW redundancy behavior in Redundancy Group").String,
+				Optional:            true,
+			},
+			"encapsulation_mpls_redundancy_initial_delay": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Initial delay before activating the redundant PW").AddIntegerRangeDescription(0, 120).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 120),
+				},
 			},
 			"encapsulation_mpls_load_balancing_pw_label": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable PW VC label based load balancing").String,
@@ -134,12 +243,35 @@ func (r *L2VPNPWClassResource) Schema(ctx context.Context, req resource.SchemaRe
 				MarkdownDescription: helpers.NewAttributeDescription("Set Flow label parameters statically").String,
 				Optional:            true,
 			},
-			"encapsulation_mpls_load_balancing_flow_label_code_one7": schema.BoolAttribute{
+			"encapsulation_mpls_load_balancing_flow_label_code_17": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Legacy code value").String,
 				Optional:            true,
 			},
-			"encapsulation_mpls_load_balancing_flow_label_code_one7_disable": schema.BoolAttribute{
+			"encapsulation_mpls_load_balancing_flow_label_code_17_disable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Disables sending code 17 TLV").String,
+				Optional:            true,
+			},
+			"encapsulation_mpls_ipv4_source": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The local source IPv4 address").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+				},
+			},
+			"backup_disable_delay": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable backup after a specified delay").AddIntegerRangeDescription(0, 180).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 180),
+				},
+			},
+			"backup_disable_never": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Never disable backup").String,
+				Optional:            true,
+			},
+			"mac_withdraw": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Send MAC withdraw message when PW becomes active").String,
 				Optional:            true,
 			},
 		},
@@ -415,15 +547,15 @@ func (r *L2VPNPWClassResource) ImportState(ctx context.Context, req resource.Imp
 	idParts = helpers.RemoveEmptyStrings(idParts)
 
 	if len(idParts) != 1 && len(idParts) != 2 {
-		expectedIdentifier := "Expected import identifier with format: '<name>'"
-		expectedIdentifier += " or '<name>,<device>'"
+		expectedIdentifier := "Expected import identifier with format: '<pw_class_name>'"
+		expectedIdentifier += " or '<pw_class_name>,<device>'"
 		resp.Diagnostics.AddError(
 			"Unexpected Import Identifier",
 			fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
 		)
 		return
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("name"), idParts[0])...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("pw_class_name"), idParts[0])...)
 	if len(idParts) == 2 {
 		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
 	}

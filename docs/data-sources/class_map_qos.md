@@ -33,8 +33,60 @@ data "iosxr_class_map_qos" "example" {
 
 - `description` (String) Set description for this class-map
 - `id` (String) The path of the retrieved object.
+- `match_all` (Boolean) Match all match criteria
 - `match_any` (Boolean) Match any match criteria (default)
+- `match_cos` (List of Number) COS value
+- `match_destination_address_ipv4` (Attributes List) IPv4 address (see [below for nested schema](#nestedatt--match_destination_address_ipv4))
+- `match_destination_address_ipv6` (Attributes List) IPv6 address (see [below for nested schema](#nestedatt--match_destination_address_ipv6))
+- `match_destination_mac` (String) MAC Address
+- `match_destination_port` (List of String) destination port
 - `match_dscp` (List of String) DSCP value
+- `match_dscp_ipv4` (List of String) DSCP value
+- `match_dscp_ipv6` (List of String) DSCP value
 - `match_mpls_experimental_topmost` (List of Number) MPLS experimental label
+- `match_precedence` (List of String) IP precedence
+- `match_precedence_ipv4` (List of String) IPV4 precedence
+- `match_precedence_ipv6` (List of String) IPV6 precedence
+- `match_protocol` (List of String) Protocol Number
 - `match_qos_group` (List of String) QoS Group Id
+- `match_source_address_ipv4` (Attributes List) IPv4 address (see [below for nested schema](#nestedatt--match_source_address_ipv4))
+- `match_source_address_ipv6` (Attributes List) IPv6 address (see [below for nested schema](#nestedatt--match_source_address_ipv6))
+- `match_source_mac` (String) MAC Address
+- `match_source_port` (List of String) source port
 - `match_traffic_class` (List of String) Traffic Class Id
+- `match_vlan` (List of String) Vlan Id
+
+<a id="nestedatt--match_destination_address_ipv4"></a>
+### Nested Schema for `match_destination_address_ipv4`
+
+Read-Only:
+
+- `address` (String) IPv4 address.
+- `netmask` (String) IPv4 netmask.
+
+
+<a id="nestedatt--match_destination_address_ipv6"></a>
+### Nested Schema for `match_destination_address_ipv6`
+
+Read-Only:
+
+- `address` (String) IPv6 address.
+- `prefix_length` (Number) Length of the IPv6 Prefix.
+
+
+<a id="nestedatt--match_source_address_ipv4"></a>
+### Nested Schema for `match_source_address_ipv4`
+
+Read-Only:
+
+- `address` (String) IPv4 address.
+- `netmask` (String) IPv4 netmask.
+
+
+<a id="nestedatt--match_source_address_ipv6"></a>
+### Nested Schema for `match_source_address_ipv6`
+
+Read-Only:
+
+- `address` (String) IPv6 address.
+- `prefix_length` (Number) Length of the IPv6 Prefix.

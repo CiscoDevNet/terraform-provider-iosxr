@@ -26,6 +26,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -35,79 +36,149 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type RouterISISInterface struct {
-	Device                        types.String                                    `tfsdk:"device"`
-	Id                            types.String                                    `tfsdk:"id"`
-	DeleteMode                    types.String                                    `tfsdk:"delete_mode"`
-	ProcessId                     types.String                                    `tfsdk:"process_id"`
-	InterfaceName                 types.String                                    `tfsdk:"interface_name"`
-	CircuitType                   types.String                                    `tfsdk:"circuit_type"`
-	HelloPadding                  types.String                                    `tfsdk:"hello_padding"`
-	HelloPaddingLevels            []RouterISISInterfaceHelloPaddingLevels         `tfsdk:"hello_padding_levels"`
-	Priority                      types.Int64                                     `tfsdk:"priority"`
-	PriorityLevels                []RouterISISInterfacePriorityLevels             `tfsdk:"priority_levels"`
-	PointToPoint                  types.Bool                                      `tfsdk:"point_to_point"`
-	State                         types.String                                    `tfsdk:"state"`
-	HelloPasswordAcceptEncrypted  types.String                                    `tfsdk:"hello_password_accept_encrypted"`
-	HelloPasswordAcceptsLevels    []RouterISISInterfaceHelloPasswordAcceptsLevels `tfsdk:"hello_password_accepts_levels"`
-	HelloPasswordTextEncrypted    types.String                                    `tfsdk:"hello_password_text_encrypted"`
-	HelloPasswordTextSendOnly     types.Bool                                      `tfsdk:"hello_password_text_send_only"`
-	HelloPasswordHmacMd5Encrypted types.String                                    `tfsdk:"hello_password_hmac_md5_encrypted"`
-	HelloPasswordHmacMd5SendOnly  types.Bool                                      `tfsdk:"hello_password_hmac_md5_send_only"`
-	HelloPasswordKeychainName     types.String                                    `tfsdk:"hello_password_keychain_name"`
-	HelloPasswordKeychainSendOnly types.Bool                                      `tfsdk:"hello_password_keychain_send_only"`
-	HelloPasswordLevels           []RouterISISInterfaceHelloPasswordLevels        `tfsdk:"hello_password_levels"`
-	BfdFastDetectIpv4             types.Bool                                      `tfsdk:"bfd_fast_detect_ipv4"`
-	BfdFastDetectIpv6             types.Bool                                      `tfsdk:"bfd_fast_detect_ipv6"`
-	BfdMinimumInterval            types.Int64                                     `tfsdk:"bfd_minimum_interval"`
-	BfdMultiplier                 types.Int64                                     `tfsdk:"bfd_multiplier"`
+	Device                           types.String                                          `tfsdk:"device"`
+	Id                               types.String                                          `tfsdk:"id"`
+	DeleteMode                       types.String                                          `tfsdk:"delete_mode"`
+	ProcessId                        types.String                                          `tfsdk:"process_id"`
+	InterfaceName                    types.String                                          `tfsdk:"interface_name"`
+	MeshGroup                        types.Int64                                           `tfsdk:"mesh_group"`
+	MeshGroupBlocked                 types.Bool                                            `tfsdk:"mesh_group_blocked"`
+	State                            types.String                                          `tfsdk:"state"`
+	CircuitType                      types.String                                          `tfsdk:"circuit_type"`
+	CsnpInterval                     types.Int64                                           `tfsdk:"csnp_interval"`
+	CsnpIntervalLevels               []RouterISISInterfaceCsnpIntervalLevels               `tfsdk:"csnp_interval_levels"`
+	HelloPadding                     types.String                                          `tfsdk:"hello_padding"`
+	HelloPaddingLevels               []RouterISISInterfaceHelloPaddingLevels               `tfsdk:"hello_padding_levels"`
+	HelloInterval                    types.Int64                                           `tfsdk:"hello_interval"`
+	HelloIntervalLevels              []RouterISISInterfaceHelloIntervalLevels              `tfsdk:"hello_interval_levels"`
+	HelloMultiplier                  types.Int64                                           `tfsdk:"hello_multiplier"`
+	HelloMultiplierLevels            []RouterISISInterfaceHelloMultiplierLevels            `tfsdk:"hello_multiplier_levels"`
+	LspInterval                      types.Int64                                           `tfsdk:"lsp_interval"`
+	LspIntervalLevels                []RouterISISInterfaceLspIntervalLevels                `tfsdk:"lsp_interval_levels"`
+	HelloPasswordAcceptEncrypted     types.String                                          `tfsdk:"hello_password_accept_encrypted"`
+	HelloPasswordAcceptsLevels       []RouterISISInterfaceHelloPasswordAcceptsLevels       `tfsdk:"hello_password_accepts_levels"`
+	HelloPasswordTextEncrypted       types.String                                          `tfsdk:"hello_password_text_encrypted"`
+	HelloPasswordTextSendOnly        types.Bool                                            `tfsdk:"hello_password_text_send_only"`
+	HelloPasswordHmacMd5Encrypted    types.String                                          `tfsdk:"hello_password_hmac_md5_encrypted"`
+	HelloPasswordHmacMd5SendOnly     types.Bool                                            `tfsdk:"hello_password_hmac_md5_send_only"`
+	HelloPasswordKeychainName        types.String                                          `tfsdk:"hello_password_keychain_name"`
+	HelloPasswordKeychainSendOnly    types.Bool                                            `tfsdk:"hello_password_keychain_send_only"`
+	HelloPasswordLevels              []RouterISISInterfaceHelloPasswordLevels              `tfsdk:"hello_password_levels"`
+	RemotePsnpDelay                  types.Int64                                           `tfsdk:"remote_psnp_delay"`
+	Priority                         types.Int64                                           `tfsdk:"priority"`
+	PriorityLevels                   []RouterISISInterfacePriorityLevels                   `tfsdk:"priority_levels"`
+	PointToPoint                     types.Bool                                            `tfsdk:"point_to_point"`
+	RetransmitInterval               types.Int64                                           `tfsdk:"retransmit_interval"`
+	RetransmitIntervalLevels         []RouterISISInterfaceRetransmitIntervalLevels         `tfsdk:"retransmit_interval_levels"`
+	RetransmitThrottleInterval       types.Int64                                           `tfsdk:"retransmit_throttle_interval"`
+	RetransmitThrottleIntervalLevels []RouterISISInterfaceRetransmitThrottleIntervalLevels `tfsdk:"retransmit_throttle_interval_levels"`
+	LinkDownFastDetect               types.Bool                                            `tfsdk:"link_down_fast_detect"`
+	AffinityFlexAlgos                types.List                                            `tfsdk:"affinity_flex_algos"`
+	AffinityFlexAlgosAnomalies       types.List                                            `tfsdk:"affinity_flex_algos_anomalies"`
+	OverrideMetrics                  types.String                                          `tfsdk:"override_metrics"`
+	DelayNormalizeInterval           types.Int64                                           `tfsdk:"delay_normalize_interval"`
+	DelayNormalizeOffset             types.Int64                                           `tfsdk:"delay_normalize_offset"`
+	MplsLdpSync                      types.Bool                                            `tfsdk:"mpls_ldp_sync"`
+	MplsLdpSyncLevel                 types.Int64                                           `tfsdk:"mpls_ldp_sync_level"`
+	BfdFastDetectIpv4                types.Bool                                            `tfsdk:"bfd_fast_detect_ipv4"`
+	BfdFastDetectIpv6                types.Bool                                            `tfsdk:"bfd_fast_detect_ipv6"`
+	BfdMinimumInterval               types.Int64                                           `tfsdk:"bfd_minimum_interval"`
+	BfdMultiplier                    types.Int64                                           `tfsdk:"bfd_multiplier"`
 }
 
 type RouterISISInterfaceData struct {
-	Device                        types.String                                    `tfsdk:"device"`
-	Id                            types.String                                    `tfsdk:"id"`
-	ProcessId                     types.String                                    `tfsdk:"process_id"`
-	InterfaceName                 types.String                                    `tfsdk:"interface_name"`
-	CircuitType                   types.String                                    `tfsdk:"circuit_type"`
-	HelloPadding                  types.String                                    `tfsdk:"hello_padding"`
-	HelloPaddingLevels            []RouterISISInterfaceHelloPaddingLevels         `tfsdk:"hello_padding_levels"`
-	Priority                      types.Int64                                     `tfsdk:"priority"`
-	PriorityLevels                []RouterISISInterfacePriorityLevels             `tfsdk:"priority_levels"`
-	PointToPoint                  types.Bool                                      `tfsdk:"point_to_point"`
-	State                         types.String                                    `tfsdk:"state"`
-	HelloPasswordAcceptEncrypted  types.String                                    `tfsdk:"hello_password_accept_encrypted"`
-	HelloPasswordAcceptsLevels    []RouterISISInterfaceHelloPasswordAcceptsLevels `tfsdk:"hello_password_accepts_levels"`
-	HelloPasswordTextEncrypted    types.String                                    `tfsdk:"hello_password_text_encrypted"`
-	HelloPasswordTextSendOnly     types.Bool                                      `tfsdk:"hello_password_text_send_only"`
-	HelloPasswordHmacMd5Encrypted types.String                                    `tfsdk:"hello_password_hmac_md5_encrypted"`
-	HelloPasswordHmacMd5SendOnly  types.Bool                                      `tfsdk:"hello_password_hmac_md5_send_only"`
-	HelloPasswordKeychainName     types.String                                    `tfsdk:"hello_password_keychain_name"`
-	HelloPasswordKeychainSendOnly types.Bool                                      `tfsdk:"hello_password_keychain_send_only"`
-	HelloPasswordLevels           []RouterISISInterfaceHelloPasswordLevels        `tfsdk:"hello_password_levels"`
-	BfdFastDetectIpv4             types.Bool                                      `tfsdk:"bfd_fast_detect_ipv4"`
-	BfdFastDetectIpv6             types.Bool                                      `tfsdk:"bfd_fast_detect_ipv6"`
-	BfdMinimumInterval            types.Int64                                     `tfsdk:"bfd_minimum_interval"`
-	BfdMultiplier                 types.Int64                                     `tfsdk:"bfd_multiplier"`
+	Device                           types.String                                          `tfsdk:"device"`
+	Id                               types.String                                          `tfsdk:"id"`
+	ProcessId                        types.String                                          `tfsdk:"process_id"`
+	InterfaceName                    types.String                                          `tfsdk:"interface_name"`
+	MeshGroup                        types.Int64                                           `tfsdk:"mesh_group"`
+	MeshGroupBlocked                 types.Bool                                            `tfsdk:"mesh_group_blocked"`
+	State                            types.String                                          `tfsdk:"state"`
+	CircuitType                      types.String                                          `tfsdk:"circuit_type"`
+	CsnpInterval                     types.Int64                                           `tfsdk:"csnp_interval"`
+	CsnpIntervalLevels               []RouterISISInterfaceCsnpIntervalLevels               `tfsdk:"csnp_interval_levels"`
+	HelloPadding                     types.String                                          `tfsdk:"hello_padding"`
+	HelloPaddingLevels               []RouterISISInterfaceHelloPaddingLevels               `tfsdk:"hello_padding_levels"`
+	HelloInterval                    types.Int64                                           `tfsdk:"hello_interval"`
+	HelloIntervalLevels              []RouterISISInterfaceHelloIntervalLevels              `tfsdk:"hello_interval_levels"`
+	HelloMultiplier                  types.Int64                                           `tfsdk:"hello_multiplier"`
+	HelloMultiplierLevels            []RouterISISInterfaceHelloMultiplierLevels            `tfsdk:"hello_multiplier_levels"`
+	LspInterval                      types.Int64                                           `tfsdk:"lsp_interval"`
+	LspIntervalLevels                []RouterISISInterfaceLspIntervalLevels                `tfsdk:"lsp_interval_levels"`
+	HelloPasswordAcceptEncrypted     types.String                                          `tfsdk:"hello_password_accept_encrypted"`
+	HelloPasswordAcceptsLevels       []RouterISISInterfaceHelloPasswordAcceptsLevels       `tfsdk:"hello_password_accepts_levels"`
+	HelloPasswordTextEncrypted       types.String                                          `tfsdk:"hello_password_text_encrypted"`
+	HelloPasswordTextSendOnly        types.Bool                                            `tfsdk:"hello_password_text_send_only"`
+	HelloPasswordHmacMd5Encrypted    types.String                                          `tfsdk:"hello_password_hmac_md5_encrypted"`
+	HelloPasswordHmacMd5SendOnly     types.Bool                                            `tfsdk:"hello_password_hmac_md5_send_only"`
+	HelloPasswordKeychainName        types.String                                          `tfsdk:"hello_password_keychain_name"`
+	HelloPasswordKeychainSendOnly    types.Bool                                            `tfsdk:"hello_password_keychain_send_only"`
+	HelloPasswordLevels              []RouterISISInterfaceHelloPasswordLevels              `tfsdk:"hello_password_levels"`
+	RemotePsnpDelay                  types.Int64                                           `tfsdk:"remote_psnp_delay"`
+	Priority                         types.Int64                                           `tfsdk:"priority"`
+	PriorityLevels                   []RouterISISInterfacePriorityLevels                   `tfsdk:"priority_levels"`
+	PointToPoint                     types.Bool                                            `tfsdk:"point_to_point"`
+	RetransmitInterval               types.Int64                                           `tfsdk:"retransmit_interval"`
+	RetransmitIntervalLevels         []RouterISISInterfaceRetransmitIntervalLevels         `tfsdk:"retransmit_interval_levels"`
+	RetransmitThrottleInterval       types.Int64                                           `tfsdk:"retransmit_throttle_interval"`
+	RetransmitThrottleIntervalLevels []RouterISISInterfaceRetransmitThrottleIntervalLevels `tfsdk:"retransmit_throttle_interval_levels"`
+	LinkDownFastDetect               types.Bool                                            `tfsdk:"link_down_fast_detect"`
+	AffinityFlexAlgos                types.List                                            `tfsdk:"affinity_flex_algos"`
+	AffinityFlexAlgosAnomalies       types.List                                            `tfsdk:"affinity_flex_algos_anomalies"`
+	OverrideMetrics                  types.String                                          `tfsdk:"override_metrics"`
+	DelayNormalizeInterval           types.Int64                                           `tfsdk:"delay_normalize_interval"`
+	DelayNormalizeOffset             types.Int64                                           `tfsdk:"delay_normalize_offset"`
+	MplsLdpSync                      types.Bool                                            `tfsdk:"mpls_ldp_sync"`
+	MplsLdpSyncLevel                 types.Int64                                           `tfsdk:"mpls_ldp_sync_level"`
+	BfdFastDetectIpv4                types.Bool                                            `tfsdk:"bfd_fast_detect_ipv4"`
+	BfdFastDetectIpv6                types.Bool                                            `tfsdk:"bfd_fast_detect_ipv6"`
+	BfdMinimumInterval               types.Int64                                           `tfsdk:"bfd_minimum_interval"`
+	BfdMultiplier                    types.Int64                                           `tfsdk:"bfd_multiplier"`
+}
+type RouterISISInterfaceCsnpIntervalLevels struct {
+	LevelNumber  types.Int64 `tfsdk:"level_number"`
+	CsnpInterval types.Int64 `tfsdk:"csnp_interval"`
 }
 type RouterISISInterfaceHelloPaddingLevels struct {
 	LevelNumber  types.Int64  `tfsdk:"level_number"`
 	HelloPadding types.String `tfsdk:"hello_padding"`
 }
-type RouterISISInterfacePriorityLevels struct {
+type RouterISISInterfaceHelloIntervalLevels struct {
+	LevelNumber   types.Int64 `tfsdk:"level_number"`
+	HelloInterval types.Int64 `tfsdk:"hello_interval"`
+}
+type RouterISISInterfaceHelloMultiplierLevels struct {
+	LevelNumber     types.Int64 `tfsdk:"level_number"`
+	HelloMultiplier types.Int64 `tfsdk:"hello_multiplier"`
+}
+type RouterISISInterfaceLspIntervalLevels struct {
 	LevelNumber types.Int64 `tfsdk:"level_number"`
-	Priority    types.Int64 `tfsdk:"priority"`
+	LspInterval types.Int64 `tfsdk:"lsp_interval"`
 }
 type RouterISISInterfaceHelloPasswordAcceptsLevels struct {
 	LevelNumber types.Int64  `tfsdk:"level_number"`
 	Encrypted   types.String `tfsdk:"encrypted"`
 }
 type RouterISISInterfaceHelloPasswordLevels struct {
-	LevelNumber                   types.Int64  `tfsdk:"level_number"`
-	HelloPasswordTextEncrypted    types.String `tfsdk:"hello_password_text_encrypted"`
-	HelloPasswordTextSendOnly     types.Bool   `tfsdk:"hello_password_text_send_only"`
-	HelloPasswordHmacMd5Encrypted types.String `tfsdk:"hello_password_hmac_md5_encrypted"`
-	HelloPasswordHmacMd5SendOnly  types.Bool   `tfsdk:"hello_password_hmac_md5_send_only"`
-	HelloKeychainName             types.String `tfsdk:"hello_keychain_name"`
-	HelloKeychainSendOnly         types.Bool   `tfsdk:"hello_keychain_send_only"`
+	LevelNumber      types.Int64  `tfsdk:"level_number"`
+	TextEncrypted    types.String `tfsdk:"text_encrypted"`
+	TextSendOnly     types.Bool   `tfsdk:"text_send_only"`
+	HmacMd5Encrypted types.String `tfsdk:"hmac_md5_encrypted"`
+	HmacMd5SendOnly  types.Bool   `tfsdk:"hmac_md5_send_only"`
+	KeychainName     types.String `tfsdk:"keychain_name"`
+	KeychainSendOnly types.Bool   `tfsdk:"keychain_send_only"`
+}
+type RouterISISInterfacePriorityLevels struct {
+	LevelNumber types.Int64 `tfsdk:"level_number"`
+	Priority    types.Int64 `tfsdk:"priority"`
+}
+type RouterISISInterfaceRetransmitIntervalLevels struct {
+	LevelNumber        types.Int64 `tfsdk:"level_number"`
+	RetransmitInterval types.Int64 `tfsdk:"retransmit_interval"`
+}
+type RouterISISInterfaceRetransmitThrottleIntervalLevels struct {
+	LevelNumber                types.Int64 `tfsdk:"level_number"`
+	RetransmitThrottleInterval types.Int64 `tfsdk:"retransmit_throttle_interval"`
 }
 
 // End of section. //template:end types
@@ -131,22 +202,34 @@ func (data RouterISISInterface) toBody(ctx context.Context) string {
 	if !data.InterfaceName.IsNull() && !data.InterfaceName.IsUnknown() {
 		body, _ = sjson.Set(body, "interface-name", data.InterfaceName.ValueString())
 	}
-	if !data.CircuitType.IsNull() && !data.CircuitType.IsUnknown() {
-		body, _ = sjson.Set(body, "circuit-type", data.CircuitType.ValueString())
+	if !data.MeshGroup.IsNull() && !data.MeshGroup.IsUnknown() {
+		body, _ = sjson.Set(body, "mesh-group.mesh-group-number", strconv.FormatInt(data.MeshGroup.ValueInt64(), 10))
 	}
-	if !data.HelloPadding.IsNull() && !data.HelloPadding.IsUnknown() {
-		body, _ = sjson.Set(body, "hello-padding", data.HelloPadding.ValueString())
-	}
-	if !data.Priority.IsNull() && !data.Priority.IsUnknown() {
-		body, _ = sjson.Set(body, "priority", strconv.FormatInt(data.Priority.ValueInt64(), 10))
-	}
-	if !data.PointToPoint.IsNull() && !data.PointToPoint.IsUnknown() {
-		if data.PointToPoint.ValueBool() {
-			body, _ = sjson.Set(body, "point-to-point", map[string]string{})
+	if !data.MeshGroupBlocked.IsNull() && !data.MeshGroupBlocked.IsUnknown() {
+		if data.MeshGroupBlocked.ValueBool() {
+			body, _ = sjson.Set(body, "mesh-group.blocked", map[string]string{})
 		}
 	}
 	if !data.State.IsNull() && !data.State.IsUnknown() {
 		body, _ = sjson.Set(body, "state", data.State.ValueString())
+	}
+	if !data.CircuitType.IsNull() && !data.CircuitType.IsUnknown() {
+		body, _ = sjson.Set(body, "circuit-type", data.CircuitType.ValueString())
+	}
+	if !data.CsnpInterval.IsNull() && !data.CsnpInterval.IsUnknown() {
+		body, _ = sjson.Set(body, "csnp-interval", strconv.FormatInt(data.CsnpInterval.ValueInt64(), 10))
+	}
+	if !data.HelloPadding.IsNull() && !data.HelloPadding.IsUnknown() {
+		body, _ = sjson.Set(body, "hello-padding", data.HelloPadding.ValueString())
+	}
+	if !data.HelloInterval.IsNull() && !data.HelloInterval.IsUnknown() {
+		body, _ = sjson.Set(body, "hello-interval", strconv.FormatInt(data.HelloInterval.ValueInt64(), 10))
+	}
+	if !data.HelloMultiplier.IsNull() && !data.HelloMultiplier.IsUnknown() {
+		body, _ = sjson.Set(body, "hello-multiplier", strconv.FormatInt(data.HelloMultiplier.ValueInt64(), 10))
+	}
+	if !data.LspInterval.IsNull() && !data.LspInterval.IsUnknown() {
+		body, _ = sjson.Set(body, "lsp-interval", strconv.FormatInt(data.LspInterval.ValueInt64(), 10))
 	}
 	if !data.HelloPasswordAcceptEncrypted.IsNull() && !data.HelloPasswordAcceptEncrypted.IsUnknown() {
 		body, _ = sjson.Set(body, "hello-password.accepts.encrypted", data.HelloPasswordAcceptEncrypted.ValueString())
@@ -175,6 +258,55 @@ func (data RouterISISInterface) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "hello-password.hello-password-options.keychain.send-only", map[string]string{})
 		}
 	}
+	if !data.RemotePsnpDelay.IsNull() && !data.RemotePsnpDelay.IsUnknown() {
+		body, _ = sjson.Set(body, "remote-psnp-delay", strconv.FormatInt(data.RemotePsnpDelay.ValueInt64(), 10))
+	}
+	if !data.Priority.IsNull() && !data.Priority.IsUnknown() {
+		body, _ = sjson.Set(body, "priority", strconv.FormatInt(data.Priority.ValueInt64(), 10))
+	}
+	if !data.PointToPoint.IsNull() && !data.PointToPoint.IsUnknown() {
+		if data.PointToPoint.ValueBool() {
+			body, _ = sjson.Set(body, "point-to-point", map[string]string{})
+		}
+	}
+	if !data.RetransmitInterval.IsNull() && !data.RetransmitInterval.IsUnknown() {
+		body, _ = sjson.Set(body, "retransmit-interval", strconv.FormatInt(data.RetransmitInterval.ValueInt64(), 10))
+	}
+	if !data.RetransmitThrottleInterval.IsNull() && !data.RetransmitThrottleInterval.IsUnknown() {
+		body, _ = sjson.Set(body, "retransmit-throttle-interval", strconv.FormatInt(data.RetransmitThrottleInterval.ValueInt64(), 10))
+	}
+	if !data.LinkDownFastDetect.IsNull() && !data.LinkDownFastDetect.IsUnknown() {
+		if data.LinkDownFastDetect.ValueBool() {
+			body, _ = sjson.Set(body, "link-down.fast-detect", map[string]string{})
+		}
+	}
+	if !data.AffinityFlexAlgos.IsNull() && !data.AffinityFlexAlgos.IsUnknown() {
+		var values []string
+		data.AffinityFlexAlgos.ElementsAs(ctx, &values, false)
+		body, _ = sjson.Set(body, "affinity.flex-algo.flex-algo-argument", values)
+	}
+	if !data.AffinityFlexAlgosAnomalies.IsNull() && !data.AffinityFlexAlgosAnomalies.IsUnknown() {
+		var values []string
+		data.AffinityFlexAlgosAnomalies.ElementsAs(ctx, &values, false)
+		body, _ = sjson.Set(body, "affinity.flex-algo.anomaly", values)
+	}
+	if !data.OverrideMetrics.IsNull() && !data.OverrideMetrics.IsUnknown() {
+		body, _ = sjson.Set(body, "override.metrics", data.OverrideMetrics.ValueString())
+	}
+	if !data.DelayNormalizeInterval.IsNull() && !data.DelayNormalizeInterval.IsUnknown() {
+		body, _ = sjson.Set(body, "delay.normalize.interval.interval-number", strconv.FormatInt(data.DelayNormalizeInterval.ValueInt64(), 10))
+	}
+	if !data.DelayNormalizeOffset.IsNull() && !data.DelayNormalizeOffset.IsUnknown() {
+		body, _ = sjson.Set(body, "delay.normalize.interval.offset", strconv.FormatInt(data.DelayNormalizeOffset.ValueInt64(), 10))
+	}
+	if !data.MplsLdpSync.IsNull() && !data.MplsLdpSync.IsUnknown() {
+		if data.MplsLdpSync.ValueBool() {
+			body, _ = sjson.Set(body, "mpls.ldp.sync", map[string]string{})
+		}
+	}
+	if !data.MplsLdpSyncLevel.IsNull() && !data.MplsLdpSyncLevel.IsUnknown() {
+		body, _ = sjson.Set(body, "mpls.ldp.sync.level", strconv.FormatInt(data.MplsLdpSyncLevel.ValueInt64(), 10))
+	}
 	if !data.BfdFastDetectIpv4.IsNull() && !data.BfdFastDetectIpv4.IsUnknown() {
 		if data.BfdFastDetectIpv4.ValueBool() {
 			body, _ = sjson.Set(body, "bfd.fast-detect.ipv4", map[string]string{})
@@ -191,6 +323,17 @@ func (data RouterISISInterface) toBody(ctx context.Context) string {
 	if !data.BfdMultiplier.IsNull() && !data.BfdMultiplier.IsUnknown() {
 		body, _ = sjson.Set(body, "bfd.multiplier", strconv.FormatInt(data.BfdMultiplier.ValueInt64(), 10))
 	}
+	if len(data.CsnpIntervalLevels) > 0 {
+		body, _ = sjson.Set(body, "csnp-interval-levels.csnp-interval-level", []interface{}{})
+		for index, item := range data.CsnpIntervalLevels {
+			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "csnp-interval-levels.csnp-interval-level"+"."+strconv.Itoa(index)+"."+"level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+			}
+			if !item.CsnpInterval.IsNull() && !item.CsnpInterval.IsUnknown() {
+				body, _ = sjson.Set(body, "csnp-interval-levels.csnp-interval-level"+"."+strconv.Itoa(index)+"."+"csnp-interval", strconv.FormatInt(item.CsnpInterval.ValueInt64(), 10))
+			}
+		}
+	}
 	if len(data.HelloPaddingLevels) > 0 {
 		body, _ = sjson.Set(body, "hello-padding-levels.hello-padding-level", []interface{}{})
 		for index, item := range data.HelloPaddingLevels {
@@ -202,14 +345,36 @@ func (data RouterISISInterface) toBody(ctx context.Context) string {
 			}
 		}
 	}
-	if len(data.PriorityLevels) > 0 {
-		body, _ = sjson.Set(body, "priority-levels.priority-level", []interface{}{})
-		for index, item := range data.PriorityLevels {
+	if len(data.HelloIntervalLevels) > 0 {
+		body, _ = sjson.Set(body, "hello-interval-levels.hello-interval-level", []interface{}{})
+		for index, item := range data.HelloIntervalLevels {
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
-				body, _ = sjson.Set(body, "priority-levels.priority-level"+"."+strconv.Itoa(index)+"."+"level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+				body, _ = sjson.Set(body, "hello-interval-levels.hello-interval-level"+"."+strconv.Itoa(index)+"."+"level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
-			if !item.Priority.IsNull() && !item.Priority.IsUnknown() {
-				body, _ = sjson.Set(body, "priority-levels.priority-level"+"."+strconv.Itoa(index)+"."+"priority", strconv.FormatInt(item.Priority.ValueInt64(), 10))
+			if !item.HelloInterval.IsNull() && !item.HelloInterval.IsUnknown() {
+				body, _ = sjson.Set(body, "hello-interval-levels.hello-interval-level"+"."+strconv.Itoa(index)+"."+"hello-interval", strconv.FormatInt(item.HelloInterval.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.HelloMultiplierLevels) > 0 {
+		body, _ = sjson.Set(body, "hello-multiplier-levels.hello-multiplier-level", []interface{}{})
+		for index, item := range data.HelloMultiplierLevels {
+			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "hello-multiplier-levels.hello-multiplier-level"+"."+strconv.Itoa(index)+"."+"level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+			}
+			if !item.HelloMultiplier.IsNull() && !item.HelloMultiplier.IsUnknown() {
+				body, _ = sjson.Set(body, "hello-multiplier-levels.hello-multiplier-level"+"."+strconv.Itoa(index)+"."+"hello-multiplier", strconv.FormatInt(item.HelloMultiplier.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.LspIntervalLevels) > 0 {
+		body, _ = sjson.Set(body, "lsp-interval-levels.lsp-interval-level", []interface{}{})
+		for index, item := range data.LspIntervalLevels {
+			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "lsp-interval-levels.lsp-interval-level"+"."+strconv.Itoa(index)+"."+"level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+			}
+			if !item.LspInterval.IsNull() && !item.LspInterval.IsUnknown() {
+				body, _ = sjson.Set(body, "lsp-interval-levels.lsp-interval-level"+"."+strconv.Itoa(index)+"."+"lsp-interval", strconv.FormatInt(item.LspInterval.ValueInt64(), 10))
 			}
 		}
 	}
@@ -230,29 +395,62 @@ func (data RouterISISInterface) toBody(ctx context.Context) string {
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
 				body, _ = sjson.Set(body, "hello-password-levels.hello-password-level"+"."+strconv.Itoa(index)+"."+"level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
-			if !item.HelloPasswordTextEncrypted.IsNull() && !item.HelloPasswordTextEncrypted.IsUnknown() {
-				body, _ = sjson.Set(body, "hello-password-levels.hello-password-level"+"."+strconv.Itoa(index)+"."+"text.hello-password-options.encrypted", item.HelloPasswordTextEncrypted.ValueString())
+			if !item.TextEncrypted.IsNull() && !item.TextEncrypted.IsUnknown() {
+				body, _ = sjson.Set(body, "hello-password-levels.hello-password-level"+"."+strconv.Itoa(index)+"."+"text.hello-password-options.encrypted", item.TextEncrypted.ValueString())
 			}
-			if !item.HelloPasswordTextSendOnly.IsNull() && !item.HelloPasswordTextSendOnly.IsUnknown() {
-				if item.HelloPasswordTextSendOnly.ValueBool() {
+			if !item.TextSendOnly.IsNull() && !item.TextSendOnly.IsUnknown() {
+				if item.TextSendOnly.ValueBool() {
 					body, _ = sjson.Set(body, "hello-password-levels.hello-password-level"+"."+strconv.Itoa(index)+"."+"text.hello-password-options.send-only", map[string]string{})
 				}
 			}
-			if !item.HelloPasswordHmacMd5Encrypted.IsNull() && !item.HelloPasswordHmacMd5Encrypted.IsUnknown() {
-				body, _ = sjson.Set(body, "hello-password-levels.hello-password-level"+"."+strconv.Itoa(index)+"."+"hmac-md5.hello-password-options.encrypted", item.HelloPasswordHmacMd5Encrypted.ValueString())
+			if !item.HmacMd5Encrypted.IsNull() && !item.HmacMd5Encrypted.IsUnknown() {
+				body, _ = sjson.Set(body, "hello-password-levels.hello-password-level"+"."+strconv.Itoa(index)+"."+"hmac-md5.hello-password-options.encrypted", item.HmacMd5Encrypted.ValueString())
 			}
-			if !item.HelloPasswordHmacMd5SendOnly.IsNull() && !item.HelloPasswordHmacMd5SendOnly.IsUnknown() {
-				if item.HelloPasswordHmacMd5SendOnly.ValueBool() {
+			if !item.HmacMd5SendOnly.IsNull() && !item.HmacMd5SendOnly.IsUnknown() {
+				if item.HmacMd5SendOnly.ValueBool() {
 					body, _ = sjson.Set(body, "hello-password-levels.hello-password-level"+"."+strconv.Itoa(index)+"."+"hmac-md5.hello-password-options.send-only", map[string]string{})
 				}
 			}
-			if !item.HelloKeychainName.IsNull() && !item.HelloKeychainName.IsUnknown() {
-				body, _ = sjson.Set(body, "hello-password-levels.hello-password-level"+"."+strconv.Itoa(index)+"."+"keychain.keychain-name", item.HelloKeychainName.ValueString())
+			if !item.KeychainName.IsNull() && !item.KeychainName.IsUnknown() {
+				body, _ = sjson.Set(body, "hello-password-levels.hello-password-level"+"."+strconv.Itoa(index)+"."+"keychain.keychain-name", item.KeychainName.ValueString())
 			}
-			if !item.HelloKeychainSendOnly.IsNull() && !item.HelloKeychainSendOnly.IsUnknown() {
-				if item.HelloKeychainSendOnly.ValueBool() {
+			if !item.KeychainSendOnly.IsNull() && !item.KeychainSendOnly.IsUnknown() {
+				if item.KeychainSendOnly.ValueBool() {
 					body, _ = sjson.Set(body, "hello-password-levels.hello-password-level"+"."+strconv.Itoa(index)+"."+"keychain.send-only", map[string]string{})
 				}
+			}
+		}
+	}
+	if len(data.PriorityLevels) > 0 {
+		body, _ = sjson.Set(body, "priority-levels.priority-level", []interface{}{})
+		for index, item := range data.PriorityLevels {
+			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "priority-levels.priority-level"+"."+strconv.Itoa(index)+"."+"level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+			}
+			if !item.Priority.IsNull() && !item.Priority.IsUnknown() {
+				body, _ = sjson.Set(body, "priority-levels.priority-level"+"."+strconv.Itoa(index)+"."+"priority", strconv.FormatInt(item.Priority.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.RetransmitIntervalLevels) > 0 {
+		body, _ = sjson.Set(body, "retransmit-interval-levels.retransmit-interval-level", []interface{}{})
+		for index, item := range data.RetransmitIntervalLevels {
+			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "retransmit-interval-levels.retransmit-interval-level"+"."+strconv.Itoa(index)+"."+"level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+			}
+			if !item.RetransmitInterval.IsNull() && !item.RetransmitInterval.IsUnknown() {
+				body, _ = sjson.Set(body, "retransmit-interval-levels.retransmit-interval-level"+"."+strconv.Itoa(index)+"."+"retransmit-interval", strconv.FormatInt(item.RetransmitInterval.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.RetransmitThrottleIntervalLevels) > 0 {
+		body, _ = sjson.Set(body, "retransmit-throttle-interval-levels.retransmit-throttle-interval-level", []interface{}{})
+		for index, item := range data.RetransmitThrottleIntervalLevels {
+			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "retransmit-throttle-interval-levels.retransmit-throttle-interval-level"+"."+strconv.Itoa(index)+"."+"level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+			}
+			if !item.RetransmitThrottleInterval.IsNull() && !item.RetransmitThrottleInterval.IsUnknown() {
+				body, _ = sjson.Set(body, "retransmit-throttle-interval-levels.retransmit-throttle-interval-level"+"."+strconv.Itoa(index)+"."+"retransmit-throttle-interval", strconv.FormatInt(item.RetransmitThrottleInterval.ValueInt64(), 10))
 			}
 		}
 	}
@@ -264,10 +462,68 @@ func (data RouterISISInterface) toBody(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "mesh-group.mesh-group-number"); value.Exists() && !data.MeshGroup.IsNull() {
+		data.MeshGroup = types.Int64Value(value.Int())
+	} else {
+		data.MeshGroup = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "mesh-group.blocked"); !data.MeshGroupBlocked.IsNull() {
+		if value.Exists() {
+			data.MeshGroupBlocked = types.BoolValue(true)
+		} else {
+			data.MeshGroupBlocked = types.BoolValue(false)
+		}
+	} else {
+		data.MeshGroupBlocked = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "state"); value.Exists() && !data.State.IsNull() {
+		data.State = types.StringValue(value.String())
+	} else {
+		data.State = types.StringNull()
+	}
 	if value := gjson.GetBytes(res, "circuit-type"); value.Exists() && !data.CircuitType.IsNull() {
 		data.CircuitType = types.StringValue(value.String())
 	} else {
 		data.CircuitType = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "csnp-interval"); value.Exists() && !data.CsnpInterval.IsNull() {
+		data.CsnpInterval = types.Int64Value(value.Int())
+	} else {
+		data.CsnpInterval = types.Int64Null()
+	}
+	for i := range data.CsnpIntervalLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.CsnpIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "csnp-interval-levels.csnp-interval-level").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("level-number"); value.Exists() && !data.CsnpIntervalLevels[i].LevelNumber.IsNull() {
+			data.CsnpIntervalLevels[i].LevelNumber = types.Int64Value(value.Int())
+		} else {
+			data.CsnpIntervalLevels[i].LevelNumber = types.Int64Null()
+		}
+		if value := r.Get("csnp-interval"); value.Exists() && !data.CsnpIntervalLevels[i].CsnpInterval.IsNull() {
+			data.CsnpIntervalLevels[i].CsnpInterval = types.Int64Value(value.Int())
+		} else {
+			data.CsnpIntervalLevels[i].CsnpInterval = types.Int64Null()
+		}
 	}
 	if value := gjson.GetBytes(res, "hello-padding"); value.Exists() && !data.HelloPadding.IsNull() {
 		data.HelloPadding = types.StringValue(value.String())
@@ -308,17 +564,17 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 			data.HelloPaddingLevels[i].HelloPadding = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "priority"); value.Exists() && !data.Priority.IsNull() {
-		data.Priority = types.Int64Value(value.Int())
+	if value := gjson.GetBytes(res, "hello-interval"); value.Exists() && !data.HelloInterval.IsNull() {
+		data.HelloInterval = types.Int64Value(value.Int())
 	} else {
-		data.Priority = types.Int64Null()
+		data.HelloInterval = types.Int64Null()
 	}
-	for i := range data.PriorityLevels {
+	for i := range data.HelloIntervalLevels {
 		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.PriorityLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyValues := [...]string{strconv.FormatInt(data.HelloIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "priority-levels.priority-level").ForEach(
+		gjson.GetBytes(res, "hello-interval-levels.hello-interval-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -336,35 +592,94 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 				return true
 			},
 		)
-		if value := r.Get("level-number"); value.Exists() && !data.PriorityLevels[i].LevelNumber.IsNull() {
-			data.PriorityLevels[i].LevelNumber = types.Int64Value(value.Int())
+		if value := r.Get("level-number"); value.Exists() && !data.HelloIntervalLevels[i].LevelNumber.IsNull() {
+			data.HelloIntervalLevels[i].LevelNumber = types.Int64Value(value.Int())
 		} else {
-			data.PriorityLevels[i].LevelNumber = types.Int64Null()
+			data.HelloIntervalLevels[i].LevelNumber = types.Int64Null()
 		}
-		if value := r.Get("priority"); value.Exists() && !data.PriorityLevels[i].Priority.IsNull() {
-			data.PriorityLevels[i].Priority = types.Int64Value(value.Int())
+		if value := r.Get("hello-interval"); value.Exists() && !data.HelloIntervalLevels[i].HelloInterval.IsNull() {
+			data.HelloIntervalLevels[i].HelloInterval = types.Int64Value(value.Int())
 		} else {
-			data.PriorityLevels[i].Priority = types.Int64Null()
+			data.HelloIntervalLevels[i].HelloInterval = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "point-to-point"); !data.PointToPoint.IsNull() {
-		if value.Exists() {
-			data.PointToPoint = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "hello-multiplier"); value.Exists() && !data.HelloMultiplier.IsNull() {
+		data.HelloMultiplier = types.Int64Value(value.Int())
+	} else {
+		data.HelloMultiplier = types.Int64Null()
+	}
+	for i := range data.HelloMultiplierLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.HelloMultiplierLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "hello-multiplier-levels.hello-multiplier-level").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("level-number"); value.Exists() && !data.HelloMultiplierLevels[i].LevelNumber.IsNull() {
+			data.HelloMultiplierLevels[i].LevelNumber = types.Int64Value(value.Int())
 		} else {
-			data.PointToPoint = types.BoolValue(false)
+			data.HelloMultiplierLevels[i].LevelNumber = types.Int64Null()
 		}
-	} else {
-		data.PointToPoint = types.BoolNull()
+		if value := r.Get("hello-multiplier"); value.Exists() && !data.HelloMultiplierLevels[i].HelloMultiplier.IsNull() {
+			data.HelloMultiplierLevels[i].HelloMultiplier = types.Int64Value(value.Int())
+		} else {
+			data.HelloMultiplierLevels[i].HelloMultiplier = types.Int64Null()
+		}
 	}
-	if value := gjson.GetBytes(res, "state"); value.Exists() && !data.State.IsNull() {
-		data.State = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "lsp-interval"); value.Exists() && !data.LspInterval.IsNull() {
+		data.LspInterval = types.Int64Value(value.Int())
 	} else {
-		data.State = types.StringNull()
+		data.LspInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "hello-password.accepts.encrypted"); value.Exists() && !data.HelloPasswordAcceptEncrypted.IsNull() {
-		data.HelloPasswordAcceptEncrypted = types.StringValue(value.String())
-	} else {
-		data.HelloPasswordAcceptEncrypted = types.StringNull()
+	for i := range data.LspIntervalLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.LspIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "lsp-interval-levels.lsp-interval-level").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("level-number"); value.Exists() && !data.LspIntervalLevels[i].LevelNumber.IsNull() {
+			data.LspIntervalLevels[i].LevelNumber = types.Int64Value(value.Int())
+		} else {
+			data.LspIntervalLevels[i].LevelNumber = types.Int64Null()
+		}
+		if value := r.Get("lsp-interval"); value.Exists() && !data.LspIntervalLevels[i].LspInterval.IsNull() {
+			data.LspIntervalLevels[i].LspInterval = types.Int64Value(value.Int())
+		} else {
+			data.LspIntervalLevels[i].LspInterval = types.Int64Null()
+		}
 	}
 	for i := range data.HelloPasswordAcceptsLevels {
 		keys := [...]string{"level-number"}
@@ -394,16 +709,6 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 		} else {
 			data.HelloPasswordAcceptsLevels[i].LevelNumber = types.Int64Null()
 		}
-		if value := r.Get("encrypted"); value.Exists() && !data.HelloPasswordAcceptsLevels[i].Encrypted.IsNull() {
-			data.HelloPasswordAcceptsLevels[i].Encrypted = types.StringValue(value.String())
-		} else {
-			data.HelloPasswordAcceptsLevels[i].Encrypted = types.StringNull()
-		}
-	}
-	if value := gjson.GetBytes(res, "hello-password.hello-password-options.text.hello-password-options.encrypted"); value.Exists() && !data.HelloPasswordTextEncrypted.IsNull() {
-		data.HelloPasswordTextEncrypted = types.StringValue(value.String())
-	} else {
-		data.HelloPasswordTextEncrypted = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "hello-password.hello-password-options.text.hello-password-options.send-only"); !data.HelloPasswordTextSendOnly.IsNull() {
 		if value.Exists() {
@@ -413,11 +718,6 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 		}
 	} else {
 		data.HelloPasswordTextSendOnly = types.BoolNull()
-	}
-	if value := gjson.GetBytes(res, "hello-password.hello-password-options.hmac-md5.hello-password-options.encrypted"); value.Exists() && !data.HelloPasswordHmacMd5Encrypted.IsNull() {
-		data.HelloPasswordHmacMd5Encrypted = types.StringValue(value.String())
-	} else {
-		data.HelloPasswordHmacMd5Encrypted = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "hello-password.hello-password-options.hmac-md5.hello-password-options.send-only"); !data.HelloPasswordHmacMd5SendOnly.IsNull() {
 		if value.Exists() {
@@ -470,48 +770,217 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 		} else {
 			data.HelloPasswordLevels[i].LevelNumber = types.Int64Null()
 		}
-		if value := r.Get("text.hello-password-options.encrypted"); value.Exists() && !data.HelloPasswordLevels[i].HelloPasswordTextEncrypted.IsNull() {
-			data.HelloPasswordLevels[i].HelloPasswordTextEncrypted = types.StringValue(value.String())
-		} else {
-			data.HelloPasswordLevels[i].HelloPasswordTextEncrypted = types.StringNull()
-		}
-		if value := r.Get("text.hello-password-options.send-only"); !data.HelloPasswordLevels[i].HelloPasswordTextSendOnly.IsNull() {
+		if value := r.Get("text.hello-password-options.send-only"); !data.HelloPasswordLevels[i].TextSendOnly.IsNull() {
 			if value.Exists() {
-				data.HelloPasswordLevels[i].HelloPasswordTextSendOnly = types.BoolValue(true)
+				data.HelloPasswordLevels[i].TextSendOnly = types.BoolValue(true)
 			} else {
-				data.HelloPasswordLevels[i].HelloPasswordTextSendOnly = types.BoolValue(false)
+				data.HelloPasswordLevels[i].TextSendOnly = types.BoolValue(false)
 			}
 		} else {
-			data.HelloPasswordLevels[i].HelloPasswordTextSendOnly = types.BoolNull()
+			data.HelloPasswordLevels[i].TextSendOnly = types.BoolNull()
 		}
-		if value := r.Get("hmac-md5.hello-password-options.encrypted"); value.Exists() && !data.HelloPasswordLevels[i].HelloPasswordHmacMd5Encrypted.IsNull() {
-			data.HelloPasswordLevels[i].HelloPasswordHmacMd5Encrypted = types.StringValue(value.String())
-		} else {
-			data.HelloPasswordLevels[i].HelloPasswordHmacMd5Encrypted = types.StringNull()
-		}
-		if value := r.Get("hmac-md5.hello-password-options.send-only"); !data.HelloPasswordLevels[i].HelloPasswordHmacMd5SendOnly.IsNull() {
+		if value := r.Get("hmac-md5.hello-password-options.send-only"); !data.HelloPasswordLevels[i].HmacMd5SendOnly.IsNull() {
 			if value.Exists() {
-				data.HelloPasswordLevels[i].HelloPasswordHmacMd5SendOnly = types.BoolValue(true)
+				data.HelloPasswordLevels[i].HmacMd5SendOnly = types.BoolValue(true)
 			} else {
-				data.HelloPasswordLevels[i].HelloPasswordHmacMd5SendOnly = types.BoolValue(false)
+				data.HelloPasswordLevels[i].HmacMd5SendOnly = types.BoolValue(false)
 			}
 		} else {
-			data.HelloPasswordLevels[i].HelloPasswordHmacMd5SendOnly = types.BoolNull()
+			data.HelloPasswordLevels[i].HmacMd5SendOnly = types.BoolNull()
 		}
-		if value := r.Get("keychain.keychain-name"); value.Exists() && !data.HelloPasswordLevels[i].HelloKeychainName.IsNull() {
-			data.HelloPasswordLevels[i].HelloKeychainName = types.StringValue(value.String())
+		if value := r.Get("keychain.keychain-name"); value.Exists() && !data.HelloPasswordLevels[i].KeychainName.IsNull() {
+			data.HelloPasswordLevels[i].KeychainName = types.StringValue(value.String())
 		} else {
-			data.HelloPasswordLevels[i].HelloKeychainName = types.StringNull()
+			data.HelloPasswordLevels[i].KeychainName = types.StringNull()
 		}
-		if value := r.Get("keychain.send-only"); !data.HelloPasswordLevels[i].HelloKeychainSendOnly.IsNull() {
+		if value := r.Get("keychain.send-only"); !data.HelloPasswordLevels[i].KeychainSendOnly.IsNull() {
 			if value.Exists() {
-				data.HelloPasswordLevels[i].HelloKeychainSendOnly = types.BoolValue(true)
+				data.HelloPasswordLevels[i].KeychainSendOnly = types.BoolValue(true)
 			} else {
-				data.HelloPasswordLevels[i].HelloKeychainSendOnly = types.BoolValue(false)
+				data.HelloPasswordLevels[i].KeychainSendOnly = types.BoolValue(false)
 			}
 		} else {
-			data.HelloPasswordLevels[i].HelloKeychainSendOnly = types.BoolNull()
+			data.HelloPasswordLevels[i].KeychainSendOnly = types.BoolNull()
 		}
+	}
+	if value := gjson.GetBytes(res, "remote-psnp-delay"); value.Exists() && !data.RemotePsnpDelay.IsNull() {
+		data.RemotePsnpDelay = types.Int64Value(value.Int())
+	} else {
+		data.RemotePsnpDelay = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "priority"); value.Exists() && !data.Priority.IsNull() {
+		data.Priority = types.Int64Value(value.Int())
+	} else {
+		data.Priority = types.Int64Null()
+	}
+	for i := range data.PriorityLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.PriorityLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "priority-levels.priority-level").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("level-number"); value.Exists() && !data.PriorityLevels[i].LevelNumber.IsNull() {
+			data.PriorityLevels[i].LevelNumber = types.Int64Value(value.Int())
+		} else {
+			data.PriorityLevels[i].LevelNumber = types.Int64Null()
+		}
+		if value := r.Get("priority"); value.Exists() && !data.PriorityLevels[i].Priority.IsNull() {
+			data.PriorityLevels[i].Priority = types.Int64Value(value.Int())
+		} else {
+			data.PriorityLevels[i].Priority = types.Int64Null()
+		}
+	}
+	if value := gjson.GetBytes(res, "point-to-point"); !data.PointToPoint.IsNull() {
+		if value.Exists() {
+			data.PointToPoint = types.BoolValue(true)
+		} else {
+			data.PointToPoint = types.BoolValue(false)
+		}
+	} else {
+		data.PointToPoint = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "retransmit-interval"); value.Exists() && !data.RetransmitInterval.IsNull() {
+		data.RetransmitInterval = types.Int64Value(value.Int())
+	} else {
+		data.RetransmitInterval = types.Int64Null()
+	}
+	for i := range data.RetransmitIntervalLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.RetransmitIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "retransmit-interval-levels.retransmit-interval-level").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("level-number"); value.Exists() && !data.RetransmitIntervalLevels[i].LevelNumber.IsNull() {
+			data.RetransmitIntervalLevels[i].LevelNumber = types.Int64Value(value.Int())
+		} else {
+			data.RetransmitIntervalLevels[i].LevelNumber = types.Int64Null()
+		}
+		if value := r.Get("retransmit-interval"); value.Exists() && !data.RetransmitIntervalLevels[i].RetransmitInterval.IsNull() {
+			data.RetransmitIntervalLevels[i].RetransmitInterval = types.Int64Value(value.Int())
+		} else {
+			data.RetransmitIntervalLevels[i].RetransmitInterval = types.Int64Null()
+		}
+	}
+	if value := gjson.GetBytes(res, "retransmit-throttle-interval"); value.Exists() && !data.RetransmitThrottleInterval.IsNull() {
+		data.RetransmitThrottleInterval = types.Int64Value(value.Int())
+	} else {
+		data.RetransmitThrottleInterval = types.Int64Null()
+	}
+	for i := range data.RetransmitThrottleIntervalLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.RetransmitThrottleIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "retransmit-throttle-interval-levels.retransmit-throttle-interval-level").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("level-number"); value.Exists() && !data.RetransmitThrottleIntervalLevels[i].LevelNumber.IsNull() {
+			data.RetransmitThrottleIntervalLevels[i].LevelNumber = types.Int64Value(value.Int())
+		} else {
+			data.RetransmitThrottleIntervalLevels[i].LevelNumber = types.Int64Null()
+		}
+		if value := r.Get("retransmit-throttle-interval"); value.Exists() && !data.RetransmitThrottleIntervalLevels[i].RetransmitThrottleInterval.IsNull() {
+			data.RetransmitThrottleIntervalLevels[i].RetransmitThrottleInterval = types.Int64Value(value.Int())
+		} else {
+			data.RetransmitThrottleIntervalLevels[i].RetransmitThrottleInterval = types.Int64Null()
+		}
+	}
+	if value := gjson.GetBytes(res, "link-down.fast-detect"); !data.LinkDownFastDetect.IsNull() {
+		if value.Exists() {
+			data.LinkDownFastDetect = types.BoolValue(true)
+		} else {
+			data.LinkDownFastDetect = types.BoolValue(false)
+		}
+	} else {
+		data.LinkDownFastDetect = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "affinity.flex-algo.flex-algo-argument"); value.Exists() && !data.AffinityFlexAlgos.IsNull() {
+		data.AffinityFlexAlgos = helpers.GetStringList(value.Array())
+	} else {
+		data.AffinityFlexAlgos = types.ListNull(types.StringType)
+	}
+	if value := gjson.GetBytes(res, "affinity.flex-algo.anomaly"); value.Exists() && !data.AffinityFlexAlgosAnomalies.IsNull() {
+		data.AffinityFlexAlgosAnomalies = helpers.GetStringList(value.Array())
+	} else {
+		data.AffinityFlexAlgosAnomalies = types.ListNull(types.StringType)
+	}
+	if value := gjson.GetBytes(res, "override.metrics"); value.Exists() && !data.OverrideMetrics.IsNull() {
+		data.OverrideMetrics = types.StringValue(value.String())
+	} else {
+		data.OverrideMetrics = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "delay.normalize.interval.interval-number"); value.Exists() && !data.DelayNormalizeInterval.IsNull() {
+		data.DelayNormalizeInterval = types.Int64Value(value.Int())
+	} else {
+		data.DelayNormalizeInterval = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "delay.normalize.interval.offset"); value.Exists() && !data.DelayNormalizeOffset.IsNull() {
+		data.DelayNormalizeOffset = types.Int64Value(value.Int())
+	} else {
+		data.DelayNormalizeOffset = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "mpls.ldp.sync"); !data.MplsLdpSync.IsNull() {
+		if value.Exists() {
+			data.MplsLdpSync = types.BoolValue(true)
+		} else {
+			data.MplsLdpSync = types.BoolValue(false)
+		}
+	} else {
+		data.MplsLdpSync = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "mpls.ldp.sync.level"); value.Exists() && !data.MplsLdpSyncLevel.IsNull() {
+		data.MplsLdpSyncLevel = types.Int64Value(value.Int())
+	} else {
+		data.MplsLdpSyncLevel = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bfd.fast-detect.ipv4"); !data.BfdFastDetectIpv4.IsNull() {
 		if value.Exists() {
@@ -548,8 +1017,36 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *RouterISISInterface) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "mesh-group.mesh-group-number"); value.Exists() {
+		data.MeshGroup = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "mesh-group.blocked"); value.Exists() {
+		data.MeshGroupBlocked = types.BoolValue(true)
+	} else {
+		data.MeshGroupBlocked = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "state"); value.Exists() {
+		data.State = types.StringValue(value.String())
+	}
 	if value := gjson.GetBytes(res, "circuit-type"); value.Exists() {
 		data.CircuitType = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "csnp-interval"); value.Exists() {
+		data.CsnpInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "csnp-interval-levels.csnp-interval-level"); value.Exists() {
+		data.CsnpIntervalLevels = make([]RouterISISInterfaceCsnpIntervalLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISInterfaceCsnpIntervalLevels{}
+			if cValue := v.Get("level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("csnp-interval"); cValue.Exists() {
+				item.CsnpInterval = types.Int64Value(cValue.Int())
+			}
+			data.CsnpIntervalLevels = append(data.CsnpIntervalLevels, item)
+			return true
+		})
 	}
 	if value := gjson.GetBytes(res, "hello-padding"); value.Exists() {
 		data.HelloPadding = types.StringValue(value.String())
@@ -567,6 +1064,118 @@ func (data *RouterISISInterface) fromBody(ctx context.Context, res []byte) {
 			data.HelloPaddingLevels = append(data.HelloPaddingLevels, item)
 			return true
 		})
+	}
+	if value := gjson.GetBytes(res, "hello-interval"); value.Exists() {
+		data.HelloInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "hello-interval-levels.hello-interval-level"); value.Exists() {
+		data.HelloIntervalLevels = make([]RouterISISInterfaceHelloIntervalLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISInterfaceHelloIntervalLevels{}
+			if cValue := v.Get("level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("hello-interval"); cValue.Exists() {
+				item.HelloInterval = types.Int64Value(cValue.Int())
+			}
+			data.HelloIntervalLevels = append(data.HelloIntervalLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "hello-multiplier"); value.Exists() {
+		data.HelloMultiplier = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "hello-multiplier-levels.hello-multiplier-level"); value.Exists() {
+		data.HelloMultiplierLevels = make([]RouterISISInterfaceHelloMultiplierLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISInterfaceHelloMultiplierLevels{}
+			if cValue := v.Get("level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("hello-multiplier"); cValue.Exists() {
+				item.HelloMultiplier = types.Int64Value(cValue.Int())
+			}
+			data.HelloMultiplierLevels = append(data.HelloMultiplierLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "lsp-interval"); value.Exists() {
+		data.LspInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "lsp-interval-levels.lsp-interval-level"); value.Exists() {
+		data.LspIntervalLevels = make([]RouterISISInterfaceLspIntervalLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISInterfaceLspIntervalLevels{}
+			if cValue := v.Get("level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("lsp-interval"); cValue.Exists() {
+				item.LspInterval = types.Int64Value(cValue.Int())
+			}
+			data.LspIntervalLevels = append(data.LspIntervalLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "hello-password.accepts-levels.accepts-level"); value.Exists() {
+		data.HelloPasswordAcceptsLevels = make([]RouterISISInterfaceHelloPasswordAcceptsLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISInterfaceHelloPasswordAcceptsLevels{}
+			if cValue := v.Get("level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			data.HelloPasswordAcceptsLevels = append(data.HelloPasswordAcceptsLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "hello-password.hello-password-options.text.hello-password-options.send-only"); value.Exists() {
+		data.HelloPasswordTextSendOnly = types.BoolValue(true)
+	} else {
+		data.HelloPasswordTextSendOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "hello-password.hello-password-options.hmac-md5.hello-password-options.send-only"); value.Exists() {
+		data.HelloPasswordHmacMd5SendOnly = types.BoolValue(true)
+	} else {
+		data.HelloPasswordHmacMd5SendOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "hello-password.hello-password-options.keychain.keychain-name"); value.Exists() {
+		data.HelloPasswordKeychainName = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "hello-password.hello-password-options.keychain.send-only"); value.Exists() {
+		data.HelloPasswordKeychainSendOnly = types.BoolValue(true)
+	} else {
+		data.HelloPasswordKeychainSendOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "hello-password-levels.hello-password-level"); value.Exists() {
+		data.HelloPasswordLevels = make([]RouterISISInterfaceHelloPasswordLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISInterfaceHelloPasswordLevels{}
+			if cValue := v.Get("level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("text.hello-password-options.send-only"); cValue.Exists() {
+				item.TextSendOnly = types.BoolValue(true)
+			} else {
+				item.TextSendOnly = types.BoolValue(false)
+			}
+			if cValue := v.Get("hmac-md5.hello-password-options.send-only"); cValue.Exists() {
+				item.HmacMd5SendOnly = types.BoolValue(true)
+			} else {
+				item.HmacMd5SendOnly = types.BoolValue(false)
+			}
+			if cValue := v.Get("keychain.keychain-name"); cValue.Exists() {
+				item.KeychainName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("keychain.send-only"); cValue.Exists() {
+				item.KeychainSendOnly = types.BoolValue(true)
+			} else {
+				item.KeychainSendOnly = types.BoolValue(false)
+			}
+			data.HelloPasswordLevels = append(data.HelloPasswordLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "remote-psnp-delay"); value.Exists() {
+		data.RemotePsnpDelay = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "priority"); value.Exists() {
 		data.Priority = types.Int64Value(value.Int())
@@ -590,84 +1199,71 @@ func (data *RouterISISInterface) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.PointToPoint = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "state"); value.Exists() {
-		data.State = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "retransmit-interval"); value.Exists() {
+		data.RetransmitInterval = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "hello-password.accepts.encrypted"); value.Exists() {
-		data.HelloPasswordAcceptEncrypted = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "hello-password.accepts-levels.accepts-level"); value.Exists() {
-		data.HelloPasswordAcceptsLevels = make([]RouterISISInterfaceHelloPasswordAcceptsLevels, 0)
+	if value := gjson.GetBytes(res, "retransmit-interval-levels.retransmit-interval-level"); value.Exists() {
+		data.RetransmitIntervalLevels = make([]RouterISISInterfaceRetransmitIntervalLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterISISInterfaceHelloPasswordAcceptsLevels{}
+			item := RouterISISInterfaceRetransmitIntervalLevels{}
 			if cValue := v.Get("level-number"); cValue.Exists() {
 				item.LevelNumber = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("encrypted"); cValue.Exists() {
-				item.Encrypted = types.StringValue(cValue.String())
+			if cValue := v.Get("retransmit-interval"); cValue.Exists() {
+				item.RetransmitInterval = types.Int64Value(cValue.Int())
 			}
-			data.HelloPasswordAcceptsLevels = append(data.HelloPasswordAcceptsLevels, item)
+			data.RetransmitIntervalLevels = append(data.RetransmitIntervalLevels, item)
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "hello-password.hello-password-options.text.hello-password-options.encrypted"); value.Exists() {
-		data.HelloPasswordTextEncrypted = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "retransmit-throttle-interval"); value.Exists() {
+		data.RetransmitThrottleInterval = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "hello-password.hello-password-options.text.hello-password-options.send-only"); value.Exists() {
-		data.HelloPasswordTextSendOnly = types.BoolValue(true)
-	} else {
-		data.HelloPasswordTextSendOnly = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "hello-password.hello-password-options.hmac-md5.hello-password-options.encrypted"); value.Exists() {
-		data.HelloPasswordHmacMd5Encrypted = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "hello-password.hello-password-options.hmac-md5.hello-password-options.send-only"); value.Exists() {
-		data.HelloPasswordHmacMd5SendOnly = types.BoolValue(true)
-	} else {
-		data.HelloPasswordHmacMd5SendOnly = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "hello-password.hello-password-options.keychain.keychain-name"); value.Exists() {
-		data.HelloPasswordKeychainName = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "hello-password.hello-password-options.keychain.send-only"); value.Exists() {
-		data.HelloPasswordKeychainSendOnly = types.BoolValue(true)
-	} else {
-		data.HelloPasswordKeychainSendOnly = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "hello-password-levels.hello-password-level"); value.Exists() {
-		data.HelloPasswordLevels = make([]RouterISISInterfaceHelloPasswordLevels, 0)
+	if value := gjson.GetBytes(res, "retransmit-throttle-interval-levels.retransmit-throttle-interval-level"); value.Exists() {
+		data.RetransmitThrottleIntervalLevels = make([]RouterISISInterfaceRetransmitThrottleIntervalLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterISISInterfaceHelloPasswordLevels{}
+			item := RouterISISInterfaceRetransmitThrottleIntervalLevels{}
 			if cValue := v.Get("level-number"); cValue.Exists() {
 				item.LevelNumber = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("text.hello-password-options.encrypted"); cValue.Exists() {
-				item.HelloPasswordTextEncrypted = types.StringValue(cValue.String())
+			if cValue := v.Get("retransmit-throttle-interval"); cValue.Exists() {
+				item.RetransmitThrottleInterval = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("text.hello-password-options.send-only"); cValue.Exists() {
-				item.HelloPasswordTextSendOnly = types.BoolValue(true)
-			} else {
-				item.HelloPasswordTextSendOnly = types.BoolValue(false)
-			}
-			if cValue := v.Get("hmac-md5.hello-password-options.encrypted"); cValue.Exists() {
-				item.HelloPasswordHmacMd5Encrypted = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("hmac-md5.hello-password-options.send-only"); cValue.Exists() {
-				item.HelloPasswordHmacMd5SendOnly = types.BoolValue(true)
-			} else {
-				item.HelloPasswordHmacMd5SendOnly = types.BoolValue(false)
-			}
-			if cValue := v.Get("keychain.keychain-name"); cValue.Exists() {
-				item.HelloKeychainName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("keychain.send-only"); cValue.Exists() {
-				item.HelloKeychainSendOnly = types.BoolValue(true)
-			} else {
-				item.HelloKeychainSendOnly = types.BoolValue(false)
-			}
-			data.HelloPasswordLevels = append(data.HelloPasswordLevels, item)
+			data.RetransmitThrottleIntervalLevels = append(data.RetransmitThrottleIntervalLevels, item)
 			return true
 		})
+	}
+	if value := gjson.GetBytes(res, "link-down.fast-detect"); value.Exists() {
+		data.LinkDownFastDetect = types.BoolValue(true)
+	} else {
+		data.LinkDownFastDetect = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "affinity.flex-algo.flex-algo-argument"); value.Exists() {
+		data.AffinityFlexAlgos = helpers.GetStringList(value.Array())
+	} else {
+		data.AffinityFlexAlgos = types.ListNull(types.StringType)
+	}
+	if value := gjson.GetBytes(res, "affinity.flex-algo.anomaly"); value.Exists() {
+		data.AffinityFlexAlgosAnomalies = helpers.GetStringList(value.Array())
+	} else {
+		data.AffinityFlexAlgosAnomalies = types.ListNull(types.StringType)
+	}
+	if value := gjson.GetBytes(res, "override.metrics"); value.Exists() {
+		data.OverrideMetrics = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "delay.normalize.interval.interval-number"); value.Exists() {
+		data.DelayNormalizeInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "delay.normalize.interval.offset"); value.Exists() {
+		data.DelayNormalizeOffset = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "mpls.ldp.sync"); value.Exists() {
+		data.MplsLdpSync = types.BoolValue(true)
+	} else {
+		data.MplsLdpSync = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mpls.ldp.sync.level"); value.Exists() {
+		data.MplsLdpSyncLevel = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "bfd.fast-detect.ipv4"); value.Exists() {
 		data.BfdFastDetectIpv4 = types.BoolValue(true)
@@ -692,8 +1288,36 @@ func (data *RouterISISInterface) fromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *RouterISISInterfaceData) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "mesh-group.mesh-group-number"); value.Exists() {
+		data.MeshGroup = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "mesh-group.blocked"); value.Exists() {
+		data.MeshGroupBlocked = types.BoolValue(true)
+	} else {
+		data.MeshGroupBlocked = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "state"); value.Exists() {
+		data.State = types.StringValue(value.String())
+	}
 	if value := gjson.GetBytes(res, "circuit-type"); value.Exists() {
 		data.CircuitType = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "csnp-interval"); value.Exists() {
+		data.CsnpInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "csnp-interval-levels.csnp-interval-level"); value.Exists() {
+		data.CsnpIntervalLevels = make([]RouterISISInterfaceCsnpIntervalLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISInterfaceCsnpIntervalLevels{}
+			if cValue := v.Get("level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("csnp-interval"); cValue.Exists() {
+				item.CsnpInterval = types.Int64Value(cValue.Int())
+			}
+			data.CsnpIntervalLevels = append(data.CsnpIntervalLevels, item)
+			return true
+		})
 	}
 	if value := gjson.GetBytes(res, "hello-padding"); value.Exists() {
 		data.HelloPadding = types.StringValue(value.String())
@@ -711,6 +1335,118 @@ func (data *RouterISISInterfaceData) fromBody(ctx context.Context, res []byte) {
 			data.HelloPaddingLevels = append(data.HelloPaddingLevels, item)
 			return true
 		})
+	}
+	if value := gjson.GetBytes(res, "hello-interval"); value.Exists() {
+		data.HelloInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "hello-interval-levels.hello-interval-level"); value.Exists() {
+		data.HelloIntervalLevels = make([]RouterISISInterfaceHelloIntervalLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISInterfaceHelloIntervalLevels{}
+			if cValue := v.Get("level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("hello-interval"); cValue.Exists() {
+				item.HelloInterval = types.Int64Value(cValue.Int())
+			}
+			data.HelloIntervalLevels = append(data.HelloIntervalLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "hello-multiplier"); value.Exists() {
+		data.HelloMultiplier = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "hello-multiplier-levels.hello-multiplier-level"); value.Exists() {
+		data.HelloMultiplierLevels = make([]RouterISISInterfaceHelloMultiplierLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISInterfaceHelloMultiplierLevels{}
+			if cValue := v.Get("level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("hello-multiplier"); cValue.Exists() {
+				item.HelloMultiplier = types.Int64Value(cValue.Int())
+			}
+			data.HelloMultiplierLevels = append(data.HelloMultiplierLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "lsp-interval"); value.Exists() {
+		data.LspInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "lsp-interval-levels.lsp-interval-level"); value.Exists() {
+		data.LspIntervalLevels = make([]RouterISISInterfaceLspIntervalLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISInterfaceLspIntervalLevels{}
+			if cValue := v.Get("level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("lsp-interval"); cValue.Exists() {
+				item.LspInterval = types.Int64Value(cValue.Int())
+			}
+			data.LspIntervalLevels = append(data.LspIntervalLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "hello-password.accepts-levels.accepts-level"); value.Exists() {
+		data.HelloPasswordAcceptsLevels = make([]RouterISISInterfaceHelloPasswordAcceptsLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISInterfaceHelloPasswordAcceptsLevels{}
+			if cValue := v.Get("level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			data.HelloPasswordAcceptsLevels = append(data.HelloPasswordAcceptsLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "hello-password.hello-password-options.text.hello-password-options.send-only"); value.Exists() {
+		data.HelloPasswordTextSendOnly = types.BoolValue(true)
+	} else {
+		data.HelloPasswordTextSendOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "hello-password.hello-password-options.hmac-md5.hello-password-options.send-only"); value.Exists() {
+		data.HelloPasswordHmacMd5SendOnly = types.BoolValue(true)
+	} else {
+		data.HelloPasswordHmacMd5SendOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "hello-password.hello-password-options.keychain.keychain-name"); value.Exists() {
+		data.HelloPasswordKeychainName = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "hello-password.hello-password-options.keychain.send-only"); value.Exists() {
+		data.HelloPasswordKeychainSendOnly = types.BoolValue(true)
+	} else {
+		data.HelloPasswordKeychainSendOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "hello-password-levels.hello-password-level"); value.Exists() {
+		data.HelloPasswordLevels = make([]RouterISISInterfaceHelloPasswordLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISInterfaceHelloPasswordLevels{}
+			if cValue := v.Get("level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("text.hello-password-options.send-only"); cValue.Exists() {
+				item.TextSendOnly = types.BoolValue(true)
+			} else {
+				item.TextSendOnly = types.BoolValue(false)
+			}
+			if cValue := v.Get("hmac-md5.hello-password-options.send-only"); cValue.Exists() {
+				item.HmacMd5SendOnly = types.BoolValue(true)
+			} else {
+				item.HmacMd5SendOnly = types.BoolValue(false)
+			}
+			if cValue := v.Get("keychain.keychain-name"); cValue.Exists() {
+				item.KeychainName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("keychain.send-only"); cValue.Exists() {
+				item.KeychainSendOnly = types.BoolValue(true)
+			} else {
+				item.KeychainSendOnly = types.BoolValue(false)
+			}
+			data.HelloPasswordLevels = append(data.HelloPasswordLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "remote-psnp-delay"); value.Exists() {
+		data.RemotePsnpDelay = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "priority"); value.Exists() {
 		data.Priority = types.Int64Value(value.Int())
@@ -734,84 +1470,71 @@ func (data *RouterISISInterfaceData) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.PointToPoint = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "state"); value.Exists() {
-		data.State = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "retransmit-interval"); value.Exists() {
+		data.RetransmitInterval = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "hello-password.accepts.encrypted"); value.Exists() {
-		data.HelloPasswordAcceptEncrypted = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "hello-password.accepts-levels.accepts-level"); value.Exists() {
-		data.HelloPasswordAcceptsLevels = make([]RouterISISInterfaceHelloPasswordAcceptsLevels, 0)
+	if value := gjson.GetBytes(res, "retransmit-interval-levels.retransmit-interval-level"); value.Exists() {
+		data.RetransmitIntervalLevels = make([]RouterISISInterfaceRetransmitIntervalLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterISISInterfaceHelloPasswordAcceptsLevels{}
+			item := RouterISISInterfaceRetransmitIntervalLevels{}
 			if cValue := v.Get("level-number"); cValue.Exists() {
 				item.LevelNumber = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("encrypted"); cValue.Exists() {
-				item.Encrypted = types.StringValue(cValue.String())
+			if cValue := v.Get("retransmit-interval"); cValue.Exists() {
+				item.RetransmitInterval = types.Int64Value(cValue.Int())
 			}
-			data.HelloPasswordAcceptsLevels = append(data.HelloPasswordAcceptsLevels, item)
+			data.RetransmitIntervalLevels = append(data.RetransmitIntervalLevels, item)
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "hello-password.hello-password-options.text.hello-password-options.encrypted"); value.Exists() {
-		data.HelloPasswordTextEncrypted = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "retransmit-throttle-interval"); value.Exists() {
+		data.RetransmitThrottleInterval = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "hello-password.hello-password-options.text.hello-password-options.send-only"); value.Exists() {
-		data.HelloPasswordTextSendOnly = types.BoolValue(true)
-	} else {
-		data.HelloPasswordTextSendOnly = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "hello-password.hello-password-options.hmac-md5.hello-password-options.encrypted"); value.Exists() {
-		data.HelloPasswordHmacMd5Encrypted = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "hello-password.hello-password-options.hmac-md5.hello-password-options.send-only"); value.Exists() {
-		data.HelloPasswordHmacMd5SendOnly = types.BoolValue(true)
-	} else {
-		data.HelloPasswordHmacMd5SendOnly = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "hello-password.hello-password-options.keychain.keychain-name"); value.Exists() {
-		data.HelloPasswordKeychainName = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "hello-password.hello-password-options.keychain.send-only"); value.Exists() {
-		data.HelloPasswordKeychainSendOnly = types.BoolValue(true)
-	} else {
-		data.HelloPasswordKeychainSendOnly = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "hello-password-levels.hello-password-level"); value.Exists() {
-		data.HelloPasswordLevels = make([]RouterISISInterfaceHelloPasswordLevels, 0)
+	if value := gjson.GetBytes(res, "retransmit-throttle-interval-levels.retransmit-throttle-interval-level"); value.Exists() {
+		data.RetransmitThrottleIntervalLevels = make([]RouterISISInterfaceRetransmitThrottleIntervalLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterISISInterfaceHelloPasswordLevels{}
+			item := RouterISISInterfaceRetransmitThrottleIntervalLevels{}
 			if cValue := v.Get("level-number"); cValue.Exists() {
 				item.LevelNumber = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("text.hello-password-options.encrypted"); cValue.Exists() {
-				item.HelloPasswordTextEncrypted = types.StringValue(cValue.String())
+			if cValue := v.Get("retransmit-throttle-interval"); cValue.Exists() {
+				item.RetransmitThrottleInterval = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("text.hello-password-options.send-only"); cValue.Exists() {
-				item.HelloPasswordTextSendOnly = types.BoolValue(true)
-			} else {
-				item.HelloPasswordTextSendOnly = types.BoolValue(false)
-			}
-			if cValue := v.Get("hmac-md5.hello-password-options.encrypted"); cValue.Exists() {
-				item.HelloPasswordHmacMd5Encrypted = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("hmac-md5.hello-password-options.send-only"); cValue.Exists() {
-				item.HelloPasswordHmacMd5SendOnly = types.BoolValue(true)
-			} else {
-				item.HelloPasswordHmacMd5SendOnly = types.BoolValue(false)
-			}
-			if cValue := v.Get("keychain.keychain-name"); cValue.Exists() {
-				item.HelloKeychainName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("keychain.send-only"); cValue.Exists() {
-				item.HelloKeychainSendOnly = types.BoolValue(true)
-			} else {
-				item.HelloKeychainSendOnly = types.BoolValue(false)
-			}
-			data.HelloPasswordLevels = append(data.HelloPasswordLevels, item)
+			data.RetransmitThrottleIntervalLevels = append(data.RetransmitThrottleIntervalLevels, item)
 			return true
 		})
+	}
+	if value := gjson.GetBytes(res, "link-down.fast-detect"); value.Exists() {
+		data.LinkDownFastDetect = types.BoolValue(true)
+	} else {
+		data.LinkDownFastDetect = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "affinity.flex-algo.flex-algo-argument"); value.Exists() {
+		data.AffinityFlexAlgos = helpers.GetStringList(value.Array())
+	} else {
+		data.AffinityFlexAlgos = types.ListNull(types.StringType)
+	}
+	if value := gjson.GetBytes(res, "affinity.flex-algo.anomaly"); value.Exists() {
+		data.AffinityFlexAlgosAnomalies = helpers.GetStringList(value.Array())
+	} else {
+		data.AffinityFlexAlgosAnomalies = types.ListNull(types.StringType)
+	}
+	if value := gjson.GetBytes(res, "override.metrics"); value.Exists() {
+		data.OverrideMetrics = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "delay.normalize.interval.interval-number"); value.Exists() {
+		data.DelayNormalizeInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "delay.normalize.interval.offset"); value.Exists() {
+		data.DelayNormalizeOffset = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "mpls.ldp.sync"); value.Exists() {
+		data.MplsLdpSync = types.BoolValue(true)
+	} else {
+		data.MplsLdpSync = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mpls.ldp.sync.level"); value.Exists() {
+		data.MplsLdpSyncLevel = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "bfd.fast-detect.ipv4"); value.Exists() {
 		data.BfdFastDetectIpv4 = types.BoolValue(true)
@@ -849,6 +1572,144 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 	if !state.BfdFastDetectIpv4.IsNull() && data.BfdFastDetectIpv4.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/fast-detect/ipv4", state.getPath()))
 	}
+	if !state.MplsLdpSyncLevel.IsNull() && data.MplsLdpSyncLevel.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/ldp/sync/level", state.getPath()))
+	}
+	if !state.MplsLdpSync.IsNull() && data.MplsLdpSync.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/ldp/sync", state.getPath()))
+	}
+	if !state.DelayNormalizeOffset.IsNull() && data.DelayNormalizeOffset.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/delay/normalize/interval/offset", state.getPath()))
+	}
+	if !state.DelayNormalizeInterval.IsNull() && data.DelayNormalizeInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/delay/normalize/interval/interval-number", state.getPath()))
+	}
+	if !state.OverrideMetrics.IsNull() && data.OverrideMetrics.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/override/metrics", state.getPath()))
+	}
+	if !state.AffinityFlexAlgosAnomalies.IsNull() && data.AffinityFlexAlgosAnomalies.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/affinity/flex-algo/anomaly", state.getPath()))
+	}
+	if !state.AffinityFlexAlgos.IsNull() && data.AffinityFlexAlgos.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/affinity/flex-algo/flex-algo-argument", state.getPath()))
+	}
+	if !state.LinkDownFastDetect.IsNull() && data.LinkDownFastDetect.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/link-down/fast-detect", state.getPath()))
+	}
+	for i := range state.RetransmitThrottleIntervalLevels {
+		keys := [...]string{"level-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.RetransmitThrottleIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.RetransmitThrottleIntervalLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.RetransmitThrottleIntervalLevels {
+			found = true
+			if state.RetransmitThrottleIntervalLevels[i].LevelNumber.ValueInt64() != data.RetransmitThrottleIntervalLevels[j].LevelNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.RetransmitThrottleIntervalLevels[i].RetransmitThrottleInterval.IsNull() && data.RetransmitThrottleIntervalLevels[j].RetransmitThrottleInterval.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/retransmit-throttle-interval-levels/retransmit-throttle-interval-level%v/retransmit-throttle-interval", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/retransmit-throttle-interval-levels/retransmit-throttle-interval-level%v", state.getPath(), keyString))
+		}
+	}
+	if !state.RetransmitThrottleInterval.IsNull() && data.RetransmitThrottleInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/retransmit-throttle-interval", state.getPath()))
+	}
+	for i := range state.RetransmitIntervalLevels {
+		keys := [...]string{"level-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.RetransmitIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.RetransmitIntervalLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.RetransmitIntervalLevels {
+			found = true
+			if state.RetransmitIntervalLevels[i].LevelNumber.ValueInt64() != data.RetransmitIntervalLevels[j].LevelNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.RetransmitIntervalLevels[i].RetransmitInterval.IsNull() && data.RetransmitIntervalLevels[j].RetransmitInterval.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/retransmit-interval-levels/retransmit-interval-level%v/retransmit-interval", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/retransmit-interval-levels/retransmit-interval-level%v", state.getPath(), keyString))
+		}
+	}
+	if !state.RetransmitInterval.IsNull() && data.RetransmitInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/retransmit-interval", state.getPath()))
+	}
+	if !state.PointToPoint.IsNull() && data.PointToPoint.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/point-to-point", state.getPath()))
+	}
+	for i := range state.PriorityLevels {
+		keys := [...]string{"level-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.PriorityLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.PriorityLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.PriorityLevels {
+			found = true
+			if state.PriorityLevels[i].LevelNumber.ValueInt64() != data.PriorityLevels[j].LevelNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.PriorityLevels[i].Priority.IsNull() && data.PriorityLevels[j].Priority.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/priority-levels/priority-level%v/priority", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/priority-levels/priority-level%v", state.getPath(), keyString))
+		}
+	}
+	if !state.Priority.IsNull() && data.Priority.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/priority", state.getPath()))
+	}
+	if !state.RemotePsnpDelay.IsNull() && data.RemotePsnpDelay.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/remote-psnp-delay", state.getPath()))
+	}
 	for i := range state.HelloPasswordLevels {
 		keys := [...]string{"level-number"}
 		stateKeyValues := [...]string{strconv.FormatInt(state.HelloPasswordLevels[i].LevelNumber.ValueInt64(), 10)}
@@ -872,22 +1733,22 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 				found = false
 			}
 			if found {
-				if !state.HelloPasswordLevels[i].HelloKeychainSendOnly.IsNull() && data.HelloPasswordLevels[j].HelloKeychainSendOnly.IsNull() {
+				if !state.HelloPasswordLevels[i].KeychainSendOnly.IsNull() && data.HelloPasswordLevels[j].KeychainSendOnly.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/keychain", state.getPath(), keyString))
 				}
-				if !state.HelloPasswordLevels[i].HelloKeychainName.IsNull() && data.HelloPasswordLevels[j].HelloKeychainName.IsNull() {
+				if !state.HelloPasswordLevels[i].KeychainName.IsNull() && data.HelloPasswordLevels[j].KeychainName.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/keychain", state.getPath(), keyString))
 				}
-				if !state.HelloPasswordLevels[i].HelloPasswordHmacMd5SendOnly.IsNull() && data.HelloPasswordLevels[j].HelloPasswordHmacMd5SendOnly.IsNull() {
+				if !state.HelloPasswordLevels[i].HmacMd5SendOnly.IsNull() && data.HelloPasswordLevels[j].HmacMd5SendOnly.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/hmac-md5/hello-password-options", state.getPath(), keyString))
 				}
-				if !state.HelloPasswordLevels[i].HelloPasswordHmacMd5Encrypted.IsNull() && data.HelloPasswordLevels[j].HelloPasswordHmacMd5Encrypted.IsNull() {
+				if !state.HelloPasswordLevels[i].HmacMd5Encrypted.IsNull() && data.HelloPasswordLevels[j].HmacMd5Encrypted.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/hmac-md5/hello-password-options", state.getPath(), keyString))
 				}
-				if !state.HelloPasswordLevels[i].HelloPasswordTextSendOnly.IsNull() && data.HelloPasswordLevels[j].HelloPasswordTextSendOnly.IsNull() {
+				if !state.HelloPasswordLevels[i].TextSendOnly.IsNull() && data.HelloPasswordLevels[j].TextSendOnly.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/text/hello-password-options", state.getPath(), keyString))
 				}
-				if !state.HelloPasswordLevels[i].HelloPasswordTextEncrypted.IsNull() && data.HelloPasswordLevels[j].HelloPasswordTextEncrypted.IsNull() {
+				if !state.HelloPasswordLevels[i].TextEncrypted.IsNull() && data.HelloPasswordLevels[j].TextEncrypted.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/text/hello-password-options", state.getPath(), keyString))
 				}
 				break
@@ -951,22 +1812,16 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 	if !state.HelloPasswordAcceptEncrypted.IsNull() && data.HelloPasswordAcceptEncrypted.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password/accepts/encrypted", state.getPath()))
 	}
-	if !state.State.IsNull() && data.State.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/state", state.getPath()))
-	}
-	if !state.PointToPoint.IsNull() && data.PointToPoint.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/point-to-point", state.getPath()))
-	}
-	for i := range state.PriorityLevels {
+	for i := range state.LspIntervalLevels {
 		keys := [...]string{"level-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.PriorityLevels[i].LevelNumber.ValueInt64(), 10)}
+		stateKeyValues := [...]string{strconv.FormatInt(state.LspIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.PriorityLevels[i].LevelNumber.ValueInt64()).IsZero() {
+		if !reflect.ValueOf(state.LspIntervalLevels[i].LevelNumber.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -974,24 +1829,96 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 		}
 
 		found := false
-		for j := range data.PriorityLevels {
+		for j := range data.LspIntervalLevels {
 			found = true
-			if state.PriorityLevels[i].LevelNumber.ValueInt64() != data.PriorityLevels[j].LevelNumber.ValueInt64() {
+			if state.LspIntervalLevels[i].LevelNumber.ValueInt64() != data.LspIntervalLevels[j].LevelNumber.ValueInt64() {
 				found = false
 			}
 			if found {
-				if !state.PriorityLevels[i].Priority.IsNull() && data.PriorityLevels[j].Priority.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/priority-levels/priority-level%v/priority", state.getPath(), keyString))
+				if !state.LspIntervalLevels[i].LspInterval.IsNull() && data.LspIntervalLevels[j].LspInterval.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-interval-levels/lsp-interval-level%v/lsp-interval", state.getPath(), keyString))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/priority-levels/priority-level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-interval-levels/lsp-interval-level%v", state.getPath(), keyString))
 		}
 	}
-	if !state.Priority.IsNull() && data.Priority.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/priority", state.getPath()))
+	if !state.LspInterval.IsNull() && data.LspInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-interval", state.getPath()))
+	}
+	for i := range state.HelloMultiplierLevels {
+		keys := [...]string{"level-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.HelloMultiplierLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.HelloMultiplierLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.HelloMultiplierLevels {
+			found = true
+			if state.HelloMultiplierLevels[i].LevelNumber.ValueInt64() != data.HelloMultiplierLevels[j].LevelNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.HelloMultiplierLevels[i].HelloMultiplier.IsNull() && data.HelloMultiplierLevels[j].HelloMultiplier.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-multiplier-levels/hello-multiplier-level%v/hello-multiplier", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-multiplier-levels/hello-multiplier-level%v", state.getPath(), keyString))
+		}
+	}
+	if !state.HelloMultiplier.IsNull() && data.HelloMultiplier.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-multiplier", state.getPath()))
+	}
+	for i := range state.HelloIntervalLevels {
+		keys := [...]string{"level-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.HelloIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.HelloIntervalLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.HelloIntervalLevels {
+			found = true
+			if state.HelloIntervalLevels[i].LevelNumber.ValueInt64() != data.HelloIntervalLevels[j].LevelNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.HelloIntervalLevels[i].HelloInterval.IsNull() && data.HelloIntervalLevels[j].HelloInterval.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-interval-levels/hello-interval-level%v/hello-interval", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-interval-levels/hello-interval-level%v", state.getPath(), keyString))
+		}
+	}
+	if !state.HelloInterval.IsNull() && data.HelloInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-interval", state.getPath()))
 	}
 	for i := range state.HelloPaddingLevels {
 		keys := [...]string{"level-number"}
@@ -1029,8 +1956,53 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 	if !state.HelloPadding.IsNull() && data.HelloPadding.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-padding", state.getPath()))
 	}
+	for i := range state.CsnpIntervalLevels {
+		keys := [...]string{"level-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.CsnpIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.CsnpIntervalLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.CsnpIntervalLevels {
+			found = true
+			if state.CsnpIntervalLevels[i].LevelNumber.ValueInt64() != data.CsnpIntervalLevels[j].LevelNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.CsnpIntervalLevels[i].CsnpInterval.IsNull() && data.CsnpIntervalLevels[j].CsnpInterval.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/csnp-interval-levels/csnp-interval-level%v/csnp-interval", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/csnp-interval-levels/csnp-interval-level%v", state.getPath(), keyString))
+		}
+	}
+	if !state.CsnpInterval.IsNull() && data.CsnpInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/csnp-interval", state.getPath()))
+	}
 	if !state.CircuitType.IsNull() && data.CircuitType.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/circuit-type", state.getPath()))
+	}
+	if !state.State.IsNull() && data.State.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/state", state.getPath()))
+	}
+	if !state.MeshGroupBlocked.IsNull() && data.MeshGroupBlocked.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mesh-group/blocked", state.getPath()))
+	}
+	if !state.MeshGroup.IsNull() && data.MeshGroup.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mesh-group/mesh-group-number", state.getPath()))
 	}
 	return deletedItems
 }
@@ -1047,6 +2019,39 @@ func (data *RouterISISInterface) getEmptyLeafsDelete(ctx context.Context) []stri
 	if !data.BfdFastDetectIpv4.IsNull() && !data.BfdFastDetectIpv4.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/fast-detect/ipv4", data.getPath()))
 	}
+	if !data.MplsLdpSync.IsNull() && !data.MplsLdpSync.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/ldp/sync", data.getPath()))
+	}
+	if !data.LinkDownFastDetect.IsNull() && !data.LinkDownFastDetect.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/link-down/fast-detect", data.getPath()))
+	}
+	for i := range data.RetransmitThrottleIntervalLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.RetransmitThrottleIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.RetransmitIntervalLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.RetransmitIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	if !data.PointToPoint.IsNull() && !data.PointToPoint.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/point-to-point", data.getPath()))
+	}
+	for i := range data.PriorityLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.PriorityLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
 	for i := range data.HelloPasswordLevels {
 		keys := [...]string{"level-number"}
 		keyValues := [...]string{strconv.FormatInt(data.HelloPasswordLevels[i].LevelNumber.ValueInt64(), 10)}
@@ -1054,13 +2059,13 @@ func (data *RouterISISInterface) getEmptyLeafsDelete(ctx context.Context) []stri
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		if !data.HelloPasswordLevels[i].HelloKeychainSendOnly.IsNull() && !data.HelloPasswordLevels[i].HelloKeychainSendOnly.ValueBool() {
+		if !data.HelloPasswordLevels[i].KeychainSendOnly.IsNull() && !data.HelloPasswordLevels[i].KeychainSendOnly.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/keychain", data.getPath(), keyString))
 		}
-		if !data.HelloPasswordLevels[i].HelloPasswordHmacMd5SendOnly.IsNull() && !data.HelloPasswordLevels[i].HelloPasswordHmacMd5SendOnly.ValueBool() {
+		if !data.HelloPasswordLevels[i].HmacMd5SendOnly.IsNull() && !data.HelloPasswordLevels[i].HmacMd5SendOnly.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/hmac-md5/hello-password-options", data.getPath(), keyString))
 		}
-		if !data.HelloPasswordLevels[i].HelloPasswordTextSendOnly.IsNull() && !data.HelloPasswordLevels[i].HelloPasswordTextSendOnly.ValueBool() {
+		if !data.HelloPasswordLevels[i].TextSendOnly.IsNull() && !data.HelloPasswordLevels[i].TextSendOnly.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/text/hello-password-options", data.getPath(), keyString))
 		}
 	}
@@ -1081,12 +2086,25 @@ func (data *RouterISISInterface) getEmptyLeafsDelete(ctx context.Context) []stri
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
-	if !data.PointToPoint.IsNull() && !data.PointToPoint.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/point-to-point", data.getPath()))
-	}
-	for i := range data.PriorityLevels {
+	for i := range data.LspIntervalLevels {
 		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.PriorityLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyValues := [...]string{strconv.FormatInt(data.LspIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.HelloMultiplierLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.HelloMultiplierLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.HelloIntervalLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.HelloIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
@@ -1099,6 +2117,17 @@ func (data *RouterISISInterface) getEmptyLeafsDelete(ctx context.Context) []stri
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
+	}
+	for i := range data.CsnpIntervalLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.CsnpIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	if !data.MeshGroupBlocked.IsNull() && !data.MeshGroupBlocked.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mesh-group/blocked", data.getPath()))
 	}
 	return emptyLeafsDelete
 }
@@ -1120,6 +2149,75 @@ func (data *RouterISISInterface) getDeletePaths(ctx context.Context) []string {
 	}
 	if !data.BfdFastDetectIpv4.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/fast-detect/ipv4", data.getPath()))
+	}
+	if !data.MplsLdpSyncLevel.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/ldp/sync/level", data.getPath()))
+	}
+	if !data.MplsLdpSync.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/ldp/sync", data.getPath()))
+	}
+	if !data.DelayNormalizeOffset.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/delay/normalize/interval/offset", data.getPath()))
+	}
+	if !data.DelayNormalizeInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/delay/normalize/interval/interval-number", data.getPath()))
+	}
+	if !data.OverrideMetrics.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/override/metrics", data.getPath()))
+	}
+	if !data.AffinityFlexAlgosAnomalies.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/affinity/flex-algo/anomaly", data.getPath()))
+	}
+	if !data.AffinityFlexAlgos.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/affinity/flex-algo/flex-algo-argument", data.getPath()))
+	}
+	if !data.LinkDownFastDetect.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/link-down/fast-detect", data.getPath()))
+	}
+	for i := range data.RetransmitThrottleIntervalLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.RetransmitThrottleIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/retransmit-throttle-interval-levels/retransmit-throttle-interval-level%v", data.getPath(), keyString))
+	}
+	if !data.RetransmitThrottleInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/retransmit-throttle-interval", data.getPath()))
+	}
+	for i := range data.RetransmitIntervalLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.RetransmitIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/retransmit-interval-levels/retransmit-interval-level%v", data.getPath(), keyString))
+	}
+	if !data.RetransmitInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/retransmit-interval", data.getPath()))
+	}
+	if !data.PointToPoint.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/point-to-point", data.getPath()))
+	}
+	for i := range data.PriorityLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.PriorityLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/priority-levels/priority-level%v", data.getPath(), keyString))
+	}
+	if !data.Priority.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/priority", data.getPath()))
+	}
+	if !data.RemotePsnpDelay.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/remote-psnp-delay", data.getPath()))
 	}
 	for i := range data.HelloPasswordLevels {
 		keys := [...]string{"level-number"}
@@ -1162,24 +2260,44 @@ func (data *RouterISISInterface) getDeletePaths(ctx context.Context) []string {
 	if !data.HelloPasswordAcceptEncrypted.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-password/accepts/encrypted", data.getPath()))
 	}
-	if !data.State.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/state", data.getPath()))
-	}
-	if !data.PointToPoint.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/point-to-point", data.getPath()))
-	}
-	for i := range data.PriorityLevels {
+	for i := range data.LspIntervalLevels {
 		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.PriorityLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyValues := [...]string{strconv.FormatInt(data.LspIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/priority-levels/priority-level%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-interval-levels/lsp-interval-level%v", data.getPath(), keyString))
 	}
-	if !data.Priority.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/priority", data.getPath()))
+	if !data.LspInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-interval", data.getPath()))
+	}
+	for i := range data.HelloMultiplierLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.HelloMultiplierLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-multiplier-levels/hello-multiplier-level%v", data.getPath(), keyString))
+	}
+	if !data.HelloMultiplier.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-multiplier", data.getPath()))
+	}
+	for i := range data.HelloIntervalLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.HelloIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-interval-levels/hello-interval-level%v", data.getPath(), keyString))
+	}
+	if !data.HelloInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-interval", data.getPath()))
 	}
 	for i := range data.HelloPaddingLevels {
 		keys := [...]string{"level-number"}
@@ -1194,8 +2312,30 @@ func (data *RouterISISInterface) getDeletePaths(ctx context.Context) []string {
 	if !data.HelloPadding.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-padding", data.getPath()))
 	}
+	for i := range data.CsnpIntervalLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.CsnpIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/csnp-interval-levels/csnp-interval-level%v", data.getPath(), keyString))
+	}
+	if !data.CsnpInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/csnp-interval", data.getPath()))
+	}
 	if !data.CircuitType.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/circuit-type", data.getPath()))
+	}
+	if !data.State.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/state", data.getPath()))
+	}
+	if !data.MeshGroupBlocked.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mesh-group/blocked", data.getPath()))
+	}
+	if !data.MeshGroup.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mesh-group/mesh-group-number", data.getPath()))
 	}
 	return deletePaths
 }

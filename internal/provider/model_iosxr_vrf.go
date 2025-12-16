@@ -35,76 +35,218 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type VRF struct {
-	Device                                       types.String                                      `tfsdk:"device"`
-	Id                                           types.String                                      `tfsdk:"id"`
-	DeleteMode                                   types.String                                      `tfsdk:"delete_mode"`
-	VrfName                                      types.String                                      `tfsdk:"vrf_name"`
-	Description                                  types.String                                      `tfsdk:"description"`
-	VpnId                                        types.String                                      `tfsdk:"vpn_id"`
-	Ipv4Unicast                                  types.Bool                                        `tfsdk:"ipv4_unicast"`
-	Ipv4UnicastImportRoutePolicy                 types.String                                      `tfsdk:"ipv4_unicast_import_route_policy"`
-	Ipv4UnicastExportRoutePolicy                 types.String                                      `tfsdk:"ipv4_unicast_export_route_policy"`
-	Ipv4Multicast                                types.Bool                                        `tfsdk:"ipv4_multicast"`
-	Ipv4Flowspec                                 types.Bool                                        `tfsdk:"ipv4_flowspec"`
-	Ipv6Unicast                                  types.Bool                                        `tfsdk:"ipv6_unicast"`
-	Ipv6UnicastImportRoutePolicy                 types.String                                      `tfsdk:"ipv6_unicast_import_route_policy"`
-	Ipv6UnicastExportRoutePolicy                 types.String                                      `tfsdk:"ipv6_unicast_export_route_policy"`
-	Ipv6Multicast                                types.Bool                                        `tfsdk:"ipv6_multicast"`
-	Ipv6Flowspec                                 types.Bool                                        `tfsdk:"ipv6_flowspec"`
-	RdTwoByteAsNumber                            types.String                                      `tfsdk:"rd_two_byte_as_number"`
-	RdTwoByteAsIndex                             types.Int64                                       `tfsdk:"rd_two_byte_as_index"`
-	RdFourByteAsNumber                           types.String                                      `tfsdk:"rd_four_byte_as_number"`
-	RdFourByteAsIndex                            types.Int64                                       `tfsdk:"rd_four_byte_as_index"`
-	RdIpv4Address                                types.String                                      `tfsdk:"rd_ipv4_address"`
-	RdIpv4AddressIndex                           types.Int64                                       `tfsdk:"rd_ipv4_address_index"`
-	Ipv4UnicastImportRouteTargetTwoByteAsFormat  []VRFIpv4UnicastImportRouteTargetTwoByteAsFormat  `tfsdk:"ipv4_unicast_import_route_target_two_byte_as_format"`
-	Ipv4UnicastImportRouteTargetFourByteAsFormat []VRFIpv4UnicastImportRouteTargetFourByteAsFormat `tfsdk:"ipv4_unicast_import_route_target_four_byte_as_format"`
-	Ipv4UnicastImportRouteTargetIpAddressFormat  []VRFIpv4UnicastImportRouteTargetIpAddressFormat  `tfsdk:"ipv4_unicast_import_route_target_ip_address_format"`
-	Ipv4UnicastExportRouteTargetTwoByteAsFormat  []VRFIpv4UnicastExportRouteTargetTwoByteAsFormat  `tfsdk:"ipv4_unicast_export_route_target_two_byte_as_format"`
-	Ipv4UnicastExportRouteTargetFourByteAsFormat []VRFIpv4UnicastExportRouteTargetFourByteAsFormat `tfsdk:"ipv4_unicast_export_route_target_four_byte_as_format"`
-	Ipv4UnicastExportRouteTargetIpAddressFormat  []VRFIpv4UnicastExportRouteTargetIpAddressFormat  `tfsdk:"ipv4_unicast_export_route_target_ip_address_format"`
-	Ipv6UnicastImportRouteTargetTwoByteAsFormat  []VRFIpv6UnicastImportRouteTargetTwoByteAsFormat  `tfsdk:"ipv6_unicast_import_route_target_two_byte_as_format"`
-	Ipv6UnicastImportRouteTargetFourByteAsFormat []VRFIpv6UnicastImportRouteTargetFourByteAsFormat `tfsdk:"ipv6_unicast_import_route_target_four_byte_as_format"`
-	Ipv6UnicastImportRouteTargetIpAddressFormat  []VRFIpv6UnicastImportRouteTargetIpAddressFormat  `tfsdk:"ipv6_unicast_import_route_target_ip_address_format"`
-	Ipv6UnicastExportRouteTargetTwoByteAsFormat  []VRFIpv6UnicastExportRouteTargetTwoByteAsFormat  `tfsdk:"ipv6_unicast_export_route_target_two_byte_as_format"`
-	Ipv6UnicastExportRouteTargetFourByteAsFormat []VRFIpv6UnicastExportRouteTargetFourByteAsFormat `tfsdk:"ipv6_unicast_export_route_target_four_byte_as_format"`
-	Ipv6UnicastExportRouteTargetIpAddressFormat  []VRFIpv6UnicastExportRouteTargetIpAddressFormat  `tfsdk:"ipv6_unicast_export_route_target_ip_address_format"`
+	Device                                            types.String                                        `tfsdk:"device"`
+	Id                                                types.String                                        `tfsdk:"id"`
+	DeleteMode                                        types.String                                        `tfsdk:"delete_mode"`
+	VrfName                                           types.String                                        `tfsdk:"vrf_name"`
+	Description                                       types.String                                        `tfsdk:"description"`
+	FallbackVrf                                       types.String                                        `tfsdk:"fallback_vrf"`
+	EvpnRouteSync                                     types.Int64                                         `tfsdk:"evpn_route_sync"`
+	Ipv4Unicast                                       types.Bool                                          `tfsdk:"ipv4_unicast"`
+	Ipv4UnicastImportRoutePolicy                      types.String                                        `tfsdk:"ipv4_unicast_import_route_policy"`
+	Ipv4UnicastExportRoutePolicy                      types.String                                        `tfsdk:"ipv4_unicast_export_route_policy"`
+	Ipv4UnicastImportFromBridgeDomainAdvertiseAsVpn   types.Bool                                          `tfsdk:"ipv4_unicast_import_from_bridge_domain_advertise_as_vpn"`
+	Ipv4UnicastImportFromVrfAdvertiseAsVpn            types.Bool                                          `tfsdk:"ipv4_unicast_import_from_vrf_advertise_as_vpn"`
+	Ipv4UnicastImportFromVrfAllowBackup               types.Bool                                          `tfsdk:"ipv4_unicast_import_from_vrf_allow_backup"`
+	Ipv4UnicastImportFromVrfAllowBestExternal         types.Bool                                          `tfsdk:"ipv4_unicast_import_from_vrf_allow_best_external"`
+	Ipv4UnicastImportFromDefaultVrfAdvertiseAsVpn     types.Bool                                          `tfsdk:"ipv4_unicast_import_from_default_vrf_advertise_as_vpn"`
+	Ipv4UnicastImportFromDefaultVrfRoutePolicy        types.String                                        `tfsdk:"ipv4_unicast_import_from_default_vrf_route_policy"`
+	Ipv4UnicastExportToVrfAllowImportedVpn            types.Bool                                          `tfsdk:"ipv4_unicast_export_to_vrf_allow_imported_vpn"`
+	Ipv4UnicastExportToVrfAllowBackup                 types.Bool                                          `tfsdk:"ipv4_unicast_export_to_vrf_allow_backup"`
+	Ipv4UnicastExportToVrfAllowBestExternal           types.Bool                                          `tfsdk:"ipv4_unicast_export_to_vrf_allow_best_external"`
+	Ipv4UnicastExportToDefaultVrfRoutePolicy          types.String                                        `tfsdk:"ipv4_unicast_export_to_default_vrf_route_policy"`
+	Ipv4UnicastExportToDefaultVrfAllowImportedVpn     types.Bool                                          `tfsdk:"ipv4_unicast_export_to_default_vrf_allow_imported_vpn"`
+	Ipv4UnicastMaxPrefixLimit                         types.Int64                                         `tfsdk:"ipv4_unicast_max_prefix_limit"`
+	Ipv4UnicastMaxPrefixThreshold                     types.Int64                                         `tfsdk:"ipv4_unicast_max_prefix_threshold"`
+	Ipv4Multicast                                     types.Bool                                          `tfsdk:"ipv4_multicast"`
+	Ipv4MulticastImportRoutePolicy                    types.String                                        `tfsdk:"ipv4_multicast_import_route_policy"`
+	Ipv4MulticastExportRoutePolicy                    types.String                                        `tfsdk:"ipv4_multicast_export_route_policy"`
+	Ipv4MulticastImportFromBridgeDomainAdvertiseAsVpn types.Bool                                          `tfsdk:"ipv4_multicast_import_from_bridge_domain_advertise_as_vpn"`
+	Ipv4MulticastImportFromVrfAdvertiseAsVpn          types.Bool                                          `tfsdk:"ipv4_multicast_import_from_vrf_advertise_as_vpn"`
+	Ipv4MulticastImportFromVrfAllowBackup             types.Bool                                          `tfsdk:"ipv4_multicast_import_from_vrf_allow_backup"`
+	Ipv4MulticastImportFromVrfAllowBestExternal       types.Bool                                          `tfsdk:"ipv4_multicast_import_from_vrf_allow_best_external"`
+	Ipv4MulticastImportFromDefaultVrfAdvertiseAsVpn   types.Bool                                          `tfsdk:"ipv4_multicast_import_from_default_vrf_advertise_as_vpn"`
+	Ipv4MulticastImportFromDefaultVrfRoutePolicy      types.String                                        `tfsdk:"ipv4_multicast_import_from_default_vrf_route_policy"`
+	Ipv4MulticastExportToVrfAllowImportedVpn          types.Bool                                          `tfsdk:"ipv4_multicast_export_to_vrf_allow_imported_vpn"`
+	Ipv4MulticastExportToVrfAllowBackup               types.Bool                                          `tfsdk:"ipv4_multicast_export_to_vrf_allow_backup"`
+	Ipv4MulticastExportToVrfAllowBestExternal         types.Bool                                          `tfsdk:"ipv4_multicast_export_to_vrf_allow_best_external"`
+	Ipv4MulticastExportToDefaultVrfRoutePolicy        types.String                                        `tfsdk:"ipv4_multicast_export_to_default_vrf_route_policy"`
+	Ipv4MulticastExportToDefaultVrfAllowImportedVpn   types.Bool                                          `tfsdk:"ipv4_multicast_export_to_default_vrf_allow_imported_vpn"`
+	Ipv4MulticastMaxPrefixLimit                       types.Int64                                         `tfsdk:"ipv4_multicast_max_prefix_limit"`
+	Ipv4MulticastMaxPrefixThreshold                   types.Int64                                         `tfsdk:"ipv4_multicast_max_prefix_threshold"`
+	Ipv4Flowspec                                      types.Bool                                          `tfsdk:"ipv4_flowspec"`
+	Ipv6Unicast                                       types.Bool                                          `tfsdk:"ipv6_unicast"`
+	Ipv6UnicastImportRoutePolicy                      types.String                                        `tfsdk:"ipv6_unicast_import_route_policy"`
+	Ipv6UnicastExportRoutePolicy                      types.String                                        `tfsdk:"ipv6_unicast_export_route_policy"`
+	Ipv6UnicastImportFromBridgeDomainAdvertiseAsVpn   types.Bool                                          `tfsdk:"ipv6_unicast_import_from_bridge_domain_advertise_as_vpn"`
+	Ipv6UnicastImportFromVrfAdvertiseAsVpn            types.Bool                                          `tfsdk:"ipv6_unicast_import_from_vrf_advertise_as_vpn"`
+	Ipv6UnicastImportFromVrfAllowBackup               types.Bool                                          `tfsdk:"ipv6_unicast_import_from_vrf_allow_backup"`
+	Ipv6UnicastImportFromVrfAllowBestExternal         types.Bool                                          `tfsdk:"ipv6_unicast_import_from_vrf_allow_best_external"`
+	Ipv6UnicastImportFromDefaultVrfAdvertiseAsVpn     types.Bool                                          `tfsdk:"ipv6_unicast_import_from_default_vrf_advertise_as_vpn"`
+	Ipv6UnicastImportFromDefaultVrfRoutePolicy        types.String                                        `tfsdk:"ipv6_unicast_import_from_default_vrf_route_policy"`
+	Ipv6UnicastExportToVrfAllowImportedVpn            types.Bool                                          `tfsdk:"ipv6_unicast_export_to_vrf_allow_imported_vpn"`
+	Ipv6UnicastExportToVrfAllowBackup                 types.Bool                                          `tfsdk:"ipv6_unicast_export_to_vrf_allow_backup"`
+	Ipv6UnicastExportToVrfAllowBestExternal           types.Bool                                          `tfsdk:"ipv6_unicast_export_to_vrf_allow_best_external"`
+	Ipv6UnicastExportToDefaultVrfRoutePolicy          types.String                                        `tfsdk:"ipv6_unicast_export_to_default_vrf_route_policy"`
+	Ipv6UnicastExportToDefaultVrfAllowImportedVpn     types.Bool                                          `tfsdk:"ipv6_unicast_export_to_default_vrf_allow_imported_vpn"`
+	Ipv6UnicastMaxPrefixLimit                         types.Int64                                         `tfsdk:"ipv6_unicast_max_prefix_limit"`
+	Ipv6UnicastMaxPrefixThreshold                     types.Int64                                         `tfsdk:"ipv6_unicast_max_prefix_threshold"`
+	Ipv6Multicast                                     types.Bool                                          `tfsdk:"ipv6_multicast"`
+	Ipv6MulticastImportRoutePolicy                    types.String                                        `tfsdk:"ipv6_multicast_import_route_policy"`
+	Ipv6MulticastExportRoutePolicy                    types.String                                        `tfsdk:"ipv6_multicast_export_route_policy"`
+	Ipv6MulticastImportFromBridgeDomainAdvertiseAsVpn types.Bool                                          `tfsdk:"ipv6_multicast_import_from_bridge_domain_advertise_as_vpn"`
+	Ipv6MulticastImportFromVrfAdvertiseAsVpn          types.Bool                                          `tfsdk:"ipv6_multicast_import_from_vrf_advertise_as_vpn"`
+	Ipv6MulticastImportFromVrfAllowBackup             types.Bool                                          `tfsdk:"ipv6_multicast_import_from_vrf_allow_backup"`
+	Ipv6MulticastImportFromVrfAllowBestExternal       types.Bool                                          `tfsdk:"ipv6_multicast_import_from_vrf_allow_best_external"`
+	Ipv6MulticastImportFromDefaultVrfAdvertiseAsVpn   types.Bool                                          `tfsdk:"ipv6_multicast_import_from_default_vrf_advertise_as_vpn"`
+	Ipv6MulticastImportFromDefaultVrfRoutePolicy      types.String                                        `tfsdk:"ipv6_multicast_import_from_default_vrf_route_policy"`
+	Ipv6MulticastExportToVrfAllowImportedVpn          types.Bool                                          `tfsdk:"ipv6_multicast_export_to_vrf_allow_imported_vpn"`
+	Ipv6MulticastExportToVrfAllowBackup               types.Bool                                          `tfsdk:"ipv6_multicast_export_to_vrf_allow_backup"`
+	Ipv6MulticastExportToVrfAllowBestExternal         types.Bool                                          `tfsdk:"ipv6_multicast_export_to_vrf_allow_best_external"`
+	Ipv6MulticastExportToDefaultVrfRoutePolicy        types.String                                        `tfsdk:"ipv6_multicast_export_to_default_vrf_route_policy"`
+	Ipv6MulticastExportToDefaultVrfAllowImportedVpn   types.Bool                                          `tfsdk:"ipv6_multicast_export_to_default_vrf_allow_imported_vpn"`
+	Ipv6MulticastMaxPrefixLimit                       types.Int64                                         `tfsdk:"ipv6_multicast_max_prefix_limit"`
+	Ipv6MulticastMaxPrefixThreshold                   types.Int64                                         `tfsdk:"ipv6_multicast_max_prefix_threshold"`
+	Ipv6Flowspec                                      types.Bool                                          `tfsdk:"ipv6_flowspec"`
+	RdTwoByteAsNumber                                 types.String                                        `tfsdk:"rd_two_byte_as_number"`
+	RdTwoByteAsIndex                                  types.Int64                                         `tfsdk:"rd_two_byte_as_index"`
+	RdFourByteAsNumber                                types.String                                        `tfsdk:"rd_four_byte_as_number"`
+	RdFourByteAsIndex                                 types.Int64                                         `tfsdk:"rd_four_byte_as_index"`
+	RdIpv4Address                                     types.String                                        `tfsdk:"rd_ipv4_address"`
+	RdIpv4AddressIndex                                types.Int64                                         `tfsdk:"rd_ipv4_address_index"`
+	Ipv4UnicastImportRouteTargetTwoByteAsFormat       []VRFIpv4UnicastImportRouteTargetTwoByteAsFormat    `tfsdk:"ipv4_unicast_import_route_target_two_byte_as_format"`
+	Ipv4UnicastImportRouteTargetFourByteAsFormat      []VRFIpv4UnicastImportRouteTargetFourByteAsFormat   `tfsdk:"ipv4_unicast_import_route_target_four_byte_as_format"`
+	Ipv4UnicastImportRouteTargetIpAddressFormat       []VRFIpv4UnicastImportRouteTargetIpAddressFormat    `tfsdk:"ipv4_unicast_import_route_target_ip_address_format"`
+	Ipv4UnicastExportRouteTargetTwoByteAsFormat       []VRFIpv4UnicastExportRouteTargetTwoByteAsFormat    `tfsdk:"ipv4_unicast_export_route_target_two_byte_as_format"`
+	Ipv4UnicastExportRouteTargetFourByteAsFormat      []VRFIpv4UnicastExportRouteTargetFourByteAsFormat   `tfsdk:"ipv4_unicast_export_route_target_four_byte_as_format"`
+	Ipv4UnicastExportRouteTargetIpAddressFormat       []VRFIpv4UnicastExportRouteTargetIpAddressFormat    `tfsdk:"ipv4_unicast_export_route_target_ip_address_format"`
+	Ipv6UnicastImportRouteTargetTwoByteAsFormat       []VRFIpv6UnicastImportRouteTargetTwoByteAsFormat    `tfsdk:"ipv6_unicast_import_route_target_two_byte_as_format"`
+	Ipv6UnicastImportRouteTargetFourByteAsFormat      []VRFIpv6UnicastImportRouteTargetFourByteAsFormat   `tfsdk:"ipv6_unicast_import_route_target_four_byte_as_format"`
+	Ipv6UnicastImportRouteTargetIpAddressFormat       []VRFIpv6UnicastImportRouteTargetIpAddressFormat    `tfsdk:"ipv6_unicast_import_route_target_ip_address_format"`
+	Ipv6UnicastExportRouteTargetTwoByteAsFormat       []VRFIpv6UnicastExportRouteTargetTwoByteAsFormat    `tfsdk:"ipv6_unicast_export_route_target_two_byte_as_format"`
+	Ipv6UnicastExportRouteTargetFourByteAsFormat      []VRFIpv6UnicastExportRouteTargetFourByteAsFormat   `tfsdk:"ipv6_unicast_export_route_target_four_byte_as_format"`
+	Ipv6UnicastExportRouteTargetIpAddressFormat       []VRFIpv6UnicastExportRouteTargetIpAddressFormat    `tfsdk:"ipv6_unicast_export_route_target_ip_address_format"`
+	Ipv4MulticastImportRouteTargetTwoByteAsFormat     []VRFIpv4MulticastImportRouteTargetTwoByteAsFormat  `tfsdk:"ipv4_multicast_import_route_target_two_byte_as_format"`
+	Ipv4MulticastImportRouteTargetFourByteAsFormat    []VRFIpv4MulticastImportRouteTargetFourByteAsFormat `tfsdk:"ipv4_multicast_import_route_target_four_byte_as_format"`
+	Ipv4MulticastImportRouteTargetIpAddressFormat     []VRFIpv4MulticastImportRouteTargetIpAddressFormat  `tfsdk:"ipv4_multicast_import_route_target_ip_address_format"`
+	Ipv4MulticastExportRouteTargetTwoByteAsFormat     []VRFIpv4MulticastExportRouteTargetTwoByteAsFormat  `tfsdk:"ipv4_multicast_export_route_target_two_byte_as_format"`
+	Ipv4MulticastExportRouteTargetFourByteAsFormat    []VRFIpv4MulticastExportRouteTargetFourByteAsFormat `tfsdk:"ipv4_multicast_export_route_target_four_byte_as_format"`
+	Ipv4MulticastExportRouteTargetIpAddressFormat     []VRFIpv4MulticastExportRouteTargetIpAddressFormat  `tfsdk:"ipv4_multicast_export_route_target_ip_address_format"`
+	Ipv6MulticastImportRouteTargetTwoByteAsFormat     []VRFIpv6MulticastImportRouteTargetTwoByteAsFormat  `tfsdk:"ipv6_multicast_import_route_target_two_byte_as_format"`
+	Ipv6MulticastImportRouteTargetFourByteAsFormat    []VRFIpv6MulticastImportRouteTargetFourByteAsFormat `tfsdk:"ipv6_multicast_import_route_target_four_byte_as_format"`
+	Ipv6MulticastImportRouteTargetIpAddressFormat     []VRFIpv6MulticastImportRouteTargetIpAddressFormat  `tfsdk:"ipv6_multicast_import_route_target_ip_address_format"`
+	Ipv6MulticastExportRouteTargetTwoByteAsFormat     []VRFIpv6MulticastExportRouteTargetTwoByteAsFormat  `tfsdk:"ipv6_multicast_export_route_target_two_byte_as_format"`
+	Ipv6MulticastExportRouteTargetFourByteAsFormat    []VRFIpv6MulticastExportRouteTargetFourByteAsFormat `tfsdk:"ipv6_multicast_export_route_target_four_byte_as_format"`
+	Ipv6MulticastExportRouteTargetIpAddressFormat     []VRFIpv6MulticastExportRouteTargetIpAddressFormat  `tfsdk:"ipv6_multicast_export_route_target_ip_address_format"`
+	VpnId                                             types.String                                        `tfsdk:"vpn_id"`
+	RemoteRouteFilteringDisable                       types.Bool                                          `tfsdk:"remote_route_filtering_disable"`
 }
 
 type VRFData struct {
-	Device                                       types.String                                      `tfsdk:"device"`
-	Id                                           types.String                                      `tfsdk:"id"`
-	VrfName                                      types.String                                      `tfsdk:"vrf_name"`
-	Description                                  types.String                                      `tfsdk:"description"`
-	VpnId                                        types.String                                      `tfsdk:"vpn_id"`
-	Ipv4Unicast                                  types.Bool                                        `tfsdk:"ipv4_unicast"`
-	Ipv4UnicastImportRoutePolicy                 types.String                                      `tfsdk:"ipv4_unicast_import_route_policy"`
-	Ipv4UnicastExportRoutePolicy                 types.String                                      `tfsdk:"ipv4_unicast_export_route_policy"`
-	Ipv4Multicast                                types.Bool                                        `tfsdk:"ipv4_multicast"`
-	Ipv4Flowspec                                 types.Bool                                        `tfsdk:"ipv4_flowspec"`
-	Ipv6Unicast                                  types.Bool                                        `tfsdk:"ipv6_unicast"`
-	Ipv6UnicastImportRoutePolicy                 types.String                                      `tfsdk:"ipv6_unicast_import_route_policy"`
-	Ipv6UnicastExportRoutePolicy                 types.String                                      `tfsdk:"ipv6_unicast_export_route_policy"`
-	Ipv6Multicast                                types.Bool                                        `tfsdk:"ipv6_multicast"`
-	Ipv6Flowspec                                 types.Bool                                        `tfsdk:"ipv6_flowspec"`
-	RdTwoByteAsNumber                            types.String                                      `tfsdk:"rd_two_byte_as_number"`
-	RdTwoByteAsIndex                             types.Int64                                       `tfsdk:"rd_two_byte_as_index"`
-	RdFourByteAsNumber                           types.String                                      `tfsdk:"rd_four_byte_as_number"`
-	RdFourByteAsIndex                            types.Int64                                       `tfsdk:"rd_four_byte_as_index"`
-	RdIpv4Address                                types.String                                      `tfsdk:"rd_ipv4_address"`
-	RdIpv4AddressIndex                           types.Int64                                       `tfsdk:"rd_ipv4_address_index"`
-	Ipv4UnicastImportRouteTargetTwoByteAsFormat  []VRFIpv4UnicastImportRouteTargetTwoByteAsFormat  `tfsdk:"ipv4_unicast_import_route_target_two_byte_as_format"`
-	Ipv4UnicastImportRouteTargetFourByteAsFormat []VRFIpv4UnicastImportRouteTargetFourByteAsFormat `tfsdk:"ipv4_unicast_import_route_target_four_byte_as_format"`
-	Ipv4UnicastImportRouteTargetIpAddressFormat  []VRFIpv4UnicastImportRouteTargetIpAddressFormat  `tfsdk:"ipv4_unicast_import_route_target_ip_address_format"`
-	Ipv4UnicastExportRouteTargetTwoByteAsFormat  []VRFIpv4UnicastExportRouteTargetTwoByteAsFormat  `tfsdk:"ipv4_unicast_export_route_target_two_byte_as_format"`
-	Ipv4UnicastExportRouteTargetFourByteAsFormat []VRFIpv4UnicastExportRouteTargetFourByteAsFormat `tfsdk:"ipv4_unicast_export_route_target_four_byte_as_format"`
-	Ipv4UnicastExportRouteTargetIpAddressFormat  []VRFIpv4UnicastExportRouteTargetIpAddressFormat  `tfsdk:"ipv4_unicast_export_route_target_ip_address_format"`
-	Ipv6UnicastImportRouteTargetTwoByteAsFormat  []VRFIpv6UnicastImportRouteTargetTwoByteAsFormat  `tfsdk:"ipv6_unicast_import_route_target_two_byte_as_format"`
-	Ipv6UnicastImportRouteTargetFourByteAsFormat []VRFIpv6UnicastImportRouteTargetFourByteAsFormat `tfsdk:"ipv6_unicast_import_route_target_four_byte_as_format"`
-	Ipv6UnicastImportRouteTargetIpAddressFormat  []VRFIpv6UnicastImportRouteTargetIpAddressFormat  `tfsdk:"ipv6_unicast_import_route_target_ip_address_format"`
-	Ipv6UnicastExportRouteTargetTwoByteAsFormat  []VRFIpv6UnicastExportRouteTargetTwoByteAsFormat  `tfsdk:"ipv6_unicast_export_route_target_two_byte_as_format"`
-	Ipv6UnicastExportRouteTargetFourByteAsFormat []VRFIpv6UnicastExportRouteTargetFourByteAsFormat `tfsdk:"ipv6_unicast_export_route_target_four_byte_as_format"`
-	Ipv6UnicastExportRouteTargetIpAddressFormat  []VRFIpv6UnicastExportRouteTargetIpAddressFormat  `tfsdk:"ipv6_unicast_export_route_target_ip_address_format"`
+	Device                                            types.String                                        `tfsdk:"device"`
+	Id                                                types.String                                        `tfsdk:"id"`
+	VrfName                                           types.String                                        `tfsdk:"vrf_name"`
+	Description                                       types.String                                        `tfsdk:"description"`
+	FallbackVrf                                       types.String                                        `tfsdk:"fallback_vrf"`
+	EvpnRouteSync                                     types.Int64                                         `tfsdk:"evpn_route_sync"`
+	Ipv4Unicast                                       types.Bool                                          `tfsdk:"ipv4_unicast"`
+	Ipv4UnicastImportRoutePolicy                      types.String                                        `tfsdk:"ipv4_unicast_import_route_policy"`
+	Ipv4UnicastExportRoutePolicy                      types.String                                        `tfsdk:"ipv4_unicast_export_route_policy"`
+	Ipv4UnicastImportFromBridgeDomainAdvertiseAsVpn   types.Bool                                          `tfsdk:"ipv4_unicast_import_from_bridge_domain_advertise_as_vpn"`
+	Ipv4UnicastImportFromVrfAdvertiseAsVpn            types.Bool                                          `tfsdk:"ipv4_unicast_import_from_vrf_advertise_as_vpn"`
+	Ipv4UnicastImportFromVrfAllowBackup               types.Bool                                          `tfsdk:"ipv4_unicast_import_from_vrf_allow_backup"`
+	Ipv4UnicastImportFromVrfAllowBestExternal         types.Bool                                          `tfsdk:"ipv4_unicast_import_from_vrf_allow_best_external"`
+	Ipv4UnicastImportFromDefaultVrfAdvertiseAsVpn     types.Bool                                          `tfsdk:"ipv4_unicast_import_from_default_vrf_advertise_as_vpn"`
+	Ipv4UnicastImportFromDefaultVrfRoutePolicy        types.String                                        `tfsdk:"ipv4_unicast_import_from_default_vrf_route_policy"`
+	Ipv4UnicastExportToVrfAllowImportedVpn            types.Bool                                          `tfsdk:"ipv4_unicast_export_to_vrf_allow_imported_vpn"`
+	Ipv4UnicastExportToVrfAllowBackup                 types.Bool                                          `tfsdk:"ipv4_unicast_export_to_vrf_allow_backup"`
+	Ipv4UnicastExportToVrfAllowBestExternal           types.Bool                                          `tfsdk:"ipv4_unicast_export_to_vrf_allow_best_external"`
+	Ipv4UnicastExportToDefaultVrfRoutePolicy          types.String                                        `tfsdk:"ipv4_unicast_export_to_default_vrf_route_policy"`
+	Ipv4UnicastExportToDefaultVrfAllowImportedVpn     types.Bool                                          `tfsdk:"ipv4_unicast_export_to_default_vrf_allow_imported_vpn"`
+	Ipv4UnicastMaxPrefixLimit                         types.Int64                                         `tfsdk:"ipv4_unicast_max_prefix_limit"`
+	Ipv4UnicastMaxPrefixThreshold                     types.Int64                                         `tfsdk:"ipv4_unicast_max_prefix_threshold"`
+	Ipv4Multicast                                     types.Bool                                          `tfsdk:"ipv4_multicast"`
+	Ipv4MulticastImportRoutePolicy                    types.String                                        `tfsdk:"ipv4_multicast_import_route_policy"`
+	Ipv4MulticastExportRoutePolicy                    types.String                                        `tfsdk:"ipv4_multicast_export_route_policy"`
+	Ipv4MulticastImportFromBridgeDomainAdvertiseAsVpn types.Bool                                          `tfsdk:"ipv4_multicast_import_from_bridge_domain_advertise_as_vpn"`
+	Ipv4MulticastImportFromVrfAdvertiseAsVpn          types.Bool                                          `tfsdk:"ipv4_multicast_import_from_vrf_advertise_as_vpn"`
+	Ipv4MulticastImportFromVrfAllowBackup             types.Bool                                          `tfsdk:"ipv4_multicast_import_from_vrf_allow_backup"`
+	Ipv4MulticastImportFromVrfAllowBestExternal       types.Bool                                          `tfsdk:"ipv4_multicast_import_from_vrf_allow_best_external"`
+	Ipv4MulticastImportFromDefaultVrfAdvertiseAsVpn   types.Bool                                          `tfsdk:"ipv4_multicast_import_from_default_vrf_advertise_as_vpn"`
+	Ipv4MulticastImportFromDefaultVrfRoutePolicy      types.String                                        `tfsdk:"ipv4_multicast_import_from_default_vrf_route_policy"`
+	Ipv4MulticastExportToVrfAllowImportedVpn          types.Bool                                          `tfsdk:"ipv4_multicast_export_to_vrf_allow_imported_vpn"`
+	Ipv4MulticastExportToVrfAllowBackup               types.Bool                                          `tfsdk:"ipv4_multicast_export_to_vrf_allow_backup"`
+	Ipv4MulticastExportToVrfAllowBestExternal         types.Bool                                          `tfsdk:"ipv4_multicast_export_to_vrf_allow_best_external"`
+	Ipv4MulticastExportToDefaultVrfRoutePolicy        types.String                                        `tfsdk:"ipv4_multicast_export_to_default_vrf_route_policy"`
+	Ipv4MulticastExportToDefaultVrfAllowImportedVpn   types.Bool                                          `tfsdk:"ipv4_multicast_export_to_default_vrf_allow_imported_vpn"`
+	Ipv4MulticastMaxPrefixLimit                       types.Int64                                         `tfsdk:"ipv4_multicast_max_prefix_limit"`
+	Ipv4MulticastMaxPrefixThreshold                   types.Int64                                         `tfsdk:"ipv4_multicast_max_prefix_threshold"`
+	Ipv4Flowspec                                      types.Bool                                          `tfsdk:"ipv4_flowspec"`
+	Ipv6Unicast                                       types.Bool                                          `tfsdk:"ipv6_unicast"`
+	Ipv6UnicastImportRoutePolicy                      types.String                                        `tfsdk:"ipv6_unicast_import_route_policy"`
+	Ipv6UnicastExportRoutePolicy                      types.String                                        `tfsdk:"ipv6_unicast_export_route_policy"`
+	Ipv6UnicastImportFromBridgeDomainAdvertiseAsVpn   types.Bool                                          `tfsdk:"ipv6_unicast_import_from_bridge_domain_advertise_as_vpn"`
+	Ipv6UnicastImportFromVrfAdvertiseAsVpn            types.Bool                                          `tfsdk:"ipv6_unicast_import_from_vrf_advertise_as_vpn"`
+	Ipv6UnicastImportFromVrfAllowBackup               types.Bool                                          `tfsdk:"ipv6_unicast_import_from_vrf_allow_backup"`
+	Ipv6UnicastImportFromVrfAllowBestExternal         types.Bool                                          `tfsdk:"ipv6_unicast_import_from_vrf_allow_best_external"`
+	Ipv6UnicastImportFromDefaultVrfAdvertiseAsVpn     types.Bool                                          `tfsdk:"ipv6_unicast_import_from_default_vrf_advertise_as_vpn"`
+	Ipv6UnicastImportFromDefaultVrfRoutePolicy        types.String                                        `tfsdk:"ipv6_unicast_import_from_default_vrf_route_policy"`
+	Ipv6UnicastExportToVrfAllowImportedVpn            types.Bool                                          `tfsdk:"ipv6_unicast_export_to_vrf_allow_imported_vpn"`
+	Ipv6UnicastExportToVrfAllowBackup                 types.Bool                                          `tfsdk:"ipv6_unicast_export_to_vrf_allow_backup"`
+	Ipv6UnicastExportToVrfAllowBestExternal           types.Bool                                          `tfsdk:"ipv6_unicast_export_to_vrf_allow_best_external"`
+	Ipv6UnicastExportToDefaultVrfRoutePolicy          types.String                                        `tfsdk:"ipv6_unicast_export_to_default_vrf_route_policy"`
+	Ipv6UnicastExportToDefaultVrfAllowImportedVpn     types.Bool                                          `tfsdk:"ipv6_unicast_export_to_default_vrf_allow_imported_vpn"`
+	Ipv6UnicastMaxPrefixLimit                         types.Int64                                         `tfsdk:"ipv6_unicast_max_prefix_limit"`
+	Ipv6UnicastMaxPrefixThreshold                     types.Int64                                         `tfsdk:"ipv6_unicast_max_prefix_threshold"`
+	Ipv6Multicast                                     types.Bool                                          `tfsdk:"ipv6_multicast"`
+	Ipv6MulticastImportRoutePolicy                    types.String                                        `tfsdk:"ipv6_multicast_import_route_policy"`
+	Ipv6MulticastExportRoutePolicy                    types.String                                        `tfsdk:"ipv6_multicast_export_route_policy"`
+	Ipv6MulticastImportFromBridgeDomainAdvertiseAsVpn types.Bool                                          `tfsdk:"ipv6_multicast_import_from_bridge_domain_advertise_as_vpn"`
+	Ipv6MulticastImportFromVrfAdvertiseAsVpn          types.Bool                                          `tfsdk:"ipv6_multicast_import_from_vrf_advertise_as_vpn"`
+	Ipv6MulticastImportFromVrfAllowBackup             types.Bool                                          `tfsdk:"ipv6_multicast_import_from_vrf_allow_backup"`
+	Ipv6MulticastImportFromVrfAllowBestExternal       types.Bool                                          `tfsdk:"ipv6_multicast_import_from_vrf_allow_best_external"`
+	Ipv6MulticastImportFromDefaultVrfAdvertiseAsVpn   types.Bool                                          `tfsdk:"ipv6_multicast_import_from_default_vrf_advertise_as_vpn"`
+	Ipv6MulticastImportFromDefaultVrfRoutePolicy      types.String                                        `tfsdk:"ipv6_multicast_import_from_default_vrf_route_policy"`
+	Ipv6MulticastExportToVrfAllowImportedVpn          types.Bool                                          `tfsdk:"ipv6_multicast_export_to_vrf_allow_imported_vpn"`
+	Ipv6MulticastExportToVrfAllowBackup               types.Bool                                          `tfsdk:"ipv6_multicast_export_to_vrf_allow_backup"`
+	Ipv6MulticastExportToVrfAllowBestExternal         types.Bool                                          `tfsdk:"ipv6_multicast_export_to_vrf_allow_best_external"`
+	Ipv6MulticastExportToDefaultVrfRoutePolicy        types.String                                        `tfsdk:"ipv6_multicast_export_to_default_vrf_route_policy"`
+	Ipv6MulticastExportToDefaultVrfAllowImportedVpn   types.Bool                                          `tfsdk:"ipv6_multicast_export_to_default_vrf_allow_imported_vpn"`
+	Ipv6MulticastMaxPrefixLimit                       types.Int64                                         `tfsdk:"ipv6_multicast_max_prefix_limit"`
+	Ipv6MulticastMaxPrefixThreshold                   types.Int64                                         `tfsdk:"ipv6_multicast_max_prefix_threshold"`
+	Ipv6Flowspec                                      types.Bool                                          `tfsdk:"ipv6_flowspec"`
+	RdTwoByteAsNumber                                 types.String                                        `tfsdk:"rd_two_byte_as_number"`
+	RdTwoByteAsIndex                                  types.Int64                                         `tfsdk:"rd_two_byte_as_index"`
+	RdFourByteAsNumber                                types.String                                        `tfsdk:"rd_four_byte_as_number"`
+	RdFourByteAsIndex                                 types.Int64                                         `tfsdk:"rd_four_byte_as_index"`
+	RdIpv4Address                                     types.String                                        `tfsdk:"rd_ipv4_address"`
+	RdIpv4AddressIndex                                types.Int64                                         `tfsdk:"rd_ipv4_address_index"`
+	Ipv4UnicastImportRouteTargetTwoByteAsFormat       []VRFIpv4UnicastImportRouteTargetTwoByteAsFormat    `tfsdk:"ipv4_unicast_import_route_target_two_byte_as_format"`
+	Ipv4UnicastImportRouteTargetFourByteAsFormat      []VRFIpv4UnicastImportRouteTargetFourByteAsFormat   `tfsdk:"ipv4_unicast_import_route_target_four_byte_as_format"`
+	Ipv4UnicastImportRouteTargetIpAddressFormat       []VRFIpv4UnicastImportRouteTargetIpAddressFormat    `tfsdk:"ipv4_unicast_import_route_target_ip_address_format"`
+	Ipv4UnicastExportRouteTargetTwoByteAsFormat       []VRFIpv4UnicastExportRouteTargetTwoByteAsFormat    `tfsdk:"ipv4_unicast_export_route_target_two_byte_as_format"`
+	Ipv4UnicastExportRouteTargetFourByteAsFormat      []VRFIpv4UnicastExportRouteTargetFourByteAsFormat   `tfsdk:"ipv4_unicast_export_route_target_four_byte_as_format"`
+	Ipv4UnicastExportRouteTargetIpAddressFormat       []VRFIpv4UnicastExportRouteTargetIpAddressFormat    `tfsdk:"ipv4_unicast_export_route_target_ip_address_format"`
+	Ipv6UnicastImportRouteTargetTwoByteAsFormat       []VRFIpv6UnicastImportRouteTargetTwoByteAsFormat    `tfsdk:"ipv6_unicast_import_route_target_two_byte_as_format"`
+	Ipv6UnicastImportRouteTargetFourByteAsFormat      []VRFIpv6UnicastImportRouteTargetFourByteAsFormat   `tfsdk:"ipv6_unicast_import_route_target_four_byte_as_format"`
+	Ipv6UnicastImportRouteTargetIpAddressFormat       []VRFIpv6UnicastImportRouteTargetIpAddressFormat    `tfsdk:"ipv6_unicast_import_route_target_ip_address_format"`
+	Ipv6UnicastExportRouteTargetTwoByteAsFormat       []VRFIpv6UnicastExportRouteTargetTwoByteAsFormat    `tfsdk:"ipv6_unicast_export_route_target_two_byte_as_format"`
+	Ipv6UnicastExportRouteTargetFourByteAsFormat      []VRFIpv6UnicastExportRouteTargetFourByteAsFormat   `tfsdk:"ipv6_unicast_export_route_target_four_byte_as_format"`
+	Ipv6UnicastExportRouteTargetIpAddressFormat       []VRFIpv6UnicastExportRouteTargetIpAddressFormat    `tfsdk:"ipv6_unicast_export_route_target_ip_address_format"`
+	Ipv4MulticastImportRouteTargetTwoByteAsFormat     []VRFIpv4MulticastImportRouteTargetTwoByteAsFormat  `tfsdk:"ipv4_multicast_import_route_target_two_byte_as_format"`
+	Ipv4MulticastImportRouteTargetFourByteAsFormat    []VRFIpv4MulticastImportRouteTargetFourByteAsFormat `tfsdk:"ipv4_multicast_import_route_target_four_byte_as_format"`
+	Ipv4MulticastImportRouteTargetIpAddressFormat     []VRFIpv4MulticastImportRouteTargetIpAddressFormat  `tfsdk:"ipv4_multicast_import_route_target_ip_address_format"`
+	Ipv4MulticastExportRouteTargetTwoByteAsFormat     []VRFIpv4MulticastExportRouteTargetTwoByteAsFormat  `tfsdk:"ipv4_multicast_export_route_target_two_byte_as_format"`
+	Ipv4MulticastExportRouteTargetFourByteAsFormat    []VRFIpv4MulticastExportRouteTargetFourByteAsFormat `tfsdk:"ipv4_multicast_export_route_target_four_byte_as_format"`
+	Ipv4MulticastExportRouteTargetIpAddressFormat     []VRFIpv4MulticastExportRouteTargetIpAddressFormat  `tfsdk:"ipv4_multicast_export_route_target_ip_address_format"`
+	Ipv6MulticastImportRouteTargetTwoByteAsFormat     []VRFIpv6MulticastImportRouteTargetTwoByteAsFormat  `tfsdk:"ipv6_multicast_import_route_target_two_byte_as_format"`
+	Ipv6MulticastImportRouteTargetFourByteAsFormat    []VRFIpv6MulticastImportRouteTargetFourByteAsFormat `tfsdk:"ipv6_multicast_import_route_target_four_byte_as_format"`
+	Ipv6MulticastImportRouteTargetIpAddressFormat     []VRFIpv6MulticastImportRouteTargetIpAddressFormat  `tfsdk:"ipv6_multicast_import_route_target_ip_address_format"`
+	Ipv6MulticastExportRouteTargetTwoByteAsFormat     []VRFIpv6MulticastExportRouteTargetTwoByteAsFormat  `tfsdk:"ipv6_multicast_export_route_target_two_byte_as_format"`
+	Ipv6MulticastExportRouteTargetFourByteAsFormat    []VRFIpv6MulticastExportRouteTargetFourByteAsFormat `tfsdk:"ipv6_multicast_export_route_target_four_byte_as_format"`
+	Ipv6MulticastExportRouteTargetIpAddressFormat     []VRFIpv6MulticastExportRouteTargetIpAddressFormat  `tfsdk:"ipv6_multicast_export_route_target_ip_address_format"`
+	VpnId                                             types.String                                        `tfsdk:"vpn_id"`
+	RemoteRouteFilteringDisable                       types.Bool                                          `tfsdk:"remote_route_filtering_disable"`
 }
 type VRFIpv4UnicastImportRouteTargetTwoByteAsFormat struct {
 	TwoByteAsNumber types.Int64  `tfsdk:"two_byte_as_number"`
@@ -166,6 +308,66 @@ type VRFIpv6UnicastExportRouteTargetIpAddressFormat struct {
 	Ipv4AddressIndex types.Int64  `tfsdk:"ipv4_address_index"`
 	Stitching        types.String `tfsdk:"stitching"`
 }
+type VRFIpv4MulticastImportRouteTargetTwoByteAsFormat struct {
+	TwoByteAsNumber types.Int64  `tfsdk:"two_byte_as_number"`
+	Asn2Index       types.Int64  `tfsdk:"asn2_index"`
+	Stitching       types.String `tfsdk:"stitching"`
+}
+type VRFIpv4MulticastImportRouteTargetFourByteAsFormat struct {
+	FourByteAsNumber types.Int64  `tfsdk:"four_byte_as_number"`
+	Asn4Index        types.Int64  `tfsdk:"asn4_index"`
+	Stitching        types.String `tfsdk:"stitching"`
+}
+type VRFIpv4MulticastImportRouteTargetIpAddressFormat struct {
+	Ipv4Address      types.String `tfsdk:"ipv4_address"`
+	Ipv4AddressIndex types.Int64  `tfsdk:"ipv4_address_index"`
+	Stitching        types.String `tfsdk:"stitching"`
+}
+type VRFIpv4MulticastExportRouteTargetTwoByteAsFormat struct {
+	TwoByteAsNumber types.Int64  `tfsdk:"two_byte_as_number"`
+	Asn2Index       types.Int64  `tfsdk:"asn2_index"`
+	Stitching       types.String `tfsdk:"stitching"`
+}
+type VRFIpv4MulticastExportRouteTargetFourByteAsFormat struct {
+	FourByteAsNumber types.Int64  `tfsdk:"four_byte_as_number"`
+	Asn4Index        types.Int64  `tfsdk:"asn4_index"`
+	Stitching        types.String `tfsdk:"stitching"`
+}
+type VRFIpv4MulticastExportRouteTargetIpAddressFormat struct {
+	Ipv4Address      types.String `tfsdk:"ipv4_address"`
+	Ipv4AddressIndex types.Int64  `tfsdk:"ipv4_address_index"`
+	Stitching        types.String `tfsdk:"stitching"`
+}
+type VRFIpv6MulticastImportRouteTargetTwoByteAsFormat struct {
+	TwoByteAsNumber types.Int64  `tfsdk:"two_byte_as_number"`
+	Asn2Index       types.Int64  `tfsdk:"asn2_index"`
+	Stitching       types.String `tfsdk:"stitching"`
+}
+type VRFIpv6MulticastImportRouteTargetFourByteAsFormat struct {
+	FourByteAsNumber types.Int64  `tfsdk:"four_byte_as_number"`
+	Asn4Index        types.Int64  `tfsdk:"asn4_index"`
+	Stitching        types.String `tfsdk:"stitching"`
+}
+type VRFIpv6MulticastImportRouteTargetIpAddressFormat struct {
+	Ipv4Address      types.String `tfsdk:"ipv4_address"`
+	Ipv4AddressIndex types.Int64  `tfsdk:"ipv4_address_index"`
+	Stitching        types.String `tfsdk:"stitching"`
+}
+type VRFIpv6MulticastExportRouteTargetTwoByteAsFormat struct {
+	TwoByteAsNumber types.Int64  `tfsdk:"two_byte_as_number"`
+	Asn2Index       types.Int64  `tfsdk:"asn2_index"`
+	Stitching       types.String `tfsdk:"stitching"`
+}
+type VRFIpv6MulticastExportRouteTargetFourByteAsFormat struct {
+	FourByteAsNumber types.Int64  `tfsdk:"four_byte_as_number"`
+	Asn4Index        types.Int64  `tfsdk:"asn4_index"`
+	Stitching        types.String `tfsdk:"stitching"`
+}
+type VRFIpv6MulticastExportRouteTargetIpAddressFormat struct {
+	Ipv4Address      types.String `tfsdk:"ipv4_address"`
+	Ipv4AddressIndex types.Int64  `tfsdk:"ipv4_address_index"`
+	Stitching        types.String `tfsdk:"stitching"`
+}
 
 // End of section. //template:end types
 
@@ -191,8 +393,11 @@ func (data VRF) toBody(ctx context.Context) string {
 	if !data.Description.IsNull() && !data.Description.IsUnknown() {
 		body, _ = sjson.Set(body, "description", data.Description.ValueString())
 	}
-	if !data.VpnId.IsNull() && !data.VpnId.IsUnknown() {
-		body, _ = sjson.Set(body, "vpn.id", data.VpnId.ValueString())
+	if !data.FallbackVrf.IsNull() && !data.FallbackVrf.IsUnknown() {
+		body, _ = sjson.Set(body, "fallback-vrf", data.FallbackVrf.ValueString())
+	}
+	if !data.EvpnRouteSync.IsNull() && !data.EvpnRouteSync.IsUnknown() {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-l2vpn-cfg:evpn-route-sync", strconv.FormatInt(data.EvpnRouteSync.ValueInt64(), 10))
 	}
 	if !data.Ipv4Unicast.IsNull() && !data.Ipv4Unicast.IsUnknown() {
 		if data.Ipv4Unicast.ValueBool() {
@@ -205,10 +410,130 @@ func (data VRF) toBody(ctx context.Context) string {
 	if !data.Ipv4UnicastExportRoutePolicy.IsNull() && !data.Ipv4UnicastExportRoutePolicy.IsUnknown() {
 		body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-policy", data.Ipv4UnicastExportRoutePolicy.ValueString())
 	}
+	if !data.Ipv4UnicastImportFromBridgeDomainAdvertiseAsVpn.IsNull() && !data.Ipv4UnicastImportFromBridgeDomainAdvertiseAsVpn.IsUnknown() {
+		if data.Ipv4UnicastImportFromBridgeDomainAdvertiseAsVpn.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.bridge-domain.advertise-as-vpn", map[string]string{})
+		}
+	}
+	if !data.Ipv4UnicastImportFromVrfAdvertiseAsVpn.IsNull() && !data.Ipv4UnicastImportFromVrfAdvertiseAsVpn.IsUnknown() {
+		if data.Ipv4UnicastImportFromVrfAdvertiseAsVpn.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.advertise-as-vpn", map[string]string{})
+		}
+	}
+	if !data.Ipv4UnicastImportFromVrfAllowBackup.IsNull() && !data.Ipv4UnicastImportFromVrfAllowBackup.IsUnknown() {
+		if data.Ipv4UnicastImportFromVrfAllowBackup.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.backup", map[string]string{})
+		}
+	}
+	if !data.Ipv4UnicastImportFromVrfAllowBestExternal.IsNull() && !data.Ipv4UnicastImportFromVrfAllowBestExternal.IsUnknown() {
+		if data.Ipv4UnicastImportFromVrfAllowBestExternal.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.best-external", map[string]string{})
+		}
+	}
+	if !data.Ipv4UnicastImportFromDefaultVrfAdvertiseAsVpn.IsNull() && !data.Ipv4UnicastImportFromDefaultVrfAdvertiseAsVpn.IsUnknown() {
+		if data.Ipv4UnicastImportFromDefaultVrfAdvertiseAsVpn.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.advertise-as-vpn", map[string]string{})
+		}
+	}
+	if !data.Ipv4UnicastImportFromDefaultVrfRoutePolicy.IsNull() && !data.Ipv4UnicastImportFromDefaultVrfRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.route-policy", data.Ipv4UnicastImportFromDefaultVrfRoutePolicy.ValueString())
+	}
+	if !data.Ipv4UnicastExportToVrfAllowImportedVpn.IsNull() && !data.Ipv4UnicastExportToVrfAllowImportedVpn.IsUnknown() {
+		if data.Ipv4UnicastExportToVrfAllowImportedVpn.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow-imported-vpn", map[string]string{})
+		}
+	}
+	if !data.Ipv4UnicastExportToVrfAllowBackup.IsNull() && !data.Ipv4UnicastExportToVrfAllowBackup.IsUnknown() {
+		if data.Ipv4UnicastExportToVrfAllowBackup.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.backup", map[string]string{})
+		}
+	}
+	if !data.Ipv4UnicastExportToVrfAllowBestExternal.IsNull() && !data.Ipv4UnicastExportToVrfAllowBestExternal.IsUnknown() {
+		if data.Ipv4UnicastExportToVrfAllowBestExternal.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.best-external", map[string]string{})
+		}
+	}
+	if !data.Ipv4UnicastExportToDefaultVrfRoutePolicy.IsNull() && !data.Ipv4UnicastExportToDefaultVrfRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.route-policy", data.Ipv4UnicastExportToDefaultVrfRoutePolicy.ValueString())
+	}
+	if !data.Ipv4UnicastExportToDefaultVrfAllowImportedVpn.IsNull() && !data.Ipv4UnicastExportToDefaultVrfAllowImportedVpn.IsUnknown() {
+		if data.Ipv4UnicastExportToDefaultVrfAllowImportedVpn.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.allow-imported-vpn", map[string]string{})
+		}
+	}
+	if !data.Ipv4UnicastMaxPrefixLimit.IsNull() && !data.Ipv4UnicastMaxPrefixLimit.IsUnknown() {
+		body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.prefix-limit", strconv.FormatInt(data.Ipv4UnicastMaxPrefixLimit.ValueInt64(), 10))
+	}
+	if !data.Ipv4UnicastMaxPrefixThreshold.IsNull() && !data.Ipv4UnicastMaxPrefixThreshold.IsUnknown() {
+		body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.mid-thresh", strconv.FormatInt(data.Ipv4UnicastMaxPrefixThreshold.ValueInt64(), 10))
+	}
 	if !data.Ipv4Multicast.IsNull() && !data.Ipv4Multicast.IsUnknown() {
 		if data.Ipv4Multicast.ValueBool() {
 			body, _ = sjson.Set(body, "address-family.ipv4.multicast", map[string]string{})
 		}
+	}
+	if !data.Ipv4MulticastImportRoutePolicy.IsNull() && !data.Ipv4MulticastImportRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-policy", data.Ipv4MulticastImportRoutePolicy.ValueString())
+	}
+	if !data.Ipv4MulticastExportRoutePolicy.IsNull() && !data.Ipv4MulticastExportRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-policy", data.Ipv4MulticastExportRoutePolicy.ValueString())
+	}
+	if !data.Ipv4MulticastImportFromBridgeDomainAdvertiseAsVpn.IsNull() && !data.Ipv4MulticastImportFromBridgeDomainAdvertiseAsVpn.IsUnknown() {
+		if data.Ipv4MulticastImportFromBridgeDomainAdvertiseAsVpn.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.bridge-domain.advertise-as-vpn", map[string]string{})
+		}
+	}
+	if !data.Ipv4MulticastImportFromVrfAdvertiseAsVpn.IsNull() && !data.Ipv4MulticastImportFromVrfAdvertiseAsVpn.IsUnknown() {
+		if data.Ipv4MulticastImportFromVrfAdvertiseAsVpn.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.advertise-as-vpn", map[string]string{})
+		}
+	}
+	if !data.Ipv4MulticastImportFromVrfAllowBackup.IsNull() && !data.Ipv4MulticastImportFromVrfAllowBackup.IsUnknown() {
+		if data.Ipv4MulticastImportFromVrfAllowBackup.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.backup", map[string]string{})
+		}
+	}
+	if !data.Ipv4MulticastImportFromVrfAllowBestExternal.IsNull() && !data.Ipv4MulticastImportFromVrfAllowBestExternal.IsUnknown() {
+		if data.Ipv4MulticastImportFromVrfAllowBestExternal.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.best-external", map[string]string{})
+		}
+	}
+	if !data.Ipv4MulticastImportFromDefaultVrfAdvertiseAsVpn.IsNull() && !data.Ipv4MulticastImportFromDefaultVrfAdvertiseAsVpn.IsUnknown() {
+		if data.Ipv4MulticastImportFromDefaultVrfAdvertiseAsVpn.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.advertise-as-vpn", map[string]string{})
+		}
+	}
+	if !data.Ipv4MulticastImportFromDefaultVrfRoutePolicy.IsNull() && !data.Ipv4MulticastImportFromDefaultVrfRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.route-policy", data.Ipv4MulticastImportFromDefaultVrfRoutePolicy.ValueString())
+	}
+	if !data.Ipv4MulticastExportToVrfAllowImportedVpn.IsNull() && !data.Ipv4MulticastExportToVrfAllowImportedVpn.IsUnknown() {
+		if data.Ipv4MulticastExportToVrfAllowImportedVpn.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow-imported-vpn", map[string]string{})
+		}
+	}
+	if !data.Ipv4MulticastExportToVrfAllowBackup.IsNull() && !data.Ipv4MulticastExportToVrfAllowBackup.IsUnknown() {
+		if data.Ipv4MulticastExportToVrfAllowBackup.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.backup", map[string]string{})
+		}
+	}
+	if !data.Ipv4MulticastExportToVrfAllowBestExternal.IsNull() && !data.Ipv4MulticastExportToVrfAllowBestExternal.IsUnknown() {
+		if data.Ipv4MulticastExportToVrfAllowBestExternal.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.best-external", map[string]string{})
+		}
+	}
+	if !data.Ipv4MulticastExportToDefaultVrfRoutePolicy.IsNull() && !data.Ipv4MulticastExportToDefaultVrfRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.route-policy", data.Ipv4MulticastExportToDefaultVrfRoutePolicy.ValueString())
+	}
+	if !data.Ipv4MulticastExportToDefaultVrfAllowImportedVpn.IsNull() && !data.Ipv4MulticastExportToDefaultVrfAllowImportedVpn.IsUnknown() {
+		if data.Ipv4MulticastExportToDefaultVrfAllowImportedVpn.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.allow-imported-vpn", map[string]string{})
+		}
+	}
+	if !data.Ipv4MulticastMaxPrefixLimit.IsNull() && !data.Ipv4MulticastMaxPrefixLimit.IsUnknown() {
+		body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.prefix-limit", strconv.FormatInt(data.Ipv4MulticastMaxPrefixLimit.ValueInt64(), 10))
+	}
+	if !data.Ipv4MulticastMaxPrefixThreshold.IsNull() && !data.Ipv4MulticastMaxPrefixThreshold.IsUnknown() {
+		body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.mid-thresh", strconv.FormatInt(data.Ipv4MulticastMaxPrefixThreshold.ValueInt64(), 10))
 	}
 	if !data.Ipv4Flowspec.IsNull() && !data.Ipv4Flowspec.IsUnknown() {
 		if data.Ipv4Flowspec.ValueBool() {
@@ -226,10 +551,130 @@ func (data VRF) toBody(ctx context.Context) string {
 	if !data.Ipv6UnicastExportRoutePolicy.IsNull() && !data.Ipv6UnicastExportRoutePolicy.IsUnknown() {
 		body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-policy", data.Ipv6UnicastExportRoutePolicy.ValueString())
 	}
+	if !data.Ipv6UnicastImportFromBridgeDomainAdvertiseAsVpn.IsNull() && !data.Ipv6UnicastImportFromBridgeDomainAdvertiseAsVpn.IsUnknown() {
+		if data.Ipv6UnicastImportFromBridgeDomainAdvertiseAsVpn.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.bridge-domain.advertise-as-vpn", map[string]string{})
+		}
+	}
+	if !data.Ipv6UnicastImportFromVrfAdvertiseAsVpn.IsNull() && !data.Ipv6UnicastImportFromVrfAdvertiseAsVpn.IsUnknown() {
+		if data.Ipv6UnicastImportFromVrfAdvertiseAsVpn.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.advertise-as-vpn", map[string]string{})
+		}
+	}
+	if !data.Ipv6UnicastImportFromVrfAllowBackup.IsNull() && !data.Ipv6UnicastImportFromVrfAllowBackup.IsUnknown() {
+		if data.Ipv6UnicastImportFromVrfAllowBackup.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.backup", map[string]string{})
+		}
+	}
+	if !data.Ipv6UnicastImportFromVrfAllowBestExternal.IsNull() && !data.Ipv6UnicastImportFromVrfAllowBestExternal.IsUnknown() {
+		if data.Ipv6UnicastImportFromVrfAllowBestExternal.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.best-external", map[string]string{})
+		}
+	}
+	if !data.Ipv6UnicastImportFromDefaultVrfAdvertiseAsVpn.IsNull() && !data.Ipv6UnicastImportFromDefaultVrfAdvertiseAsVpn.IsUnknown() {
+		if data.Ipv6UnicastImportFromDefaultVrfAdvertiseAsVpn.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.advertise-as-vpn", map[string]string{})
+		}
+	}
+	if !data.Ipv6UnicastImportFromDefaultVrfRoutePolicy.IsNull() && !data.Ipv6UnicastImportFromDefaultVrfRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.route-policy", data.Ipv6UnicastImportFromDefaultVrfRoutePolicy.ValueString())
+	}
+	if !data.Ipv6UnicastExportToVrfAllowImportedVpn.IsNull() && !data.Ipv6UnicastExportToVrfAllowImportedVpn.IsUnknown() {
+		if data.Ipv6UnicastExportToVrfAllowImportedVpn.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow-imported-vpn", map[string]string{})
+		}
+	}
+	if !data.Ipv6UnicastExportToVrfAllowBackup.IsNull() && !data.Ipv6UnicastExportToVrfAllowBackup.IsUnknown() {
+		if data.Ipv6UnicastExportToVrfAllowBackup.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.backup", map[string]string{})
+		}
+	}
+	if !data.Ipv6UnicastExportToVrfAllowBestExternal.IsNull() && !data.Ipv6UnicastExportToVrfAllowBestExternal.IsUnknown() {
+		if data.Ipv6UnicastExportToVrfAllowBestExternal.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.best-external", map[string]string{})
+		}
+	}
+	if !data.Ipv6UnicastExportToDefaultVrfRoutePolicy.IsNull() && !data.Ipv6UnicastExportToDefaultVrfRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.route-policy", data.Ipv6UnicastExportToDefaultVrfRoutePolicy.ValueString())
+	}
+	if !data.Ipv6UnicastExportToDefaultVrfAllowImportedVpn.IsNull() && !data.Ipv6UnicastExportToDefaultVrfAllowImportedVpn.IsUnknown() {
+		if data.Ipv6UnicastExportToDefaultVrfAllowImportedVpn.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.allow-imported-vpn", map[string]string{})
+		}
+	}
+	if !data.Ipv6UnicastMaxPrefixLimit.IsNull() && !data.Ipv6UnicastMaxPrefixLimit.IsUnknown() {
+		body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.prefix-limit", strconv.FormatInt(data.Ipv6UnicastMaxPrefixLimit.ValueInt64(), 10))
+	}
+	if !data.Ipv6UnicastMaxPrefixThreshold.IsNull() && !data.Ipv6UnicastMaxPrefixThreshold.IsUnknown() {
+		body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.mid-thresh", strconv.FormatInt(data.Ipv6UnicastMaxPrefixThreshold.ValueInt64(), 10))
+	}
 	if !data.Ipv6Multicast.IsNull() && !data.Ipv6Multicast.IsUnknown() {
 		if data.Ipv6Multicast.ValueBool() {
 			body, _ = sjson.Set(body, "address-family.ipv6.multicast", map[string]string{})
 		}
+	}
+	if !data.Ipv6MulticastImportRoutePolicy.IsNull() && !data.Ipv6MulticastImportRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-policy", data.Ipv6MulticastImportRoutePolicy.ValueString())
+	}
+	if !data.Ipv6MulticastExportRoutePolicy.IsNull() && !data.Ipv6MulticastExportRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-policy", data.Ipv6MulticastExportRoutePolicy.ValueString())
+	}
+	if !data.Ipv6MulticastImportFromBridgeDomainAdvertiseAsVpn.IsNull() && !data.Ipv6MulticastImportFromBridgeDomainAdvertiseAsVpn.IsUnknown() {
+		if data.Ipv6MulticastImportFromBridgeDomainAdvertiseAsVpn.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.bridge-domain.advertise-as-vpn", map[string]string{})
+		}
+	}
+	if !data.Ipv6MulticastImportFromVrfAdvertiseAsVpn.IsNull() && !data.Ipv6MulticastImportFromVrfAdvertiseAsVpn.IsUnknown() {
+		if data.Ipv6MulticastImportFromVrfAdvertiseAsVpn.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.advertise-as-vpn", map[string]string{})
+		}
+	}
+	if !data.Ipv6MulticastImportFromVrfAllowBackup.IsNull() && !data.Ipv6MulticastImportFromVrfAllowBackup.IsUnknown() {
+		if data.Ipv6MulticastImportFromVrfAllowBackup.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.backup", map[string]string{})
+		}
+	}
+	if !data.Ipv6MulticastImportFromVrfAllowBestExternal.IsNull() && !data.Ipv6MulticastImportFromVrfAllowBestExternal.IsUnknown() {
+		if data.Ipv6MulticastImportFromVrfAllowBestExternal.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.best-external", map[string]string{})
+		}
+	}
+	if !data.Ipv6MulticastImportFromDefaultVrfAdvertiseAsVpn.IsNull() && !data.Ipv6MulticastImportFromDefaultVrfAdvertiseAsVpn.IsUnknown() {
+		if data.Ipv6MulticastImportFromDefaultVrfAdvertiseAsVpn.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.advertise-as-vpn", map[string]string{})
+		}
+	}
+	if !data.Ipv6MulticastImportFromDefaultVrfRoutePolicy.IsNull() && !data.Ipv6MulticastImportFromDefaultVrfRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.route-policy", data.Ipv6MulticastImportFromDefaultVrfRoutePolicy.ValueString())
+	}
+	if !data.Ipv6MulticastExportToVrfAllowImportedVpn.IsNull() && !data.Ipv6MulticastExportToVrfAllowImportedVpn.IsUnknown() {
+		if data.Ipv6MulticastExportToVrfAllowImportedVpn.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow-imported-vpn", map[string]string{})
+		}
+	}
+	if !data.Ipv6MulticastExportToVrfAllowBackup.IsNull() && !data.Ipv6MulticastExportToVrfAllowBackup.IsUnknown() {
+		if data.Ipv6MulticastExportToVrfAllowBackup.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.backup", map[string]string{})
+		}
+	}
+	if !data.Ipv6MulticastExportToVrfAllowBestExternal.IsNull() && !data.Ipv6MulticastExportToVrfAllowBestExternal.IsUnknown() {
+		if data.Ipv6MulticastExportToVrfAllowBestExternal.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.best-external", map[string]string{})
+		}
+	}
+	if !data.Ipv6MulticastExportToDefaultVrfRoutePolicy.IsNull() && !data.Ipv6MulticastExportToDefaultVrfRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.route-policy", data.Ipv6MulticastExportToDefaultVrfRoutePolicy.ValueString())
+	}
+	if !data.Ipv6MulticastExportToDefaultVrfAllowImportedVpn.IsNull() && !data.Ipv6MulticastExportToDefaultVrfAllowImportedVpn.IsUnknown() {
+		if data.Ipv6MulticastExportToDefaultVrfAllowImportedVpn.ValueBool() {
+			body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.allow-imported-vpn", map[string]string{})
+		}
+	}
+	if !data.Ipv6MulticastMaxPrefixLimit.IsNull() && !data.Ipv6MulticastMaxPrefixLimit.IsUnknown() {
+		body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.prefix-limit", strconv.FormatInt(data.Ipv6MulticastMaxPrefixLimit.ValueInt64(), 10))
+	}
+	if !data.Ipv6MulticastMaxPrefixThreshold.IsNull() && !data.Ipv6MulticastMaxPrefixThreshold.IsUnknown() {
+		body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.mid-thresh", strconv.FormatInt(data.Ipv6MulticastMaxPrefixThreshold.ValueInt64(), 10))
 	}
 	if !data.Ipv6Flowspec.IsNull() && !data.Ipv6Flowspec.IsUnknown() {
 		if data.Ipv6Flowspec.ValueBool() {
@@ -253,6 +698,14 @@ func (data VRF) toBody(ctx context.Context) string {
 	}
 	if !data.RdIpv4AddressIndex.IsNull() && !data.RdIpv4AddressIndex.IsUnknown() {
 		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-router-bgp-cfg:rd.ipv4-address.ipv4address-index", strconv.FormatInt(data.RdIpv4AddressIndex.ValueInt64(), 10))
+	}
+	if !data.VpnId.IsNull() && !data.VpnId.IsUnknown() {
+		body, _ = sjson.Set(body, "vpn.id", data.VpnId.ValueString())
+	}
+	if !data.RemoteRouteFilteringDisable.IsNull() && !data.RemoteRouteFilteringDisable.IsUnknown() {
+		if data.RemoteRouteFilteringDisable.ValueBool() {
+			body, _ = sjson.Set(body, "remote-route-filtering.disable", map[string]string{})
+		}
 	}
 	if len(data.Ipv4UnicastImportRouteTargetTwoByteAsFormat) > 0 {
 		body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-route-targets.two-byte-as-route-target", []interface{}{})
@@ -422,6 +875,174 @@ func (data VRF) toBody(ctx context.Context) string {
 			}
 		}
 	}
+	if len(data.Ipv4MulticastImportRouteTargetTwoByteAsFormat) > 0 {
+		body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-route-targets.two-byte-as-route-target", []interface{}{})
+		for index, item := range data.Ipv4MulticastImportRouteTargetTwoByteAsFormat {
+			if !item.TwoByteAsNumber.IsNull() && !item.TwoByteAsNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-route-targets.two-byte-as-route-target"+"."+strconv.Itoa(index)+"."+"two-byte-as-number", strconv.FormatInt(item.TwoByteAsNumber.ValueInt64(), 10))
+			}
+			if !item.Asn2Index.IsNull() && !item.Asn2Index.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-route-targets.two-byte-as-route-target"+"."+strconv.Itoa(index)+"."+"asn2-index", strconv.FormatInt(item.Asn2Index.ValueInt64(), 10))
+			}
+			if !item.Stitching.IsNull() && !item.Stitching.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-route-targets.two-byte-as-route-target"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.ValueString())
+			}
+		}
+	}
+	if len(data.Ipv4MulticastImportRouteTargetFourByteAsFormat) > 0 {
+		body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-route-targets.four-byte-as-route-target", []interface{}{})
+		for index, item := range data.Ipv4MulticastImportRouteTargetFourByteAsFormat {
+			if !item.FourByteAsNumber.IsNull() && !item.FourByteAsNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-route-targets.four-byte-as-route-target"+"."+strconv.Itoa(index)+"."+"four-byte-as-number", strconv.FormatInt(item.FourByteAsNumber.ValueInt64(), 10))
+			}
+			if !item.Asn4Index.IsNull() && !item.Asn4Index.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-route-targets.four-byte-as-route-target"+"."+strconv.Itoa(index)+"."+"asn4-index", strconv.FormatInt(item.Asn4Index.ValueInt64(), 10))
+			}
+			if !item.Stitching.IsNull() && !item.Stitching.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-route-targets.four-byte-as-route-target"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.ValueString())
+			}
+		}
+	}
+	if len(data.Ipv4MulticastImportRouteTargetIpAddressFormat) > 0 {
+		body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ipv4-address-route-targets.ipv4-address-route-target", []interface{}{})
+		for index, item := range data.Ipv4MulticastImportRouteTargetIpAddressFormat {
+			if !item.Ipv4Address.IsNull() && !item.Ipv4Address.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ipv4-address-route-targets.ipv4-address-route-target"+"."+strconv.Itoa(index)+"."+"ipv4-address", item.Ipv4Address.ValueString())
+			}
+			if !item.Ipv4AddressIndex.IsNull() && !item.Ipv4AddressIndex.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ipv4-address-route-targets.ipv4-address-route-target"+"."+strconv.Itoa(index)+"."+"ipv4-address-index", strconv.FormatInt(item.Ipv4AddressIndex.ValueInt64(), 10))
+			}
+			if !item.Stitching.IsNull() && !item.Stitching.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ipv4-address-route-targets.ipv4-address-route-target"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.ValueString())
+			}
+		}
+	}
+	if len(data.Ipv4MulticastExportRouteTargetTwoByteAsFormat) > 0 {
+		body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-route-targets.two-byte-as-route-target", []interface{}{})
+		for index, item := range data.Ipv4MulticastExportRouteTargetTwoByteAsFormat {
+			if !item.TwoByteAsNumber.IsNull() && !item.TwoByteAsNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-route-targets.two-byte-as-route-target"+"."+strconv.Itoa(index)+"."+"two-byte-as-number", strconv.FormatInt(item.TwoByteAsNumber.ValueInt64(), 10))
+			}
+			if !item.Asn2Index.IsNull() && !item.Asn2Index.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-route-targets.two-byte-as-route-target"+"."+strconv.Itoa(index)+"."+"asn2-index", strconv.FormatInt(item.Asn2Index.ValueInt64(), 10))
+			}
+			if !item.Stitching.IsNull() && !item.Stitching.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-route-targets.two-byte-as-route-target"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.ValueString())
+			}
+		}
+	}
+	if len(data.Ipv4MulticastExportRouteTargetFourByteAsFormat) > 0 {
+		body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-route-targets.four-byte-as-route-target", []interface{}{})
+		for index, item := range data.Ipv4MulticastExportRouteTargetFourByteAsFormat {
+			if !item.FourByteAsNumber.IsNull() && !item.FourByteAsNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-route-targets.four-byte-as-route-target"+"."+strconv.Itoa(index)+"."+"four-byte-as-number", strconv.FormatInt(item.FourByteAsNumber.ValueInt64(), 10))
+			}
+			if !item.Asn4Index.IsNull() && !item.Asn4Index.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-route-targets.four-byte-as-route-target"+"."+strconv.Itoa(index)+"."+"asn4-index", strconv.FormatInt(item.Asn4Index.ValueInt64(), 10))
+			}
+			if !item.Stitching.IsNull() && !item.Stitching.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-route-targets.four-byte-as-route-target"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.ValueString())
+			}
+		}
+	}
+	if len(data.Ipv4MulticastExportRouteTargetIpAddressFormat) > 0 {
+		body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ipv4-address-route-targets.ipv4-address-route-target", []interface{}{})
+		for index, item := range data.Ipv4MulticastExportRouteTargetIpAddressFormat {
+			if !item.Ipv4Address.IsNull() && !item.Ipv4Address.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ipv4-address-route-targets.ipv4-address-route-target"+"."+strconv.Itoa(index)+"."+"ipv4-address", item.Ipv4Address.ValueString())
+			}
+			if !item.Ipv4AddressIndex.IsNull() && !item.Ipv4AddressIndex.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ipv4-address-route-targets.ipv4-address-route-target"+"."+strconv.Itoa(index)+"."+"ipv4-address-index", strconv.FormatInt(item.Ipv4AddressIndex.ValueInt64(), 10))
+			}
+			if !item.Stitching.IsNull() && !item.Stitching.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ipv4-address-route-targets.ipv4-address-route-target"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.ValueString())
+			}
+		}
+	}
+	if len(data.Ipv6MulticastImportRouteTargetTwoByteAsFormat) > 0 {
+		body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-route-targets.two-byte-as-route-target", []interface{}{})
+		for index, item := range data.Ipv6MulticastImportRouteTargetTwoByteAsFormat {
+			if !item.TwoByteAsNumber.IsNull() && !item.TwoByteAsNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-route-targets.two-byte-as-route-target"+"."+strconv.Itoa(index)+"."+"two-byte-as-number", strconv.FormatInt(item.TwoByteAsNumber.ValueInt64(), 10))
+			}
+			if !item.Asn2Index.IsNull() && !item.Asn2Index.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-route-targets.two-byte-as-route-target"+"."+strconv.Itoa(index)+"."+"asn2-index", strconv.FormatInt(item.Asn2Index.ValueInt64(), 10))
+			}
+			if !item.Stitching.IsNull() && !item.Stitching.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-route-targets.two-byte-as-route-target"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.ValueString())
+			}
+		}
+	}
+	if len(data.Ipv6MulticastImportRouteTargetFourByteAsFormat) > 0 {
+		body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-route-targets.four-byte-as-route-target", []interface{}{})
+		for index, item := range data.Ipv6MulticastImportRouteTargetFourByteAsFormat {
+			if !item.FourByteAsNumber.IsNull() && !item.FourByteAsNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-route-targets.four-byte-as-route-target"+"."+strconv.Itoa(index)+"."+"four-byte-as-number", strconv.FormatInt(item.FourByteAsNumber.ValueInt64(), 10))
+			}
+			if !item.Asn4Index.IsNull() && !item.Asn4Index.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-route-targets.four-byte-as-route-target"+"."+strconv.Itoa(index)+"."+"asn4-index", strconv.FormatInt(item.Asn4Index.ValueInt64(), 10))
+			}
+			if !item.Stitching.IsNull() && !item.Stitching.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-route-targets.four-byte-as-route-target"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.ValueString())
+			}
+		}
+	}
+	if len(data.Ipv6MulticastImportRouteTargetIpAddressFormat) > 0 {
+		body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ipv4-address-route-targets.ipv4-address-route-target", []interface{}{})
+		for index, item := range data.Ipv6MulticastImportRouteTargetIpAddressFormat {
+			if !item.Ipv4Address.IsNull() && !item.Ipv4Address.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ipv4-address-route-targets.ipv4-address-route-target"+"."+strconv.Itoa(index)+"."+"ipv4-address", item.Ipv4Address.ValueString())
+			}
+			if !item.Ipv4AddressIndex.IsNull() && !item.Ipv4AddressIndex.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ipv4-address-route-targets.ipv4-address-route-target"+"."+strconv.Itoa(index)+"."+"ipv4-address-index", strconv.FormatInt(item.Ipv4AddressIndex.ValueInt64(), 10))
+			}
+			if !item.Stitching.IsNull() && !item.Stitching.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ipv4-address-route-targets.ipv4-address-route-target"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.ValueString())
+			}
+		}
+	}
+	if len(data.Ipv6MulticastExportRouteTargetTwoByteAsFormat) > 0 {
+		body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-route-targets.two-byte-as-route-target", []interface{}{})
+		for index, item := range data.Ipv6MulticastExportRouteTargetTwoByteAsFormat {
+			if !item.TwoByteAsNumber.IsNull() && !item.TwoByteAsNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-route-targets.two-byte-as-route-target"+"."+strconv.Itoa(index)+"."+"two-byte-as-number", strconv.FormatInt(item.TwoByteAsNumber.ValueInt64(), 10))
+			}
+			if !item.Asn2Index.IsNull() && !item.Asn2Index.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-route-targets.two-byte-as-route-target"+"."+strconv.Itoa(index)+"."+"asn2-index", strconv.FormatInt(item.Asn2Index.ValueInt64(), 10))
+			}
+			if !item.Stitching.IsNull() && !item.Stitching.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-route-targets.two-byte-as-route-target"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.ValueString())
+			}
+		}
+	}
+	if len(data.Ipv6MulticastExportRouteTargetFourByteAsFormat) > 0 {
+		body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-route-targets.four-byte-as-route-target", []interface{}{})
+		for index, item := range data.Ipv6MulticastExportRouteTargetFourByteAsFormat {
+			if !item.FourByteAsNumber.IsNull() && !item.FourByteAsNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-route-targets.four-byte-as-route-target"+"."+strconv.Itoa(index)+"."+"four-byte-as-number", strconv.FormatInt(item.FourByteAsNumber.ValueInt64(), 10))
+			}
+			if !item.Asn4Index.IsNull() && !item.Asn4Index.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-route-targets.four-byte-as-route-target"+"."+strconv.Itoa(index)+"."+"asn4-index", strconv.FormatInt(item.Asn4Index.ValueInt64(), 10))
+			}
+			if !item.Stitching.IsNull() && !item.Stitching.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-route-targets.four-byte-as-route-target"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.ValueString())
+			}
+		}
+	}
+	if len(data.Ipv6MulticastExportRouteTargetIpAddressFormat) > 0 {
+		body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ipv4-address-route-targets.ipv4-address-route-target", []interface{}{})
+		for index, item := range data.Ipv6MulticastExportRouteTargetIpAddressFormat {
+			if !item.Ipv4Address.IsNull() && !item.Ipv4Address.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ipv4-address-route-targets.ipv4-address-route-target"+"."+strconv.Itoa(index)+"."+"ipv4-address", item.Ipv4Address.ValueString())
+			}
+			if !item.Ipv4AddressIndex.IsNull() && !item.Ipv4AddressIndex.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ipv4-address-route-targets.ipv4-address-route-target"+"."+strconv.Itoa(index)+"."+"ipv4-address-index", strconv.FormatInt(item.Ipv4AddressIndex.ValueInt64(), 10))
+			}
+			if !item.Stitching.IsNull() && !item.Stitching.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ipv4-address-route-targets.ipv4-address-route-target"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.ValueString())
+			}
+		}
+	}
 	return body
 }
 
@@ -435,10 +1056,15 @@ func (data *VRF) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Description = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "vpn.id"); value.Exists() && !data.VpnId.IsNull() {
-		data.VpnId = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "fallback-vrf"); value.Exists() && !data.FallbackVrf.IsNull() {
+		data.FallbackVrf = types.StringValue(value.String())
 	} else {
-		data.VpnId = types.StringNull()
+		data.FallbackVrf = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-l2vpn-cfg:evpn-route-sync"); value.Exists() && !data.EvpnRouteSync.IsNull() {
+		data.EvpnRouteSync = types.Int64Value(value.Int())
+	} else {
+		data.EvpnRouteSync = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv4.unicast"); !data.Ipv4Unicast.IsNull() {
 		if value.Exists() {
@@ -459,6 +1085,107 @@ func (data *VRF) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Ipv4UnicastExportRoutePolicy = types.StringNull()
 	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.bridge-domain.advertise-as-vpn"); !data.Ipv4UnicastImportFromBridgeDomainAdvertiseAsVpn.IsNull() {
+		if value.Exists() {
+			data.Ipv4UnicastImportFromBridgeDomainAdvertiseAsVpn = types.BoolValue(true)
+		} else {
+			data.Ipv4UnicastImportFromBridgeDomainAdvertiseAsVpn = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv4UnicastImportFromBridgeDomainAdvertiseAsVpn = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.advertise-as-vpn"); !data.Ipv4UnicastImportFromVrfAdvertiseAsVpn.IsNull() {
+		if value.Exists() {
+			data.Ipv4UnicastImportFromVrfAdvertiseAsVpn = types.BoolValue(true)
+		} else {
+			data.Ipv4UnicastImportFromVrfAdvertiseAsVpn = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv4UnicastImportFromVrfAdvertiseAsVpn = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.backup"); !data.Ipv4UnicastImportFromVrfAllowBackup.IsNull() {
+		if value.Exists() {
+			data.Ipv4UnicastImportFromVrfAllowBackup = types.BoolValue(true)
+		} else {
+			data.Ipv4UnicastImportFromVrfAllowBackup = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv4UnicastImportFromVrfAllowBackup = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.best-external"); !data.Ipv4UnicastImportFromVrfAllowBestExternal.IsNull() {
+		if value.Exists() {
+			data.Ipv4UnicastImportFromVrfAllowBestExternal = types.BoolValue(true)
+		} else {
+			data.Ipv4UnicastImportFromVrfAllowBestExternal = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv4UnicastImportFromVrfAllowBestExternal = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.advertise-as-vpn"); !data.Ipv4UnicastImportFromDefaultVrfAdvertiseAsVpn.IsNull() {
+		if value.Exists() {
+			data.Ipv4UnicastImportFromDefaultVrfAdvertiseAsVpn = types.BoolValue(true)
+		} else {
+			data.Ipv4UnicastImportFromDefaultVrfAdvertiseAsVpn = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv4UnicastImportFromDefaultVrfAdvertiseAsVpn = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.route-policy"); value.Exists() && !data.Ipv4UnicastImportFromDefaultVrfRoutePolicy.IsNull() {
+		data.Ipv4UnicastImportFromDefaultVrfRoutePolicy = types.StringValue(value.String())
+	} else {
+		data.Ipv4UnicastImportFromDefaultVrfRoutePolicy = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow-imported-vpn"); !data.Ipv4UnicastExportToVrfAllowImportedVpn.IsNull() {
+		if value.Exists() {
+			data.Ipv4UnicastExportToVrfAllowImportedVpn = types.BoolValue(true)
+		} else {
+			data.Ipv4UnicastExportToVrfAllowImportedVpn = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv4UnicastExportToVrfAllowImportedVpn = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.backup"); !data.Ipv4UnicastExportToVrfAllowBackup.IsNull() {
+		if value.Exists() {
+			data.Ipv4UnicastExportToVrfAllowBackup = types.BoolValue(true)
+		} else {
+			data.Ipv4UnicastExportToVrfAllowBackup = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv4UnicastExportToVrfAllowBackup = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.best-external"); !data.Ipv4UnicastExportToVrfAllowBestExternal.IsNull() {
+		if value.Exists() {
+			data.Ipv4UnicastExportToVrfAllowBestExternal = types.BoolValue(true)
+		} else {
+			data.Ipv4UnicastExportToVrfAllowBestExternal = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv4UnicastExportToVrfAllowBestExternal = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.route-policy"); value.Exists() && !data.Ipv4UnicastExportToDefaultVrfRoutePolicy.IsNull() {
+		data.Ipv4UnicastExportToDefaultVrfRoutePolicy = types.StringValue(value.String())
+	} else {
+		data.Ipv4UnicastExportToDefaultVrfRoutePolicy = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.allow-imported-vpn"); !data.Ipv4UnicastExportToDefaultVrfAllowImportedVpn.IsNull() {
+		if value.Exists() {
+			data.Ipv4UnicastExportToDefaultVrfAllowImportedVpn = types.BoolValue(true)
+		} else {
+			data.Ipv4UnicastExportToDefaultVrfAllowImportedVpn = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv4UnicastExportToDefaultVrfAllowImportedVpn = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.prefix-limit"); value.Exists() && !data.Ipv4UnicastMaxPrefixLimit.IsNull() {
+		data.Ipv4UnicastMaxPrefixLimit = types.Int64Value(value.Int())
+	} else {
+		data.Ipv4UnicastMaxPrefixLimit = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.mid-thresh"); value.Exists() && !data.Ipv4UnicastMaxPrefixThreshold.IsNull() {
+		data.Ipv4UnicastMaxPrefixThreshold = types.Int64Value(value.Int())
+	} else {
+		data.Ipv4UnicastMaxPrefixThreshold = types.Int64Null()
+	}
 	if value := gjson.GetBytes(res, "address-family.ipv4.multicast"); !data.Ipv4Multicast.IsNull() {
 		if value.Exists() {
 			data.Ipv4Multicast = types.BoolValue(true)
@@ -467,6 +1194,117 @@ func (data *VRF) updateFromBody(ctx context.Context, res []byte) {
 		}
 	} else {
 		data.Ipv4Multicast = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-policy"); value.Exists() && !data.Ipv4MulticastImportRoutePolicy.IsNull() {
+		data.Ipv4MulticastImportRoutePolicy = types.StringValue(value.String())
+	} else {
+		data.Ipv4MulticastImportRoutePolicy = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-policy"); value.Exists() && !data.Ipv4MulticastExportRoutePolicy.IsNull() {
+		data.Ipv4MulticastExportRoutePolicy = types.StringValue(value.String())
+	} else {
+		data.Ipv4MulticastExportRoutePolicy = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.bridge-domain.advertise-as-vpn"); !data.Ipv4MulticastImportFromBridgeDomainAdvertiseAsVpn.IsNull() {
+		if value.Exists() {
+			data.Ipv4MulticastImportFromBridgeDomainAdvertiseAsVpn = types.BoolValue(true)
+		} else {
+			data.Ipv4MulticastImportFromBridgeDomainAdvertiseAsVpn = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv4MulticastImportFromBridgeDomainAdvertiseAsVpn = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.advertise-as-vpn"); !data.Ipv4MulticastImportFromVrfAdvertiseAsVpn.IsNull() {
+		if value.Exists() {
+			data.Ipv4MulticastImportFromVrfAdvertiseAsVpn = types.BoolValue(true)
+		} else {
+			data.Ipv4MulticastImportFromVrfAdvertiseAsVpn = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv4MulticastImportFromVrfAdvertiseAsVpn = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.backup"); !data.Ipv4MulticastImportFromVrfAllowBackup.IsNull() {
+		if value.Exists() {
+			data.Ipv4MulticastImportFromVrfAllowBackup = types.BoolValue(true)
+		} else {
+			data.Ipv4MulticastImportFromVrfAllowBackup = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv4MulticastImportFromVrfAllowBackup = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.best-external"); !data.Ipv4MulticastImportFromVrfAllowBestExternal.IsNull() {
+		if value.Exists() {
+			data.Ipv4MulticastImportFromVrfAllowBestExternal = types.BoolValue(true)
+		} else {
+			data.Ipv4MulticastImportFromVrfAllowBestExternal = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv4MulticastImportFromVrfAllowBestExternal = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.advertise-as-vpn"); !data.Ipv4MulticastImportFromDefaultVrfAdvertiseAsVpn.IsNull() {
+		if value.Exists() {
+			data.Ipv4MulticastImportFromDefaultVrfAdvertiseAsVpn = types.BoolValue(true)
+		} else {
+			data.Ipv4MulticastImportFromDefaultVrfAdvertiseAsVpn = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv4MulticastImportFromDefaultVrfAdvertiseAsVpn = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.route-policy"); value.Exists() && !data.Ipv4MulticastImportFromDefaultVrfRoutePolicy.IsNull() {
+		data.Ipv4MulticastImportFromDefaultVrfRoutePolicy = types.StringValue(value.String())
+	} else {
+		data.Ipv4MulticastImportFromDefaultVrfRoutePolicy = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow-imported-vpn"); !data.Ipv4MulticastExportToVrfAllowImportedVpn.IsNull() {
+		if value.Exists() {
+			data.Ipv4MulticastExportToVrfAllowImportedVpn = types.BoolValue(true)
+		} else {
+			data.Ipv4MulticastExportToVrfAllowImportedVpn = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv4MulticastExportToVrfAllowImportedVpn = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.backup"); !data.Ipv4MulticastExportToVrfAllowBackup.IsNull() {
+		if value.Exists() {
+			data.Ipv4MulticastExportToVrfAllowBackup = types.BoolValue(true)
+		} else {
+			data.Ipv4MulticastExportToVrfAllowBackup = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv4MulticastExportToVrfAllowBackup = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.best-external"); !data.Ipv4MulticastExportToVrfAllowBestExternal.IsNull() {
+		if value.Exists() {
+			data.Ipv4MulticastExportToVrfAllowBestExternal = types.BoolValue(true)
+		} else {
+			data.Ipv4MulticastExportToVrfAllowBestExternal = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv4MulticastExportToVrfAllowBestExternal = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.route-policy"); value.Exists() && !data.Ipv4MulticastExportToDefaultVrfRoutePolicy.IsNull() {
+		data.Ipv4MulticastExportToDefaultVrfRoutePolicy = types.StringValue(value.String())
+	} else {
+		data.Ipv4MulticastExportToDefaultVrfRoutePolicy = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.allow-imported-vpn"); !data.Ipv4MulticastExportToDefaultVrfAllowImportedVpn.IsNull() {
+		if value.Exists() {
+			data.Ipv4MulticastExportToDefaultVrfAllowImportedVpn = types.BoolValue(true)
+		} else {
+			data.Ipv4MulticastExportToDefaultVrfAllowImportedVpn = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv4MulticastExportToDefaultVrfAllowImportedVpn = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.prefix-limit"); value.Exists() && !data.Ipv4MulticastMaxPrefixLimit.IsNull() {
+		data.Ipv4MulticastMaxPrefixLimit = types.Int64Value(value.Int())
+	} else {
+		data.Ipv4MulticastMaxPrefixLimit = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.mid-thresh"); value.Exists() && !data.Ipv4MulticastMaxPrefixThreshold.IsNull() {
+		data.Ipv4MulticastMaxPrefixThreshold = types.Int64Value(value.Int())
+	} else {
+		data.Ipv4MulticastMaxPrefixThreshold = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv4.flowspec"); !data.Ipv4Flowspec.IsNull() {
 		if value.Exists() {
@@ -496,6 +1334,107 @@ func (data *VRF) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Ipv6UnicastExportRoutePolicy = types.StringNull()
 	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.bridge-domain.advertise-as-vpn"); !data.Ipv6UnicastImportFromBridgeDomainAdvertiseAsVpn.IsNull() {
+		if value.Exists() {
+			data.Ipv6UnicastImportFromBridgeDomainAdvertiseAsVpn = types.BoolValue(true)
+		} else {
+			data.Ipv6UnicastImportFromBridgeDomainAdvertiseAsVpn = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv6UnicastImportFromBridgeDomainAdvertiseAsVpn = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.advertise-as-vpn"); !data.Ipv6UnicastImportFromVrfAdvertiseAsVpn.IsNull() {
+		if value.Exists() {
+			data.Ipv6UnicastImportFromVrfAdvertiseAsVpn = types.BoolValue(true)
+		} else {
+			data.Ipv6UnicastImportFromVrfAdvertiseAsVpn = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv6UnicastImportFromVrfAdvertiseAsVpn = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.backup"); !data.Ipv6UnicastImportFromVrfAllowBackup.IsNull() {
+		if value.Exists() {
+			data.Ipv6UnicastImportFromVrfAllowBackup = types.BoolValue(true)
+		} else {
+			data.Ipv6UnicastImportFromVrfAllowBackup = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv6UnicastImportFromVrfAllowBackup = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.best-external"); !data.Ipv6UnicastImportFromVrfAllowBestExternal.IsNull() {
+		if value.Exists() {
+			data.Ipv6UnicastImportFromVrfAllowBestExternal = types.BoolValue(true)
+		} else {
+			data.Ipv6UnicastImportFromVrfAllowBestExternal = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv6UnicastImportFromVrfAllowBestExternal = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.advertise-as-vpn"); !data.Ipv6UnicastImportFromDefaultVrfAdvertiseAsVpn.IsNull() {
+		if value.Exists() {
+			data.Ipv6UnicastImportFromDefaultVrfAdvertiseAsVpn = types.BoolValue(true)
+		} else {
+			data.Ipv6UnicastImportFromDefaultVrfAdvertiseAsVpn = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv6UnicastImportFromDefaultVrfAdvertiseAsVpn = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.route-policy"); value.Exists() && !data.Ipv6UnicastImportFromDefaultVrfRoutePolicy.IsNull() {
+		data.Ipv6UnicastImportFromDefaultVrfRoutePolicy = types.StringValue(value.String())
+	} else {
+		data.Ipv6UnicastImportFromDefaultVrfRoutePolicy = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow-imported-vpn"); !data.Ipv6UnicastExportToVrfAllowImportedVpn.IsNull() {
+		if value.Exists() {
+			data.Ipv6UnicastExportToVrfAllowImportedVpn = types.BoolValue(true)
+		} else {
+			data.Ipv6UnicastExportToVrfAllowImportedVpn = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv6UnicastExportToVrfAllowImportedVpn = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.backup"); !data.Ipv6UnicastExportToVrfAllowBackup.IsNull() {
+		if value.Exists() {
+			data.Ipv6UnicastExportToVrfAllowBackup = types.BoolValue(true)
+		} else {
+			data.Ipv6UnicastExportToVrfAllowBackup = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv6UnicastExportToVrfAllowBackup = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.best-external"); !data.Ipv6UnicastExportToVrfAllowBestExternal.IsNull() {
+		if value.Exists() {
+			data.Ipv6UnicastExportToVrfAllowBestExternal = types.BoolValue(true)
+		} else {
+			data.Ipv6UnicastExportToVrfAllowBestExternal = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv6UnicastExportToVrfAllowBestExternal = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.route-policy"); value.Exists() && !data.Ipv6UnicastExportToDefaultVrfRoutePolicy.IsNull() {
+		data.Ipv6UnicastExportToDefaultVrfRoutePolicy = types.StringValue(value.String())
+	} else {
+		data.Ipv6UnicastExportToDefaultVrfRoutePolicy = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.allow-imported-vpn"); !data.Ipv6UnicastExportToDefaultVrfAllowImportedVpn.IsNull() {
+		if value.Exists() {
+			data.Ipv6UnicastExportToDefaultVrfAllowImportedVpn = types.BoolValue(true)
+		} else {
+			data.Ipv6UnicastExportToDefaultVrfAllowImportedVpn = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv6UnicastExportToDefaultVrfAllowImportedVpn = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.prefix-limit"); value.Exists() && !data.Ipv6UnicastMaxPrefixLimit.IsNull() {
+		data.Ipv6UnicastMaxPrefixLimit = types.Int64Value(value.Int())
+	} else {
+		data.Ipv6UnicastMaxPrefixLimit = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.mid-thresh"); value.Exists() && !data.Ipv6UnicastMaxPrefixThreshold.IsNull() {
+		data.Ipv6UnicastMaxPrefixThreshold = types.Int64Value(value.Int())
+	} else {
+		data.Ipv6UnicastMaxPrefixThreshold = types.Int64Null()
+	}
 	if value := gjson.GetBytes(res, "address-family.ipv6.multicast"); !data.Ipv6Multicast.IsNull() {
 		if value.Exists() {
 			data.Ipv6Multicast = types.BoolValue(true)
@@ -504,6 +1443,117 @@ func (data *VRF) updateFromBody(ctx context.Context, res []byte) {
 		}
 	} else {
 		data.Ipv6Multicast = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-policy"); value.Exists() && !data.Ipv6MulticastImportRoutePolicy.IsNull() {
+		data.Ipv6MulticastImportRoutePolicy = types.StringValue(value.String())
+	} else {
+		data.Ipv6MulticastImportRoutePolicy = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-policy"); value.Exists() && !data.Ipv6MulticastExportRoutePolicy.IsNull() {
+		data.Ipv6MulticastExportRoutePolicy = types.StringValue(value.String())
+	} else {
+		data.Ipv6MulticastExportRoutePolicy = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.bridge-domain.advertise-as-vpn"); !data.Ipv6MulticastImportFromBridgeDomainAdvertiseAsVpn.IsNull() {
+		if value.Exists() {
+			data.Ipv6MulticastImportFromBridgeDomainAdvertiseAsVpn = types.BoolValue(true)
+		} else {
+			data.Ipv6MulticastImportFromBridgeDomainAdvertiseAsVpn = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv6MulticastImportFromBridgeDomainAdvertiseAsVpn = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.advertise-as-vpn"); !data.Ipv6MulticastImportFromVrfAdvertiseAsVpn.IsNull() {
+		if value.Exists() {
+			data.Ipv6MulticastImportFromVrfAdvertiseAsVpn = types.BoolValue(true)
+		} else {
+			data.Ipv6MulticastImportFromVrfAdvertiseAsVpn = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv6MulticastImportFromVrfAdvertiseAsVpn = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.backup"); !data.Ipv6MulticastImportFromVrfAllowBackup.IsNull() {
+		if value.Exists() {
+			data.Ipv6MulticastImportFromVrfAllowBackup = types.BoolValue(true)
+		} else {
+			data.Ipv6MulticastImportFromVrfAllowBackup = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv6MulticastImportFromVrfAllowBackup = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.best-external"); !data.Ipv6MulticastImportFromVrfAllowBestExternal.IsNull() {
+		if value.Exists() {
+			data.Ipv6MulticastImportFromVrfAllowBestExternal = types.BoolValue(true)
+		} else {
+			data.Ipv6MulticastImportFromVrfAllowBestExternal = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv6MulticastImportFromVrfAllowBestExternal = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.advertise-as-vpn"); !data.Ipv6MulticastImportFromDefaultVrfAdvertiseAsVpn.IsNull() {
+		if value.Exists() {
+			data.Ipv6MulticastImportFromDefaultVrfAdvertiseAsVpn = types.BoolValue(true)
+		} else {
+			data.Ipv6MulticastImportFromDefaultVrfAdvertiseAsVpn = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv6MulticastImportFromDefaultVrfAdvertiseAsVpn = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.route-policy"); value.Exists() && !data.Ipv6MulticastImportFromDefaultVrfRoutePolicy.IsNull() {
+		data.Ipv6MulticastImportFromDefaultVrfRoutePolicy = types.StringValue(value.String())
+	} else {
+		data.Ipv6MulticastImportFromDefaultVrfRoutePolicy = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow-imported-vpn"); !data.Ipv6MulticastExportToVrfAllowImportedVpn.IsNull() {
+		if value.Exists() {
+			data.Ipv6MulticastExportToVrfAllowImportedVpn = types.BoolValue(true)
+		} else {
+			data.Ipv6MulticastExportToVrfAllowImportedVpn = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv6MulticastExportToVrfAllowImportedVpn = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.backup"); !data.Ipv6MulticastExportToVrfAllowBackup.IsNull() {
+		if value.Exists() {
+			data.Ipv6MulticastExportToVrfAllowBackup = types.BoolValue(true)
+		} else {
+			data.Ipv6MulticastExportToVrfAllowBackup = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv6MulticastExportToVrfAllowBackup = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.best-external"); !data.Ipv6MulticastExportToVrfAllowBestExternal.IsNull() {
+		if value.Exists() {
+			data.Ipv6MulticastExportToVrfAllowBestExternal = types.BoolValue(true)
+		} else {
+			data.Ipv6MulticastExportToVrfAllowBestExternal = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv6MulticastExportToVrfAllowBestExternal = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.route-policy"); value.Exists() && !data.Ipv6MulticastExportToDefaultVrfRoutePolicy.IsNull() {
+		data.Ipv6MulticastExportToDefaultVrfRoutePolicy = types.StringValue(value.String())
+	} else {
+		data.Ipv6MulticastExportToDefaultVrfRoutePolicy = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.allow-imported-vpn"); !data.Ipv6MulticastExportToDefaultVrfAllowImportedVpn.IsNull() {
+		if value.Exists() {
+			data.Ipv6MulticastExportToDefaultVrfAllowImportedVpn = types.BoolValue(true)
+		} else {
+			data.Ipv6MulticastExportToDefaultVrfAllowImportedVpn = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv6MulticastExportToDefaultVrfAllowImportedVpn = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.prefix-limit"); value.Exists() && !data.Ipv6MulticastMaxPrefixLimit.IsNull() {
+		data.Ipv6MulticastMaxPrefixLimit = types.Int64Value(value.Int())
+	} else {
+		data.Ipv6MulticastMaxPrefixLimit = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.mid-thresh"); value.Exists() && !data.Ipv6MulticastMaxPrefixThreshold.IsNull() {
+		data.Ipv6MulticastMaxPrefixThreshold = types.Int64Value(value.Int())
+	} else {
+		data.Ipv6MulticastMaxPrefixThreshold = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv6.flowspec"); !data.Ipv6Flowspec.IsNull() {
 		if value.Exists() {
@@ -1012,6 +2062,488 @@ func (data *VRF) updateFromBody(ctx context.Context, res []byte) {
 			data.Ipv6UnicastExportRouteTargetIpAddressFormat[i].Stitching = types.StringNull()
 		}
 	}
+	for i := range data.Ipv4MulticastImportRouteTargetTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "asn2-index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.Ipv4MulticastImportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Ipv4MulticastImportRouteTargetTwoByteAsFormat[i].Asn2Index.ValueInt64(), 10), data.Ipv4MulticastImportRouteTargetTwoByteAsFormat[i].Stitching.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-route-targets.two-byte-as-route-target").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("two-byte-as-number"); value.Exists() && !data.Ipv4MulticastImportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.IsNull() {
+			data.Ipv4MulticastImportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber = types.Int64Value(value.Int())
+		} else {
+			data.Ipv4MulticastImportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber = types.Int64Null()
+		}
+		if value := r.Get("asn2-index"); value.Exists() && !data.Ipv4MulticastImportRouteTargetTwoByteAsFormat[i].Asn2Index.IsNull() {
+			data.Ipv4MulticastImportRouteTargetTwoByteAsFormat[i].Asn2Index = types.Int64Value(value.Int())
+		} else {
+			data.Ipv4MulticastImportRouteTargetTwoByteAsFormat[i].Asn2Index = types.Int64Null()
+		}
+		if value := r.Get("stitching"); value.Exists() && !data.Ipv4MulticastImportRouteTargetTwoByteAsFormat[i].Stitching.IsNull() {
+			data.Ipv4MulticastImportRouteTargetTwoByteAsFormat[i].Stitching = types.StringValue(value.String())
+		} else {
+			data.Ipv4MulticastImportRouteTargetTwoByteAsFormat[i].Stitching = types.StringNull()
+		}
+	}
+	for i := range data.Ipv4MulticastImportRouteTargetFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "asn4-index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.Ipv4MulticastImportRouteTargetFourByteAsFormat[i].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Ipv4MulticastImportRouteTargetFourByteAsFormat[i].Asn4Index.ValueInt64(), 10), data.Ipv4MulticastImportRouteTargetFourByteAsFormat[i].Stitching.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-route-targets.four-byte-as-route-target").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("four-byte-as-number"); value.Exists() && !data.Ipv4MulticastImportRouteTargetFourByteAsFormat[i].FourByteAsNumber.IsNull() {
+			data.Ipv4MulticastImportRouteTargetFourByteAsFormat[i].FourByteAsNumber = types.Int64Value(value.Int())
+		} else {
+			data.Ipv4MulticastImportRouteTargetFourByteAsFormat[i].FourByteAsNumber = types.Int64Null()
+		}
+		if value := r.Get("asn4-index"); value.Exists() && !data.Ipv4MulticastImportRouteTargetFourByteAsFormat[i].Asn4Index.IsNull() {
+			data.Ipv4MulticastImportRouteTargetFourByteAsFormat[i].Asn4Index = types.Int64Value(value.Int())
+		} else {
+			data.Ipv4MulticastImportRouteTargetFourByteAsFormat[i].Asn4Index = types.Int64Null()
+		}
+		if value := r.Get("stitching"); value.Exists() && !data.Ipv4MulticastImportRouteTargetFourByteAsFormat[i].Stitching.IsNull() {
+			data.Ipv4MulticastImportRouteTargetFourByteAsFormat[i].Stitching = types.StringValue(value.String())
+		} else {
+			data.Ipv4MulticastImportRouteTargetFourByteAsFormat[i].Stitching = types.StringNull()
+		}
+	}
+	for i := range data.Ipv4MulticastImportRouteTargetIpAddressFormat {
+		keys := [...]string{"ipv4-address", "ipv4-address-index", "stitching"}
+		keyValues := [...]string{data.Ipv4MulticastImportRouteTargetIpAddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.Ipv4MulticastImportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.ValueInt64(), 10), data.Ipv4MulticastImportRouteTargetIpAddressFormat[i].Stitching.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ipv4-address-route-targets.ipv4-address-route-target").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("ipv4-address"); value.Exists() && !data.Ipv4MulticastImportRouteTargetIpAddressFormat[i].Ipv4Address.IsNull() {
+			data.Ipv4MulticastImportRouteTargetIpAddressFormat[i].Ipv4Address = types.StringValue(value.String())
+		} else {
+			data.Ipv4MulticastImportRouteTargetIpAddressFormat[i].Ipv4Address = types.StringNull()
+		}
+		if value := r.Get("ipv4-address-index"); value.Exists() && !data.Ipv4MulticastImportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.IsNull() {
+			data.Ipv4MulticastImportRouteTargetIpAddressFormat[i].Ipv4AddressIndex = types.Int64Value(value.Int())
+		} else {
+			data.Ipv4MulticastImportRouteTargetIpAddressFormat[i].Ipv4AddressIndex = types.Int64Null()
+		}
+		if value := r.Get("stitching"); value.Exists() && !data.Ipv4MulticastImportRouteTargetIpAddressFormat[i].Stitching.IsNull() {
+			data.Ipv4MulticastImportRouteTargetIpAddressFormat[i].Stitching = types.StringValue(value.String())
+		} else {
+			data.Ipv4MulticastImportRouteTargetIpAddressFormat[i].Stitching = types.StringNull()
+		}
+	}
+	for i := range data.Ipv4MulticastExportRouteTargetTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "asn2-index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.Ipv4MulticastExportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Ipv4MulticastExportRouteTargetTwoByteAsFormat[i].Asn2Index.ValueInt64(), 10), data.Ipv4MulticastExportRouteTargetTwoByteAsFormat[i].Stitching.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-route-targets.two-byte-as-route-target").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("two-byte-as-number"); value.Exists() && !data.Ipv4MulticastExportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.IsNull() {
+			data.Ipv4MulticastExportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber = types.Int64Value(value.Int())
+		} else {
+			data.Ipv4MulticastExportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber = types.Int64Null()
+		}
+		if value := r.Get("asn2-index"); value.Exists() && !data.Ipv4MulticastExportRouteTargetTwoByteAsFormat[i].Asn2Index.IsNull() {
+			data.Ipv4MulticastExportRouteTargetTwoByteAsFormat[i].Asn2Index = types.Int64Value(value.Int())
+		} else {
+			data.Ipv4MulticastExportRouteTargetTwoByteAsFormat[i].Asn2Index = types.Int64Null()
+		}
+		if value := r.Get("stitching"); value.Exists() && !data.Ipv4MulticastExportRouteTargetTwoByteAsFormat[i].Stitching.IsNull() {
+			data.Ipv4MulticastExportRouteTargetTwoByteAsFormat[i].Stitching = types.StringValue(value.String())
+		} else {
+			data.Ipv4MulticastExportRouteTargetTwoByteAsFormat[i].Stitching = types.StringNull()
+		}
+	}
+	for i := range data.Ipv4MulticastExportRouteTargetFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "asn4-index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.Ipv4MulticastExportRouteTargetFourByteAsFormat[i].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Ipv4MulticastExportRouteTargetFourByteAsFormat[i].Asn4Index.ValueInt64(), 10), data.Ipv4MulticastExportRouteTargetFourByteAsFormat[i].Stitching.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-route-targets.four-byte-as-route-target").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("four-byte-as-number"); value.Exists() && !data.Ipv4MulticastExportRouteTargetFourByteAsFormat[i].FourByteAsNumber.IsNull() {
+			data.Ipv4MulticastExportRouteTargetFourByteAsFormat[i].FourByteAsNumber = types.Int64Value(value.Int())
+		} else {
+			data.Ipv4MulticastExportRouteTargetFourByteAsFormat[i].FourByteAsNumber = types.Int64Null()
+		}
+		if value := r.Get("asn4-index"); value.Exists() && !data.Ipv4MulticastExportRouteTargetFourByteAsFormat[i].Asn4Index.IsNull() {
+			data.Ipv4MulticastExportRouteTargetFourByteAsFormat[i].Asn4Index = types.Int64Value(value.Int())
+		} else {
+			data.Ipv4MulticastExportRouteTargetFourByteAsFormat[i].Asn4Index = types.Int64Null()
+		}
+		if value := r.Get("stitching"); value.Exists() && !data.Ipv4MulticastExportRouteTargetFourByteAsFormat[i].Stitching.IsNull() {
+			data.Ipv4MulticastExportRouteTargetFourByteAsFormat[i].Stitching = types.StringValue(value.String())
+		} else {
+			data.Ipv4MulticastExportRouteTargetFourByteAsFormat[i].Stitching = types.StringNull()
+		}
+	}
+	for i := range data.Ipv4MulticastExportRouteTargetIpAddressFormat {
+		keys := [...]string{"ipv4-address", "ipv4-address-index", "stitching"}
+		keyValues := [...]string{data.Ipv4MulticastExportRouteTargetIpAddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.Ipv4MulticastExportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.ValueInt64(), 10), data.Ipv4MulticastExportRouteTargetIpAddressFormat[i].Stitching.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ipv4-address-route-targets.ipv4-address-route-target").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("ipv4-address"); value.Exists() && !data.Ipv4MulticastExportRouteTargetIpAddressFormat[i].Ipv4Address.IsNull() {
+			data.Ipv4MulticastExportRouteTargetIpAddressFormat[i].Ipv4Address = types.StringValue(value.String())
+		} else {
+			data.Ipv4MulticastExportRouteTargetIpAddressFormat[i].Ipv4Address = types.StringNull()
+		}
+		if value := r.Get("ipv4-address-index"); value.Exists() && !data.Ipv4MulticastExportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.IsNull() {
+			data.Ipv4MulticastExportRouteTargetIpAddressFormat[i].Ipv4AddressIndex = types.Int64Value(value.Int())
+		} else {
+			data.Ipv4MulticastExportRouteTargetIpAddressFormat[i].Ipv4AddressIndex = types.Int64Null()
+		}
+		if value := r.Get("stitching"); value.Exists() && !data.Ipv4MulticastExportRouteTargetIpAddressFormat[i].Stitching.IsNull() {
+			data.Ipv4MulticastExportRouteTargetIpAddressFormat[i].Stitching = types.StringValue(value.String())
+		} else {
+			data.Ipv4MulticastExportRouteTargetIpAddressFormat[i].Stitching = types.StringNull()
+		}
+	}
+	for i := range data.Ipv6MulticastImportRouteTargetTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "asn2-index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.Ipv6MulticastImportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Ipv6MulticastImportRouteTargetTwoByteAsFormat[i].Asn2Index.ValueInt64(), 10), data.Ipv6MulticastImportRouteTargetTwoByteAsFormat[i].Stitching.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-route-targets.two-byte-as-route-target").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("two-byte-as-number"); value.Exists() && !data.Ipv6MulticastImportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.IsNull() {
+			data.Ipv6MulticastImportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber = types.Int64Value(value.Int())
+		} else {
+			data.Ipv6MulticastImportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber = types.Int64Null()
+		}
+		if value := r.Get("asn2-index"); value.Exists() && !data.Ipv6MulticastImportRouteTargetTwoByteAsFormat[i].Asn2Index.IsNull() {
+			data.Ipv6MulticastImportRouteTargetTwoByteAsFormat[i].Asn2Index = types.Int64Value(value.Int())
+		} else {
+			data.Ipv6MulticastImportRouteTargetTwoByteAsFormat[i].Asn2Index = types.Int64Null()
+		}
+		if value := r.Get("stitching"); value.Exists() && !data.Ipv6MulticastImportRouteTargetTwoByteAsFormat[i].Stitching.IsNull() {
+			data.Ipv6MulticastImportRouteTargetTwoByteAsFormat[i].Stitching = types.StringValue(value.String())
+		} else {
+			data.Ipv6MulticastImportRouteTargetTwoByteAsFormat[i].Stitching = types.StringNull()
+		}
+	}
+	for i := range data.Ipv6MulticastImportRouteTargetFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "asn4-index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.Ipv6MulticastImportRouteTargetFourByteAsFormat[i].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Ipv6MulticastImportRouteTargetFourByteAsFormat[i].Asn4Index.ValueInt64(), 10), data.Ipv6MulticastImportRouteTargetFourByteAsFormat[i].Stitching.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-route-targets.four-byte-as-route-target").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("four-byte-as-number"); value.Exists() && !data.Ipv6MulticastImportRouteTargetFourByteAsFormat[i].FourByteAsNumber.IsNull() {
+			data.Ipv6MulticastImportRouteTargetFourByteAsFormat[i].FourByteAsNumber = types.Int64Value(value.Int())
+		} else {
+			data.Ipv6MulticastImportRouteTargetFourByteAsFormat[i].FourByteAsNumber = types.Int64Null()
+		}
+		if value := r.Get("asn4-index"); value.Exists() && !data.Ipv6MulticastImportRouteTargetFourByteAsFormat[i].Asn4Index.IsNull() {
+			data.Ipv6MulticastImportRouteTargetFourByteAsFormat[i].Asn4Index = types.Int64Value(value.Int())
+		} else {
+			data.Ipv6MulticastImportRouteTargetFourByteAsFormat[i].Asn4Index = types.Int64Null()
+		}
+		if value := r.Get("stitching"); value.Exists() && !data.Ipv6MulticastImportRouteTargetFourByteAsFormat[i].Stitching.IsNull() {
+			data.Ipv6MulticastImportRouteTargetFourByteAsFormat[i].Stitching = types.StringValue(value.String())
+		} else {
+			data.Ipv6MulticastImportRouteTargetFourByteAsFormat[i].Stitching = types.StringNull()
+		}
+	}
+	for i := range data.Ipv6MulticastImportRouteTargetIpAddressFormat {
+		keys := [...]string{"ipv4-address", "ipv4-address-index", "stitching"}
+		keyValues := [...]string{data.Ipv6MulticastImportRouteTargetIpAddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.Ipv6MulticastImportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.ValueInt64(), 10), data.Ipv6MulticastImportRouteTargetIpAddressFormat[i].Stitching.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ipv4-address-route-targets.ipv4-address-route-target").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("ipv4-address"); value.Exists() && !data.Ipv6MulticastImportRouteTargetIpAddressFormat[i].Ipv4Address.IsNull() {
+			data.Ipv6MulticastImportRouteTargetIpAddressFormat[i].Ipv4Address = types.StringValue(value.String())
+		} else {
+			data.Ipv6MulticastImportRouteTargetIpAddressFormat[i].Ipv4Address = types.StringNull()
+		}
+		if value := r.Get("ipv4-address-index"); value.Exists() && !data.Ipv6MulticastImportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.IsNull() {
+			data.Ipv6MulticastImportRouteTargetIpAddressFormat[i].Ipv4AddressIndex = types.Int64Value(value.Int())
+		} else {
+			data.Ipv6MulticastImportRouteTargetIpAddressFormat[i].Ipv4AddressIndex = types.Int64Null()
+		}
+		if value := r.Get("stitching"); value.Exists() && !data.Ipv6MulticastImportRouteTargetIpAddressFormat[i].Stitching.IsNull() {
+			data.Ipv6MulticastImportRouteTargetIpAddressFormat[i].Stitching = types.StringValue(value.String())
+		} else {
+			data.Ipv6MulticastImportRouteTargetIpAddressFormat[i].Stitching = types.StringNull()
+		}
+	}
+	for i := range data.Ipv6MulticastExportRouteTargetTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "asn2-index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.Ipv6MulticastExportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Ipv6MulticastExportRouteTargetTwoByteAsFormat[i].Asn2Index.ValueInt64(), 10), data.Ipv6MulticastExportRouteTargetTwoByteAsFormat[i].Stitching.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-route-targets.two-byte-as-route-target").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("two-byte-as-number"); value.Exists() && !data.Ipv6MulticastExportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.IsNull() {
+			data.Ipv6MulticastExportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber = types.Int64Value(value.Int())
+		} else {
+			data.Ipv6MulticastExportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber = types.Int64Null()
+		}
+		if value := r.Get("asn2-index"); value.Exists() && !data.Ipv6MulticastExportRouteTargetTwoByteAsFormat[i].Asn2Index.IsNull() {
+			data.Ipv6MulticastExportRouteTargetTwoByteAsFormat[i].Asn2Index = types.Int64Value(value.Int())
+		} else {
+			data.Ipv6MulticastExportRouteTargetTwoByteAsFormat[i].Asn2Index = types.Int64Null()
+		}
+		if value := r.Get("stitching"); value.Exists() && !data.Ipv6MulticastExportRouteTargetTwoByteAsFormat[i].Stitching.IsNull() {
+			data.Ipv6MulticastExportRouteTargetTwoByteAsFormat[i].Stitching = types.StringValue(value.String())
+		} else {
+			data.Ipv6MulticastExportRouteTargetTwoByteAsFormat[i].Stitching = types.StringNull()
+		}
+	}
+	for i := range data.Ipv6MulticastExportRouteTargetFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "asn4-index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.Ipv6MulticastExportRouteTargetFourByteAsFormat[i].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Ipv6MulticastExportRouteTargetFourByteAsFormat[i].Asn4Index.ValueInt64(), 10), data.Ipv6MulticastExportRouteTargetFourByteAsFormat[i].Stitching.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-route-targets.four-byte-as-route-target").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("four-byte-as-number"); value.Exists() && !data.Ipv6MulticastExportRouteTargetFourByteAsFormat[i].FourByteAsNumber.IsNull() {
+			data.Ipv6MulticastExportRouteTargetFourByteAsFormat[i].FourByteAsNumber = types.Int64Value(value.Int())
+		} else {
+			data.Ipv6MulticastExportRouteTargetFourByteAsFormat[i].FourByteAsNumber = types.Int64Null()
+		}
+		if value := r.Get("asn4-index"); value.Exists() && !data.Ipv6MulticastExportRouteTargetFourByteAsFormat[i].Asn4Index.IsNull() {
+			data.Ipv6MulticastExportRouteTargetFourByteAsFormat[i].Asn4Index = types.Int64Value(value.Int())
+		} else {
+			data.Ipv6MulticastExportRouteTargetFourByteAsFormat[i].Asn4Index = types.Int64Null()
+		}
+		if value := r.Get("stitching"); value.Exists() && !data.Ipv6MulticastExportRouteTargetFourByteAsFormat[i].Stitching.IsNull() {
+			data.Ipv6MulticastExportRouteTargetFourByteAsFormat[i].Stitching = types.StringValue(value.String())
+		} else {
+			data.Ipv6MulticastExportRouteTargetFourByteAsFormat[i].Stitching = types.StringNull()
+		}
+	}
+	for i := range data.Ipv6MulticastExportRouteTargetIpAddressFormat {
+		keys := [...]string{"ipv4-address", "ipv4-address-index", "stitching"}
+		keyValues := [...]string{data.Ipv6MulticastExportRouteTargetIpAddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.Ipv6MulticastExportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.ValueInt64(), 10), data.Ipv6MulticastExportRouteTargetIpAddressFormat[i].Stitching.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ipv4-address-route-targets.ipv4-address-route-target").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("ipv4-address"); value.Exists() && !data.Ipv6MulticastExportRouteTargetIpAddressFormat[i].Ipv4Address.IsNull() {
+			data.Ipv6MulticastExportRouteTargetIpAddressFormat[i].Ipv4Address = types.StringValue(value.String())
+		} else {
+			data.Ipv6MulticastExportRouteTargetIpAddressFormat[i].Ipv4Address = types.StringNull()
+		}
+		if value := r.Get("ipv4-address-index"); value.Exists() && !data.Ipv6MulticastExportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.IsNull() {
+			data.Ipv6MulticastExportRouteTargetIpAddressFormat[i].Ipv4AddressIndex = types.Int64Value(value.Int())
+		} else {
+			data.Ipv6MulticastExportRouteTargetIpAddressFormat[i].Ipv4AddressIndex = types.Int64Null()
+		}
+		if value := r.Get("stitching"); value.Exists() && !data.Ipv6MulticastExportRouteTargetIpAddressFormat[i].Stitching.IsNull() {
+			data.Ipv6MulticastExportRouteTargetIpAddressFormat[i].Stitching = types.StringValue(value.String())
+		} else {
+			data.Ipv6MulticastExportRouteTargetIpAddressFormat[i].Stitching = types.StringNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "vpn.id"); value.Exists() && !data.VpnId.IsNull() {
+		data.VpnId = types.StringValue(value.String())
+	} else {
+		data.VpnId = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "remote-route-filtering.disable"); !data.RemoteRouteFilteringDisable.IsNull() {
+		if value.Exists() {
+			data.RemoteRouteFilteringDisable = types.BoolValue(true)
+		} else {
+			data.RemoteRouteFilteringDisable = types.BoolValue(false)
+		}
+	} else {
+		data.RemoteRouteFilteringDisable = types.BoolNull()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -1022,8 +2554,11 @@ func (data *VRF) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "vpn.id"); value.Exists() {
-		data.VpnId = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "fallback-vrf"); value.Exists() {
+		data.FallbackVrf = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-l2vpn-cfg:evpn-route-sync"); value.Exists() {
+		data.EvpnRouteSync = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv4.unicast"); value.Exists() {
 		data.Ipv4Unicast = types.BoolValue(true)
@@ -1036,10 +2571,130 @@ func (data *VRF) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-policy"); value.Exists() {
 		data.Ipv4UnicastExportRoutePolicy = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.bridge-domain.advertise-as-vpn"); value.Exists() {
+		data.Ipv4UnicastImportFromBridgeDomainAdvertiseAsVpn = types.BoolValue(true)
+	} else {
+		data.Ipv4UnicastImportFromBridgeDomainAdvertiseAsVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.advertise-as-vpn"); value.Exists() {
+		data.Ipv4UnicastImportFromVrfAdvertiseAsVpn = types.BoolValue(true)
+	} else {
+		data.Ipv4UnicastImportFromVrfAdvertiseAsVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.backup"); value.Exists() {
+		data.Ipv4UnicastImportFromVrfAllowBackup = types.BoolValue(true)
+	} else {
+		data.Ipv4UnicastImportFromVrfAllowBackup = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.best-external"); value.Exists() {
+		data.Ipv4UnicastImportFromVrfAllowBestExternal = types.BoolValue(true)
+	} else {
+		data.Ipv4UnicastImportFromVrfAllowBestExternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.advertise-as-vpn"); value.Exists() {
+		data.Ipv4UnicastImportFromDefaultVrfAdvertiseAsVpn = types.BoolValue(true)
+	} else {
+		data.Ipv4UnicastImportFromDefaultVrfAdvertiseAsVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.route-policy"); value.Exists() {
+		data.Ipv4UnicastImportFromDefaultVrfRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow-imported-vpn"); value.Exists() {
+		data.Ipv4UnicastExportToVrfAllowImportedVpn = types.BoolValue(true)
+	} else {
+		data.Ipv4UnicastExportToVrfAllowImportedVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.backup"); value.Exists() {
+		data.Ipv4UnicastExportToVrfAllowBackup = types.BoolValue(true)
+	} else {
+		data.Ipv4UnicastExportToVrfAllowBackup = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.best-external"); value.Exists() {
+		data.Ipv4UnicastExportToVrfAllowBestExternal = types.BoolValue(true)
+	} else {
+		data.Ipv4UnicastExportToVrfAllowBestExternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.route-policy"); value.Exists() {
+		data.Ipv4UnicastExportToDefaultVrfRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.allow-imported-vpn"); value.Exists() {
+		data.Ipv4UnicastExportToDefaultVrfAllowImportedVpn = types.BoolValue(true)
+	} else {
+		data.Ipv4UnicastExportToDefaultVrfAllowImportedVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.prefix-limit"); value.Exists() {
+		data.Ipv4UnicastMaxPrefixLimit = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.mid-thresh"); value.Exists() {
+		data.Ipv4UnicastMaxPrefixThreshold = types.Int64Value(value.Int())
+	}
 	if value := gjson.GetBytes(res, "address-family.ipv4.multicast"); value.Exists() {
 		data.Ipv4Multicast = types.BoolValue(true)
 	} else {
 		data.Ipv4Multicast = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-policy"); value.Exists() {
+		data.Ipv4MulticastImportRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-policy"); value.Exists() {
+		data.Ipv4MulticastExportRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.bridge-domain.advertise-as-vpn"); value.Exists() {
+		data.Ipv4MulticastImportFromBridgeDomainAdvertiseAsVpn = types.BoolValue(true)
+	} else {
+		data.Ipv4MulticastImportFromBridgeDomainAdvertiseAsVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.advertise-as-vpn"); value.Exists() {
+		data.Ipv4MulticastImportFromVrfAdvertiseAsVpn = types.BoolValue(true)
+	} else {
+		data.Ipv4MulticastImportFromVrfAdvertiseAsVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.backup"); value.Exists() {
+		data.Ipv4MulticastImportFromVrfAllowBackup = types.BoolValue(true)
+	} else {
+		data.Ipv4MulticastImportFromVrfAllowBackup = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.best-external"); value.Exists() {
+		data.Ipv4MulticastImportFromVrfAllowBestExternal = types.BoolValue(true)
+	} else {
+		data.Ipv4MulticastImportFromVrfAllowBestExternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.advertise-as-vpn"); value.Exists() {
+		data.Ipv4MulticastImportFromDefaultVrfAdvertiseAsVpn = types.BoolValue(true)
+	} else {
+		data.Ipv4MulticastImportFromDefaultVrfAdvertiseAsVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.route-policy"); value.Exists() {
+		data.Ipv4MulticastImportFromDefaultVrfRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow-imported-vpn"); value.Exists() {
+		data.Ipv4MulticastExportToVrfAllowImportedVpn = types.BoolValue(true)
+	} else {
+		data.Ipv4MulticastExportToVrfAllowImportedVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.backup"); value.Exists() {
+		data.Ipv4MulticastExportToVrfAllowBackup = types.BoolValue(true)
+	} else {
+		data.Ipv4MulticastExportToVrfAllowBackup = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.best-external"); value.Exists() {
+		data.Ipv4MulticastExportToVrfAllowBestExternal = types.BoolValue(true)
+	} else {
+		data.Ipv4MulticastExportToVrfAllowBestExternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.route-policy"); value.Exists() {
+		data.Ipv4MulticastExportToDefaultVrfRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.allow-imported-vpn"); value.Exists() {
+		data.Ipv4MulticastExportToDefaultVrfAllowImportedVpn = types.BoolValue(true)
+	} else {
+		data.Ipv4MulticastExportToDefaultVrfAllowImportedVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.prefix-limit"); value.Exists() {
+		data.Ipv4MulticastMaxPrefixLimit = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.mid-thresh"); value.Exists() {
+		data.Ipv4MulticastMaxPrefixThreshold = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv4.flowspec"); value.Exists() {
 		data.Ipv4Flowspec = types.BoolValue(true)
@@ -1057,10 +2712,130 @@ func (data *VRF) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-policy"); value.Exists() {
 		data.Ipv6UnicastExportRoutePolicy = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.bridge-domain.advertise-as-vpn"); value.Exists() {
+		data.Ipv6UnicastImportFromBridgeDomainAdvertiseAsVpn = types.BoolValue(true)
+	} else {
+		data.Ipv6UnicastImportFromBridgeDomainAdvertiseAsVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.advertise-as-vpn"); value.Exists() {
+		data.Ipv6UnicastImportFromVrfAdvertiseAsVpn = types.BoolValue(true)
+	} else {
+		data.Ipv6UnicastImportFromVrfAdvertiseAsVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.backup"); value.Exists() {
+		data.Ipv6UnicastImportFromVrfAllowBackup = types.BoolValue(true)
+	} else {
+		data.Ipv6UnicastImportFromVrfAllowBackup = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.best-external"); value.Exists() {
+		data.Ipv6UnicastImportFromVrfAllowBestExternal = types.BoolValue(true)
+	} else {
+		data.Ipv6UnicastImportFromVrfAllowBestExternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.advertise-as-vpn"); value.Exists() {
+		data.Ipv6UnicastImportFromDefaultVrfAdvertiseAsVpn = types.BoolValue(true)
+	} else {
+		data.Ipv6UnicastImportFromDefaultVrfAdvertiseAsVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.route-policy"); value.Exists() {
+		data.Ipv6UnicastImportFromDefaultVrfRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow-imported-vpn"); value.Exists() {
+		data.Ipv6UnicastExportToVrfAllowImportedVpn = types.BoolValue(true)
+	} else {
+		data.Ipv6UnicastExportToVrfAllowImportedVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.backup"); value.Exists() {
+		data.Ipv6UnicastExportToVrfAllowBackup = types.BoolValue(true)
+	} else {
+		data.Ipv6UnicastExportToVrfAllowBackup = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.best-external"); value.Exists() {
+		data.Ipv6UnicastExportToVrfAllowBestExternal = types.BoolValue(true)
+	} else {
+		data.Ipv6UnicastExportToVrfAllowBestExternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.route-policy"); value.Exists() {
+		data.Ipv6UnicastExportToDefaultVrfRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.allow-imported-vpn"); value.Exists() {
+		data.Ipv6UnicastExportToDefaultVrfAllowImportedVpn = types.BoolValue(true)
+	} else {
+		data.Ipv6UnicastExportToDefaultVrfAllowImportedVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.prefix-limit"); value.Exists() {
+		data.Ipv6UnicastMaxPrefixLimit = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.mid-thresh"); value.Exists() {
+		data.Ipv6UnicastMaxPrefixThreshold = types.Int64Value(value.Int())
+	}
 	if value := gjson.GetBytes(res, "address-family.ipv6.multicast"); value.Exists() {
 		data.Ipv6Multicast = types.BoolValue(true)
 	} else {
 		data.Ipv6Multicast = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-policy"); value.Exists() {
+		data.Ipv6MulticastImportRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-policy"); value.Exists() {
+		data.Ipv6MulticastExportRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.bridge-domain.advertise-as-vpn"); value.Exists() {
+		data.Ipv6MulticastImportFromBridgeDomainAdvertiseAsVpn = types.BoolValue(true)
+	} else {
+		data.Ipv6MulticastImportFromBridgeDomainAdvertiseAsVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.advertise-as-vpn"); value.Exists() {
+		data.Ipv6MulticastImportFromVrfAdvertiseAsVpn = types.BoolValue(true)
+	} else {
+		data.Ipv6MulticastImportFromVrfAdvertiseAsVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.backup"); value.Exists() {
+		data.Ipv6MulticastImportFromVrfAllowBackup = types.BoolValue(true)
+	} else {
+		data.Ipv6MulticastImportFromVrfAllowBackup = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.best-external"); value.Exists() {
+		data.Ipv6MulticastImportFromVrfAllowBestExternal = types.BoolValue(true)
+	} else {
+		data.Ipv6MulticastImportFromVrfAllowBestExternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.advertise-as-vpn"); value.Exists() {
+		data.Ipv6MulticastImportFromDefaultVrfAdvertiseAsVpn = types.BoolValue(true)
+	} else {
+		data.Ipv6MulticastImportFromDefaultVrfAdvertiseAsVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.route-policy"); value.Exists() {
+		data.Ipv6MulticastImportFromDefaultVrfRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow-imported-vpn"); value.Exists() {
+		data.Ipv6MulticastExportToVrfAllowImportedVpn = types.BoolValue(true)
+	} else {
+		data.Ipv6MulticastExportToVrfAllowImportedVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.backup"); value.Exists() {
+		data.Ipv6MulticastExportToVrfAllowBackup = types.BoolValue(true)
+	} else {
+		data.Ipv6MulticastExportToVrfAllowBackup = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.best-external"); value.Exists() {
+		data.Ipv6MulticastExportToVrfAllowBestExternal = types.BoolValue(true)
+	} else {
+		data.Ipv6MulticastExportToVrfAllowBestExternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.route-policy"); value.Exists() {
+		data.Ipv6MulticastExportToDefaultVrfRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.allow-imported-vpn"); value.Exists() {
+		data.Ipv6MulticastExportToDefaultVrfAllowImportedVpn = types.BoolValue(true)
+	} else {
+		data.Ipv6MulticastExportToDefaultVrfAllowImportedVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.prefix-limit"); value.Exists() {
+		data.Ipv6MulticastMaxPrefixLimit = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.mid-thresh"); value.Exists() {
+		data.Ipv6MulticastMaxPrefixThreshold = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv6.flowspec"); value.Exists() {
 		data.Ipv6Flowspec = types.BoolValue(true)
@@ -1288,6 +3063,218 @@ func (data *VRF) fromBody(ctx context.Context, res []byte) {
 			data.Ipv6UnicastExportRouteTargetIpAddressFormat = append(data.Ipv6UnicastExportRouteTargetIpAddressFormat, item)
 			return true
 		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-route-targets.two-byte-as-route-target"); value.Exists() {
+		data.Ipv4MulticastImportRouteTargetTwoByteAsFormat = make([]VRFIpv4MulticastImportRouteTargetTwoByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFIpv4MulticastImportRouteTargetTwoByteAsFormat{}
+			if cValue := v.Get("two-byte-as-number"); cValue.Exists() {
+				item.TwoByteAsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("asn2-index"); cValue.Exists() {
+				item.Asn2Index = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.StringValue(cValue.String())
+			}
+			data.Ipv4MulticastImportRouteTargetTwoByteAsFormat = append(data.Ipv4MulticastImportRouteTargetTwoByteAsFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-route-targets.four-byte-as-route-target"); value.Exists() {
+		data.Ipv4MulticastImportRouteTargetFourByteAsFormat = make([]VRFIpv4MulticastImportRouteTargetFourByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFIpv4MulticastImportRouteTargetFourByteAsFormat{}
+			if cValue := v.Get("four-byte-as-number"); cValue.Exists() {
+				item.FourByteAsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("asn4-index"); cValue.Exists() {
+				item.Asn4Index = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.StringValue(cValue.String())
+			}
+			data.Ipv4MulticastImportRouteTargetFourByteAsFormat = append(data.Ipv4MulticastImportRouteTargetFourByteAsFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ipv4-address-route-targets.ipv4-address-route-target"); value.Exists() {
+		data.Ipv4MulticastImportRouteTargetIpAddressFormat = make([]VRFIpv4MulticastImportRouteTargetIpAddressFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFIpv4MulticastImportRouteTargetIpAddressFormat{}
+			if cValue := v.Get("ipv4-address"); cValue.Exists() {
+				item.Ipv4Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4-address-index"); cValue.Exists() {
+				item.Ipv4AddressIndex = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.StringValue(cValue.String())
+			}
+			data.Ipv4MulticastImportRouteTargetIpAddressFormat = append(data.Ipv4MulticastImportRouteTargetIpAddressFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-route-targets.two-byte-as-route-target"); value.Exists() {
+		data.Ipv4MulticastExportRouteTargetTwoByteAsFormat = make([]VRFIpv4MulticastExportRouteTargetTwoByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFIpv4MulticastExportRouteTargetTwoByteAsFormat{}
+			if cValue := v.Get("two-byte-as-number"); cValue.Exists() {
+				item.TwoByteAsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("asn2-index"); cValue.Exists() {
+				item.Asn2Index = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.StringValue(cValue.String())
+			}
+			data.Ipv4MulticastExportRouteTargetTwoByteAsFormat = append(data.Ipv4MulticastExportRouteTargetTwoByteAsFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-route-targets.four-byte-as-route-target"); value.Exists() {
+		data.Ipv4MulticastExportRouteTargetFourByteAsFormat = make([]VRFIpv4MulticastExportRouteTargetFourByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFIpv4MulticastExportRouteTargetFourByteAsFormat{}
+			if cValue := v.Get("four-byte-as-number"); cValue.Exists() {
+				item.FourByteAsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("asn4-index"); cValue.Exists() {
+				item.Asn4Index = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.StringValue(cValue.String())
+			}
+			data.Ipv4MulticastExportRouteTargetFourByteAsFormat = append(data.Ipv4MulticastExportRouteTargetFourByteAsFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ipv4-address-route-targets.ipv4-address-route-target"); value.Exists() {
+		data.Ipv4MulticastExportRouteTargetIpAddressFormat = make([]VRFIpv4MulticastExportRouteTargetIpAddressFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFIpv4MulticastExportRouteTargetIpAddressFormat{}
+			if cValue := v.Get("ipv4-address"); cValue.Exists() {
+				item.Ipv4Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4-address-index"); cValue.Exists() {
+				item.Ipv4AddressIndex = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.StringValue(cValue.String())
+			}
+			data.Ipv4MulticastExportRouteTargetIpAddressFormat = append(data.Ipv4MulticastExportRouteTargetIpAddressFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-route-targets.two-byte-as-route-target"); value.Exists() {
+		data.Ipv6MulticastImportRouteTargetTwoByteAsFormat = make([]VRFIpv6MulticastImportRouteTargetTwoByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFIpv6MulticastImportRouteTargetTwoByteAsFormat{}
+			if cValue := v.Get("two-byte-as-number"); cValue.Exists() {
+				item.TwoByteAsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("asn2-index"); cValue.Exists() {
+				item.Asn2Index = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.StringValue(cValue.String())
+			}
+			data.Ipv6MulticastImportRouteTargetTwoByteAsFormat = append(data.Ipv6MulticastImportRouteTargetTwoByteAsFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-route-targets.four-byte-as-route-target"); value.Exists() {
+		data.Ipv6MulticastImportRouteTargetFourByteAsFormat = make([]VRFIpv6MulticastImportRouteTargetFourByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFIpv6MulticastImportRouteTargetFourByteAsFormat{}
+			if cValue := v.Get("four-byte-as-number"); cValue.Exists() {
+				item.FourByteAsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("asn4-index"); cValue.Exists() {
+				item.Asn4Index = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.StringValue(cValue.String())
+			}
+			data.Ipv6MulticastImportRouteTargetFourByteAsFormat = append(data.Ipv6MulticastImportRouteTargetFourByteAsFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ipv4-address-route-targets.ipv4-address-route-target"); value.Exists() {
+		data.Ipv6MulticastImportRouteTargetIpAddressFormat = make([]VRFIpv6MulticastImportRouteTargetIpAddressFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFIpv6MulticastImportRouteTargetIpAddressFormat{}
+			if cValue := v.Get("ipv4-address"); cValue.Exists() {
+				item.Ipv4Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4-address-index"); cValue.Exists() {
+				item.Ipv4AddressIndex = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.StringValue(cValue.String())
+			}
+			data.Ipv6MulticastImportRouteTargetIpAddressFormat = append(data.Ipv6MulticastImportRouteTargetIpAddressFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-route-targets.two-byte-as-route-target"); value.Exists() {
+		data.Ipv6MulticastExportRouteTargetTwoByteAsFormat = make([]VRFIpv6MulticastExportRouteTargetTwoByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFIpv6MulticastExportRouteTargetTwoByteAsFormat{}
+			if cValue := v.Get("two-byte-as-number"); cValue.Exists() {
+				item.TwoByteAsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("asn2-index"); cValue.Exists() {
+				item.Asn2Index = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.StringValue(cValue.String())
+			}
+			data.Ipv6MulticastExportRouteTargetTwoByteAsFormat = append(data.Ipv6MulticastExportRouteTargetTwoByteAsFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-route-targets.four-byte-as-route-target"); value.Exists() {
+		data.Ipv6MulticastExportRouteTargetFourByteAsFormat = make([]VRFIpv6MulticastExportRouteTargetFourByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFIpv6MulticastExportRouteTargetFourByteAsFormat{}
+			if cValue := v.Get("four-byte-as-number"); cValue.Exists() {
+				item.FourByteAsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("asn4-index"); cValue.Exists() {
+				item.Asn4Index = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.StringValue(cValue.String())
+			}
+			data.Ipv6MulticastExportRouteTargetFourByteAsFormat = append(data.Ipv6MulticastExportRouteTargetFourByteAsFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ipv4-address-route-targets.ipv4-address-route-target"); value.Exists() {
+		data.Ipv6MulticastExportRouteTargetIpAddressFormat = make([]VRFIpv6MulticastExportRouteTargetIpAddressFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFIpv6MulticastExportRouteTargetIpAddressFormat{}
+			if cValue := v.Get("ipv4-address"); cValue.Exists() {
+				item.Ipv4Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4-address-index"); cValue.Exists() {
+				item.Ipv4AddressIndex = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.StringValue(cValue.String())
+			}
+			data.Ipv6MulticastExportRouteTargetIpAddressFormat = append(data.Ipv6MulticastExportRouteTargetIpAddressFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "vpn.id"); value.Exists() {
+		data.VpnId = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "remote-route-filtering.disable"); value.Exists() {
+		data.RemoteRouteFilteringDisable = types.BoolValue(true)
+	} else {
+		data.RemoteRouteFilteringDisable = types.BoolValue(false)
 	}
 }
 
@@ -1299,8 +3286,11 @@ func (data *VRFData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "vpn.id"); value.Exists() {
-		data.VpnId = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "fallback-vrf"); value.Exists() {
+		data.FallbackVrf = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-l2vpn-cfg:evpn-route-sync"); value.Exists() {
+		data.EvpnRouteSync = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv4.unicast"); value.Exists() {
 		data.Ipv4Unicast = types.BoolValue(true)
@@ -1313,10 +3303,130 @@ func (data *VRFData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-policy"); value.Exists() {
 		data.Ipv4UnicastExportRoutePolicy = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.bridge-domain.advertise-as-vpn"); value.Exists() {
+		data.Ipv4UnicastImportFromBridgeDomainAdvertiseAsVpn = types.BoolValue(true)
+	} else {
+		data.Ipv4UnicastImportFromBridgeDomainAdvertiseAsVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.advertise-as-vpn"); value.Exists() {
+		data.Ipv4UnicastImportFromVrfAdvertiseAsVpn = types.BoolValue(true)
+	} else {
+		data.Ipv4UnicastImportFromVrfAdvertiseAsVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.backup"); value.Exists() {
+		data.Ipv4UnicastImportFromVrfAllowBackup = types.BoolValue(true)
+	} else {
+		data.Ipv4UnicastImportFromVrfAllowBackup = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.best-external"); value.Exists() {
+		data.Ipv4UnicastImportFromVrfAllowBestExternal = types.BoolValue(true)
+	} else {
+		data.Ipv4UnicastImportFromVrfAllowBestExternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.advertise-as-vpn"); value.Exists() {
+		data.Ipv4UnicastImportFromDefaultVrfAdvertiseAsVpn = types.BoolValue(true)
+	} else {
+		data.Ipv4UnicastImportFromDefaultVrfAdvertiseAsVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.route-policy"); value.Exists() {
+		data.Ipv4UnicastImportFromDefaultVrfRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow-imported-vpn"); value.Exists() {
+		data.Ipv4UnicastExportToVrfAllowImportedVpn = types.BoolValue(true)
+	} else {
+		data.Ipv4UnicastExportToVrfAllowImportedVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.backup"); value.Exists() {
+		data.Ipv4UnicastExportToVrfAllowBackup = types.BoolValue(true)
+	} else {
+		data.Ipv4UnicastExportToVrfAllowBackup = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.best-external"); value.Exists() {
+		data.Ipv4UnicastExportToVrfAllowBestExternal = types.BoolValue(true)
+	} else {
+		data.Ipv4UnicastExportToVrfAllowBestExternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.route-policy"); value.Exists() {
+		data.Ipv4UnicastExportToDefaultVrfRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.allow-imported-vpn"); value.Exists() {
+		data.Ipv4UnicastExportToDefaultVrfAllowImportedVpn = types.BoolValue(true)
+	} else {
+		data.Ipv4UnicastExportToDefaultVrfAllowImportedVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.prefix-limit"); value.Exists() {
+		data.Ipv4UnicastMaxPrefixLimit = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.mid-thresh"); value.Exists() {
+		data.Ipv4UnicastMaxPrefixThreshold = types.Int64Value(value.Int())
+	}
 	if value := gjson.GetBytes(res, "address-family.ipv4.multicast"); value.Exists() {
 		data.Ipv4Multicast = types.BoolValue(true)
 	} else {
 		data.Ipv4Multicast = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-policy"); value.Exists() {
+		data.Ipv4MulticastImportRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-policy"); value.Exists() {
+		data.Ipv4MulticastExportRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.bridge-domain.advertise-as-vpn"); value.Exists() {
+		data.Ipv4MulticastImportFromBridgeDomainAdvertiseAsVpn = types.BoolValue(true)
+	} else {
+		data.Ipv4MulticastImportFromBridgeDomainAdvertiseAsVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.advertise-as-vpn"); value.Exists() {
+		data.Ipv4MulticastImportFromVrfAdvertiseAsVpn = types.BoolValue(true)
+	} else {
+		data.Ipv4MulticastImportFromVrfAdvertiseAsVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.backup"); value.Exists() {
+		data.Ipv4MulticastImportFromVrfAllowBackup = types.BoolValue(true)
+	} else {
+		data.Ipv4MulticastImportFromVrfAllowBackup = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.best-external"); value.Exists() {
+		data.Ipv4MulticastImportFromVrfAllowBestExternal = types.BoolValue(true)
+	} else {
+		data.Ipv4MulticastImportFromVrfAllowBestExternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.advertise-as-vpn"); value.Exists() {
+		data.Ipv4MulticastImportFromDefaultVrfAdvertiseAsVpn = types.BoolValue(true)
+	} else {
+		data.Ipv4MulticastImportFromDefaultVrfAdvertiseAsVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.route-policy"); value.Exists() {
+		data.Ipv4MulticastImportFromDefaultVrfRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow-imported-vpn"); value.Exists() {
+		data.Ipv4MulticastExportToVrfAllowImportedVpn = types.BoolValue(true)
+	} else {
+		data.Ipv4MulticastExportToVrfAllowImportedVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.backup"); value.Exists() {
+		data.Ipv4MulticastExportToVrfAllowBackup = types.BoolValue(true)
+	} else {
+		data.Ipv4MulticastExportToVrfAllowBackup = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.best-external"); value.Exists() {
+		data.Ipv4MulticastExportToVrfAllowBestExternal = types.BoolValue(true)
+	} else {
+		data.Ipv4MulticastExportToVrfAllowBestExternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.route-policy"); value.Exists() {
+		data.Ipv4MulticastExportToDefaultVrfRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.allow-imported-vpn"); value.Exists() {
+		data.Ipv4MulticastExportToDefaultVrfAllowImportedVpn = types.BoolValue(true)
+	} else {
+		data.Ipv4MulticastExportToDefaultVrfAllowImportedVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.prefix-limit"); value.Exists() {
+		data.Ipv4MulticastMaxPrefixLimit = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.mid-thresh"); value.Exists() {
+		data.Ipv4MulticastMaxPrefixThreshold = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv4.flowspec"); value.Exists() {
 		data.Ipv4Flowspec = types.BoolValue(true)
@@ -1334,10 +3444,130 @@ func (data *VRFData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-policy"); value.Exists() {
 		data.Ipv6UnicastExportRoutePolicy = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.bridge-domain.advertise-as-vpn"); value.Exists() {
+		data.Ipv6UnicastImportFromBridgeDomainAdvertiseAsVpn = types.BoolValue(true)
+	} else {
+		data.Ipv6UnicastImportFromBridgeDomainAdvertiseAsVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.advertise-as-vpn"); value.Exists() {
+		data.Ipv6UnicastImportFromVrfAdvertiseAsVpn = types.BoolValue(true)
+	} else {
+		data.Ipv6UnicastImportFromVrfAdvertiseAsVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.backup"); value.Exists() {
+		data.Ipv6UnicastImportFromVrfAllowBackup = types.BoolValue(true)
+	} else {
+		data.Ipv6UnicastImportFromVrfAllowBackup = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.best-external"); value.Exists() {
+		data.Ipv6UnicastImportFromVrfAllowBestExternal = types.BoolValue(true)
+	} else {
+		data.Ipv6UnicastImportFromVrfAllowBestExternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.advertise-as-vpn"); value.Exists() {
+		data.Ipv6UnicastImportFromDefaultVrfAdvertiseAsVpn = types.BoolValue(true)
+	} else {
+		data.Ipv6UnicastImportFromDefaultVrfAdvertiseAsVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.route-policy"); value.Exists() {
+		data.Ipv6UnicastImportFromDefaultVrfRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow-imported-vpn"); value.Exists() {
+		data.Ipv6UnicastExportToVrfAllowImportedVpn = types.BoolValue(true)
+	} else {
+		data.Ipv6UnicastExportToVrfAllowImportedVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.backup"); value.Exists() {
+		data.Ipv6UnicastExportToVrfAllowBackup = types.BoolValue(true)
+	} else {
+		data.Ipv6UnicastExportToVrfAllowBackup = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.best-external"); value.Exists() {
+		data.Ipv6UnicastExportToVrfAllowBestExternal = types.BoolValue(true)
+	} else {
+		data.Ipv6UnicastExportToVrfAllowBestExternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.route-policy"); value.Exists() {
+		data.Ipv6UnicastExportToDefaultVrfRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.allow-imported-vpn"); value.Exists() {
+		data.Ipv6UnicastExportToDefaultVrfAllowImportedVpn = types.BoolValue(true)
+	} else {
+		data.Ipv6UnicastExportToDefaultVrfAllowImportedVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.prefix-limit"); value.Exists() {
+		data.Ipv6UnicastMaxPrefixLimit = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.mid-thresh"); value.Exists() {
+		data.Ipv6UnicastMaxPrefixThreshold = types.Int64Value(value.Int())
+	}
 	if value := gjson.GetBytes(res, "address-family.ipv6.multicast"); value.Exists() {
 		data.Ipv6Multicast = types.BoolValue(true)
 	} else {
 		data.Ipv6Multicast = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-policy"); value.Exists() {
+		data.Ipv6MulticastImportRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-policy"); value.Exists() {
+		data.Ipv6MulticastExportRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.bridge-domain.advertise-as-vpn"); value.Exists() {
+		data.Ipv6MulticastImportFromBridgeDomainAdvertiseAsVpn = types.BoolValue(true)
+	} else {
+		data.Ipv6MulticastImportFromBridgeDomainAdvertiseAsVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.advertise-as-vpn"); value.Exists() {
+		data.Ipv6MulticastImportFromVrfAdvertiseAsVpn = types.BoolValue(true)
+	} else {
+		data.Ipv6MulticastImportFromVrfAdvertiseAsVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.backup"); value.Exists() {
+		data.Ipv6MulticastImportFromVrfAllowBackup = types.BoolValue(true)
+	} else {
+		data.Ipv6MulticastImportFromVrfAllowBackup = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.vrf.allow.best-external"); value.Exists() {
+		data.Ipv6MulticastImportFromVrfAllowBestExternal = types.BoolValue(true)
+	} else {
+		data.Ipv6MulticastImportFromVrfAllowBestExternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.advertise-as-vpn"); value.Exists() {
+		data.Ipv6MulticastImportFromDefaultVrfAdvertiseAsVpn = types.BoolValue(true)
+	} else {
+		data.Ipv6MulticastImportFromDefaultVrfAdvertiseAsVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.from.default-vrf.route-policy"); value.Exists() {
+		data.Ipv6MulticastImportFromDefaultVrfRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow-imported-vpn"); value.Exists() {
+		data.Ipv6MulticastExportToVrfAllowImportedVpn = types.BoolValue(true)
+	} else {
+		data.Ipv6MulticastExportToVrfAllowImportedVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.backup"); value.Exists() {
+		data.Ipv6MulticastExportToVrfAllowBackup = types.BoolValue(true)
+	} else {
+		data.Ipv6MulticastExportToVrfAllowBackup = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.vrf.allow.best-external"); value.Exists() {
+		data.Ipv6MulticastExportToVrfAllowBestExternal = types.BoolValue(true)
+	} else {
+		data.Ipv6MulticastExportToVrfAllowBestExternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.route-policy"); value.Exists() {
+		data.Ipv6MulticastExportToDefaultVrfRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.to.default-vrf.allow-imported-vpn"); value.Exists() {
+		data.Ipv6MulticastExportToDefaultVrfAllowImportedVpn = types.BoolValue(true)
+	} else {
+		data.Ipv6MulticastExportToDefaultVrfAllowImportedVpn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.prefix-limit"); value.Exists() {
+		data.Ipv6MulticastMaxPrefixLimit = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-rib-cfg:maximum.prefix.mid-thresh"); value.Exists() {
+		data.Ipv6MulticastMaxPrefixThreshold = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv6.flowspec"); value.Exists() {
 		data.Ipv6Flowspec = types.BoolValue(true)
@@ -1566,6 +3796,218 @@ func (data *VRFData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-route-targets.two-byte-as-route-target"); value.Exists() {
+		data.Ipv4MulticastImportRouteTargetTwoByteAsFormat = make([]VRFIpv4MulticastImportRouteTargetTwoByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFIpv4MulticastImportRouteTargetTwoByteAsFormat{}
+			if cValue := v.Get("two-byte-as-number"); cValue.Exists() {
+				item.TwoByteAsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("asn2-index"); cValue.Exists() {
+				item.Asn2Index = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.StringValue(cValue.String())
+			}
+			data.Ipv4MulticastImportRouteTargetTwoByteAsFormat = append(data.Ipv4MulticastImportRouteTargetTwoByteAsFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-route-targets.four-byte-as-route-target"); value.Exists() {
+		data.Ipv4MulticastImportRouteTargetFourByteAsFormat = make([]VRFIpv4MulticastImportRouteTargetFourByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFIpv4MulticastImportRouteTargetFourByteAsFormat{}
+			if cValue := v.Get("four-byte-as-number"); cValue.Exists() {
+				item.FourByteAsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("asn4-index"); cValue.Exists() {
+				item.Asn4Index = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.StringValue(cValue.String())
+			}
+			data.Ipv4MulticastImportRouteTargetFourByteAsFormat = append(data.Ipv4MulticastImportRouteTargetFourByteAsFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ipv4-address-route-targets.ipv4-address-route-target"); value.Exists() {
+		data.Ipv4MulticastImportRouteTargetIpAddressFormat = make([]VRFIpv4MulticastImportRouteTargetIpAddressFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFIpv4MulticastImportRouteTargetIpAddressFormat{}
+			if cValue := v.Get("ipv4-address"); cValue.Exists() {
+				item.Ipv4Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4-address-index"); cValue.Exists() {
+				item.Ipv4AddressIndex = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.StringValue(cValue.String())
+			}
+			data.Ipv4MulticastImportRouteTargetIpAddressFormat = append(data.Ipv4MulticastImportRouteTargetIpAddressFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-route-targets.two-byte-as-route-target"); value.Exists() {
+		data.Ipv4MulticastExportRouteTargetTwoByteAsFormat = make([]VRFIpv4MulticastExportRouteTargetTwoByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFIpv4MulticastExportRouteTargetTwoByteAsFormat{}
+			if cValue := v.Get("two-byte-as-number"); cValue.Exists() {
+				item.TwoByteAsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("asn2-index"); cValue.Exists() {
+				item.Asn2Index = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.StringValue(cValue.String())
+			}
+			data.Ipv4MulticastExportRouteTargetTwoByteAsFormat = append(data.Ipv4MulticastExportRouteTargetTwoByteAsFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-route-targets.four-byte-as-route-target"); value.Exists() {
+		data.Ipv4MulticastExportRouteTargetFourByteAsFormat = make([]VRFIpv4MulticastExportRouteTargetFourByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFIpv4MulticastExportRouteTargetFourByteAsFormat{}
+			if cValue := v.Get("four-byte-as-number"); cValue.Exists() {
+				item.FourByteAsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("asn4-index"); cValue.Exists() {
+				item.Asn4Index = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.StringValue(cValue.String())
+			}
+			data.Ipv4MulticastExportRouteTargetFourByteAsFormat = append(data.Ipv4MulticastExportRouteTargetFourByteAsFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ipv4-address-route-targets.ipv4-address-route-target"); value.Exists() {
+		data.Ipv4MulticastExportRouteTargetIpAddressFormat = make([]VRFIpv4MulticastExportRouteTargetIpAddressFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFIpv4MulticastExportRouteTargetIpAddressFormat{}
+			if cValue := v.Get("ipv4-address"); cValue.Exists() {
+				item.Ipv4Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4-address-index"); cValue.Exists() {
+				item.Ipv4AddressIndex = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.StringValue(cValue.String())
+			}
+			data.Ipv4MulticastExportRouteTargetIpAddressFormat = append(data.Ipv4MulticastExportRouteTargetIpAddressFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-route-targets.two-byte-as-route-target"); value.Exists() {
+		data.Ipv6MulticastImportRouteTargetTwoByteAsFormat = make([]VRFIpv6MulticastImportRouteTargetTwoByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFIpv6MulticastImportRouteTargetTwoByteAsFormat{}
+			if cValue := v.Get("two-byte-as-number"); cValue.Exists() {
+				item.TwoByteAsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("asn2-index"); cValue.Exists() {
+				item.Asn2Index = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.StringValue(cValue.String())
+			}
+			data.Ipv6MulticastImportRouteTargetTwoByteAsFormat = append(data.Ipv6MulticastImportRouteTargetTwoByteAsFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-route-targets.four-byte-as-route-target"); value.Exists() {
+		data.Ipv6MulticastImportRouteTargetFourByteAsFormat = make([]VRFIpv6MulticastImportRouteTargetFourByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFIpv6MulticastImportRouteTargetFourByteAsFormat{}
+			if cValue := v.Get("four-byte-as-number"); cValue.Exists() {
+				item.FourByteAsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("asn4-index"); cValue.Exists() {
+				item.Asn4Index = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.StringValue(cValue.String())
+			}
+			data.Ipv6MulticastImportRouteTargetFourByteAsFormat = append(data.Ipv6MulticastImportRouteTargetFourByteAsFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ipv4-address-route-targets.ipv4-address-route-target"); value.Exists() {
+		data.Ipv6MulticastImportRouteTargetIpAddressFormat = make([]VRFIpv6MulticastImportRouteTargetIpAddressFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFIpv6MulticastImportRouteTargetIpAddressFormat{}
+			if cValue := v.Get("ipv4-address"); cValue.Exists() {
+				item.Ipv4Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4-address-index"); cValue.Exists() {
+				item.Ipv4AddressIndex = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.StringValue(cValue.String())
+			}
+			data.Ipv6MulticastImportRouteTargetIpAddressFormat = append(data.Ipv6MulticastImportRouteTargetIpAddressFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-route-targets.two-byte-as-route-target"); value.Exists() {
+		data.Ipv6MulticastExportRouteTargetTwoByteAsFormat = make([]VRFIpv6MulticastExportRouteTargetTwoByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFIpv6MulticastExportRouteTargetTwoByteAsFormat{}
+			if cValue := v.Get("two-byte-as-number"); cValue.Exists() {
+				item.TwoByteAsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("asn2-index"); cValue.Exists() {
+				item.Asn2Index = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.StringValue(cValue.String())
+			}
+			data.Ipv6MulticastExportRouteTargetTwoByteAsFormat = append(data.Ipv6MulticastExportRouteTargetTwoByteAsFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-route-targets.four-byte-as-route-target"); value.Exists() {
+		data.Ipv6MulticastExportRouteTargetFourByteAsFormat = make([]VRFIpv6MulticastExportRouteTargetFourByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFIpv6MulticastExportRouteTargetFourByteAsFormat{}
+			if cValue := v.Get("four-byte-as-number"); cValue.Exists() {
+				item.FourByteAsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("asn4-index"); cValue.Exists() {
+				item.Asn4Index = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.StringValue(cValue.String())
+			}
+			data.Ipv6MulticastExportRouteTargetFourByteAsFormat = append(data.Ipv6MulticastExportRouteTargetFourByteAsFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ipv4-address-route-targets.ipv4-address-route-target"); value.Exists() {
+		data.Ipv6MulticastExportRouteTargetIpAddressFormat = make([]VRFIpv6MulticastExportRouteTargetIpAddressFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFIpv6MulticastExportRouteTargetIpAddressFormat{}
+			if cValue := v.Get("ipv4-address"); cValue.Exists() {
+				item.Ipv4Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4-address-index"); cValue.Exists() {
+				item.Ipv4AddressIndex = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.StringValue(cValue.String())
+			}
+			data.Ipv6MulticastExportRouteTargetIpAddressFormat = append(data.Ipv6MulticastExportRouteTargetIpAddressFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "vpn.id"); value.Exists() {
+		data.VpnId = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "remote-route-filtering.disable"); value.Exists() {
+		data.RemoteRouteFilteringDisable = types.BoolValue(true)
+	} else {
+		data.RemoteRouteFilteringDisable = types.BoolValue(false)
+	}
 }
 
 // End of section. //template:end fromBodyData
@@ -1574,6 +4016,516 @@ func (data *VRFData) fromBody(ctx context.Context, res []byte) {
 
 func (data *VRF) getDeletedItems(ctx context.Context, state VRF) []string {
 	deletedItems := make([]string, 0)
+	if !state.RemoteRouteFilteringDisable.IsNull() && data.RemoteRouteFilteringDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/remote-route-filtering/disable", state.getPath()))
+	}
+	if !state.VpnId.IsNull() && data.VpnId.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/vpn/id", state.getPath()))
+	}
+	for i := range state.Ipv6MulticastExportRouteTargetIpAddressFormat {
+		keys := [...]string{"ipv4-address", "ipv4-address-index", "stitching"}
+		stateKeyValues := [...]string{state.Ipv6MulticastExportRouteTargetIpAddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(state.Ipv6MulticastExportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.ValueInt64(), 10), state.Ipv6MulticastExportRouteTargetIpAddressFormat[i].Stitching.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Ipv6MulticastExportRouteTargetIpAddressFormat[i].Ipv4Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Ipv6MulticastExportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Ipv6MulticastExportRouteTargetIpAddressFormat[i].Stitching.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Ipv6MulticastExportRouteTargetIpAddressFormat {
+			found = true
+			if state.Ipv6MulticastExportRouteTargetIpAddressFormat[i].Ipv4Address.ValueString() != data.Ipv6MulticastExportRouteTargetIpAddressFormat[j].Ipv4Address.ValueString() {
+				found = false
+			}
+			if state.Ipv6MulticastExportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.ValueInt64() != data.Ipv6MulticastExportRouteTargetIpAddressFormat[j].Ipv4AddressIndex.ValueInt64() {
+				found = false
+			}
+			if state.Ipv6MulticastExportRouteTargetIpAddressFormat[i].Stitching.ValueString() != data.Ipv6MulticastExportRouteTargetIpAddressFormat[j].Stitching.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/ipv4-address-route-targets/ipv4-address-route-target%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.Ipv6MulticastExportRouteTargetFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "asn4-index", "stitching"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.Ipv6MulticastExportRouteTargetFourByteAsFormat[i].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(state.Ipv6MulticastExportRouteTargetFourByteAsFormat[i].Asn4Index.ValueInt64(), 10), state.Ipv6MulticastExportRouteTargetFourByteAsFormat[i].Stitching.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Ipv6MulticastExportRouteTargetFourByteAsFormat[i].FourByteAsNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Ipv6MulticastExportRouteTargetFourByteAsFormat[i].Asn4Index.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Ipv6MulticastExportRouteTargetFourByteAsFormat[i].Stitching.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Ipv6MulticastExportRouteTargetFourByteAsFormat {
+			found = true
+			if state.Ipv6MulticastExportRouteTargetFourByteAsFormat[i].FourByteAsNumber.ValueInt64() != data.Ipv6MulticastExportRouteTargetFourByteAsFormat[j].FourByteAsNumber.ValueInt64() {
+				found = false
+			}
+			if state.Ipv6MulticastExportRouteTargetFourByteAsFormat[i].Asn4Index.ValueInt64() != data.Ipv6MulticastExportRouteTargetFourByteAsFormat[j].Asn4Index.ValueInt64() {
+				found = false
+			}
+			if state.Ipv6MulticastExportRouteTargetFourByteAsFormat[i].Stitching.ValueString() != data.Ipv6MulticastExportRouteTargetFourByteAsFormat[j].Stitching.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/four-byte-as-route-targets/four-byte-as-route-target%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.Ipv6MulticastExportRouteTargetTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "asn2-index", "stitching"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.Ipv6MulticastExportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(state.Ipv6MulticastExportRouteTargetTwoByteAsFormat[i].Asn2Index.ValueInt64(), 10), state.Ipv6MulticastExportRouteTargetTwoByteAsFormat[i].Stitching.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Ipv6MulticastExportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Ipv6MulticastExportRouteTargetTwoByteAsFormat[i].Asn2Index.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Ipv6MulticastExportRouteTargetTwoByteAsFormat[i].Stitching.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Ipv6MulticastExportRouteTargetTwoByteAsFormat {
+			found = true
+			if state.Ipv6MulticastExportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64() != data.Ipv6MulticastExportRouteTargetTwoByteAsFormat[j].TwoByteAsNumber.ValueInt64() {
+				found = false
+			}
+			if state.Ipv6MulticastExportRouteTargetTwoByteAsFormat[i].Asn2Index.ValueInt64() != data.Ipv6MulticastExportRouteTargetTwoByteAsFormat[j].Asn2Index.ValueInt64() {
+				found = false
+			}
+			if state.Ipv6MulticastExportRouteTargetTwoByteAsFormat[i].Stitching.ValueString() != data.Ipv6MulticastExportRouteTargetTwoByteAsFormat[j].Stitching.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/two-byte-as-route-targets/two-byte-as-route-target%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.Ipv6MulticastImportRouteTargetIpAddressFormat {
+		keys := [...]string{"ipv4-address", "ipv4-address-index", "stitching"}
+		stateKeyValues := [...]string{state.Ipv6MulticastImportRouteTargetIpAddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(state.Ipv6MulticastImportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.ValueInt64(), 10), state.Ipv6MulticastImportRouteTargetIpAddressFormat[i].Stitching.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Ipv6MulticastImportRouteTargetIpAddressFormat[i].Ipv4Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Ipv6MulticastImportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Ipv6MulticastImportRouteTargetIpAddressFormat[i].Stitching.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Ipv6MulticastImportRouteTargetIpAddressFormat {
+			found = true
+			if state.Ipv6MulticastImportRouteTargetIpAddressFormat[i].Ipv4Address.ValueString() != data.Ipv6MulticastImportRouteTargetIpAddressFormat[j].Ipv4Address.ValueString() {
+				found = false
+			}
+			if state.Ipv6MulticastImportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.ValueInt64() != data.Ipv6MulticastImportRouteTargetIpAddressFormat[j].Ipv4AddressIndex.ValueInt64() {
+				found = false
+			}
+			if state.Ipv6MulticastImportRouteTargetIpAddressFormat[i].Stitching.ValueString() != data.Ipv6MulticastImportRouteTargetIpAddressFormat[j].Stitching.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/ipv4-address-route-targets/ipv4-address-route-target%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.Ipv6MulticastImportRouteTargetFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "asn4-index", "stitching"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.Ipv6MulticastImportRouteTargetFourByteAsFormat[i].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(state.Ipv6MulticastImportRouteTargetFourByteAsFormat[i].Asn4Index.ValueInt64(), 10), state.Ipv6MulticastImportRouteTargetFourByteAsFormat[i].Stitching.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Ipv6MulticastImportRouteTargetFourByteAsFormat[i].FourByteAsNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Ipv6MulticastImportRouteTargetFourByteAsFormat[i].Asn4Index.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Ipv6MulticastImportRouteTargetFourByteAsFormat[i].Stitching.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Ipv6MulticastImportRouteTargetFourByteAsFormat {
+			found = true
+			if state.Ipv6MulticastImportRouteTargetFourByteAsFormat[i].FourByteAsNumber.ValueInt64() != data.Ipv6MulticastImportRouteTargetFourByteAsFormat[j].FourByteAsNumber.ValueInt64() {
+				found = false
+			}
+			if state.Ipv6MulticastImportRouteTargetFourByteAsFormat[i].Asn4Index.ValueInt64() != data.Ipv6MulticastImportRouteTargetFourByteAsFormat[j].Asn4Index.ValueInt64() {
+				found = false
+			}
+			if state.Ipv6MulticastImportRouteTargetFourByteAsFormat[i].Stitching.ValueString() != data.Ipv6MulticastImportRouteTargetFourByteAsFormat[j].Stitching.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/four-byte-as-route-targets/four-byte-as-route-target%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.Ipv6MulticastImportRouteTargetTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "asn2-index", "stitching"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.Ipv6MulticastImportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(state.Ipv6MulticastImportRouteTargetTwoByteAsFormat[i].Asn2Index.ValueInt64(), 10), state.Ipv6MulticastImportRouteTargetTwoByteAsFormat[i].Stitching.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Ipv6MulticastImportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Ipv6MulticastImportRouteTargetTwoByteAsFormat[i].Asn2Index.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Ipv6MulticastImportRouteTargetTwoByteAsFormat[i].Stitching.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Ipv6MulticastImportRouteTargetTwoByteAsFormat {
+			found = true
+			if state.Ipv6MulticastImportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64() != data.Ipv6MulticastImportRouteTargetTwoByteAsFormat[j].TwoByteAsNumber.ValueInt64() {
+				found = false
+			}
+			if state.Ipv6MulticastImportRouteTargetTwoByteAsFormat[i].Asn2Index.ValueInt64() != data.Ipv6MulticastImportRouteTargetTwoByteAsFormat[j].Asn2Index.ValueInt64() {
+				found = false
+			}
+			if state.Ipv6MulticastImportRouteTargetTwoByteAsFormat[i].Stitching.ValueString() != data.Ipv6MulticastImportRouteTargetTwoByteAsFormat[j].Stitching.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/two-byte-as-route-targets/two-byte-as-route-target%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.Ipv4MulticastExportRouteTargetIpAddressFormat {
+		keys := [...]string{"ipv4-address", "ipv4-address-index", "stitching"}
+		stateKeyValues := [...]string{state.Ipv4MulticastExportRouteTargetIpAddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(state.Ipv4MulticastExportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.ValueInt64(), 10), state.Ipv4MulticastExportRouteTargetIpAddressFormat[i].Stitching.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Ipv4MulticastExportRouteTargetIpAddressFormat[i].Ipv4Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Ipv4MulticastExportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Ipv4MulticastExportRouteTargetIpAddressFormat[i].Stitching.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Ipv4MulticastExportRouteTargetIpAddressFormat {
+			found = true
+			if state.Ipv4MulticastExportRouteTargetIpAddressFormat[i].Ipv4Address.ValueString() != data.Ipv4MulticastExportRouteTargetIpAddressFormat[j].Ipv4Address.ValueString() {
+				found = false
+			}
+			if state.Ipv4MulticastExportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.ValueInt64() != data.Ipv4MulticastExportRouteTargetIpAddressFormat[j].Ipv4AddressIndex.ValueInt64() {
+				found = false
+			}
+			if state.Ipv4MulticastExportRouteTargetIpAddressFormat[i].Stitching.ValueString() != data.Ipv4MulticastExportRouteTargetIpAddressFormat[j].Stitching.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/ipv4-address-route-targets/ipv4-address-route-target%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.Ipv4MulticastExportRouteTargetFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "asn4-index", "stitching"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.Ipv4MulticastExportRouteTargetFourByteAsFormat[i].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(state.Ipv4MulticastExportRouteTargetFourByteAsFormat[i].Asn4Index.ValueInt64(), 10), state.Ipv4MulticastExportRouteTargetFourByteAsFormat[i].Stitching.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Ipv4MulticastExportRouteTargetFourByteAsFormat[i].FourByteAsNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Ipv4MulticastExportRouteTargetFourByteAsFormat[i].Asn4Index.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Ipv4MulticastExportRouteTargetFourByteAsFormat[i].Stitching.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Ipv4MulticastExportRouteTargetFourByteAsFormat {
+			found = true
+			if state.Ipv4MulticastExportRouteTargetFourByteAsFormat[i].FourByteAsNumber.ValueInt64() != data.Ipv4MulticastExportRouteTargetFourByteAsFormat[j].FourByteAsNumber.ValueInt64() {
+				found = false
+			}
+			if state.Ipv4MulticastExportRouteTargetFourByteAsFormat[i].Asn4Index.ValueInt64() != data.Ipv4MulticastExportRouteTargetFourByteAsFormat[j].Asn4Index.ValueInt64() {
+				found = false
+			}
+			if state.Ipv4MulticastExportRouteTargetFourByteAsFormat[i].Stitching.ValueString() != data.Ipv4MulticastExportRouteTargetFourByteAsFormat[j].Stitching.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/four-byte-as-route-targets/four-byte-as-route-target%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.Ipv4MulticastExportRouteTargetTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "asn2-index", "stitching"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.Ipv4MulticastExportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(state.Ipv4MulticastExportRouteTargetTwoByteAsFormat[i].Asn2Index.ValueInt64(), 10), state.Ipv4MulticastExportRouteTargetTwoByteAsFormat[i].Stitching.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Ipv4MulticastExportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Ipv4MulticastExportRouteTargetTwoByteAsFormat[i].Asn2Index.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Ipv4MulticastExportRouteTargetTwoByteAsFormat[i].Stitching.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Ipv4MulticastExportRouteTargetTwoByteAsFormat {
+			found = true
+			if state.Ipv4MulticastExportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64() != data.Ipv4MulticastExportRouteTargetTwoByteAsFormat[j].TwoByteAsNumber.ValueInt64() {
+				found = false
+			}
+			if state.Ipv4MulticastExportRouteTargetTwoByteAsFormat[i].Asn2Index.ValueInt64() != data.Ipv4MulticastExportRouteTargetTwoByteAsFormat[j].Asn2Index.ValueInt64() {
+				found = false
+			}
+			if state.Ipv4MulticastExportRouteTargetTwoByteAsFormat[i].Stitching.ValueString() != data.Ipv4MulticastExportRouteTargetTwoByteAsFormat[j].Stitching.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/two-byte-as-route-targets/two-byte-as-route-target%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.Ipv4MulticastImportRouteTargetIpAddressFormat {
+		keys := [...]string{"ipv4-address", "ipv4-address-index", "stitching"}
+		stateKeyValues := [...]string{state.Ipv4MulticastImportRouteTargetIpAddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(state.Ipv4MulticastImportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.ValueInt64(), 10), state.Ipv4MulticastImportRouteTargetIpAddressFormat[i].Stitching.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Ipv4MulticastImportRouteTargetIpAddressFormat[i].Ipv4Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Ipv4MulticastImportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Ipv4MulticastImportRouteTargetIpAddressFormat[i].Stitching.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Ipv4MulticastImportRouteTargetIpAddressFormat {
+			found = true
+			if state.Ipv4MulticastImportRouteTargetIpAddressFormat[i].Ipv4Address.ValueString() != data.Ipv4MulticastImportRouteTargetIpAddressFormat[j].Ipv4Address.ValueString() {
+				found = false
+			}
+			if state.Ipv4MulticastImportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.ValueInt64() != data.Ipv4MulticastImportRouteTargetIpAddressFormat[j].Ipv4AddressIndex.ValueInt64() {
+				found = false
+			}
+			if state.Ipv4MulticastImportRouteTargetIpAddressFormat[i].Stitching.ValueString() != data.Ipv4MulticastImportRouteTargetIpAddressFormat[j].Stitching.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/ipv4-address-route-targets/ipv4-address-route-target%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.Ipv4MulticastImportRouteTargetFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "asn4-index", "stitching"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.Ipv4MulticastImportRouteTargetFourByteAsFormat[i].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(state.Ipv4MulticastImportRouteTargetFourByteAsFormat[i].Asn4Index.ValueInt64(), 10), state.Ipv4MulticastImportRouteTargetFourByteAsFormat[i].Stitching.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Ipv4MulticastImportRouteTargetFourByteAsFormat[i].FourByteAsNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Ipv4MulticastImportRouteTargetFourByteAsFormat[i].Asn4Index.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Ipv4MulticastImportRouteTargetFourByteAsFormat[i].Stitching.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Ipv4MulticastImportRouteTargetFourByteAsFormat {
+			found = true
+			if state.Ipv4MulticastImportRouteTargetFourByteAsFormat[i].FourByteAsNumber.ValueInt64() != data.Ipv4MulticastImportRouteTargetFourByteAsFormat[j].FourByteAsNumber.ValueInt64() {
+				found = false
+			}
+			if state.Ipv4MulticastImportRouteTargetFourByteAsFormat[i].Asn4Index.ValueInt64() != data.Ipv4MulticastImportRouteTargetFourByteAsFormat[j].Asn4Index.ValueInt64() {
+				found = false
+			}
+			if state.Ipv4MulticastImportRouteTargetFourByteAsFormat[i].Stitching.ValueString() != data.Ipv4MulticastImportRouteTargetFourByteAsFormat[j].Stitching.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/four-byte-as-route-targets/four-byte-as-route-target%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.Ipv4MulticastImportRouteTargetTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "asn2-index", "stitching"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.Ipv4MulticastImportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(state.Ipv4MulticastImportRouteTargetTwoByteAsFormat[i].Asn2Index.ValueInt64(), 10), state.Ipv4MulticastImportRouteTargetTwoByteAsFormat[i].Stitching.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Ipv4MulticastImportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Ipv4MulticastImportRouteTargetTwoByteAsFormat[i].Asn2Index.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Ipv4MulticastImportRouteTargetTwoByteAsFormat[i].Stitching.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Ipv4MulticastImportRouteTargetTwoByteAsFormat {
+			found = true
+			if state.Ipv4MulticastImportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64() != data.Ipv4MulticastImportRouteTargetTwoByteAsFormat[j].TwoByteAsNumber.ValueInt64() {
+				found = false
+			}
+			if state.Ipv4MulticastImportRouteTargetTwoByteAsFormat[i].Asn2Index.ValueInt64() != data.Ipv4MulticastImportRouteTargetTwoByteAsFormat[j].Asn2Index.ValueInt64() {
+				found = false
+			}
+			if state.Ipv4MulticastImportRouteTargetTwoByteAsFormat[i].Stitching.ValueString() != data.Ipv4MulticastImportRouteTargetTwoByteAsFormat[j].Stitching.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/two-byte-as-route-targets/two-byte-as-route-target%v", state.getPath(), keyString))
+		}
+	}
 	for i := range state.Ipv6UnicastExportRouteTargetIpAddressFormat {
 		keys := [...]string{"ipv4-address", "ipv4-address-index", "stitching"}
 		stateKeyValues := [...]string{state.Ipv6UnicastExportRouteTargetIpAddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(state.Ipv6UnicastExportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.ValueInt64(), 10), state.Ipv6UnicastExportRouteTargetIpAddressFormat[i].Stitching.ValueString()}
@@ -2099,8 +5051,92 @@ func (data *VRF) getDeletedItems(ctx context.Context, state VRF) []string {
 	if !state.Ipv6Flowspec.IsNull() && data.Ipv6Flowspec.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/flowspec", state.getPath()))
 	}
+	if !state.Ipv6MulticastMaxPrefixThreshold.IsNull() && data.Ipv6MulticastMaxPrefixThreshold.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-rib-cfg:maximum", state.getPath()))
+	}
+	if !state.Ipv6MulticastMaxPrefixLimit.IsNull() && data.Ipv6MulticastMaxPrefixLimit.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-rib-cfg:maximum", state.getPath()))
+	}
+	if !state.Ipv6MulticastExportToDefaultVrfAllowImportedVpn.IsNull() && data.Ipv6MulticastExportToDefaultVrfAllowImportedVpn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/allow-imported-vpn", state.getPath()))
+	}
+	if !state.Ipv6MulticastExportToDefaultVrfRoutePolicy.IsNull() && data.Ipv6MulticastExportToDefaultVrfRoutePolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/route-policy", state.getPath()))
+	}
+	if !state.Ipv6MulticastExportToVrfAllowBestExternal.IsNull() && data.Ipv6MulticastExportToVrfAllowBestExternal.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/best-external", state.getPath()))
+	}
+	if !state.Ipv6MulticastExportToVrfAllowBackup.IsNull() && data.Ipv6MulticastExportToVrfAllowBackup.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/backup", state.getPath()))
+	}
+	if !state.Ipv6MulticastExportToVrfAllowImportedVpn.IsNull() && data.Ipv6MulticastExportToVrfAllowImportedVpn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow-imported-vpn", state.getPath()))
+	}
+	if !state.Ipv6MulticastImportFromDefaultVrfRoutePolicy.IsNull() && data.Ipv6MulticastImportFromDefaultVrfRoutePolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/route-policy", state.getPath()))
+	}
+	if !state.Ipv6MulticastImportFromDefaultVrfAdvertiseAsVpn.IsNull() && data.Ipv6MulticastImportFromDefaultVrfAdvertiseAsVpn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/advertise-as-vpn", state.getPath()))
+	}
+	if !state.Ipv6MulticastImportFromVrfAllowBestExternal.IsNull() && data.Ipv6MulticastImportFromVrfAllowBestExternal.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/best-external", state.getPath()))
+	}
+	if !state.Ipv6MulticastImportFromVrfAllowBackup.IsNull() && data.Ipv6MulticastImportFromVrfAllowBackup.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/backup", state.getPath()))
+	}
+	if !state.Ipv6MulticastImportFromVrfAdvertiseAsVpn.IsNull() && data.Ipv6MulticastImportFromVrfAdvertiseAsVpn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/advertise-as-vpn", state.getPath()))
+	}
+	if !state.Ipv6MulticastImportFromBridgeDomainAdvertiseAsVpn.IsNull() && data.Ipv6MulticastImportFromBridgeDomainAdvertiseAsVpn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/bridge-domain/advertise-as-vpn", state.getPath()))
+	}
+	if !state.Ipv6MulticastExportRoutePolicy.IsNull() && data.Ipv6MulticastExportRoutePolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-policy", state.getPath()))
+	}
+	if !state.Ipv6MulticastImportRoutePolicy.IsNull() && data.Ipv6MulticastImportRoutePolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-policy", state.getPath()))
+	}
 	if !state.Ipv6Multicast.IsNull() && data.Ipv6Multicast.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/multicast", state.getPath()))
+	}
+	if !state.Ipv6UnicastMaxPrefixThreshold.IsNull() && data.Ipv6UnicastMaxPrefixThreshold.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-rib-cfg:maximum", state.getPath()))
+	}
+	if !state.Ipv6UnicastMaxPrefixLimit.IsNull() && data.Ipv6UnicastMaxPrefixLimit.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-rib-cfg:maximum", state.getPath()))
+	}
+	if !state.Ipv6UnicastExportToDefaultVrfAllowImportedVpn.IsNull() && data.Ipv6UnicastExportToDefaultVrfAllowImportedVpn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/allow-imported-vpn", state.getPath()))
+	}
+	if !state.Ipv6UnicastExportToDefaultVrfRoutePolicy.IsNull() && data.Ipv6UnicastExportToDefaultVrfRoutePolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/route-policy", state.getPath()))
+	}
+	if !state.Ipv6UnicastExportToVrfAllowBestExternal.IsNull() && data.Ipv6UnicastExportToVrfAllowBestExternal.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/best-external", state.getPath()))
+	}
+	if !state.Ipv6UnicastExportToVrfAllowBackup.IsNull() && data.Ipv6UnicastExportToVrfAllowBackup.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/backup", state.getPath()))
+	}
+	if !state.Ipv6UnicastExportToVrfAllowImportedVpn.IsNull() && data.Ipv6UnicastExportToVrfAllowImportedVpn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow-imported-vpn", state.getPath()))
+	}
+	if !state.Ipv6UnicastImportFromDefaultVrfRoutePolicy.IsNull() && data.Ipv6UnicastImportFromDefaultVrfRoutePolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/route-policy", state.getPath()))
+	}
+	if !state.Ipv6UnicastImportFromDefaultVrfAdvertiseAsVpn.IsNull() && data.Ipv6UnicastImportFromDefaultVrfAdvertiseAsVpn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/advertise-as-vpn", state.getPath()))
+	}
+	if !state.Ipv6UnicastImportFromVrfAllowBestExternal.IsNull() && data.Ipv6UnicastImportFromVrfAllowBestExternal.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/best-external", state.getPath()))
+	}
+	if !state.Ipv6UnicastImportFromVrfAllowBackup.IsNull() && data.Ipv6UnicastImportFromVrfAllowBackup.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/backup", state.getPath()))
+	}
+	if !state.Ipv6UnicastImportFromVrfAdvertiseAsVpn.IsNull() && data.Ipv6UnicastImportFromVrfAdvertiseAsVpn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/advertise-as-vpn", state.getPath()))
+	}
+	if !state.Ipv6UnicastImportFromBridgeDomainAdvertiseAsVpn.IsNull() && data.Ipv6UnicastImportFromBridgeDomainAdvertiseAsVpn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/bridge-domain/advertise-as-vpn", state.getPath()))
 	}
 	if !state.Ipv6UnicastExportRoutePolicy.IsNull() && data.Ipv6UnicastExportRoutePolicy.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-policy", state.getPath()))
@@ -2114,8 +5150,92 @@ func (data *VRF) getDeletedItems(ctx context.Context, state VRF) []string {
 	if !state.Ipv4Flowspec.IsNull() && data.Ipv4Flowspec.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/flowspec", state.getPath()))
 	}
+	if !state.Ipv4MulticastMaxPrefixThreshold.IsNull() && data.Ipv4MulticastMaxPrefixThreshold.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-rib-cfg:maximum", state.getPath()))
+	}
+	if !state.Ipv4MulticastMaxPrefixLimit.IsNull() && data.Ipv4MulticastMaxPrefixLimit.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-rib-cfg:maximum", state.getPath()))
+	}
+	if !state.Ipv4MulticastExportToDefaultVrfAllowImportedVpn.IsNull() && data.Ipv4MulticastExportToDefaultVrfAllowImportedVpn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/allow-imported-vpn", state.getPath()))
+	}
+	if !state.Ipv4MulticastExportToDefaultVrfRoutePolicy.IsNull() && data.Ipv4MulticastExportToDefaultVrfRoutePolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/route-policy", state.getPath()))
+	}
+	if !state.Ipv4MulticastExportToVrfAllowBestExternal.IsNull() && data.Ipv4MulticastExportToVrfAllowBestExternal.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/best-external", state.getPath()))
+	}
+	if !state.Ipv4MulticastExportToVrfAllowBackup.IsNull() && data.Ipv4MulticastExportToVrfAllowBackup.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/backup", state.getPath()))
+	}
+	if !state.Ipv4MulticastExportToVrfAllowImportedVpn.IsNull() && data.Ipv4MulticastExportToVrfAllowImportedVpn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow-imported-vpn", state.getPath()))
+	}
+	if !state.Ipv4MulticastImportFromDefaultVrfRoutePolicy.IsNull() && data.Ipv4MulticastImportFromDefaultVrfRoutePolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/route-policy", state.getPath()))
+	}
+	if !state.Ipv4MulticastImportFromDefaultVrfAdvertiseAsVpn.IsNull() && data.Ipv4MulticastImportFromDefaultVrfAdvertiseAsVpn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/advertise-as-vpn", state.getPath()))
+	}
+	if !state.Ipv4MulticastImportFromVrfAllowBestExternal.IsNull() && data.Ipv4MulticastImportFromVrfAllowBestExternal.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/best-external", state.getPath()))
+	}
+	if !state.Ipv4MulticastImportFromVrfAllowBackup.IsNull() && data.Ipv4MulticastImportFromVrfAllowBackup.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/backup", state.getPath()))
+	}
+	if !state.Ipv4MulticastImportFromVrfAdvertiseAsVpn.IsNull() && data.Ipv4MulticastImportFromVrfAdvertiseAsVpn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/advertise-as-vpn", state.getPath()))
+	}
+	if !state.Ipv4MulticastImportFromBridgeDomainAdvertiseAsVpn.IsNull() && data.Ipv4MulticastImportFromBridgeDomainAdvertiseAsVpn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/bridge-domain/advertise-as-vpn", state.getPath()))
+	}
+	if !state.Ipv4MulticastExportRoutePolicy.IsNull() && data.Ipv4MulticastExportRoutePolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-policy", state.getPath()))
+	}
+	if !state.Ipv4MulticastImportRoutePolicy.IsNull() && data.Ipv4MulticastImportRoutePolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-policy", state.getPath()))
+	}
 	if !state.Ipv4Multicast.IsNull() && data.Ipv4Multicast.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/multicast", state.getPath()))
+	}
+	if !state.Ipv4UnicastMaxPrefixThreshold.IsNull() && data.Ipv4UnicastMaxPrefixThreshold.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-rib-cfg:maximum", state.getPath()))
+	}
+	if !state.Ipv4UnicastMaxPrefixLimit.IsNull() && data.Ipv4UnicastMaxPrefixLimit.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-rib-cfg:maximum", state.getPath()))
+	}
+	if !state.Ipv4UnicastExportToDefaultVrfAllowImportedVpn.IsNull() && data.Ipv4UnicastExportToDefaultVrfAllowImportedVpn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/allow-imported-vpn", state.getPath()))
+	}
+	if !state.Ipv4UnicastExportToDefaultVrfRoutePolicy.IsNull() && data.Ipv4UnicastExportToDefaultVrfRoutePolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/route-policy", state.getPath()))
+	}
+	if !state.Ipv4UnicastExportToVrfAllowBestExternal.IsNull() && data.Ipv4UnicastExportToVrfAllowBestExternal.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/best-external", state.getPath()))
+	}
+	if !state.Ipv4UnicastExportToVrfAllowBackup.IsNull() && data.Ipv4UnicastExportToVrfAllowBackup.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/backup", state.getPath()))
+	}
+	if !state.Ipv4UnicastExportToVrfAllowImportedVpn.IsNull() && data.Ipv4UnicastExportToVrfAllowImportedVpn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow-imported-vpn", state.getPath()))
+	}
+	if !state.Ipv4UnicastImportFromDefaultVrfRoutePolicy.IsNull() && data.Ipv4UnicastImportFromDefaultVrfRoutePolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/route-policy", state.getPath()))
+	}
+	if !state.Ipv4UnicastImportFromDefaultVrfAdvertiseAsVpn.IsNull() && data.Ipv4UnicastImportFromDefaultVrfAdvertiseAsVpn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/advertise-as-vpn", state.getPath()))
+	}
+	if !state.Ipv4UnicastImportFromVrfAllowBestExternal.IsNull() && data.Ipv4UnicastImportFromVrfAllowBestExternal.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/best-external", state.getPath()))
+	}
+	if !state.Ipv4UnicastImportFromVrfAllowBackup.IsNull() && data.Ipv4UnicastImportFromVrfAllowBackup.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/backup", state.getPath()))
+	}
+	if !state.Ipv4UnicastImportFromVrfAdvertiseAsVpn.IsNull() && data.Ipv4UnicastImportFromVrfAdvertiseAsVpn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/advertise-as-vpn", state.getPath()))
+	}
+	if !state.Ipv4UnicastImportFromBridgeDomainAdvertiseAsVpn.IsNull() && data.Ipv4UnicastImportFromBridgeDomainAdvertiseAsVpn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/bridge-domain/advertise-as-vpn", state.getPath()))
 	}
 	if !state.Ipv4UnicastExportRoutePolicy.IsNull() && data.Ipv4UnicastExportRoutePolicy.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-policy", state.getPath()))
@@ -2126,8 +5246,11 @@ func (data *VRF) getDeletedItems(ctx context.Context, state VRF) []string {
 	if !state.Ipv4Unicast.IsNull() && data.Ipv4Unicast.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/address-family/ipv4/unicast", state.getPath()))
 	}
-	if !state.VpnId.IsNull() && data.VpnId.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/vpn/id", state.getPath()))
+	if !state.EvpnRouteSync.IsNull() && data.EvpnRouteSync.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-l2vpn-cfg:evpn-route-sync", state.getPath()))
+	}
+	if !state.FallbackVrf.IsNull() && data.FallbackVrf.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/fallback-vrf", state.getPath()))
 	}
 	if !state.Description.IsNull() && data.Description.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/description", state.getPath()))
@@ -2141,6 +5264,105 @@ func (data *VRF) getDeletedItems(ctx context.Context, state VRF) []string {
 
 func (data *VRF) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.RemoteRouteFilteringDisable.IsNull() && !data.RemoteRouteFilteringDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remote-route-filtering/disable", data.getPath()))
+	}
+	for i := range data.Ipv6MulticastExportRouteTargetIpAddressFormat {
+		keys := [...]string{"ipv4-address", "ipv4-address-index", "stitching"}
+		keyValues := [...]string{data.Ipv6MulticastExportRouteTargetIpAddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.Ipv6MulticastExportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.ValueInt64(), 10), data.Ipv6MulticastExportRouteTargetIpAddressFormat[i].Stitching.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.Ipv6MulticastExportRouteTargetFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "asn4-index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.Ipv6MulticastExportRouteTargetFourByteAsFormat[i].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Ipv6MulticastExportRouteTargetFourByteAsFormat[i].Asn4Index.ValueInt64(), 10), data.Ipv6MulticastExportRouteTargetFourByteAsFormat[i].Stitching.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.Ipv6MulticastExportRouteTargetTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "asn2-index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.Ipv6MulticastExportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Ipv6MulticastExportRouteTargetTwoByteAsFormat[i].Asn2Index.ValueInt64(), 10), data.Ipv6MulticastExportRouteTargetTwoByteAsFormat[i].Stitching.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.Ipv6MulticastImportRouteTargetIpAddressFormat {
+		keys := [...]string{"ipv4-address", "ipv4-address-index", "stitching"}
+		keyValues := [...]string{data.Ipv6MulticastImportRouteTargetIpAddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.Ipv6MulticastImportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.ValueInt64(), 10), data.Ipv6MulticastImportRouteTargetIpAddressFormat[i].Stitching.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.Ipv6MulticastImportRouteTargetFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "asn4-index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.Ipv6MulticastImportRouteTargetFourByteAsFormat[i].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Ipv6MulticastImportRouteTargetFourByteAsFormat[i].Asn4Index.ValueInt64(), 10), data.Ipv6MulticastImportRouteTargetFourByteAsFormat[i].Stitching.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.Ipv6MulticastImportRouteTargetTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "asn2-index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.Ipv6MulticastImportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Ipv6MulticastImportRouteTargetTwoByteAsFormat[i].Asn2Index.ValueInt64(), 10), data.Ipv6MulticastImportRouteTargetTwoByteAsFormat[i].Stitching.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.Ipv4MulticastExportRouteTargetIpAddressFormat {
+		keys := [...]string{"ipv4-address", "ipv4-address-index", "stitching"}
+		keyValues := [...]string{data.Ipv4MulticastExportRouteTargetIpAddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.Ipv4MulticastExportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.ValueInt64(), 10), data.Ipv4MulticastExportRouteTargetIpAddressFormat[i].Stitching.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.Ipv4MulticastExportRouteTargetFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "asn4-index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.Ipv4MulticastExportRouteTargetFourByteAsFormat[i].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Ipv4MulticastExportRouteTargetFourByteAsFormat[i].Asn4Index.ValueInt64(), 10), data.Ipv4MulticastExportRouteTargetFourByteAsFormat[i].Stitching.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.Ipv4MulticastExportRouteTargetTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "asn2-index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.Ipv4MulticastExportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Ipv4MulticastExportRouteTargetTwoByteAsFormat[i].Asn2Index.ValueInt64(), 10), data.Ipv4MulticastExportRouteTargetTwoByteAsFormat[i].Stitching.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.Ipv4MulticastImportRouteTargetIpAddressFormat {
+		keys := [...]string{"ipv4-address", "ipv4-address-index", "stitching"}
+		keyValues := [...]string{data.Ipv4MulticastImportRouteTargetIpAddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.Ipv4MulticastImportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.ValueInt64(), 10), data.Ipv4MulticastImportRouteTargetIpAddressFormat[i].Stitching.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.Ipv4MulticastImportRouteTargetFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "asn4-index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.Ipv4MulticastImportRouteTargetFourByteAsFormat[i].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Ipv4MulticastImportRouteTargetFourByteAsFormat[i].Asn4Index.ValueInt64(), 10), data.Ipv4MulticastImportRouteTargetFourByteAsFormat[i].Stitching.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.Ipv4MulticastImportRouteTargetTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "asn2-index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.Ipv4MulticastImportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Ipv4MulticastImportRouteTargetTwoByteAsFormat[i].Asn2Index.ValueInt64(), 10), data.Ipv4MulticastImportRouteTargetTwoByteAsFormat[i].Stitching.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
 	for i := range data.Ipv6UnicastExportRouteTargetIpAddressFormat {
 		keys := [...]string{"ipv4-address", "ipv4-address-index", "stitching"}
 		keyValues := [...]string{data.Ipv6UnicastExportRouteTargetIpAddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.Ipv6UnicastExportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.ValueInt64(), 10), data.Ipv6UnicastExportRouteTargetIpAddressFormat[i].Stitching.ValueString()}
@@ -2240,8 +5462,62 @@ func (data *VRF) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.Ipv6Flowspec.IsNull() && !data.Ipv6Flowspec.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv6/flowspec", data.getPath()))
 	}
+	if !data.Ipv6MulticastExportToDefaultVrfAllowImportedVpn.IsNull() && !data.Ipv6MulticastExportToDefaultVrfAllowImportedVpn.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/allow-imported-vpn", data.getPath()))
+	}
+	if !data.Ipv6MulticastExportToVrfAllowBestExternal.IsNull() && !data.Ipv6MulticastExportToVrfAllowBestExternal.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/best-external", data.getPath()))
+	}
+	if !data.Ipv6MulticastExportToVrfAllowBackup.IsNull() && !data.Ipv6MulticastExportToVrfAllowBackup.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/backup", data.getPath()))
+	}
+	if !data.Ipv6MulticastExportToVrfAllowImportedVpn.IsNull() && !data.Ipv6MulticastExportToVrfAllowImportedVpn.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow-imported-vpn", data.getPath()))
+	}
+	if !data.Ipv6MulticastImportFromDefaultVrfAdvertiseAsVpn.IsNull() && !data.Ipv6MulticastImportFromDefaultVrfAdvertiseAsVpn.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/advertise-as-vpn", data.getPath()))
+	}
+	if !data.Ipv6MulticastImportFromVrfAllowBestExternal.IsNull() && !data.Ipv6MulticastImportFromVrfAllowBestExternal.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/best-external", data.getPath()))
+	}
+	if !data.Ipv6MulticastImportFromVrfAllowBackup.IsNull() && !data.Ipv6MulticastImportFromVrfAllowBackup.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/backup", data.getPath()))
+	}
+	if !data.Ipv6MulticastImportFromVrfAdvertiseAsVpn.IsNull() && !data.Ipv6MulticastImportFromVrfAdvertiseAsVpn.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/advertise-as-vpn", data.getPath()))
+	}
+	if !data.Ipv6MulticastImportFromBridgeDomainAdvertiseAsVpn.IsNull() && !data.Ipv6MulticastImportFromBridgeDomainAdvertiseAsVpn.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/bridge-domain/advertise-as-vpn", data.getPath()))
+	}
 	if !data.Ipv6Multicast.IsNull() && !data.Ipv6Multicast.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv6/multicast", data.getPath()))
+	}
+	if !data.Ipv6UnicastExportToDefaultVrfAllowImportedVpn.IsNull() && !data.Ipv6UnicastExportToDefaultVrfAllowImportedVpn.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/allow-imported-vpn", data.getPath()))
+	}
+	if !data.Ipv6UnicastExportToVrfAllowBestExternal.IsNull() && !data.Ipv6UnicastExportToVrfAllowBestExternal.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/best-external", data.getPath()))
+	}
+	if !data.Ipv6UnicastExportToVrfAllowBackup.IsNull() && !data.Ipv6UnicastExportToVrfAllowBackup.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/backup", data.getPath()))
+	}
+	if !data.Ipv6UnicastExportToVrfAllowImportedVpn.IsNull() && !data.Ipv6UnicastExportToVrfAllowImportedVpn.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow-imported-vpn", data.getPath()))
+	}
+	if !data.Ipv6UnicastImportFromDefaultVrfAdvertiseAsVpn.IsNull() && !data.Ipv6UnicastImportFromDefaultVrfAdvertiseAsVpn.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/advertise-as-vpn", data.getPath()))
+	}
+	if !data.Ipv6UnicastImportFromVrfAllowBestExternal.IsNull() && !data.Ipv6UnicastImportFromVrfAllowBestExternal.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/best-external", data.getPath()))
+	}
+	if !data.Ipv6UnicastImportFromVrfAllowBackup.IsNull() && !data.Ipv6UnicastImportFromVrfAllowBackup.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/backup", data.getPath()))
+	}
+	if !data.Ipv6UnicastImportFromVrfAdvertiseAsVpn.IsNull() && !data.Ipv6UnicastImportFromVrfAdvertiseAsVpn.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/advertise-as-vpn", data.getPath()))
+	}
+	if !data.Ipv6UnicastImportFromBridgeDomainAdvertiseAsVpn.IsNull() && !data.Ipv6UnicastImportFromBridgeDomainAdvertiseAsVpn.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/bridge-domain/advertise-as-vpn", data.getPath()))
 	}
 	if !data.Ipv6Unicast.IsNull() && !data.Ipv6Unicast.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv6/unicast", data.getPath()))
@@ -2249,8 +5525,62 @@ func (data *VRF) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.Ipv4Flowspec.IsNull() && !data.Ipv4Flowspec.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv4/flowspec", data.getPath()))
 	}
+	if !data.Ipv4MulticastExportToDefaultVrfAllowImportedVpn.IsNull() && !data.Ipv4MulticastExportToDefaultVrfAllowImportedVpn.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/allow-imported-vpn", data.getPath()))
+	}
+	if !data.Ipv4MulticastExportToVrfAllowBestExternal.IsNull() && !data.Ipv4MulticastExportToVrfAllowBestExternal.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/best-external", data.getPath()))
+	}
+	if !data.Ipv4MulticastExportToVrfAllowBackup.IsNull() && !data.Ipv4MulticastExportToVrfAllowBackup.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/backup", data.getPath()))
+	}
+	if !data.Ipv4MulticastExportToVrfAllowImportedVpn.IsNull() && !data.Ipv4MulticastExportToVrfAllowImportedVpn.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow-imported-vpn", data.getPath()))
+	}
+	if !data.Ipv4MulticastImportFromDefaultVrfAdvertiseAsVpn.IsNull() && !data.Ipv4MulticastImportFromDefaultVrfAdvertiseAsVpn.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/advertise-as-vpn", data.getPath()))
+	}
+	if !data.Ipv4MulticastImportFromVrfAllowBestExternal.IsNull() && !data.Ipv4MulticastImportFromVrfAllowBestExternal.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/best-external", data.getPath()))
+	}
+	if !data.Ipv4MulticastImportFromVrfAllowBackup.IsNull() && !data.Ipv4MulticastImportFromVrfAllowBackup.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/backup", data.getPath()))
+	}
+	if !data.Ipv4MulticastImportFromVrfAdvertiseAsVpn.IsNull() && !data.Ipv4MulticastImportFromVrfAdvertiseAsVpn.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/advertise-as-vpn", data.getPath()))
+	}
+	if !data.Ipv4MulticastImportFromBridgeDomainAdvertiseAsVpn.IsNull() && !data.Ipv4MulticastImportFromBridgeDomainAdvertiseAsVpn.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/bridge-domain/advertise-as-vpn", data.getPath()))
+	}
 	if !data.Ipv4Multicast.IsNull() && !data.Ipv4Multicast.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv4/multicast", data.getPath()))
+	}
+	if !data.Ipv4UnicastExportToDefaultVrfAllowImportedVpn.IsNull() && !data.Ipv4UnicastExportToDefaultVrfAllowImportedVpn.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/allow-imported-vpn", data.getPath()))
+	}
+	if !data.Ipv4UnicastExportToVrfAllowBestExternal.IsNull() && !data.Ipv4UnicastExportToVrfAllowBestExternal.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/best-external", data.getPath()))
+	}
+	if !data.Ipv4UnicastExportToVrfAllowBackup.IsNull() && !data.Ipv4UnicastExportToVrfAllowBackup.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/backup", data.getPath()))
+	}
+	if !data.Ipv4UnicastExportToVrfAllowImportedVpn.IsNull() && !data.Ipv4UnicastExportToVrfAllowImportedVpn.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow-imported-vpn", data.getPath()))
+	}
+	if !data.Ipv4UnicastImportFromDefaultVrfAdvertiseAsVpn.IsNull() && !data.Ipv4UnicastImportFromDefaultVrfAdvertiseAsVpn.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/advertise-as-vpn", data.getPath()))
+	}
+	if !data.Ipv4UnicastImportFromVrfAllowBestExternal.IsNull() && !data.Ipv4UnicastImportFromVrfAllowBestExternal.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/best-external", data.getPath()))
+	}
+	if !data.Ipv4UnicastImportFromVrfAllowBackup.IsNull() && !data.Ipv4UnicastImportFromVrfAllowBackup.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/backup", data.getPath()))
+	}
+	if !data.Ipv4UnicastImportFromVrfAdvertiseAsVpn.IsNull() && !data.Ipv4UnicastImportFromVrfAdvertiseAsVpn.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/advertise-as-vpn", data.getPath()))
+	}
+	if !data.Ipv4UnicastImportFromBridgeDomainAdvertiseAsVpn.IsNull() && !data.Ipv4UnicastImportFromBridgeDomainAdvertiseAsVpn.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/bridge-domain/advertise-as-vpn", data.getPath()))
 	}
 	if !data.Ipv4Unicast.IsNull() && !data.Ipv4Unicast.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv4/unicast", data.getPath()))
@@ -2264,6 +5594,132 @@ func (data *VRF) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *VRF) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
+	if !data.RemoteRouteFilteringDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/remote-route-filtering/disable", data.getPath()))
+	}
+	if !data.VpnId.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/vpn/id", data.getPath()))
+	}
+	for i := range data.Ipv6MulticastExportRouteTargetIpAddressFormat {
+		keys := [...]string{"ipv4-address", "ipv4-address-index", "stitching"}
+		keyValues := [...]string{data.Ipv6MulticastExportRouteTargetIpAddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.Ipv6MulticastExportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.ValueInt64(), 10), data.Ipv6MulticastExportRouteTargetIpAddressFormat[i].Stitching.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/ipv4-address-route-targets/ipv4-address-route-target%v", data.getPath(), keyString))
+	}
+	for i := range data.Ipv6MulticastExportRouteTargetFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "asn4-index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.Ipv6MulticastExportRouteTargetFourByteAsFormat[i].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Ipv6MulticastExportRouteTargetFourByteAsFormat[i].Asn4Index.ValueInt64(), 10), data.Ipv6MulticastExportRouteTargetFourByteAsFormat[i].Stitching.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/four-byte-as-route-targets/four-byte-as-route-target%v", data.getPath(), keyString))
+	}
+	for i := range data.Ipv6MulticastExportRouteTargetTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "asn2-index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.Ipv6MulticastExportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Ipv6MulticastExportRouteTargetTwoByteAsFormat[i].Asn2Index.ValueInt64(), 10), data.Ipv6MulticastExportRouteTargetTwoByteAsFormat[i].Stitching.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/two-byte-as-route-targets/two-byte-as-route-target%v", data.getPath(), keyString))
+	}
+	for i := range data.Ipv6MulticastImportRouteTargetIpAddressFormat {
+		keys := [...]string{"ipv4-address", "ipv4-address-index", "stitching"}
+		keyValues := [...]string{data.Ipv6MulticastImportRouteTargetIpAddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.Ipv6MulticastImportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.ValueInt64(), 10), data.Ipv6MulticastImportRouteTargetIpAddressFormat[i].Stitching.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/ipv4-address-route-targets/ipv4-address-route-target%v", data.getPath(), keyString))
+	}
+	for i := range data.Ipv6MulticastImportRouteTargetFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "asn4-index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.Ipv6MulticastImportRouteTargetFourByteAsFormat[i].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Ipv6MulticastImportRouteTargetFourByteAsFormat[i].Asn4Index.ValueInt64(), 10), data.Ipv6MulticastImportRouteTargetFourByteAsFormat[i].Stitching.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/four-byte-as-route-targets/four-byte-as-route-target%v", data.getPath(), keyString))
+	}
+	for i := range data.Ipv6MulticastImportRouteTargetTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "asn2-index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.Ipv6MulticastImportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Ipv6MulticastImportRouteTargetTwoByteAsFormat[i].Asn2Index.ValueInt64(), 10), data.Ipv6MulticastImportRouteTargetTwoByteAsFormat[i].Stitching.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/two-byte-as-route-targets/two-byte-as-route-target%v", data.getPath(), keyString))
+	}
+	for i := range data.Ipv4MulticastExportRouteTargetIpAddressFormat {
+		keys := [...]string{"ipv4-address", "ipv4-address-index", "stitching"}
+		keyValues := [...]string{data.Ipv4MulticastExportRouteTargetIpAddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.Ipv4MulticastExportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.ValueInt64(), 10), data.Ipv4MulticastExportRouteTargetIpAddressFormat[i].Stitching.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/ipv4-address-route-targets/ipv4-address-route-target%v", data.getPath(), keyString))
+	}
+	for i := range data.Ipv4MulticastExportRouteTargetFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "asn4-index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.Ipv4MulticastExportRouteTargetFourByteAsFormat[i].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Ipv4MulticastExportRouteTargetFourByteAsFormat[i].Asn4Index.ValueInt64(), 10), data.Ipv4MulticastExportRouteTargetFourByteAsFormat[i].Stitching.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/four-byte-as-route-targets/four-byte-as-route-target%v", data.getPath(), keyString))
+	}
+	for i := range data.Ipv4MulticastExportRouteTargetTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "asn2-index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.Ipv4MulticastExportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Ipv4MulticastExportRouteTargetTwoByteAsFormat[i].Asn2Index.ValueInt64(), 10), data.Ipv4MulticastExportRouteTargetTwoByteAsFormat[i].Stitching.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/two-byte-as-route-targets/two-byte-as-route-target%v", data.getPath(), keyString))
+	}
+	for i := range data.Ipv4MulticastImportRouteTargetIpAddressFormat {
+		keys := [...]string{"ipv4-address", "ipv4-address-index", "stitching"}
+		keyValues := [...]string{data.Ipv4MulticastImportRouteTargetIpAddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.Ipv4MulticastImportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.ValueInt64(), 10), data.Ipv4MulticastImportRouteTargetIpAddressFormat[i].Stitching.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/ipv4-address-route-targets/ipv4-address-route-target%v", data.getPath(), keyString))
+	}
+	for i := range data.Ipv4MulticastImportRouteTargetFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "asn4-index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.Ipv4MulticastImportRouteTargetFourByteAsFormat[i].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Ipv4MulticastImportRouteTargetFourByteAsFormat[i].Asn4Index.ValueInt64(), 10), data.Ipv4MulticastImportRouteTargetFourByteAsFormat[i].Stitching.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/four-byte-as-route-targets/four-byte-as-route-target%v", data.getPath(), keyString))
+	}
+	for i := range data.Ipv4MulticastImportRouteTargetTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "asn2-index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.Ipv4MulticastImportRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Ipv4MulticastImportRouteTargetTwoByteAsFormat[i].Asn2Index.ValueInt64(), 10), data.Ipv4MulticastImportRouteTargetTwoByteAsFormat[i].Stitching.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/two-byte-as-route-targets/two-byte-as-route-target%v", data.getPath(), keyString))
+	}
 	for i := range data.Ipv6UnicastExportRouteTargetIpAddressFormat {
 		keys := [...]string{"ipv4-address", "ipv4-address-index", "stitching"}
 		keyValues := [...]string{data.Ipv6UnicastExportRouteTargetIpAddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.Ipv6UnicastExportRouteTargetIpAddressFormat[i].Ipv4AddressIndex.ValueInt64(), 10), data.Ipv6UnicastExportRouteTargetIpAddressFormat[i].Stitching.ValueString()}
@@ -2405,8 +5861,92 @@ func (data *VRF) getDeletePaths(ctx context.Context) []string {
 	if !data.Ipv6Flowspec.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/flowspec", data.getPath()))
 	}
+	if !data.Ipv6MulticastMaxPrefixThreshold.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-rib-cfg:maximum", data.getPath()))
+	}
+	if !data.Ipv6MulticastMaxPrefixLimit.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-rib-cfg:maximum", data.getPath()))
+	}
+	if !data.Ipv6MulticastExportToDefaultVrfAllowImportedVpn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/allow-imported-vpn", data.getPath()))
+	}
+	if !data.Ipv6MulticastExportToDefaultVrfRoutePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/route-policy", data.getPath()))
+	}
+	if !data.Ipv6MulticastExportToVrfAllowBestExternal.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/best-external", data.getPath()))
+	}
+	if !data.Ipv6MulticastExportToVrfAllowBackup.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/backup", data.getPath()))
+	}
+	if !data.Ipv6MulticastExportToVrfAllowImportedVpn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow-imported-vpn", data.getPath()))
+	}
+	if !data.Ipv6MulticastImportFromDefaultVrfRoutePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/route-policy", data.getPath()))
+	}
+	if !data.Ipv6MulticastImportFromDefaultVrfAdvertiseAsVpn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/advertise-as-vpn", data.getPath()))
+	}
+	if !data.Ipv6MulticastImportFromVrfAllowBestExternal.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/best-external", data.getPath()))
+	}
+	if !data.Ipv6MulticastImportFromVrfAllowBackup.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/backup", data.getPath()))
+	}
+	if !data.Ipv6MulticastImportFromVrfAdvertiseAsVpn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/advertise-as-vpn", data.getPath()))
+	}
+	if !data.Ipv6MulticastImportFromBridgeDomainAdvertiseAsVpn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/bridge-domain/advertise-as-vpn", data.getPath()))
+	}
+	if !data.Ipv6MulticastExportRoutePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-policy", data.getPath()))
+	}
+	if !data.Ipv6MulticastImportRoutePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-policy", data.getPath()))
+	}
 	if !data.Ipv6Multicast.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/multicast", data.getPath()))
+	}
+	if !data.Ipv6UnicastMaxPrefixThreshold.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-rib-cfg:maximum", data.getPath()))
+	}
+	if !data.Ipv6UnicastMaxPrefixLimit.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-rib-cfg:maximum", data.getPath()))
+	}
+	if !data.Ipv6UnicastExportToDefaultVrfAllowImportedVpn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/allow-imported-vpn", data.getPath()))
+	}
+	if !data.Ipv6UnicastExportToDefaultVrfRoutePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/route-policy", data.getPath()))
+	}
+	if !data.Ipv6UnicastExportToVrfAllowBestExternal.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/best-external", data.getPath()))
+	}
+	if !data.Ipv6UnicastExportToVrfAllowBackup.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/backup", data.getPath()))
+	}
+	if !data.Ipv6UnicastExportToVrfAllowImportedVpn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow-imported-vpn", data.getPath()))
+	}
+	if !data.Ipv6UnicastImportFromDefaultVrfRoutePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/route-policy", data.getPath()))
+	}
+	if !data.Ipv6UnicastImportFromDefaultVrfAdvertiseAsVpn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/advertise-as-vpn", data.getPath()))
+	}
+	if !data.Ipv6UnicastImportFromVrfAllowBestExternal.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/best-external", data.getPath()))
+	}
+	if !data.Ipv6UnicastImportFromVrfAllowBackup.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/backup", data.getPath()))
+	}
+	if !data.Ipv6UnicastImportFromVrfAdvertiseAsVpn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/advertise-as-vpn", data.getPath()))
+	}
+	if !data.Ipv6UnicastImportFromBridgeDomainAdvertiseAsVpn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/bridge-domain/advertise-as-vpn", data.getPath()))
 	}
 	if !data.Ipv6UnicastExportRoutePolicy.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-policy", data.getPath()))
@@ -2420,8 +5960,92 @@ func (data *VRF) getDeletePaths(ctx context.Context) []string {
 	if !data.Ipv4Flowspec.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/flowspec", data.getPath()))
 	}
+	if !data.Ipv4MulticastMaxPrefixThreshold.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-rib-cfg:maximum", data.getPath()))
+	}
+	if !data.Ipv4MulticastMaxPrefixLimit.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-rib-cfg:maximum", data.getPath()))
+	}
+	if !data.Ipv4MulticastExportToDefaultVrfAllowImportedVpn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/allow-imported-vpn", data.getPath()))
+	}
+	if !data.Ipv4MulticastExportToDefaultVrfRoutePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/route-policy", data.getPath()))
+	}
+	if !data.Ipv4MulticastExportToVrfAllowBestExternal.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/best-external", data.getPath()))
+	}
+	if !data.Ipv4MulticastExportToVrfAllowBackup.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/backup", data.getPath()))
+	}
+	if !data.Ipv4MulticastExportToVrfAllowImportedVpn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow-imported-vpn", data.getPath()))
+	}
+	if !data.Ipv4MulticastImportFromDefaultVrfRoutePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/route-policy", data.getPath()))
+	}
+	if !data.Ipv4MulticastImportFromDefaultVrfAdvertiseAsVpn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/advertise-as-vpn", data.getPath()))
+	}
+	if !data.Ipv4MulticastImportFromVrfAllowBestExternal.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/best-external", data.getPath()))
+	}
+	if !data.Ipv4MulticastImportFromVrfAllowBackup.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/backup", data.getPath()))
+	}
+	if !data.Ipv4MulticastImportFromVrfAdvertiseAsVpn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/advertise-as-vpn", data.getPath()))
+	}
+	if !data.Ipv4MulticastImportFromBridgeDomainAdvertiseAsVpn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/bridge-domain/advertise-as-vpn", data.getPath()))
+	}
+	if !data.Ipv4MulticastExportRoutePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-policy", data.getPath()))
+	}
+	if !data.Ipv4MulticastImportRoutePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-policy", data.getPath()))
+	}
 	if !data.Ipv4Multicast.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/multicast", data.getPath()))
+	}
+	if !data.Ipv4UnicastMaxPrefixThreshold.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-rib-cfg:maximum", data.getPath()))
+	}
+	if !data.Ipv4UnicastMaxPrefixLimit.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-rib-cfg:maximum", data.getPath()))
+	}
+	if !data.Ipv4UnicastExportToDefaultVrfAllowImportedVpn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/allow-imported-vpn", data.getPath()))
+	}
+	if !data.Ipv4UnicastExportToDefaultVrfRoutePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/route-policy", data.getPath()))
+	}
+	if !data.Ipv4UnicastExportToVrfAllowBestExternal.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/best-external", data.getPath()))
+	}
+	if !data.Ipv4UnicastExportToVrfAllowBackup.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/backup", data.getPath()))
+	}
+	if !data.Ipv4UnicastExportToVrfAllowImportedVpn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow-imported-vpn", data.getPath()))
+	}
+	if !data.Ipv4UnicastImportFromDefaultVrfRoutePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/route-policy", data.getPath()))
+	}
+	if !data.Ipv4UnicastImportFromDefaultVrfAdvertiseAsVpn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/advertise-as-vpn", data.getPath()))
+	}
+	if !data.Ipv4UnicastImportFromVrfAllowBestExternal.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/best-external", data.getPath()))
+	}
+	if !data.Ipv4UnicastImportFromVrfAllowBackup.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/backup", data.getPath()))
+	}
+	if !data.Ipv4UnicastImportFromVrfAdvertiseAsVpn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/advertise-as-vpn", data.getPath()))
+	}
+	if !data.Ipv4UnicastImportFromBridgeDomainAdvertiseAsVpn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/bridge-domain/advertise-as-vpn", data.getPath()))
 	}
 	if !data.Ipv4UnicastExportRoutePolicy.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-policy", data.getPath()))
@@ -2432,8 +6056,11 @@ func (data *VRF) getDeletePaths(ctx context.Context) []string {
 	if !data.Ipv4Unicast.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/unicast", data.getPath()))
 	}
-	if !data.VpnId.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/vpn/id", data.getPath()))
+	if !data.EvpnRouteSync.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-l2vpn-cfg:evpn-route-sync", data.getPath()))
+	}
+	if !data.FallbackVrf.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fallback-vrf", data.getPath()))
 	}
 	if !data.Description.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/description", data.getPath()))

@@ -98,7 +98,7 @@ func (r *SNMPServerVRFHostResource) Schema(ctx context.Context, req resource.Sch
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"unencrypted_strings": schema.ListNestedAttribute{
+			"traps_unencrypted_strings": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The UNENCRYPTED (cleartext) community string").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -106,6 +106,7 @@ func (r *SNMPServerVRFHostResource) Schema(ctx context.Context, req resource.Sch
 						"community_string": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("The UNENCRYPTED (cleartext) community string").String,
 							Required:            true,
+							Sensitive:           true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
 							},
@@ -115,6 +116,43 @@ func (r *SNMPServerVRFHostResource) Schema(ctx context.Context, req resource.Sch
 							Optional:            true,
 							Computed:            true,
 							Default:             stringdefault.StaticString("default"),
+						},
+						"version_v2c": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use 2c for SNMPv2c").String,
+							Optional:            true,
+						},
+						"version_v3_security_level": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Security level").AddStringEnumDescription("auth", "noauth", "priv").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("auth", "noauth", "priv"),
+							},
+						},
+					},
+				},
+			},
+			"informs_unencrypted_strings": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The UNENCRYPTED (cleartext) community string").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"community_string": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The UNENCRYPTED (cleartext) community string").String,
+							Required:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+							},
+						},
+						"udp_port": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("udp port to which notifications should be sent").AddDefaultValueDescription("default").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("default"),
+						},
+						"version_v2c": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use 2c for SNMPv2c").String,
+							Optional:            true,
 						},
 						"version_v3_security_level": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Security level").AddStringEnumDescription("auth", "noauth", "priv").String,

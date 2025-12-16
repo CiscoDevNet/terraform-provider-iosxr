@@ -18,7 +18,7 @@ resource "iosxr_key_chain" "example" {
   keys = [
     {
       key_name                                = "1"
-      key_string_password                     = "00071A150754"
+      key_string_password6                    = "00071A150754"
       cryptographic_algorithm                 = "hmac-md5"
       accept_lifetime_start_time_hour         = 11
       accept_lifetime_start_time_minute       = 52
@@ -79,7 +79,8 @@ Optional:
   - Range: `1993`-`2035`
 - `cryptographic_algorithm` (String) Choose cryptographic algorithm
   - Choices: `aes-128-cmac-96`, `hmac-md5`, `hmac-sha-256`, `hmac-sha1-12`, `hmac-sha1-20`, `hmac-sha1-96`, `md5`, `sha-1`
-- `key_string_password` (String) Encrypted key string (even number of characters with first two as digits and sum less than 53, and rest of the characters should be hex digits)
+- `key_string_password` (String, Sensitive) Encrypted key string (even number of characters with first two as digits and sum less than 53, and rest of the characters should be hex digits)
+- `key_string_password6` (String, Sensitive) Enter encrypted type6 password
 - `send_lifetime_infinite` (Boolean) Never expires
 - `send_lifetime_start_time_day_of_month` (Number) Day of the month
   - Range: `1`-`31`

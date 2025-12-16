@@ -101,6 +101,15 @@ func (r *KeyChainResource) Schema(ctx context.Context, req resource.SchemaReques
 						"key_string_password": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Encrypted key string (even number of characters with first two as digits and sum less than 53, and rest of the characters should be hex digits)").String,
 							Optional:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+							},
+						},
+						"key_string_password6": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enter encrypted type6 password").String,
+							Optional:            true,
+							Sensitive:           true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
 							},

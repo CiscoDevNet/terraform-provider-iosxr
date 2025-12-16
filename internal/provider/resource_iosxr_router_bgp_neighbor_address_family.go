@@ -186,14 +186,14 @@ func (r *RouterBGPNeighborAddressFamilyResource) Schema(ctx context.Context, req
 			},
 			"maximum_prefix_limit": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("maximum no. of prefix limit").AddIntegerRangeDescription(1, 4294967295).String,
-				Required:            true,
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 4294967295),
 				},
 			},
 			"maximum_prefix_threshold": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Threshold value (%) at which to generate a warning msg").AddIntegerRangeDescription(1, 100).String,
-				Required:            true,
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 100),
 				},

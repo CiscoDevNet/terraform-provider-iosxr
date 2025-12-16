@@ -83,46 +83,6 @@ func (d *RouterHSRPInterfaceIPv4GroupV1DataSource) Schema(ctx context.Context, r
 				MarkdownDescription: "Learn virtual IP address from peer",
 				Computed:            true,
 			},
-			"priority": schema.Int64Attribute{
-				MarkdownDescription: "Priority level",
-				Computed:            true,
-			},
-			"mac_address": schema.StringAttribute{
-				MarkdownDescription: "Use specified mac address for the virtual router",
-				Computed:            true,
-			},
-			"name": schema.StringAttribute{
-				MarkdownDescription: "MGO session name",
-				Computed:            true,
-			},
-			"preempt_delay": schema.Int64Attribute{
-				MarkdownDescription: "Wait before preempting",
-				Computed:            true,
-			},
-			"timers_msec": schema.Int64Attribute{
-				MarkdownDescription: "Specify hellotime in milliseconds",
-				Computed:            true,
-			},
-			"timers_msec_holdtime": schema.Int64Attribute{
-				MarkdownDescription: "Specify hold time in milliseconds",
-				Computed:            true,
-			},
-			"timers_seconds": schema.Int64Attribute{
-				MarkdownDescription: "Hold time in seconds",
-				Computed:            true,
-			},
-			"timers_seconds_holdtime": schema.Int64Attribute{
-				MarkdownDescription: "Hold time in seconds",
-				Computed:            true,
-			},
-			"bfd_fast_detect_peer_ipv4": schema.StringAttribute{
-				MarkdownDescription: "BFD peer interface IPv4 address",
-				Computed:            true,
-			},
-			"bfd_fast_detect_peer_interface": schema.StringAttribute{
-				MarkdownDescription: "Select an interface over which to run BFD",
-				Computed:            true,
-			},
 			"secondary_ipv4_addresses": schema.ListNestedAttribute{
 				MarkdownDescription: "Set secondary hot standby IP address",
 				Computed:            true,
@@ -134,6 +94,14 @@ func (d *RouterHSRPInterfaceIPv4GroupV1DataSource) Schema(ctx context.Context, r
 						},
 					},
 				},
+			},
+			"priority": schema.Int64Attribute{
+				MarkdownDescription: "Priority level",
+				Computed:            true,
+			},
+			"preempt_delay": schema.Int64Attribute{
+				MarkdownDescription: "Wait before preempting",
+				Computed:            true,
 			},
 			"track_interfaces": schema.ListNestedAttribute{
 				MarkdownDescription: "Configure tracking",
@@ -166,6 +134,38 @@ func (d *RouterHSRPInterfaceIPv4GroupV1DataSource) Schema(ctx context.Context, r
 						},
 					},
 				},
+			},
+			"timers_msec": schema.Int64Attribute{
+				MarkdownDescription: "Specify hellotime in milliseconds",
+				Computed:            true,
+			},
+			"timers_msec_holdtime": schema.Int64Attribute{
+				MarkdownDescription: "Specify hold time in milliseconds",
+				Computed:            true,
+			},
+			"timers_seconds": schema.Int64Attribute{
+				MarkdownDescription: "Hold time in seconds",
+				Computed:            true,
+			},
+			"timers_seconds_holdtime": schema.Int64Attribute{
+				MarkdownDescription: "Hold time in seconds",
+				Computed:            true,
+			},
+			"mac_address": schema.StringAttribute{
+				MarkdownDescription: "Use specified mac address for the virtual router",
+				Computed:            true,
+			},
+			"name": schema.StringAttribute{
+				MarkdownDescription: "MGO session name",
+				Computed:            true,
+			},
+			"bfd_fast_detect_peer_ipv4": schema.StringAttribute{
+				MarkdownDescription: "BFD peer interface IPv4 address",
+				Computed:            true,
+			},
+			"bfd_fast_detect_peer_interface": schema.StringAttribute{
+				MarkdownDescription: "Select an interface over which to run BFD",
+				Computed:            true,
 			},
 		},
 	}

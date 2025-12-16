@@ -104,6 +104,14 @@ resource "iosxr_gnmi" "PreReq1" {
 	depends_on = [iosxr_gnmi.PreReq0, ]
 }
 
+resource "iosxr_gnmi" "PreReq2" {
+	path = "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]/areas/area[area-id=0]/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]"
+	attributes = {
+		"interface-name" = "GigabitEthernet0/0/0/1"
+	}
+	depends_on = [iosxr_gnmi.PreReq1, ]
+}
+
 `
 
 // End of section. //template:end testPrerequisites
@@ -115,7 +123,7 @@ func testAccIosxrRouterOSPFAreaInterfaceConfig_minimum() string {
 	config += `	process_name = "OSPF1"` + "\n"
 	config += `	area_id = "0"` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -126,6 +134,7 @@ func testAccIosxrRouterOSPFAreaInterfaceConfig_minimum() string {
 
 func testAccIosxrRouterOSPFAreaInterfaceConfig_all() string {
 	config := `resource "iosxr_router_ospf_area_interface" "test" {` + "\n"
+	config += `	delete_mode = "all"` + "\n"
 	config += `	process_name = "OSPF1"` + "\n"
 	config += `	area_id = "0"` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
@@ -140,7 +149,7 @@ func testAccIosxrRouterOSPFAreaInterfaceConfig_all() string {
 	config += `	fast_reroute_per_prefix_ti_lfa = true` + "\n"
 	config += `	fast_reroute_per_prefix_tiebreaker_srlg_disjoint = 22` + "\n"
 	config += `	fast_reroute_per_prefix_tiebreaker_node_protecting = 33` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

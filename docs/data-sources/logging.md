@@ -26,15 +26,111 @@ data "iosxr_logging" "example" {
 
 ### Read-Only
 
+- `archive_disk0` (Boolean) Use disk0 as the archive device
+- `archive_disk1` (Boolean) Use disk1 as the archive device
+- `archive_filesize` (Number) The maximum file size for a single log file.
+- `archive_frequency_daily` (Boolean) Collect log in files on a daily basis
+- `archive_frequency_weekly` (Boolean) Collect log in files on a weekly basis
+- `archive_harddisk` (Boolean) Use harddisk as the archive device
+- `archive_length` (Number) The maximum no of weeks of log to maintain
+- `archive_severity` (String) The minimum severity of log messages to archive
+- `archive_size` (Number) The total size of the archive
+- `archive_threshold` (Number) The size threshold at which a syslog is generated
+- `buffered_discriminator_match1` (String) Set match discriminator 1
+- `buffered_discriminator_match2` (String) Set match discriminator 2
+- `buffered_discriminator_match3` (String) Set match discriminator 3
+- `buffered_discriminator_nomatch1` (String) Set no-match discriminator 1
+- `buffered_discriminator_nomatch2` (String) Set no-match discriminator 2
+- `buffered_discriminator_nomatch3` (String) Set no-match discriminator 3
+- `buffered_entries_count` (Number) Number of syslog entries in buffer
 - `buffered_level` (String) configure this node
-- `buffered_logging_buffer_size` (Number) Logging buffer size
+- `buffered_size` (Number) Logging buffer size
 - `console` (String) Set console logging
+- `console_facility` (String) Console message logging facilities
+- `container_all` (Boolean) Enables log collection from all containers
+- `container_fetch_timestamp` (Boolean) Fetch logs with container timestamp for all containers
+- `events_buffer_size` (Number) Set size of the local event buffer
 - `events_display_location` (Boolean) Include alarm source location in message text
 - `events_level` (String) Log all events with equal or higher (lower level) severity
+- `events_precfg_suppression` (String) Suppress events from a card/VM till its configuration is complete
+- `events_precfg_suppression_timeout` (Number) Timeout (in minutes) for pre-config events suppression (default 15)
+- `events_threshold` (Number) Configure threshold (%) for capacity alarm
 - `facility_level` (String) configure this node
+- `file` (Attributes List) Set file logging (see [below for nested schema](#nestedatt--file))
+- `filter_matches` (Attributes List) Configure match string to filter (see [below for nested schema](#nestedatt--filter_matches))
+- `format_bsd` (Boolean) Enable to send the syslog message as BSD format
+- `format_rfc5424` (Boolean) Enable to send the syslog message rfc5424 format
+- `history` (String) Set history logging
+- `history_size` (Number) Logging history size
 - `hostnameprefix` (String) Hostname prefix to add on msgs to servers
 - `id` (String) The path of the retrieved object.
 - `ipv4_dscp` (String) Set IP DSCP (DiffServ CodePoint)
+- `ipv4_precedence` (String) Set precedence
+- `ipv6_dscp` (String) Set IP DSCP (DiffServ CodePoint)
+- `ipv6_precedence` (String) Set precedence
+- `localfilesize` (Number) Set size of the local log file
 - `monitor` (String) Set monitor logging
+- `monitor_discriminator_match1` (String) Set match discriminator 1
+- `monitor_discriminator_match2` (String) Set match discriminator 2
+- `monitor_discriminator_match3` (String) Set match discriminator 3
+- `monitor_discriminator_nomatch1` (String) Set no-match discriminator 1
+- `monitor_discriminator_nomatch2` (String) Set no-match discriminator 2
+- `monitor_discriminator_nomatch3` (String) Set no-match discriminator 3
 - `suppress_duplicates` (Boolean) Suppress consecutive duplicate messages
+- `suppress_rules` (Attributes List) Configure a specified suppression rule (see [below for nested schema](#nestedatt--suppress_rules))
 - `trap` (String) Set trap logging
+- `yang` (String) Set yang logging parameters
+
+<a id="nestedatt--file"></a>
+### Nested Schema for `file`
+
+Read-Only:
+
+- `discriminator_match1` (String) Set match discriminator 1
+- `discriminator_match2` (String) Set match discriminator 2
+- `discriminator_match3` (String) Set match discriminator 3
+- `discriminator_nomatch1` (String) Set no-match discriminator 1
+- `discriminator_nomatch2` (String) Set no-match discriminator 2
+- `discriminator_nomatch3` (String) Set no-match discriminator 3
+- `file_name` (String) Set file logging
+- `local_accounting_send_to_remote_facility_level` (String) configure this node
+- `maxfilesize` (Number) Set max file size
+- `path` (String) Set file path
+- `severity` (String) Set severity level
+
+
+<a id="nestedatt--filter_matches"></a>
+### Nested Schema for `filter_matches`
+
+Read-Only:
+
+- `match` (String) Configure match string to filter
+
+
+<a id="nestedatt--suppress_rules"></a>
+### Nested Schema for `suppress_rules`
+
+Read-Only:
+
+- `alarms` (Attributes List) Specify alarm: Category/Group/Code combos (see [below for nested schema](#nestedatt--suppress_rules--alarms))
+- `all_alarms` (Boolean) Specify all alarms
+- `apply_all_of_router` (Boolean) Apply the rule to all of the router
+- `apply_source_locations` (Attributes List) Apply the rule to specified location (see [below for nested schema](#nestedatt--suppress_rules--apply_source_locations))
+- `rule_name` (String) Rule name
+
+<a id="nestedatt--suppress_rules--alarms"></a>
+### Nested Schema for `suppress_rules.alarms`
+
+Read-Only:
+
+- `group_name` (String) Group name of suppressed message
+- `message_category` (String) Message category of the suppressed message
+- `message_code` (String) Message code of suppressed message
+
+
+<a id="nestedatt--suppress_rules--apply_source_locations"></a>
+### Nested Schema for `suppress_rules.apply_source_locations`
+
+Read-Only:
+
+- `location_name` (String) Location name

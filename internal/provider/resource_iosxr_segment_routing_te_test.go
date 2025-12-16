@@ -124,6 +124,7 @@ func testAccIosxrSegmentRoutingTEConfig_minimum() string {
 
 func testAccIosxrSegmentRoutingTEConfig_all() string {
 	config := `resource "iosxr_segment_routing_te" "test" {` + "\n"
+	config += `	delete_mode = "all"` + "\n"
 	config += `	logging_pcep_peer_status = true` + "\n"
 	config += `	logging_policy_status = true` + "\n"
 	config += `	pcc_report_all = true` + "\n"

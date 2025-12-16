@@ -28,7 +28,12 @@ data "iosxr_mpls_oam" "example" {
 
 - `id` (String) The path of the retrieved object.
 - `oam` (Boolean) OAM configuration
+- `oam_dpm_downstream_ecmp_faults` (Boolean) Report downstream mismatches
 - `oam_dpm_interval` (Number) Wait time between each iteration of DPM - default is 30mins
 - `oam_dpm_pps` (Number) DPM packets per second rate - default is 50pps
 - `oam_echo_disable_vendor_extension` (Boolean) Disable sending vendor extension TLV with echo req
 - `oam_echo_reply_mode_control_channel_allow_reverse_lsp` (Boolean) Use Reverse LSP as the control channel
+- `oam_echo_revision_four` (Boolean) draft-ietf-mpls-lsp-ping-09 (initial)
+- `oam_echo_revision_one` (Boolean) draft-ietf-mpls-lsp-ping-03 (initial)
+- `oam_echo_revision_three` (Boolean) draft-ietf-mpls-lsp-ping-03 (rev 2)
+- `oam_echo_revision_two` (Boolean) draft-ietf-mpls-lsp-ping-03 (rev 1)

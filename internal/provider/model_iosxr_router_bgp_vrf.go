@@ -578,11 +578,6 @@ func (data *RouterBGPVRF) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Neighbors[i].LocalAsNoPrependReplaceAsDualAs = types.BoolNull()
 		}
-		if value := r.Get("password.encrypted"); value.Exists() && !data.Neighbors[i].Password.IsNull() {
-			data.Neighbors[i].Password = types.StringValue(value.String())
-		} else {
-			data.Neighbors[i].Password = types.StringNull()
-		}
 		if value := r.Get("password.inheritance-disable"); !data.Neighbors[i].PasswordInheritanceDisable.IsNull() {
 			if value.Exists() {
 				data.Neighbors[i].PasswordInheritanceDisable = types.BoolValue(true)
@@ -797,9 +792,6 @@ func (data *RouterBGPVRF) fromBody(ctx context.Context, res []byte) {
 			} else {
 				item.LocalAsNoPrependReplaceAsDualAs = types.BoolValue(false)
 			}
-			if cValue := v.Get("password.encrypted"); cValue.Exists() {
-				item.Password = types.StringValue(cValue.String())
-			}
 			if cValue := v.Get("password.inheritance-disable"); cValue.Exists() {
 				item.PasswordInheritanceDisable = types.BoolValue(true)
 			} else {
@@ -986,9 +978,6 @@ func (data *RouterBGPVRFData) fromBody(ctx context.Context, res []byte) {
 				item.LocalAsNoPrependReplaceAsDualAs = types.BoolValue(true)
 			} else {
 				item.LocalAsNoPrependReplaceAsDualAs = types.BoolValue(false)
-			}
-			if cValue := v.Get("password.encrypted"); cValue.Exists() {
-				item.Password = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("password.inheritance-disable"); cValue.Exists() {
 				item.PasswordInheritanceDisable = types.BoolValue(true)

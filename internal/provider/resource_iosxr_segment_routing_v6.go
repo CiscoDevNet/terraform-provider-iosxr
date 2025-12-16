@@ -84,9 +84,52 @@ func (r *SegmentRoutingV6Resource) Schema(ctx context.Context, req resource.Sche
 				MarkdownDescription: helpers.NewAttributeDescription("Enable SRv6").String,
 				Optional:            true,
 			},
-			"encapsulation_source_address": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure a source address").String,
+			"sid_holdtime": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure SID holdtime for a stale/freed SID").AddIntegerRangeDescription(0, 60).String,
 				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 60),
+				},
+			},
+			"logging_locator_status": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable logging for locator status changes").String,
+				Optional:            true,
+			},
+			"formats": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure a SRv6 format").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Format name").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"usid_local_id_block_ranges_lib_start": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Start of LIB").AddIntegerRangeDescription(57344, 57344).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(57344, 57344),
+							},
+						},
+						"usid_local_id_block_ranges_explict_lib_start": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Start of Explicit LIB").AddIntegerRangeDescription(57444, 65279).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(57444, 65279),
+							},
+						},
+						"usid_wide_local_id_block_explicit_range": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify uSID WLIB explicit range").AddIntegerRangeDescription(65520, 65527).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(65520, 65527),
+							},
+						},
+					},
+				},
 			},
 			"locators": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Configure a SRv6 locator").String,
@@ -123,48 +166,51 @@ func (r *SegmentRoutingV6Resource) Schema(ctx context.Context, req resource.Sche
 								int64validator.Between(32, 112),
 							},
 						},
+						"anycast": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify locator to be anycast type").String,
+							Optional:            true,
+						},
+						"algorithm": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify locator algorithm").AddIntegerRangeDescription(128, 255).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(128, 255),
+							},
+						},
 					},
+				},
+			},
+			"encapsulation_traffic_class_option": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Config option").AddStringEnumDescription("propagate", "propagate-disable", "value").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("propagate", "propagate-disable", "value"),
 				},
 			},
-			"formats": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure a SRv6 format").String,
+			"encapsulation_traffic_class_value": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Field Value").AddIntegerRangeDescription(0, 255).String,
 				Optional:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Format name").String,
-							Required:            true,
-							Validators: []validator.String{
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
-							},
-						},
-						"format_enable": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Enable a SRv6 format").String,
-							Optional:            true,
-						},
-						"usid_local_id_block_ranges_lib_start": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Start of LIB").AddIntegerRangeDescription(57344, 57344).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(57344, 57344),
-							},
-						},
-						"usid_local_id_block_ranges_explict_lib_start": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Start of Explicit LIB").AddIntegerRangeDescription(57444, 65279).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(57444, 65279),
-							},
-						},
-						"usid_wide_local_id_block_explicit_range": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specify uSID WLIB explicit range").AddIntegerRangeDescription(65520, 65527).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(65520, 65527),
-							},
-						},
-					},
+				Validators: []validator.Int64{
+					int64validator.Between(0, 255),
 				},
+			},
+			"encapsulation_hop_limit_option": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Hop-Limit config option").AddStringEnumDescription("count", "propagate", "propagate-disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("count", "propagate", "propagate-disable"),
+				},
+			},
+			"encapsulation_hop_limit_value": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Count for Hop-limit").AddIntegerRangeDescription(0, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 255),
+				},
+			},
+			"encapsulation_source_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure a source address").String,
+				Optional:            true,
 			},
 		},
 	}

@@ -92,6 +92,14 @@ func (d *LoggingVRFDataSource) Schema(ctx context.Context, req datasource.Schema
 							MarkdownDescription: "Set severity operator of  messages for particular remote host/vrf",
 							Computed:            true,
 						},
+						"facility": schema.StringAttribute{
+							MarkdownDescription: "Modify message logging facilities",
+							Computed:            true,
+						},
+						"ipv4_source_address": schema.StringAttribute{
+							MarkdownDescription: "IPV4 source address of the logging host",
+							Computed:            true,
+						},
 					},
 				},
 			},
@@ -114,6 +122,14 @@ func (d *LoggingVRFDataSource) Schema(ctx context.Context, req datasource.Schema
 						},
 						"operator": schema.StringAttribute{
 							MarkdownDescription: "Set severity operator of  messages for particular remote host/vrf",
+							Computed:            true,
+						},
+						"facility": schema.StringAttribute{
+							MarkdownDescription: "Modify message logging facilities",
+							Computed:            true,
+						},
+						"ipv6_source_address": schema.StringAttribute{
+							MarkdownDescription: "IPV6 source address of the logging host",
 							Computed:            true,
 						},
 					},

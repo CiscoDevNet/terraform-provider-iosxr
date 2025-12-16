@@ -26,47 +26,59 @@ data "iosxr_mpls_ldp" "example" {
 
 ### Read-Only
 
-- `address_families` (Attributes List) Configure Address Family and its parameters (see [below for nested schema](#nestedatt--address_families))
 - `capabilities_sac` (Boolean) State Advertisement Control
 - `capabilities_sac_fec128_disable` (Boolean) Disable exchanging PW FEC128 label bindings
 - `capabilities_sac_fec129_disable` (Boolean) Disable exchanging PW FEC129 label bindings
 - `capabilities_sac_ipv4_disable` (Boolean) Disable exchanging IPv4 prefix label bindings
 - `capabilities_sac_ipv6_disable` (Boolean) Disable exchanging IPv6 prefix label bindings
+- `default_vrf_implicit_ipv4_disable` (Boolean) Disable the implicit enabling for IPv4 address family
+- `discovery_ds_tlv_disable` (Boolean) Disable transmit and receive processing for TLV
+- `discovery_hello_holdtime` (Number) Hello holdtime
+- `discovery_hello_interval` (Number) Hello interval
+- `discovery_instance_tlv_disable` (Boolean) Disable transmit and receive processing for TLV
+- `discovery_quick_start_disable` (Boolean) Disable quick discovery
+- `discovery_rtr_id_arb_tlv_disable` (Boolean) Disable transmit and receive processing for TLV
+- `discovery_targeted_hello_holdtime` (Number) Targeted hello holdtime
+- `discovery_targeted_hello_interval` (Number) Targeted Hello interval
+- `entropy_label` (Boolean) Configure Entropy Label
+- `entropy_label_add_el` (Boolean) Configure Entropy Label
+- `graceful_restart` (Boolean) Configure graceful restart feature
+- `graceful_restart_forwarding_state_holdtime` (Number) Forwarding State holdtime for a restarting LSR
+- `graceful_restart_helper_peer_maintain_on_local_reset_for` (String) Access list of LDP Peers
+- `graceful_restart_reconnect_timeout` (Number) Session Reconnect timeout
 - `id` (String) The path of the retrieved object.
 - `igp_sync_delay_on_proc_restart` (Number) Global sync up delay to be used after process restart
 - `igp_sync_delay_on_session_up` (Number) Interface sync-up delay after session up
-- `interfaces` (Attributes List) Enable LDP on an interface and enter interface submode (see [below for nested schema](#nestedatt--interfaces))
-- `mldp` (Boolean) Configure mLDP parameters
-- `mldp_address_families` (Attributes List) Configure Address Family and its parameters (see [below for nested schema](#nestedatt--mldp_address_families))
-- `mldp_logging_notifications` (Boolean) MLDP logging notifications
+- `log_graceful_restart` (Boolean) Graceful Restart events
+- `log_hello_adjacency` (Boolean) Hello adjacency events
+- `log_neighbor` (Boolean) Neighbor events
+- `log_nsr` (Boolean) NSR synchronization events
+- `log_session_protection` (Boolean) Session Protection events
+- `ltrace_buffer_multiplier` (Number) Ltrace buffer file size multiplier
+- `neighbor_dual_stack_tlv_compliance` (Boolean) Configure dual-stack tlv compliance checks
+- `neighbor_dual_stack_transport_connection_max_wait` (Number) Maximum wait for prefered transport connection establishment
+- `neighbor_dual_stack_transport_connection_prefer_ipv4` (Boolean) IPv4
+- `neighbors` (Attributes List) configure this node (see [below for nested schema](#nestedatt--neighbors))
+- `nsr` (Boolean) Configure Non-Stop Routing
 - `router_id` (String) Configure router Id
+- `session_backoff_time_initial` (Number) Configure session backoff parameters
+- `session_backoff_time_maximum` (Number) Maximum session backoff time (seconds)
+- `session_downstream_on_demand_with` (String) Access list of LDP Peers
+- `session_holdtime` (Number) Configure session holdtime
 - `session_protection` (Boolean) Configure session protection parameters
+- `session_protection_duration` (Number) Holdup time in seconds
+- `session_protection_duration_infinite` (Boolean) Protect session forever after loss of link discovery
+- `session_protection_for_acl` (String) IP Access list to specify LDP Peers
+- `session_protection_for_acl_duration` (Number) Holdup time in seconds
+- `session_protection_for_acl_duration_infinite` (Boolean) Protect session forever after loss of link discovery
+- `signalling_dscp` (Number) Set DSCP for LDP control packets
 
-<a id="nestedatt--address_families"></a>
-### Nested Schema for `address_families`
-
-Read-Only:
-
-- `af_name` (String) Configure Address Family and its parameters
-- `label_local_allocate_for_access_list` (String) IP access-list
-- `label_local_allocate_for_host_routes` (Boolean) Allocate label for host routes only
-
-
-<a id="nestedatt--interfaces"></a>
-### Nested Schema for `interfaces`
+<a id="nestedatt--neighbors"></a>
+### Nested Schema for `neighbors`
 
 Read-Only:
 
-- `interface_name` (String) Enable LDP on an interface and enter interface submode
-
-
-<a id="nestedatt--mldp_address_families"></a>
-### Nested Schema for `mldp_address_families`
-
-Read-Only:
-
-- `forwarding_recursive` (Boolean) Enable recursive forwarding
-- `forwarding_recursive_route_policy` (String) Route policy
-- `make_before_break_delay` (Number) MBB delay
-- `name` (String) Configure Address Family and its parameters
-- `recursive_fec` (Boolean) MLDP Recursive FEC enable
+- `label_space_id` (Number) Label Space Id of neighbor
+- `neighbor_address` (String) configure this node
+- `password_disable` (Boolean) Disables the global password from this neighbor
+- `password_encrypted` (String, Sensitive) Specifies an ENCRYPTED password will follow

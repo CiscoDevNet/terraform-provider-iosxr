@@ -109,6 +109,7 @@ func testAccIosxrEVPNInterfaceConfig_minimum() string {
 
 func testAccIosxrEVPNInterfaceConfig_all() string {
 	config := `resource "iosxr_evpn_interface" "test" {` + "\n"
+	config += `	delete_mode = "all"` + "\n"
 	config += `	interface_name = "Bundle-Ether12"` + "\n"
 	config += `	core_isolation_group = 11` + "\n"
 	config += `	ethernet_segment_identifier_type_zero_esi = "01.00.01.01.00.00.00.01.1"` + "\n"

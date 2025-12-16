@@ -423,11 +423,6 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 	} else {
 		data.LocalAsDualAs = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "password.encrypted"); value.Exists() && !data.Password.IsNull() {
-		data.Password = types.StringValue(value.String())
-	} else {
-		data.Password = types.StringNull()
-	}
 	if value := gjson.GetBytes(res, "password.inheritance-disable"); !data.PasswordInheritanceDisable.IsNull() {
 		if value.Exists() {
 			data.PasswordInheritanceDisable = types.BoolValue(true)
@@ -646,9 +641,6 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.LocalAsDualAs = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "password.encrypted"); value.Exists() {
-		data.Password = types.StringValue(value.String())
-	}
 	if value := gjson.GetBytes(res, "password.inheritance-disable"); value.Exists() {
 		data.PasswordInheritanceDisable = types.BoolValue(true)
 	} else {
@@ -802,9 +794,6 @@ func (data *RouterBGPNeighborGroupData) fromBody(ctx context.Context, res []byte
 		data.LocalAsDualAs = types.BoolValue(true)
 	} else {
 		data.LocalAsDualAs = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "password.encrypted"); value.Exists() {
-		data.Password = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "password.inheritance-disable"); value.Exists() {
 		data.PasswordInheritanceDisable = types.BoolValue(true)

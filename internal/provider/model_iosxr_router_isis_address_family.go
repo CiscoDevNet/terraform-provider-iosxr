@@ -35,152 +35,310 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type RouterISISAddressFamily struct {
-	Device                                                 types.String                                                                    `tfsdk:"device"`
-	Id                                                     types.String                                                                    `tfsdk:"id"`
-	DeleteMode                                             types.String                                                                    `tfsdk:"delete_mode"`
-	ProcessId                                              types.String                                                                    `tfsdk:"process_id"`
-	AfName                                                 types.String                                                                    `tfsdk:"af_name"`
-	SafName                                                types.String                                                                    `tfsdk:"saf_name"`
-	MetricStyleNarrow                                      types.Bool                                                                      `tfsdk:"metric_style_narrow"`
-	MetricStyleNarrowTransition                            types.Bool                                                                      `tfsdk:"metric_style_narrow_transition"`
-	MetricStyleWide                                        types.Bool                                                                      `tfsdk:"metric_style_wide"`
-	MetricStyleWideTransition                              types.Bool                                                                      `tfsdk:"metric_style_wide_transition"`
-	MetricStyleTransition                                  types.Bool                                                                      `tfsdk:"metric_style_transition"`
-	MetricStyleLevels                                      []RouterISISAddressFamilyMetricStyleLevels                                      `tfsdk:"metric_style_levels"`
-	RouterIdInterfaceName                                  types.String                                                                    `tfsdk:"router_id_interface_name"`
-	RouterIdIpAddress                                      types.String                                                                    `tfsdk:"router_id_ip_address"`
-	DefaultInformationOriginate                            types.Bool                                                                      `tfsdk:"default_information_originate"`
-	FastRerouteDelayInterval                               types.Int64                                                                     `tfsdk:"fast_reroute_delay_interval"`
-	FastReroutePerPrefixPriorityLimit                      types.String                                                                    `tfsdk:"fast_reroute_per_prefix_priority_limit"`
-	FastReroutePerPrefixPriorityLimitLevels                []RouterISISAddressFamilyFastReroutePerPrefixPriorityLimitLevels                `tfsdk:"fast_reroute_per_prefix_priority_limit_levels"`
-	FastReroutePerPrefixUseCandidateOnly                   types.Bool                                                                      `tfsdk:"fast_reroute_per_prefix_use_candidate_only"`
-	FastReroutePerPrefixSrlgProtectionWeightedGlobal       types.Bool                                                                      `tfsdk:"fast_reroute_per_prefix_srlg_protection_weighted_global"`
-	FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels []RouterISISAddressFamilyFastReroutePerPrefixSrlgProtectionWeightedGlobalLevels `tfsdk:"fast_reroute_per_prefix_srlg_protection_weighted_global_levels"`
-	FastReroutePerPrefixRemoteLfaPrefixList                types.String                                                                    `tfsdk:"fast_reroute_per_prefix_remote_lfa_prefix_list"`
-	FastReroutePerPrefixRemoteLfaPrefixListLevels          []RouterISISAddressFamilyFastReroutePerPrefixRemoteLfaPrefixListLevels          `tfsdk:"fast_reroute_per_prefix_remote_lfa_prefix_list_levels"`
-	FastReroutePerPrefixLoadSharingDisable                 types.Bool                                                                      `tfsdk:"fast_reroute_per_prefix_load_sharing_disable"`
-	FastReroutePerPrefixLoadSharingDisableLevels           []RouterISISAddressFamilyFastReroutePerPrefixLoadSharingDisableLevels           `tfsdk:"fast_reroute_per_prefix_load_sharing_disable_levels"`
-	FastReroutePerPrefixTiebreakerDownstreamIndex          types.Int64                                                                     `tfsdk:"fast_reroute_per_prefix_tiebreaker_downstream_index"`
-	FastReroutePerPrefixTiebreakerLcDisjointIndex          types.Int64                                                                     `tfsdk:"fast_reroute_per_prefix_tiebreaker_lc_disjoint_index"`
-	FastReroutePerPrefixTiebreakerLowestBackupMetricIndex  types.Int64                                                                     `tfsdk:"fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_index"`
-	FastReroutePerPrefixTiebreakerNodeProtectingIndex      types.Int64                                                                     `tfsdk:"fast_reroute_per_prefix_tiebreaker_node_protecting_index"`
-	FastReroutePerPrefixTiebreakerPrimaryPathIndex         types.Int64                                                                     `tfsdk:"fast_reroute_per_prefix_tiebreaker_primary_path_index"`
-	FastReroutePerPrefixTiebreakerSecondaryPathIndex       types.Int64                                                                     `tfsdk:"fast_reroute_per_prefix_tiebreaker_secondary_path_index"`
-	FastReroutePerPrefixTiebreakerSrlgDisjointIndex        types.Int64                                                                     `tfsdk:"fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index"`
-	FastReroutePerLinkPriorityLimit                        types.String                                                                    `tfsdk:"fast_reroute_per_link_priority_limit"`
-	FastReroutePerLinkPriorityLimitLevels                  []RouterISISAddressFamilyFastReroutePerLinkPriorityLimitLevels                  `tfsdk:"fast_reroute_per_link_priority_limit_levels"`
-	FastReroutePerLinkUseCandidateOnly                     types.Bool                                                                      `tfsdk:"fast_reroute_per_link_use_candidate_only"`
-	MicroloopAvoidance                                     types.Bool                                                                      `tfsdk:"microloop_avoidance"`
-	MicroloopAvoidanceProtected                            types.Bool                                                                      `tfsdk:"microloop_avoidance_protected"`
-	MicroloopAvoidanceSegmentRoutingRoutePolicy            types.String                                                                    `tfsdk:"microloop_avoidance_segment_routing_route_policy"`
-	MicroloopAvoidanceRibUpdateDelay                       types.Int64                                                                     `tfsdk:"microloop_avoidance_rib_update_delay"`
-	AdvertisePassiveOnly                                   types.Bool                                                                      `tfsdk:"advertise_passive_only"`
-	AdvertiseLinkAttributes                                types.Bool                                                                      `tfsdk:"advertise_link_attributes"`
-	MplsLdpAutoConfig                                      types.Bool                                                                      `tfsdk:"mpls_ldp_auto_config"`
-	MplsTrafficEngRouterIdIpv4Address                      types.String                                                                    `tfsdk:"mpls_traffic_eng_router_id_ipv4_address"`
-	MplsTrafficEngRouterIdInterfaceName                    types.String                                                                    `tfsdk:"mpls_traffic_eng_router_id_interface_name"`
-	MplsTrafficEngLevel12                                  types.Bool                                                                      `tfsdk:"mpls_traffic_eng_level_1_2"`
-	MplsTrafficEngLevel1                                   types.Bool                                                                      `tfsdk:"mpls_traffic_eng_level_1"`
-	MplsTrafficEngLevel2Only                               types.Bool                                                                      `tfsdk:"mpls_traffic_eng_level_2_only"`
-	SpfIntervalMaximumWait                                 types.Int64                                                                     `tfsdk:"spf_interval_maximum_wait"`
-	SpfIntervalInitialWait                                 types.Int64                                                                     `tfsdk:"spf_interval_initial_wait"`
-	SpfIntervalSecondaryWait                               types.Int64                                                                     `tfsdk:"spf_interval_secondary_wait"`
-	SpfIntervalIetf                                        types.Bool                                                                      `tfsdk:"spf_interval_ietf"`
-	SpfIntervalIetfInitialWait                             types.Int64                                                                     `tfsdk:"spf_interval_ietf_initial_wait"`
-	SpfIntervalIetfShortWait                               types.Int64                                                                     `tfsdk:"spf_interval_ietf_short_wait"`
-	SpfIntervalIetfLongWait                                types.Int64                                                                     `tfsdk:"spf_interval_ietf_long_wait"`
-	SpfIntervalIetfLearnInterval                           types.Int64                                                                     `tfsdk:"spf_interval_ietf_learn_interval"`
-	SpfIntervalIetfHolddownInterval                        types.Int64                                                                     `tfsdk:"spf_interval_ietf_holddown_interval"`
-	SpfIntervalLevels                                      []RouterISISAddressFamilySpfIntervalLevels                                      `tfsdk:"spf_interval_levels"`
-	SpfPrefixPriorityCriticalTag                           types.Int64                                                                     `tfsdk:"spf_prefix_priority_critical_tag"`
-	SpfPrefixPriorityCriticalPrefixListName                types.String                                                                    `tfsdk:"spf_prefix_priority_critical_prefix_list_name"`
-	SpfPrefixPriorityHighTag                               types.Int64                                                                     `tfsdk:"spf_prefix_priority_high_tag"`
-	SpfPrefixPriorityHighPrefixListName                    types.String                                                                    `tfsdk:"spf_prefix_priority_high_prefix_list_name"`
-	SpfPrefixPriorityMediumTag                             types.Int64                                                                     `tfsdk:"spf_prefix_priority_medium_tag"`
-	SpfPrefixPriorityMediumPrefixListName                  types.String                                                                    `tfsdk:"spf_prefix_priority_medium_prefix_list_name"`
-	SpfPrefixPriorityCriticalLevels                        []RouterISISAddressFamilySpfPrefixPriorityCriticalLevels                        `tfsdk:"spf_prefix_priority_critical_levels"`
-	SpfPrefixPriorityHighLevels                            []RouterISISAddressFamilySpfPrefixPriorityHighLevels                            `tfsdk:"spf_prefix_priority_high_levels"`
-	SpfPrefixPriorityMediumLevels                          []RouterISISAddressFamilySpfPrefixPriorityMediumLevels                          `tfsdk:"spf_prefix_priority_medium_levels"`
-	SegmentRoutingMplsEnable                               types.Bool                                                                      `tfsdk:"segment_routing_mpls_enable"`
-	SegmentRoutingMplsSrPrefer                             types.Bool                                                                      `tfsdk:"segment_routing_mpls_sr_prefer"`
-	MaximumRedistributedPrefixes                           types.Int64                                                                     `tfsdk:"maximum_redistributed_prefixes"`
-	MaximumRedistributedPrefixesLevels                     []RouterISISAddressFamilyMaximumRedistributedPrefixesLevels                     `tfsdk:"maximum_redistributed_prefixes_levels"`
-	RedistributeIsis                                       []RouterISISAddressFamilyRedistributeIsis                                       `tfsdk:"redistribute_isis"`
-	SegmentRoutingSrv6Locators                             []RouterISISAddressFamilySegmentRoutingSrv6Locators                             `tfsdk:"segment_routing_srv6_locators"`
+	Device                                                    types.String                                                                       `tfsdk:"device"`
+	Id                                                        types.String                                                                       `tfsdk:"id"`
+	DeleteMode                                                types.String                                                                       `tfsdk:"delete_mode"`
+	ProcessId                                                 types.String                                                                       `tfsdk:"process_id"`
+	AfName                                                    types.String                                                                       `tfsdk:"af_name"`
+	SafName                                                   types.String                                                                       `tfsdk:"saf_name"`
+	Distance                                                  types.Int64                                                                        `tfsdk:"distance"`
+	DistanceSources                                           []RouterISISAddressFamilyDistanceSources                                           `tfsdk:"distance_sources"`
+	DistributeListPrefixListIn                                types.String                                                                       `tfsdk:"distribute_list_prefix_list_in"`
+	DistributeListRoutePolicyIn                               types.String                                                                       `tfsdk:"distribute_list_route_policy_in"`
+	RedistributeConnected                                     types.Bool                                                                         `tfsdk:"redistribute_connected"`
+	RedistributeConnectedLevel                                types.String                                                                       `tfsdk:"redistribute_connected_level"`
+	RedistributeConnectedMetric                               types.Int64                                                                        `tfsdk:"redistribute_connected_metric"`
+	RedistributeConnectedRoutePolicy                          types.String                                                                       `tfsdk:"redistribute_connected_route_policy"`
+	RedistributeConnectedMetricType                           types.String                                                                       `tfsdk:"redistribute_connected_metric_type"`
+	RedistributeStatic                                        types.Bool                                                                         `tfsdk:"redistribute_static"`
+	RedistributeStaticLevel                                   types.String                                                                       `tfsdk:"redistribute_static_level"`
+	RedistributeStaticMetric                                  types.Int64                                                                        `tfsdk:"redistribute_static_metric"`
+	RedistributeStaticRoutePolicy                             types.String                                                                       `tfsdk:"redistribute_static_route_policy"`
+	RedistributeStaticMetricType                              types.String                                                                       `tfsdk:"redistribute_static_metric_type"`
+	RedistributeIsis                                          []RouterISISAddressFamilyRedistributeIsis                                          `tfsdk:"redistribute_isis"`
+	RedistributeBgp                                           []RouterISISAddressFamilyRedistributeBgp                                           `tfsdk:"redistribute_bgp"`
+	RedistributeOspf                                          []RouterISISAddressFamilyRedistributeOspf                                          `tfsdk:"redistribute_ospf"`
+	MaximumPaths                                              types.Int64                                                                        `tfsdk:"maximum_paths"`
+	RouterIdInterfaceName                                     types.String                                                                       `tfsdk:"router_id_interface_name"`
+	RouterIdIpAddress                                         types.String                                                                       `tfsdk:"router_id_ip_address"`
+	AdvertisePassiveOnly                                      types.Bool                                                                         `tfsdk:"advertise_passive_only"`
+	AdvertiseLinkAttributes                                   types.Bool                                                                         `tfsdk:"advertise_link_attributes"`
+	MicroloopAvoidance                                        types.Bool                                                                         `tfsdk:"microloop_avoidance"`
+	MicroloopAvoidanceProtected                               types.Bool                                                                         `tfsdk:"microloop_avoidance_protected"`
+	MicroloopAvoidanceSegmentRoutingRoutePolicy               types.String                                                                       `tfsdk:"microloop_avoidance_segment_routing_route_policy"`
+	MicroloopAvoidanceRibUpdateDelay                          types.Int64                                                                        `tfsdk:"microloop_avoidance_rib_update_delay"`
+	SummaryPrefixes                                           []RouterISISAddressFamilySummaryPrefixes                                           `tfsdk:"summary_prefixes"`
+	Metric                                                    types.Int64                                                                        `tfsdk:"metric"`
+	MetricLevels                                              []RouterISISAddressFamilyMetricLevels                                              `tfsdk:"metric_levels"`
+	MetricStyleNarrow                                         types.Bool                                                                         `tfsdk:"metric_style_narrow"`
+	MetricStyleNarrowTransition                               types.Bool                                                                         `tfsdk:"metric_style_narrow_transition"`
+	MetricStyleWide                                           types.Bool                                                                         `tfsdk:"metric_style_wide"`
+	MetricStyleWideTransition                                 types.Bool                                                                         `tfsdk:"metric_style_wide_transition"`
+	MetricStyleTransition                                     types.Bool                                                                         `tfsdk:"metric_style_transition"`
+	MetricStyleLevels                                         []RouterISISAddressFamilyMetricStyleLevels                                         `tfsdk:"metric_style_levels"`
+	SpfIntervalMaximumWait                                    types.Int64                                                                        `tfsdk:"spf_interval_maximum_wait"`
+	SpfIntervalInitialWait                                    types.Int64                                                                        `tfsdk:"spf_interval_initial_wait"`
+	SpfIntervalSecondaryWait                                  types.Int64                                                                        `tfsdk:"spf_interval_secondary_wait"`
+	SpfIntervalIetf                                           types.Bool                                                                         `tfsdk:"spf_interval_ietf"`
+	SpfIntervalIetfInitialWait                                types.Int64                                                                        `tfsdk:"spf_interval_ietf_initial_wait"`
+	SpfIntervalIetfShortWait                                  types.Int64                                                                        `tfsdk:"spf_interval_ietf_short_wait"`
+	SpfIntervalIetfLongWait                                   types.Int64                                                                        `tfsdk:"spf_interval_ietf_long_wait"`
+	SpfIntervalIetfLearnInterval                              types.Int64                                                                        `tfsdk:"spf_interval_ietf_learn_interval"`
+	SpfIntervalIetfHolddownInterval                           types.Int64                                                                        `tfsdk:"spf_interval_ietf_holddown_interval"`
+	SpfIntervalLevels                                         []RouterISISAddressFamilySpfIntervalLevels                                         `tfsdk:"spf_interval_levels"`
+	SpfPrefixPriorityCriticalTag                              types.Int64                                                                        `tfsdk:"spf_prefix_priority_critical_tag"`
+	SpfPrefixPriorityCriticalPrefixListName                   types.String                                                                       `tfsdk:"spf_prefix_priority_critical_prefix_list_name"`
+	SpfPrefixPriorityHighTag                                  types.Int64                                                                        `tfsdk:"spf_prefix_priority_high_tag"`
+	SpfPrefixPriorityHighPrefixListName                       types.String                                                                       `tfsdk:"spf_prefix_priority_high_prefix_list_name"`
+	SpfPrefixPriorityMediumTag                                types.Int64                                                                        `tfsdk:"spf_prefix_priority_medium_tag"`
+	SpfPrefixPriorityMediumPrefixListName                     types.String                                                                       `tfsdk:"spf_prefix_priority_medium_prefix_list_name"`
+	SpfPrefixPriorityCriticalLevels                           []RouterISISAddressFamilySpfPrefixPriorityCriticalLevels                           `tfsdk:"spf_prefix_priority_critical_levels"`
+	SpfPrefixPriorityHighLevels                               []RouterISISAddressFamilySpfPrefixPriorityHighLevels                               `tfsdk:"spf_prefix_priority_high_levels"`
+	SpfPrefixPriorityMediumLevels                             []RouterISISAddressFamilySpfPrefixPriorityMediumLevels                             `tfsdk:"spf_prefix_priority_medium_levels"`
+	MaximumRedistributedPrefixes                              types.Int64                                                                        `tfsdk:"maximum_redistributed_prefixes"`
+	MaximumRedistributedPrefixesLevels                        []RouterISISAddressFamilyMaximumRedistributedPrefixesLevels                        `tfsdk:"maximum_redistributed_prefixes_levels"`
+	PropagateLevels                                           []RouterISISAddressFamilyPropagateLevels                                           `tfsdk:"propagate_levels"`
+	AdjacencyCheckDisable                                     types.Bool                                                                         `tfsdk:"adjacency_check_disable"`
+	RouteSourceFirstHop                                       types.Bool                                                                         `tfsdk:"route_source_first_hop"`
+	AttachedBitReceiveIgnore                                  types.Bool                                                                         `tfsdk:"attached_bit_receive_ignore"`
+	AttachedBitSend                                           types.String                                                                       `tfsdk:"attached_bit_send"`
+	FastRerouteDelayInterval                                  types.Int64                                                                        `tfsdk:"fast_reroute_delay_interval"`
+	FastReroutePerPrefixPriorityLimit                         types.String                                                                       `tfsdk:"fast_reroute_per_prefix_priority_limit"`
+	FastReroutePerPrefixPriorityLimitLevels                   []RouterISISAddressFamilyFastReroutePerPrefixPriorityLimitLevels                   `tfsdk:"fast_reroute_per_prefix_priority_limit_levels"`
+	FastReroutePerPrefixUseCandidateOnly                      types.Bool                                                                         `tfsdk:"fast_reroute_per_prefix_use_candidate_only"`
+	FastReroutePerPrefixSrlgProtectionWeightedGlobal          types.Bool                                                                         `tfsdk:"fast_reroute_per_prefix_srlg_protection_weighted_global"`
+	FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels    []RouterISISAddressFamilyFastReroutePerPrefixSrlgProtectionWeightedGlobalLevels    `tfsdk:"fast_reroute_per_prefix_srlg_protection_weighted_global_levels"`
+	FastReroutePerPrefixRemoteLfaPrefixList                   types.String                                                                       `tfsdk:"fast_reroute_per_prefix_remote_lfa_prefix_list"`
+	FastReroutePerPrefixRemoteLfaPrefixListLevels             []RouterISISAddressFamilyFastReroutePerPrefixRemoteLfaPrefixListLevels             `tfsdk:"fast_reroute_per_prefix_remote_lfa_prefix_list_levels"`
+	FastReroutePerPrefixLoadSharingDisable                    types.Bool                                                                         `tfsdk:"fast_reroute_per_prefix_load_sharing_disable"`
+	FastReroutePerPrefixLoadSharingDisableLevels              []RouterISISAddressFamilyFastReroutePerPrefixLoadSharingDisableLevels              `tfsdk:"fast_reroute_per_prefix_load_sharing_disable_levels"`
+	FastReroutePerPrefixTiebreakerDownstreamIndex             types.Int64                                                                        `tfsdk:"fast_reroute_per_prefix_tiebreaker_downstream_index"`
+	FastReroutePerPrefixTiebreakerLcDisjointIndex             types.Int64                                                                        `tfsdk:"fast_reroute_per_prefix_tiebreaker_lc_disjoint_index"`
+	FastReroutePerPrefixTiebreakerLowestBackupMetricIndex     types.Int64                                                                        `tfsdk:"fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_index"`
+	FastReroutePerPrefixTiebreakerNodeProtectingIndex         types.Int64                                                                        `tfsdk:"fast_reroute_per_prefix_tiebreaker_node_protecting_index"`
+	FastReroutePerPrefixTiebreakerPrimaryPathIndex            types.Int64                                                                        `tfsdk:"fast_reroute_per_prefix_tiebreaker_primary_path_index"`
+	FastReroutePerPrefixTiebreakerSecondaryPathIndex          types.Int64                                                                        `tfsdk:"fast_reroute_per_prefix_tiebreaker_secondary_path_index"`
+	FastReroutePerPrefixTiebreakerSrlgDisjointIndex           types.Int64                                                                        `tfsdk:"fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index"`
+	FastReroutePerLinkUseCandidateOnly                        types.Bool                                                                         `tfsdk:"fast_reroute_per_link_use_candidate_only"`
+	FastReroutePerLinkUseCandidateOnlyLevels                  []RouterISISAddressFamilyFastReroutePerLinkUseCandidateOnlyLevels                  `tfsdk:"fast_reroute_per_link_use_candidate_only_levels"`
+	FastReroutePerLinkPriorityLimit                           types.String                                                                       `tfsdk:"fast_reroute_per_link_priority_limit"`
+	FastReroutePerLinkPriorityLimitLevels                     []RouterISISAddressFamilyFastReroutePerLinkPriorityLimitLevels                     `tfsdk:"fast_reroute_per_link_priority_limit_levels"`
+	DefaultInformationOriginate                               types.Bool                                                                         `tfsdk:"default_information_originate"`
+	DefaultInformationOriginateRoutePolicy                    types.String                                                                       `tfsdk:"default_information_originate_route_policy"`
+	SegmentRoutingBundleMemberAdjSid                          types.Bool                                                                         `tfsdk:"segment_routing_bundle_member_adj_sid"`
+	SegmentRoutingLabeledOnly                                 types.Bool                                                                         `tfsdk:"segment_routing_labeled_only"`
+	SegmentRoutingProtectedAdjacencySidDelay                  types.Int64                                                                        `tfsdk:"segment_routing_protected_adjacency_sid_delay"`
+	SegmentRoutingMplsEnable                                  types.Bool                                                                         `tfsdk:"segment_routing_mpls_enable"`
+	SegmentRoutingMplsSrPrefer                                types.Bool                                                                         `tfsdk:"segment_routing_mpls_sr_prefer"`
+	SegmentRoutingMplsUnlabeledProtectionPrefixList           types.String                                                                       `tfsdk:"segment_routing_mpls_unlabeled_protection_prefix_list"`
+	SegmentRoutingMplsUnlabeledProtectionRoutePolicy          types.String                                                                       `tfsdk:"segment_routing_mpls_unlabeled_protection_route_policy"`
+	SegmentRoutingMplsUnlabeledProtectionDisable              types.Bool                                                                         `tfsdk:"segment_routing_mpls_unlabeled_protection_disable"`
+	SegmentRoutingMplsPrefixSidMapReceive                     types.Bool                                                                         `tfsdk:"segment_routing_mpls_prefix_sid_map_receive"`
+	SegmentRoutingMplsPrefixSidMapReceiveDisable              types.Bool                                                                         `tfsdk:"segment_routing_mpls_prefix_sid_map_receive_disable"`
+	SegmentRoutingMplsPrefixSidMapAdvertiseLocal              types.Bool                                                                         `tfsdk:"segment_routing_mpls_prefix_sid_map_advertise_local"`
+	SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide    types.Bool                                                                         `tfsdk:"segment_routing_mpls_prefix_sid_map_advertise_local_domain_wide"`
+	SegmentRoutingMplsConnectedPrefixSidMap                   types.Bool                                                                         `tfsdk:"segment_routing_mpls_connected_prefix_sid_map"`
+	SegmentRoutingMplsConnectedPrefixSidMapAddresses          []RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapAddresses          `tfsdk:"segment_routing_mpls_connected_prefix_sid_map_addresses"`
+	SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses  []RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses  `tfsdk:"segment_routing_mpls_connected_prefix_sid_map_flex_algo_addresses"`
+	SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses []RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses `tfsdk:"segment_routing_mpls_connected_prefix_sid_map_strict_spf_addresses"`
+	SegmentRoutingSrv6Locators                                []RouterISISAddressFamilySegmentRoutingSrv6Locators                                `tfsdk:"segment_routing_srv6_locators"`
+	PartitionDetect                                           types.Bool                                                                         `tfsdk:"partition_detect"`
+	PartitionDetectTracks                                     []RouterISISAddressFamilyPartitionDetectTracks                                     `tfsdk:"partition_detect_tracks"`
+	PartitionDetectExternalAddressTracks                      []RouterISISAddressFamilyPartitionDetectExternalAddressTracks                      `tfsdk:"partition_detect_external_address_tracks"`
+	MplsLdpAutoConfig                                         types.Bool                                                                         `tfsdk:"mpls_ldp_auto_config"`
+	MplsTrafficEngRouterIdIpv4Address                         types.String                                                                       `tfsdk:"mpls_traffic_eng_router_id_ipv4_address"`
+	MplsTrafficEngRouterIdInterfaceName                       types.String                                                                       `tfsdk:"mpls_traffic_eng_router_id_interface_name"`
+	MplsTrafficEngIgpIntact                                   types.Bool                                                                         `tfsdk:"mpls_traffic_eng_igp_intact"`
+	MplsTrafficEngMulticastIntact                             types.Bool                                                                         `tfsdk:"mpls_traffic_eng_multicast_intact"`
+	MplsTrafficEngTunnelRestricted                            types.Bool                                                                         `tfsdk:"mpls_traffic_eng_tunnel_restricted"`
+	MplsTrafficEngTunnelPreferred                             types.Bool                                                                         `tfsdk:"mpls_traffic_eng_tunnel_preferred"`
+	MplsTrafficEngTunnelMetric                                types.Int64                                                                        `tfsdk:"mpls_traffic_eng_tunnel_metric"`
+	MplsTrafficEngTunnelAnycastPreferIgpCost                  types.Bool                                                                         `tfsdk:"mpls_traffic_eng_tunnel_anycast_prefer_igp_cost"`
+	MplsTrafficEngTunnelMetricLevels                          []RouterISISAddressFamilyMplsTrafficEngTunnelMetricLevels                          `tfsdk:"mpls_traffic_eng_tunnel_metric_levels"`
+	MplsTrafficEngLevel12                                     types.Bool                                                                         `tfsdk:"mpls_traffic_eng_level_1_2"`
+	MplsTrafficEngLevel1                                      types.Bool                                                                         `tfsdk:"mpls_traffic_eng_level_1"`
+	MplsTrafficEngLevel2Only                                  types.Bool                                                                         `tfsdk:"mpls_traffic_eng_level_2_only"`
+	PrefixUnreachable                                         types.Bool                                                                         `tfsdk:"prefix_unreachable"`
+	PrefixUnreachableAdvMaximum                               types.Int64                                                                        `tfsdk:"prefix_unreachable_adv_maximum"`
+	PrefixUnreachableAdvLifetime                              types.Int64                                                                        `tfsdk:"prefix_unreachable_adv_lifetime"`
+	PrefixUnreachableAdvMetric                                types.Int64                                                                        `tfsdk:"prefix_unreachable_adv_metric"`
+	PrefixUnreachableRxProcessEnable                          types.Bool                                                                         `tfsdk:"prefix_unreachable_rx_process_enable"`
 }
 
 type RouterISISAddressFamilyData struct {
-	Device                                                 types.String                                                                    `tfsdk:"device"`
-	Id                                                     types.String                                                                    `tfsdk:"id"`
-	ProcessId                                              types.String                                                                    `tfsdk:"process_id"`
-	AfName                                                 types.String                                                                    `tfsdk:"af_name"`
-	SafName                                                types.String                                                                    `tfsdk:"saf_name"`
-	MetricStyleNarrow                                      types.Bool                                                                      `tfsdk:"metric_style_narrow"`
-	MetricStyleNarrowTransition                            types.Bool                                                                      `tfsdk:"metric_style_narrow_transition"`
-	MetricStyleWide                                        types.Bool                                                                      `tfsdk:"metric_style_wide"`
-	MetricStyleWideTransition                              types.Bool                                                                      `tfsdk:"metric_style_wide_transition"`
-	MetricStyleTransition                                  types.Bool                                                                      `tfsdk:"metric_style_transition"`
-	MetricStyleLevels                                      []RouterISISAddressFamilyMetricStyleLevels                                      `tfsdk:"metric_style_levels"`
-	RouterIdInterfaceName                                  types.String                                                                    `tfsdk:"router_id_interface_name"`
-	RouterIdIpAddress                                      types.String                                                                    `tfsdk:"router_id_ip_address"`
-	DefaultInformationOriginate                            types.Bool                                                                      `tfsdk:"default_information_originate"`
-	FastRerouteDelayInterval                               types.Int64                                                                     `tfsdk:"fast_reroute_delay_interval"`
-	FastReroutePerPrefixPriorityLimit                      types.String                                                                    `tfsdk:"fast_reroute_per_prefix_priority_limit"`
-	FastReroutePerPrefixPriorityLimitLevels                []RouterISISAddressFamilyFastReroutePerPrefixPriorityLimitLevels                `tfsdk:"fast_reroute_per_prefix_priority_limit_levels"`
-	FastReroutePerPrefixUseCandidateOnly                   types.Bool                                                                      `tfsdk:"fast_reroute_per_prefix_use_candidate_only"`
-	FastReroutePerPrefixSrlgProtectionWeightedGlobal       types.Bool                                                                      `tfsdk:"fast_reroute_per_prefix_srlg_protection_weighted_global"`
-	FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels []RouterISISAddressFamilyFastReroutePerPrefixSrlgProtectionWeightedGlobalLevels `tfsdk:"fast_reroute_per_prefix_srlg_protection_weighted_global_levels"`
-	FastReroutePerPrefixRemoteLfaPrefixList                types.String                                                                    `tfsdk:"fast_reroute_per_prefix_remote_lfa_prefix_list"`
-	FastReroutePerPrefixRemoteLfaPrefixListLevels          []RouterISISAddressFamilyFastReroutePerPrefixRemoteLfaPrefixListLevels          `tfsdk:"fast_reroute_per_prefix_remote_lfa_prefix_list_levels"`
-	FastReroutePerPrefixLoadSharingDisable                 types.Bool                                                                      `tfsdk:"fast_reroute_per_prefix_load_sharing_disable"`
-	FastReroutePerPrefixLoadSharingDisableLevels           []RouterISISAddressFamilyFastReroutePerPrefixLoadSharingDisableLevels           `tfsdk:"fast_reroute_per_prefix_load_sharing_disable_levels"`
-	FastReroutePerPrefixTiebreakerDownstreamIndex          types.Int64                                                                     `tfsdk:"fast_reroute_per_prefix_tiebreaker_downstream_index"`
-	FastReroutePerPrefixTiebreakerLcDisjointIndex          types.Int64                                                                     `tfsdk:"fast_reroute_per_prefix_tiebreaker_lc_disjoint_index"`
-	FastReroutePerPrefixTiebreakerLowestBackupMetricIndex  types.Int64                                                                     `tfsdk:"fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_index"`
-	FastReroutePerPrefixTiebreakerNodeProtectingIndex      types.Int64                                                                     `tfsdk:"fast_reroute_per_prefix_tiebreaker_node_protecting_index"`
-	FastReroutePerPrefixTiebreakerPrimaryPathIndex         types.Int64                                                                     `tfsdk:"fast_reroute_per_prefix_tiebreaker_primary_path_index"`
-	FastReroutePerPrefixTiebreakerSecondaryPathIndex       types.Int64                                                                     `tfsdk:"fast_reroute_per_prefix_tiebreaker_secondary_path_index"`
-	FastReroutePerPrefixTiebreakerSrlgDisjointIndex        types.Int64                                                                     `tfsdk:"fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index"`
-	FastReroutePerLinkPriorityLimit                        types.String                                                                    `tfsdk:"fast_reroute_per_link_priority_limit"`
-	FastReroutePerLinkPriorityLimitLevels                  []RouterISISAddressFamilyFastReroutePerLinkPriorityLimitLevels                  `tfsdk:"fast_reroute_per_link_priority_limit_levels"`
-	FastReroutePerLinkUseCandidateOnly                     types.Bool                                                                      `tfsdk:"fast_reroute_per_link_use_candidate_only"`
-	MicroloopAvoidance                                     types.Bool                                                                      `tfsdk:"microloop_avoidance"`
-	MicroloopAvoidanceProtected                            types.Bool                                                                      `tfsdk:"microloop_avoidance_protected"`
-	MicroloopAvoidanceSegmentRoutingRoutePolicy            types.String                                                                    `tfsdk:"microloop_avoidance_segment_routing_route_policy"`
-	MicroloopAvoidanceRibUpdateDelay                       types.Int64                                                                     `tfsdk:"microloop_avoidance_rib_update_delay"`
-	AdvertisePassiveOnly                                   types.Bool                                                                      `tfsdk:"advertise_passive_only"`
-	AdvertiseLinkAttributes                                types.Bool                                                                      `tfsdk:"advertise_link_attributes"`
-	MplsLdpAutoConfig                                      types.Bool                                                                      `tfsdk:"mpls_ldp_auto_config"`
-	MplsTrafficEngRouterIdIpv4Address                      types.String                                                                    `tfsdk:"mpls_traffic_eng_router_id_ipv4_address"`
-	MplsTrafficEngRouterIdInterfaceName                    types.String                                                                    `tfsdk:"mpls_traffic_eng_router_id_interface_name"`
-	MplsTrafficEngLevel12                                  types.Bool                                                                      `tfsdk:"mpls_traffic_eng_level_1_2"`
-	MplsTrafficEngLevel1                                   types.Bool                                                                      `tfsdk:"mpls_traffic_eng_level_1"`
-	MplsTrafficEngLevel2Only                               types.Bool                                                                      `tfsdk:"mpls_traffic_eng_level_2_only"`
-	SpfIntervalMaximumWait                                 types.Int64                                                                     `tfsdk:"spf_interval_maximum_wait"`
-	SpfIntervalInitialWait                                 types.Int64                                                                     `tfsdk:"spf_interval_initial_wait"`
-	SpfIntervalSecondaryWait                               types.Int64                                                                     `tfsdk:"spf_interval_secondary_wait"`
-	SpfIntervalIetf                                        types.Bool                                                                      `tfsdk:"spf_interval_ietf"`
-	SpfIntervalIetfInitialWait                             types.Int64                                                                     `tfsdk:"spf_interval_ietf_initial_wait"`
-	SpfIntervalIetfShortWait                               types.Int64                                                                     `tfsdk:"spf_interval_ietf_short_wait"`
-	SpfIntervalIetfLongWait                                types.Int64                                                                     `tfsdk:"spf_interval_ietf_long_wait"`
-	SpfIntervalIetfLearnInterval                           types.Int64                                                                     `tfsdk:"spf_interval_ietf_learn_interval"`
-	SpfIntervalIetfHolddownInterval                        types.Int64                                                                     `tfsdk:"spf_interval_ietf_holddown_interval"`
-	SpfIntervalLevels                                      []RouterISISAddressFamilySpfIntervalLevels                                      `tfsdk:"spf_interval_levels"`
-	SpfPrefixPriorityCriticalTag                           types.Int64                                                                     `tfsdk:"spf_prefix_priority_critical_tag"`
-	SpfPrefixPriorityCriticalPrefixListName                types.String                                                                    `tfsdk:"spf_prefix_priority_critical_prefix_list_name"`
-	SpfPrefixPriorityHighTag                               types.Int64                                                                     `tfsdk:"spf_prefix_priority_high_tag"`
-	SpfPrefixPriorityHighPrefixListName                    types.String                                                                    `tfsdk:"spf_prefix_priority_high_prefix_list_name"`
-	SpfPrefixPriorityMediumTag                             types.Int64                                                                     `tfsdk:"spf_prefix_priority_medium_tag"`
-	SpfPrefixPriorityMediumPrefixListName                  types.String                                                                    `tfsdk:"spf_prefix_priority_medium_prefix_list_name"`
-	SpfPrefixPriorityCriticalLevels                        []RouterISISAddressFamilySpfPrefixPriorityCriticalLevels                        `tfsdk:"spf_prefix_priority_critical_levels"`
-	SpfPrefixPriorityHighLevels                            []RouterISISAddressFamilySpfPrefixPriorityHighLevels                            `tfsdk:"spf_prefix_priority_high_levels"`
-	SpfPrefixPriorityMediumLevels                          []RouterISISAddressFamilySpfPrefixPriorityMediumLevels                          `tfsdk:"spf_prefix_priority_medium_levels"`
-	SegmentRoutingMplsEnable                               types.Bool                                                                      `tfsdk:"segment_routing_mpls_enable"`
-	SegmentRoutingMplsSrPrefer                             types.Bool                                                                      `tfsdk:"segment_routing_mpls_sr_prefer"`
-	MaximumRedistributedPrefixes                           types.Int64                                                                     `tfsdk:"maximum_redistributed_prefixes"`
-	MaximumRedistributedPrefixesLevels                     []RouterISISAddressFamilyMaximumRedistributedPrefixesLevels                     `tfsdk:"maximum_redistributed_prefixes_levels"`
-	RedistributeIsis                                       []RouterISISAddressFamilyRedistributeIsis                                       `tfsdk:"redistribute_isis"`
-	SegmentRoutingSrv6Locators                             []RouterISISAddressFamilySegmentRoutingSrv6Locators                             `tfsdk:"segment_routing_srv6_locators"`
+	Device                                                    types.String                                                                       `tfsdk:"device"`
+	Id                                                        types.String                                                                       `tfsdk:"id"`
+	ProcessId                                                 types.String                                                                       `tfsdk:"process_id"`
+	AfName                                                    types.String                                                                       `tfsdk:"af_name"`
+	SafName                                                   types.String                                                                       `tfsdk:"saf_name"`
+	Distance                                                  types.Int64                                                                        `tfsdk:"distance"`
+	DistanceSources                                           []RouterISISAddressFamilyDistanceSources                                           `tfsdk:"distance_sources"`
+	DistributeListPrefixListIn                                types.String                                                                       `tfsdk:"distribute_list_prefix_list_in"`
+	DistributeListRoutePolicyIn                               types.String                                                                       `tfsdk:"distribute_list_route_policy_in"`
+	RedistributeConnected                                     types.Bool                                                                         `tfsdk:"redistribute_connected"`
+	RedistributeConnectedLevel                                types.String                                                                       `tfsdk:"redistribute_connected_level"`
+	RedistributeConnectedMetric                               types.Int64                                                                        `tfsdk:"redistribute_connected_metric"`
+	RedistributeConnectedRoutePolicy                          types.String                                                                       `tfsdk:"redistribute_connected_route_policy"`
+	RedistributeConnectedMetricType                           types.String                                                                       `tfsdk:"redistribute_connected_metric_type"`
+	RedistributeStatic                                        types.Bool                                                                         `tfsdk:"redistribute_static"`
+	RedistributeStaticLevel                                   types.String                                                                       `tfsdk:"redistribute_static_level"`
+	RedistributeStaticMetric                                  types.Int64                                                                        `tfsdk:"redistribute_static_metric"`
+	RedistributeStaticRoutePolicy                             types.String                                                                       `tfsdk:"redistribute_static_route_policy"`
+	RedistributeStaticMetricType                              types.String                                                                       `tfsdk:"redistribute_static_metric_type"`
+	RedistributeIsis                                          []RouterISISAddressFamilyRedistributeIsis                                          `tfsdk:"redistribute_isis"`
+	RedistributeBgp                                           []RouterISISAddressFamilyRedistributeBgp                                           `tfsdk:"redistribute_bgp"`
+	RedistributeOspf                                          []RouterISISAddressFamilyRedistributeOspf                                          `tfsdk:"redistribute_ospf"`
+	MaximumPaths                                              types.Int64                                                                        `tfsdk:"maximum_paths"`
+	RouterIdInterfaceName                                     types.String                                                                       `tfsdk:"router_id_interface_name"`
+	RouterIdIpAddress                                         types.String                                                                       `tfsdk:"router_id_ip_address"`
+	AdvertisePassiveOnly                                      types.Bool                                                                         `tfsdk:"advertise_passive_only"`
+	AdvertiseLinkAttributes                                   types.Bool                                                                         `tfsdk:"advertise_link_attributes"`
+	MicroloopAvoidance                                        types.Bool                                                                         `tfsdk:"microloop_avoidance"`
+	MicroloopAvoidanceProtected                               types.Bool                                                                         `tfsdk:"microloop_avoidance_protected"`
+	MicroloopAvoidanceSegmentRoutingRoutePolicy               types.String                                                                       `tfsdk:"microloop_avoidance_segment_routing_route_policy"`
+	MicroloopAvoidanceRibUpdateDelay                          types.Int64                                                                        `tfsdk:"microloop_avoidance_rib_update_delay"`
+	SummaryPrefixes                                           []RouterISISAddressFamilySummaryPrefixes                                           `tfsdk:"summary_prefixes"`
+	Metric                                                    types.Int64                                                                        `tfsdk:"metric"`
+	MetricLevels                                              []RouterISISAddressFamilyMetricLevels                                              `tfsdk:"metric_levels"`
+	MetricStyleNarrow                                         types.Bool                                                                         `tfsdk:"metric_style_narrow"`
+	MetricStyleNarrowTransition                               types.Bool                                                                         `tfsdk:"metric_style_narrow_transition"`
+	MetricStyleWide                                           types.Bool                                                                         `tfsdk:"metric_style_wide"`
+	MetricStyleWideTransition                                 types.Bool                                                                         `tfsdk:"metric_style_wide_transition"`
+	MetricStyleTransition                                     types.Bool                                                                         `tfsdk:"metric_style_transition"`
+	MetricStyleLevels                                         []RouterISISAddressFamilyMetricStyleLevels                                         `tfsdk:"metric_style_levels"`
+	SpfIntervalMaximumWait                                    types.Int64                                                                        `tfsdk:"spf_interval_maximum_wait"`
+	SpfIntervalInitialWait                                    types.Int64                                                                        `tfsdk:"spf_interval_initial_wait"`
+	SpfIntervalSecondaryWait                                  types.Int64                                                                        `tfsdk:"spf_interval_secondary_wait"`
+	SpfIntervalIetf                                           types.Bool                                                                         `tfsdk:"spf_interval_ietf"`
+	SpfIntervalIetfInitialWait                                types.Int64                                                                        `tfsdk:"spf_interval_ietf_initial_wait"`
+	SpfIntervalIetfShortWait                                  types.Int64                                                                        `tfsdk:"spf_interval_ietf_short_wait"`
+	SpfIntervalIetfLongWait                                   types.Int64                                                                        `tfsdk:"spf_interval_ietf_long_wait"`
+	SpfIntervalIetfLearnInterval                              types.Int64                                                                        `tfsdk:"spf_interval_ietf_learn_interval"`
+	SpfIntervalIetfHolddownInterval                           types.Int64                                                                        `tfsdk:"spf_interval_ietf_holddown_interval"`
+	SpfIntervalLevels                                         []RouterISISAddressFamilySpfIntervalLevels                                         `tfsdk:"spf_interval_levels"`
+	SpfPrefixPriorityCriticalTag                              types.Int64                                                                        `tfsdk:"spf_prefix_priority_critical_tag"`
+	SpfPrefixPriorityCriticalPrefixListName                   types.String                                                                       `tfsdk:"spf_prefix_priority_critical_prefix_list_name"`
+	SpfPrefixPriorityHighTag                                  types.Int64                                                                        `tfsdk:"spf_prefix_priority_high_tag"`
+	SpfPrefixPriorityHighPrefixListName                       types.String                                                                       `tfsdk:"spf_prefix_priority_high_prefix_list_name"`
+	SpfPrefixPriorityMediumTag                                types.Int64                                                                        `tfsdk:"spf_prefix_priority_medium_tag"`
+	SpfPrefixPriorityMediumPrefixListName                     types.String                                                                       `tfsdk:"spf_prefix_priority_medium_prefix_list_name"`
+	SpfPrefixPriorityCriticalLevels                           []RouterISISAddressFamilySpfPrefixPriorityCriticalLevels                           `tfsdk:"spf_prefix_priority_critical_levels"`
+	SpfPrefixPriorityHighLevels                               []RouterISISAddressFamilySpfPrefixPriorityHighLevels                               `tfsdk:"spf_prefix_priority_high_levels"`
+	SpfPrefixPriorityMediumLevels                             []RouterISISAddressFamilySpfPrefixPriorityMediumLevels                             `tfsdk:"spf_prefix_priority_medium_levels"`
+	MaximumRedistributedPrefixes                              types.Int64                                                                        `tfsdk:"maximum_redistributed_prefixes"`
+	MaximumRedistributedPrefixesLevels                        []RouterISISAddressFamilyMaximumRedistributedPrefixesLevels                        `tfsdk:"maximum_redistributed_prefixes_levels"`
+	PropagateLevels                                           []RouterISISAddressFamilyPropagateLevels                                           `tfsdk:"propagate_levels"`
+	AdjacencyCheckDisable                                     types.Bool                                                                         `tfsdk:"adjacency_check_disable"`
+	RouteSourceFirstHop                                       types.Bool                                                                         `tfsdk:"route_source_first_hop"`
+	AttachedBitReceiveIgnore                                  types.Bool                                                                         `tfsdk:"attached_bit_receive_ignore"`
+	AttachedBitSend                                           types.String                                                                       `tfsdk:"attached_bit_send"`
+	FastRerouteDelayInterval                                  types.Int64                                                                        `tfsdk:"fast_reroute_delay_interval"`
+	FastReroutePerPrefixPriorityLimit                         types.String                                                                       `tfsdk:"fast_reroute_per_prefix_priority_limit"`
+	FastReroutePerPrefixPriorityLimitLevels                   []RouterISISAddressFamilyFastReroutePerPrefixPriorityLimitLevels                   `tfsdk:"fast_reroute_per_prefix_priority_limit_levels"`
+	FastReroutePerPrefixUseCandidateOnly                      types.Bool                                                                         `tfsdk:"fast_reroute_per_prefix_use_candidate_only"`
+	FastReroutePerPrefixSrlgProtectionWeightedGlobal          types.Bool                                                                         `tfsdk:"fast_reroute_per_prefix_srlg_protection_weighted_global"`
+	FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels    []RouterISISAddressFamilyFastReroutePerPrefixSrlgProtectionWeightedGlobalLevels    `tfsdk:"fast_reroute_per_prefix_srlg_protection_weighted_global_levels"`
+	FastReroutePerPrefixRemoteLfaPrefixList                   types.String                                                                       `tfsdk:"fast_reroute_per_prefix_remote_lfa_prefix_list"`
+	FastReroutePerPrefixRemoteLfaPrefixListLevels             []RouterISISAddressFamilyFastReroutePerPrefixRemoteLfaPrefixListLevels             `tfsdk:"fast_reroute_per_prefix_remote_lfa_prefix_list_levels"`
+	FastReroutePerPrefixLoadSharingDisable                    types.Bool                                                                         `tfsdk:"fast_reroute_per_prefix_load_sharing_disable"`
+	FastReroutePerPrefixLoadSharingDisableLevels              []RouterISISAddressFamilyFastReroutePerPrefixLoadSharingDisableLevels              `tfsdk:"fast_reroute_per_prefix_load_sharing_disable_levels"`
+	FastReroutePerPrefixTiebreakerDownstreamIndex             types.Int64                                                                        `tfsdk:"fast_reroute_per_prefix_tiebreaker_downstream_index"`
+	FastReroutePerPrefixTiebreakerLcDisjointIndex             types.Int64                                                                        `tfsdk:"fast_reroute_per_prefix_tiebreaker_lc_disjoint_index"`
+	FastReroutePerPrefixTiebreakerLowestBackupMetricIndex     types.Int64                                                                        `tfsdk:"fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_index"`
+	FastReroutePerPrefixTiebreakerNodeProtectingIndex         types.Int64                                                                        `tfsdk:"fast_reroute_per_prefix_tiebreaker_node_protecting_index"`
+	FastReroutePerPrefixTiebreakerPrimaryPathIndex            types.Int64                                                                        `tfsdk:"fast_reroute_per_prefix_tiebreaker_primary_path_index"`
+	FastReroutePerPrefixTiebreakerSecondaryPathIndex          types.Int64                                                                        `tfsdk:"fast_reroute_per_prefix_tiebreaker_secondary_path_index"`
+	FastReroutePerPrefixTiebreakerSrlgDisjointIndex           types.Int64                                                                        `tfsdk:"fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index"`
+	FastReroutePerLinkUseCandidateOnly                        types.Bool                                                                         `tfsdk:"fast_reroute_per_link_use_candidate_only"`
+	FastReroutePerLinkUseCandidateOnlyLevels                  []RouterISISAddressFamilyFastReroutePerLinkUseCandidateOnlyLevels                  `tfsdk:"fast_reroute_per_link_use_candidate_only_levels"`
+	FastReroutePerLinkPriorityLimit                           types.String                                                                       `tfsdk:"fast_reroute_per_link_priority_limit"`
+	FastReroutePerLinkPriorityLimitLevels                     []RouterISISAddressFamilyFastReroutePerLinkPriorityLimitLevels                     `tfsdk:"fast_reroute_per_link_priority_limit_levels"`
+	DefaultInformationOriginate                               types.Bool                                                                         `tfsdk:"default_information_originate"`
+	DefaultInformationOriginateRoutePolicy                    types.String                                                                       `tfsdk:"default_information_originate_route_policy"`
+	SegmentRoutingBundleMemberAdjSid                          types.Bool                                                                         `tfsdk:"segment_routing_bundle_member_adj_sid"`
+	SegmentRoutingLabeledOnly                                 types.Bool                                                                         `tfsdk:"segment_routing_labeled_only"`
+	SegmentRoutingProtectedAdjacencySidDelay                  types.Int64                                                                        `tfsdk:"segment_routing_protected_adjacency_sid_delay"`
+	SegmentRoutingMplsEnable                                  types.Bool                                                                         `tfsdk:"segment_routing_mpls_enable"`
+	SegmentRoutingMplsSrPrefer                                types.Bool                                                                         `tfsdk:"segment_routing_mpls_sr_prefer"`
+	SegmentRoutingMplsUnlabeledProtectionPrefixList           types.String                                                                       `tfsdk:"segment_routing_mpls_unlabeled_protection_prefix_list"`
+	SegmentRoutingMplsUnlabeledProtectionRoutePolicy          types.String                                                                       `tfsdk:"segment_routing_mpls_unlabeled_protection_route_policy"`
+	SegmentRoutingMplsUnlabeledProtectionDisable              types.Bool                                                                         `tfsdk:"segment_routing_mpls_unlabeled_protection_disable"`
+	SegmentRoutingMplsPrefixSidMapReceive                     types.Bool                                                                         `tfsdk:"segment_routing_mpls_prefix_sid_map_receive"`
+	SegmentRoutingMplsPrefixSidMapReceiveDisable              types.Bool                                                                         `tfsdk:"segment_routing_mpls_prefix_sid_map_receive_disable"`
+	SegmentRoutingMplsPrefixSidMapAdvertiseLocal              types.Bool                                                                         `tfsdk:"segment_routing_mpls_prefix_sid_map_advertise_local"`
+	SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide    types.Bool                                                                         `tfsdk:"segment_routing_mpls_prefix_sid_map_advertise_local_domain_wide"`
+	SegmentRoutingMplsConnectedPrefixSidMap                   types.Bool                                                                         `tfsdk:"segment_routing_mpls_connected_prefix_sid_map"`
+	SegmentRoutingMplsConnectedPrefixSidMapAddresses          []RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapAddresses          `tfsdk:"segment_routing_mpls_connected_prefix_sid_map_addresses"`
+	SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses  []RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses  `tfsdk:"segment_routing_mpls_connected_prefix_sid_map_flex_algo_addresses"`
+	SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses []RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses `tfsdk:"segment_routing_mpls_connected_prefix_sid_map_strict_spf_addresses"`
+	SegmentRoutingSrv6Locators                                []RouterISISAddressFamilySegmentRoutingSrv6Locators                                `tfsdk:"segment_routing_srv6_locators"`
+	PartitionDetect                                           types.Bool                                                                         `tfsdk:"partition_detect"`
+	PartitionDetectTracks                                     []RouterISISAddressFamilyPartitionDetectTracks                                     `tfsdk:"partition_detect_tracks"`
+	PartitionDetectExternalAddressTracks                      []RouterISISAddressFamilyPartitionDetectExternalAddressTracks                      `tfsdk:"partition_detect_external_address_tracks"`
+	MplsLdpAutoConfig                                         types.Bool                                                                         `tfsdk:"mpls_ldp_auto_config"`
+	MplsTrafficEngRouterIdIpv4Address                         types.String                                                                       `tfsdk:"mpls_traffic_eng_router_id_ipv4_address"`
+	MplsTrafficEngRouterIdInterfaceName                       types.String                                                                       `tfsdk:"mpls_traffic_eng_router_id_interface_name"`
+	MplsTrafficEngIgpIntact                                   types.Bool                                                                         `tfsdk:"mpls_traffic_eng_igp_intact"`
+	MplsTrafficEngMulticastIntact                             types.Bool                                                                         `tfsdk:"mpls_traffic_eng_multicast_intact"`
+	MplsTrafficEngTunnelRestricted                            types.Bool                                                                         `tfsdk:"mpls_traffic_eng_tunnel_restricted"`
+	MplsTrafficEngTunnelPreferred                             types.Bool                                                                         `tfsdk:"mpls_traffic_eng_tunnel_preferred"`
+	MplsTrafficEngTunnelMetric                                types.Int64                                                                        `tfsdk:"mpls_traffic_eng_tunnel_metric"`
+	MplsTrafficEngTunnelAnycastPreferIgpCost                  types.Bool                                                                         `tfsdk:"mpls_traffic_eng_tunnel_anycast_prefer_igp_cost"`
+	MplsTrafficEngTunnelMetricLevels                          []RouterISISAddressFamilyMplsTrafficEngTunnelMetricLevels                          `tfsdk:"mpls_traffic_eng_tunnel_metric_levels"`
+	MplsTrafficEngLevel12                                     types.Bool                                                                         `tfsdk:"mpls_traffic_eng_level_1_2"`
+	MplsTrafficEngLevel1                                      types.Bool                                                                         `tfsdk:"mpls_traffic_eng_level_1"`
+	MplsTrafficEngLevel2Only                                  types.Bool                                                                         `tfsdk:"mpls_traffic_eng_level_2_only"`
+	PrefixUnreachable                                         types.Bool                                                                         `tfsdk:"prefix_unreachable"`
+	PrefixUnreachableAdvMaximum                               types.Int64                                                                        `tfsdk:"prefix_unreachable_adv_maximum"`
+	PrefixUnreachableAdvLifetime                              types.Int64                                                                        `tfsdk:"prefix_unreachable_adv_lifetime"`
+	PrefixUnreachableAdvMetric                                types.Int64                                                                        `tfsdk:"prefix_unreachable_adv_metric"`
+	PrefixUnreachableRxProcessEnable                          types.Bool                                                                         `tfsdk:"prefix_unreachable_rx_process_enable"`
+}
+type RouterISISAddressFamilyDistanceSources struct {
+	Address     types.String `tfsdk:"address"`
+	Prefix      types.Int64  `tfsdk:"prefix"`
+	Distance    types.Int64  `tfsdk:"distance"`
+	RouteFilter types.String `tfsdk:"route_filter"`
+}
+type RouterISISAddressFamilyRedistributeIsis struct {
+	InstanceId    types.String `tfsdk:"instance_id"`
+	Level         types.String `tfsdk:"level"`
+	Metric        types.Int64  `tfsdk:"metric"`
+	RoutePolicy   types.String `tfsdk:"route_policy"`
+	MetricType    types.String `tfsdk:"metric_type"`
+	DownFlagClear types.Bool   `tfsdk:"down_flag_clear"`
+}
+type RouterISISAddressFamilyRedistributeBgp struct {
+	AsNumber    types.String `tfsdk:"as_number"`
+	Level       types.String `tfsdk:"level"`
+	Metric      types.Int64  `tfsdk:"metric"`
+	RoutePolicy types.String `tfsdk:"route_policy"`
+	MetricType  types.String `tfsdk:"metric_type"`
+}
+type RouterISISAddressFamilyRedistributeOspf struct {
+	InstanceId    types.String `tfsdk:"instance_id"`
+	MatchInternal types.Bool   `tfsdk:"match_internal"`
+	MatchExternal types.Bool   `tfsdk:"match_external"`
+	Level         types.String `tfsdk:"level"`
+	Metric        types.Int64  `tfsdk:"metric"`
+	RoutePolicy   types.String `tfsdk:"route_policy"`
+	MetricType    types.String `tfsdk:"metric_type"`
+}
+type RouterISISAddressFamilySummaryPrefixes struct {
+	Address                       types.String `tfsdk:"address"`
+	Prefix                        types.Int64  `tfsdk:"prefix"`
+	Tag                           types.Int64  `tfsdk:"tag"`
+	Level                         types.Int64  `tfsdk:"level"`
+	Algorithm                     types.Int64  `tfsdk:"algorithm"`
+	Explicit                      types.Bool   `tfsdk:"explicit"`
+	AdvUnreachable                types.Bool   `tfsdk:"adv_unreachable"`
+	UnreachableTag                types.Int64  `tfsdk:"unreachable_tag"`
+	UnreachableTagExcludePrefixes types.Bool   `tfsdk:"unreachable_tag_exclude_prefixes"`
+	PartitionRepair               types.Bool   `tfsdk:"partition_repair"`
+}
+type RouterISISAddressFamilyMetricLevels struct {
+	LevelNumber types.Int64 `tfsdk:"level_number"`
+	Metric      types.Int64 `tfsdk:"metric"`
 }
 type RouterISISAddressFamilyMetricStyleLevels struct {
 	LevelNumber      types.Int64 `tfsdk:"level_number"`
@@ -189,24 +347,6 @@ type RouterISISAddressFamilyMetricStyleLevels struct {
 	Wide             types.Bool  `tfsdk:"wide"`
 	WideTransition   types.Bool  `tfsdk:"wide_transition"`
 	Transition       types.Bool  `tfsdk:"transition"`
-}
-type RouterISISAddressFamilyFastReroutePerPrefixPriorityLimitLevels struct {
-	LevelNumber   types.Int64  `tfsdk:"level_number"`
-	PriorityLimit types.String `tfsdk:"priority_limit"`
-}
-type RouterISISAddressFamilyFastReroutePerPrefixSrlgProtectionWeightedGlobalLevels struct {
-	LevelNumber types.Int64 `tfsdk:"level_number"`
-}
-type RouterISISAddressFamilyFastReroutePerPrefixRemoteLfaPrefixListLevels struct {
-	LevelNumber types.Int64  `tfsdk:"level_number"`
-	PrefixList  types.String `tfsdk:"prefix_list"`
-}
-type RouterISISAddressFamilyFastReroutePerPrefixLoadSharingDisableLevels struct {
-	LevelNumber types.Int64 `tfsdk:"level_number"`
-}
-type RouterISISAddressFamilyFastReroutePerLinkPriorityLimitLevels struct {
-	LevelNumber   types.Int64  `tfsdk:"level_number"`
-	PriorityLimit types.String `tfsdk:"priority_limit"`
 }
 type RouterISISAddressFamilySpfIntervalLevels struct {
 	LevelNumber          types.Int64 `tfsdk:"level_number"`
@@ -239,13 +379,68 @@ type RouterISISAddressFamilyMaximumRedistributedPrefixesLevels struct {
 	LevelNumber                  types.Int64 `tfsdk:"level_number"`
 	MaximumRedistributedPrefixes types.Int64 `tfsdk:"maximum_redistributed_prefixes"`
 }
-type RouterISISAddressFamilyRedistributeIsis struct {
-	InstanceId    types.String `tfsdk:"instance_id"`
-	Level         types.String `tfsdk:"level"`
-	Metric        types.Int64  `tfsdk:"metric"`
-	RoutePolicy   types.String `tfsdk:"route_policy"`
-	MetricType    types.String `tfsdk:"metric_type"`
-	DownFlagClear types.Bool   `tfsdk:"down_flag_clear"`
+type RouterISISAddressFamilyPropagateLevels struct {
+	SourceLevel      types.Int64  `tfsdk:"source_level"`
+	DestinationLevel types.Int64  `tfsdk:"destination_level"`
+	RoutePolicy      types.String `tfsdk:"route_policy"`
+}
+type RouterISISAddressFamilyFastReroutePerPrefixPriorityLimitLevels struct {
+	LevelNumber   types.Int64  `tfsdk:"level_number"`
+	PriorityLimit types.String `tfsdk:"priority_limit"`
+}
+type RouterISISAddressFamilyFastReroutePerPrefixSrlgProtectionWeightedGlobalLevels struct {
+	LevelNumber types.Int64 `tfsdk:"level_number"`
+}
+type RouterISISAddressFamilyFastReroutePerPrefixRemoteLfaPrefixListLevels struct {
+	LevelNumber types.Int64  `tfsdk:"level_number"`
+	PrefixList  types.String `tfsdk:"prefix_list"`
+}
+type RouterISISAddressFamilyFastReroutePerPrefixLoadSharingDisableLevels struct {
+	LevelNumber types.Int64 `tfsdk:"level_number"`
+}
+type RouterISISAddressFamilyFastReroutePerLinkUseCandidateOnlyLevels struct {
+	LevelNumber types.Int64 `tfsdk:"level_number"`
+}
+type RouterISISAddressFamilyFastReroutePerLinkPriorityLimitLevels struct {
+	LevelNumber   types.Int64  `tfsdk:"level_number"`
+	PriorityLimit types.String `tfsdk:"priority_limit"`
+}
+type RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapAddresses struct {
+	IpAddress            types.String `tfsdk:"ip_address"`
+	Prefix               types.Int64  `tfsdk:"prefix"`
+	IndexId              types.Int64  `tfsdk:"index_id"`
+	IndexInterface       types.String `tfsdk:"index_interface"`
+	IndexPhpDisable      types.Bool   `tfsdk:"index_php_disable"`
+	IndexExplicitNull    types.Bool   `tfsdk:"index_explicit_null"`
+	AbsoluteId           types.Int64  `tfsdk:"absolute_id"`
+	AbsoluteInterface    types.String `tfsdk:"absolute_interface"`
+	AbsolutePhpDisable   types.Bool   `tfsdk:"absolute_php_disable"`
+	AbsoluteExplicitNull types.Bool   `tfsdk:"absolute_explicit_null"`
+}
+type RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses struct {
+	IpAddress            types.String `tfsdk:"ip_address"`
+	Prefix               types.Int64  `tfsdk:"prefix"`
+	FlexAlgo             types.Int64  `tfsdk:"flex_algo"`
+	IndexId              types.Int64  `tfsdk:"index_id"`
+	IndexInterface       types.String `tfsdk:"index_interface"`
+	IndexPhpDisable      types.Bool   `tfsdk:"index_php_disable"`
+	IndexExplicitNull    types.Bool   `tfsdk:"index_explicit_null"`
+	AbsoluteId           types.Int64  `tfsdk:"absolute_id"`
+	AbsoluteInterface    types.String `tfsdk:"absolute_interface"`
+	AbsolutePhpDisable   types.Bool   `tfsdk:"absolute_php_disable"`
+	AbsoluteExplicitNull types.Bool   `tfsdk:"absolute_explicit_null"`
+}
+type RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses struct {
+	IpAddress            types.String `tfsdk:"ip_address"`
+	Prefix               types.Int64  `tfsdk:"prefix"`
+	IndexId              types.Int64  `tfsdk:"index_id"`
+	IndexInterface       types.String `tfsdk:"index_interface"`
+	IndexPhpDisable      types.Bool   `tfsdk:"index_php_disable"`
+	IndexExplicitNull    types.Bool   `tfsdk:"index_explicit_null"`
+	AbsoluteId           types.Int64  `tfsdk:"absolute_id"`
+	AbsoluteInterface    types.String `tfsdk:"absolute_interface"`
+	AbsolutePhpDisable   types.Bool   `tfsdk:"absolute_php_disable"`
+	AbsoluteExplicitNull types.Bool   `tfsdk:"absolute_explicit_null"`
 }
 type RouterISISAddressFamilySegmentRoutingSrv6Locators struct {
 	LocatorName  types.String                                                    `tfsdk:"locator_name"`
@@ -254,6 +449,19 @@ type RouterISISAddressFamilySegmentRoutingSrv6Locators struct {
 	MetricLevels []RouterISISAddressFamilySegmentRoutingSrv6LocatorsMetricLevels `tfsdk:"metric_levels"`
 	Tag          types.Int64                                                     `tfsdk:"tag"`
 	TagLevels    []RouterISISAddressFamilySegmentRoutingSrv6LocatorsTagLevels    `tfsdk:"tag_levels"`
+}
+type RouterISISAddressFamilyPartitionDetectTracks struct {
+	Address types.String `tfsdk:"address"`
+	Ipv4    types.Bool   `tfsdk:"ipv4"`
+	Ipv6    types.Bool   `tfsdk:"ipv6"`
+}
+type RouterISISAddressFamilyPartitionDetectExternalAddressTracks struct {
+	Address         types.String `tfsdk:"address"`
+	ExternalAddress types.String `tfsdk:"external_address"`
+}
+type RouterISISAddressFamilyMplsTrafficEngTunnelMetricLevels struct {
+	LevelNumber types.Int64 `tfsdk:"level_number"`
+	Metric      types.Int64 `tfsdk:"metric"`
 }
 type RouterISISAddressFamilySegmentRoutingSrv6LocatorsMetricLevels struct {
 	LevelNumber types.Int64 `tfsdk:"level_number"`
@@ -288,6 +496,87 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 	if !data.SafName.IsNull() && !data.SafName.IsUnknown() {
 		body, _ = sjson.Set(body, "saf-name", data.SafName.ValueString())
 	}
+	if !data.Distance.IsNull() && !data.Distance.IsUnknown() {
+		body, _ = sjson.Set(body, "distance.global", strconv.FormatInt(data.Distance.ValueInt64(), 10))
+	}
+	if !data.DistributeListPrefixListIn.IsNull() && !data.DistributeListPrefixListIn.IsUnknown() {
+		body, _ = sjson.Set(body, "distribute-list.prefix-list.prefix-list-string", data.DistributeListPrefixListIn.ValueString())
+	}
+	if !data.DistributeListRoutePolicyIn.IsNull() && !data.DistributeListRoutePolicyIn.IsUnknown() {
+		body, _ = sjson.Set(body, "distribute-list.route-policy", data.DistributeListRoutePolicyIn.ValueString())
+	}
+	if !data.RedistributeConnected.IsNull() && !data.RedistributeConnected.IsUnknown() {
+		if data.RedistributeConnected.ValueBool() {
+			body, _ = sjson.Set(body, "redistribute.connected", map[string]string{})
+		}
+	}
+	if !data.RedistributeConnectedLevel.IsNull() && !data.RedistributeConnectedLevel.IsUnknown() {
+		body, _ = sjson.Set(body, "redistribute.connected.redistribute-route-level", data.RedistributeConnectedLevel.ValueString())
+	}
+	if !data.RedistributeConnectedMetric.IsNull() && !data.RedistributeConnectedMetric.IsUnknown() {
+		body, _ = sjson.Set(body, "redistribute.connected.metric", strconv.FormatInt(data.RedistributeConnectedMetric.ValueInt64(), 10))
+	}
+	if !data.RedistributeConnectedRoutePolicy.IsNull() && !data.RedistributeConnectedRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "redistribute.connected.route-policy", data.RedistributeConnectedRoutePolicy.ValueString())
+	}
+	if !data.RedistributeConnectedMetricType.IsNull() && !data.RedistributeConnectedMetricType.IsUnknown() {
+		body, _ = sjson.Set(body, "redistribute.connected.metric-type", data.RedistributeConnectedMetricType.ValueString())
+	}
+	if !data.RedistributeStatic.IsNull() && !data.RedistributeStatic.IsUnknown() {
+		if data.RedistributeStatic.ValueBool() {
+			body, _ = sjson.Set(body, "redistribute.static", map[string]string{})
+		}
+	}
+	if !data.RedistributeStaticLevel.IsNull() && !data.RedistributeStaticLevel.IsUnknown() {
+		body, _ = sjson.Set(body, "redistribute.static.redistribute-route-level", data.RedistributeStaticLevel.ValueString())
+	}
+	if !data.RedistributeStaticMetric.IsNull() && !data.RedistributeStaticMetric.IsUnknown() {
+		body, _ = sjson.Set(body, "redistribute.static.metric", strconv.FormatInt(data.RedistributeStaticMetric.ValueInt64(), 10))
+	}
+	if !data.RedistributeStaticRoutePolicy.IsNull() && !data.RedistributeStaticRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "redistribute.static.route-policy", data.RedistributeStaticRoutePolicy.ValueString())
+	}
+	if !data.RedistributeStaticMetricType.IsNull() && !data.RedistributeStaticMetricType.IsUnknown() {
+		body, _ = sjson.Set(body, "redistribute.static.metric-type", data.RedistributeStaticMetricType.ValueString())
+	}
+	if !data.MaximumPaths.IsNull() && !data.MaximumPaths.IsUnknown() {
+		body, _ = sjson.Set(body, "maximum-paths", strconv.FormatInt(data.MaximumPaths.ValueInt64(), 10))
+	}
+	if !data.RouterIdInterfaceName.IsNull() && !data.RouterIdInterfaceName.IsUnknown() {
+		body, _ = sjson.Set(body, "router-id.interface-name", data.RouterIdInterfaceName.ValueString())
+	}
+	if !data.RouterIdIpAddress.IsNull() && !data.RouterIdIpAddress.IsUnknown() {
+		body, _ = sjson.Set(body, "router-id.ip-address", data.RouterIdIpAddress.ValueString())
+	}
+	if !data.AdvertisePassiveOnly.IsNull() && !data.AdvertisePassiveOnly.IsUnknown() {
+		if data.AdvertisePassiveOnly.ValueBool() {
+			body, _ = sjson.Set(body, "advertise.passive-only", map[string]string{})
+		}
+	}
+	if !data.AdvertiseLinkAttributes.IsNull() && !data.AdvertiseLinkAttributes.IsUnknown() {
+		if data.AdvertiseLinkAttributes.ValueBool() {
+			body, _ = sjson.Set(body, "advertise.link.attributes", map[string]string{})
+		}
+	}
+	if !data.MicroloopAvoidance.IsNull() && !data.MicroloopAvoidance.IsUnknown() {
+		if data.MicroloopAvoidance.ValueBool() {
+			body, _ = sjson.Set(body, "microloop.avoidance.enable", map[string]string{})
+		}
+	}
+	if !data.MicroloopAvoidanceProtected.IsNull() && !data.MicroloopAvoidanceProtected.IsUnknown() {
+		if data.MicroloopAvoidanceProtected.ValueBool() {
+			body, _ = sjson.Set(body, "microloop.avoidance.enable.protected", map[string]string{})
+		}
+	}
+	if !data.MicroloopAvoidanceSegmentRoutingRoutePolicy.IsNull() && !data.MicroloopAvoidanceSegmentRoutingRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "microloop.avoidance.enable.segment-routing.route-policy", data.MicroloopAvoidanceSegmentRoutingRoutePolicy.ValueString())
+	}
+	if !data.MicroloopAvoidanceRibUpdateDelay.IsNull() && !data.MicroloopAvoidanceRibUpdateDelay.IsUnknown() {
+		body, _ = sjson.Set(body, "microloop.avoidance.rib-update-delay", strconv.FormatInt(data.MicroloopAvoidanceRibUpdateDelay.ValueInt64(), 10))
+	}
+	if !data.Metric.IsNull() && !data.Metric.IsUnknown() {
+		body, _ = sjson.Set(body, "metric", strconv.FormatInt(data.Metric.ValueInt64(), 10))
+	}
 	if !data.MetricStyleNarrow.IsNull() && !data.MetricStyleNarrow.IsUnknown() {
 		if data.MetricStyleNarrow.ValueBool() {
 			body, _ = sjson.Set(body, "metric-style.narrow", map[string]string{})
@@ -311,122 +600,6 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 	if !data.MetricStyleTransition.IsNull() && !data.MetricStyleTransition.IsUnknown() {
 		if data.MetricStyleTransition.ValueBool() {
 			body, _ = sjson.Set(body, "metric-style.transition", map[string]string{})
-		}
-	}
-	if !data.RouterIdInterfaceName.IsNull() && !data.RouterIdInterfaceName.IsUnknown() {
-		body, _ = sjson.Set(body, "router-id.interface-name", data.RouterIdInterfaceName.ValueString())
-	}
-	if !data.RouterIdIpAddress.IsNull() && !data.RouterIdIpAddress.IsUnknown() {
-		body, _ = sjson.Set(body, "router-id.ip-address", data.RouterIdIpAddress.ValueString())
-	}
-	if !data.DefaultInformationOriginate.IsNull() && !data.DefaultInformationOriginate.IsUnknown() {
-		if data.DefaultInformationOriginate.ValueBool() {
-			body, _ = sjson.Set(body, "default-information.originate", map[string]string{})
-		}
-	}
-	if !data.FastRerouteDelayInterval.IsNull() && !data.FastRerouteDelayInterval.IsUnknown() {
-		body, _ = sjson.Set(body, "fast-reroute.delay-interval", strconv.FormatInt(data.FastRerouteDelayInterval.ValueInt64(), 10))
-	}
-	if !data.FastReroutePerPrefixPriorityLimit.IsNull() && !data.FastReroutePerPrefixPriorityLimit.IsUnknown() {
-		body, _ = sjson.Set(body, "fast-reroute.per-prefix.priority-limit", data.FastReroutePerPrefixPriorityLimit.ValueString())
-	}
-	if !data.FastReroutePerPrefixUseCandidateOnly.IsNull() && !data.FastReroutePerPrefixUseCandidateOnly.IsUnknown() {
-		if data.FastReroutePerPrefixUseCandidateOnly.ValueBool() {
-			body, _ = sjson.Set(body, "fast-reroute.per-prefix.use-candidate-only", map[string]string{})
-		}
-	}
-	if !data.FastReroutePerPrefixSrlgProtectionWeightedGlobal.IsNull() && !data.FastReroutePerPrefixSrlgProtectionWeightedGlobal.IsUnknown() {
-		if data.FastReroutePerPrefixSrlgProtectionWeightedGlobal.ValueBool() {
-			body, _ = sjson.Set(body, "fast-reroute.per-prefix.srlg-protection.weighted-global", map[string]string{})
-		}
-	}
-	if !data.FastReroutePerPrefixRemoteLfaPrefixList.IsNull() && !data.FastReroutePerPrefixRemoteLfaPrefixList.IsUnknown() {
-		body, _ = sjson.Set(body, "fast-reroute.per-prefix.remote-lfa.prefix-list", data.FastReroutePerPrefixRemoteLfaPrefixList.ValueString())
-	}
-	if !data.FastReroutePerPrefixLoadSharingDisable.IsNull() && !data.FastReroutePerPrefixLoadSharingDisable.IsUnknown() {
-		if data.FastReroutePerPrefixLoadSharingDisable.ValueBool() {
-			body, _ = sjson.Set(body, "fast-reroute.per-prefix.load-sharing.disable", map[string]string{})
-		}
-	}
-	if !data.FastReroutePerPrefixTiebreakerDownstreamIndex.IsNull() && !data.FastReroutePerPrefixTiebreakerDownstreamIndex.IsUnknown() {
-		body, _ = sjson.Set(body, "fast-reroute.per-prefix.tiebreaker.downstream.index", strconv.FormatInt(data.FastReroutePerPrefixTiebreakerDownstreamIndex.ValueInt64(), 10))
-	}
-	if !data.FastReroutePerPrefixTiebreakerLcDisjointIndex.IsNull() && !data.FastReroutePerPrefixTiebreakerLcDisjointIndex.IsUnknown() {
-		body, _ = sjson.Set(body, "fast-reroute.per-prefix.tiebreaker.lc-disjoint.index", strconv.FormatInt(data.FastReroutePerPrefixTiebreakerLcDisjointIndex.ValueInt64(), 10))
-	}
-	if !data.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex.IsNull() && !data.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex.IsUnknown() {
-		body, _ = sjson.Set(body, "fast-reroute.per-prefix.tiebreaker.lowest-backup-metric.index", strconv.FormatInt(data.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex.ValueInt64(), 10))
-	}
-	if !data.FastReroutePerPrefixTiebreakerNodeProtectingIndex.IsNull() && !data.FastReroutePerPrefixTiebreakerNodeProtectingIndex.IsUnknown() {
-		body, _ = sjson.Set(body, "fast-reroute.per-prefix.tiebreaker.node-protecting.index", strconv.FormatInt(data.FastReroutePerPrefixTiebreakerNodeProtectingIndex.ValueInt64(), 10))
-	}
-	if !data.FastReroutePerPrefixTiebreakerPrimaryPathIndex.IsNull() && !data.FastReroutePerPrefixTiebreakerPrimaryPathIndex.IsUnknown() {
-		body, _ = sjson.Set(body, "fast-reroute.per-prefix.tiebreaker.primary-path.index", strconv.FormatInt(data.FastReroutePerPrefixTiebreakerPrimaryPathIndex.ValueInt64(), 10))
-	}
-	if !data.FastReroutePerPrefixTiebreakerSecondaryPathIndex.IsNull() && !data.FastReroutePerPrefixTiebreakerSecondaryPathIndex.IsUnknown() {
-		body, _ = sjson.Set(body, "fast-reroute.per-prefix.tiebreaker.secondary-path.index", strconv.FormatInt(data.FastReroutePerPrefixTiebreakerSecondaryPathIndex.ValueInt64(), 10))
-	}
-	if !data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex.IsNull() && !data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex.IsUnknown() {
-		body, _ = sjson.Set(body, "fast-reroute.per-prefix.tiebreaker.srlg-disjoint.index", strconv.FormatInt(data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex.ValueInt64(), 10))
-	}
-	if !data.FastReroutePerLinkPriorityLimit.IsNull() && !data.FastReroutePerLinkPriorityLimit.IsUnknown() {
-		body, _ = sjson.Set(body, "fast-reroute.per-link.priority-limit", data.FastReroutePerLinkPriorityLimit.ValueString())
-	}
-	if !data.FastReroutePerLinkUseCandidateOnly.IsNull() && !data.FastReroutePerLinkUseCandidateOnly.IsUnknown() {
-		if data.FastReroutePerLinkUseCandidateOnly.ValueBool() {
-			body, _ = sjson.Set(body, "fast-reroute.per-link.use-candidate-only", map[string]string{})
-		}
-	}
-	if !data.MicroloopAvoidance.IsNull() && !data.MicroloopAvoidance.IsUnknown() {
-		if data.MicroloopAvoidance.ValueBool() {
-			body, _ = sjson.Set(body, "microloop.avoidance.enable", map[string]string{})
-		}
-	}
-	if !data.MicroloopAvoidanceProtected.IsNull() && !data.MicroloopAvoidanceProtected.IsUnknown() {
-		if data.MicroloopAvoidanceProtected.ValueBool() {
-			body, _ = sjson.Set(body, "microloop.avoidance.enable.protected", map[string]string{})
-		}
-	}
-	if !data.MicroloopAvoidanceSegmentRoutingRoutePolicy.IsNull() && !data.MicroloopAvoidanceSegmentRoutingRoutePolicy.IsUnknown() {
-		body, _ = sjson.Set(body, "microloop.avoidance.enable.segment-routing.route-policy", data.MicroloopAvoidanceSegmentRoutingRoutePolicy.ValueString())
-	}
-	if !data.MicroloopAvoidanceRibUpdateDelay.IsNull() && !data.MicroloopAvoidanceRibUpdateDelay.IsUnknown() {
-		body, _ = sjson.Set(body, "microloop.avoidance.rib-update-delay", strconv.FormatInt(data.MicroloopAvoidanceRibUpdateDelay.ValueInt64(), 10))
-	}
-	if !data.AdvertisePassiveOnly.IsNull() && !data.AdvertisePassiveOnly.IsUnknown() {
-		if data.AdvertisePassiveOnly.ValueBool() {
-			body, _ = sjson.Set(body, "advertise.passive-only", map[string]string{})
-		}
-	}
-	if !data.AdvertiseLinkAttributes.IsNull() && !data.AdvertiseLinkAttributes.IsUnknown() {
-		if data.AdvertiseLinkAttributes.ValueBool() {
-			body, _ = sjson.Set(body, "advertise.link.attributes", map[string]string{})
-		}
-	}
-	if !data.MplsLdpAutoConfig.IsNull() && !data.MplsLdpAutoConfig.IsUnknown() {
-		if data.MplsLdpAutoConfig.ValueBool() {
-			body, _ = sjson.Set(body, "mpls.ldp.auto-config", map[string]string{})
-		}
-	}
-	if !data.MplsTrafficEngRouterIdIpv4Address.IsNull() && !data.MplsTrafficEngRouterIdIpv4Address.IsUnknown() {
-		body, _ = sjson.Set(body, "mpls.traffic-eng.router-id.ipv4-address", data.MplsTrafficEngRouterIdIpv4Address.ValueString())
-	}
-	if !data.MplsTrafficEngRouterIdInterfaceName.IsNull() && !data.MplsTrafficEngRouterIdInterfaceName.IsUnknown() {
-		body, _ = sjson.Set(body, "mpls.traffic-eng.router-id.interface-name", data.MplsTrafficEngRouterIdInterfaceName.ValueString())
-	}
-	if !data.MplsTrafficEngLevel12.IsNull() && !data.MplsTrafficEngLevel12.IsUnknown() {
-		if data.MplsTrafficEngLevel12.ValueBool() {
-			body, _ = sjson.Set(body, "mpls.traffic-eng.traffic-eng-level.level-one-two", map[string]string{})
-		}
-	}
-	if !data.MplsTrafficEngLevel1.IsNull() && !data.MplsTrafficEngLevel1.IsUnknown() {
-		if data.MplsTrafficEngLevel1.ValueBool() {
-			body, _ = sjson.Set(body, "mpls.traffic-eng.traffic-eng-level.level-one", map[string]string{})
-		}
-	}
-	if !data.MplsTrafficEngLevel2Only.IsNull() && !data.MplsTrafficEngLevel2Only.IsUnknown() {
-		if data.MplsTrafficEngLevel2Only.ValueBool() {
-			body, _ = sjson.Set(body, "mpls.traffic-eng.traffic-eng-level.level-two-only", map[string]string{})
 		}
 	}
 	if !data.SpfIntervalMaximumWait.IsNull() && !data.SpfIntervalMaximumWait.IsUnknown() {
@@ -476,6 +649,101 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 	if !data.SpfPrefixPriorityMediumPrefixListName.IsNull() && !data.SpfPrefixPriorityMediumPrefixListName.IsUnknown() {
 		body, _ = sjson.Set(body, "spf.prefix-priority.medium.prefixlist-name", data.SpfPrefixPriorityMediumPrefixListName.ValueString())
 	}
+	if !data.MaximumRedistributedPrefixes.IsNull() && !data.MaximumRedistributedPrefixes.IsUnknown() {
+		body, _ = sjson.Set(body, "maximum-redistributed-prefixes", strconv.FormatInt(data.MaximumRedistributedPrefixes.ValueInt64(), 10))
+	}
+	if !data.AdjacencyCheckDisable.IsNull() && !data.AdjacencyCheckDisable.IsUnknown() {
+		if data.AdjacencyCheckDisable.ValueBool() {
+			body, _ = sjson.Set(body, "adjacency-check.disable", map[string]string{})
+		}
+	}
+	if !data.RouteSourceFirstHop.IsNull() && !data.RouteSourceFirstHop.IsUnknown() {
+		if data.RouteSourceFirstHop.ValueBool() {
+			body, _ = sjson.Set(body, "route.source.first-hop", map[string]string{})
+		}
+	}
+	if !data.AttachedBitReceiveIgnore.IsNull() && !data.AttachedBitReceiveIgnore.IsUnknown() {
+		if data.AttachedBitReceiveIgnore.ValueBool() {
+			body, _ = sjson.Set(body, "attached-bit.receive.ignore", map[string]string{})
+		}
+	}
+	if !data.AttachedBitSend.IsNull() && !data.AttachedBitSend.IsUnknown() {
+		body, _ = sjson.Set(body, "attached-bit.send", data.AttachedBitSend.ValueString())
+	}
+	if !data.FastRerouteDelayInterval.IsNull() && !data.FastRerouteDelayInterval.IsUnknown() {
+		body, _ = sjson.Set(body, "fast-reroute.delay-interval", strconv.FormatInt(data.FastRerouteDelayInterval.ValueInt64(), 10))
+	}
+	if !data.FastReroutePerPrefixPriorityLimit.IsNull() && !data.FastReroutePerPrefixPriorityLimit.IsUnknown() {
+		body, _ = sjson.Set(body, "fast-reroute.per-prefix.priority-limit", data.FastReroutePerPrefixPriorityLimit.ValueString())
+	}
+	if !data.FastReroutePerPrefixUseCandidateOnly.IsNull() && !data.FastReroutePerPrefixUseCandidateOnly.IsUnknown() {
+		if data.FastReroutePerPrefixUseCandidateOnly.ValueBool() {
+			body, _ = sjson.Set(body, "fast-reroute.per-prefix.use-candidate-only", map[string]string{})
+		}
+	}
+	if !data.FastReroutePerPrefixSrlgProtectionWeightedGlobal.IsNull() && !data.FastReroutePerPrefixSrlgProtectionWeightedGlobal.IsUnknown() {
+		if data.FastReroutePerPrefixSrlgProtectionWeightedGlobal.ValueBool() {
+			body, _ = sjson.Set(body, "fast-reroute.per-prefix.srlg-protection.weighted-global", map[string]string{})
+		}
+	}
+	if !data.FastReroutePerPrefixRemoteLfaPrefixList.IsNull() && !data.FastReroutePerPrefixRemoteLfaPrefixList.IsUnknown() {
+		body, _ = sjson.Set(body, "fast-reroute.per-prefix.remote-lfa.prefix-list", data.FastReroutePerPrefixRemoteLfaPrefixList.ValueString())
+	}
+	if !data.FastReroutePerPrefixLoadSharingDisable.IsNull() && !data.FastReroutePerPrefixLoadSharingDisable.IsUnknown() {
+		if data.FastReroutePerPrefixLoadSharingDisable.ValueBool() {
+			body, _ = sjson.Set(body, "fast-reroute.per-prefix.load-sharing.disable", map[string]string{})
+		}
+	}
+	if !data.FastReroutePerPrefixTiebreakerDownstreamIndex.IsNull() && !data.FastReroutePerPrefixTiebreakerDownstreamIndex.IsUnknown() {
+		body, _ = sjson.Set(body, "fast-reroute.per-prefix.tiebreaker.downstream.index", strconv.FormatInt(data.FastReroutePerPrefixTiebreakerDownstreamIndex.ValueInt64(), 10))
+	}
+	if !data.FastReroutePerPrefixTiebreakerLcDisjointIndex.IsNull() && !data.FastReroutePerPrefixTiebreakerLcDisjointIndex.IsUnknown() {
+		body, _ = sjson.Set(body, "fast-reroute.per-prefix.tiebreaker.lc-disjoint.index", strconv.FormatInt(data.FastReroutePerPrefixTiebreakerLcDisjointIndex.ValueInt64(), 10))
+	}
+	if !data.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex.IsNull() && !data.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex.IsUnknown() {
+		body, _ = sjson.Set(body, "fast-reroute.per-prefix.tiebreaker.lowest-backup-metric.index", strconv.FormatInt(data.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex.ValueInt64(), 10))
+	}
+	if !data.FastReroutePerPrefixTiebreakerNodeProtectingIndex.IsNull() && !data.FastReroutePerPrefixTiebreakerNodeProtectingIndex.IsUnknown() {
+		body, _ = sjson.Set(body, "fast-reroute.per-prefix.tiebreaker.node-protecting.index", strconv.FormatInt(data.FastReroutePerPrefixTiebreakerNodeProtectingIndex.ValueInt64(), 10))
+	}
+	if !data.FastReroutePerPrefixTiebreakerPrimaryPathIndex.IsNull() && !data.FastReroutePerPrefixTiebreakerPrimaryPathIndex.IsUnknown() {
+		body, _ = sjson.Set(body, "fast-reroute.per-prefix.tiebreaker.primary-path.index", strconv.FormatInt(data.FastReroutePerPrefixTiebreakerPrimaryPathIndex.ValueInt64(), 10))
+	}
+	if !data.FastReroutePerPrefixTiebreakerSecondaryPathIndex.IsNull() && !data.FastReroutePerPrefixTiebreakerSecondaryPathIndex.IsUnknown() {
+		body, _ = sjson.Set(body, "fast-reroute.per-prefix.tiebreaker.secondary-path.index", strconv.FormatInt(data.FastReroutePerPrefixTiebreakerSecondaryPathIndex.ValueInt64(), 10))
+	}
+	if !data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex.IsNull() && !data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex.IsUnknown() {
+		body, _ = sjson.Set(body, "fast-reroute.per-prefix.tiebreaker.srlg-disjoint.index", strconv.FormatInt(data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex.ValueInt64(), 10))
+	}
+	if !data.FastReroutePerLinkUseCandidateOnly.IsNull() && !data.FastReroutePerLinkUseCandidateOnly.IsUnknown() {
+		if data.FastReroutePerLinkUseCandidateOnly.ValueBool() {
+			body, _ = sjson.Set(body, "fast-reroute.per-link.use-candidate-only", map[string]string{})
+		}
+	}
+	if !data.FastReroutePerLinkPriorityLimit.IsNull() && !data.FastReroutePerLinkPriorityLimit.IsUnknown() {
+		body, _ = sjson.Set(body, "fast-reroute.per-link.priority-limit", data.FastReroutePerLinkPriorityLimit.ValueString())
+	}
+	if !data.DefaultInformationOriginate.IsNull() && !data.DefaultInformationOriginate.IsUnknown() {
+		if data.DefaultInformationOriginate.ValueBool() {
+			body, _ = sjson.Set(body, "default-information.originate", map[string]string{})
+		}
+	}
+	if !data.DefaultInformationOriginateRoutePolicy.IsNull() && !data.DefaultInformationOriginateRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "default-information.originate.route-policy.text", data.DefaultInformationOriginateRoutePolicy.ValueString())
+	}
+	if !data.SegmentRoutingBundleMemberAdjSid.IsNull() && !data.SegmentRoutingBundleMemberAdjSid.IsUnknown() {
+		if data.SegmentRoutingBundleMemberAdjSid.ValueBool() {
+			body, _ = sjson.Set(body, "segment-routing.bundle-member-adj-sid", map[string]string{})
+		}
+	}
+	if !data.SegmentRoutingLabeledOnly.IsNull() && !data.SegmentRoutingLabeledOnly.IsUnknown() {
+		if data.SegmentRoutingLabeledOnly.ValueBool() {
+			body, _ = sjson.Set(body, "segment-routing.labeled-only", map[string]string{})
+		}
+	}
+	if !data.SegmentRoutingProtectedAdjacencySidDelay.IsNull() && !data.SegmentRoutingProtectedAdjacencySidDelay.IsUnknown() {
+		body, _ = sjson.Set(body, "segment-routing.protected-adjacency-sid-delay", strconv.FormatInt(data.SegmentRoutingProtectedAdjacencySidDelay.ValueInt64(), 10))
+	}
 	if !data.SegmentRoutingMplsEnable.IsNull() && !data.SegmentRoutingMplsEnable.IsUnknown() {
 		if data.SegmentRoutingMplsEnable.ValueBool() {
 			body, _ = sjson.Set(body, "segment-routing.mpls.enable", map[string]string{})
@@ -486,8 +754,265 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "segment-routing.mpls.sr-prefer", map[string]string{})
 		}
 	}
-	if !data.MaximumRedistributedPrefixes.IsNull() && !data.MaximumRedistributedPrefixes.IsUnknown() {
-		body, _ = sjson.Set(body, "maximum-redistributed-prefixes", strconv.FormatInt(data.MaximumRedistributedPrefixes.ValueInt64(), 10))
+	if !data.SegmentRoutingMplsUnlabeledProtectionPrefixList.IsNull() && !data.SegmentRoutingMplsUnlabeledProtectionPrefixList.IsUnknown() {
+		body, _ = sjson.Set(body, "segment-routing.mpls.unlabeled.protection.prefix-list", data.SegmentRoutingMplsUnlabeledProtectionPrefixList.ValueString())
+	}
+	if !data.SegmentRoutingMplsUnlabeledProtectionRoutePolicy.IsNull() && !data.SegmentRoutingMplsUnlabeledProtectionRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "segment-routing.mpls.unlabeled.protection.route-policy", data.SegmentRoutingMplsUnlabeledProtectionRoutePolicy.ValueString())
+	}
+	if !data.SegmentRoutingMplsUnlabeledProtectionDisable.IsNull() && !data.SegmentRoutingMplsUnlabeledProtectionDisable.IsUnknown() {
+		if data.SegmentRoutingMplsUnlabeledProtectionDisable.ValueBool() {
+			body, _ = sjson.Set(body, "segment-routing.mpls.unlabeled.protection.disable", map[string]string{})
+		}
+	}
+	if !data.SegmentRoutingMplsPrefixSidMapReceive.IsNull() && !data.SegmentRoutingMplsPrefixSidMapReceive.IsUnknown() {
+		if data.SegmentRoutingMplsPrefixSidMapReceive.ValueBool() {
+			body, _ = sjson.Set(body, "segment-routing.mpls.prefix-sid-map.receive", map[string]string{})
+		}
+	}
+	if !data.SegmentRoutingMplsPrefixSidMapReceiveDisable.IsNull() && !data.SegmentRoutingMplsPrefixSidMapReceiveDisable.IsUnknown() {
+		if data.SegmentRoutingMplsPrefixSidMapReceiveDisable.ValueBool() {
+			body, _ = sjson.Set(body, "segment-routing.mpls.prefix-sid-map.receive.disable", map[string]string{})
+		}
+	}
+	if !data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal.IsNull() && !data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal.IsUnknown() {
+		if data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal.ValueBool() {
+			body, _ = sjson.Set(body, "segment-routing.mpls.prefix-sid-map.advertise-local", map[string]string{})
+		}
+	}
+	if !data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide.IsNull() && !data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide.IsUnknown() {
+		if data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide.ValueBool() {
+			body, _ = sjson.Set(body, "segment-routing.mpls.prefix-sid-map.advertise-local.domain-wide", map[string]string{})
+		}
+	}
+	if !data.SegmentRoutingMplsConnectedPrefixSidMap.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMap.IsUnknown() {
+		if data.SegmentRoutingMplsConnectedPrefixSidMap.ValueBool() {
+			body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map", map[string]string{})
+		}
+	}
+	if !data.PartitionDetect.IsNull() && !data.PartitionDetect.IsUnknown() {
+		if data.PartitionDetect.ValueBool() {
+			body, _ = sjson.Set(body, "partition-detect", map[string]string{})
+		}
+	}
+	if !data.MplsLdpAutoConfig.IsNull() && !data.MplsLdpAutoConfig.IsUnknown() {
+		if data.MplsLdpAutoConfig.ValueBool() {
+			body, _ = sjson.Set(body, "mpls.ldp.auto-config", map[string]string{})
+		}
+	}
+	if !data.MplsTrafficEngRouterIdIpv4Address.IsNull() && !data.MplsTrafficEngRouterIdIpv4Address.IsUnknown() {
+		body, _ = sjson.Set(body, "mpls.traffic-eng.router-id.ipv4-address", data.MplsTrafficEngRouterIdIpv4Address.ValueString())
+	}
+	if !data.MplsTrafficEngRouterIdInterfaceName.IsNull() && !data.MplsTrafficEngRouterIdInterfaceName.IsUnknown() {
+		body, _ = sjson.Set(body, "mpls.traffic-eng.router-id.interface-name", data.MplsTrafficEngRouterIdInterfaceName.ValueString())
+	}
+	if !data.MplsTrafficEngIgpIntact.IsNull() && !data.MplsTrafficEngIgpIntact.IsUnknown() {
+		if data.MplsTrafficEngIgpIntact.ValueBool() {
+			body, _ = sjson.Set(body, "mpls.traffic-eng.igp-intact", map[string]string{})
+		}
+	}
+	if !data.MplsTrafficEngMulticastIntact.IsNull() && !data.MplsTrafficEngMulticastIntact.IsUnknown() {
+		if data.MplsTrafficEngMulticastIntact.ValueBool() {
+			body, _ = sjson.Set(body, "mpls.traffic-eng.multicast-intact", map[string]string{})
+		}
+	}
+	if !data.MplsTrafficEngTunnelRestricted.IsNull() && !data.MplsTrafficEngTunnelRestricted.IsUnknown() {
+		if data.MplsTrafficEngTunnelRestricted.ValueBool() {
+			body, _ = sjson.Set(body, "mpls.traffic-eng.tunnel.restricted", map[string]string{})
+		}
+	}
+	if !data.MplsTrafficEngTunnelPreferred.IsNull() && !data.MplsTrafficEngTunnelPreferred.IsUnknown() {
+		if data.MplsTrafficEngTunnelPreferred.ValueBool() {
+			body, _ = sjson.Set(body, "mpls.traffic-eng.tunnel.preferred", map[string]string{})
+		}
+	}
+	if !data.MplsTrafficEngTunnelMetric.IsNull() && !data.MplsTrafficEngTunnelMetric.IsUnknown() {
+		body, _ = sjson.Set(body, "mpls.traffic-eng.tunnel.metric", strconv.FormatInt(data.MplsTrafficEngTunnelMetric.ValueInt64(), 10))
+	}
+	if !data.MplsTrafficEngTunnelAnycastPreferIgpCost.IsNull() && !data.MplsTrafficEngTunnelAnycastPreferIgpCost.IsUnknown() {
+		if data.MplsTrafficEngTunnelAnycastPreferIgpCost.ValueBool() {
+			body, _ = sjson.Set(body, "mpls.traffic-eng.tunnel.anycast-prefer-igp-cost", map[string]string{})
+		}
+	}
+	if !data.MplsTrafficEngLevel12.IsNull() && !data.MplsTrafficEngLevel12.IsUnknown() {
+		if data.MplsTrafficEngLevel12.ValueBool() {
+			body, _ = sjson.Set(body, "mpls.traffic-eng.traffic-eng-level.level-one-two", map[string]string{})
+		}
+	}
+	if !data.MplsTrafficEngLevel1.IsNull() && !data.MplsTrafficEngLevel1.IsUnknown() {
+		if data.MplsTrafficEngLevel1.ValueBool() {
+			body, _ = sjson.Set(body, "mpls.traffic-eng.traffic-eng-level.level-one", map[string]string{})
+		}
+	}
+	if !data.MplsTrafficEngLevel2Only.IsNull() && !data.MplsTrafficEngLevel2Only.IsUnknown() {
+		if data.MplsTrafficEngLevel2Only.ValueBool() {
+			body, _ = sjson.Set(body, "mpls.traffic-eng.traffic-eng-level.level-two-only", map[string]string{})
+		}
+	}
+	if !data.PrefixUnreachable.IsNull() && !data.PrefixUnreachable.IsUnknown() {
+		if data.PrefixUnreachable.ValueBool() {
+			body, _ = sjson.Set(body, "prefix-unreachable", map[string]string{})
+		}
+	}
+	if !data.PrefixUnreachableAdvMaximum.IsNull() && !data.PrefixUnreachableAdvMaximum.IsUnknown() {
+		body, _ = sjson.Set(body, "prefix-unreachable.adv-maximum", strconv.FormatInt(data.PrefixUnreachableAdvMaximum.ValueInt64(), 10))
+	}
+	if !data.PrefixUnreachableAdvLifetime.IsNull() && !data.PrefixUnreachableAdvLifetime.IsUnknown() {
+		body, _ = sjson.Set(body, "prefix-unreachable.adv-lifetime", strconv.FormatInt(data.PrefixUnreachableAdvLifetime.ValueInt64(), 10))
+	}
+	if !data.PrefixUnreachableAdvMetric.IsNull() && !data.PrefixUnreachableAdvMetric.IsUnknown() {
+		body, _ = sjson.Set(body, "prefix-unreachable.adv-metric", strconv.FormatInt(data.PrefixUnreachableAdvMetric.ValueInt64(), 10))
+	}
+	if !data.PrefixUnreachableRxProcessEnable.IsNull() && !data.PrefixUnreachableRxProcessEnable.IsUnknown() {
+		if data.PrefixUnreachableRxProcessEnable.ValueBool() {
+			body, _ = sjson.Set(body, "prefix-unreachable.rx-process-enable", map[string]string{})
+		}
+	}
+	if len(data.DistanceSources) > 0 {
+		body, _ = sjson.Set(body, "distance.ip-addresses.ip-address", []interface{}{})
+		for index, item := range data.DistanceSources {
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body, _ = sjson.Set(body, "distance.ip-addresses.ip-address"+"."+strconv.Itoa(index)+"."+"address", item.Address.ValueString())
+			}
+			if !item.Prefix.IsNull() && !item.Prefix.IsUnknown() {
+				body, _ = sjson.Set(body, "distance.ip-addresses.ip-address"+"."+strconv.Itoa(index)+"."+"address-prefix", strconv.FormatInt(item.Prefix.ValueInt64(), 10))
+			}
+			if !item.Distance.IsNull() && !item.Distance.IsUnknown() {
+				body, _ = sjson.Set(body, "distance.ip-addresses.ip-address"+"."+strconv.Itoa(index)+"."+"distance-number", strconv.FormatInt(item.Distance.ValueInt64(), 10))
+			}
+			if !item.RouteFilter.IsNull() && !item.RouteFilter.IsUnknown() {
+				body, _ = sjson.Set(body, "distance.ip-addresses.ip-address"+"."+strconv.Itoa(index)+"."+"prefix-list-or-access-list-to", item.RouteFilter.ValueString())
+			}
+		}
+	}
+	if len(data.RedistributeIsis) > 0 {
+		body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process", []interface{}{})
+		for index, item := range data.RedistributeIsis {
+			if !item.InstanceId.IsNull() && !item.InstanceId.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"isis-string", item.InstanceId.ValueString())
+			}
+			if !item.Level.IsNull() && !item.Level.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"redistribute-route-level", item.Level.ValueString())
+			}
+			if !item.Metric.IsNull() && !item.Metric.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"metric", strconv.FormatInt(item.Metric.ValueInt64(), 10))
+			}
+			if !item.RoutePolicy.IsNull() && !item.RoutePolicy.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"route-policy", item.RoutePolicy.ValueString())
+			}
+			if !item.MetricType.IsNull() && !item.MetricType.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"metric-type", item.MetricType.ValueString())
+			}
+			if !item.DownFlagClear.IsNull() && !item.DownFlagClear.IsUnknown() {
+				if item.DownFlagClear.ValueBool() {
+					body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"down-flag-clear", map[string]string{})
+				}
+			}
+		}
+	}
+	if len(data.RedistributeBgp) > 0 {
+		body, _ = sjson.Set(body, "redistribute.bgps.bgp", []interface{}{})
+		for index, item := range data.RedistributeBgp {
+			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.bgps.bgp"+"."+strconv.Itoa(index)+"."+"as-number", item.AsNumber.ValueString())
+			}
+			if !item.Level.IsNull() && !item.Level.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.bgps.bgp"+"."+strconv.Itoa(index)+"."+"redistribute-route-level", item.Level.ValueString())
+			}
+			if !item.Metric.IsNull() && !item.Metric.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.bgps.bgp"+"."+strconv.Itoa(index)+"."+"metric", strconv.FormatInt(item.Metric.ValueInt64(), 10))
+			}
+			if !item.RoutePolicy.IsNull() && !item.RoutePolicy.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.bgps.bgp"+"."+strconv.Itoa(index)+"."+"route-policy", item.RoutePolicy.ValueString())
+			}
+			if !item.MetricType.IsNull() && !item.MetricType.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.bgps.bgp"+"."+strconv.Itoa(index)+"."+"metric-type", item.MetricType.ValueString())
+			}
+		}
+	}
+	if len(data.RedistributeOspf) > 0 {
+		body, _ = sjson.Set(body, "redistribute.ospfs.ospf", []interface{}{})
+		for index, item := range data.RedistributeOspf {
+			if !item.InstanceId.IsNull() && !item.InstanceId.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"ospf-process-id", item.InstanceId.ValueString())
+			}
+			if !item.MatchInternal.IsNull() && !item.MatchInternal.IsUnknown() {
+				if item.MatchInternal.ValueBool() {
+					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.internal", map[string]string{})
+				}
+			}
+			if !item.MatchExternal.IsNull() && !item.MatchExternal.IsUnknown() {
+				if item.MatchExternal.ValueBool() {
+					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.external", map[string]string{})
+				}
+			}
+			if !item.Level.IsNull() && !item.Level.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"redistribute-route-level", item.Level.ValueString())
+			}
+			if !item.Metric.IsNull() && !item.Metric.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"metric", strconv.FormatInt(item.Metric.ValueInt64(), 10))
+			}
+			if !item.RoutePolicy.IsNull() && !item.RoutePolicy.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"route-policy", item.RoutePolicy.ValueString())
+			}
+			if !item.MetricType.IsNull() && !item.MetricType.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"metric-type", item.MetricType.ValueString())
+			}
+		}
+	}
+	if len(data.SummaryPrefixes) > 0 {
+		body, _ = sjson.Set(body, "summary-prefix.ip-addresses.ip-address", []interface{}{})
+		for index, item := range data.SummaryPrefixes {
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body, _ = sjson.Set(body, "summary-prefix.ip-addresses.ip-address"+"."+strconv.Itoa(index)+"."+"address", item.Address.ValueString())
+			}
+			if !item.Prefix.IsNull() && !item.Prefix.IsUnknown() {
+				body, _ = sjson.Set(body, "summary-prefix.ip-addresses.ip-address"+"."+strconv.Itoa(index)+"."+"address-prefix", strconv.FormatInt(item.Prefix.ValueInt64(), 10))
+			}
+			if !item.Tag.IsNull() && !item.Tag.IsUnknown() {
+				body, _ = sjson.Set(body, "summary-prefix.ip-addresses.ip-address"+"."+strconv.Itoa(index)+"."+"tag", strconv.FormatInt(item.Tag.ValueInt64(), 10))
+			}
+			if !item.Level.IsNull() && !item.Level.IsUnknown() {
+				body, _ = sjson.Set(body, "summary-prefix.ip-addresses.ip-address"+"."+strconv.Itoa(index)+"."+"level", strconv.FormatInt(item.Level.ValueInt64(), 10))
+			}
+			if !item.Algorithm.IsNull() && !item.Algorithm.IsUnknown() {
+				body, _ = sjson.Set(body, "summary-prefix.ip-addresses.ip-address"+"."+strconv.Itoa(index)+"."+"algorithm", strconv.FormatInt(item.Algorithm.ValueInt64(), 10))
+			}
+			if !item.Explicit.IsNull() && !item.Explicit.IsUnknown() {
+				if item.Explicit.ValueBool() {
+					body, _ = sjson.Set(body, "summary-prefix.ip-addresses.ip-address"+"."+strconv.Itoa(index)+"."+"explicit", map[string]string{})
+				}
+			}
+			if !item.AdvUnreachable.IsNull() && !item.AdvUnreachable.IsUnknown() {
+				if item.AdvUnreachable.ValueBool() {
+					body, _ = sjson.Set(body, "summary-prefix.ip-addresses.ip-address"+"."+strconv.Itoa(index)+"."+"adv-unreachable", map[string]string{})
+				}
+			}
+			if !item.UnreachableTag.IsNull() && !item.UnreachableTag.IsUnknown() {
+				body, _ = sjson.Set(body, "summary-prefix.ip-addresses.ip-address"+"."+strconv.Itoa(index)+"."+"adv-unreachable.unreachable-component-tag.unreachable-component-tag-number", strconv.FormatInt(item.UnreachableTag.ValueInt64(), 10))
+			}
+			if !item.UnreachableTagExcludePrefixes.IsNull() && !item.UnreachableTagExcludePrefixes.IsUnknown() {
+				if item.UnreachableTagExcludePrefixes.ValueBool() {
+					body, _ = sjson.Set(body, "summary-prefix.ip-addresses.ip-address"+"."+strconv.Itoa(index)+"."+"adv-unreachable.unreachable-component-tag.exclude", map[string]string{})
+				}
+			}
+			if !item.PartitionRepair.IsNull() && !item.PartitionRepair.IsUnknown() {
+				if item.PartitionRepair.ValueBool() {
+					body, _ = sjson.Set(body, "summary-prefix.ip-addresses.ip-address"+"."+strconv.Itoa(index)+"."+"partition-repair", map[string]string{})
+				}
+			}
+		}
+	}
+	if len(data.MetricLevels) > 0 {
+		body, _ = sjson.Set(body, "metric-levels.metric-level", []interface{}{})
+		for index, item := range data.MetricLevels {
+			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "metric-levels.metric-level"+"."+strconv.Itoa(index)+"."+"level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+			}
+			if !item.Metric.IsNull() && !item.Metric.IsUnknown() {
+				body, _ = sjson.Set(body, "metric-levels.metric-level"+"."+strconv.Itoa(index)+"."+"metric", strconv.FormatInt(item.Metric.ValueInt64(), 10))
+			}
+		}
 	}
 	if len(data.MetricStyleLevels) > 0 {
 		body, _ = sjson.Set(body, "metric-style-levels.metric-style-level", []interface{}{})
@@ -519,55 +1044,6 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 				if item.Transition.ValueBool() {
 					body, _ = sjson.Set(body, "metric-style-levels.metric-style-level"+"."+strconv.Itoa(index)+"."+"transition", map[string]string{})
 				}
-			}
-		}
-	}
-	if len(data.FastReroutePerPrefixPriorityLimitLevels) > 0 {
-		body, _ = sjson.Set(body, "fast-reroute.per-prefix.priority-limit-levels.priority-limit-level", []interface{}{})
-		for index, item := range data.FastReroutePerPrefixPriorityLimitLevels {
-			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
-				body, _ = sjson.Set(body, "fast-reroute.per-prefix.priority-limit-levels.priority-limit-level"+"."+strconv.Itoa(index)+"."+"level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
-			}
-			if !item.PriorityLimit.IsNull() && !item.PriorityLimit.IsUnknown() {
-				body, _ = sjson.Set(body, "fast-reroute.per-prefix.priority-limit-levels.priority-limit-level"+"."+strconv.Itoa(index)+"."+"priority-limit", item.PriorityLimit.ValueString())
-			}
-		}
-	}
-	if len(data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels) > 0 {
-		body, _ = sjson.Set(body, "fast-reroute.per-prefix.srlg-protection.weighted-global-levels.weighted-global-level", []interface{}{})
-		for index, item := range data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels {
-			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
-				body, _ = sjson.Set(body, "fast-reroute.per-prefix.srlg-protection.weighted-global-levels.weighted-global-level"+"."+strconv.Itoa(index)+"."+"level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
-			}
-		}
-	}
-	if len(data.FastReroutePerPrefixRemoteLfaPrefixListLevels) > 0 {
-		body, _ = sjson.Set(body, "fast-reroute.per-prefix.remote-lfa.prefix-list-levels.prefix-list-level", []interface{}{})
-		for index, item := range data.FastReroutePerPrefixRemoteLfaPrefixListLevels {
-			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
-				body, _ = sjson.Set(body, "fast-reroute.per-prefix.remote-lfa.prefix-list-levels.prefix-list-level"+"."+strconv.Itoa(index)+"."+"level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
-			}
-			if !item.PrefixList.IsNull() && !item.PrefixList.IsUnknown() {
-				body, _ = sjson.Set(body, "fast-reroute.per-prefix.remote-lfa.prefix-list-levels.prefix-list-level"+"."+strconv.Itoa(index)+"."+"prefix-list", item.PrefixList.ValueString())
-			}
-		}
-	}
-	if len(data.FastReroutePerPrefixLoadSharingDisableLevels) > 0 {
-		body, _ = sjson.Set(body, "fast-reroute.per-prefix.load-sharing.disable-levels.disable-level", []interface{}{})
-		for index, item := range data.FastReroutePerPrefixLoadSharingDisableLevels {
-			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
-				body, _ = sjson.Set(body, "fast-reroute.per-prefix.load-sharing.disable-levels.disable-level"+"."+strconv.Itoa(index)+"."+"level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
-			}
-		}
-	}
-	if len(data.FastReroutePerLinkPriorityLimitLevels) > 0 {
-		body, _ = sjson.Set(body, "fast-reroute.per-link.priority-limit-levels.priority-limit-level", []interface{}{})
-		for index, item := range data.FastReroutePerLinkPriorityLimitLevels {
-			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
-				body, _ = sjson.Set(body, "fast-reroute.per-link.priority-limit-levels.priority-limit-level"+"."+strconv.Itoa(index)+"."+"level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
-			}
-			if !item.PriorityLimit.IsNull() && !item.PriorityLimit.IsUnknown() {
-				body, _ = sjson.Set(body, "fast-reroute.per-link.priority-limit-levels.priority-limit-level"+"."+strconv.Itoa(index)+"."+"priority-limit", item.PriorityLimit.ValueString())
 			}
 		}
 	}
@@ -632,7 +1108,7 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "spf.prefix-priority-high-levels.prefix-priority-high-level"+"."+strconv.Itoa(index)+"."+"tag", strconv.FormatInt(item.Tag.ValueInt64(), 10))
 			}
 			if !item.PrefixListName.IsNull() && !item.PrefixListName.IsUnknown() {
-				body, _ = sjson.Set(body, "spf.prefix-priority-high-levels.prefix-priority-high-level"+"."+strconv.Itoa(index)+"."+"prefix_list_name", item.PrefixListName.ValueString())
+				body, _ = sjson.Set(body, "spf.prefix-priority-high-levels.prefix-priority-high-level"+"."+strconv.Itoa(index)+"."+"prefixlist-name", item.PrefixListName.ValueString())
 			}
 		}
 	}
@@ -646,7 +1122,7 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "spf.prefix-priority-medium-levels.prefix-priority-medium-level"+"."+strconv.Itoa(index)+"."+"tag", strconv.FormatInt(item.Tag.ValueInt64(), 10))
 			}
 			if !item.PrefixListName.IsNull() && !item.PrefixListName.IsUnknown() {
-				body, _ = sjson.Set(body, "spf.prefix-priority-medium-levels.prefix-priority-medium-level"+"."+strconv.Itoa(index)+"."+"prefix_list_name", item.PrefixListName.ValueString())
+				body, _ = sjson.Set(body, "spf.prefix-priority-medium-levels.prefix-priority-medium-level"+"."+strconv.Itoa(index)+"."+"prefixlist-name", item.PrefixListName.ValueString())
 			}
 		}
 	}
@@ -661,27 +1137,205 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 			}
 		}
 	}
-	if len(data.RedistributeIsis) > 0 {
-		body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process", []interface{}{})
-		for index, item := range data.RedistributeIsis {
-			if !item.InstanceId.IsNull() && !item.InstanceId.IsUnknown() {
-				body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"isis-string", item.InstanceId.ValueString())
+	if len(data.PropagateLevels) > 0 {
+		body, _ = sjson.Set(body, "propagate.levels.level", []interface{}{})
+		for index, item := range data.PropagateLevels {
+			if !item.SourceLevel.IsNull() && !item.SourceLevel.IsUnknown() {
+				body, _ = sjson.Set(body, "propagate.levels.level"+"."+strconv.Itoa(index)+"."+"source-level", strconv.FormatInt(item.SourceLevel.ValueInt64(), 10))
 			}
-			if !item.Level.IsNull() && !item.Level.IsUnknown() {
-				body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"redistribute-route-level", item.Level.ValueString())
-			}
-			if !item.Metric.IsNull() && !item.Metric.IsUnknown() {
-				body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"metric", strconv.FormatInt(item.Metric.ValueInt64(), 10))
+			if !item.DestinationLevel.IsNull() && !item.DestinationLevel.IsUnknown() {
+				body, _ = sjson.Set(body, "propagate.levels.level"+"."+strconv.Itoa(index)+"."+"destination-level", strconv.FormatInt(item.DestinationLevel.ValueInt64(), 10))
 			}
 			if !item.RoutePolicy.IsNull() && !item.RoutePolicy.IsUnknown() {
-				body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"route-policy", item.RoutePolicy.ValueString())
+				body, _ = sjson.Set(body, "propagate.levels.level"+"."+strconv.Itoa(index)+"."+"route-policy", item.RoutePolicy.ValueString())
 			}
-			if !item.MetricType.IsNull() && !item.MetricType.IsUnknown() {
-				body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"metric-type", item.MetricType.ValueString())
+		}
+	}
+	if len(data.FastReroutePerPrefixPriorityLimitLevels) > 0 {
+		body, _ = sjson.Set(body, "fast-reroute.per-prefix.priority-limit-levels.priority-limit-level", []interface{}{})
+		for index, item := range data.FastReroutePerPrefixPriorityLimitLevels {
+			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "fast-reroute.per-prefix.priority-limit-levels.priority-limit-level"+"."+strconv.Itoa(index)+"."+"level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
-			if !item.DownFlagClear.IsNull() && !item.DownFlagClear.IsUnknown() {
-				if item.DownFlagClear.ValueBool() {
-					body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"down-flag-clear", map[string]string{})
+			if !item.PriorityLimit.IsNull() && !item.PriorityLimit.IsUnknown() {
+				body, _ = sjson.Set(body, "fast-reroute.per-prefix.priority-limit-levels.priority-limit-level"+"."+strconv.Itoa(index)+"."+"priority-limit", item.PriorityLimit.ValueString())
+			}
+		}
+	}
+	if len(data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels) > 0 {
+		body, _ = sjson.Set(body, "fast-reroute.per-prefix.srlg-protection.weighted-global-levels.weighted-global-level", []interface{}{})
+		for index, item := range data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels {
+			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "fast-reroute.per-prefix.srlg-protection.weighted-global-levels.weighted-global-level"+"."+strconv.Itoa(index)+"."+"level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.FastReroutePerPrefixRemoteLfaPrefixListLevels) > 0 {
+		body, _ = sjson.Set(body, "fast-reroute.per-prefix.remote-lfa.prefix-list-levels.prefix-list-level", []interface{}{})
+		for index, item := range data.FastReroutePerPrefixRemoteLfaPrefixListLevels {
+			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "fast-reroute.per-prefix.remote-lfa.prefix-list-levels.prefix-list-level"+"."+strconv.Itoa(index)+"."+"level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+			}
+			if !item.PrefixList.IsNull() && !item.PrefixList.IsUnknown() {
+				body, _ = sjson.Set(body, "fast-reroute.per-prefix.remote-lfa.prefix-list-levels.prefix-list-level"+"."+strconv.Itoa(index)+"."+"prefix-list", item.PrefixList.ValueString())
+			}
+		}
+	}
+	if len(data.FastReroutePerPrefixLoadSharingDisableLevels) > 0 {
+		body, _ = sjson.Set(body, "fast-reroute.per-prefix.load-sharing.disable-levels.disable-level", []interface{}{})
+		for index, item := range data.FastReroutePerPrefixLoadSharingDisableLevels {
+			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "fast-reroute.per-prefix.load-sharing.disable-levels.disable-level"+"."+strconv.Itoa(index)+"."+"level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.FastReroutePerLinkUseCandidateOnlyLevels) > 0 {
+		body, _ = sjson.Set(body, "fast-reroute.per-link.use-candidate-only-levels.use-candidate-only-level", []interface{}{})
+		for index, item := range data.FastReroutePerLinkUseCandidateOnlyLevels {
+			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "fast-reroute.per-link.use-candidate-only-levels.use-candidate-only-level"+"."+strconv.Itoa(index)+"."+"level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.FastReroutePerLinkPriorityLimitLevels) > 0 {
+		body, _ = sjson.Set(body, "fast-reroute.per-link.priority-limit-levels.priority-limit-level", []interface{}{})
+		for index, item := range data.FastReroutePerLinkPriorityLimitLevels {
+			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "fast-reroute.per-link.priority-limit-levels.priority-limit-level"+"."+strconv.Itoa(index)+"."+"level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+			}
+			if !item.PriorityLimit.IsNull() && !item.PriorityLimit.IsUnknown() {
+				body, _ = sjson.Set(body, "fast-reroute.per-link.priority-limit-levels.priority-limit-level"+"."+strconv.Itoa(index)+"."+"priority-limit", item.PriorityLimit.ValueString())
+			}
+		}
+	}
+	if len(data.SegmentRoutingMplsConnectedPrefixSidMapAddresses) > 0 {
+		body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.address", []interface{}{})
+		for index, item := range data.SegmentRoutingMplsConnectedPrefixSidMapAddresses {
+			if !item.IpAddress.IsNull() && !item.IpAddress.IsUnknown() {
+				body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.address"+"."+strconv.Itoa(index)+"."+"ip-address", item.IpAddress.ValueString())
+			}
+			if !item.Prefix.IsNull() && !item.Prefix.IsUnknown() {
+				body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.address"+"."+strconv.Itoa(index)+"."+"address-prefix", strconv.FormatInt(item.Prefix.ValueInt64(), 10))
+			}
+			if !item.IndexId.IsNull() && !item.IndexId.IsUnknown() {
+				body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.address"+"."+strconv.Itoa(index)+"."+"index.index-id", strconv.FormatInt(item.IndexId.ValueInt64(), 10))
+			}
+			if !item.IndexInterface.IsNull() && !item.IndexInterface.IsUnknown() {
+				body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.address"+"."+strconv.Itoa(index)+"."+"index.interface", item.IndexInterface.ValueString())
+			}
+			if !item.IndexPhpDisable.IsNull() && !item.IndexPhpDisable.IsUnknown() {
+				if item.IndexPhpDisable.ValueBool() {
+					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.address"+"."+strconv.Itoa(index)+"."+"index.php-disable", map[string]string{})
+				}
+			}
+			if !item.IndexExplicitNull.IsNull() && !item.IndexExplicitNull.IsUnknown() {
+				if item.IndexExplicitNull.ValueBool() {
+					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.address"+"."+strconv.Itoa(index)+"."+"index.explicit-null", map[string]string{})
+				}
+			}
+			if !item.AbsoluteId.IsNull() && !item.AbsoluteId.IsUnknown() {
+				body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.address"+"."+strconv.Itoa(index)+"."+"absolute.absolute-id", strconv.FormatInt(item.AbsoluteId.ValueInt64(), 10))
+			}
+			if !item.AbsoluteInterface.IsNull() && !item.AbsoluteInterface.IsUnknown() {
+				body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.address"+"."+strconv.Itoa(index)+"."+"absolute.interface", item.AbsoluteInterface.ValueString())
+			}
+			if !item.AbsolutePhpDisable.IsNull() && !item.AbsolutePhpDisable.IsUnknown() {
+				if item.AbsolutePhpDisable.ValueBool() {
+					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.address"+"."+strconv.Itoa(index)+"."+"absolute.php-disable", map[string]string{})
+				}
+			}
+			if !item.AbsoluteExplicitNull.IsNull() && !item.AbsoluteExplicitNull.IsUnknown() {
+				if item.AbsoluteExplicitNull.ValueBool() {
+					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.address"+"."+strconv.Itoa(index)+"."+"absolute.explicit-null", map[string]string{})
+				}
+			}
+		}
+	}
+	if len(data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses) > 0 {
+		body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address", []interface{}{})
+		for index, item := range data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses {
+			if !item.IpAddress.IsNull() && !item.IpAddress.IsUnknown() {
+				body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address"+"."+strconv.Itoa(index)+"."+"ip-address", item.IpAddress.ValueString())
+			}
+			if !item.Prefix.IsNull() && !item.Prefix.IsUnknown() {
+				body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address"+"."+strconv.Itoa(index)+"."+"address-prefix", strconv.FormatInt(item.Prefix.ValueInt64(), 10))
+			}
+			if !item.FlexAlgo.IsNull() && !item.FlexAlgo.IsUnknown() {
+				body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address"+"."+strconv.Itoa(index)+"."+"flex-algo", strconv.FormatInt(item.FlexAlgo.ValueInt64(), 10))
+			}
+			if !item.IndexId.IsNull() && !item.IndexId.IsUnknown() {
+				body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address"+"."+strconv.Itoa(index)+"."+"index.index-id", strconv.FormatInt(item.IndexId.ValueInt64(), 10))
+			}
+			if !item.IndexInterface.IsNull() && !item.IndexInterface.IsUnknown() {
+				body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address"+"."+strconv.Itoa(index)+"."+"index.interface", item.IndexInterface.ValueString())
+			}
+			if !item.IndexPhpDisable.IsNull() && !item.IndexPhpDisable.IsUnknown() {
+				if item.IndexPhpDisable.ValueBool() {
+					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address"+"."+strconv.Itoa(index)+"."+"index.php-disable", map[string]string{})
+				}
+			}
+			if !item.IndexExplicitNull.IsNull() && !item.IndexExplicitNull.IsUnknown() {
+				if item.IndexExplicitNull.ValueBool() {
+					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address"+"."+strconv.Itoa(index)+"."+"index.explicit-null", map[string]string{})
+				}
+			}
+			if !item.AbsoluteId.IsNull() && !item.AbsoluteId.IsUnknown() {
+				body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address"+"."+strconv.Itoa(index)+"."+"absolute.absolute-id", strconv.FormatInt(item.AbsoluteId.ValueInt64(), 10))
+			}
+			if !item.AbsoluteInterface.IsNull() && !item.AbsoluteInterface.IsUnknown() {
+				body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address"+"."+strconv.Itoa(index)+"."+"absolute.interface", item.AbsoluteInterface.ValueString())
+			}
+			if !item.AbsolutePhpDisable.IsNull() && !item.AbsolutePhpDisable.IsUnknown() {
+				if item.AbsolutePhpDisable.ValueBool() {
+					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address"+"."+strconv.Itoa(index)+"."+"absolute.php-disable", map[string]string{})
+				}
+			}
+			if !item.AbsoluteExplicitNull.IsNull() && !item.AbsoluteExplicitNull.IsUnknown() {
+				if item.AbsoluteExplicitNull.ValueBool() {
+					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address"+"."+strconv.Itoa(index)+"."+"absolute.explicit-null", map[string]string{})
+				}
+			}
+		}
+	}
+	if len(data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses) > 0 {
+		body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.strict-spf-address", []interface{}{})
+		for index, item := range data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses {
+			if !item.IpAddress.IsNull() && !item.IpAddress.IsUnknown() {
+				body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.strict-spf-address"+"."+strconv.Itoa(index)+"."+"ip-address", item.IpAddress.ValueString())
+			}
+			if !item.Prefix.IsNull() && !item.Prefix.IsUnknown() {
+				body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.strict-spf-address"+"."+strconv.Itoa(index)+"."+"address-prefix", strconv.FormatInt(item.Prefix.ValueInt64(), 10))
+			}
+			if !item.IndexId.IsNull() && !item.IndexId.IsUnknown() {
+				body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.strict-spf-address"+"."+strconv.Itoa(index)+"."+"index.index-id", strconv.FormatInt(item.IndexId.ValueInt64(), 10))
+			}
+			if !item.IndexInterface.IsNull() && !item.IndexInterface.IsUnknown() {
+				body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.strict-spf-address"+"."+strconv.Itoa(index)+"."+"index.interface", item.IndexInterface.ValueString())
+			}
+			if !item.IndexPhpDisable.IsNull() && !item.IndexPhpDisable.IsUnknown() {
+				if item.IndexPhpDisable.ValueBool() {
+					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.strict-spf-address"+"."+strconv.Itoa(index)+"."+"index.php-disable", map[string]string{})
+				}
+			}
+			if !item.IndexExplicitNull.IsNull() && !item.IndexExplicitNull.IsUnknown() {
+				if item.IndexExplicitNull.ValueBool() {
+					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.strict-spf-address"+"."+strconv.Itoa(index)+"."+"index.explicit-null", map[string]string{})
+				}
+			}
+			if !item.AbsoluteId.IsNull() && !item.AbsoluteId.IsUnknown() {
+				body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.strict-spf-address"+"."+strconv.Itoa(index)+"."+"absolute.absolute-id", strconv.FormatInt(item.AbsoluteId.ValueInt64(), 10))
+			}
+			if !item.AbsoluteInterface.IsNull() && !item.AbsoluteInterface.IsUnknown() {
+				body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.strict-spf-address"+"."+strconv.Itoa(index)+"."+"absolute.interface", item.AbsoluteInterface.ValueString())
+			}
+			if !item.AbsolutePhpDisable.IsNull() && !item.AbsolutePhpDisable.IsUnknown() {
+				if item.AbsolutePhpDisable.ValueBool() {
+					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.strict-spf-address"+"."+strconv.Itoa(index)+"."+"absolute.php-disable", map[string]string{})
+				}
+			}
+			if !item.AbsoluteExplicitNull.IsNull() && !item.AbsoluteExplicitNull.IsUnknown() {
+				if item.AbsoluteExplicitNull.ValueBool() {
+					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.strict-spf-address"+"."+strconv.Itoa(index)+"."+"absolute.explicit-null", map[string]string{})
 				}
 			}
 		}
@@ -725,6 +1379,46 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 			}
 		}
 	}
+	if len(data.PartitionDetectTracks) > 0 {
+		body, _ = sjson.Set(body, "partition-detect.tracks.track", []interface{}{})
+		for index, item := range data.PartitionDetectTracks {
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body, _ = sjson.Set(body, "partition-detect.tracks.track"+"."+strconv.Itoa(index)+"."+"address", item.Address.ValueString())
+			}
+			if !item.Ipv4.IsNull() && !item.Ipv4.IsUnknown() {
+				if item.Ipv4.ValueBool() {
+					body, _ = sjson.Set(body, "partition-detect.tracks.track"+"."+strconv.Itoa(index)+"."+"ipv4", map[string]string{})
+				}
+			}
+			if !item.Ipv6.IsNull() && !item.Ipv6.IsUnknown() {
+				if item.Ipv6.ValueBool() {
+					body, _ = sjson.Set(body, "partition-detect.tracks.track"+"."+strconv.Itoa(index)+"."+"ipv6", map[string]string{})
+				}
+			}
+		}
+	}
+	if len(data.PartitionDetectExternalAddressTracks) > 0 {
+		body, _ = sjson.Set(body, "partition-detect.external-address-tracks.external-address-track", []interface{}{})
+		for index, item := range data.PartitionDetectExternalAddressTracks {
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body, _ = sjson.Set(body, "partition-detect.external-address-tracks.external-address-track"+"."+strconv.Itoa(index)+"."+"address", item.Address.ValueString())
+			}
+			if !item.ExternalAddress.IsNull() && !item.ExternalAddress.IsUnknown() {
+				body, _ = sjson.Set(body, "partition-detect.external-address-tracks.external-address-track"+"."+strconv.Itoa(index)+"."+"external-address", item.ExternalAddress.ValueString())
+			}
+		}
+	}
+	if len(data.MplsTrafficEngTunnelMetricLevels) > 0 {
+		body, _ = sjson.Set(body, "mpls.traffic-eng.tunnel.metric-levels.metric-level", []interface{}{})
+		for index, item := range data.MplsTrafficEngTunnelMetricLevels {
+			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "mpls.traffic-eng.tunnel.metric-levels.metric-level"+"."+strconv.Itoa(index)+"."+"level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+			}
+			if !item.Metric.IsNull() && !item.Metric.IsUnknown() {
+				body, _ = sjson.Set(body, "mpls.traffic-eng.tunnel.metric-levels.metric-level"+"."+strconv.Itoa(index)+"."+"metric", strconv.FormatInt(item.Metric.ValueInt64(), 10))
+			}
+		}
+	}
 	return body
 }
 
@@ -733,6 +1427,487 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "distance.global"); value.Exists() && !data.Distance.IsNull() {
+		data.Distance = types.Int64Value(value.Int())
+	} else {
+		data.Distance = types.Int64Null()
+	}
+	for i := range data.DistanceSources {
+		keys := [...]string{"address", "address-prefix"}
+		keyValues := [...]string{data.DistanceSources[i].Address.ValueString(), strconv.FormatInt(data.DistanceSources[i].Prefix.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "distance.ip-addresses.ip-address").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("address"); value.Exists() && !data.DistanceSources[i].Address.IsNull() {
+			data.DistanceSources[i].Address = types.StringValue(value.String())
+		} else {
+			data.DistanceSources[i].Address = types.StringNull()
+		}
+		if value := r.Get("address-prefix"); value.Exists() && !data.DistanceSources[i].Prefix.IsNull() {
+			data.DistanceSources[i].Prefix = types.Int64Value(value.Int())
+		} else {
+			data.DistanceSources[i].Prefix = types.Int64Null()
+		}
+		if value := r.Get("distance-number"); value.Exists() && !data.DistanceSources[i].Distance.IsNull() {
+			data.DistanceSources[i].Distance = types.Int64Value(value.Int())
+		} else {
+			data.DistanceSources[i].Distance = types.Int64Null()
+		}
+		if value := r.Get("prefix-list-or-access-list-to"); value.Exists() && !data.DistanceSources[i].RouteFilter.IsNull() {
+			data.DistanceSources[i].RouteFilter = types.StringValue(value.String())
+		} else {
+			data.DistanceSources[i].RouteFilter = types.StringNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "distribute-list.prefix-list.prefix-list-string"); value.Exists() && !data.DistributeListPrefixListIn.IsNull() {
+		data.DistributeListPrefixListIn = types.StringValue(value.String())
+	} else {
+		data.DistributeListPrefixListIn = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "distribute-list.route-policy"); value.Exists() && !data.DistributeListRoutePolicyIn.IsNull() {
+		data.DistributeListRoutePolicyIn = types.StringValue(value.String())
+	} else {
+		data.DistributeListRoutePolicyIn = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "redistribute.connected"); !data.RedistributeConnected.IsNull() {
+		if value.Exists() {
+			data.RedistributeConnected = types.BoolValue(true)
+		} else {
+			data.RedistributeConnected = types.BoolValue(false)
+		}
+	} else {
+		data.RedistributeConnected = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "redistribute.connected.redistribute-route-level"); value.Exists() && !data.RedistributeConnectedLevel.IsNull() {
+		data.RedistributeConnectedLevel = types.StringValue(value.String())
+	} else {
+		data.RedistributeConnectedLevel = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "redistribute.connected.metric"); value.Exists() && !data.RedistributeConnectedMetric.IsNull() {
+		data.RedistributeConnectedMetric = types.Int64Value(value.Int())
+	} else {
+		data.RedistributeConnectedMetric = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "redistribute.connected.route-policy"); value.Exists() && !data.RedistributeConnectedRoutePolicy.IsNull() {
+		data.RedistributeConnectedRoutePolicy = types.StringValue(value.String())
+	} else {
+		data.RedistributeConnectedRoutePolicy = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "redistribute.connected.metric-type"); value.Exists() && !data.RedistributeConnectedMetricType.IsNull() {
+		data.RedistributeConnectedMetricType = types.StringValue(value.String())
+	} else {
+		data.RedistributeConnectedMetricType = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "redistribute.static"); !data.RedistributeStatic.IsNull() {
+		if value.Exists() {
+			data.RedistributeStatic = types.BoolValue(true)
+		} else {
+			data.RedistributeStatic = types.BoolValue(false)
+		}
+	} else {
+		data.RedistributeStatic = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "redistribute.static.redistribute-route-level"); value.Exists() && !data.RedistributeStaticLevel.IsNull() {
+		data.RedistributeStaticLevel = types.StringValue(value.String())
+	} else {
+		data.RedistributeStaticLevel = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "redistribute.static.metric"); value.Exists() && !data.RedistributeStaticMetric.IsNull() {
+		data.RedistributeStaticMetric = types.Int64Value(value.Int())
+	} else {
+		data.RedistributeStaticMetric = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "redistribute.static.route-policy"); value.Exists() && !data.RedistributeStaticRoutePolicy.IsNull() {
+		data.RedistributeStaticRoutePolicy = types.StringValue(value.String())
+	} else {
+		data.RedistributeStaticRoutePolicy = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "redistribute.static.metric-type"); value.Exists() && !data.RedistributeStaticMetricType.IsNull() {
+		data.RedistributeStaticMetricType = types.StringValue(value.String())
+	} else {
+		data.RedistributeStaticMetricType = types.StringNull()
+	}
+	for i := range data.RedistributeIsis {
+		keys := [...]string{"isis-string"}
+		keyValues := [...]string{data.RedistributeIsis[i].InstanceId.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "redistribute.isis-processes.isis-process").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("isis-string"); value.Exists() && !data.RedistributeIsis[i].InstanceId.IsNull() {
+			data.RedistributeIsis[i].InstanceId = types.StringValue(value.String())
+		} else {
+			data.RedistributeIsis[i].InstanceId = types.StringNull()
+		}
+		if value := r.Get("redistribute-route-level"); value.Exists() && !data.RedistributeIsis[i].Level.IsNull() {
+			data.RedistributeIsis[i].Level = types.StringValue(value.String())
+		} else {
+			data.RedistributeIsis[i].Level = types.StringNull()
+		}
+		if value := r.Get("metric"); value.Exists() && !data.RedistributeIsis[i].Metric.IsNull() {
+			data.RedistributeIsis[i].Metric = types.Int64Value(value.Int())
+		} else {
+			data.RedistributeIsis[i].Metric = types.Int64Null()
+		}
+		if value := r.Get("route-policy"); value.Exists() && !data.RedistributeIsis[i].RoutePolicy.IsNull() {
+			data.RedistributeIsis[i].RoutePolicy = types.StringValue(value.String())
+		} else {
+			data.RedistributeIsis[i].RoutePolicy = types.StringNull()
+		}
+		if value := r.Get("metric-type"); value.Exists() && !data.RedistributeIsis[i].MetricType.IsNull() {
+			data.RedistributeIsis[i].MetricType = types.StringValue(value.String())
+		} else {
+			data.RedistributeIsis[i].MetricType = types.StringNull()
+		}
+		if value := r.Get("down-flag-clear"); !data.RedistributeIsis[i].DownFlagClear.IsNull() {
+			if value.Exists() {
+				data.RedistributeIsis[i].DownFlagClear = types.BoolValue(true)
+			} else {
+				data.RedistributeIsis[i].DownFlagClear = types.BoolValue(false)
+			}
+		} else {
+			data.RedistributeIsis[i].DownFlagClear = types.BoolNull()
+		}
+	}
+	for i := range data.RedistributeBgp {
+		keys := [...]string{"as-number"}
+		keyValues := [...]string{data.RedistributeBgp[i].AsNumber.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "redistribute.bgps.bgp").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("as-number"); value.Exists() && !data.RedistributeBgp[i].AsNumber.IsNull() {
+			data.RedistributeBgp[i].AsNumber = types.StringValue(value.String())
+		} else {
+			data.RedistributeBgp[i].AsNumber = types.StringNull()
+		}
+		if value := r.Get("redistribute-route-level"); value.Exists() && !data.RedistributeBgp[i].Level.IsNull() {
+			data.RedistributeBgp[i].Level = types.StringValue(value.String())
+		} else {
+			data.RedistributeBgp[i].Level = types.StringNull()
+		}
+		if value := r.Get("metric"); value.Exists() && !data.RedistributeBgp[i].Metric.IsNull() {
+			data.RedistributeBgp[i].Metric = types.Int64Value(value.Int())
+		} else {
+			data.RedistributeBgp[i].Metric = types.Int64Null()
+		}
+		if value := r.Get("route-policy"); value.Exists() && !data.RedistributeBgp[i].RoutePolicy.IsNull() {
+			data.RedistributeBgp[i].RoutePolicy = types.StringValue(value.String())
+		} else {
+			data.RedistributeBgp[i].RoutePolicy = types.StringNull()
+		}
+		if value := r.Get("metric-type"); value.Exists() && !data.RedistributeBgp[i].MetricType.IsNull() {
+			data.RedistributeBgp[i].MetricType = types.StringValue(value.String())
+		} else {
+			data.RedistributeBgp[i].MetricType = types.StringNull()
+		}
+	}
+	for i := range data.RedistributeOspf {
+		keys := [...]string{"ospf-process-id"}
+		keyValues := [...]string{data.RedistributeOspf[i].InstanceId.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "redistribute.ospfs.ospf").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("ospf-process-id"); value.Exists() && !data.RedistributeOspf[i].InstanceId.IsNull() {
+			data.RedistributeOspf[i].InstanceId = types.StringValue(value.String())
+		} else {
+			data.RedistributeOspf[i].InstanceId = types.StringNull()
+		}
+		if value := r.Get("match.internal"); !data.RedistributeOspf[i].MatchInternal.IsNull() {
+			if value.Exists() {
+				data.RedistributeOspf[i].MatchInternal = types.BoolValue(true)
+			} else {
+				data.RedistributeOspf[i].MatchInternal = types.BoolValue(false)
+			}
+		} else {
+			data.RedistributeOspf[i].MatchInternal = types.BoolNull()
+		}
+		if value := r.Get("match.external"); !data.RedistributeOspf[i].MatchExternal.IsNull() {
+			if value.Exists() {
+				data.RedistributeOspf[i].MatchExternal = types.BoolValue(true)
+			} else {
+				data.RedistributeOspf[i].MatchExternal = types.BoolValue(false)
+			}
+		} else {
+			data.RedistributeOspf[i].MatchExternal = types.BoolNull()
+		}
+		if value := r.Get("redistribute-route-level"); value.Exists() && !data.RedistributeOspf[i].Level.IsNull() {
+			data.RedistributeOspf[i].Level = types.StringValue(value.String())
+		} else {
+			data.RedistributeOspf[i].Level = types.StringNull()
+		}
+		if value := r.Get("metric"); value.Exists() && !data.RedistributeOspf[i].Metric.IsNull() {
+			data.RedistributeOspf[i].Metric = types.Int64Value(value.Int())
+		} else {
+			data.RedistributeOspf[i].Metric = types.Int64Null()
+		}
+		if value := r.Get("route-policy"); value.Exists() && !data.RedistributeOspf[i].RoutePolicy.IsNull() {
+			data.RedistributeOspf[i].RoutePolicy = types.StringValue(value.String())
+		} else {
+			data.RedistributeOspf[i].RoutePolicy = types.StringNull()
+		}
+		if value := r.Get("metric-type"); value.Exists() && !data.RedistributeOspf[i].MetricType.IsNull() {
+			data.RedistributeOspf[i].MetricType = types.StringValue(value.String())
+		} else {
+			data.RedistributeOspf[i].MetricType = types.StringNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "maximum-paths"); value.Exists() && !data.MaximumPaths.IsNull() {
+		data.MaximumPaths = types.Int64Value(value.Int())
+	} else {
+		data.MaximumPaths = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "router-id.interface-name"); value.Exists() && !data.RouterIdInterfaceName.IsNull() {
+		data.RouterIdInterfaceName = types.StringValue(value.String())
+	} else {
+		data.RouterIdInterfaceName = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "router-id.ip-address"); value.Exists() && !data.RouterIdIpAddress.IsNull() {
+		data.RouterIdIpAddress = types.StringValue(value.String())
+	} else {
+		data.RouterIdIpAddress = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "advertise.passive-only"); !data.AdvertisePassiveOnly.IsNull() {
+		if value.Exists() {
+			data.AdvertisePassiveOnly = types.BoolValue(true)
+		} else {
+			data.AdvertisePassiveOnly = types.BoolValue(false)
+		}
+	} else {
+		data.AdvertisePassiveOnly = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "advertise.link.attributes"); !data.AdvertiseLinkAttributes.IsNull() {
+		if value.Exists() {
+			data.AdvertiseLinkAttributes = types.BoolValue(true)
+		} else {
+			data.AdvertiseLinkAttributes = types.BoolValue(false)
+		}
+	} else {
+		data.AdvertiseLinkAttributes = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "microloop.avoidance.enable"); !data.MicroloopAvoidance.IsNull() {
+		if value.Exists() {
+			data.MicroloopAvoidance = types.BoolValue(true)
+		} else {
+			data.MicroloopAvoidance = types.BoolValue(false)
+		}
+	} else {
+		data.MicroloopAvoidance = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "microloop.avoidance.enable.protected"); !data.MicroloopAvoidanceProtected.IsNull() {
+		if value.Exists() {
+			data.MicroloopAvoidanceProtected = types.BoolValue(true)
+		} else {
+			data.MicroloopAvoidanceProtected = types.BoolValue(false)
+		}
+	} else {
+		data.MicroloopAvoidanceProtected = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "microloop.avoidance.enable.segment-routing.route-policy"); value.Exists() && !data.MicroloopAvoidanceSegmentRoutingRoutePolicy.IsNull() {
+		data.MicroloopAvoidanceSegmentRoutingRoutePolicy = types.StringValue(value.String())
+	} else {
+		data.MicroloopAvoidanceSegmentRoutingRoutePolicy = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "microloop.avoidance.rib-update-delay"); value.Exists() && !data.MicroloopAvoidanceRibUpdateDelay.IsNull() {
+		data.MicroloopAvoidanceRibUpdateDelay = types.Int64Value(value.Int())
+	} else {
+		data.MicroloopAvoidanceRibUpdateDelay = types.Int64Null()
+	}
+	for i := range data.SummaryPrefixes {
+		keys := [...]string{"address", "address-prefix"}
+		keyValues := [...]string{data.SummaryPrefixes[i].Address.ValueString(), strconv.FormatInt(data.SummaryPrefixes[i].Prefix.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "summary-prefix.ip-addresses.ip-address").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("address"); value.Exists() && !data.SummaryPrefixes[i].Address.IsNull() {
+			data.SummaryPrefixes[i].Address = types.StringValue(value.String())
+		} else {
+			data.SummaryPrefixes[i].Address = types.StringNull()
+		}
+		if value := r.Get("address-prefix"); value.Exists() && !data.SummaryPrefixes[i].Prefix.IsNull() {
+			data.SummaryPrefixes[i].Prefix = types.Int64Value(value.Int())
+		} else {
+			data.SummaryPrefixes[i].Prefix = types.Int64Null()
+		}
+		if value := r.Get("tag"); value.Exists() && !data.SummaryPrefixes[i].Tag.IsNull() {
+			data.SummaryPrefixes[i].Tag = types.Int64Value(value.Int())
+		} else {
+			data.SummaryPrefixes[i].Tag = types.Int64Null()
+		}
+		if value := r.Get("level"); value.Exists() && !data.SummaryPrefixes[i].Level.IsNull() {
+			data.SummaryPrefixes[i].Level = types.Int64Value(value.Int())
+		} else {
+			data.SummaryPrefixes[i].Level = types.Int64Null()
+		}
+		if value := r.Get("algorithm"); value.Exists() && !data.SummaryPrefixes[i].Algorithm.IsNull() {
+			data.SummaryPrefixes[i].Algorithm = types.Int64Value(value.Int())
+		} else {
+			data.SummaryPrefixes[i].Algorithm = types.Int64Null()
+		}
+		if value := r.Get("explicit"); !data.SummaryPrefixes[i].Explicit.IsNull() {
+			if value.Exists() {
+				data.SummaryPrefixes[i].Explicit = types.BoolValue(true)
+			} else {
+				data.SummaryPrefixes[i].Explicit = types.BoolValue(false)
+			}
+		} else {
+			data.SummaryPrefixes[i].Explicit = types.BoolNull()
+		}
+		if value := r.Get("adv-unreachable"); !data.SummaryPrefixes[i].AdvUnreachable.IsNull() {
+			if value.Exists() {
+				data.SummaryPrefixes[i].AdvUnreachable = types.BoolValue(true)
+			} else {
+				data.SummaryPrefixes[i].AdvUnreachable = types.BoolValue(false)
+			}
+		} else {
+			data.SummaryPrefixes[i].AdvUnreachable = types.BoolNull()
+		}
+		if value := r.Get("adv-unreachable.unreachable-component-tag.unreachable-component-tag-number"); value.Exists() && !data.SummaryPrefixes[i].UnreachableTag.IsNull() {
+			data.SummaryPrefixes[i].UnreachableTag = types.Int64Value(value.Int())
+		} else {
+			data.SummaryPrefixes[i].UnreachableTag = types.Int64Null()
+		}
+		if value := r.Get("adv-unreachable.unreachable-component-tag.exclude"); !data.SummaryPrefixes[i].UnreachableTagExcludePrefixes.IsNull() {
+			if value.Exists() {
+				data.SummaryPrefixes[i].UnreachableTagExcludePrefixes = types.BoolValue(true)
+			} else {
+				data.SummaryPrefixes[i].UnreachableTagExcludePrefixes = types.BoolValue(false)
+			}
+		} else {
+			data.SummaryPrefixes[i].UnreachableTagExcludePrefixes = types.BoolNull()
+		}
+		if value := r.Get("partition-repair"); !data.SummaryPrefixes[i].PartitionRepair.IsNull() {
+			if value.Exists() {
+				data.SummaryPrefixes[i].PartitionRepair = types.BoolValue(true)
+			} else {
+				data.SummaryPrefixes[i].PartitionRepair = types.BoolValue(false)
+			}
+		} else {
+			data.SummaryPrefixes[i].PartitionRepair = types.BoolNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "metric"); value.Exists() && !data.Metric.IsNull() {
+		data.Metric = types.Int64Value(value.Int())
+	} else {
+		data.Metric = types.Int64Null()
+	}
+	for i := range data.MetricLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.MetricLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "metric-levels.metric-level").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("level-number"); value.Exists() && !data.MetricLevels[i].LevelNumber.IsNull() {
+			data.MetricLevels[i].LevelNumber = types.Int64Value(value.Int())
+		} else {
+			data.MetricLevels[i].LevelNumber = types.Int64Null()
+		}
+		if value := r.Get("metric"); value.Exists() && !data.MetricLevels[i].Metric.IsNull() {
+			data.MetricLevels[i].Metric = types.Int64Value(value.Int())
+		} else {
+			data.MetricLevels[i].Metric = types.Int64Null()
+		}
+	}
 	if value := gjson.GetBytes(res, "metric-style.narrow"); !data.MetricStyleNarrow.IsNull() {
 		if value.Exists() {
 			data.MetricStyleNarrow = types.BoolValue(true)
@@ -851,368 +2026,6 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 		} else {
 			data.MetricStyleLevels[i].Transition = types.BoolNull()
 		}
-	}
-	if value := gjson.GetBytes(res, "router-id.interface-name"); value.Exists() && !data.RouterIdInterfaceName.IsNull() {
-		data.RouterIdInterfaceName = types.StringValue(value.String())
-	} else {
-		data.RouterIdInterfaceName = types.StringNull()
-	}
-	if value := gjson.GetBytes(res, "router-id.ip-address"); value.Exists() && !data.RouterIdIpAddress.IsNull() {
-		data.RouterIdIpAddress = types.StringValue(value.String())
-	} else {
-		data.RouterIdIpAddress = types.StringNull()
-	}
-	if value := gjson.GetBytes(res, "default-information.originate"); !data.DefaultInformationOriginate.IsNull() {
-		if value.Exists() {
-			data.DefaultInformationOriginate = types.BoolValue(true)
-		} else {
-			data.DefaultInformationOriginate = types.BoolValue(false)
-		}
-	} else {
-		data.DefaultInformationOriginate = types.BoolNull()
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.delay-interval"); value.Exists() && !data.FastRerouteDelayInterval.IsNull() {
-		data.FastRerouteDelayInterval = types.Int64Value(value.Int())
-	} else {
-		data.FastRerouteDelayInterval = types.Int64Null()
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.priority-limit"); value.Exists() && !data.FastReroutePerPrefixPriorityLimit.IsNull() {
-		data.FastReroutePerPrefixPriorityLimit = types.StringValue(value.String())
-	} else {
-		data.FastReroutePerPrefixPriorityLimit = types.StringNull()
-	}
-	for i := range data.FastReroutePerPrefixPriorityLimitLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixPriorityLimitLevels[i].LevelNumber.ValueInt64(), 10)}
-
-		var r gjson.Result
-		gjson.GetBytes(res, "fast-reroute.per-prefix.priority-limit-levels.priority-limit-level").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("level-number"); value.Exists() && !data.FastReroutePerPrefixPriorityLimitLevels[i].LevelNumber.IsNull() {
-			data.FastReroutePerPrefixPriorityLimitLevels[i].LevelNumber = types.Int64Value(value.Int())
-		} else {
-			data.FastReroutePerPrefixPriorityLimitLevels[i].LevelNumber = types.Int64Null()
-		}
-		if value := r.Get("priority-limit"); value.Exists() && !data.FastReroutePerPrefixPriorityLimitLevels[i].PriorityLimit.IsNull() {
-			data.FastReroutePerPrefixPriorityLimitLevels[i].PriorityLimit = types.StringValue(value.String())
-		} else {
-			data.FastReroutePerPrefixPriorityLimitLevels[i].PriorityLimit = types.StringNull()
-		}
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.use-candidate-only"); !data.FastReroutePerPrefixUseCandidateOnly.IsNull() {
-		if value.Exists() {
-			data.FastReroutePerPrefixUseCandidateOnly = types.BoolValue(true)
-		} else {
-			data.FastReroutePerPrefixUseCandidateOnly = types.BoolValue(false)
-		}
-	} else {
-		data.FastReroutePerPrefixUseCandidateOnly = types.BoolNull()
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.srlg-protection.weighted-global"); !data.FastReroutePerPrefixSrlgProtectionWeightedGlobal.IsNull() {
-		if value.Exists() {
-			data.FastReroutePerPrefixSrlgProtectionWeightedGlobal = types.BoolValue(true)
-		} else {
-			data.FastReroutePerPrefixSrlgProtectionWeightedGlobal = types.BoolValue(false)
-		}
-	} else {
-		data.FastReroutePerPrefixSrlgProtectionWeightedGlobal = types.BoolNull()
-	}
-	for i := range data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels[i].LevelNumber.ValueInt64(), 10)}
-
-		var r gjson.Result
-		gjson.GetBytes(res, "fast-reroute.per-prefix.srlg-protection.weighted-global-levels.weighted-global-level").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("level-number"); value.Exists() && !data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels[i].LevelNumber.IsNull() {
-			data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels[i].LevelNumber = types.Int64Value(value.Int())
-		} else {
-			data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels[i].LevelNumber = types.Int64Null()
-		}
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.remote-lfa.prefix-list"); value.Exists() && !data.FastReroutePerPrefixRemoteLfaPrefixList.IsNull() {
-		data.FastReroutePerPrefixRemoteLfaPrefixList = types.StringValue(value.String())
-	} else {
-		data.FastReroutePerPrefixRemoteLfaPrefixList = types.StringNull()
-	}
-	for i := range data.FastReroutePerPrefixRemoteLfaPrefixListLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixRemoteLfaPrefixListLevels[i].LevelNumber.ValueInt64(), 10)}
-
-		var r gjson.Result
-		gjson.GetBytes(res, "fast-reroute.per-prefix.remote-lfa.prefix-list-levels.prefix-list-level").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("level-number"); value.Exists() && !data.FastReroutePerPrefixRemoteLfaPrefixListLevels[i].LevelNumber.IsNull() {
-			data.FastReroutePerPrefixRemoteLfaPrefixListLevels[i].LevelNumber = types.Int64Value(value.Int())
-		} else {
-			data.FastReroutePerPrefixRemoteLfaPrefixListLevels[i].LevelNumber = types.Int64Null()
-		}
-		if value := r.Get("prefix-list"); value.Exists() && !data.FastReroutePerPrefixRemoteLfaPrefixListLevels[i].PrefixList.IsNull() {
-			data.FastReroutePerPrefixRemoteLfaPrefixListLevels[i].PrefixList = types.StringValue(value.String())
-		} else {
-			data.FastReroutePerPrefixRemoteLfaPrefixListLevels[i].PrefixList = types.StringNull()
-		}
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.load-sharing.disable"); !data.FastReroutePerPrefixLoadSharingDisable.IsNull() {
-		if value.Exists() {
-			data.FastReroutePerPrefixLoadSharingDisable = types.BoolValue(true)
-		} else {
-			data.FastReroutePerPrefixLoadSharingDisable = types.BoolValue(false)
-		}
-	} else {
-		data.FastReroutePerPrefixLoadSharingDisable = types.BoolNull()
-	}
-	for i := range data.FastReroutePerPrefixLoadSharingDisableLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixLoadSharingDisableLevels[i].LevelNumber.ValueInt64(), 10)}
-
-		var r gjson.Result
-		gjson.GetBytes(res, "fast-reroute.per-prefix.load-sharing.disable-levels.disable-level").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("level-number"); value.Exists() && !data.FastReroutePerPrefixLoadSharingDisableLevels[i].LevelNumber.IsNull() {
-			data.FastReroutePerPrefixLoadSharingDisableLevels[i].LevelNumber = types.Int64Value(value.Int())
-		} else {
-			data.FastReroutePerPrefixLoadSharingDisableLevels[i].LevelNumber = types.Int64Null()
-		}
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.downstream.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerDownstreamIndex.IsNull() {
-		data.FastReroutePerPrefixTiebreakerDownstreamIndex = types.Int64Value(value.Int())
-	} else {
-		data.FastReroutePerPrefixTiebreakerDownstreamIndex = types.Int64Null()
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.lc-disjoint.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerLcDisjointIndex.IsNull() {
-		data.FastReroutePerPrefixTiebreakerLcDisjointIndex = types.Int64Value(value.Int())
-	} else {
-		data.FastReroutePerPrefixTiebreakerLcDisjointIndex = types.Int64Null()
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.lowest-backup-metric.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex.IsNull() {
-		data.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex = types.Int64Value(value.Int())
-	} else {
-		data.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex = types.Int64Null()
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.node-protecting.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerNodeProtectingIndex.IsNull() {
-		data.FastReroutePerPrefixTiebreakerNodeProtectingIndex = types.Int64Value(value.Int())
-	} else {
-		data.FastReroutePerPrefixTiebreakerNodeProtectingIndex = types.Int64Null()
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.primary-path.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerPrimaryPathIndex.IsNull() {
-		data.FastReroutePerPrefixTiebreakerPrimaryPathIndex = types.Int64Value(value.Int())
-	} else {
-		data.FastReroutePerPrefixTiebreakerPrimaryPathIndex = types.Int64Null()
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.secondary-path.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerSecondaryPathIndex.IsNull() {
-		data.FastReroutePerPrefixTiebreakerSecondaryPathIndex = types.Int64Value(value.Int())
-	} else {
-		data.FastReroutePerPrefixTiebreakerSecondaryPathIndex = types.Int64Null()
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.srlg-disjoint.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex.IsNull() {
-		data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex = types.Int64Value(value.Int())
-	} else {
-		data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex = types.Int64Null()
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-link.priority-limit"); value.Exists() && !data.FastReroutePerLinkPriorityLimit.IsNull() {
-		data.FastReroutePerLinkPriorityLimit = types.StringValue(value.String())
-	} else {
-		data.FastReroutePerLinkPriorityLimit = types.StringNull()
-	}
-	for i := range data.FastReroutePerLinkPriorityLimitLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerLinkPriorityLimitLevels[i].LevelNumber.ValueInt64(), 10)}
-
-		var r gjson.Result
-		gjson.GetBytes(res, "fast-reroute.per-link.priority-limit-levels.priority-limit-level").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("level-number"); value.Exists() && !data.FastReroutePerLinkPriorityLimitLevels[i].LevelNumber.IsNull() {
-			data.FastReroutePerLinkPriorityLimitLevels[i].LevelNumber = types.Int64Value(value.Int())
-		} else {
-			data.FastReroutePerLinkPriorityLimitLevels[i].LevelNumber = types.Int64Null()
-		}
-		if value := r.Get("priority-limit"); value.Exists() && !data.FastReroutePerLinkPriorityLimitLevels[i].PriorityLimit.IsNull() {
-			data.FastReroutePerLinkPriorityLimitLevels[i].PriorityLimit = types.StringValue(value.String())
-		} else {
-			data.FastReroutePerLinkPriorityLimitLevels[i].PriorityLimit = types.StringNull()
-		}
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-link.use-candidate-only"); !data.FastReroutePerLinkUseCandidateOnly.IsNull() {
-		if value.Exists() {
-			data.FastReroutePerLinkUseCandidateOnly = types.BoolValue(true)
-		} else {
-			data.FastReroutePerLinkUseCandidateOnly = types.BoolValue(false)
-		}
-	} else {
-		data.FastReroutePerLinkUseCandidateOnly = types.BoolNull()
-	}
-	if value := gjson.GetBytes(res, "microloop.avoidance.enable"); !data.MicroloopAvoidance.IsNull() {
-		if value.Exists() {
-			data.MicroloopAvoidance = types.BoolValue(true)
-		} else {
-			data.MicroloopAvoidance = types.BoolValue(false)
-		}
-	} else {
-		data.MicroloopAvoidance = types.BoolNull()
-	}
-	if value := gjson.GetBytes(res, "microloop.avoidance.enable.protected"); !data.MicroloopAvoidanceProtected.IsNull() {
-		if value.Exists() {
-			data.MicroloopAvoidanceProtected = types.BoolValue(true)
-		} else {
-			data.MicroloopAvoidanceProtected = types.BoolValue(false)
-		}
-	} else {
-		data.MicroloopAvoidanceProtected = types.BoolNull()
-	}
-	if value := gjson.GetBytes(res, "microloop.avoidance.enable.segment-routing.route-policy"); value.Exists() && !data.MicroloopAvoidanceSegmentRoutingRoutePolicy.IsNull() {
-		data.MicroloopAvoidanceSegmentRoutingRoutePolicy = types.StringValue(value.String())
-	} else {
-		data.MicroloopAvoidanceSegmentRoutingRoutePolicy = types.StringNull()
-	}
-	if value := gjson.GetBytes(res, "microloop.avoidance.rib-update-delay"); value.Exists() && !data.MicroloopAvoidanceRibUpdateDelay.IsNull() {
-		data.MicroloopAvoidanceRibUpdateDelay = types.Int64Value(value.Int())
-	} else {
-		data.MicroloopAvoidanceRibUpdateDelay = types.Int64Null()
-	}
-	if value := gjson.GetBytes(res, "advertise.passive-only"); !data.AdvertisePassiveOnly.IsNull() {
-		if value.Exists() {
-			data.AdvertisePassiveOnly = types.BoolValue(true)
-		} else {
-			data.AdvertisePassiveOnly = types.BoolValue(false)
-		}
-	} else {
-		data.AdvertisePassiveOnly = types.BoolNull()
-	}
-	if value := gjson.GetBytes(res, "advertise.link.attributes"); !data.AdvertiseLinkAttributes.IsNull() {
-		if value.Exists() {
-			data.AdvertiseLinkAttributes = types.BoolValue(true)
-		} else {
-			data.AdvertiseLinkAttributes = types.BoolValue(false)
-		}
-	} else {
-		data.AdvertiseLinkAttributes = types.BoolNull()
-	}
-	if value := gjson.GetBytes(res, "mpls.ldp.auto-config"); !data.MplsLdpAutoConfig.IsNull() {
-		if value.Exists() {
-			data.MplsLdpAutoConfig = types.BoolValue(true)
-		} else {
-			data.MplsLdpAutoConfig = types.BoolValue(false)
-		}
-	} else {
-		data.MplsLdpAutoConfig = types.BoolNull()
-	}
-	if value := gjson.GetBytes(res, "mpls.traffic-eng.router-id.ipv4-address"); value.Exists() && !data.MplsTrafficEngRouterIdIpv4Address.IsNull() {
-		data.MplsTrafficEngRouterIdIpv4Address = types.StringValue(value.String())
-	} else {
-		data.MplsTrafficEngRouterIdIpv4Address = types.StringNull()
-	}
-	if value := gjson.GetBytes(res, "mpls.traffic-eng.router-id.interface-name"); value.Exists() && !data.MplsTrafficEngRouterIdInterfaceName.IsNull() {
-		data.MplsTrafficEngRouterIdInterfaceName = types.StringValue(value.String())
-	} else {
-		data.MplsTrafficEngRouterIdInterfaceName = types.StringNull()
-	}
-	if value := gjson.GetBytes(res, "mpls.traffic-eng.traffic-eng-level.level-one-two"); !data.MplsTrafficEngLevel12.IsNull() {
-		if value.Exists() {
-			data.MplsTrafficEngLevel12 = types.BoolValue(true)
-		} else {
-			data.MplsTrafficEngLevel12 = types.BoolValue(false)
-		}
-	} else {
-		data.MplsTrafficEngLevel12 = types.BoolNull()
-	}
-	if value := gjson.GetBytes(res, "mpls.traffic-eng.traffic-eng-level.level-one"); !data.MplsTrafficEngLevel1.IsNull() {
-		if value.Exists() {
-			data.MplsTrafficEngLevel1 = types.BoolValue(true)
-		} else {
-			data.MplsTrafficEngLevel1 = types.BoolValue(false)
-		}
-	} else {
-		data.MplsTrafficEngLevel1 = types.BoolNull()
-	}
-	if value := gjson.GetBytes(res, "mpls.traffic-eng.traffic-eng-level.level-two-only"); !data.MplsTrafficEngLevel2Only.IsNull() {
-		if value.Exists() {
-			data.MplsTrafficEngLevel2Only = types.BoolValue(true)
-		} else {
-			data.MplsTrafficEngLevel2Only = types.BoolValue(false)
-		}
-	} else {
-		data.MplsTrafficEngLevel2Only = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "spf-interval.maximum-wait"); value.Exists() && !data.SpfIntervalMaximumWait.IsNull() {
 		data.SpfIntervalMaximumWait = types.Int64Value(value.Int())
@@ -1443,7 +2256,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 		} else {
 			data.SpfPrefixPriorityHighLevels[i].Tag = types.Int64Null()
 		}
-		if value := r.Get("prefix_list_name"); value.Exists() && !data.SpfPrefixPriorityHighLevels[i].PrefixListName.IsNull() {
+		if value := r.Get("prefixlist-name"); value.Exists() && !data.SpfPrefixPriorityHighLevels[i].PrefixListName.IsNull() {
 			data.SpfPrefixPriorityHighLevels[i].PrefixListName = types.StringValue(value.String())
 		} else {
 			data.SpfPrefixPriorityHighLevels[i].PrefixListName = types.StringNull()
@@ -1482,29 +2295,11 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 		} else {
 			data.SpfPrefixPriorityMediumLevels[i].Tag = types.Int64Null()
 		}
-		if value := r.Get("prefix_list_name"); value.Exists() && !data.SpfPrefixPriorityMediumLevels[i].PrefixListName.IsNull() {
+		if value := r.Get("prefixlist-name"); value.Exists() && !data.SpfPrefixPriorityMediumLevels[i].PrefixListName.IsNull() {
 			data.SpfPrefixPriorityMediumLevels[i].PrefixListName = types.StringValue(value.String())
 		} else {
 			data.SpfPrefixPriorityMediumLevels[i].PrefixListName = types.StringNull()
 		}
-	}
-	if value := gjson.GetBytes(res, "segment-routing.mpls.enable"); !data.SegmentRoutingMplsEnable.IsNull() {
-		if value.Exists() {
-			data.SegmentRoutingMplsEnable = types.BoolValue(true)
-		} else {
-			data.SegmentRoutingMplsEnable = types.BoolValue(false)
-		}
-	} else {
-		data.SegmentRoutingMplsEnable = types.BoolNull()
-	}
-	if value := gjson.GetBytes(res, "segment-routing.mpls.sr-prefer"); !data.SegmentRoutingMplsSrPrefer.IsNull() {
-		if value.Exists() {
-			data.SegmentRoutingMplsSrPrefer = types.BoolValue(true)
-		} else {
-			data.SegmentRoutingMplsSrPrefer = types.BoolValue(false)
-		}
-	} else {
-		data.SegmentRoutingMplsSrPrefer = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "maximum-redistributed-prefixes"); value.Exists() && !data.MaximumRedistributedPrefixes.IsNull() {
 		data.MaximumRedistributedPrefixes = types.Int64Value(value.Int())
@@ -1545,12 +2340,12 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 			data.MaximumRedistributedPrefixesLevels[i].MaximumRedistributedPrefixes = types.Int64Null()
 		}
 	}
-	for i := range data.RedistributeIsis {
-		keys := [...]string{"isis-string"}
-		keyValues := [...]string{data.RedistributeIsis[i].InstanceId.ValueString()}
+	for i := range data.PropagateLevels {
+		keys := [...]string{"source-level", "destination-level"}
+		keyValues := [...]string{strconv.FormatInt(data.PropagateLevels[i].SourceLevel.ValueInt64(), 10), strconv.FormatInt(data.PropagateLevels[i].DestinationLevel.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "redistribute.isis-processes.isis-process").ForEach(
+		gjson.GetBytes(res, "propagate.levels.level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1568,39 +2363,726 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 				return true
 			},
 		)
-		if value := r.Get("isis-string"); value.Exists() && !data.RedistributeIsis[i].InstanceId.IsNull() {
-			data.RedistributeIsis[i].InstanceId = types.StringValue(value.String())
+		if value := r.Get("source-level"); value.Exists() && !data.PropagateLevels[i].SourceLevel.IsNull() {
+			data.PropagateLevels[i].SourceLevel = types.Int64Value(value.Int())
 		} else {
-			data.RedistributeIsis[i].InstanceId = types.StringNull()
+			data.PropagateLevels[i].SourceLevel = types.Int64Null()
 		}
-		if value := r.Get("redistribute-route-level"); value.Exists() && !data.RedistributeIsis[i].Level.IsNull() {
-			data.RedistributeIsis[i].Level = types.StringValue(value.String())
+		if value := r.Get("destination-level"); value.Exists() && !data.PropagateLevels[i].DestinationLevel.IsNull() {
+			data.PropagateLevels[i].DestinationLevel = types.Int64Value(value.Int())
 		} else {
-			data.RedistributeIsis[i].Level = types.StringNull()
+			data.PropagateLevels[i].DestinationLevel = types.Int64Null()
 		}
-		if value := r.Get("metric"); value.Exists() && !data.RedistributeIsis[i].Metric.IsNull() {
-			data.RedistributeIsis[i].Metric = types.Int64Value(value.Int())
+		if value := r.Get("route-policy"); value.Exists() && !data.PropagateLevels[i].RoutePolicy.IsNull() {
+			data.PropagateLevels[i].RoutePolicy = types.StringValue(value.String())
 		} else {
-			data.RedistributeIsis[i].Metric = types.Int64Null()
+			data.PropagateLevels[i].RoutePolicy = types.StringNull()
 		}
-		if value := r.Get("route-policy"); value.Exists() && !data.RedistributeIsis[i].RoutePolicy.IsNull() {
-			data.RedistributeIsis[i].RoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "adjacency-check.disable"); !data.AdjacencyCheckDisable.IsNull() {
+		if value.Exists() {
+			data.AdjacencyCheckDisable = types.BoolValue(true)
 		} else {
-			data.RedistributeIsis[i].RoutePolicy = types.StringNull()
+			data.AdjacencyCheckDisable = types.BoolValue(false)
 		}
-		if value := r.Get("metric-type"); value.Exists() && !data.RedistributeIsis[i].MetricType.IsNull() {
-			data.RedistributeIsis[i].MetricType = types.StringValue(value.String())
+	} else {
+		data.AdjacencyCheckDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "route.source.first-hop"); !data.RouteSourceFirstHop.IsNull() {
+		if value.Exists() {
+			data.RouteSourceFirstHop = types.BoolValue(true)
 		} else {
-			data.RedistributeIsis[i].MetricType = types.StringNull()
+			data.RouteSourceFirstHop = types.BoolValue(false)
 		}
-		if value := r.Get("down-flag-clear"); !data.RedistributeIsis[i].DownFlagClear.IsNull() {
+	} else {
+		data.RouteSourceFirstHop = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "attached-bit.receive.ignore"); !data.AttachedBitReceiveIgnore.IsNull() {
+		if value.Exists() {
+			data.AttachedBitReceiveIgnore = types.BoolValue(true)
+		} else {
+			data.AttachedBitReceiveIgnore = types.BoolValue(false)
+		}
+	} else {
+		data.AttachedBitReceiveIgnore = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "attached-bit.send"); value.Exists() && !data.AttachedBitSend.IsNull() {
+		data.AttachedBitSend = types.StringValue(value.String())
+	} else {
+		data.AttachedBitSend = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.delay-interval"); value.Exists() && !data.FastRerouteDelayInterval.IsNull() {
+		data.FastRerouteDelayInterval = types.Int64Value(value.Int())
+	} else {
+		data.FastRerouteDelayInterval = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.priority-limit"); value.Exists() && !data.FastReroutePerPrefixPriorityLimit.IsNull() {
+		data.FastReroutePerPrefixPriorityLimit = types.StringValue(value.String())
+	} else {
+		data.FastReroutePerPrefixPriorityLimit = types.StringNull()
+	}
+	for i := range data.FastReroutePerPrefixPriorityLimitLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixPriorityLimitLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "fast-reroute.per-prefix.priority-limit-levels.priority-limit-level").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("level-number"); value.Exists() && !data.FastReroutePerPrefixPriorityLimitLevels[i].LevelNumber.IsNull() {
+			data.FastReroutePerPrefixPriorityLimitLevels[i].LevelNumber = types.Int64Value(value.Int())
+		} else {
+			data.FastReroutePerPrefixPriorityLimitLevels[i].LevelNumber = types.Int64Null()
+		}
+		if value := r.Get("priority-limit"); value.Exists() && !data.FastReroutePerPrefixPriorityLimitLevels[i].PriorityLimit.IsNull() {
+			data.FastReroutePerPrefixPriorityLimitLevels[i].PriorityLimit = types.StringValue(value.String())
+		} else {
+			data.FastReroutePerPrefixPriorityLimitLevels[i].PriorityLimit = types.StringNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.use-candidate-only"); !data.FastReroutePerPrefixUseCandidateOnly.IsNull() {
+		if value.Exists() {
+			data.FastReroutePerPrefixUseCandidateOnly = types.BoolValue(true)
+		} else {
+			data.FastReroutePerPrefixUseCandidateOnly = types.BoolValue(false)
+		}
+	} else {
+		data.FastReroutePerPrefixUseCandidateOnly = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.srlg-protection.weighted-global"); !data.FastReroutePerPrefixSrlgProtectionWeightedGlobal.IsNull() {
+		if value.Exists() {
+			data.FastReroutePerPrefixSrlgProtectionWeightedGlobal = types.BoolValue(true)
+		} else {
+			data.FastReroutePerPrefixSrlgProtectionWeightedGlobal = types.BoolValue(false)
+		}
+	} else {
+		data.FastReroutePerPrefixSrlgProtectionWeightedGlobal = types.BoolNull()
+	}
+	for i := range data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "fast-reroute.per-prefix.srlg-protection.weighted-global-levels.weighted-global-level").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("level-number"); value.Exists() && !data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels[i].LevelNumber.IsNull() {
+			data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels[i].LevelNumber = types.Int64Value(value.Int())
+		} else {
+			data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels[i].LevelNumber = types.Int64Null()
+		}
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.remote-lfa.prefix-list"); value.Exists() && !data.FastReroutePerPrefixRemoteLfaPrefixList.IsNull() {
+		data.FastReroutePerPrefixRemoteLfaPrefixList = types.StringValue(value.String())
+	} else {
+		data.FastReroutePerPrefixRemoteLfaPrefixList = types.StringNull()
+	}
+	for i := range data.FastReroutePerPrefixRemoteLfaPrefixListLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixRemoteLfaPrefixListLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "fast-reroute.per-prefix.remote-lfa.prefix-list-levels.prefix-list-level").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("level-number"); value.Exists() && !data.FastReroutePerPrefixRemoteLfaPrefixListLevels[i].LevelNumber.IsNull() {
+			data.FastReroutePerPrefixRemoteLfaPrefixListLevels[i].LevelNumber = types.Int64Value(value.Int())
+		} else {
+			data.FastReroutePerPrefixRemoteLfaPrefixListLevels[i].LevelNumber = types.Int64Null()
+		}
+		if value := r.Get("prefix-list"); value.Exists() && !data.FastReroutePerPrefixRemoteLfaPrefixListLevels[i].PrefixList.IsNull() {
+			data.FastReroutePerPrefixRemoteLfaPrefixListLevels[i].PrefixList = types.StringValue(value.String())
+		} else {
+			data.FastReroutePerPrefixRemoteLfaPrefixListLevels[i].PrefixList = types.StringNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.load-sharing.disable"); !data.FastReroutePerPrefixLoadSharingDisable.IsNull() {
+		if value.Exists() {
+			data.FastReroutePerPrefixLoadSharingDisable = types.BoolValue(true)
+		} else {
+			data.FastReroutePerPrefixLoadSharingDisable = types.BoolValue(false)
+		}
+	} else {
+		data.FastReroutePerPrefixLoadSharingDisable = types.BoolNull()
+	}
+	for i := range data.FastReroutePerPrefixLoadSharingDisableLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixLoadSharingDisableLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "fast-reroute.per-prefix.load-sharing.disable-levels.disable-level").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("level-number"); value.Exists() && !data.FastReroutePerPrefixLoadSharingDisableLevels[i].LevelNumber.IsNull() {
+			data.FastReroutePerPrefixLoadSharingDisableLevels[i].LevelNumber = types.Int64Value(value.Int())
+		} else {
+			data.FastReroutePerPrefixLoadSharingDisableLevels[i].LevelNumber = types.Int64Null()
+		}
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.downstream.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerDownstreamIndex.IsNull() {
+		data.FastReroutePerPrefixTiebreakerDownstreamIndex = types.Int64Value(value.Int())
+	} else {
+		data.FastReroutePerPrefixTiebreakerDownstreamIndex = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.lc-disjoint.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerLcDisjointIndex.IsNull() {
+		data.FastReroutePerPrefixTiebreakerLcDisjointIndex = types.Int64Value(value.Int())
+	} else {
+		data.FastReroutePerPrefixTiebreakerLcDisjointIndex = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.lowest-backup-metric.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex.IsNull() {
+		data.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex = types.Int64Value(value.Int())
+	} else {
+		data.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.node-protecting.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerNodeProtectingIndex.IsNull() {
+		data.FastReroutePerPrefixTiebreakerNodeProtectingIndex = types.Int64Value(value.Int())
+	} else {
+		data.FastReroutePerPrefixTiebreakerNodeProtectingIndex = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.primary-path.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerPrimaryPathIndex.IsNull() {
+		data.FastReroutePerPrefixTiebreakerPrimaryPathIndex = types.Int64Value(value.Int())
+	} else {
+		data.FastReroutePerPrefixTiebreakerPrimaryPathIndex = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.secondary-path.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerSecondaryPathIndex.IsNull() {
+		data.FastReroutePerPrefixTiebreakerSecondaryPathIndex = types.Int64Value(value.Int())
+	} else {
+		data.FastReroutePerPrefixTiebreakerSecondaryPathIndex = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.srlg-disjoint.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex.IsNull() {
+		data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex = types.Int64Value(value.Int())
+	} else {
+		data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-link.use-candidate-only"); !data.FastReroutePerLinkUseCandidateOnly.IsNull() {
+		if value.Exists() {
+			data.FastReroutePerLinkUseCandidateOnly = types.BoolValue(true)
+		} else {
+			data.FastReroutePerLinkUseCandidateOnly = types.BoolValue(false)
+		}
+	} else {
+		data.FastReroutePerLinkUseCandidateOnly = types.BoolNull()
+	}
+	for i := range data.FastReroutePerLinkUseCandidateOnlyLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerLinkUseCandidateOnlyLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "fast-reroute.per-link.use-candidate-only-levels.use-candidate-only-level").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("level-number"); value.Exists() && !data.FastReroutePerLinkUseCandidateOnlyLevels[i].LevelNumber.IsNull() {
+			data.FastReroutePerLinkUseCandidateOnlyLevels[i].LevelNumber = types.Int64Value(value.Int())
+		} else {
+			data.FastReroutePerLinkUseCandidateOnlyLevels[i].LevelNumber = types.Int64Null()
+		}
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-link.priority-limit"); value.Exists() && !data.FastReroutePerLinkPriorityLimit.IsNull() {
+		data.FastReroutePerLinkPriorityLimit = types.StringValue(value.String())
+	} else {
+		data.FastReroutePerLinkPriorityLimit = types.StringNull()
+	}
+	for i := range data.FastReroutePerLinkPriorityLimitLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerLinkPriorityLimitLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "fast-reroute.per-link.priority-limit-levels.priority-limit-level").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("level-number"); value.Exists() && !data.FastReroutePerLinkPriorityLimitLevels[i].LevelNumber.IsNull() {
+			data.FastReroutePerLinkPriorityLimitLevels[i].LevelNumber = types.Int64Value(value.Int())
+		} else {
+			data.FastReroutePerLinkPriorityLimitLevels[i].LevelNumber = types.Int64Null()
+		}
+		if value := r.Get("priority-limit"); value.Exists() && !data.FastReroutePerLinkPriorityLimitLevels[i].PriorityLimit.IsNull() {
+			data.FastReroutePerLinkPriorityLimitLevels[i].PriorityLimit = types.StringValue(value.String())
+		} else {
+			data.FastReroutePerLinkPriorityLimitLevels[i].PriorityLimit = types.StringNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "default-information.originate"); !data.DefaultInformationOriginate.IsNull() {
+		if value.Exists() {
+			data.DefaultInformationOriginate = types.BoolValue(true)
+		} else {
+			data.DefaultInformationOriginate = types.BoolValue(false)
+		}
+	} else {
+		data.DefaultInformationOriginate = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "default-information.originate.route-policy.text"); value.Exists() && !data.DefaultInformationOriginateRoutePolicy.IsNull() {
+		data.DefaultInformationOriginateRoutePolicy = types.StringValue(value.String())
+	} else {
+		data.DefaultInformationOriginateRoutePolicy = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "segment-routing.bundle-member-adj-sid"); !data.SegmentRoutingBundleMemberAdjSid.IsNull() {
+		if value.Exists() {
+			data.SegmentRoutingBundleMemberAdjSid = types.BoolValue(true)
+		} else {
+			data.SegmentRoutingBundleMemberAdjSid = types.BoolValue(false)
+		}
+	} else {
+		data.SegmentRoutingBundleMemberAdjSid = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "segment-routing.labeled-only"); !data.SegmentRoutingLabeledOnly.IsNull() {
+		if value.Exists() {
+			data.SegmentRoutingLabeledOnly = types.BoolValue(true)
+		} else {
+			data.SegmentRoutingLabeledOnly = types.BoolValue(false)
+		}
+	} else {
+		data.SegmentRoutingLabeledOnly = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "segment-routing.protected-adjacency-sid-delay"); value.Exists() && !data.SegmentRoutingProtectedAdjacencySidDelay.IsNull() {
+		data.SegmentRoutingProtectedAdjacencySidDelay = types.Int64Value(value.Int())
+	} else {
+		data.SegmentRoutingProtectedAdjacencySidDelay = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.enable"); !data.SegmentRoutingMplsEnable.IsNull() {
+		if value.Exists() {
+			data.SegmentRoutingMplsEnable = types.BoolValue(true)
+		} else {
+			data.SegmentRoutingMplsEnable = types.BoolValue(false)
+		}
+	} else {
+		data.SegmentRoutingMplsEnable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.sr-prefer"); !data.SegmentRoutingMplsSrPrefer.IsNull() {
+		if value.Exists() {
+			data.SegmentRoutingMplsSrPrefer = types.BoolValue(true)
+		} else {
+			data.SegmentRoutingMplsSrPrefer = types.BoolValue(false)
+		}
+	} else {
+		data.SegmentRoutingMplsSrPrefer = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.unlabeled.protection.prefix-list"); value.Exists() && !data.SegmentRoutingMplsUnlabeledProtectionPrefixList.IsNull() {
+		data.SegmentRoutingMplsUnlabeledProtectionPrefixList = types.StringValue(value.String())
+	} else {
+		data.SegmentRoutingMplsUnlabeledProtectionPrefixList = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.unlabeled.protection.route-policy"); value.Exists() && !data.SegmentRoutingMplsUnlabeledProtectionRoutePolicy.IsNull() {
+		data.SegmentRoutingMplsUnlabeledProtectionRoutePolicy = types.StringValue(value.String())
+	} else {
+		data.SegmentRoutingMplsUnlabeledProtectionRoutePolicy = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.unlabeled.protection.disable"); !data.SegmentRoutingMplsUnlabeledProtectionDisable.IsNull() {
+		if value.Exists() {
+			data.SegmentRoutingMplsUnlabeledProtectionDisable = types.BoolValue(true)
+		} else {
+			data.SegmentRoutingMplsUnlabeledProtectionDisable = types.BoolValue(false)
+		}
+	} else {
+		data.SegmentRoutingMplsUnlabeledProtectionDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.prefix-sid-map.receive"); !data.SegmentRoutingMplsPrefixSidMapReceive.IsNull() {
+		if value.Exists() {
+			data.SegmentRoutingMplsPrefixSidMapReceive = types.BoolValue(true)
+		} else {
+			data.SegmentRoutingMplsPrefixSidMapReceive = types.BoolValue(false)
+		}
+	} else {
+		data.SegmentRoutingMplsPrefixSidMapReceive = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.prefix-sid-map.receive.disable"); !data.SegmentRoutingMplsPrefixSidMapReceiveDisable.IsNull() {
+		if value.Exists() {
+			data.SegmentRoutingMplsPrefixSidMapReceiveDisable = types.BoolValue(true)
+		} else {
+			data.SegmentRoutingMplsPrefixSidMapReceiveDisable = types.BoolValue(false)
+		}
+	} else {
+		data.SegmentRoutingMplsPrefixSidMapReceiveDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.prefix-sid-map.advertise-local"); !data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal.IsNull() {
+		if value.Exists() {
+			data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal = types.BoolValue(true)
+		} else {
+			data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal = types.BoolValue(false)
+		}
+	} else {
+		data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.prefix-sid-map.advertise-local.domain-wide"); !data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide.IsNull() {
+		if value.Exists() {
+			data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide = types.BoolValue(true)
+		} else {
+			data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide = types.BoolValue(false)
+		}
+	} else {
+		data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.connected-prefix-sid-map"); !data.SegmentRoutingMplsConnectedPrefixSidMap.IsNull() {
+		if value.Exists() {
+			data.SegmentRoutingMplsConnectedPrefixSidMap = types.BoolValue(true)
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMap = types.BoolValue(false)
+		}
+	} else {
+		data.SegmentRoutingMplsConnectedPrefixSidMap = types.BoolNull()
+	}
+	for i := range data.SegmentRoutingMplsConnectedPrefixSidMapAddresses {
+		keys := [...]string{"ip-address", "address-prefix"}
+		keyValues := [...]string{data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IpAddress.ValueString(), strconv.FormatInt(data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].Prefix.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "segment-routing.mpls.connected-prefix-sid-map.addresses.address").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("ip-address"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IpAddress.IsNull() {
+			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IpAddress = types.StringValue(value.String())
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IpAddress = types.StringNull()
+		}
+		if value := r.Get("address-prefix"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].Prefix.IsNull() {
+			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].Prefix = types.Int64Value(value.Int())
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].Prefix = types.Int64Null()
+		}
+		if value := r.Get("index.index-id"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexId.IsNull() {
+			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexId = types.Int64Value(value.Int())
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexId = types.Int64Null()
+		}
+		if value := r.Get("index.interface"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexInterface.IsNull() {
+			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexInterface = types.StringValue(value.String())
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexInterface = types.StringNull()
+		}
+		if value := r.Get("index.php-disable"); !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexPhpDisable.IsNull() {
 			if value.Exists() {
-				data.RedistributeIsis[i].DownFlagClear = types.BoolValue(true)
+				data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexPhpDisable = types.BoolValue(true)
 			} else {
-				data.RedistributeIsis[i].DownFlagClear = types.BoolValue(false)
+				data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexPhpDisable = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeIsis[i].DownFlagClear = types.BoolNull()
+			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexPhpDisable = types.BoolNull()
+		}
+		if value := r.Get("index.explicit-null"); !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexExplicitNull.IsNull() {
+			if value.Exists() {
+				data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexExplicitNull = types.BoolValue(true)
+			} else {
+				data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexExplicitNull = types.BoolValue(false)
+			}
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexExplicitNull = types.BoolNull()
+		}
+		if value := r.Get("absolute.absolute-id"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteId.IsNull() {
+			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteId = types.Int64Value(value.Int())
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteId = types.Int64Null()
+		}
+		if value := r.Get("absolute.interface"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteInterface.IsNull() {
+			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteInterface = types.StringValue(value.String())
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteInterface = types.StringNull()
+		}
+		if value := r.Get("absolute.php-disable"); !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsolutePhpDisable.IsNull() {
+			if value.Exists() {
+				data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsolutePhpDisable = types.BoolValue(true)
+			} else {
+				data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsolutePhpDisable = types.BoolValue(false)
+			}
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsolutePhpDisable = types.BoolNull()
+		}
+		if value := r.Get("absolute.explicit-null"); !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteExplicitNull.IsNull() {
+			if value.Exists() {
+				data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteExplicitNull = types.BoolValue(true)
+			} else {
+				data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteExplicitNull = types.BoolValue(false)
+			}
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteExplicitNull = types.BoolNull()
+		}
+	}
+	for i := range data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses {
+		keys := [...]string{"ip-address", "address-prefix", "flex-algo"}
+		keyValues := [...]string{data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IpAddress.ValueString(), strconv.FormatInt(data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].Prefix.ValueInt64(), 10), strconv.FormatInt(data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].FlexAlgo.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("ip-address"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IpAddress.IsNull() {
+			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IpAddress = types.StringValue(value.String())
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IpAddress = types.StringNull()
+		}
+		if value := r.Get("address-prefix"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].Prefix.IsNull() {
+			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].Prefix = types.Int64Value(value.Int())
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].Prefix = types.Int64Null()
+		}
+		if value := r.Get("flex-algo"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].FlexAlgo.IsNull() {
+			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].FlexAlgo = types.Int64Value(value.Int())
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].FlexAlgo = types.Int64Null()
+		}
+		if value := r.Get("index.index-id"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexId.IsNull() {
+			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexId = types.Int64Value(value.Int())
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexId = types.Int64Null()
+		}
+		if value := r.Get("index.interface"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexInterface.IsNull() {
+			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexInterface = types.StringValue(value.String())
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexInterface = types.StringNull()
+		}
+		if value := r.Get("index.php-disable"); !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexPhpDisable.IsNull() {
+			if value.Exists() {
+				data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexPhpDisable = types.BoolValue(true)
+			} else {
+				data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexPhpDisable = types.BoolValue(false)
+			}
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexPhpDisable = types.BoolNull()
+		}
+		if value := r.Get("index.explicit-null"); !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexExplicitNull.IsNull() {
+			if value.Exists() {
+				data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexExplicitNull = types.BoolValue(true)
+			} else {
+				data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexExplicitNull = types.BoolValue(false)
+			}
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexExplicitNull = types.BoolNull()
+		}
+		if value := r.Get("absolute.absolute-id"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteId.IsNull() {
+			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteId = types.Int64Value(value.Int())
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteId = types.Int64Null()
+		}
+		if value := r.Get("absolute.interface"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteInterface.IsNull() {
+			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteInterface = types.StringValue(value.String())
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteInterface = types.StringNull()
+		}
+		if value := r.Get("absolute.php-disable"); !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsolutePhpDisable.IsNull() {
+			if value.Exists() {
+				data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsolutePhpDisable = types.BoolValue(true)
+			} else {
+				data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsolutePhpDisable = types.BoolValue(false)
+			}
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsolutePhpDisable = types.BoolNull()
+		}
+		if value := r.Get("absolute.explicit-null"); !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteExplicitNull.IsNull() {
+			if value.Exists() {
+				data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteExplicitNull = types.BoolValue(true)
+			} else {
+				data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteExplicitNull = types.BoolValue(false)
+			}
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteExplicitNull = types.BoolNull()
+		}
+	}
+	for i := range data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses {
+		keys := [...]string{"ip-address", "address-prefix"}
+		keyValues := [...]string{data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IpAddress.ValueString(), strconv.FormatInt(data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].Prefix.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "segment-routing.mpls.connected-prefix-sid-map.addresses.strict-spf-address").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("ip-address"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IpAddress.IsNull() {
+			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IpAddress = types.StringValue(value.String())
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IpAddress = types.StringNull()
+		}
+		if value := r.Get("address-prefix"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].Prefix.IsNull() {
+			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].Prefix = types.Int64Value(value.Int())
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].Prefix = types.Int64Null()
+		}
+		if value := r.Get("index.index-id"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexId.IsNull() {
+			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexId = types.Int64Value(value.Int())
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexId = types.Int64Null()
+		}
+		if value := r.Get("index.interface"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexInterface.IsNull() {
+			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexInterface = types.StringValue(value.String())
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexInterface = types.StringNull()
+		}
+		if value := r.Get("index.php-disable"); !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexPhpDisable.IsNull() {
+			if value.Exists() {
+				data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexPhpDisable = types.BoolValue(true)
+			} else {
+				data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexPhpDisable = types.BoolValue(false)
+			}
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexPhpDisable = types.BoolNull()
+		}
+		if value := r.Get("index.explicit-null"); !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexExplicitNull.IsNull() {
+			if value.Exists() {
+				data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexExplicitNull = types.BoolValue(true)
+			} else {
+				data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexExplicitNull = types.BoolValue(false)
+			}
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexExplicitNull = types.BoolNull()
+		}
+		if value := r.Get("absolute.absolute-id"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteId.IsNull() {
+			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteId = types.Int64Value(value.Int())
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteId = types.Int64Null()
+		}
+		if value := r.Get("absolute.interface"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteInterface.IsNull() {
+			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteInterface = types.StringValue(value.String())
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteInterface = types.StringNull()
+		}
+		if value := r.Get("absolute.php-disable"); !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsolutePhpDisable.IsNull() {
+			if value.Exists() {
+				data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsolutePhpDisable = types.BoolValue(true)
+			} else {
+				data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsolutePhpDisable = types.BoolValue(false)
+			}
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsolutePhpDisable = types.BoolNull()
+		}
+		if value := r.Get("absolute.explicit-null"); !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteExplicitNull.IsNull() {
+			if value.Exists() {
+				data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteExplicitNull = types.BoolValue(true)
+			} else {
+				data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteExplicitNull = types.BoolValue(false)
+			}
+		} else {
+			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteExplicitNull = types.BoolNull()
 		}
 	}
 	for i := range data.SegmentRoutingSrv6Locators {
@@ -1715,6 +3197,259 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 			}
 		}
 	}
+	if value := gjson.GetBytes(res, "partition-detect"); !data.PartitionDetect.IsNull() {
+		if value.Exists() {
+			data.PartitionDetect = types.BoolValue(true)
+		} else {
+			data.PartitionDetect = types.BoolValue(false)
+		}
+	} else {
+		data.PartitionDetect = types.BoolNull()
+	}
+	for i := range data.PartitionDetectTracks {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.PartitionDetectTracks[i].Address.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "partition-detect.tracks.track").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("address"); value.Exists() && !data.PartitionDetectTracks[i].Address.IsNull() {
+			data.PartitionDetectTracks[i].Address = types.StringValue(value.String())
+		} else {
+			data.PartitionDetectTracks[i].Address = types.StringNull()
+		}
+		if value := r.Get("ipv4"); !data.PartitionDetectTracks[i].Ipv4.IsNull() {
+			if value.Exists() {
+				data.PartitionDetectTracks[i].Ipv4 = types.BoolValue(true)
+			} else {
+				data.PartitionDetectTracks[i].Ipv4 = types.BoolValue(false)
+			}
+		} else {
+			data.PartitionDetectTracks[i].Ipv4 = types.BoolNull()
+		}
+		if value := r.Get("ipv6"); !data.PartitionDetectTracks[i].Ipv6.IsNull() {
+			if value.Exists() {
+				data.PartitionDetectTracks[i].Ipv6 = types.BoolValue(true)
+			} else {
+				data.PartitionDetectTracks[i].Ipv6 = types.BoolValue(false)
+			}
+		} else {
+			data.PartitionDetectTracks[i].Ipv6 = types.BoolNull()
+		}
+	}
+	for i := range data.PartitionDetectExternalAddressTracks {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.PartitionDetectExternalAddressTracks[i].Address.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "partition-detect.external-address-tracks.external-address-track").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("address"); value.Exists() && !data.PartitionDetectExternalAddressTracks[i].Address.IsNull() {
+			data.PartitionDetectExternalAddressTracks[i].Address = types.StringValue(value.String())
+		} else {
+			data.PartitionDetectExternalAddressTracks[i].Address = types.StringNull()
+		}
+		if value := r.Get("external-address"); value.Exists() && !data.PartitionDetectExternalAddressTracks[i].ExternalAddress.IsNull() {
+			data.PartitionDetectExternalAddressTracks[i].ExternalAddress = types.StringValue(value.String())
+		} else {
+			data.PartitionDetectExternalAddressTracks[i].ExternalAddress = types.StringNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "mpls.ldp.auto-config"); !data.MplsLdpAutoConfig.IsNull() {
+		if value.Exists() {
+			data.MplsLdpAutoConfig = types.BoolValue(true)
+		} else {
+			data.MplsLdpAutoConfig = types.BoolValue(false)
+		}
+	} else {
+		data.MplsLdpAutoConfig = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.router-id.ipv4-address"); value.Exists() && !data.MplsTrafficEngRouterIdIpv4Address.IsNull() {
+		data.MplsTrafficEngRouterIdIpv4Address = types.StringValue(value.String())
+	} else {
+		data.MplsTrafficEngRouterIdIpv4Address = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.router-id.interface-name"); value.Exists() && !data.MplsTrafficEngRouterIdInterfaceName.IsNull() {
+		data.MplsTrafficEngRouterIdInterfaceName = types.StringValue(value.String())
+	} else {
+		data.MplsTrafficEngRouterIdInterfaceName = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.igp-intact"); !data.MplsTrafficEngIgpIntact.IsNull() {
+		if value.Exists() {
+			data.MplsTrafficEngIgpIntact = types.BoolValue(true)
+		} else {
+			data.MplsTrafficEngIgpIntact = types.BoolValue(false)
+		}
+	} else {
+		data.MplsTrafficEngIgpIntact = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.multicast-intact"); !data.MplsTrafficEngMulticastIntact.IsNull() {
+		if value.Exists() {
+			data.MplsTrafficEngMulticastIntact = types.BoolValue(true)
+		} else {
+			data.MplsTrafficEngMulticastIntact = types.BoolValue(false)
+		}
+	} else {
+		data.MplsTrafficEngMulticastIntact = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.tunnel.restricted"); !data.MplsTrafficEngTunnelRestricted.IsNull() {
+		if value.Exists() {
+			data.MplsTrafficEngTunnelRestricted = types.BoolValue(true)
+		} else {
+			data.MplsTrafficEngTunnelRestricted = types.BoolValue(false)
+		}
+	} else {
+		data.MplsTrafficEngTunnelRestricted = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.tunnel.preferred"); !data.MplsTrafficEngTunnelPreferred.IsNull() {
+		if value.Exists() {
+			data.MplsTrafficEngTunnelPreferred = types.BoolValue(true)
+		} else {
+			data.MplsTrafficEngTunnelPreferred = types.BoolValue(false)
+		}
+	} else {
+		data.MplsTrafficEngTunnelPreferred = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.tunnel.metric"); value.Exists() && !data.MplsTrafficEngTunnelMetric.IsNull() {
+		data.MplsTrafficEngTunnelMetric = types.Int64Value(value.Int())
+	} else {
+		data.MplsTrafficEngTunnelMetric = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.tunnel.anycast-prefer-igp-cost"); !data.MplsTrafficEngTunnelAnycastPreferIgpCost.IsNull() {
+		if value.Exists() {
+			data.MplsTrafficEngTunnelAnycastPreferIgpCost = types.BoolValue(true)
+		} else {
+			data.MplsTrafficEngTunnelAnycastPreferIgpCost = types.BoolValue(false)
+		}
+	} else {
+		data.MplsTrafficEngTunnelAnycastPreferIgpCost = types.BoolNull()
+	}
+	for i := range data.MplsTrafficEngTunnelMetricLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.MplsTrafficEngTunnelMetricLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "mpls.traffic-eng.tunnel.metric-levels.metric-level").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("level-number"); value.Exists() && !data.MplsTrafficEngTunnelMetricLevels[i].LevelNumber.IsNull() {
+			data.MplsTrafficEngTunnelMetricLevels[i].LevelNumber = types.Int64Value(value.Int())
+		} else {
+			data.MplsTrafficEngTunnelMetricLevels[i].LevelNumber = types.Int64Null()
+		}
+		if value := r.Get("metric"); value.Exists() && !data.MplsTrafficEngTunnelMetricLevels[i].Metric.IsNull() {
+			data.MplsTrafficEngTunnelMetricLevels[i].Metric = types.Int64Value(value.Int())
+		} else {
+			data.MplsTrafficEngTunnelMetricLevels[i].Metric = types.Int64Null()
+		}
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.traffic-eng-level.level-one-two"); !data.MplsTrafficEngLevel12.IsNull() {
+		if value.Exists() {
+			data.MplsTrafficEngLevel12 = types.BoolValue(true)
+		} else {
+			data.MplsTrafficEngLevel12 = types.BoolValue(false)
+		}
+	} else {
+		data.MplsTrafficEngLevel12 = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.traffic-eng-level.level-one"); !data.MplsTrafficEngLevel1.IsNull() {
+		if value.Exists() {
+			data.MplsTrafficEngLevel1 = types.BoolValue(true)
+		} else {
+			data.MplsTrafficEngLevel1 = types.BoolValue(false)
+		}
+	} else {
+		data.MplsTrafficEngLevel1 = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.traffic-eng-level.level-two-only"); !data.MplsTrafficEngLevel2Only.IsNull() {
+		if value.Exists() {
+			data.MplsTrafficEngLevel2Only = types.BoolValue(true)
+		} else {
+			data.MplsTrafficEngLevel2Only = types.BoolValue(false)
+		}
+	} else {
+		data.MplsTrafficEngLevel2Only = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "prefix-unreachable"); !data.PrefixUnreachable.IsNull() {
+		if value.Exists() {
+			data.PrefixUnreachable = types.BoolValue(true)
+		} else {
+			data.PrefixUnreachable = types.BoolValue(false)
+		}
+	} else {
+		data.PrefixUnreachable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "prefix-unreachable.adv-maximum"); value.Exists() && !data.PrefixUnreachableAdvMaximum.IsNull() {
+		data.PrefixUnreachableAdvMaximum = types.Int64Value(value.Int())
+	} else {
+		data.PrefixUnreachableAdvMaximum = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "prefix-unreachable.adv-lifetime"); value.Exists() && !data.PrefixUnreachableAdvLifetime.IsNull() {
+		data.PrefixUnreachableAdvLifetime = types.Int64Value(value.Int())
+	} else {
+		data.PrefixUnreachableAdvLifetime = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "prefix-unreachable.adv-metric"); value.Exists() && !data.PrefixUnreachableAdvMetric.IsNull() {
+		data.PrefixUnreachableAdvMetric = types.Int64Value(value.Int())
+	} else {
+		data.PrefixUnreachableAdvMetric = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "prefix-unreachable.rx-process-enable"); !data.PrefixUnreachableRxProcessEnable.IsNull() {
+		if value.Exists() {
+			data.PrefixUnreachableRxProcessEnable = types.BoolValue(true)
+		} else {
+			data.PrefixUnreachableRxProcessEnable = types.BoolValue(false)
+		}
+	} else {
+		data.PrefixUnreachableRxProcessEnable = types.BoolNull()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -1722,6 +3457,251 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "distance.global"); value.Exists() {
+		data.Distance = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "distance.ip-addresses.ip-address"); value.Exists() {
+		data.DistanceSources = make([]RouterISISAddressFamilyDistanceSources, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyDistanceSources{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("address-prefix"); cValue.Exists() {
+				item.Prefix = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("distance-number"); cValue.Exists() {
+				item.Distance = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("prefix-list-or-access-list-to"); cValue.Exists() {
+				item.RouteFilter = types.StringValue(cValue.String())
+			}
+			data.DistanceSources = append(data.DistanceSources, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "distribute-list.prefix-list.prefix-list-string"); value.Exists() {
+		data.DistributeListPrefixListIn = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "distribute-list.route-policy"); value.Exists() {
+		data.DistributeListRoutePolicyIn = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "redistribute.connected"); value.Exists() {
+		data.RedistributeConnected = types.BoolValue(true)
+	} else {
+		data.RedistributeConnected = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "redistribute.connected.redistribute-route-level"); value.Exists() {
+		data.RedistributeConnectedLevel = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "redistribute.connected.metric"); value.Exists() {
+		data.RedistributeConnectedMetric = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "redistribute.connected.route-policy"); value.Exists() {
+		data.RedistributeConnectedRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "redistribute.connected.metric-type"); value.Exists() {
+		data.RedistributeConnectedMetricType = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "redistribute.static"); value.Exists() {
+		data.RedistributeStatic = types.BoolValue(true)
+	} else {
+		data.RedistributeStatic = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "redistribute.static.redistribute-route-level"); value.Exists() {
+		data.RedistributeStaticLevel = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "redistribute.static.metric"); value.Exists() {
+		data.RedistributeStaticMetric = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "redistribute.static.route-policy"); value.Exists() {
+		data.RedistributeStaticRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "redistribute.static.metric-type"); value.Exists() {
+		data.RedistributeStaticMetricType = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "redistribute.isis-processes.isis-process"); value.Exists() {
+		data.RedistributeIsis = make([]RouterISISAddressFamilyRedistributeIsis, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyRedistributeIsis{}
+			if cValue := v.Get("isis-string"); cValue.Exists() {
+				item.InstanceId = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("redistribute-route-level"); cValue.Exists() {
+				item.Level = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("metric"); cValue.Exists() {
+				item.Metric = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("route-policy"); cValue.Exists() {
+				item.RoutePolicy = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("metric-type"); cValue.Exists() {
+				item.MetricType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("down-flag-clear"); cValue.Exists() {
+				item.DownFlagClear = types.BoolValue(true)
+			} else {
+				item.DownFlagClear = types.BoolValue(false)
+			}
+			data.RedistributeIsis = append(data.RedistributeIsis, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "redistribute.bgps.bgp"); value.Exists() {
+		data.RedistributeBgp = make([]RouterISISAddressFamilyRedistributeBgp, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyRedistributeBgp{}
+			if cValue := v.Get("as-number"); cValue.Exists() {
+				item.AsNumber = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("redistribute-route-level"); cValue.Exists() {
+				item.Level = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("metric"); cValue.Exists() {
+				item.Metric = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("route-policy"); cValue.Exists() {
+				item.RoutePolicy = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("metric-type"); cValue.Exists() {
+				item.MetricType = types.StringValue(cValue.String())
+			}
+			data.RedistributeBgp = append(data.RedistributeBgp, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "redistribute.ospfs.ospf"); value.Exists() {
+		data.RedistributeOspf = make([]RouterISISAddressFamilyRedistributeOspf, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyRedistributeOspf{}
+			if cValue := v.Get("ospf-process-id"); cValue.Exists() {
+				item.InstanceId = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("match.internal"); cValue.Exists() {
+				item.MatchInternal = types.BoolValue(true)
+			} else {
+				item.MatchInternal = types.BoolValue(false)
+			}
+			if cValue := v.Get("match.external"); cValue.Exists() {
+				item.MatchExternal = types.BoolValue(true)
+			} else {
+				item.MatchExternal = types.BoolValue(false)
+			}
+			if cValue := v.Get("redistribute-route-level"); cValue.Exists() {
+				item.Level = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("metric"); cValue.Exists() {
+				item.Metric = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("route-policy"); cValue.Exists() {
+				item.RoutePolicy = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("metric-type"); cValue.Exists() {
+				item.MetricType = types.StringValue(cValue.String())
+			}
+			data.RedistributeOspf = append(data.RedistributeOspf, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "maximum-paths"); value.Exists() {
+		data.MaximumPaths = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "router-id.interface-name"); value.Exists() {
+		data.RouterIdInterfaceName = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "router-id.ip-address"); value.Exists() {
+		data.RouterIdIpAddress = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "advertise.passive-only"); value.Exists() {
+		data.AdvertisePassiveOnly = types.BoolValue(true)
+	} else {
+		data.AdvertisePassiveOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "advertise.link.attributes"); value.Exists() {
+		data.AdvertiseLinkAttributes = types.BoolValue(true)
+	} else {
+		data.AdvertiseLinkAttributes = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "microloop.avoidance.enable"); value.Exists() {
+		data.MicroloopAvoidance = types.BoolValue(true)
+	} else {
+		data.MicroloopAvoidance = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "microloop.avoidance.enable.protected"); value.Exists() {
+		data.MicroloopAvoidanceProtected = types.BoolValue(true)
+	} else {
+		data.MicroloopAvoidanceProtected = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "microloop.avoidance.enable.segment-routing.route-policy"); value.Exists() {
+		data.MicroloopAvoidanceSegmentRoutingRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "microloop.avoidance.rib-update-delay"); value.Exists() {
+		data.MicroloopAvoidanceRibUpdateDelay = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "summary-prefix.ip-addresses.ip-address"); value.Exists() {
+		data.SummaryPrefixes = make([]RouterISISAddressFamilySummaryPrefixes, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilySummaryPrefixes{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("address-prefix"); cValue.Exists() {
+				item.Prefix = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("tag"); cValue.Exists() {
+				item.Tag = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("level"); cValue.Exists() {
+				item.Level = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("algorithm"); cValue.Exists() {
+				item.Algorithm = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("explicit"); cValue.Exists() {
+				item.Explicit = types.BoolValue(true)
+			} else {
+				item.Explicit = types.BoolValue(false)
+			}
+			if cValue := v.Get("adv-unreachable"); cValue.Exists() {
+				item.AdvUnreachable = types.BoolValue(true)
+			} else {
+				item.AdvUnreachable = types.BoolValue(false)
+			}
+			if cValue := v.Get("adv-unreachable.unreachable-component-tag.unreachable-component-tag-number"); cValue.Exists() {
+				item.UnreachableTag = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("adv-unreachable.unreachable-component-tag.exclude"); cValue.Exists() {
+				item.UnreachableTagExcludePrefixes = types.BoolValue(true)
+			} else {
+				item.UnreachableTagExcludePrefixes = types.BoolValue(false)
+			}
+			if cValue := v.Get("partition-repair"); cValue.Exists() {
+				item.PartitionRepair = types.BoolValue(true)
+			} else {
+				item.PartitionRepair = types.BoolValue(false)
+			}
+			data.SummaryPrefixes = append(data.SummaryPrefixes, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "metric"); value.Exists() {
+		data.Metric = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "metric-levels.metric-level"); value.Exists() {
+		data.MetricLevels = make([]RouterISISAddressFamilyMetricLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyMetricLevels{}
+			if cValue := v.Get("level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("metric"); cValue.Exists() {
+				item.Metric = types.Int64Value(cValue.Int())
+			}
+			data.MetricLevels = append(data.MetricLevels, item)
+			return true
+		})
+	}
 	if value := gjson.GetBytes(res, "metric-style.narrow"); value.Exists() {
 		data.MetricStyleNarrow = types.BoolValue(true)
 	} else {
@@ -1782,186 +3762,6 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
 			data.MetricStyleLevels = append(data.MetricStyleLevels, item)
 			return true
 		})
-	}
-	if value := gjson.GetBytes(res, "router-id.interface-name"); value.Exists() {
-		data.RouterIdInterfaceName = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "router-id.ip-address"); value.Exists() {
-		data.RouterIdIpAddress = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
-		data.DefaultInformationOriginate = types.BoolValue(true)
-	} else {
-		data.DefaultInformationOriginate = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.delay-interval"); value.Exists() {
-		data.FastRerouteDelayInterval = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.priority-limit"); value.Exists() {
-		data.FastReroutePerPrefixPriorityLimit = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.priority-limit-levels.priority-limit-level"); value.Exists() {
-		data.FastReroutePerPrefixPriorityLimitLevels = make([]RouterISISAddressFamilyFastReroutePerPrefixPriorityLimitLevels, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterISISAddressFamilyFastReroutePerPrefixPriorityLimitLevels{}
-			if cValue := v.Get("level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("priority-limit"); cValue.Exists() {
-				item.PriorityLimit = types.StringValue(cValue.String())
-			}
-			data.FastReroutePerPrefixPriorityLimitLevels = append(data.FastReroutePerPrefixPriorityLimitLevels, item)
-			return true
-		})
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.use-candidate-only"); value.Exists() {
-		data.FastReroutePerPrefixUseCandidateOnly = types.BoolValue(true)
-	} else {
-		data.FastReroutePerPrefixUseCandidateOnly = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.srlg-protection.weighted-global"); value.Exists() {
-		data.FastReroutePerPrefixSrlgProtectionWeightedGlobal = types.BoolValue(true)
-	} else {
-		data.FastReroutePerPrefixSrlgProtectionWeightedGlobal = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.srlg-protection.weighted-global-levels.weighted-global-level"); value.Exists() {
-		data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels = make([]RouterISISAddressFamilyFastReroutePerPrefixSrlgProtectionWeightedGlobalLevels, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterISISAddressFamilyFastReroutePerPrefixSrlgProtectionWeightedGlobalLevels{}
-			if cValue := v.Get("level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels = append(data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels, item)
-			return true
-		})
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.remote-lfa.prefix-list"); value.Exists() {
-		data.FastReroutePerPrefixRemoteLfaPrefixList = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.remote-lfa.prefix-list-levels.prefix-list-level"); value.Exists() {
-		data.FastReroutePerPrefixRemoteLfaPrefixListLevels = make([]RouterISISAddressFamilyFastReroutePerPrefixRemoteLfaPrefixListLevels, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterISISAddressFamilyFastReroutePerPrefixRemoteLfaPrefixListLevels{}
-			if cValue := v.Get("level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("prefix-list"); cValue.Exists() {
-				item.PrefixList = types.StringValue(cValue.String())
-			}
-			data.FastReroutePerPrefixRemoteLfaPrefixListLevels = append(data.FastReroutePerPrefixRemoteLfaPrefixListLevels, item)
-			return true
-		})
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.load-sharing.disable"); value.Exists() {
-		data.FastReroutePerPrefixLoadSharingDisable = types.BoolValue(true)
-	} else {
-		data.FastReroutePerPrefixLoadSharingDisable = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.load-sharing.disable-levels.disable-level"); value.Exists() {
-		data.FastReroutePerPrefixLoadSharingDisableLevels = make([]RouterISISAddressFamilyFastReroutePerPrefixLoadSharingDisableLevels, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterISISAddressFamilyFastReroutePerPrefixLoadSharingDisableLevels{}
-			if cValue := v.Get("level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			data.FastReroutePerPrefixLoadSharingDisableLevels = append(data.FastReroutePerPrefixLoadSharingDisableLevels, item)
-			return true
-		})
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.downstream.index"); value.Exists() {
-		data.FastReroutePerPrefixTiebreakerDownstreamIndex = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.lc-disjoint.index"); value.Exists() {
-		data.FastReroutePerPrefixTiebreakerLcDisjointIndex = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.lowest-backup-metric.index"); value.Exists() {
-		data.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.node-protecting.index"); value.Exists() {
-		data.FastReroutePerPrefixTiebreakerNodeProtectingIndex = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.primary-path.index"); value.Exists() {
-		data.FastReroutePerPrefixTiebreakerPrimaryPathIndex = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.secondary-path.index"); value.Exists() {
-		data.FastReroutePerPrefixTiebreakerSecondaryPathIndex = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.srlg-disjoint.index"); value.Exists() {
-		data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-link.priority-limit"); value.Exists() {
-		data.FastReroutePerLinkPriorityLimit = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-link.priority-limit-levels.priority-limit-level"); value.Exists() {
-		data.FastReroutePerLinkPriorityLimitLevels = make([]RouterISISAddressFamilyFastReroutePerLinkPriorityLimitLevels, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterISISAddressFamilyFastReroutePerLinkPriorityLimitLevels{}
-			if cValue := v.Get("level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("priority-limit"); cValue.Exists() {
-				item.PriorityLimit = types.StringValue(cValue.String())
-			}
-			data.FastReroutePerLinkPriorityLimitLevels = append(data.FastReroutePerLinkPriorityLimitLevels, item)
-			return true
-		})
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-link.use-candidate-only"); value.Exists() {
-		data.FastReroutePerLinkUseCandidateOnly = types.BoolValue(true)
-	} else {
-		data.FastReroutePerLinkUseCandidateOnly = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "microloop.avoidance.enable"); value.Exists() {
-		data.MicroloopAvoidance = types.BoolValue(true)
-	} else {
-		data.MicroloopAvoidance = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "microloop.avoidance.enable.protected"); value.Exists() {
-		data.MicroloopAvoidanceProtected = types.BoolValue(true)
-	} else {
-		data.MicroloopAvoidanceProtected = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "microloop.avoidance.enable.segment-routing.route-policy"); value.Exists() {
-		data.MicroloopAvoidanceSegmentRoutingRoutePolicy = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "microloop.avoidance.rib-update-delay"); value.Exists() {
-		data.MicroloopAvoidanceRibUpdateDelay = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "advertise.passive-only"); value.Exists() {
-		data.AdvertisePassiveOnly = types.BoolValue(true)
-	} else {
-		data.AdvertisePassiveOnly = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "advertise.link.attributes"); value.Exists() {
-		data.AdvertiseLinkAttributes = types.BoolValue(true)
-	} else {
-		data.AdvertiseLinkAttributes = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "mpls.ldp.auto-config"); value.Exists() {
-		data.MplsLdpAutoConfig = types.BoolValue(true)
-	} else {
-		data.MplsLdpAutoConfig = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "mpls.traffic-eng.router-id.ipv4-address"); value.Exists() {
-		data.MplsTrafficEngRouterIdIpv4Address = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "mpls.traffic-eng.router-id.interface-name"); value.Exists() {
-		data.MplsTrafficEngRouterIdInterfaceName = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "mpls.traffic-eng.traffic-eng-level.level-one-two"); value.Exists() {
-		data.MplsTrafficEngLevel12 = types.BoolValue(true)
-	} else {
-		data.MplsTrafficEngLevel12 = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "mpls.traffic-eng.traffic-eng-level.level-one"); value.Exists() {
-		data.MplsTrafficEngLevel1 = types.BoolValue(true)
-	} else {
-		data.MplsTrafficEngLevel1 = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "mpls.traffic-eng.traffic-eng-level.level-two-only"); value.Exists() {
-		data.MplsTrafficEngLevel2Only = types.BoolValue(true)
-	} else {
-		data.MplsTrafficEngLevel2Only = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "spf-interval.maximum-wait"); value.Exists() {
 		data.SpfIntervalMaximumWait = types.Int64Value(value.Int())
@@ -2077,7 +3877,7 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("tag"); cValue.Exists() {
 				item.Tag = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("prefix_list_name"); cValue.Exists() {
+			if cValue := v.Get("prefixlist-name"); cValue.Exists() {
 				item.PrefixListName = types.StringValue(cValue.String())
 			}
 			data.SpfPrefixPriorityHighLevels = append(data.SpfPrefixPriorityHighLevels, item)
@@ -2094,22 +3894,12 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("tag"); cValue.Exists() {
 				item.Tag = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("prefix_list_name"); cValue.Exists() {
+			if cValue := v.Get("prefixlist-name"); cValue.Exists() {
 				item.PrefixListName = types.StringValue(cValue.String())
 			}
 			data.SpfPrefixPriorityMediumLevels = append(data.SpfPrefixPriorityMediumLevels, item)
 			return true
 		})
-	}
-	if value := gjson.GetBytes(res, "segment-routing.mpls.enable"); value.Exists() {
-		data.SegmentRoutingMplsEnable = types.BoolValue(true)
-	} else {
-		data.SegmentRoutingMplsEnable = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "segment-routing.mpls.sr-prefer"); value.Exists() {
-		data.SegmentRoutingMplsSrPrefer = types.BoolValue(true)
-	} else {
-		data.SegmentRoutingMplsSrPrefer = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "maximum-redistributed-prefixes"); value.Exists() {
 		data.MaximumRedistributedPrefixes = types.Int64Value(value.Int())
@@ -2128,31 +3918,374 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "redistribute.isis-processes.isis-process"); value.Exists() {
-		data.RedistributeIsis = make([]RouterISISAddressFamilyRedistributeIsis, 0)
+	if value := gjson.GetBytes(res, "propagate.levels.level"); value.Exists() {
+		data.PropagateLevels = make([]RouterISISAddressFamilyPropagateLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterISISAddressFamilyRedistributeIsis{}
-			if cValue := v.Get("isis-string"); cValue.Exists() {
-				item.InstanceId = types.StringValue(cValue.String())
+			item := RouterISISAddressFamilyPropagateLevels{}
+			if cValue := v.Get("source-level"); cValue.Exists() {
+				item.SourceLevel = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("redistribute-route-level"); cValue.Exists() {
-				item.Level = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("metric"); cValue.Exists() {
-				item.Metric = types.Int64Value(cValue.Int())
+			if cValue := v.Get("destination-level"); cValue.Exists() {
+				item.DestinationLevel = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("route-policy"); cValue.Exists() {
 				item.RoutePolicy = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("metric-type"); cValue.Exists() {
-				item.MetricType = types.StringValue(cValue.String())
+			data.PropagateLevels = append(data.PropagateLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "adjacency-check.disable"); value.Exists() {
+		data.AdjacencyCheckDisable = types.BoolValue(true)
+	} else {
+		data.AdjacencyCheckDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "route.source.first-hop"); value.Exists() {
+		data.RouteSourceFirstHop = types.BoolValue(true)
+	} else {
+		data.RouteSourceFirstHop = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "attached-bit.receive.ignore"); value.Exists() {
+		data.AttachedBitReceiveIgnore = types.BoolValue(true)
+	} else {
+		data.AttachedBitReceiveIgnore = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "attached-bit.send"); value.Exists() {
+		data.AttachedBitSend = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.delay-interval"); value.Exists() {
+		data.FastRerouteDelayInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.priority-limit"); value.Exists() {
+		data.FastReroutePerPrefixPriorityLimit = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.priority-limit-levels.priority-limit-level"); value.Exists() {
+		data.FastReroutePerPrefixPriorityLimitLevels = make([]RouterISISAddressFamilyFastReroutePerPrefixPriorityLimitLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyFastReroutePerPrefixPriorityLimitLevels{}
+			if cValue := v.Get("level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("down-flag-clear"); cValue.Exists() {
-				item.DownFlagClear = types.BoolValue(true)
+			if cValue := v.Get("priority-limit"); cValue.Exists() {
+				item.PriorityLimit = types.StringValue(cValue.String())
+			}
+			data.FastReroutePerPrefixPriorityLimitLevels = append(data.FastReroutePerPrefixPriorityLimitLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.use-candidate-only"); value.Exists() {
+		data.FastReroutePerPrefixUseCandidateOnly = types.BoolValue(true)
+	} else {
+		data.FastReroutePerPrefixUseCandidateOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.srlg-protection.weighted-global"); value.Exists() {
+		data.FastReroutePerPrefixSrlgProtectionWeightedGlobal = types.BoolValue(true)
+	} else {
+		data.FastReroutePerPrefixSrlgProtectionWeightedGlobal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.srlg-protection.weighted-global-levels.weighted-global-level"); value.Exists() {
+		data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels = make([]RouterISISAddressFamilyFastReroutePerPrefixSrlgProtectionWeightedGlobalLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyFastReroutePerPrefixSrlgProtectionWeightedGlobalLevels{}
+			if cValue := v.Get("level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels = append(data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.remote-lfa.prefix-list"); value.Exists() {
+		data.FastReroutePerPrefixRemoteLfaPrefixList = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.remote-lfa.prefix-list-levels.prefix-list-level"); value.Exists() {
+		data.FastReroutePerPrefixRemoteLfaPrefixListLevels = make([]RouterISISAddressFamilyFastReroutePerPrefixRemoteLfaPrefixListLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyFastReroutePerPrefixRemoteLfaPrefixListLevels{}
+			if cValue := v.Get("level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("prefix-list"); cValue.Exists() {
+				item.PrefixList = types.StringValue(cValue.String())
+			}
+			data.FastReroutePerPrefixRemoteLfaPrefixListLevels = append(data.FastReroutePerPrefixRemoteLfaPrefixListLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.load-sharing.disable"); value.Exists() {
+		data.FastReroutePerPrefixLoadSharingDisable = types.BoolValue(true)
+	} else {
+		data.FastReroutePerPrefixLoadSharingDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.load-sharing.disable-levels.disable-level"); value.Exists() {
+		data.FastReroutePerPrefixLoadSharingDisableLevels = make([]RouterISISAddressFamilyFastReroutePerPrefixLoadSharingDisableLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyFastReroutePerPrefixLoadSharingDisableLevels{}
+			if cValue := v.Get("level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			data.FastReroutePerPrefixLoadSharingDisableLevels = append(data.FastReroutePerPrefixLoadSharingDisableLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.downstream.index"); value.Exists() {
+		data.FastReroutePerPrefixTiebreakerDownstreamIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.lc-disjoint.index"); value.Exists() {
+		data.FastReroutePerPrefixTiebreakerLcDisjointIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.lowest-backup-metric.index"); value.Exists() {
+		data.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.node-protecting.index"); value.Exists() {
+		data.FastReroutePerPrefixTiebreakerNodeProtectingIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.primary-path.index"); value.Exists() {
+		data.FastReroutePerPrefixTiebreakerPrimaryPathIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.secondary-path.index"); value.Exists() {
+		data.FastReroutePerPrefixTiebreakerSecondaryPathIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.srlg-disjoint.index"); value.Exists() {
+		data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-link.use-candidate-only"); value.Exists() {
+		data.FastReroutePerLinkUseCandidateOnly = types.BoolValue(true)
+	} else {
+		data.FastReroutePerLinkUseCandidateOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-link.use-candidate-only-levels.use-candidate-only-level"); value.Exists() {
+		data.FastReroutePerLinkUseCandidateOnlyLevels = make([]RouterISISAddressFamilyFastReroutePerLinkUseCandidateOnlyLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyFastReroutePerLinkUseCandidateOnlyLevels{}
+			if cValue := v.Get("level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			data.FastReroutePerLinkUseCandidateOnlyLevels = append(data.FastReroutePerLinkUseCandidateOnlyLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-link.priority-limit"); value.Exists() {
+		data.FastReroutePerLinkPriorityLimit = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-link.priority-limit-levels.priority-limit-level"); value.Exists() {
+		data.FastReroutePerLinkPriorityLimitLevels = make([]RouterISISAddressFamilyFastReroutePerLinkPriorityLimitLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyFastReroutePerLinkPriorityLimitLevels{}
+			if cValue := v.Get("level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("priority-limit"); cValue.Exists() {
+				item.PriorityLimit = types.StringValue(cValue.String())
+			}
+			data.FastReroutePerLinkPriorityLimitLevels = append(data.FastReroutePerLinkPriorityLimitLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
+		data.DefaultInformationOriginate = types.BoolValue(true)
+	} else {
+		data.DefaultInformationOriginate = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "default-information.originate.route-policy.text"); value.Exists() {
+		data.DefaultInformationOriginateRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "segment-routing.bundle-member-adj-sid"); value.Exists() {
+		data.SegmentRoutingBundleMemberAdjSid = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingBundleMemberAdjSid = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.labeled-only"); value.Exists() {
+		data.SegmentRoutingLabeledOnly = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingLabeledOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.protected-adjacency-sid-delay"); value.Exists() {
+		data.SegmentRoutingProtectedAdjacencySidDelay = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.enable"); value.Exists() {
+		data.SegmentRoutingMplsEnable = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingMplsEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.sr-prefer"); value.Exists() {
+		data.SegmentRoutingMplsSrPrefer = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingMplsSrPrefer = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.unlabeled.protection.prefix-list"); value.Exists() {
+		data.SegmentRoutingMplsUnlabeledProtectionPrefixList = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.unlabeled.protection.route-policy"); value.Exists() {
+		data.SegmentRoutingMplsUnlabeledProtectionRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.unlabeled.protection.disable"); value.Exists() {
+		data.SegmentRoutingMplsUnlabeledProtectionDisable = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingMplsUnlabeledProtectionDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.prefix-sid-map.receive"); value.Exists() {
+		data.SegmentRoutingMplsPrefixSidMapReceive = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingMplsPrefixSidMapReceive = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.prefix-sid-map.receive.disable"); value.Exists() {
+		data.SegmentRoutingMplsPrefixSidMapReceiveDisable = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingMplsPrefixSidMapReceiveDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.prefix-sid-map.advertise-local"); value.Exists() {
+		data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.prefix-sid-map.advertise-local.domain-wide"); value.Exists() {
+		data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.connected-prefix-sid-map"); value.Exists() {
+		data.SegmentRoutingMplsConnectedPrefixSidMap = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingMplsConnectedPrefixSidMap = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.connected-prefix-sid-map.addresses.address"); value.Exists() {
+		data.SegmentRoutingMplsConnectedPrefixSidMapAddresses = make([]RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapAddresses, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapAddresses{}
+			if cValue := v.Get("ip-address"); cValue.Exists() {
+				item.IpAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("address-prefix"); cValue.Exists() {
+				item.Prefix = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("index.index-id"); cValue.Exists() {
+				item.IndexId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("index.interface"); cValue.Exists() {
+				item.IndexInterface = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("index.php-disable"); cValue.Exists() {
+				item.IndexPhpDisable = types.BoolValue(true)
 			} else {
-				item.DownFlagClear = types.BoolValue(false)
+				item.IndexPhpDisable = types.BoolValue(false)
 			}
-			data.RedistributeIsis = append(data.RedistributeIsis, item)
+			if cValue := v.Get("index.explicit-null"); cValue.Exists() {
+				item.IndexExplicitNull = types.BoolValue(true)
+			} else {
+				item.IndexExplicitNull = types.BoolValue(false)
+			}
+			if cValue := v.Get("absolute.absolute-id"); cValue.Exists() {
+				item.AbsoluteId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("absolute.interface"); cValue.Exists() {
+				item.AbsoluteInterface = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("absolute.php-disable"); cValue.Exists() {
+				item.AbsolutePhpDisable = types.BoolValue(true)
+			} else {
+				item.AbsolutePhpDisable = types.BoolValue(false)
+			}
+			if cValue := v.Get("absolute.explicit-null"); cValue.Exists() {
+				item.AbsoluteExplicitNull = types.BoolValue(true)
+			} else {
+				item.AbsoluteExplicitNull = types.BoolValue(false)
+			}
+			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses = append(data.SegmentRoutingMplsConnectedPrefixSidMapAddresses, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address"); value.Exists() {
+		data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses = make([]RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses{}
+			if cValue := v.Get("ip-address"); cValue.Exists() {
+				item.IpAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("address-prefix"); cValue.Exists() {
+				item.Prefix = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("flex-algo"); cValue.Exists() {
+				item.FlexAlgo = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("index.index-id"); cValue.Exists() {
+				item.IndexId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("index.interface"); cValue.Exists() {
+				item.IndexInterface = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("index.php-disable"); cValue.Exists() {
+				item.IndexPhpDisable = types.BoolValue(true)
+			} else {
+				item.IndexPhpDisable = types.BoolValue(false)
+			}
+			if cValue := v.Get("index.explicit-null"); cValue.Exists() {
+				item.IndexExplicitNull = types.BoolValue(true)
+			} else {
+				item.IndexExplicitNull = types.BoolValue(false)
+			}
+			if cValue := v.Get("absolute.absolute-id"); cValue.Exists() {
+				item.AbsoluteId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("absolute.interface"); cValue.Exists() {
+				item.AbsoluteInterface = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("absolute.php-disable"); cValue.Exists() {
+				item.AbsolutePhpDisable = types.BoolValue(true)
+			} else {
+				item.AbsolutePhpDisable = types.BoolValue(false)
+			}
+			if cValue := v.Get("absolute.explicit-null"); cValue.Exists() {
+				item.AbsoluteExplicitNull = types.BoolValue(true)
+			} else {
+				item.AbsoluteExplicitNull = types.BoolValue(false)
+			}
+			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses = append(data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.connected-prefix-sid-map.addresses.strict-spf-address"); value.Exists() {
+		data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses = make([]RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses{}
+			if cValue := v.Get("ip-address"); cValue.Exists() {
+				item.IpAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("address-prefix"); cValue.Exists() {
+				item.Prefix = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("index.index-id"); cValue.Exists() {
+				item.IndexId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("index.interface"); cValue.Exists() {
+				item.IndexInterface = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("index.php-disable"); cValue.Exists() {
+				item.IndexPhpDisable = types.BoolValue(true)
+			} else {
+				item.IndexPhpDisable = types.BoolValue(false)
+			}
+			if cValue := v.Get("index.explicit-null"); cValue.Exists() {
+				item.IndexExplicitNull = types.BoolValue(true)
+			} else {
+				item.IndexExplicitNull = types.BoolValue(false)
+			}
+			if cValue := v.Get("absolute.absolute-id"); cValue.Exists() {
+				item.AbsoluteId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("absolute.interface"); cValue.Exists() {
+				item.AbsoluteInterface = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("absolute.php-disable"); cValue.Exists() {
+				item.AbsolutePhpDisable = types.BoolValue(true)
+			} else {
+				item.AbsolutePhpDisable = types.BoolValue(false)
+			}
+			if cValue := v.Get("absolute.explicit-null"); cValue.Exists() {
+				item.AbsoluteExplicitNull = types.BoolValue(true)
+			} else {
+				item.AbsoluteExplicitNull = types.BoolValue(false)
+			}
+			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses = append(data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses, item)
 			return true
 		})
 	}
@@ -2203,6 +4336,133 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
 			data.SegmentRoutingSrv6Locators = append(data.SegmentRoutingSrv6Locators, item)
 			return true
 		})
+	}
+	if value := gjson.GetBytes(res, "partition-detect"); value.Exists() {
+		data.PartitionDetect = types.BoolValue(true)
+	} else {
+		data.PartitionDetect = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "partition-detect.tracks.track"); value.Exists() {
+		data.PartitionDetectTracks = make([]RouterISISAddressFamilyPartitionDetectTracks, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyPartitionDetectTracks{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4"); cValue.Exists() {
+				item.Ipv4 = types.BoolValue(true)
+			} else {
+				item.Ipv4 = types.BoolValue(false)
+			}
+			if cValue := v.Get("ipv6"); cValue.Exists() {
+				item.Ipv6 = types.BoolValue(true)
+			} else {
+				item.Ipv6 = types.BoolValue(false)
+			}
+			data.PartitionDetectTracks = append(data.PartitionDetectTracks, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "partition-detect.external-address-tracks.external-address-track"); value.Exists() {
+		data.PartitionDetectExternalAddressTracks = make([]RouterISISAddressFamilyPartitionDetectExternalAddressTracks, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyPartitionDetectExternalAddressTracks{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("external-address"); cValue.Exists() {
+				item.ExternalAddress = types.StringValue(cValue.String())
+			}
+			data.PartitionDetectExternalAddressTracks = append(data.PartitionDetectExternalAddressTracks, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "mpls.ldp.auto-config"); value.Exists() {
+		data.MplsLdpAutoConfig = types.BoolValue(true)
+	} else {
+		data.MplsLdpAutoConfig = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.router-id.ipv4-address"); value.Exists() {
+		data.MplsTrafficEngRouterIdIpv4Address = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.router-id.interface-name"); value.Exists() {
+		data.MplsTrafficEngRouterIdInterfaceName = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.igp-intact"); value.Exists() {
+		data.MplsTrafficEngIgpIntact = types.BoolValue(true)
+	} else {
+		data.MplsTrafficEngIgpIntact = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.multicast-intact"); value.Exists() {
+		data.MplsTrafficEngMulticastIntact = types.BoolValue(true)
+	} else {
+		data.MplsTrafficEngMulticastIntact = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.tunnel.restricted"); value.Exists() {
+		data.MplsTrafficEngTunnelRestricted = types.BoolValue(true)
+	} else {
+		data.MplsTrafficEngTunnelRestricted = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.tunnel.preferred"); value.Exists() {
+		data.MplsTrafficEngTunnelPreferred = types.BoolValue(true)
+	} else {
+		data.MplsTrafficEngTunnelPreferred = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.tunnel.metric"); value.Exists() {
+		data.MplsTrafficEngTunnelMetric = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.tunnel.anycast-prefer-igp-cost"); value.Exists() {
+		data.MplsTrafficEngTunnelAnycastPreferIgpCost = types.BoolValue(true)
+	} else {
+		data.MplsTrafficEngTunnelAnycastPreferIgpCost = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.tunnel.metric-levels.metric-level"); value.Exists() {
+		data.MplsTrafficEngTunnelMetricLevels = make([]RouterISISAddressFamilyMplsTrafficEngTunnelMetricLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyMplsTrafficEngTunnelMetricLevels{}
+			if cValue := v.Get("level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("metric"); cValue.Exists() {
+				item.Metric = types.Int64Value(cValue.Int())
+			}
+			data.MplsTrafficEngTunnelMetricLevels = append(data.MplsTrafficEngTunnelMetricLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.traffic-eng-level.level-one-two"); value.Exists() {
+		data.MplsTrafficEngLevel12 = types.BoolValue(true)
+	} else {
+		data.MplsTrafficEngLevel12 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.traffic-eng-level.level-one"); value.Exists() {
+		data.MplsTrafficEngLevel1 = types.BoolValue(true)
+	} else {
+		data.MplsTrafficEngLevel1 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.traffic-eng-level.level-two-only"); value.Exists() {
+		data.MplsTrafficEngLevel2Only = types.BoolValue(true)
+	} else {
+		data.MplsTrafficEngLevel2Only = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "prefix-unreachable"); value.Exists() {
+		data.PrefixUnreachable = types.BoolValue(true)
+	} else {
+		data.PrefixUnreachable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "prefix-unreachable.adv-maximum"); value.Exists() {
+		data.PrefixUnreachableAdvMaximum = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "prefix-unreachable.adv-lifetime"); value.Exists() {
+		data.PrefixUnreachableAdvLifetime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "prefix-unreachable.adv-metric"); value.Exists() {
+		data.PrefixUnreachableAdvMetric = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "prefix-unreachable.rx-process-enable"); value.Exists() {
+		data.PrefixUnreachableRxProcessEnable = types.BoolValue(true)
+	} else {
+		data.PrefixUnreachableRxProcessEnable = types.BoolValue(false)
 	}
 }
 
@@ -2211,6 +4471,251 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "distance.global"); value.Exists() {
+		data.Distance = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "distance.ip-addresses.ip-address"); value.Exists() {
+		data.DistanceSources = make([]RouterISISAddressFamilyDistanceSources, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyDistanceSources{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("address-prefix"); cValue.Exists() {
+				item.Prefix = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("distance-number"); cValue.Exists() {
+				item.Distance = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("prefix-list-or-access-list-to"); cValue.Exists() {
+				item.RouteFilter = types.StringValue(cValue.String())
+			}
+			data.DistanceSources = append(data.DistanceSources, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "distribute-list.prefix-list.prefix-list-string"); value.Exists() {
+		data.DistributeListPrefixListIn = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "distribute-list.route-policy"); value.Exists() {
+		data.DistributeListRoutePolicyIn = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "redistribute.connected"); value.Exists() {
+		data.RedistributeConnected = types.BoolValue(true)
+	} else {
+		data.RedistributeConnected = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "redistribute.connected.redistribute-route-level"); value.Exists() {
+		data.RedistributeConnectedLevel = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "redistribute.connected.metric"); value.Exists() {
+		data.RedistributeConnectedMetric = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "redistribute.connected.route-policy"); value.Exists() {
+		data.RedistributeConnectedRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "redistribute.connected.metric-type"); value.Exists() {
+		data.RedistributeConnectedMetricType = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "redistribute.static"); value.Exists() {
+		data.RedistributeStatic = types.BoolValue(true)
+	} else {
+		data.RedistributeStatic = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "redistribute.static.redistribute-route-level"); value.Exists() {
+		data.RedistributeStaticLevel = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "redistribute.static.metric"); value.Exists() {
+		data.RedistributeStaticMetric = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "redistribute.static.route-policy"); value.Exists() {
+		data.RedistributeStaticRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "redistribute.static.metric-type"); value.Exists() {
+		data.RedistributeStaticMetricType = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "redistribute.isis-processes.isis-process"); value.Exists() {
+		data.RedistributeIsis = make([]RouterISISAddressFamilyRedistributeIsis, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyRedistributeIsis{}
+			if cValue := v.Get("isis-string"); cValue.Exists() {
+				item.InstanceId = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("redistribute-route-level"); cValue.Exists() {
+				item.Level = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("metric"); cValue.Exists() {
+				item.Metric = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("route-policy"); cValue.Exists() {
+				item.RoutePolicy = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("metric-type"); cValue.Exists() {
+				item.MetricType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("down-flag-clear"); cValue.Exists() {
+				item.DownFlagClear = types.BoolValue(true)
+			} else {
+				item.DownFlagClear = types.BoolValue(false)
+			}
+			data.RedistributeIsis = append(data.RedistributeIsis, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "redistribute.bgps.bgp"); value.Exists() {
+		data.RedistributeBgp = make([]RouterISISAddressFamilyRedistributeBgp, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyRedistributeBgp{}
+			if cValue := v.Get("as-number"); cValue.Exists() {
+				item.AsNumber = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("redistribute-route-level"); cValue.Exists() {
+				item.Level = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("metric"); cValue.Exists() {
+				item.Metric = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("route-policy"); cValue.Exists() {
+				item.RoutePolicy = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("metric-type"); cValue.Exists() {
+				item.MetricType = types.StringValue(cValue.String())
+			}
+			data.RedistributeBgp = append(data.RedistributeBgp, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "redistribute.ospfs.ospf"); value.Exists() {
+		data.RedistributeOspf = make([]RouterISISAddressFamilyRedistributeOspf, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyRedistributeOspf{}
+			if cValue := v.Get("ospf-process-id"); cValue.Exists() {
+				item.InstanceId = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("match.internal"); cValue.Exists() {
+				item.MatchInternal = types.BoolValue(true)
+			} else {
+				item.MatchInternal = types.BoolValue(false)
+			}
+			if cValue := v.Get("match.external"); cValue.Exists() {
+				item.MatchExternal = types.BoolValue(true)
+			} else {
+				item.MatchExternal = types.BoolValue(false)
+			}
+			if cValue := v.Get("redistribute-route-level"); cValue.Exists() {
+				item.Level = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("metric"); cValue.Exists() {
+				item.Metric = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("route-policy"); cValue.Exists() {
+				item.RoutePolicy = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("metric-type"); cValue.Exists() {
+				item.MetricType = types.StringValue(cValue.String())
+			}
+			data.RedistributeOspf = append(data.RedistributeOspf, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "maximum-paths"); value.Exists() {
+		data.MaximumPaths = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "router-id.interface-name"); value.Exists() {
+		data.RouterIdInterfaceName = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "router-id.ip-address"); value.Exists() {
+		data.RouterIdIpAddress = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "advertise.passive-only"); value.Exists() {
+		data.AdvertisePassiveOnly = types.BoolValue(true)
+	} else {
+		data.AdvertisePassiveOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "advertise.link.attributes"); value.Exists() {
+		data.AdvertiseLinkAttributes = types.BoolValue(true)
+	} else {
+		data.AdvertiseLinkAttributes = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "microloop.avoidance.enable"); value.Exists() {
+		data.MicroloopAvoidance = types.BoolValue(true)
+	} else {
+		data.MicroloopAvoidance = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "microloop.avoidance.enable.protected"); value.Exists() {
+		data.MicroloopAvoidanceProtected = types.BoolValue(true)
+	} else {
+		data.MicroloopAvoidanceProtected = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "microloop.avoidance.enable.segment-routing.route-policy"); value.Exists() {
+		data.MicroloopAvoidanceSegmentRoutingRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "microloop.avoidance.rib-update-delay"); value.Exists() {
+		data.MicroloopAvoidanceRibUpdateDelay = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "summary-prefix.ip-addresses.ip-address"); value.Exists() {
+		data.SummaryPrefixes = make([]RouterISISAddressFamilySummaryPrefixes, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilySummaryPrefixes{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("address-prefix"); cValue.Exists() {
+				item.Prefix = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("tag"); cValue.Exists() {
+				item.Tag = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("level"); cValue.Exists() {
+				item.Level = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("algorithm"); cValue.Exists() {
+				item.Algorithm = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("explicit"); cValue.Exists() {
+				item.Explicit = types.BoolValue(true)
+			} else {
+				item.Explicit = types.BoolValue(false)
+			}
+			if cValue := v.Get("adv-unreachable"); cValue.Exists() {
+				item.AdvUnreachable = types.BoolValue(true)
+			} else {
+				item.AdvUnreachable = types.BoolValue(false)
+			}
+			if cValue := v.Get("adv-unreachable.unreachable-component-tag.unreachable-component-tag-number"); cValue.Exists() {
+				item.UnreachableTag = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("adv-unreachable.unreachable-component-tag.exclude"); cValue.Exists() {
+				item.UnreachableTagExcludePrefixes = types.BoolValue(true)
+			} else {
+				item.UnreachableTagExcludePrefixes = types.BoolValue(false)
+			}
+			if cValue := v.Get("partition-repair"); cValue.Exists() {
+				item.PartitionRepair = types.BoolValue(true)
+			} else {
+				item.PartitionRepair = types.BoolValue(false)
+			}
+			data.SummaryPrefixes = append(data.SummaryPrefixes, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "metric"); value.Exists() {
+		data.Metric = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "metric-levels.metric-level"); value.Exists() {
+		data.MetricLevels = make([]RouterISISAddressFamilyMetricLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyMetricLevels{}
+			if cValue := v.Get("level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("metric"); cValue.Exists() {
+				item.Metric = types.Int64Value(cValue.Int())
+			}
+			data.MetricLevels = append(data.MetricLevels, item)
+			return true
+		})
+	}
 	if value := gjson.GetBytes(res, "metric-style.narrow"); value.Exists() {
 		data.MetricStyleNarrow = types.BoolValue(true)
 	} else {
@@ -2271,186 +4776,6 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res []byt
 			data.MetricStyleLevels = append(data.MetricStyleLevels, item)
 			return true
 		})
-	}
-	if value := gjson.GetBytes(res, "router-id.interface-name"); value.Exists() {
-		data.RouterIdInterfaceName = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "router-id.ip-address"); value.Exists() {
-		data.RouterIdIpAddress = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
-		data.DefaultInformationOriginate = types.BoolValue(true)
-	} else {
-		data.DefaultInformationOriginate = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.delay-interval"); value.Exists() {
-		data.FastRerouteDelayInterval = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.priority-limit"); value.Exists() {
-		data.FastReroutePerPrefixPriorityLimit = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.priority-limit-levels.priority-limit-level"); value.Exists() {
-		data.FastReroutePerPrefixPriorityLimitLevels = make([]RouterISISAddressFamilyFastReroutePerPrefixPriorityLimitLevels, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterISISAddressFamilyFastReroutePerPrefixPriorityLimitLevels{}
-			if cValue := v.Get("level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("priority-limit"); cValue.Exists() {
-				item.PriorityLimit = types.StringValue(cValue.String())
-			}
-			data.FastReroutePerPrefixPriorityLimitLevels = append(data.FastReroutePerPrefixPriorityLimitLevels, item)
-			return true
-		})
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.use-candidate-only"); value.Exists() {
-		data.FastReroutePerPrefixUseCandidateOnly = types.BoolValue(true)
-	} else {
-		data.FastReroutePerPrefixUseCandidateOnly = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.srlg-protection.weighted-global"); value.Exists() {
-		data.FastReroutePerPrefixSrlgProtectionWeightedGlobal = types.BoolValue(true)
-	} else {
-		data.FastReroutePerPrefixSrlgProtectionWeightedGlobal = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.srlg-protection.weighted-global-levels.weighted-global-level"); value.Exists() {
-		data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels = make([]RouterISISAddressFamilyFastReroutePerPrefixSrlgProtectionWeightedGlobalLevels, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterISISAddressFamilyFastReroutePerPrefixSrlgProtectionWeightedGlobalLevels{}
-			if cValue := v.Get("level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels = append(data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels, item)
-			return true
-		})
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.remote-lfa.prefix-list"); value.Exists() {
-		data.FastReroutePerPrefixRemoteLfaPrefixList = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.remote-lfa.prefix-list-levels.prefix-list-level"); value.Exists() {
-		data.FastReroutePerPrefixRemoteLfaPrefixListLevels = make([]RouterISISAddressFamilyFastReroutePerPrefixRemoteLfaPrefixListLevels, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterISISAddressFamilyFastReroutePerPrefixRemoteLfaPrefixListLevels{}
-			if cValue := v.Get("level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("prefix-list"); cValue.Exists() {
-				item.PrefixList = types.StringValue(cValue.String())
-			}
-			data.FastReroutePerPrefixRemoteLfaPrefixListLevels = append(data.FastReroutePerPrefixRemoteLfaPrefixListLevels, item)
-			return true
-		})
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.load-sharing.disable"); value.Exists() {
-		data.FastReroutePerPrefixLoadSharingDisable = types.BoolValue(true)
-	} else {
-		data.FastReroutePerPrefixLoadSharingDisable = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.load-sharing.disable-levels.disable-level"); value.Exists() {
-		data.FastReroutePerPrefixLoadSharingDisableLevels = make([]RouterISISAddressFamilyFastReroutePerPrefixLoadSharingDisableLevels, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterISISAddressFamilyFastReroutePerPrefixLoadSharingDisableLevels{}
-			if cValue := v.Get("level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			data.FastReroutePerPrefixLoadSharingDisableLevels = append(data.FastReroutePerPrefixLoadSharingDisableLevels, item)
-			return true
-		})
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.downstream.index"); value.Exists() {
-		data.FastReroutePerPrefixTiebreakerDownstreamIndex = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.lc-disjoint.index"); value.Exists() {
-		data.FastReroutePerPrefixTiebreakerLcDisjointIndex = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.lowest-backup-metric.index"); value.Exists() {
-		data.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.node-protecting.index"); value.Exists() {
-		data.FastReroutePerPrefixTiebreakerNodeProtectingIndex = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.primary-path.index"); value.Exists() {
-		data.FastReroutePerPrefixTiebreakerPrimaryPathIndex = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.secondary-path.index"); value.Exists() {
-		data.FastReroutePerPrefixTiebreakerSecondaryPathIndex = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.srlg-disjoint.index"); value.Exists() {
-		data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-link.priority-limit"); value.Exists() {
-		data.FastReroutePerLinkPriorityLimit = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-link.priority-limit-levels.priority-limit-level"); value.Exists() {
-		data.FastReroutePerLinkPriorityLimitLevels = make([]RouterISISAddressFamilyFastReroutePerLinkPriorityLimitLevels, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterISISAddressFamilyFastReroutePerLinkPriorityLimitLevels{}
-			if cValue := v.Get("level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("priority-limit"); cValue.Exists() {
-				item.PriorityLimit = types.StringValue(cValue.String())
-			}
-			data.FastReroutePerLinkPriorityLimitLevels = append(data.FastReroutePerLinkPriorityLimitLevels, item)
-			return true
-		})
-	}
-	if value := gjson.GetBytes(res, "fast-reroute.per-link.use-candidate-only"); value.Exists() {
-		data.FastReroutePerLinkUseCandidateOnly = types.BoolValue(true)
-	} else {
-		data.FastReroutePerLinkUseCandidateOnly = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "microloop.avoidance.enable"); value.Exists() {
-		data.MicroloopAvoidance = types.BoolValue(true)
-	} else {
-		data.MicroloopAvoidance = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "microloop.avoidance.enable.protected"); value.Exists() {
-		data.MicroloopAvoidanceProtected = types.BoolValue(true)
-	} else {
-		data.MicroloopAvoidanceProtected = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "microloop.avoidance.enable.segment-routing.route-policy"); value.Exists() {
-		data.MicroloopAvoidanceSegmentRoutingRoutePolicy = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "microloop.avoidance.rib-update-delay"); value.Exists() {
-		data.MicroloopAvoidanceRibUpdateDelay = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "advertise.passive-only"); value.Exists() {
-		data.AdvertisePassiveOnly = types.BoolValue(true)
-	} else {
-		data.AdvertisePassiveOnly = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "advertise.link.attributes"); value.Exists() {
-		data.AdvertiseLinkAttributes = types.BoolValue(true)
-	} else {
-		data.AdvertiseLinkAttributes = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "mpls.ldp.auto-config"); value.Exists() {
-		data.MplsLdpAutoConfig = types.BoolValue(true)
-	} else {
-		data.MplsLdpAutoConfig = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "mpls.traffic-eng.router-id.ipv4-address"); value.Exists() {
-		data.MplsTrafficEngRouterIdIpv4Address = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "mpls.traffic-eng.router-id.interface-name"); value.Exists() {
-		data.MplsTrafficEngRouterIdInterfaceName = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "mpls.traffic-eng.traffic-eng-level.level-one-two"); value.Exists() {
-		data.MplsTrafficEngLevel12 = types.BoolValue(true)
-	} else {
-		data.MplsTrafficEngLevel12 = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "mpls.traffic-eng.traffic-eng-level.level-one"); value.Exists() {
-		data.MplsTrafficEngLevel1 = types.BoolValue(true)
-	} else {
-		data.MplsTrafficEngLevel1 = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "mpls.traffic-eng.traffic-eng-level.level-two-only"); value.Exists() {
-		data.MplsTrafficEngLevel2Only = types.BoolValue(true)
-	} else {
-		data.MplsTrafficEngLevel2Only = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "spf-interval.maximum-wait"); value.Exists() {
 		data.SpfIntervalMaximumWait = types.Int64Value(value.Int())
@@ -2566,7 +4891,7 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res []byt
 			if cValue := v.Get("tag"); cValue.Exists() {
 				item.Tag = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("prefix_list_name"); cValue.Exists() {
+			if cValue := v.Get("prefixlist-name"); cValue.Exists() {
 				item.PrefixListName = types.StringValue(cValue.String())
 			}
 			data.SpfPrefixPriorityHighLevels = append(data.SpfPrefixPriorityHighLevels, item)
@@ -2583,22 +4908,12 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res []byt
 			if cValue := v.Get("tag"); cValue.Exists() {
 				item.Tag = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("prefix_list_name"); cValue.Exists() {
+			if cValue := v.Get("prefixlist-name"); cValue.Exists() {
 				item.PrefixListName = types.StringValue(cValue.String())
 			}
 			data.SpfPrefixPriorityMediumLevels = append(data.SpfPrefixPriorityMediumLevels, item)
 			return true
 		})
-	}
-	if value := gjson.GetBytes(res, "segment-routing.mpls.enable"); value.Exists() {
-		data.SegmentRoutingMplsEnable = types.BoolValue(true)
-	} else {
-		data.SegmentRoutingMplsEnable = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "segment-routing.mpls.sr-prefer"); value.Exists() {
-		data.SegmentRoutingMplsSrPrefer = types.BoolValue(true)
-	} else {
-		data.SegmentRoutingMplsSrPrefer = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "maximum-redistributed-prefixes"); value.Exists() {
 		data.MaximumRedistributedPrefixes = types.Int64Value(value.Int())
@@ -2617,31 +4932,374 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res []byt
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "redistribute.isis-processes.isis-process"); value.Exists() {
-		data.RedistributeIsis = make([]RouterISISAddressFamilyRedistributeIsis, 0)
+	if value := gjson.GetBytes(res, "propagate.levels.level"); value.Exists() {
+		data.PropagateLevels = make([]RouterISISAddressFamilyPropagateLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterISISAddressFamilyRedistributeIsis{}
-			if cValue := v.Get("isis-string"); cValue.Exists() {
-				item.InstanceId = types.StringValue(cValue.String())
+			item := RouterISISAddressFamilyPropagateLevels{}
+			if cValue := v.Get("source-level"); cValue.Exists() {
+				item.SourceLevel = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("redistribute-route-level"); cValue.Exists() {
-				item.Level = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("metric"); cValue.Exists() {
-				item.Metric = types.Int64Value(cValue.Int())
+			if cValue := v.Get("destination-level"); cValue.Exists() {
+				item.DestinationLevel = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("route-policy"); cValue.Exists() {
 				item.RoutePolicy = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("metric-type"); cValue.Exists() {
-				item.MetricType = types.StringValue(cValue.String())
+			data.PropagateLevels = append(data.PropagateLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "adjacency-check.disable"); value.Exists() {
+		data.AdjacencyCheckDisable = types.BoolValue(true)
+	} else {
+		data.AdjacencyCheckDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "route.source.first-hop"); value.Exists() {
+		data.RouteSourceFirstHop = types.BoolValue(true)
+	} else {
+		data.RouteSourceFirstHop = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "attached-bit.receive.ignore"); value.Exists() {
+		data.AttachedBitReceiveIgnore = types.BoolValue(true)
+	} else {
+		data.AttachedBitReceiveIgnore = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "attached-bit.send"); value.Exists() {
+		data.AttachedBitSend = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.delay-interval"); value.Exists() {
+		data.FastRerouteDelayInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.priority-limit"); value.Exists() {
+		data.FastReroutePerPrefixPriorityLimit = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.priority-limit-levels.priority-limit-level"); value.Exists() {
+		data.FastReroutePerPrefixPriorityLimitLevels = make([]RouterISISAddressFamilyFastReroutePerPrefixPriorityLimitLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyFastReroutePerPrefixPriorityLimitLevels{}
+			if cValue := v.Get("level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("down-flag-clear"); cValue.Exists() {
-				item.DownFlagClear = types.BoolValue(true)
+			if cValue := v.Get("priority-limit"); cValue.Exists() {
+				item.PriorityLimit = types.StringValue(cValue.String())
+			}
+			data.FastReroutePerPrefixPriorityLimitLevels = append(data.FastReroutePerPrefixPriorityLimitLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.use-candidate-only"); value.Exists() {
+		data.FastReroutePerPrefixUseCandidateOnly = types.BoolValue(true)
+	} else {
+		data.FastReroutePerPrefixUseCandidateOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.srlg-protection.weighted-global"); value.Exists() {
+		data.FastReroutePerPrefixSrlgProtectionWeightedGlobal = types.BoolValue(true)
+	} else {
+		data.FastReroutePerPrefixSrlgProtectionWeightedGlobal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.srlg-protection.weighted-global-levels.weighted-global-level"); value.Exists() {
+		data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels = make([]RouterISISAddressFamilyFastReroutePerPrefixSrlgProtectionWeightedGlobalLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyFastReroutePerPrefixSrlgProtectionWeightedGlobalLevels{}
+			if cValue := v.Get("level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels = append(data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.remote-lfa.prefix-list"); value.Exists() {
+		data.FastReroutePerPrefixRemoteLfaPrefixList = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.remote-lfa.prefix-list-levels.prefix-list-level"); value.Exists() {
+		data.FastReroutePerPrefixRemoteLfaPrefixListLevels = make([]RouterISISAddressFamilyFastReroutePerPrefixRemoteLfaPrefixListLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyFastReroutePerPrefixRemoteLfaPrefixListLevels{}
+			if cValue := v.Get("level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("prefix-list"); cValue.Exists() {
+				item.PrefixList = types.StringValue(cValue.String())
+			}
+			data.FastReroutePerPrefixRemoteLfaPrefixListLevels = append(data.FastReroutePerPrefixRemoteLfaPrefixListLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.load-sharing.disable"); value.Exists() {
+		data.FastReroutePerPrefixLoadSharingDisable = types.BoolValue(true)
+	} else {
+		data.FastReroutePerPrefixLoadSharingDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.load-sharing.disable-levels.disable-level"); value.Exists() {
+		data.FastReroutePerPrefixLoadSharingDisableLevels = make([]RouterISISAddressFamilyFastReroutePerPrefixLoadSharingDisableLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyFastReroutePerPrefixLoadSharingDisableLevels{}
+			if cValue := v.Get("level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			data.FastReroutePerPrefixLoadSharingDisableLevels = append(data.FastReroutePerPrefixLoadSharingDisableLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.downstream.index"); value.Exists() {
+		data.FastReroutePerPrefixTiebreakerDownstreamIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.lc-disjoint.index"); value.Exists() {
+		data.FastReroutePerPrefixTiebreakerLcDisjointIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.lowest-backup-metric.index"); value.Exists() {
+		data.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.node-protecting.index"); value.Exists() {
+		data.FastReroutePerPrefixTiebreakerNodeProtectingIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.primary-path.index"); value.Exists() {
+		data.FastReroutePerPrefixTiebreakerPrimaryPathIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.secondary-path.index"); value.Exists() {
+		data.FastReroutePerPrefixTiebreakerSecondaryPathIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.srlg-disjoint.index"); value.Exists() {
+		data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-link.use-candidate-only"); value.Exists() {
+		data.FastReroutePerLinkUseCandidateOnly = types.BoolValue(true)
+	} else {
+		data.FastReroutePerLinkUseCandidateOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-link.use-candidate-only-levels.use-candidate-only-level"); value.Exists() {
+		data.FastReroutePerLinkUseCandidateOnlyLevels = make([]RouterISISAddressFamilyFastReroutePerLinkUseCandidateOnlyLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyFastReroutePerLinkUseCandidateOnlyLevels{}
+			if cValue := v.Get("level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			data.FastReroutePerLinkUseCandidateOnlyLevels = append(data.FastReroutePerLinkUseCandidateOnlyLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-link.priority-limit"); value.Exists() {
+		data.FastReroutePerLinkPriorityLimit = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-link.priority-limit-levels.priority-limit-level"); value.Exists() {
+		data.FastReroutePerLinkPriorityLimitLevels = make([]RouterISISAddressFamilyFastReroutePerLinkPriorityLimitLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyFastReroutePerLinkPriorityLimitLevels{}
+			if cValue := v.Get("level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("priority-limit"); cValue.Exists() {
+				item.PriorityLimit = types.StringValue(cValue.String())
+			}
+			data.FastReroutePerLinkPriorityLimitLevels = append(data.FastReroutePerLinkPriorityLimitLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
+		data.DefaultInformationOriginate = types.BoolValue(true)
+	} else {
+		data.DefaultInformationOriginate = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "default-information.originate.route-policy.text"); value.Exists() {
+		data.DefaultInformationOriginateRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "segment-routing.bundle-member-adj-sid"); value.Exists() {
+		data.SegmentRoutingBundleMemberAdjSid = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingBundleMemberAdjSid = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.labeled-only"); value.Exists() {
+		data.SegmentRoutingLabeledOnly = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingLabeledOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.protected-adjacency-sid-delay"); value.Exists() {
+		data.SegmentRoutingProtectedAdjacencySidDelay = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.enable"); value.Exists() {
+		data.SegmentRoutingMplsEnable = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingMplsEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.sr-prefer"); value.Exists() {
+		data.SegmentRoutingMplsSrPrefer = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingMplsSrPrefer = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.unlabeled.protection.prefix-list"); value.Exists() {
+		data.SegmentRoutingMplsUnlabeledProtectionPrefixList = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.unlabeled.protection.route-policy"); value.Exists() {
+		data.SegmentRoutingMplsUnlabeledProtectionRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.unlabeled.protection.disable"); value.Exists() {
+		data.SegmentRoutingMplsUnlabeledProtectionDisable = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingMplsUnlabeledProtectionDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.prefix-sid-map.receive"); value.Exists() {
+		data.SegmentRoutingMplsPrefixSidMapReceive = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingMplsPrefixSidMapReceive = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.prefix-sid-map.receive.disable"); value.Exists() {
+		data.SegmentRoutingMplsPrefixSidMapReceiveDisable = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingMplsPrefixSidMapReceiveDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.prefix-sid-map.advertise-local"); value.Exists() {
+		data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.prefix-sid-map.advertise-local.domain-wide"); value.Exists() {
+		data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.connected-prefix-sid-map"); value.Exists() {
+		data.SegmentRoutingMplsConnectedPrefixSidMap = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingMplsConnectedPrefixSidMap = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.connected-prefix-sid-map.addresses.address"); value.Exists() {
+		data.SegmentRoutingMplsConnectedPrefixSidMapAddresses = make([]RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapAddresses, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapAddresses{}
+			if cValue := v.Get("ip-address"); cValue.Exists() {
+				item.IpAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("address-prefix"); cValue.Exists() {
+				item.Prefix = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("index.index-id"); cValue.Exists() {
+				item.IndexId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("index.interface"); cValue.Exists() {
+				item.IndexInterface = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("index.php-disable"); cValue.Exists() {
+				item.IndexPhpDisable = types.BoolValue(true)
 			} else {
-				item.DownFlagClear = types.BoolValue(false)
+				item.IndexPhpDisable = types.BoolValue(false)
 			}
-			data.RedistributeIsis = append(data.RedistributeIsis, item)
+			if cValue := v.Get("index.explicit-null"); cValue.Exists() {
+				item.IndexExplicitNull = types.BoolValue(true)
+			} else {
+				item.IndexExplicitNull = types.BoolValue(false)
+			}
+			if cValue := v.Get("absolute.absolute-id"); cValue.Exists() {
+				item.AbsoluteId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("absolute.interface"); cValue.Exists() {
+				item.AbsoluteInterface = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("absolute.php-disable"); cValue.Exists() {
+				item.AbsolutePhpDisable = types.BoolValue(true)
+			} else {
+				item.AbsolutePhpDisable = types.BoolValue(false)
+			}
+			if cValue := v.Get("absolute.explicit-null"); cValue.Exists() {
+				item.AbsoluteExplicitNull = types.BoolValue(true)
+			} else {
+				item.AbsoluteExplicitNull = types.BoolValue(false)
+			}
+			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses = append(data.SegmentRoutingMplsConnectedPrefixSidMapAddresses, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address"); value.Exists() {
+		data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses = make([]RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses{}
+			if cValue := v.Get("ip-address"); cValue.Exists() {
+				item.IpAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("address-prefix"); cValue.Exists() {
+				item.Prefix = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("flex-algo"); cValue.Exists() {
+				item.FlexAlgo = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("index.index-id"); cValue.Exists() {
+				item.IndexId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("index.interface"); cValue.Exists() {
+				item.IndexInterface = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("index.php-disable"); cValue.Exists() {
+				item.IndexPhpDisable = types.BoolValue(true)
+			} else {
+				item.IndexPhpDisable = types.BoolValue(false)
+			}
+			if cValue := v.Get("index.explicit-null"); cValue.Exists() {
+				item.IndexExplicitNull = types.BoolValue(true)
+			} else {
+				item.IndexExplicitNull = types.BoolValue(false)
+			}
+			if cValue := v.Get("absolute.absolute-id"); cValue.Exists() {
+				item.AbsoluteId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("absolute.interface"); cValue.Exists() {
+				item.AbsoluteInterface = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("absolute.php-disable"); cValue.Exists() {
+				item.AbsolutePhpDisable = types.BoolValue(true)
+			} else {
+				item.AbsolutePhpDisable = types.BoolValue(false)
+			}
+			if cValue := v.Get("absolute.explicit-null"); cValue.Exists() {
+				item.AbsoluteExplicitNull = types.BoolValue(true)
+			} else {
+				item.AbsoluteExplicitNull = types.BoolValue(false)
+			}
+			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses = append(data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.connected-prefix-sid-map.addresses.strict-spf-address"); value.Exists() {
+		data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses = make([]RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses{}
+			if cValue := v.Get("ip-address"); cValue.Exists() {
+				item.IpAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("address-prefix"); cValue.Exists() {
+				item.Prefix = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("index.index-id"); cValue.Exists() {
+				item.IndexId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("index.interface"); cValue.Exists() {
+				item.IndexInterface = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("index.php-disable"); cValue.Exists() {
+				item.IndexPhpDisable = types.BoolValue(true)
+			} else {
+				item.IndexPhpDisable = types.BoolValue(false)
+			}
+			if cValue := v.Get("index.explicit-null"); cValue.Exists() {
+				item.IndexExplicitNull = types.BoolValue(true)
+			} else {
+				item.IndexExplicitNull = types.BoolValue(false)
+			}
+			if cValue := v.Get("absolute.absolute-id"); cValue.Exists() {
+				item.AbsoluteId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("absolute.interface"); cValue.Exists() {
+				item.AbsoluteInterface = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("absolute.php-disable"); cValue.Exists() {
+				item.AbsolutePhpDisable = types.BoolValue(true)
+			} else {
+				item.AbsolutePhpDisable = types.BoolValue(false)
+			}
+			if cValue := v.Get("absolute.explicit-null"); cValue.Exists() {
+				item.AbsoluteExplicitNull = types.BoolValue(true)
+			} else {
+				item.AbsoluteExplicitNull = types.BoolValue(false)
+			}
+			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses = append(data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses, item)
 			return true
 		})
 	}
@@ -2692,6 +5350,133 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res []byt
 			data.SegmentRoutingSrv6Locators = append(data.SegmentRoutingSrv6Locators, item)
 			return true
 		})
+	}
+	if value := gjson.GetBytes(res, "partition-detect"); value.Exists() {
+		data.PartitionDetect = types.BoolValue(true)
+	} else {
+		data.PartitionDetect = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "partition-detect.tracks.track"); value.Exists() {
+		data.PartitionDetectTracks = make([]RouterISISAddressFamilyPartitionDetectTracks, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyPartitionDetectTracks{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4"); cValue.Exists() {
+				item.Ipv4 = types.BoolValue(true)
+			} else {
+				item.Ipv4 = types.BoolValue(false)
+			}
+			if cValue := v.Get("ipv6"); cValue.Exists() {
+				item.Ipv6 = types.BoolValue(true)
+			} else {
+				item.Ipv6 = types.BoolValue(false)
+			}
+			data.PartitionDetectTracks = append(data.PartitionDetectTracks, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "partition-detect.external-address-tracks.external-address-track"); value.Exists() {
+		data.PartitionDetectExternalAddressTracks = make([]RouterISISAddressFamilyPartitionDetectExternalAddressTracks, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyPartitionDetectExternalAddressTracks{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("external-address"); cValue.Exists() {
+				item.ExternalAddress = types.StringValue(cValue.String())
+			}
+			data.PartitionDetectExternalAddressTracks = append(data.PartitionDetectExternalAddressTracks, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "mpls.ldp.auto-config"); value.Exists() {
+		data.MplsLdpAutoConfig = types.BoolValue(true)
+	} else {
+		data.MplsLdpAutoConfig = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.router-id.ipv4-address"); value.Exists() {
+		data.MplsTrafficEngRouterIdIpv4Address = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.router-id.interface-name"); value.Exists() {
+		data.MplsTrafficEngRouterIdInterfaceName = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.igp-intact"); value.Exists() {
+		data.MplsTrafficEngIgpIntact = types.BoolValue(true)
+	} else {
+		data.MplsTrafficEngIgpIntact = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.multicast-intact"); value.Exists() {
+		data.MplsTrafficEngMulticastIntact = types.BoolValue(true)
+	} else {
+		data.MplsTrafficEngMulticastIntact = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.tunnel.restricted"); value.Exists() {
+		data.MplsTrafficEngTunnelRestricted = types.BoolValue(true)
+	} else {
+		data.MplsTrafficEngTunnelRestricted = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.tunnel.preferred"); value.Exists() {
+		data.MplsTrafficEngTunnelPreferred = types.BoolValue(true)
+	} else {
+		data.MplsTrafficEngTunnelPreferred = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.tunnel.metric"); value.Exists() {
+		data.MplsTrafficEngTunnelMetric = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.tunnel.anycast-prefer-igp-cost"); value.Exists() {
+		data.MplsTrafficEngTunnelAnycastPreferIgpCost = types.BoolValue(true)
+	} else {
+		data.MplsTrafficEngTunnelAnycastPreferIgpCost = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.tunnel.metric-levels.metric-level"); value.Exists() {
+		data.MplsTrafficEngTunnelMetricLevels = make([]RouterISISAddressFamilyMplsTrafficEngTunnelMetricLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyMplsTrafficEngTunnelMetricLevels{}
+			if cValue := v.Get("level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("metric"); cValue.Exists() {
+				item.Metric = types.Int64Value(cValue.Int())
+			}
+			data.MplsTrafficEngTunnelMetricLevels = append(data.MplsTrafficEngTunnelMetricLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.traffic-eng-level.level-one-two"); value.Exists() {
+		data.MplsTrafficEngLevel12 = types.BoolValue(true)
+	} else {
+		data.MplsTrafficEngLevel12 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.traffic-eng-level.level-one"); value.Exists() {
+		data.MplsTrafficEngLevel1 = types.BoolValue(true)
+	} else {
+		data.MplsTrafficEngLevel1 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.traffic-eng-level.level-two-only"); value.Exists() {
+		data.MplsTrafficEngLevel2Only = types.BoolValue(true)
+	} else {
+		data.MplsTrafficEngLevel2Only = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "prefix-unreachable"); value.Exists() {
+		data.PrefixUnreachable = types.BoolValue(true)
+	} else {
+		data.PrefixUnreachable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "prefix-unreachable.adv-maximum"); value.Exists() {
+		data.PrefixUnreachableAdvMaximum = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "prefix-unreachable.adv-lifetime"); value.Exists() {
+		data.PrefixUnreachableAdvLifetime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "prefix-unreachable.adv-metric"); value.Exists() {
+		data.PrefixUnreachableAdvMetric = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "prefix-unreachable.rx-process-enable"); value.Exists() {
+		data.PrefixUnreachableRxProcessEnable = types.BoolValue(true)
+	} else {
+		data.PrefixUnreachableRxProcessEnable = types.BoolValue(false)
 	}
 }
 
@@ -2701,6 +5486,162 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res []byt
 
 func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state RouterISISAddressFamily) []string {
 	deletedItems := make([]string, 0)
+	if !state.PrefixUnreachableRxProcessEnable.IsNull() && data.PrefixUnreachableRxProcessEnable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/prefix-unreachable/rx-process-enable", state.getPath()))
+	}
+	if !state.PrefixUnreachableAdvMetric.IsNull() && data.PrefixUnreachableAdvMetric.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/prefix-unreachable/adv-metric", state.getPath()))
+	}
+	if !state.PrefixUnreachableAdvLifetime.IsNull() && data.PrefixUnreachableAdvLifetime.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/prefix-unreachable/adv-lifetime", state.getPath()))
+	}
+	if !state.PrefixUnreachableAdvMaximum.IsNull() && data.PrefixUnreachableAdvMaximum.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/prefix-unreachable/adv-maximum", state.getPath()))
+	}
+	if !state.PrefixUnreachable.IsNull() && data.PrefixUnreachable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/prefix-unreachable", state.getPath()))
+	}
+	if !state.MplsTrafficEngLevel2Only.IsNull() && data.MplsTrafficEngLevel2Only.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-two-only", state.getPath()))
+	}
+	if !state.MplsTrafficEngLevel1.IsNull() && data.MplsTrafficEngLevel1.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-one", state.getPath()))
+	}
+	if !state.MplsTrafficEngLevel12.IsNull() && data.MplsTrafficEngLevel12.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-one-two", state.getPath()))
+	}
+	for i := range state.MplsTrafficEngTunnelMetricLevels {
+		keys := [...]string{"level-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.MplsTrafficEngTunnelMetricLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MplsTrafficEngTunnelMetricLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MplsTrafficEngTunnelMetricLevels {
+			found = true
+			if state.MplsTrafficEngTunnelMetricLevels[i].LevelNumber.ValueInt64() != data.MplsTrafficEngTunnelMetricLevels[j].LevelNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.MplsTrafficEngTunnelMetricLevels[i].Metric.IsNull() && data.MplsTrafficEngTunnelMetricLevels[j].Metric.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/tunnel/metric-levels/metric-level%v/metric", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/tunnel/metric-levels/metric-level%v", state.getPath(), keyString))
+		}
+	}
+	if !state.MplsTrafficEngTunnelAnycastPreferIgpCost.IsNull() && data.MplsTrafficEngTunnelAnycastPreferIgpCost.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/tunnel/anycast-prefer-igp-cost", state.getPath()))
+	}
+	if !state.MplsTrafficEngTunnelMetric.IsNull() && data.MplsTrafficEngTunnelMetric.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/tunnel/metric", state.getPath()))
+	}
+	if !state.MplsTrafficEngTunnelPreferred.IsNull() && data.MplsTrafficEngTunnelPreferred.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/tunnel/preferred", state.getPath()))
+	}
+	if !state.MplsTrafficEngTunnelRestricted.IsNull() && data.MplsTrafficEngTunnelRestricted.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/tunnel/restricted", state.getPath()))
+	}
+	if !state.MplsTrafficEngMulticastIntact.IsNull() && data.MplsTrafficEngMulticastIntact.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/multicast-intact", state.getPath()))
+	}
+	if !state.MplsTrafficEngIgpIntact.IsNull() && data.MplsTrafficEngIgpIntact.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/igp-intact", state.getPath()))
+	}
+	if !state.MplsTrafficEngRouterIdInterfaceName.IsNull() && data.MplsTrafficEngRouterIdInterfaceName.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/router-id/interface-name", state.getPath()))
+	}
+	if !state.MplsTrafficEngRouterIdIpv4Address.IsNull() && data.MplsTrafficEngRouterIdIpv4Address.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/router-id/ipv4-address", state.getPath()))
+	}
+	if !state.MplsLdpAutoConfig.IsNull() && data.MplsLdpAutoConfig.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/ldp/auto-config", state.getPath()))
+	}
+	for i := range state.PartitionDetectExternalAddressTracks {
+		keys := [...]string{"address"}
+		stateKeyValues := [...]string{state.PartitionDetectExternalAddressTracks[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.PartitionDetectExternalAddressTracks[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.PartitionDetectExternalAddressTracks {
+			found = true
+			if state.PartitionDetectExternalAddressTracks[i].Address.ValueString() != data.PartitionDetectExternalAddressTracks[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.PartitionDetectExternalAddressTracks[i].ExternalAddress.IsNull() && data.PartitionDetectExternalAddressTracks[j].ExternalAddress.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/partition-detect/external-address-tracks/external-address-track%v/external-address", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/partition-detect/external-address-tracks/external-address-track%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.PartitionDetectTracks {
+		keys := [...]string{"address"}
+		stateKeyValues := [...]string{state.PartitionDetectTracks[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.PartitionDetectTracks[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.PartitionDetectTracks {
+			found = true
+			if state.PartitionDetectTracks[i].Address.ValueString() != data.PartitionDetectTracks[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.PartitionDetectTracks[i].Ipv6.IsNull() && data.PartitionDetectTracks[j].Ipv6.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/partition-detect/tracks/track%v/.", state.getPath(), keyString))
+				}
+				if !state.PartitionDetectTracks[i].Ipv4.IsNull() && data.PartitionDetectTracks[j].Ipv4.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/partition-detect/tracks/track%v/.", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/partition-detect/tracks/track%v", state.getPath(), keyString))
+		}
+	}
+	if !state.PartitionDetect.IsNull() && data.PartitionDetect.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/partition-detect", state.getPath()))
+	}
 	for i := range state.SegmentRoutingSrv6Locators {
 		keys := [...]string{"locator-string"}
 		stateKeyValues := [...]string{state.SegmentRoutingSrv6Locators[i].LocatorName.ValueString()}
@@ -2806,16 +5747,19 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v", state.getPath(), keyString))
 		}
 	}
-	for i := range state.RedistributeIsis {
-		keys := [...]string{"isis-string"}
-		stateKeyValues := [...]string{state.RedistributeIsis[i].InstanceId.ValueString()}
+	for i := range state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses {
+		keys := [...]string{"ip-address", "address-prefix"}
+		stateKeyValues := [...]string{state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IpAddress.ValueString(), strconv.FormatInt(state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].Prefix.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.RedistributeIsis[i].InstanceId.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IpAddress.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].Prefix.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -2823,44 +5767,62 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 		}
 
 		found := false
-		for j := range data.RedistributeIsis {
+		for j := range data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses {
 			found = true
-			if state.RedistributeIsis[i].InstanceId.ValueString() != data.RedistributeIsis[j].InstanceId.ValueString() {
+			if state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IpAddress.ValueString() != data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[j].IpAddress.ValueString() {
+				found = false
+			}
+			if state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].Prefix.ValueInt64() != data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[j].Prefix.ValueInt64() {
 				found = false
 			}
 			if found {
-				if !state.RedistributeIsis[i].DownFlagClear.IsNull() && data.RedistributeIsis[j].DownFlagClear.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/down-flag-clear", state.getPath(), keyString))
+				if !state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteExplicitNull.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[j].AbsoluteExplicitNull.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address%v/absolute/explicit-null", state.getPath(), keyString))
 				}
-				if !state.RedistributeIsis[i].MetricType.IsNull() && data.RedistributeIsis[j].MetricType.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/metric-type", state.getPath(), keyString))
+				if !state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsolutePhpDisable.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[j].AbsolutePhpDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address%v/absolute/php-disable", state.getPath(), keyString))
 				}
-				if !state.RedistributeIsis[i].RoutePolicy.IsNull() && data.RedistributeIsis[j].RoutePolicy.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/route-policy", state.getPath(), keyString))
+				if !state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteInterface.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[j].AbsoluteInterface.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address%v/absolute/interface", state.getPath(), keyString))
 				}
-				if !state.RedistributeIsis[i].Metric.IsNull() && data.RedistributeIsis[j].Metric.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/metric", state.getPath(), keyString))
+				if !state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteId.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[j].AbsoluteId.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address%v/absolute/absolute-id", state.getPath(), keyString))
 				}
-				if !state.RedistributeIsis[i].Level.IsNull() && data.RedistributeIsis[j].Level.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/redistribute-route-level", state.getPath(), keyString))
+				if !state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexExplicitNull.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[j].IndexExplicitNull.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address%v/index/explicit-null", state.getPath(), keyString))
+				}
+				if !state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexPhpDisable.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[j].IndexPhpDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address%v/index/php-disable", state.getPath(), keyString))
+				}
+				if !state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexInterface.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[j].IndexInterface.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address%v/index/interface", state.getPath(), keyString))
+				}
+				if !state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexId.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[j].IndexId.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address%v/index/index-id", state.getPath(), keyString))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address%v", state.getPath(), keyString))
 		}
 	}
-	for i := range state.MaximumRedistributedPrefixesLevels {
-		keys := [...]string{"level-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.MaximumRedistributedPrefixesLevels[i].LevelNumber.ValueInt64(), 10)}
+	for i := range state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses {
+		keys := [...]string{"ip-address", "address-prefix", "flex-algo"}
+		stateKeyValues := [...]string{state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IpAddress.ValueString(), strconv.FormatInt(state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].Prefix.ValueInt64(), 10), strconv.FormatInt(state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].FlexAlgo.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.MaximumRedistributedPrefixesLevels[i].LevelNumber.ValueInt64()).IsZero() {
+		if !reflect.ValueOf(state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IpAddress.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].Prefix.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].FlexAlgo.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -2868,24 +5830,132 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 		}
 
 		found := false
-		for j := range data.MaximumRedistributedPrefixesLevels {
+		for j := range data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses {
 			found = true
-			if state.MaximumRedistributedPrefixesLevels[i].LevelNumber.ValueInt64() != data.MaximumRedistributedPrefixesLevels[j].LevelNumber.ValueInt64() {
+			if state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IpAddress.ValueString() != data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[j].IpAddress.ValueString() {
+				found = false
+			}
+			if state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].Prefix.ValueInt64() != data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[j].Prefix.ValueInt64() {
+				found = false
+			}
+			if state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].FlexAlgo.ValueInt64() != data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[j].FlexAlgo.ValueInt64() {
 				found = false
 			}
 			if found {
-				if !state.MaximumRedistributedPrefixesLevels[i].MaximumRedistributedPrefixes.IsNull() && data.MaximumRedistributedPrefixesLevels[j].MaximumRedistributedPrefixes.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-redistributed-prefixes-levels/maximum-redistributed-prefixes-level%v/maximum-redistributed-prefixes", state.getPath(), keyString))
+				if !state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteExplicitNull.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[j].AbsoluteExplicitNull.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address%v/absolute/explicit-null", state.getPath(), keyString))
+				}
+				if !state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsolutePhpDisable.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[j].AbsolutePhpDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address%v/absolute/php-disable", state.getPath(), keyString))
+				}
+				if !state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteInterface.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[j].AbsoluteInterface.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address%v/absolute/interface", state.getPath(), keyString))
+				}
+				if !state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteId.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[j].AbsoluteId.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address%v/absolute/absolute-id", state.getPath(), keyString))
+				}
+				if !state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexExplicitNull.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[j].IndexExplicitNull.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address%v/index/explicit-null", state.getPath(), keyString))
+				}
+				if !state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexPhpDisable.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[j].IndexPhpDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address%v/index/php-disable", state.getPath(), keyString))
+				}
+				if !state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexInterface.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[j].IndexInterface.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address%v/index/interface", state.getPath(), keyString))
+				}
+				if !state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexId.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[j].IndexId.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address%v/index/index-id", state.getPath(), keyString))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-redistributed-prefixes-levels/maximum-redistributed-prefixes-level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address%v", state.getPath(), keyString))
 		}
 	}
-	if !state.MaximumRedistributedPrefixes.IsNull() && data.MaximumRedistributedPrefixes.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-redistributed-prefixes", state.getPath()))
+	for i := range state.SegmentRoutingMplsConnectedPrefixSidMapAddresses {
+		keys := [...]string{"ip-address", "address-prefix"}
+		stateKeyValues := [...]string{state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IpAddress.ValueString(), strconv.FormatInt(state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].Prefix.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IpAddress.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].Prefix.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SegmentRoutingMplsConnectedPrefixSidMapAddresses {
+			found = true
+			if state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IpAddress.ValueString() != data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[j].IpAddress.ValueString() {
+				found = false
+			}
+			if state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].Prefix.ValueInt64() != data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[j].Prefix.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteExplicitNull.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[j].AbsoluteExplicitNull.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/address%v/absolute/explicit-null", state.getPath(), keyString))
+				}
+				if !state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsolutePhpDisable.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[j].AbsolutePhpDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/address%v/absolute/php-disable", state.getPath(), keyString))
+				}
+				if !state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteInterface.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[j].AbsoluteInterface.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/address%v/absolute/interface", state.getPath(), keyString))
+				}
+				if !state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteId.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[j].AbsoluteId.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/address%v/absolute/absolute-id", state.getPath(), keyString))
+				}
+				if !state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexExplicitNull.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[j].IndexExplicitNull.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/address%v/index/explicit-null", state.getPath(), keyString))
+				}
+				if !state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexPhpDisable.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[j].IndexPhpDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/address%v/index/php-disable", state.getPath(), keyString))
+				}
+				if !state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexInterface.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[j].IndexInterface.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/address%v/index/interface", state.getPath(), keyString))
+				}
+				if !state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexId.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[j].IndexId.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/address%v/index/index-id", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/address%v", state.getPath(), keyString))
+		}
+	}
+	if !state.SegmentRoutingMplsConnectedPrefixSidMap.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMap.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map", state.getPath()))
+	}
+	if !state.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide.IsNull() && data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/prefix-sid-map/advertise-local", state.getPath()))
+	}
+	if !state.SegmentRoutingMplsPrefixSidMapAdvertiseLocal.IsNull() && data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/prefix-sid-map/advertise-local", state.getPath()))
+	}
+	if !state.SegmentRoutingMplsPrefixSidMapReceiveDisable.IsNull() && data.SegmentRoutingMplsPrefixSidMapReceiveDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/prefix-sid-map/receive", state.getPath()))
+	}
+	if !state.SegmentRoutingMplsPrefixSidMapReceive.IsNull() && data.SegmentRoutingMplsPrefixSidMapReceive.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/prefix-sid-map/receive", state.getPath()))
+	}
+	if !state.SegmentRoutingMplsUnlabeledProtectionDisable.IsNull() && data.SegmentRoutingMplsUnlabeledProtectionDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/unlabeled/protection/disable", state.getPath()))
+	}
+	if !state.SegmentRoutingMplsUnlabeledProtectionRoutePolicy.IsNull() && data.SegmentRoutingMplsUnlabeledProtectionRoutePolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/unlabeled/protection/route-policy", state.getPath()))
+	}
+	if !state.SegmentRoutingMplsUnlabeledProtectionPrefixList.IsNull() && data.SegmentRoutingMplsUnlabeledProtectionPrefixList.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/unlabeled/protection/prefix-list", state.getPath()))
 	}
 	if !state.SegmentRoutingMplsSrPrefer.IsNull() && data.SegmentRoutingMplsSrPrefer.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/sr-prefer", state.getPath()))
@@ -2893,254 +5963,20 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 	if !state.SegmentRoutingMplsEnable.IsNull() && data.SegmentRoutingMplsEnable.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/enable", state.getPath()))
 	}
-	for i := range state.SpfPrefixPriorityMediumLevels {
-		keys := [...]string{"level-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.SpfPrefixPriorityMediumLevels[i].LevelNumber.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.SpfPrefixPriorityMediumLevels[i].LevelNumber.ValueInt64()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.SpfPrefixPriorityMediumLevels {
-			found = true
-			if state.SpfPrefixPriorityMediumLevels[i].LevelNumber.ValueInt64() != data.SpfPrefixPriorityMediumLevels[j].LevelNumber.ValueInt64() {
-				found = false
-			}
-			if found {
-				if !state.SpfPrefixPriorityMediumLevels[i].PrefixListName.IsNull() && data.SpfPrefixPriorityMediumLevels[j].PrefixListName.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-medium-levels/prefix-priority-medium-level%v/prefix_list_name", state.getPath(), keyString))
-				}
-				if !state.SpfPrefixPriorityMediumLevels[i].Tag.IsNull() && data.SpfPrefixPriorityMediumLevels[j].Tag.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-medium-levels/prefix-priority-medium-level%v/tag", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-medium-levels/prefix-priority-medium-level%v", state.getPath(), keyString))
-		}
+	if !state.SegmentRoutingProtectedAdjacencySidDelay.IsNull() && data.SegmentRoutingProtectedAdjacencySidDelay.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/protected-adjacency-sid-delay", state.getPath()))
 	}
-	for i := range state.SpfPrefixPriorityHighLevels {
-		keys := [...]string{"level-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.SpfPrefixPriorityHighLevels[i].LevelNumber.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.SpfPrefixPriorityHighLevels[i].LevelNumber.ValueInt64()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.SpfPrefixPriorityHighLevels {
-			found = true
-			if state.SpfPrefixPriorityHighLevels[i].LevelNumber.ValueInt64() != data.SpfPrefixPriorityHighLevels[j].LevelNumber.ValueInt64() {
-				found = false
-			}
-			if found {
-				if !state.SpfPrefixPriorityHighLevels[i].PrefixListName.IsNull() && data.SpfPrefixPriorityHighLevels[j].PrefixListName.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-high-levels/prefix-priority-high-level%v/prefix_list_name", state.getPath(), keyString))
-				}
-				if !state.SpfPrefixPriorityHighLevels[i].Tag.IsNull() && data.SpfPrefixPriorityHighLevels[j].Tag.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-high-levels/prefix-priority-high-level%v/tag", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-high-levels/prefix-priority-high-level%v", state.getPath(), keyString))
-		}
+	if !state.SegmentRoutingLabeledOnly.IsNull() && data.SegmentRoutingLabeledOnly.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/labeled-only", state.getPath()))
 	}
-	for i := range state.SpfPrefixPriorityCriticalLevels {
-		keys := [...]string{"level-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.SpfPrefixPriorityCriticalLevels[i].LevelNumber.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.SpfPrefixPriorityCriticalLevels[i].LevelNumber.ValueInt64()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.SpfPrefixPriorityCriticalLevels {
-			found = true
-			if state.SpfPrefixPriorityCriticalLevels[i].LevelNumber.ValueInt64() != data.SpfPrefixPriorityCriticalLevels[j].LevelNumber.ValueInt64() {
-				found = false
-			}
-			if found {
-				if !state.SpfPrefixPriorityCriticalLevels[i].PrefixListName.IsNull() && data.SpfPrefixPriorityCriticalLevels[j].PrefixListName.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-critical-levels/prefix-priority-critical-level%v/prefixlist-name", state.getPath(), keyString))
-				}
-				if !state.SpfPrefixPriorityCriticalLevels[i].Tag.IsNull() && data.SpfPrefixPriorityCriticalLevels[j].Tag.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-critical-levels/prefix-priority-critical-level%v/tag", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-critical-levels/prefix-priority-critical-level%v", state.getPath(), keyString))
-		}
+	if !state.SegmentRoutingBundleMemberAdjSid.IsNull() && data.SegmentRoutingBundleMemberAdjSid.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/bundle-member-adj-sid", state.getPath()))
 	}
-	if !state.SpfPrefixPriorityMediumPrefixListName.IsNull() && data.SpfPrefixPriorityMediumPrefixListName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/medium/prefixlist-name", state.getPath()))
+	if !state.DefaultInformationOriginateRoutePolicy.IsNull() && data.DefaultInformationOriginateRoutePolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-information/originate/route-policy", state.getPath()))
 	}
-	if !state.SpfPrefixPriorityMediumTag.IsNull() && data.SpfPrefixPriorityMediumTag.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/medium/tag", state.getPath()))
-	}
-	if !state.SpfPrefixPriorityHighPrefixListName.IsNull() && data.SpfPrefixPriorityHighPrefixListName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/high/prefixlist-name", state.getPath()))
-	}
-	if !state.SpfPrefixPriorityHighTag.IsNull() && data.SpfPrefixPriorityHighTag.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/high/tag", state.getPath()))
-	}
-	if !state.SpfPrefixPriorityCriticalPrefixListName.IsNull() && data.SpfPrefixPriorityCriticalPrefixListName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/critical/prefixlist-name", state.getPath()))
-	}
-	if !state.SpfPrefixPriorityCriticalTag.IsNull() && data.SpfPrefixPriorityCriticalTag.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/critical/tag", state.getPath()))
-	}
-	for i := range state.SpfIntervalLevels {
-		keys := [...]string{"level-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.SpfIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.SpfIntervalLevels[i].LevelNumber.ValueInt64()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.SpfIntervalLevels {
-			found = true
-			if state.SpfIntervalLevels[i].LevelNumber.ValueInt64() != data.SpfIntervalLevels[j].LevelNumber.ValueInt64() {
-				found = false
-			}
-			if found {
-				if !state.SpfIntervalLevels[i].IetfHolddownInterval.IsNull() && data.SpfIntervalLevels[j].IetfHolddownInterval.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v/ietf/holddown-interval", state.getPath(), keyString))
-				}
-				if !state.SpfIntervalLevels[i].IetfLearnInterval.IsNull() && data.SpfIntervalLevels[j].IetfLearnInterval.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v/ietf/learn-interval", state.getPath(), keyString))
-				}
-				if !state.SpfIntervalLevels[i].IetfLongWait.IsNull() && data.SpfIntervalLevels[j].IetfLongWait.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v/ietf/long-wait", state.getPath(), keyString))
-				}
-				if !state.SpfIntervalLevels[i].IetfShortWait.IsNull() && data.SpfIntervalLevels[j].IetfShortWait.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v/ietf/short-wait", state.getPath(), keyString))
-				}
-				if !state.SpfIntervalLevels[i].IetfInitialWait.IsNull() && data.SpfIntervalLevels[j].IetfInitialWait.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v/ietf/initial-wait", state.getPath(), keyString))
-				}
-				if !state.SpfIntervalLevels[i].Ietf.IsNull() && data.SpfIntervalLevels[j].Ietf.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v/ietf", state.getPath(), keyString))
-				}
-				if !state.SpfIntervalLevels[i].SecondaryWait.IsNull() && data.SpfIntervalLevels[j].SecondaryWait.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v/secondary-wait", state.getPath(), keyString))
-				}
-				if !state.SpfIntervalLevels[i].InitialWait.IsNull() && data.SpfIntervalLevels[j].InitialWait.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v/initial-wait", state.getPath(), keyString))
-				}
-				if !state.SpfIntervalLevels[i].MaximumWait.IsNull() && data.SpfIntervalLevels[j].MaximumWait.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v/maximum-wait", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v", state.getPath(), keyString))
-		}
-	}
-	if !state.SpfIntervalIetfHolddownInterval.IsNull() && data.SpfIntervalIetfHolddownInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/ietf/holddown-interval", state.getPath()))
-	}
-	if !state.SpfIntervalIetfLearnInterval.IsNull() && data.SpfIntervalIetfLearnInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/ietf/learn-interval", state.getPath()))
-	}
-	if !state.SpfIntervalIetfLongWait.IsNull() && data.SpfIntervalIetfLongWait.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/ietf/long-wait", state.getPath()))
-	}
-	if !state.SpfIntervalIetfShortWait.IsNull() && data.SpfIntervalIetfShortWait.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/ietf/short-wait", state.getPath()))
-	}
-	if !state.SpfIntervalIetfInitialWait.IsNull() && data.SpfIntervalIetfInitialWait.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/ietf/initial-wait", state.getPath()))
-	}
-	if !state.SpfIntervalIetf.IsNull() && data.SpfIntervalIetf.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/ietf", state.getPath()))
-	}
-	if !state.SpfIntervalSecondaryWait.IsNull() && data.SpfIntervalSecondaryWait.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/secondary-wait", state.getPath()))
-	}
-	if !state.SpfIntervalInitialWait.IsNull() && data.SpfIntervalInitialWait.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/initial-wait", state.getPath()))
-	}
-	if !state.SpfIntervalMaximumWait.IsNull() && data.SpfIntervalMaximumWait.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/maximum-wait", state.getPath()))
-	}
-	if !state.MplsTrafficEngLevel2Only.IsNull() && data.MplsTrafficEngLevel2Only.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-two-only", state.getPath()))
-	}
-	if !state.MplsTrafficEngLevel1.IsNull() && data.MplsTrafficEngLevel1.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-one", state.getPath()))
-	}
-	if !state.MplsTrafficEngLevel12.IsNull() && data.MplsTrafficEngLevel12.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-one-two", state.getPath()))
-	}
-	if !state.MplsTrafficEngRouterIdInterfaceName.IsNull() && data.MplsTrafficEngRouterIdInterfaceName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/router-id/interface-name", state.getPath()))
-	}
-	if !state.MplsTrafficEngRouterIdIpv4Address.IsNull() && data.MplsTrafficEngRouterIdIpv4Address.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/router-id/ipv4-address", state.getPath()))
-	}
-	if !state.MplsLdpAutoConfig.IsNull() && data.MplsLdpAutoConfig.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/ldp/auto-config", state.getPath()))
-	}
-	if !state.AdvertiseLinkAttributes.IsNull() && data.AdvertiseLinkAttributes.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise/link/attributes", state.getPath()))
-	}
-	if !state.AdvertisePassiveOnly.IsNull() && data.AdvertisePassiveOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise/passive-only", state.getPath()))
-	}
-	if !state.MicroloopAvoidanceRibUpdateDelay.IsNull() && data.MicroloopAvoidanceRibUpdateDelay.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/microloop/avoidance/rib-update-delay", state.getPath()))
-	}
-	if !state.MicroloopAvoidanceSegmentRoutingRoutePolicy.IsNull() && data.MicroloopAvoidanceSegmentRoutingRoutePolicy.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/microloop/avoidance/enable/segment-routing/route-policy", state.getPath()))
-	}
-	if !state.MicroloopAvoidanceProtected.IsNull() && data.MicroloopAvoidanceProtected.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/microloop/avoidance/enable/protected", state.getPath()))
-	}
-	if !state.MicroloopAvoidance.IsNull() && data.MicroloopAvoidance.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/microloop/avoidance/enable", state.getPath()))
-	}
-	if !state.FastReroutePerLinkUseCandidateOnly.IsNull() && data.FastReroutePerLinkUseCandidateOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-link/use-candidate-only", state.getPath()))
+	if !state.DefaultInformationOriginate.IsNull() && data.DefaultInformationOriginate.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-information/originate", state.getPath()))
 	}
 	for i := range state.FastReroutePerLinkPriorityLimitLevels {
 		keys := [...]string{"level-number"}
@@ -3177,6 +6013,39 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 	}
 	if !state.FastReroutePerLinkPriorityLimit.IsNull() && data.FastReroutePerLinkPriorityLimit.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-link/priority-limit", state.getPath()))
+	}
+	for i := range state.FastReroutePerLinkUseCandidateOnlyLevels {
+		keys := [...]string{"level-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.FastReroutePerLinkUseCandidateOnlyLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.FastReroutePerLinkUseCandidateOnlyLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.FastReroutePerLinkUseCandidateOnlyLevels {
+			found = true
+			if state.FastReroutePerLinkUseCandidateOnlyLevels[i].LevelNumber.ValueInt64() != data.FastReroutePerLinkUseCandidateOnlyLevels[j].LevelNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-link/use-candidate-only-levels/use-candidate-only-level%v", state.getPath(), keyString))
+		}
+	}
+	if !state.FastReroutePerLinkUseCandidateOnly.IsNull() && data.FastReroutePerLinkUseCandidateOnly.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-link/use-candidate-only", state.getPath()))
 	}
 	if !state.FastReroutePerPrefixTiebreakerSrlgDisjointIndex.IsNull() && data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/srlg-disjoint/index", state.getPath()))
@@ -3343,14 +6212,302 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 	if !state.FastRerouteDelayInterval.IsNull() && data.FastRerouteDelayInterval.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/delay-interval", state.getPath()))
 	}
-	if !state.DefaultInformationOriginate.IsNull() && data.DefaultInformationOriginate.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-information/originate", state.getPath()))
+	if !state.AttachedBitSend.IsNull() && data.AttachedBitSend.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/attached-bit/send", state.getPath()))
 	}
-	if !state.RouterIdIpAddress.IsNull() && data.RouterIdIpAddress.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/router-id/ip-address", state.getPath()))
+	if !state.AttachedBitReceiveIgnore.IsNull() && data.AttachedBitReceiveIgnore.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/attached-bit/receive/ignore", state.getPath()))
 	}
-	if !state.RouterIdInterfaceName.IsNull() && data.RouterIdInterfaceName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/router-id/interface-name", state.getPath()))
+	if !state.RouteSourceFirstHop.IsNull() && data.RouteSourceFirstHop.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/route/source/first-hop", state.getPath()))
+	}
+	if !state.AdjacencyCheckDisable.IsNull() && data.AdjacencyCheckDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/adjacency-check/disable", state.getPath()))
+	}
+	for i := range state.PropagateLevels {
+		keys := [...]string{"source-level", "destination-level"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.PropagateLevels[i].SourceLevel.ValueInt64(), 10), strconv.FormatInt(state.PropagateLevels[i].DestinationLevel.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.PropagateLevels[i].SourceLevel.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.PropagateLevels[i].DestinationLevel.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.PropagateLevels {
+			found = true
+			if state.PropagateLevels[i].SourceLevel.ValueInt64() != data.PropagateLevels[j].SourceLevel.ValueInt64() {
+				found = false
+			}
+			if state.PropagateLevels[i].DestinationLevel.ValueInt64() != data.PropagateLevels[j].DestinationLevel.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.PropagateLevels[i].RoutePolicy.IsNull() && data.PropagateLevels[j].RoutePolicy.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/propagate/levels/level%v/route-policy", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/propagate/levels/level%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.MaximumRedistributedPrefixesLevels {
+		keys := [...]string{"level-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.MaximumRedistributedPrefixesLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MaximumRedistributedPrefixesLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MaximumRedistributedPrefixesLevels {
+			found = true
+			if state.MaximumRedistributedPrefixesLevels[i].LevelNumber.ValueInt64() != data.MaximumRedistributedPrefixesLevels[j].LevelNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.MaximumRedistributedPrefixesLevels[i].MaximumRedistributedPrefixes.IsNull() && data.MaximumRedistributedPrefixesLevels[j].MaximumRedistributedPrefixes.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-redistributed-prefixes-levels/maximum-redistributed-prefixes-level%v/maximum-redistributed-prefixes", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-redistributed-prefixes-levels/maximum-redistributed-prefixes-level%v", state.getPath(), keyString))
+		}
+	}
+	if !state.MaximumRedistributedPrefixes.IsNull() && data.MaximumRedistributedPrefixes.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-redistributed-prefixes", state.getPath()))
+	}
+	for i := range state.SpfPrefixPriorityMediumLevels {
+		keys := [...]string{"level-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.SpfPrefixPriorityMediumLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SpfPrefixPriorityMediumLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SpfPrefixPriorityMediumLevels {
+			found = true
+			if state.SpfPrefixPriorityMediumLevels[i].LevelNumber.ValueInt64() != data.SpfPrefixPriorityMediumLevels[j].LevelNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.SpfPrefixPriorityMediumLevels[i].PrefixListName.IsNull() && data.SpfPrefixPriorityMediumLevels[j].PrefixListName.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-medium-levels/prefix-priority-medium-level%v/prefixlist-name", state.getPath(), keyString))
+				}
+				if !state.SpfPrefixPriorityMediumLevels[i].Tag.IsNull() && data.SpfPrefixPriorityMediumLevels[j].Tag.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-medium-levels/prefix-priority-medium-level%v/tag", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-medium-levels/prefix-priority-medium-level%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.SpfPrefixPriorityHighLevels {
+		keys := [...]string{"level-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.SpfPrefixPriorityHighLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SpfPrefixPriorityHighLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SpfPrefixPriorityHighLevels {
+			found = true
+			if state.SpfPrefixPriorityHighLevels[i].LevelNumber.ValueInt64() != data.SpfPrefixPriorityHighLevels[j].LevelNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.SpfPrefixPriorityHighLevels[i].PrefixListName.IsNull() && data.SpfPrefixPriorityHighLevels[j].PrefixListName.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-high-levels/prefix-priority-high-level%v/prefixlist-name", state.getPath(), keyString))
+				}
+				if !state.SpfPrefixPriorityHighLevels[i].Tag.IsNull() && data.SpfPrefixPriorityHighLevels[j].Tag.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-high-levels/prefix-priority-high-level%v/tag", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-high-levels/prefix-priority-high-level%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.SpfPrefixPriorityCriticalLevels {
+		keys := [...]string{"level-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.SpfPrefixPriorityCriticalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SpfPrefixPriorityCriticalLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SpfPrefixPriorityCriticalLevels {
+			found = true
+			if state.SpfPrefixPriorityCriticalLevels[i].LevelNumber.ValueInt64() != data.SpfPrefixPriorityCriticalLevels[j].LevelNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.SpfPrefixPriorityCriticalLevels[i].PrefixListName.IsNull() && data.SpfPrefixPriorityCriticalLevels[j].PrefixListName.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-critical-levels/prefix-priority-critical-level%v/prefixlist-name", state.getPath(), keyString))
+				}
+				if !state.SpfPrefixPriorityCriticalLevels[i].Tag.IsNull() && data.SpfPrefixPriorityCriticalLevels[j].Tag.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-critical-levels/prefix-priority-critical-level%v/tag", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-critical-levels/prefix-priority-critical-level%v", state.getPath(), keyString))
+		}
+	}
+	if !state.SpfPrefixPriorityMediumPrefixListName.IsNull() && data.SpfPrefixPriorityMediumPrefixListName.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/medium/prefixlist-name", state.getPath()))
+	}
+	if !state.SpfPrefixPriorityMediumTag.IsNull() && data.SpfPrefixPriorityMediumTag.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/medium/tag", state.getPath()))
+	}
+	if !state.SpfPrefixPriorityHighPrefixListName.IsNull() && data.SpfPrefixPriorityHighPrefixListName.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/high/prefixlist-name", state.getPath()))
+	}
+	if !state.SpfPrefixPriorityHighTag.IsNull() && data.SpfPrefixPriorityHighTag.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/high/tag", state.getPath()))
+	}
+	if !state.SpfPrefixPriorityCriticalPrefixListName.IsNull() && data.SpfPrefixPriorityCriticalPrefixListName.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/critical/prefixlist-name", state.getPath()))
+	}
+	if !state.SpfPrefixPriorityCriticalTag.IsNull() && data.SpfPrefixPriorityCriticalTag.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/critical/tag", state.getPath()))
+	}
+	for i := range state.SpfIntervalLevels {
+		keys := [...]string{"level-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.SpfIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SpfIntervalLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SpfIntervalLevels {
+			found = true
+			if state.SpfIntervalLevels[i].LevelNumber.ValueInt64() != data.SpfIntervalLevels[j].LevelNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.SpfIntervalLevels[i].IetfHolddownInterval.IsNull() && data.SpfIntervalLevels[j].IetfHolddownInterval.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v/ietf/holddown-interval", state.getPath(), keyString))
+				}
+				if !state.SpfIntervalLevels[i].IetfLearnInterval.IsNull() && data.SpfIntervalLevels[j].IetfLearnInterval.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v/ietf/learn-interval", state.getPath(), keyString))
+				}
+				if !state.SpfIntervalLevels[i].IetfLongWait.IsNull() && data.SpfIntervalLevels[j].IetfLongWait.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v/ietf/long-wait", state.getPath(), keyString))
+				}
+				if !state.SpfIntervalLevels[i].IetfShortWait.IsNull() && data.SpfIntervalLevels[j].IetfShortWait.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v/ietf/short-wait", state.getPath(), keyString))
+				}
+				if !state.SpfIntervalLevels[i].IetfInitialWait.IsNull() && data.SpfIntervalLevels[j].IetfInitialWait.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v/ietf/initial-wait", state.getPath(), keyString))
+				}
+				if !state.SpfIntervalLevels[i].Ietf.IsNull() && data.SpfIntervalLevels[j].Ietf.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v/ietf", state.getPath(), keyString))
+				}
+				if !state.SpfIntervalLevels[i].SecondaryWait.IsNull() && data.SpfIntervalLevels[j].SecondaryWait.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v/secondary-wait", state.getPath(), keyString))
+				}
+				if !state.SpfIntervalLevels[i].InitialWait.IsNull() && data.SpfIntervalLevels[j].InitialWait.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v/initial-wait", state.getPath(), keyString))
+				}
+				if !state.SpfIntervalLevels[i].MaximumWait.IsNull() && data.SpfIntervalLevels[j].MaximumWait.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v/maximum-wait", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v", state.getPath(), keyString))
+		}
+	}
+	if !state.SpfIntervalIetfHolddownInterval.IsNull() && data.SpfIntervalIetfHolddownInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/ietf/holddown-interval", state.getPath()))
+	}
+	if !state.SpfIntervalIetfLearnInterval.IsNull() && data.SpfIntervalIetfLearnInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/ietf/learn-interval", state.getPath()))
+	}
+	if !state.SpfIntervalIetfLongWait.IsNull() && data.SpfIntervalIetfLongWait.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/ietf/long-wait", state.getPath()))
+	}
+	if !state.SpfIntervalIetfShortWait.IsNull() && data.SpfIntervalIetfShortWait.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/ietf/short-wait", state.getPath()))
+	}
+	if !state.SpfIntervalIetfInitialWait.IsNull() && data.SpfIntervalIetfInitialWait.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/ietf/initial-wait", state.getPath()))
+	}
+	if !state.SpfIntervalIetf.IsNull() && data.SpfIntervalIetf.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/ietf", state.getPath()))
+	}
+	if !state.SpfIntervalSecondaryWait.IsNull() && data.SpfIntervalSecondaryWait.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/secondary-wait", state.getPath()))
+	}
+	if !state.SpfIntervalInitialWait.IsNull() && data.SpfIntervalInitialWait.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/initial-wait", state.getPath()))
+	}
+	if !state.SpfIntervalMaximumWait.IsNull() && data.SpfIntervalMaximumWait.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/maximum-wait", state.getPath()))
 	}
 	for i := range state.MetricStyleLevels {
 		keys := [...]string{"level-number"}
@@ -3412,6 +6569,345 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 	if !state.MetricStyleNarrow.IsNull() && data.MetricStyleNarrow.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style/narrow", state.getPath()))
 	}
+	for i := range state.MetricLevels {
+		keys := [...]string{"level-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.MetricLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MetricLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MetricLevels {
+			found = true
+			if state.MetricLevels[i].LevelNumber.ValueInt64() != data.MetricLevels[j].LevelNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.MetricLevels[i].Metric.IsNull() && data.MetricLevels[j].Metric.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-levels/metric-level%v/metric", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-levels/metric-level%v", state.getPath(), keyString))
+		}
+	}
+	if !state.Metric.IsNull() && data.Metric.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric", state.getPath()))
+	}
+	for i := range state.SummaryPrefixes {
+		keys := [...]string{"address", "address-prefix"}
+		stateKeyValues := [...]string{state.SummaryPrefixes[i].Address.ValueString(), strconv.FormatInt(state.SummaryPrefixes[i].Prefix.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SummaryPrefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.SummaryPrefixes[i].Prefix.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SummaryPrefixes {
+			found = true
+			if state.SummaryPrefixes[i].Address.ValueString() != data.SummaryPrefixes[j].Address.ValueString() {
+				found = false
+			}
+			if state.SummaryPrefixes[i].Prefix.ValueInt64() != data.SummaryPrefixes[j].Prefix.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.SummaryPrefixes[i].PartitionRepair.IsNull() && data.SummaryPrefixes[j].PartitionRepair.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/summary-prefix/ip-addresses/ip-address%v/partition-repair", state.getPath(), keyString))
+				}
+				if !state.SummaryPrefixes[i].UnreachableTagExcludePrefixes.IsNull() && data.SummaryPrefixes[j].UnreachableTagExcludePrefixes.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/summary-prefix/ip-addresses/ip-address%v/adv-unreachable/unreachable-component-tag/exclude", state.getPath(), keyString))
+				}
+				if !state.SummaryPrefixes[i].UnreachableTag.IsNull() && data.SummaryPrefixes[j].UnreachableTag.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/summary-prefix/ip-addresses/ip-address%v/adv-unreachable/unreachable-component-tag/unreachable-component-tag-number", state.getPath(), keyString))
+				}
+				if !state.SummaryPrefixes[i].AdvUnreachable.IsNull() && data.SummaryPrefixes[j].AdvUnreachable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/summary-prefix/ip-addresses/ip-address%v/adv-unreachable", state.getPath(), keyString))
+				}
+				if !state.SummaryPrefixes[i].Explicit.IsNull() && data.SummaryPrefixes[j].Explicit.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/summary-prefix/ip-addresses/ip-address%v/explicit", state.getPath(), keyString))
+				}
+				if !state.SummaryPrefixes[i].Algorithm.IsNull() && data.SummaryPrefixes[j].Algorithm.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/summary-prefix/ip-addresses/ip-address%v/algorithm", state.getPath(), keyString))
+				}
+				if !state.SummaryPrefixes[i].Level.IsNull() && data.SummaryPrefixes[j].Level.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/summary-prefix/ip-addresses/ip-address%v/level", state.getPath(), keyString))
+				}
+				if !state.SummaryPrefixes[i].Tag.IsNull() && data.SummaryPrefixes[j].Tag.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/summary-prefix/ip-addresses/ip-address%v/tag", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/summary-prefix/ip-addresses/ip-address%v", state.getPath(), keyString))
+		}
+	}
+	if !state.MicroloopAvoidanceRibUpdateDelay.IsNull() && data.MicroloopAvoidanceRibUpdateDelay.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/microloop/avoidance/rib-update-delay", state.getPath()))
+	}
+	if !state.MicroloopAvoidanceSegmentRoutingRoutePolicy.IsNull() && data.MicroloopAvoidanceSegmentRoutingRoutePolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/microloop/avoidance/enable/segment-routing/route-policy", state.getPath()))
+	}
+	if !state.MicroloopAvoidanceProtected.IsNull() && data.MicroloopAvoidanceProtected.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/microloop/avoidance/enable/protected", state.getPath()))
+	}
+	if !state.MicroloopAvoidance.IsNull() && data.MicroloopAvoidance.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/microloop/avoidance/enable", state.getPath()))
+	}
+	if !state.AdvertiseLinkAttributes.IsNull() && data.AdvertiseLinkAttributes.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise/link/attributes", state.getPath()))
+	}
+	if !state.AdvertisePassiveOnly.IsNull() && data.AdvertisePassiveOnly.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise/passive-only", state.getPath()))
+	}
+	if !state.RouterIdIpAddress.IsNull() && data.RouterIdIpAddress.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/router-id", state.getPath()))
+	}
+	if !state.RouterIdInterfaceName.IsNull() && data.RouterIdInterfaceName.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/router-id", state.getPath()))
+	}
+	if !state.MaximumPaths.IsNull() && data.MaximumPaths.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-paths", state.getPath()))
+	}
+	for i := range state.RedistributeOspf {
+		keys := [...]string{"ospf-process-id"}
+		stateKeyValues := [...]string{state.RedistributeOspf[i].InstanceId.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.RedistributeOspf[i].InstanceId.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.RedistributeOspf {
+			found = true
+			if state.RedistributeOspf[i].InstanceId.ValueString() != data.RedistributeOspf[j].InstanceId.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.RedistributeOspf[i].MetricType.IsNull() && data.RedistributeOspf[j].MetricType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/metric-type", state.getPath(), keyString))
+				}
+				if !state.RedistributeOspf[i].RoutePolicy.IsNull() && data.RedistributeOspf[j].RoutePolicy.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/route-policy", state.getPath(), keyString))
+				}
+				if !state.RedistributeOspf[i].Metric.IsNull() && data.RedistributeOspf[j].Metric.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/metric", state.getPath(), keyString))
+				}
+				if !state.RedistributeOspf[i].Level.IsNull() && data.RedistributeOspf[j].Level.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/redistribute-route-level", state.getPath(), keyString))
+				}
+				if !state.RedistributeOspf[i].MatchExternal.IsNull() && data.RedistributeOspf[j].MatchExternal.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/external", state.getPath(), keyString))
+				}
+				if !state.RedistributeOspf[i].MatchInternal.IsNull() && data.RedistributeOspf[j].MatchInternal.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/internal", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.RedistributeBgp {
+		keys := [...]string{"as-number"}
+		stateKeyValues := [...]string{state.RedistributeBgp[i].AsNumber.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.RedistributeBgp[i].AsNumber.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.RedistributeBgp {
+			found = true
+			if state.RedistributeBgp[i].AsNumber.ValueString() != data.RedistributeBgp[j].AsNumber.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.RedistributeBgp[i].MetricType.IsNull() && data.RedistributeBgp[j].MetricType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/bgps/bgp%v/metric-type", state.getPath(), keyString))
+				}
+				if !state.RedistributeBgp[i].RoutePolicy.IsNull() && data.RedistributeBgp[j].RoutePolicy.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/bgps/bgp%v/route-policy", state.getPath(), keyString))
+				}
+				if !state.RedistributeBgp[i].Metric.IsNull() && data.RedistributeBgp[j].Metric.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/bgps/bgp%v/metric", state.getPath(), keyString))
+				}
+				if !state.RedistributeBgp[i].Level.IsNull() && data.RedistributeBgp[j].Level.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/bgps/bgp%v/redistribute-route-level", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/bgps/bgp%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.RedistributeIsis {
+		keys := [...]string{"isis-string"}
+		stateKeyValues := [...]string{state.RedistributeIsis[i].InstanceId.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.RedistributeIsis[i].InstanceId.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.RedistributeIsis {
+			found = true
+			if state.RedistributeIsis[i].InstanceId.ValueString() != data.RedistributeIsis[j].InstanceId.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.RedistributeIsis[i].DownFlagClear.IsNull() && data.RedistributeIsis[j].DownFlagClear.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/down-flag-clear", state.getPath(), keyString))
+				}
+				if !state.RedistributeIsis[i].MetricType.IsNull() && data.RedistributeIsis[j].MetricType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/metric-type", state.getPath(), keyString))
+				}
+				if !state.RedistributeIsis[i].RoutePolicy.IsNull() && data.RedistributeIsis[j].RoutePolicy.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/route-policy", state.getPath(), keyString))
+				}
+				if !state.RedistributeIsis[i].Metric.IsNull() && data.RedistributeIsis[j].Metric.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/metric", state.getPath(), keyString))
+				}
+				if !state.RedistributeIsis[i].Level.IsNull() && data.RedistributeIsis[j].Level.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/redistribute-route-level", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v", state.getPath(), keyString))
+		}
+	}
+	if !state.RedistributeStaticMetricType.IsNull() && data.RedistributeStaticMetricType.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/static/metric-type", state.getPath()))
+	}
+	if !state.RedistributeStaticRoutePolicy.IsNull() && data.RedistributeStaticRoutePolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/static/route-policy", state.getPath()))
+	}
+	if !state.RedistributeStaticMetric.IsNull() && data.RedistributeStaticMetric.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/static/metric", state.getPath()))
+	}
+	if !state.RedistributeStaticLevel.IsNull() && data.RedistributeStaticLevel.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/static", state.getPath()))
+	}
+	if !state.RedistributeStatic.IsNull() && data.RedistributeStatic.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/static", state.getPath()))
+	}
+	if !state.RedistributeConnectedMetricType.IsNull() && data.RedistributeConnectedMetricType.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/connected/metric-type", state.getPath()))
+	}
+	if !state.RedistributeConnectedRoutePolicy.IsNull() && data.RedistributeConnectedRoutePolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/connected/route-policy", state.getPath()))
+	}
+	if !state.RedistributeConnectedMetric.IsNull() && data.RedistributeConnectedMetric.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/connected/metric", state.getPath()))
+	}
+	if !state.RedistributeConnectedLevel.IsNull() && data.RedistributeConnectedLevel.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/connected", state.getPath()))
+	}
+	if !state.RedistributeConnected.IsNull() && data.RedistributeConnected.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/connected", state.getPath()))
+	}
+	if !state.DistributeListRoutePolicyIn.IsNull() && data.DistributeListRoutePolicyIn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute-list/route-policy", state.getPath()))
+	}
+	if !state.DistributeListPrefixListIn.IsNull() && data.DistributeListPrefixListIn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute-list/prefix-list/prefix-list-string", state.getPath()))
+	}
+	for i := range state.DistanceSources {
+		keys := [...]string{"address", "address-prefix"}
+		stateKeyValues := [...]string{state.DistanceSources[i].Address.ValueString(), strconv.FormatInt(state.DistanceSources[i].Prefix.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.DistanceSources[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.DistanceSources[i].Prefix.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.DistanceSources {
+			found = true
+			if state.DistanceSources[i].Address.ValueString() != data.DistanceSources[j].Address.ValueString() {
+				found = false
+			}
+			if state.DistanceSources[i].Prefix.ValueInt64() != data.DistanceSources[j].Prefix.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.DistanceSources[i].RouteFilter.IsNull() && data.DistanceSources[j].RouteFilter.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/distance/ip-addresses/ip-address%v/prefix-list-or-access-list-to", state.getPath(), keyString))
+				}
+				if !state.DistanceSources[i].Distance.IsNull() && data.DistanceSources[j].Distance.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/distance/ip-addresses/ip-address%v/distance-number", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/distance/ip-addresses/ip-address%v", state.getPath(), keyString))
+		}
+	}
+	if !state.Distance.IsNull() && data.Distance.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/distance/global", state.getPath()))
+	}
 	return deletedItems
 }
 
@@ -3421,6 +6917,72 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 
 func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.PrefixUnreachableRxProcessEnable.IsNull() && !data.PrefixUnreachableRxProcessEnable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/prefix-unreachable/rx-process-enable", data.getPath()))
+	}
+	if !data.PrefixUnreachable.IsNull() && !data.PrefixUnreachable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/prefix-unreachable", data.getPath()))
+	}
+	if !data.MplsTrafficEngLevel2Only.IsNull() && !data.MplsTrafficEngLevel2Only.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-two-only", data.getPath()))
+	}
+	if !data.MplsTrafficEngLevel1.IsNull() && !data.MplsTrafficEngLevel1.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-one", data.getPath()))
+	}
+	if !data.MplsTrafficEngLevel12.IsNull() && !data.MplsTrafficEngLevel12.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-one-two", data.getPath()))
+	}
+	for i := range data.MplsTrafficEngTunnelMetricLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.MplsTrafficEngTunnelMetricLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	if !data.MplsTrafficEngTunnelAnycastPreferIgpCost.IsNull() && !data.MplsTrafficEngTunnelAnycastPreferIgpCost.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/tunnel/anycast-prefer-igp-cost", data.getPath()))
+	}
+	if !data.MplsTrafficEngTunnelPreferred.IsNull() && !data.MplsTrafficEngTunnelPreferred.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/tunnel/preferred", data.getPath()))
+	}
+	if !data.MplsTrafficEngTunnelRestricted.IsNull() && !data.MplsTrafficEngTunnelRestricted.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/tunnel/restricted", data.getPath()))
+	}
+	if !data.MplsTrafficEngMulticastIntact.IsNull() && !data.MplsTrafficEngMulticastIntact.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/multicast-intact", data.getPath()))
+	}
+	if !data.MplsTrafficEngIgpIntact.IsNull() && !data.MplsTrafficEngIgpIntact.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/igp-intact", data.getPath()))
+	}
+	if !data.MplsLdpAutoConfig.IsNull() && !data.MplsLdpAutoConfig.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/ldp/auto-config", data.getPath()))
+	}
+	for i := range data.PartitionDetectExternalAddressTracks {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.PartitionDetectExternalAddressTracks[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.PartitionDetectTracks {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.PartitionDetectTracks[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.PartitionDetectTracks[i].Ipv6.IsNull() && !data.PartitionDetectTracks[i].Ipv6.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/partition-detect/tracks/track%v/.", data.getPath(), keyString))
+		}
+		if !data.PartitionDetectTracks[i].Ipv4.IsNull() && !data.PartitionDetectTracks[i].Ipv4.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/partition-detect/tracks/track%v/.", data.getPath(), keyString))
+		}
+	}
+	if !data.PartitionDetect.IsNull() && !data.PartitionDetect.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/partition-detect", data.getPath()))
+	}
 	for i := range data.SegmentRoutingSrv6Locators {
 		keys := [...]string{"locator-string"}
 		keyValues := [...]string{data.SegmentRoutingSrv6Locators[i].LocatorName.ValueString()}
@@ -3445,24 +7007,83 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context) []
 			}
 		}
 	}
-	for i := range data.RedistributeIsis {
-		keys := [...]string{"isis-string"}
-		keyValues := [...]string{data.RedistributeIsis[i].InstanceId.ValueString()}
+	for i := range data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses {
+		keys := [...]string{"ip-address", "address-prefix"}
+		keyValues := [...]string{data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IpAddress.ValueString(), strconv.FormatInt(data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].Prefix.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		if !data.RedistributeIsis[i].DownFlagClear.IsNull() && !data.RedistributeIsis[i].DownFlagClear.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/down-flag-clear", data.getPath(), keyString))
+		if !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteExplicitNull.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteExplicitNull.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address%v/absolute/explicit-null", data.getPath(), keyString))
+		}
+		if !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsolutePhpDisable.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsolutePhpDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address%v/absolute/php-disable", data.getPath(), keyString))
+		}
+		if !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexExplicitNull.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexExplicitNull.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address%v/index/explicit-null", data.getPath(), keyString))
+		}
+		if !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexPhpDisable.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexPhpDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address%v/index/php-disable", data.getPath(), keyString))
 		}
 	}
-	for i := range data.MaximumRedistributedPrefixesLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.MaximumRedistributedPrefixesLevels[i].LevelNumber.ValueInt64(), 10)}
+	for i := range data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses {
+		keys := [...]string{"ip-address", "address-prefix", "flex-algo"}
+		keyValues := [...]string{data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IpAddress.ValueString(), strconv.FormatInt(data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].Prefix.ValueInt64(), 10), strconv.FormatInt(data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].FlexAlgo.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
+		if !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteExplicitNull.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteExplicitNull.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address%v/absolute/explicit-null", data.getPath(), keyString))
+		}
+		if !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsolutePhpDisable.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsolutePhpDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address%v/absolute/php-disable", data.getPath(), keyString))
+		}
+		if !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexExplicitNull.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexExplicitNull.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address%v/index/explicit-null", data.getPath(), keyString))
+		}
+		if !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexPhpDisable.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexPhpDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address%v/index/php-disable", data.getPath(), keyString))
+		}
+	}
+	for i := range data.SegmentRoutingMplsConnectedPrefixSidMapAddresses {
+		keys := [...]string{"ip-address", "address-prefix"}
+		keyValues := [...]string{data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IpAddress.ValueString(), strconv.FormatInt(data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].Prefix.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteExplicitNull.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteExplicitNull.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/address%v/absolute/explicit-null", data.getPath(), keyString))
+		}
+		if !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsolutePhpDisable.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsolutePhpDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/address%v/absolute/php-disable", data.getPath(), keyString))
+		}
+		if !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexExplicitNull.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexExplicitNull.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/address%v/index/explicit-null", data.getPath(), keyString))
+		}
+		if !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexPhpDisable.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexPhpDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/address%v/index/php-disable", data.getPath(), keyString))
+		}
+	}
+	if !data.SegmentRoutingMplsConnectedPrefixSidMap.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMap.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map", data.getPath()))
+	}
+	if !data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide.IsNull() && !data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/prefix-sid-map/advertise-local", data.getPath()))
+	}
+	if !data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal.IsNull() && !data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/prefix-sid-map/advertise-local", data.getPath()))
+	}
+	if !data.SegmentRoutingMplsPrefixSidMapReceiveDisable.IsNull() && !data.SegmentRoutingMplsPrefixSidMapReceiveDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/prefix-sid-map/receive", data.getPath()))
+	}
+	if !data.SegmentRoutingMplsPrefixSidMapReceive.IsNull() && !data.SegmentRoutingMplsPrefixSidMapReceive.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/prefix-sid-map/receive", data.getPath()))
+	}
+	if !data.SegmentRoutingMplsUnlabeledProtectionDisable.IsNull() && !data.SegmentRoutingMplsUnlabeledProtectionDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/unlabeled/protection/disable", data.getPath()))
 	}
 	if !data.SegmentRoutingMplsSrPrefer.IsNull() && !data.SegmentRoutingMplsSrPrefer.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/sr-prefer", data.getPath()))
@@ -3470,70 +7091,14 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context) []
 	if !data.SegmentRoutingMplsEnable.IsNull() && !data.SegmentRoutingMplsEnable.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/enable", data.getPath()))
 	}
-	for i := range data.SpfPrefixPriorityMediumLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.SpfPrefixPriorityMediumLevels[i].LevelNumber.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
+	if !data.SegmentRoutingLabeledOnly.IsNull() && !data.SegmentRoutingLabeledOnly.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/labeled-only", data.getPath()))
 	}
-	for i := range data.SpfPrefixPriorityHighLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.SpfPrefixPriorityHighLevels[i].LevelNumber.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
+	if !data.SegmentRoutingBundleMemberAdjSid.IsNull() && !data.SegmentRoutingBundleMemberAdjSid.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/bundle-member-adj-sid", data.getPath()))
 	}
-	for i := range data.SpfPrefixPriorityCriticalLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.SpfPrefixPriorityCriticalLevels[i].LevelNumber.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	for i := range data.SpfIntervalLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.SpfIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		if !data.SpfIntervalLevels[i].Ietf.IsNull() && !data.SpfIntervalLevels[i].Ietf.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/spf-interval-levels/level%v/ietf", data.getPath(), keyString))
-		}
-	}
-	if !data.SpfIntervalIetf.IsNull() && !data.SpfIntervalIetf.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/spf-interval/ietf", data.getPath()))
-	}
-	if !data.MplsTrafficEngLevel2Only.IsNull() && !data.MplsTrafficEngLevel2Only.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-two-only", data.getPath()))
-	}
-	if !data.MplsTrafficEngLevel1.IsNull() && !data.MplsTrafficEngLevel1.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-one", data.getPath()))
-	}
-	if !data.MplsTrafficEngLevel12.IsNull() && !data.MplsTrafficEngLevel12.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-one-two", data.getPath()))
-	}
-	if !data.MplsLdpAutoConfig.IsNull() && !data.MplsLdpAutoConfig.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/ldp/auto-config", data.getPath()))
-	}
-	if !data.AdvertiseLinkAttributes.IsNull() && !data.AdvertiseLinkAttributes.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise/link/attributes", data.getPath()))
-	}
-	if !data.AdvertisePassiveOnly.IsNull() && !data.AdvertisePassiveOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise/passive-only", data.getPath()))
-	}
-	if !data.MicroloopAvoidanceProtected.IsNull() && !data.MicroloopAvoidanceProtected.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/microloop/avoidance/enable/protected", data.getPath()))
-	}
-	if !data.MicroloopAvoidance.IsNull() && !data.MicroloopAvoidance.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/microloop/avoidance/enable", data.getPath()))
-	}
-	if !data.FastReroutePerLinkUseCandidateOnly.IsNull() && !data.FastReroutePerLinkUseCandidateOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/fast-reroute/per-link/use-candidate-only", data.getPath()))
+	if !data.DefaultInformationOriginate.IsNull() && !data.DefaultInformationOriginate.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-information/originate", data.getPath()))
 	}
 	for i := range data.FastReroutePerLinkPriorityLimitLevels {
 		keys := [...]string{"level-number"}
@@ -3542,6 +7107,17 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context) []
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
+	}
+	for i := range data.FastReroutePerLinkUseCandidateOnlyLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerLinkUseCandidateOnlyLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	if !data.FastReroutePerLinkUseCandidateOnly.IsNull() && !data.FastReroutePerLinkUseCandidateOnly.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/fast-reroute/per-link/use-candidate-only", data.getPath()))
 	}
 	for i := range data.FastReroutePerPrefixLoadSharingDisableLevels {
 		keys := [...]string{"level-number"}
@@ -3584,8 +7160,68 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context) []
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
-	if !data.DefaultInformationOriginate.IsNull() && !data.DefaultInformationOriginate.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-information/originate", data.getPath()))
+	if !data.AttachedBitReceiveIgnore.IsNull() && !data.AttachedBitReceiveIgnore.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/attached-bit/receive/ignore", data.getPath()))
+	}
+	if !data.RouteSourceFirstHop.IsNull() && !data.RouteSourceFirstHop.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/route/source/first-hop", data.getPath()))
+	}
+	if !data.AdjacencyCheckDisable.IsNull() && !data.AdjacencyCheckDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/adjacency-check/disable", data.getPath()))
+	}
+	for i := range data.PropagateLevels {
+		keys := [...]string{"source-level", "destination-level"}
+		keyValues := [...]string{strconv.FormatInt(data.PropagateLevels[i].SourceLevel.ValueInt64(), 10), strconv.FormatInt(data.PropagateLevels[i].DestinationLevel.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.MaximumRedistributedPrefixesLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.MaximumRedistributedPrefixesLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.SpfPrefixPriorityMediumLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.SpfPrefixPriorityMediumLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.SpfPrefixPriorityHighLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.SpfPrefixPriorityHighLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.SpfPrefixPriorityCriticalLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.SpfPrefixPriorityCriticalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.SpfIntervalLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.SpfIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.SpfIntervalLevels[i].Ietf.IsNull() && !data.SpfIntervalLevels[i].Ietf.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/spf-interval-levels/level%v/ietf", data.getPath(), keyString))
+		}
+	}
+	if !data.SpfIntervalIetf.IsNull() && !data.SpfIntervalIetf.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/spf-interval/ietf", data.getPath()))
 	}
 	for i := range data.MetricStyleLevels {
 		keys := [...]string{"level-number"}
@@ -3625,6 +7261,93 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context) []
 	if !data.MetricStyleNarrow.IsNull() && !data.MetricStyleNarrow.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/narrow", data.getPath()))
 	}
+	for i := range data.MetricLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.MetricLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.SummaryPrefixes {
+		keys := [...]string{"address", "address-prefix"}
+		keyValues := [...]string{data.SummaryPrefixes[i].Address.ValueString(), strconv.FormatInt(data.SummaryPrefixes[i].Prefix.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.SummaryPrefixes[i].PartitionRepair.IsNull() && !data.SummaryPrefixes[i].PartitionRepair.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/summary-prefix/ip-addresses/ip-address%v/partition-repair", data.getPath(), keyString))
+		}
+		if !data.SummaryPrefixes[i].UnreachableTagExcludePrefixes.IsNull() && !data.SummaryPrefixes[i].UnreachableTagExcludePrefixes.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/summary-prefix/ip-addresses/ip-address%v/adv-unreachable/unreachable-component-tag/exclude", data.getPath(), keyString))
+		}
+		if !data.SummaryPrefixes[i].AdvUnreachable.IsNull() && !data.SummaryPrefixes[i].AdvUnreachable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/summary-prefix/ip-addresses/ip-address%v/adv-unreachable", data.getPath(), keyString))
+		}
+		if !data.SummaryPrefixes[i].Explicit.IsNull() && !data.SummaryPrefixes[i].Explicit.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/summary-prefix/ip-addresses/ip-address%v/explicit", data.getPath(), keyString))
+		}
+	}
+	if !data.MicroloopAvoidanceProtected.IsNull() && !data.MicroloopAvoidanceProtected.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/microloop/avoidance/enable/protected", data.getPath()))
+	}
+	if !data.MicroloopAvoidance.IsNull() && !data.MicroloopAvoidance.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/microloop/avoidance/enable", data.getPath()))
+	}
+	if !data.AdvertiseLinkAttributes.IsNull() && !data.AdvertiseLinkAttributes.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise/link/attributes", data.getPath()))
+	}
+	if !data.AdvertisePassiveOnly.IsNull() && !data.AdvertisePassiveOnly.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise/passive-only", data.getPath()))
+	}
+	for i := range data.RedistributeOspf {
+		keys := [...]string{"ospf-process-id"}
+		keyValues := [...]string{data.RedistributeOspf[i].InstanceId.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.RedistributeOspf[i].MatchExternal.IsNull() && !data.RedistributeOspf[i].MatchExternal.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/external", data.getPath(), keyString))
+		}
+		if !data.RedistributeOspf[i].MatchInternal.IsNull() && !data.RedistributeOspf[i].MatchInternal.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/internal", data.getPath(), keyString))
+		}
+	}
+	for i := range data.RedistributeBgp {
+		keys := [...]string{"as-number"}
+		keyValues := [...]string{data.RedistributeBgp[i].AsNumber.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.RedistributeIsis {
+		keys := [...]string{"isis-string"}
+		keyValues := [...]string{data.RedistributeIsis[i].InstanceId.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.RedistributeIsis[i].DownFlagClear.IsNull() && !data.RedistributeIsis[i].DownFlagClear.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/down-flag-clear", data.getPath(), keyString))
+		}
+	}
+	if !data.RedistributeStatic.IsNull() && !data.RedistributeStatic.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/static", data.getPath()))
+	}
+	if !data.RedistributeConnected.IsNull() && !data.RedistributeConnected.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/connected", data.getPath()))
+	}
+	for i := range data.DistanceSources {
+		keys := [...]string{"address", "address-prefix"}
+		keyValues := [...]string{data.DistanceSources[i].Address.ValueString(), strconv.FormatInt(data.DistanceSources[i].Prefix.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
 	return emptyLeafsDelete
 }
 
@@ -3634,6 +7357,90 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context) []
 
 func (data *RouterISISAddressFamily) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
+	if !data.PrefixUnreachableRxProcessEnable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/prefix-unreachable/rx-process-enable", data.getPath()))
+	}
+	if !data.PrefixUnreachableAdvMetric.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/prefix-unreachable/adv-metric", data.getPath()))
+	}
+	if !data.PrefixUnreachableAdvLifetime.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/prefix-unreachable/adv-lifetime", data.getPath()))
+	}
+	if !data.PrefixUnreachableAdvMaximum.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/prefix-unreachable/adv-maximum", data.getPath()))
+	}
+	if !data.PrefixUnreachable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/prefix-unreachable", data.getPath()))
+	}
+	if !data.MplsTrafficEngLevel2Only.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-two-only", data.getPath()))
+	}
+	if !data.MplsTrafficEngLevel1.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-one", data.getPath()))
+	}
+	if !data.MplsTrafficEngLevel12.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-one-two", data.getPath()))
+	}
+	for i := range data.MplsTrafficEngTunnelMetricLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.MplsTrafficEngTunnelMetricLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/tunnel/metric-levels/metric-level%v", data.getPath(), keyString))
+	}
+	if !data.MplsTrafficEngTunnelAnycastPreferIgpCost.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/tunnel/anycast-prefer-igp-cost", data.getPath()))
+	}
+	if !data.MplsTrafficEngTunnelMetric.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/tunnel/metric", data.getPath()))
+	}
+	if !data.MplsTrafficEngTunnelPreferred.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/tunnel/preferred", data.getPath()))
+	}
+	if !data.MplsTrafficEngTunnelRestricted.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/tunnel/restricted", data.getPath()))
+	}
+	if !data.MplsTrafficEngMulticastIntact.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/multicast-intact", data.getPath()))
+	}
+	if !data.MplsTrafficEngIgpIntact.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/igp-intact", data.getPath()))
+	}
+	if !data.MplsTrafficEngRouterIdInterfaceName.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/router-id/interface-name", data.getPath()))
+	}
+	if !data.MplsTrafficEngRouterIdIpv4Address.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/router-id/ipv4-address", data.getPath()))
+	}
+	if !data.MplsLdpAutoConfig.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/ldp/auto-config", data.getPath()))
+	}
+	for i := range data.PartitionDetectExternalAddressTracks {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.PartitionDetectExternalAddressTracks[i].Address.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/partition-detect/external-address-tracks/external-address-track%v", data.getPath(), keyString))
+	}
+	for i := range data.PartitionDetectTracks {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.PartitionDetectTracks[i].Address.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/partition-detect/tracks/track%v", data.getPath(), keyString))
+	}
+	if !data.PartitionDetect.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/partition-detect", data.getPath()))
+	}
 	for i := range data.SegmentRoutingSrv6Locators {
 		keys := [...]string{"locator-string"}
 		keyValues := [...]string{data.SegmentRoutingSrv6Locators[i].LocatorName.ValueString()}
@@ -3644,15 +7451,207 @@ func (data *RouterISISAddressFamily) getDeletePaths(ctx context.Context) []strin
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v", data.getPath(), keyString))
 	}
-	for i := range data.RedistributeIsis {
-		keys := [...]string{"isis-string"}
-		keyValues := [...]string{data.RedistributeIsis[i].InstanceId.ValueString()}
+	for i := range data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses {
+		keys := [...]string{"ip-address", "address-prefix"}
+		keyValues := [...]string{data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IpAddress.ValueString(), strconv.FormatInt(data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].Prefix.ValueInt64(), 10)}
 
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address%v", data.getPath(), keyString))
+	}
+	for i := range data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses {
+		keys := [...]string{"ip-address", "address-prefix", "flex-algo"}
+		keyValues := [...]string{data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IpAddress.ValueString(), strconv.FormatInt(data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].Prefix.ValueInt64(), 10), strconv.FormatInt(data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].FlexAlgo.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address%v", data.getPath(), keyString))
+	}
+	for i := range data.SegmentRoutingMplsConnectedPrefixSidMapAddresses {
+		keys := [...]string{"ip-address", "address-prefix"}
+		keyValues := [...]string{data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IpAddress.ValueString(), strconv.FormatInt(data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].Prefix.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/address%v", data.getPath(), keyString))
+	}
+	if !data.SegmentRoutingMplsConnectedPrefixSidMap.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map", data.getPath()))
+	}
+	if !data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/prefix-sid-map/advertise-local", data.getPath()))
+	}
+	if !data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/prefix-sid-map/advertise-local", data.getPath()))
+	}
+	if !data.SegmentRoutingMplsPrefixSidMapReceiveDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/prefix-sid-map/receive", data.getPath()))
+	}
+	if !data.SegmentRoutingMplsPrefixSidMapReceive.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/prefix-sid-map/receive", data.getPath()))
+	}
+	if !data.SegmentRoutingMplsUnlabeledProtectionDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/unlabeled/protection/disable", data.getPath()))
+	}
+	if !data.SegmentRoutingMplsUnlabeledProtectionRoutePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/unlabeled/protection/route-policy", data.getPath()))
+	}
+	if !data.SegmentRoutingMplsUnlabeledProtectionPrefixList.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/unlabeled/protection/prefix-list", data.getPath()))
+	}
+	if !data.SegmentRoutingMplsSrPrefer.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/sr-prefer", data.getPath()))
+	}
+	if !data.SegmentRoutingMplsEnable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/enable", data.getPath()))
+	}
+	if !data.SegmentRoutingProtectedAdjacencySidDelay.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/protected-adjacency-sid-delay", data.getPath()))
+	}
+	if !data.SegmentRoutingLabeledOnly.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/labeled-only", data.getPath()))
+	}
+	if !data.SegmentRoutingBundleMemberAdjSid.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/bundle-member-adj-sid", data.getPath()))
+	}
+	if !data.DefaultInformationOriginateRoutePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-information/originate/route-policy", data.getPath()))
+	}
+	if !data.DefaultInformationOriginate.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-information/originate", data.getPath()))
+	}
+	for i := range data.FastReroutePerLinkPriorityLimitLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerLinkPriorityLimitLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-link/priority-limit-levels/priority-limit-level%v", data.getPath(), keyString))
+	}
+	if !data.FastReroutePerLinkPriorityLimit.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-link/priority-limit", data.getPath()))
+	}
+	for i := range data.FastReroutePerLinkUseCandidateOnlyLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerLinkUseCandidateOnlyLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-link/use-candidate-only-levels/use-candidate-only-level%v", data.getPath(), keyString))
+	}
+	if !data.FastReroutePerLinkUseCandidateOnly.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-link/use-candidate-only", data.getPath()))
+	}
+	if !data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/srlg-disjoint/index", data.getPath()))
+	}
+	if !data.FastReroutePerPrefixTiebreakerSecondaryPathIndex.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/secondary-path/index", data.getPath()))
+	}
+	if !data.FastReroutePerPrefixTiebreakerPrimaryPathIndex.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/primary-path/index", data.getPath()))
+	}
+	if !data.FastReroutePerPrefixTiebreakerNodeProtectingIndex.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/node-protecting/index", data.getPath()))
+	}
+	if !data.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/lowest-backup-metric/index", data.getPath()))
+	}
+	if !data.FastReroutePerPrefixTiebreakerLcDisjointIndex.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/lc-disjoint/index", data.getPath()))
+	}
+	if !data.FastReroutePerPrefixTiebreakerDownstreamIndex.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/downstream/index", data.getPath()))
+	}
+	for i := range data.FastReroutePerPrefixLoadSharingDisableLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixLoadSharingDisableLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/load-sharing/disable-levels/disable-level%v", data.getPath(), keyString))
+	}
+	if !data.FastReroutePerPrefixLoadSharingDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/load-sharing/disable", data.getPath()))
+	}
+	for i := range data.FastReroutePerPrefixRemoteLfaPrefixListLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixRemoteLfaPrefixListLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/remote-lfa/prefix-list-levels/prefix-list-level%v", data.getPath(), keyString))
+	}
+	if !data.FastReroutePerPrefixRemoteLfaPrefixList.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/remote-lfa/prefix-list", data.getPath()))
+	}
+	for i := range data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/srlg-protection/weighted-global-levels/weighted-global-level%v", data.getPath(), keyString))
+	}
+	if !data.FastReroutePerPrefixSrlgProtectionWeightedGlobal.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/srlg-protection/weighted-global", data.getPath()))
+	}
+	if !data.FastReroutePerPrefixUseCandidateOnly.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/use-candidate-only", data.getPath()))
+	}
+	for i := range data.FastReroutePerPrefixPriorityLimitLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixPriorityLimitLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/priority-limit-levels/priority-limit-level%v", data.getPath(), keyString))
+	}
+	if !data.FastReroutePerPrefixPriorityLimit.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/priority-limit", data.getPath()))
+	}
+	if !data.FastRerouteDelayInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/delay-interval", data.getPath()))
+	}
+	if !data.AttachedBitSend.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/attached-bit/send", data.getPath()))
+	}
+	if !data.AttachedBitReceiveIgnore.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/attached-bit/receive/ignore", data.getPath()))
+	}
+	if !data.RouteSourceFirstHop.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/route/source/first-hop", data.getPath()))
+	}
+	if !data.AdjacencyCheckDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/adjacency-check/disable", data.getPath()))
+	}
+	for i := range data.PropagateLevels {
+		keys := [...]string{"source-level", "destination-level"}
+		keyValues := [...]string{strconv.FormatInt(data.PropagateLevels[i].SourceLevel.ValueInt64(), 10), strconv.FormatInt(data.PropagateLevels[i].DestinationLevel.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/propagate/levels/level%v", data.getPath(), keyString))
 	}
 	for i := range data.MaximumRedistributedPrefixesLevels {
 		keys := [...]string{"level-number"}
@@ -3666,12 +7665,6 @@ func (data *RouterISISAddressFamily) getDeletePaths(ctx context.Context) []strin
 	}
 	if !data.MaximumRedistributedPrefixes.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-redistributed-prefixes", data.getPath()))
-	}
-	if !data.SegmentRoutingMplsSrPrefer.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/sr-prefer", data.getPath()))
-	}
-	if !data.SegmentRoutingMplsEnable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/enable", data.getPath()))
 	}
 	for i := range data.SpfPrefixPriorityMediumLevels {
 		keys := [...]string{"level-number"}
@@ -3758,146 +7751,6 @@ func (data *RouterISISAddressFamily) getDeletePaths(ctx context.Context) []strin
 	if !data.SpfIntervalMaximumWait.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf-interval/maximum-wait", data.getPath()))
 	}
-	if !data.MplsTrafficEngLevel2Only.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-two-only", data.getPath()))
-	}
-	if !data.MplsTrafficEngLevel1.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-one", data.getPath()))
-	}
-	if !data.MplsTrafficEngLevel12.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-one-two", data.getPath()))
-	}
-	if !data.MplsTrafficEngRouterIdInterfaceName.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/router-id/interface-name", data.getPath()))
-	}
-	if !data.MplsTrafficEngRouterIdIpv4Address.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/router-id/ipv4-address", data.getPath()))
-	}
-	if !data.MplsLdpAutoConfig.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/ldp/auto-config", data.getPath()))
-	}
-	if !data.AdvertiseLinkAttributes.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/link/attributes", data.getPath()))
-	}
-	if !data.AdvertisePassiveOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/passive-only", data.getPath()))
-	}
-	if !data.MicroloopAvoidanceRibUpdateDelay.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/microloop/avoidance/rib-update-delay", data.getPath()))
-	}
-	if !data.MicroloopAvoidanceSegmentRoutingRoutePolicy.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/microloop/avoidance/enable/segment-routing/route-policy", data.getPath()))
-	}
-	if !data.MicroloopAvoidanceProtected.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/microloop/avoidance/enable/protected", data.getPath()))
-	}
-	if !data.MicroloopAvoidance.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/microloop/avoidance/enable", data.getPath()))
-	}
-	if !data.FastReroutePerLinkUseCandidateOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-link/use-candidate-only", data.getPath()))
-	}
-	for i := range data.FastReroutePerLinkPriorityLimitLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerLinkPriorityLimitLevels[i].LevelNumber.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-link/priority-limit-levels/priority-limit-level%v", data.getPath(), keyString))
-	}
-	if !data.FastReroutePerLinkPriorityLimit.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-link/priority-limit", data.getPath()))
-	}
-	if !data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/srlg-disjoint/index", data.getPath()))
-	}
-	if !data.FastReroutePerPrefixTiebreakerSecondaryPathIndex.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/secondary-path/index", data.getPath()))
-	}
-	if !data.FastReroutePerPrefixTiebreakerPrimaryPathIndex.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/primary-path/index", data.getPath()))
-	}
-	if !data.FastReroutePerPrefixTiebreakerNodeProtectingIndex.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/node-protecting/index", data.getPath()))
-	}
-	if !data.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/lowest-backup-metric/index", data.getPath()))
-	}
-	if !data.FastReroutePerPrefixTiebreakerLcDisjointIndex.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/lc-disjoint/index", data.getPath()))
-	}
-	if !data.FastReroutePerPrefixTiebreakerDownstreamIndex.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/downstream/index", data.getPath()))
-	}
-	for i := range data.FastReroutePerPrefixLoadSharingDisableLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixLoadSharingDisableLevels[i].LevelNumber.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/load-sharing/disable-levels/disable-level%v", data.getPath(), keyString))
-	}
-	if !data.FastReroutePerPrefixLoadSharingDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/load-sharing/disable", data.getPath()))
-	}
-	for i := range data.FastReroutePerPrefixRemoteLfaPrefixListLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixRemoteLfaPrefixListLevels[i].LevelNumber.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/remote-lfa/prefix-list-levels/prefix-list-level%v", data.getPath(), keyString))
-	}
-	if !data.FastReroutePerPrefixRemoteLfaPrefixList.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/remote-lfa/prefix-list", data.getPath()))
-	}
-	for i := range data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels[i].LevelNumber.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/srlg-protection/weighted-global-levels/weighted-global-level%v", data.getPath(), keyString))
-	}
-	if !data.FastReroutePerPrefixSrlgProtectionWeightedGlobal.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/srlg-protection/weighted-global", data.getPath()))
-	}
-	if !data.FastReroutePerPrefixUseCandidateOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/use-candidate-only", data.getPath()))
-	}
-	for i := range data.FastReroutePerPrefixPriorityLimitLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixPriorityLimitLevels[i].LevelNumber.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/priority-limit-levels/priority-limit-level%v", data.getPath(), keyString))
-	}
-	if !data.FastReroutePerPrefixPriorityLimit.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/priority-limit", data.getPath()))
-	}
-	if !data.FastRerouteDelayInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/delay-interval", data.getPath()))
-	}
-	if !data.DefaultInformationOriginate.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-information/originate", data.getPath()))
-	}
-	if !data.RouterIdIpAddress.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id/ip-address", data.getPath()))
-	}
-	if !data.RouterIdInterfaceName.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id/interface-name", data.getPath()))
-	}
 	for i := range data.MetricStyleLevels {
 		keys := [...]string{"level-number"}
 		keyValues := [...]string{strconv.FormatInt(data.MetricStyleLevels[i].LevelNumber.ValueInt64(), 10)}
@@ -3922,6 +7775,135 @@ func (data *RouterISISAddressFamily) getDeletePaths(ctx context.Context) []strin
 	}
 	if !data.MetricStyleNarrow.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style/narrow", data.getPath()))
+	}
+	for i := range data.MetricLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.MetricLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-levels/metric-level%v", data.getPath(), keyString))
+	}
+	if !data.Metric.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric", data.getPath()))
+	}
+	for i := range data.SummaryPrefixes {
+		keys := [...]string{"address", "address-prefix"}
+		keyValues := [...]string{data.SummaryPrefixes[i].Address.ValueString(), strconv.FormatInt(data.SummaryPrefixes[i].Prefix.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/summary-prefix/ip-addresses/ip-address%v", data.getPath(), keyString))
+	}
+	if !data.MicroloopAvoidanceRibUpdateDelay.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/microloop/avoidance/rib-update-delay", data.getPath()))
+	}
+	if !data.MicroloopAvoidanceSegmentRoutingRoutePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/microloop/avoidance/enable/segment-routing/route-policy", data.getPath()))
+	}
+	if !data.MicroloopAvoidanceProtected.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/microloop/avoidance/enable/protected", data.getPath()))
+	}
+	if !data.MicroloopAvoidance.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/microloop/avoidance/enable", data.getPath()))
+	}
+	if !data.AdvertiseLinkAttributes.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/link/attributes", data.getPath()))
+	}
+	if !data.AdvertisePassiveOnly.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/passive-only", data.getPath()))
+	}
+	if !data.RouterIdIpAddress.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id", data.getPath()))
+	}
+	if !data.RouterIdInterfaceName.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id", data.getPath()))
+	}
+	if !data.MaximumPaths.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-paths", data.getPath()))
+	}
+	for i := range data.RedistributeOspf {
+		keys := [...]string{"ospf-process-id"}
+		keyValues := [...]string{data.RedistributeOspf[i].InstanceId.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/ospfs/ospf%v", data.getPath(), keyString))
+	}
+	for i := range data.RedistributeBgp {
+		keys := [...]string{"as-number"}
+		keyValues := [...]string{data.RedistributeBgp[i].AsNumber.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/bgps/bgp%v", data.getPath(), keyString))
+	}
+	for i := range data.RedistributeIsis {
+		keys := [...]string{"isis-string"}
+		keyValues := [...]string{data.RedistributeIsis[i].InstanceId.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v", data.getPath(), keyString))
+	}
+	if !data.RedistributeStaticMetricType.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/static/metric-type", data.getPath()))
+	}
+	if !data.RedistributeStaticRoutePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/static/route-policy", data.getPath()))
+	}
+	if !data.RedistributeStaticMetric.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/static/metric", data.getPath()))
+	}
+	if !data.RedistributeStaticLevel.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/static", data.getPath()))
+	}
+	if !data.RedistributeStatic.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/static", data.getPath()))
+	}
+	if !data.RedistributeConnectedMetricType.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/connected/metric-type", data.getPath()))
+	}
+	if !data.RedistributeConnectedRoutePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/connected/route-policy", data.getPath()))
+	}
+	if !data.RedistributeConnectedMetric.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/connected/metric", data.getPath()))
+	}
+	if !data.RedistributeConnectedLevel.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/connected", data.getPath()))
+	}
+	if !data.RedistributeConnected.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/connected", data.getPath()))
+	}
+	if !data.DistributeListRoutePolicyIn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute-list/route-policy", data.getPath()))
+	}
+	if !data.DistributeListPrefixListIn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute-list/prefix-list/prefix-list-string", data.getPath()))
+	}
+	for i := range data.DistanceSources {
+		keys := [...]string{"address", "address-prefix"}
+		keyValues := [...]string{data.DistanceSources[i].Address.ValueString(), strconv.FormatInt(data.DistanceSources[i].Prefix.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/distance/ip-addresses/ip-address%v", data.getPath(), keyString))
+	}
+	if !data.Distance.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/distance/global", data.getPath()))
 	}
 	return deletePaths
 }

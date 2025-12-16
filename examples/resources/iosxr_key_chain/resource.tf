@@ -3,7 +3,7 @@ resource "iosxr_key_chain" "example" {
   keys = [
     {
       key_name                                = "1"
-      key_string_password                     = "00071A150754"
+      key_string_password6                    = "00071A150754"
       cryptographic_algorithm                 = "hmac-md5"
       accept_lifetime_start_time_hour         = 11
       accept_lifetime_start_time_minute       = 52

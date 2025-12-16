@@ -53,24 +53,34 @@ type NTP struct {
 	AccessGroupVrfs            []NTPAccessGroupVrfs            `tfsdk:"access_group_vrfs"`
 	Authenticate               types.Bool                      `tfsdk:"authenticate"`
 	AuthenticationKeys         []NTPAuthenticationKeys         `tfsdk:"authentication_keys"`
-	Broadcastdelay             types.Int64                     `tfsdk:"broadcastdelay"`
-	MaxAssociations            types.Int64                     `tfsdk:"max_associations"`
-	TrustedKeys                []NTPTrustedKeys                `tfsdk:"trusted_keys"`
-	UpdateCalendar             types.Bool                      `tfsdk:"update_calendar"`
-	LogInternalSync            types.Bool                      `tfsdk:"log_internal_sync"`
-	SourceInterfaceName        types.String                    `tfsdk:"source_interface_name"`
-	SourceVrfs                 []NTPSourceVrfs                 `tfsdk:"source_vrfs"`
-	Passive                    types.Bool                      `tfsdk:"passive"`
 	CmacAuthenticationKeys     []NTPCmacAuthenticationKeys     `tfsdk:"cmac_authentication_keys"`
 	HmacSha1AuthenticationKeys []NTPHmacSha1AuthenticationKeys `tfsdk:"hmac_sha1_authentication_keys"`
 	HmacSha2AuthenticationKeys []NTPHmacSha2AuthenticationKeys `tfsdk:"hmac_sha2_authentication_keys"`
+	Broadcastdelay             types.Int64                     `tfsdk:"broadcastdelay"`
+	DriftAgingTime             types.Int64                     `tfsdk:"drift_aging_time"`
+	DriftFileBootflash         types.Bool                      `tfsdk:"drift_file_bootflash"`
+	DriftFileCompactflash      types.Bool                      `tfsdk:"drift_file_compactflash"`
+	DriftFileUsb               types.Bool                      `tfsdk:"drift_file_usb"`
+	DriftFileDisk0             types.Bool                      `tfsdk:"drift_file_disk0"`
+	DriftFileDisk1             types.Bool                      `tfsdk:"drift_file_disk1"`
+	DriftFileDisk2             types.Bool                      `tfsdk:"drift_file_disk2"`
+	DriftFileHarddisk          types.Bool                      `tfsdk:"drift_file_harddisk"`
+	DriftFilename              types.String                    `tfsdk:"drift_filename"`
 	Interfaces                 []NTPInterfaces                 `tfsdk:"interfaces"`
 	InterfaceVrfs              []NTPInterfaceVrfs              `tfsdk:"interface_vrfs"`
 	PrimaryStratumNumber       types.Int64                     `tfsdk:"primary_stratum_number"`
 	PrimaryReferenceClock      types.Bool                      `tfsdk:"primary_reference_clock"`
+	MaxAssociations            types.Int64                     `tfsdk:"max_associations"`
 	Ipv4PeersServers           []NTPIpv4PeersServers           `tfsdk:"ipv4_peers_servers"`
 	Ipv6PeersServers           []NTPIpv6PeersServers           `tfsdk:"ipv6_peers_servers"`
+	HostnamePeersServers       []NTPHostnamePeersServers       `tfsdk:"hostname_peers_servers"`
 	PeersServersVrfs           []NTPPeersServersVrfs           `tfsdk:"peers_servers_vrfs"`
+	TrustedKeys                []NTPTrustedKeys                `tfsdk:"trusted_keys"`
+	UpdateCalendar             types.Bool                      `tfsdk:"update_calendar"`
+	LogInternalSync            types.Bool                      `tfsdk:"log_internal_sync"`
+	Passive                    types.Bool                      `tfsdk:"passive"`
+	SourceInterfaceName        types.String                    `tfsdk:"source_interface_name"`
+	SourceVrfs                 []NTPSourceVrfs                 `tfsdk:"source_vrfs"`
 	AdminPlaneVersion          types.Int64                     `tfsdk:"admin_plane_version"`
 	AdminPlaneKey              types.Int64                     `tfsdk:"admin_plane_key"`
 	AdminPlaneMinpoll          types.Int64                     `tfsdk:"admin_plane_minpoll"`
@@ -98,24 +108,34 @@ type NTPData struct {
 	AccessGroupVrfs            []NTPAccessGroupVrfs            `tfsdk:"access_group_vrfs"`
 	Authenticate               types.Bool                      `tfsdk:"authenticate"`
 	AuthenticationKeys         []NTPAuthenticationKeys         `tfsdk:"authentication_keys"`
-	Broadcastdelay             types.Int64                     `tfsdk:"broadcastdelay"`
-	MaxAssociations            types.Int64                     `tfsdk:"max_associations"`
-	TrustedKeys                []NTPTrustedKeys                `tfsdk:"trusted_keys"`
-	UpdateCalendar             types.Bool                      `tfsdk:"update_calendar"`
-	LogInternalSync            types.Bool                      `tfsdk:"log_internal_sync"`
-	SourceInterfaceName        types.String                    `tfsdk:"source_interface_name"`
-	SourceVrfs                 []NTPSourceVrfs                 `tfsdk:"source_vrfs"`
-	Passive                    types.Bool                      `tfsdk:"passive"`
 	CmacAuthenticationKeys     []NTPCmacAuthenticationKeys     `tfsdk:"cmac_authentication_keys"`
 	HmacSha1AuthenticationKeys []NTPHmacSha1AuthenticationKeys `tfsdk:"hmac_sha1_authentication_keys"`
 	HmacSha2AuthenticationKeys []NTPHmacSha2AuthenticationKeys `tfsdk:"hmac_sha2_authentication_keys"`
+	Broadcastdelay             types.Int64                     `tfsdk:"broadcastdelay"`
+	DriftAgingTime             types.Int64                     `tfsdk:"drift_aging_time"`
+	DriftFileBootflash         types.Bool                      `tfsdk:"drift_file_bootflash"`
+	DriftFileCompactflash      types.Bool                      `tfsdk:"drift_file_compactflash"`
+	DriftFileUsb               types.Bool                      `tfsdk:"drift_file_usb"`
+	DriftFileDisk0             types.Bool                      `tfsdk:"drift_file_disk0"`
+	DriftFileDisk1             types.Bool                      `tfsdk:"drift_file_disk1"`
+	DriftFileDisk2             types.Bool                      `tfsdk:"drift_file_disk2"`
+	DriftFileHarddisk          types.Bool                      `tfsdk:"drift_file_harddisk"`
+	DriftFilename              types.String                    `tfsdk:"drift_filename"`
 	Interfaces                 []NTPInterfaces                 `tfsdk:"interfaces"`
 	InterfaceVrfs              []NTPInterfaceVrfs              `tfsdk:"interface_vrfs"`
 	PrimaryStratumNumber       types.Int64                     `tfsdk:"primary_stratum_number"`
 	PrimaryReferenceClock      types.Bool                      `tfsdk:"primary_reference_clock"`
+	MaxAssociations            types.Int64                     `tfsdk:"max_associations"`
 	Ipv4PeersServers           []NTPIpv4PeersServers           `tfsdk:"ipv4_peers_servers"`
 	Ipv6PeersServers           []NTPIpv6PeersServers           `tfsdk:"ipv6_peers_servers"`
+	HostnamePeersServers       []NTPHostnamePeersServers       `tfsdk:"hostname_peers_servers"`
 	PeersServersVrfs           []NTPPeersServersVrfs           `tfsdk:"peers_servers_vrfs"`
+	TrustedKeys                []NTPTrustedKeys                `tfsdk:"trusted_keys"`
+	UpdateCalendar             types.Bool                      `tfsdk:"update_calendar"`
+	LogInternalSync            types.Bool                      `tfsdk:"log_internal_sync"`
+	Passive                    types.Bool                      `tfsdk:"passive"`
+	SourceInterfaceName        types.String                    `tfsdk:"source_interface_name"`
+	SourceVrfs                 []NTPSourceVrfs                 `tfsdk:"source_vrfs"`
 	AdminPlaneVersion          types.Int64                     `tfsdk:"admin_plane_version"`
 	AdminPlaneKey              types.Int64                     `tfsdk:"admin_plane_key"`
 	AdminPlaneMinpoll          types.Int64                     `tfsdk:"admin_plane_minpoll"`
@@ -139,13 +159,6 @@ type NTPAuthenticationKeys struct {
 	KeyNumber    types.Int64  `tfsdk:"key_number"`
 	Md5Encrypted types.String `tfsdk:"md5_encrypted"`
 }
-type NTPTrustedKeys struct {
-	KeyNumber types.Int64 `tfsdk:"key_number"`
-}
-type NTPSourceVrfs struct {
-	VrfName       types.String `tfsdk:"vrf_name"`
-	InterfaceName types.String `tfsdk:"interface_name"`
-}
 type NTPCmacAuthenticationKeys struct {
 	KeyNumber     types.Int64  `tfsdk:"key_number"`
 	CmacEncrypted types.String `tfsdk:"cmac_encrypted"`
@@ -160,6 +173,7 @@ type NTPHmacSha2AuthenticationKeys struct {
 }
 type NTPInterfaces struct {
 	InterfaceName        types.String `tfsdk:"interface_name"`
+	BroadcastClient      types.Bool   `tfsdk:"broadcast_client"`
 	BroadcastDestination types.String `tfsdk:"broadcast_destination"`
 	BroadcastKey         types.Int64  `tfsdk:"broadcast_key"`
 	BroadcastVersion     types.Int64  `tfsdk:"broadcast_version"`
@@ -194,10 +208,30 @@ type NTPIpv6PeersServers struct {
 	Source      types.String `tfsdk:"source"`
 	Ipv6Address types.String `tfsdk:"ipv6_address"`
 }
+type NTPHostnamePeersServers struct {
+	FqdnHostname types.String `tfsdk:"fqdn_hostname"`
+	Type         types.String `tfsdk:"type"`
+	Version      types.Int64  `tfsdk:"version"`
+	Key          types.Int64  `tfsdk:"key"`
+	Minpoll      types.Int64  `tfsdk:"minpoll"`
+	Maxpoll      types.Int64  `tfsdk:"maxpoll"`
+	Prefer       types.Bool   `tfsdk:"prefer"`
+	Burst        types.Bool   `tfsdk:"burst"`
+	Iburst       types.Bool   `tfsdk:"iburst"`
+	Source       types.String `tfsdk:"source"`
+}
 type NTPPeersServersVrfs struct {
-	VrfName          types.String                          `tfsdk:"vrf_name"`
-	Ipv4PeersServers []NTPPeersServersVrfsIpv4PeersServers `tfsdk:"ipv4_peers_servers"`
-	Ipv6PeersServers []NTPPeersServersVrfsIpv6PeersServers `tfsdk:"ipv6_peers_servers"`
+	VrfName              types.String                              `tfsdk:"vrf_name"`
+	Ipv4PeersServers     []NTPPeersServersVrfsIpv4PeersServers     `tfsdk:"ipv4_peers_servers"`
+	Ipv6PeersServers     []NTPPeersServersVrfsIpv6PeersServers     `tfsdk:"ipv6_peers_servers"`
+	HostnamePeersServers []NTPPeersServersVrfsHostnamePeersServers `tfsdk:"hostname_peers_servers"`
+}
+type NTPTrustedKeys struct {
+	KeyNumber types.Int64 `tfsdk:"key_number"`
+}
+type NTPSourceVrfs struct {
+	VrfName       types.String `tfsdk:"vrf_name"`
+	InterfaceName types.String `tfsdk:"interface_name"`
 }
 type NTPInterfaceVrfsInterfaces struct {
 	InterfaceName        types.String `tfsdk:"interface_name"`
@@ -231,6 +265,18 @@ type NTPPeersServersVrfsIpv6PeersServers struct {
 	Iburst      types.Bool   `tfsdk:"iburst"`
 	Source      types.String `tfsdk:"source"`
 	Ipv6Address types.String `tfsdk:"ipv6_address"`
+}
+type NTPPeersServersVrfsHostnamePeersServers struct {
+	FqdnHostname types.String `tfsdk:"fqdn_hostname"`
+	Type         types.String `tfsdk:"type"`
+	Version      types.Int64  `tfsdk:"version"`
+	Key          types.Int64  `tfsdk:"key"`
+	Minpoll      types.Int64  `tfsdk:"minpoll"`
+	Maxpoll      types.Int64  `tfsdk:"maxpoll"`
+	Prefer       types.Bool   `tfsdk:"prefer"`
+	Burst        types.Bool   `tfsdk:"burst"`
+	Iburst       types.Bool   `tfsdk:"iburst"`
+	Source       types.String `tfsdk:"source"`
 }
 
 // End of section. //template:end types
@@ -295,6 +341,55 @@ func (data NTP) toBody(ctx context.Context) string {
 	if !data.Broadcastdelay.IsNull() && !data.Broadcastdelay.IsUnknown() {
 		body, _ = sjson.Set(body, "broadcastdelay", strconv.FormatInt(data.Broadcastdelay.ValueInt64(), 10))
 	}
+	if !data.DriftAgingTime.IsNull() && !data.DriftAgingTime.IsUnknown() {
+		body, _ = sjson.Set(body, "drift.aging.time", strconv.FormatInt(data.DriftAgingTime.ValueInt64(), 10))
+	}
+	if !data.DriftFileBootflash.IsNull() && !data.DriftFileBootflash.IsUnknown() {
+		if data.DriftFileBootflash.ValueBool() {
+			body, _ = sjson.Set(body, "drift.file.bootflash", map[string]string{})
+		}
+	}
+	if !data.DriftFileCompactflash.IsNull() && !data.DriftFileCompactflash.IsUnknown() {
+		if data.DriftFileCompactflash.ValueBool() {
+			body, _ = sjson.Set(body, "drift.file.compactflash", map[string]string{})
+		}
+	}
+	if !data.DriftFileUsb.IsNull() && !data.DriftFileUsb.IsUnknown() {
+		if data.DriftFileUsb.ValueBool() {
+			body, _ = sjson.Set(body, "drift.file.usb", map[string]string{})
+		}
+	}
+	if !data.DriftFileDisk0.IsNull() && !data.DriftFileDisk0.IsUnknown() {
+		if data.DriftFileDisk0.ValueBool() {
+			body, _ = sjson.Set(body, "drift.file.disk0", map[string]string{})
+		}
+	}
+	if !data.DriftFileDisk1.IsNull() && !data.DriftFileDisk1.IsUnknown() {
+		if data.DriftFileDisk1.ValueBool() {
+			body, _ = sjson.Set(body, "drift.file.disk1", map[string]string{})
+		}
+	}
+	if !data.DriftFileDisk2.IsNull() && !data.DriftFileDisk2.IsUnknown() {
+		if data.DriftFileDisk2.ValueBool() {
+			body, _ = sjson.Set(body, "drift.file.disk2", map[string]string{})
+		}
+	}
+	if !data.DriftFileHarddisk.IsNull() && !data.DriftFileHarddisk.IsUnknown() {
+		if data.DriftFileHarddisk.ValueBool() {
+			body, _ = sjson.Set(body, "drift.file.harddisk", map[string]string{})
+		}
+	}
+	if !data.DriftFilename.IsNull() && !data.DriftFilename.IsUnknown() {
+		body, _ = sjson.Set(body, "drift.file.file-name", data.DriftFilename.ValueString())
+	}
+	if !data.PrimaryStratumNumber.IsNull() && !data.PrimaryStratumNumber.IsUnknown() {
+		body, _ = sjson.Set(body, "primary.stratum-number", strconv.FormatInt(data.PrimaryStratumNumber.ValueInt64(), 10))
+	}
+	if !data.PrimaryReferenceClock.IsNull() && !data.PrimaryReferenceClock.IsUnknown() {
+		if data.PrimaryReferenceClock.ValueBool() {
+			body, _ = sjson.Set(body, "primary.primary-reference-clock", map[string]string{})
+		}
+	}
 	if !data.MaxAssociations.IsNull() && !data.MaxAssociations.IsUnknown() {
 		body, _ = sjson.Set(body, "max-associations", strconv.FormatInt(data.MaxAssociations.ValueInt64(), 10))
 	}
@@ -308,21 +403,13 @@ func (data NTP) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "log-internal-sync", map[string]string{})
 		}
 	}
-	if !data.SourceInterfaceName.IsNull() && !data.SourceInterfaceName.IsUnknown() {
-		body, _ = sjson.Set(body, "source.interface-name", data.SourceInterfaceName.ValueString())
-	}
 	if !data.Passive.IsNull() && !data.Passive.IsUnknown() {
 		if data.Passive.ValueBool() {
 			body, _ = sjson.Set(body, "passive", map[string]string{})
 		}
 	}
-	if !data.PrimaryStratumNumber.IsNull() && !data.PrimaryStratumNumber.IsUnknown() {
-		body, _ = sjson.Set(body, "primary.stratum-number", strconv.FormatInt(data.PrimaryStratumNumber.ValueInt64(), 10))
-	}
-	if !data.PrimaryReferenceClock.IsNull() && !data.PrimaryReferenceClock.IsUnknown() {
-		if data.PrimaryReferenceClock.ValueBool() {
-			body, _ = sjson.Set(body, "primary.primary-reference-clock", map[string]string{})
-		}
+	if !data.SourceInterfaceName.IsNull() && !data.SourceInterfaceName.IsUnknown() {
+		body, _ = sjson.Set(body, "source.interface-name", data.SourceInterfaceName.ValueString())
 	}
 	if !data.AdminPlaneVersion.IsNull() && !data.AdminPlaneVersion.IsUnknown() {
 		body, _ = sjson.Set(body, "admin-plane.version", strconv.FormatInt(data.AdminPlaneVersion.ValueInt64(), 10))
@@ -394,25 +481,6 @@ func (data NTP) toBody(ctx context.Context) string {
 			}
 		}
 	}
-	if len(data.TrustedKeys) > 0 {
-		body, _ = sjson.Set(body, "trusted-keys.trusted-key", []interface{}{})
-		for index, item := range data.TrustedKeys {
-			if !item.KeyNumber.IsNull() && !item.KeyNumber.IsUnknown() {
-				body, _ = sjson.Set(body, "trusted-keys.trusted-key"+"."+strconv.Itoa(index)+"."+"key-number", strconv.FormatInt(item.KeyNumber.ValueInt64(), 10))
-			}
-		}
-	}
-	if len(data.SourceVrfs) > 0 {
-		body, _ = sjson.Set(body, "source.vrfs.vrf", []interface{}{})
-		for index, item := range data.SourceVrfs {
-			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
-				body, _ = sjson.Set(body, "source.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"vrf-name", item.VrfName.ValueString())
-			}
-			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
-				body, _ = sjson.Set(body, "source.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"interface-name", item.InterfaceName.ValueString())
-			}
-		}
-	}
 	if len(data.CmacAuthenticationKeys) > 0 {
 		body, _ = sjson.Set(body, "cmac-authentication-keys.cmac-authentication-key", []interface{}{})
 		for index, item := range data.CmacAuthenticationKeys {
@@ -451,6 +519,11 @@ func (data NTP) toBody(ctx context.Context) string {
 		for index, item := range data.Interfaces {
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
 				body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"interface-name", item.InterfaceName.ValueString())
+			}
+			if !item.BroadcastClient.IsNull() && !item.BroadcastClient.IsUnknown() {
+				if item.BroadcastClient.ValueBool() {
+					body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"broadcast-client", map[string]string{})
+				}
 			}
 			if !item.BroadcastDestination.IsNull() && !item.BroadcastDestination.IsUnknown() {
 				body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"broadcast.destination", item.BroadcastDestination.ValueString())
@@ -588,6 +661,47 @@ func (data NTP) toBody(ctx context.Context) string {
 			}
 		}
 	}
+	if len(data.HostnamePeersServers) > 0 {
+		body, _ = sjson.Set(body, "peer-server.hostname.hostname-peer-server", []interface{}{})
+		for index, item := range data.HostnamePeersServers {
+			if !item.FqdnHostname.IsNull() && !item.FqdnHostname.IsUnknown() {
+				body, _ = sjson.Set(body, "peer-server.hostname.hostname-peer-server"+"."+strconv.Itoa(index)+"."+"fqdn-hostname", item.FqdnHostname.ValueString())
+			}
+			if !item.Type.IsNull() && !item.Type.IsUnknown() {
+				body, _ = sjson.Set(body, "peer-server.hostname.hostname-peer-server"+"."+strconv.Itoa(index)+"."+"type", item.Type.ValueString())
+			}
+			if !item.Version.IsNull() && !item.Version.IsUnknown() {
+				body, _ = sjson.Set(body, "peer-server.hostname.hostname-peer-server"+"."+strconv.Itoa(index)+"."+"version", strconv.FormatInt(item.Version.ValueInt64(), 10))
+			}
+			if !item.Key.IsNull() && !item.Key.IsUnknown() {
+				body, _ = sjson.Set(body, "peer-server.hostname.hostname-peer-server"+"."+strconv.Itoa(index)+"."+"key", strconv.FormatInt(item.Key.ValueInt64(), 10))
+			}
+			if !item.Minpoll.IsNull() && !item.Minpoll.IsUnknown() {
+				body, _ = sjson.Set(body, "peer-server.hostname.hostname-peer-server"+"."+strconv.Itoa(index)+"."+"minpoll", strconv.FormatInt(item.Minpoll.ValueInt64(), 10))
+			}
+			if !item.Maxpoll.IsNull() && !item.Maxpoll.IsUnknown() {
+				body, _ = sjson.Set(body, "peer-server.hostname.hostname-peer-server"+"."+strconv.Itoa(index)+"."+"maxpoll", strconv.FormatInt(item.Maxpoll.ValueInt64(), 10))
+			}
+			if !item.Prefer.IsNull() && !item.Prefer.IsUnknown() {
+				if item.Prefer.ValueBool() {
+					body, _ = sjson.Set(body, "peer-server.hostname.hostname-peer-server"+"."+strconv.Itoa(index)+"."+"prefer", map[string]string{})
+				}
+			}
+			if !item.Burst.IsNull() && !item.Burst.IsUnknown() {
+				if item.Burst.ValueBool() {
+					body, _ = sjson.Set(body, "peer-server.hostname.hostname-peer-server"+"."+strconv.Itoa(index)+"."+"burst", map[string]string{})
+				}
+			}
+			if !item.Iburst.IsNull() && !item.Iburst.IsUnknown() {
+				if item.Iburst.ValueBool() {
+					body, _ = sjson.Set(body, "peer-server.hostname.hostname-peer-server"+"."+strconv.Itoa(index)+"."+"iburst", map[string]string{})
+				}
+			}
+			if !item.Source.IsNull() && !item.Source.IsUnknown() {
+				body, _ = sjson.Set(body, "peer-server.hostname.hostname-peer-server"+"."+strconv.Itoa(index)+"."+"source", item.Source.ValueString())
+			}
+		}
+	}
 	if len(data.PeersServersVrfs) > 0 {
 		body, _ = sjson.Set(body, "peer-server.vrfs.vrf", []interface{}{})
 		for index, item := range data.PeersServersVrfs {
@@ -678,6 +792,66 @@ func (data NTP) toBody(ctx context.Context) string {
 						body, _ = sjson.Set(body, "peer-server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"ipv6.ipv6-peer-server"+"."+strconv.Itoa(cindex)+"."+"ipv6-address", citem.Ipv6Address.ValueString())
 					}
 				}
+			}
+			if len(item.HostnamePeersServers) > 0 {
+				body, _ = sjson.Set(body, "peer-server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"hostname.hostname-peer-server", []interface{}{})
+				for cindex, citem := range item.HostnamePeersServers {
+					if !citem.FqdnHostname.IsNull() && !citem.FqdnHostname.IsUnknown() {
+						body, _ = sjson.Set(body, "peer-server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"hostname.hostname-peer-server"+"."+strconv.Itoa(cindex)+"."+"fqdn-hostname", citem.FqdnHostname.ValueString())
+					}
+					if !citem.Type.IsNull() && !citem.Type.IsUnknown() {
+						body, _ = sjson.Set(body, "peer-server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"hostname.hostname-peer-server"+"."+strconv.Itoa(cindex)+"."+"type", citem.Type.ValueString())
+					}
+					if !citem.Version.IsNull() && !citem.Version.IsUnknown() {
+						body, _ = sjson.Set(body, "peer-server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"hostname.hostname-peer-server"+"."+strconv.Itoa(cindex)+"."+"version", strconv.FormatInt(citem.Version.ValueInt64(), 10))
+					}
+					if !citem.Key.IsNull() && !citem.Key.IsUnknown() {
+						body, _ = sjson.Set(body, "peer-server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"hostname.hostname-peer-server"+"."+strconv.Itoa(cindex)+"."+"key", strconv.FormatInt(citem.Key.ValueInt64(), 10))
+					}
+					if !citem.Minpoll.IsNull() && !citem.Minpoll.IsUnknown() {
+						body, _ = sjson.Set(body, "peer-server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"hostname.hostname-peer-server"+"."+strconv.Itoa(cindex)+"."+"minpoll", strconv.FormatInt(citem.Minpoll.ValueInt64(), 10))
+					}
+					if !citem.Maxpoll.IsNull() && !citem.Maxpoll.IsUnknown() {
+						body, _ = sjson.Set(body, "peer-server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"hostname.hostname-peer-server"+"."+strconv.Itoa(cindex)+"."+"maxpoll", strconv.FormatInt(citem.Maxpoll.ValueInt64(), 10))
+					}
+					if !citem.Prefer.IsNull() && !citem.Prefer.IsUnknown() {
+						if citem.Prefer.ValueBool() {
+							body, _ = sjson.Set(body, "peer-server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"hostname.hostname-peer-server"+"."+strconv.Itoa(cindex)+"."+"prefer", map[string]string{})
+						}
+					}
+					if !citem.Burst.IsNull() && !citem.Burst.IsUnknown() {
+						if citem.Burst.ValueBool() {
+							body, _ = sjson.Set(body, "peer-server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"hostname.hostname-peer-server"+"."+strconv.Itoa(cindex)+"."+"burst", map[string]string{})
+						}
+					}
+					if !citem.Iburst.IsNull() && !citem.Iburst.IsUnknown() {
+						if citem.Iburst.ValueBool() {
+							body, _ = sjson.Set(body, "peer-server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"hostname.hostname-peer-server"+"."+strconv.Itoa(cindex)+"."+"iburst", map[string]string{})
+						}
+					}
+					if !citem.Source.IsNull() && !citem.Source.IsUnknown() {
+						body, _ = sjson.Set(body, "peer-server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"hostname.hostname-peer-server"+"."+strconv.Itoa(cindex)+"."+"source", citem.Source.ValueString())
+					}
+				}
+			}
+		}
+	}
+	if len(data.TrustedKeys) > 0 {
+		body, _ = sjson.Set(body, "trusted-keys.trusted-key", []interface{}{})
+		for index, item := range data.TrustedKeys {
+			if !item.KeyNumber.IsNull() && !item.KeyNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "trusted-keys.trusted-key"+"."+strconv.Itoa(index)+"."+"key-number", strconv.FormatInt(item.KeyNumber.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.SourceVrfs) > 0 {
+		body, _ = sjson.Set(body, "source.vrfs.vrf", []interface{}{})
+		for index, item := range data.SourceVrfs {
+			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
+				body, _ = sjson.Set(body, "source.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"vrf-name", item.VrfName.ValueString())
+			}
+			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
+				body, _ = sjson.Set(body, "source.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"interface-name", item.InterfaceName.ValueString())
 			}
 		}
 	}
@@ -855,116 +1029,6 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.AuthenticationKeys[i].KeyNumber = types.Int64Null()
 		}
-		if value := r.Get("md5.encrypted"); value.Exists() && !data.AuthenticationKeys[i].Md5Encrypted.IsNull() {
-			data.AuthenticationKeys[i].Md5Encrypted = types.StringValue(value.String())
-		} else {
-			data.AuthenticationKeys[i].Md5Encrypted = types.StringNull()
-		}
-	}
-	if value := gjson.GetBytes(res, "broadcastdelay"); value.Exists() && !data.Broadcastdelay.IsNull() {
-		data.Broadcastdelay = types.Int64Value(value.Int())
-	} else {
-		data.Broadcastdelay = types.Int64Null()
-	}
-	if value := gjson.GetBytes(res, "max-associations"); value.Exists() && !data.MaxAssociations.IsNull() {
-		data.MaxAssociations = types.Int64Value(value.Int())
-	} else {
-		data.MaxAssociations = types.Int64Null()
-	}
-	for i := range data.TrustedKeys {
-		keys := [...]string{"key-number"}
-		keyValues := [...]string{strconv.FormatInt(data.TrustedKeys[i].KeyNumber.ValueInt64(), 10)}
-
-		var r gjson.Result
-		gjson.GetBytes(res, "trusted-keys.trusted-key").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("key-number"); value.Exists() && !data.TrustedKeys[i].KeyNumber.IsNull() {
-			data.TrustedKeys[i].KeyNumber = types.Int64Value(value.Int())
-		} else {
-			data.TrustedKeys[i].KeyNumber = types.Int64Null()
-		}
-	}
-	if value := gjson.GetBytes(res, "update-calendar"); !data.UpdateCalendar.IsNull() {
-		if value.Exists() {
-			data.UpdateCalendar = types.BoolValue(true)
-		} else {
-			data.UpdateCalendar = types.BoolValue(false)
-		}
-	} else {
-		data.UpdateCalendar = types.BoolNull()
-	}
-	if value := gjson.GetBytes(res, "log-internal-sync"); !data.LogInternalSync.IsNull() {
-		if value.Exists() {
-			data.LogInternalSync = types.BoolValue(true)
-		} else {
-			data.LogInternalSync = types.BoolValue(false)
-		}
-	} else {
-		data.LogInternalSync = types.BoolNull()
-	}
-	if value := gjson.GetBytes(res, "source.interface-name"); value.Exists() && !data.SourceInterfaceName.IsNull() {
-		data.SourceInterfaceName = types.StringValue(value.String())
-	} else {
-		data.SourceInterfaceName = types.StringNull()
-	}
-	for i := range data.SourceVrfs {
-		keys := [...]string{"vrf-name"}
-		keyValues := [...]string{data.SourceVrfs[i].VrfName.ValueString()}
-
-		var r gjson.Result
-		gjson.GetBytes(res, "source.vrfs.vrf").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("vrf-name"); value.Exists() && !data.SourceVrfs[i].VrfName.IsNull() {
-			data.SourceVrfs[i].VrfName = types.StringValue(value.String())
-		} else {
-			data.SourceVrfs[i].VrfName = types.StringNull()
-		}
-		if value := r.Get("interface-name"); value.Exists() && !data.SourceVrfs[i].InterfaceName.IsNull() {
-			data.SourceVrfs[i].InterfaceName = types.StringValue(value.String())
-		} else {
-			data.SourceVrfs[i].InterfaceName = types.StringNull()
-		}
-	}
-	if value := gjson.GetBytes(res, "passive"); !data.Passive.IsNull() {
-		if value.Exists() {
-			data.Passive = types.BoolValue(true)
-		} else {
-			data.Passive = types.BoolValue(false)
-		}
-	} else {
-		data.Passive = types.BoolNull()
 	}
 	for i := range data.CmacAuthenticationKeys {
 		keys := [...]string{"key-number"}
@@ -993,11 +1057,6 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.CmacAuthenticationKeys[i].KeyNumber = types.Int64Value(value.Int())
 		} else {
 			data.CmacAuthenticationKeys[i].KeyNumber = types.Int64Null()
-		}
-		if value := r.Get("cmac.encrypted"); value.Exists() && !data.CmacAuthenticationKeys[i].CmacEncrypted.IsNull() {
-			data.CmacAuthenticationKeys[i].CmacEncrypted = types.StringValue(value.String())
-		} else {
-			data.CmacAuthenticationKeys[i].CmacEncrypted = types.StringNull()
 		}
 	}
 	for i := range data.HmacSha1AuthenticationKeys {
@@ -1028,11 +1087,6 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.HmacSha1AuthenticationKeys[i].KeyNumber = types.Int64Null()
 		}
-		if value := r.Get("hmac-sha1.encrypted"); value.Exists() && !data.HmacSha1AuthenticationKeys[i].HmacSha1Encrypted.IsNull() {
-			data.HmacSha1AuthenticationKeys[i].HmacSha1Encrypted = types.StringValue(value.String())
-		} else {
-			data.HmacSha1AuthenticationKeys[i].HmacSha1Encrypted = types.StringNull()
-		}
 	}
 	for i := range data.HmacSha2AuthenticationKeys {
 		keys := [...]string{"key-number"}
@@ -1062,11 +1116,84 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.HmacSha2AuthenticationKeys[i].KeyNumber = types.Int64Null()
 		}
-		if value := r.Get("hmac-sha2.encrypted"); value.Exists() && !data.HmacSha2AuthenticationKeys[i].HmacSha2Encrypted.IsNull() {
-			data.HmacSha2AuthenticationKeys[i].HmacSha2Encrypted = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "broadcastdelay"); value.Exists() && !data.Broadcastdelay.IsNull() {
+		data.Broadcastdelay = types.Int64Value(value.Int())
+	} else {
+		data.Broadcastdelay = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "drift.aging.time"); value.Exists() && !data.DriftAgingTime.IsNull() {
+		data.DriftAgingTime = types.Int64Value(value.Int())
+	} else {
+		data.DriftAgingTime = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "drift.file.bootflash"); !data.DriftFileBootflash.IsNull() {
+		if value.Exists() {
+			data.DriftFileBootflash = types.BoolValue(true)
 		} else {
-			data.HmacSha2AuthenticationKeys[i].HmacSha2Encrypted = types.StringNull()
+			data.DriftFileBootflash = types.BoolValue(false)
 		}
+	} else {
+		data.DriftFileBootflash = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "drift.file.compactflash"); !data.DriftFileCompactflash.IsNull() {
+		if value.Exists() {
+			data.DriftFileCompactflash = types.BoolValue(true)
+		} else {
+			data.DriftFileCompactflash = types.BoolValue(false)
+		}
+	} else {
+		data.DriftFileCompactflash = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "drift.file.usb"); !data.DriftFileUsb.IsNull() {
+		if value.Exists() {
+			data.DriftFileUsb = types.BoolValue(true)
+		} else {
+			data.DriftFileUsb = types.BoolValue(false)
+		}
+	} else {
+		data.DriftFileUsb = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "drift.file.disk0"); !data.DriftFileDisk0.IsNull() {
+		if value.Exists() {
+			data.DriftFileDisk0 = types.BoolValue(true)
+		} else {
+			data.DriftFileDisk0 = types.BoolValue(false)
+		}
+	} else {
+		data.DriftFileDisk0 = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "drift.file.disk1"); !data.DriftFileDisk1.IsNull() {
+		if value.Exists() {
+			data.DriftFileDisk1 = types.BoolValue(true)
+		} else {
+			data.DriftFileDisk1 = types.BoolValue(false)
+		}
+	} else {
+		data.DriftFileDisk1 = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "drift.file.disk2"); !data.DriftFileDisk2.IsNull() {
+		if value.Exists() {
+			data.DriftFileDisk2 = types.BoolValue(true)
+		} else {
+			data.DriftFileDisk2 = types.BoolValue(false)
+		}
+	} else {
+		data.DriftFileDisk2 = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "drift.file.harddisk"); !data.DriftFileHarddisk.IsNull() {
+		if value.Exists() {
+			data.DriftFileHarddisk = types.BoolValue(true)
+		} else {
+			data.DriftFileHarddisk = types.BoolValue(false)
+		}
+	} else {
+		data.DriftFileHarddisk = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "drift.file.file-name"); value.Exists() && !data.DriftFilename.IsNull() {
+		data.DriftFilename = types.StringValue(value.String())
+	} else {
+		data.DriftFilename = types.StringNull()
 	}
 	for i := range data.Interfaces {
 		keys := [...]string{"interface-name"}
@@ -1095,6 +1222,15 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.Interfaces[i].InterfaceName = types.StringValue(value.String())
 		} else {
 			data.Interfaces[i].InterfaceName = types.StringNull()
+		}
+		if value := r.Get("broadcast-client"); !data.Interfaces[i].BroadcastClient.IsNull() {
+			if value.Exists() {
+				data.Interfaces[i].BroadcastClient = types.BoolValue(true)
+			} else {
+				data.Interfaces[i].BroadcastClient = types.BoolValue(false)
+			}
+		} else {
+			data.Interfaces[i].BroadcastClient = types.BoolNull()
 		}
 		if value := r.Get("broadcast.destination"); value.Exists() && !data.Interfaces[i].BroadcastDestination.IsNull() {
 			data.Interfaces[i].BroadcastDestination = types.StringValue(value.String())
@@ -1225,6 +1361,11 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 		}
 	} else {
 		data.PrimaryReferenceClock = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "max-associations"); value.Exists() && !data.MaxAssociations.IsNull() {
+		data.MaxAssociations = types.Int64Value(value.Int())
+	} else {
+		data.MaxAssociations = types.Int64Null()
 	}
 	for i := range data.Ipv4PeersServers {
 		keys := [...]string{"address", "type"}
@@ -1401,6 +1542,92 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.Ipv6PeersServers[i].Ipv6Address = types.StringValue(value.String())
 		} else {
 			data.Ipv6PeersServers[i].Ipv6Address = types.StringNull()
+		}
+	}
+	for i := range data.HostnamePeersServers {
+		keys := [...]string{"fqdn-hostname", "type"}
+		keyValues := [...]string{data.HostnamePeersServers[i].FqdnHostname.ValueString(), data.HostnamePeersServers[i].Type.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "peer-server.hostname.hostname-peer-server").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("fqdn-hostname"); value.Exists() && !data.HostnamePeersServers[i].FqdnHostname.IsNull() {
+			data.HostnamePeersServers[i].FqdnHostname = types.StringValue(value.String())
+		} else {
+			data.HostnamePeersServers[i].FqdnHostname = types.StringNull()
+		}
+		if value := r.Get("type"); value.Exists() && !data.HostnamePeersServers[i].Type.IsNull() {
+			data.HostnamePeersServers[i].Type = types.StringValue(value.String())
+		} else {
+			data.HostnamePeersServers[i].Type = types.StringNull()
+		}
+		if value := r.Get("version"); value.Exists() && !data.HostnamePeersServers[i].Version.IsNull() {
+			data.HostnamePeersServers[i].Version = types.Int64Value(value.Int())
+		} else {
+			data.HostnamePeersServers[i].Version = types.Int64Null()
+		}
+		if value := r.Get("key"); value.Exists() && !data.HostnamePeersServers[i].Key.IsNull() {
+			data.HostnamePeersServers[i].Key = types.Int64Value(value.Int())
+		} else {
+			data.HostnamePeersServers[i].Key = types.Int64Null()
+		}
+		if value := r.Get("minpoll"); value.Exists() && !data.HostnamePeersServers[i].Minpoll.IsNull() {
+			data.HostnamePeersServers[i].Minpoll = types.Int64Value(value.Int())
+		} else {
+			data.HostnamePeersServers[i].Minpoll = types.Int64Null()
+		}
+		if value := r.Get("maxpoll"); value.Exists() && !data.HostnamePeersServers[i].Maxpoll.IsNull() {
+			data.HostnamePeersServers[i].Maxpoll = types.Int64Value(value.Int())
+		} else {
+			data.HostnamePeersServers[i].Maxpoll = types.Int64Null()
+		}
+		if value := r.Get("prefer"); !data.HostnamePeersServers[i].Prefer.IsNull() {
+			if value.Exists() {
+				data.HostnamePeersServers[i].Prefer = types.BoolValue(true)
+			} else {
+				data.HostnamePeersServers[i].Prefer = types.BoolValue(false)
+			}
+		} else {
+			data.HostnamePeersServers[i].Prefer = types.BoolNull()
+		}
+		if value := r.Get("burst"); !data.HostnamePeersServers[i].Burst.IsNull() {
+			if value.Exists() {
+				data.HostnamePeersServers[i].Burst = types.BoolValue(true)
+			} else {
+				data.HostnamePeersServers[i].Burst = types.BoolValue(false)
+			}
+		} else {
+			data.HostnamePeersServers[i].Burst = types.BoolNull()
+		}
+		if value := r.Get("iburst"); !data.HostnamePeersServers[i].Iburst.IsNull() {
+			if value.Exists() {
+				data.HostnamePeersServers[i].Iburst = types.BoolValue(true)
+			} else {
+				data.HostnamePeersServers[i].Iburst = types.BoolValue(false)
+			}
+		} else {
+			data.HostnamePeersServers[i].Iburst = types.BoolNull()
+		}
+		if value := r.Get("source"); value.Exists() && !data.HostnamePeersServers[i].Source.IsNull() {
+			data.HostnamePeersServers[i].Source = types.StringValue(value.String())
+		} else {
+			data.HostnamePeersServers[i].Source = types.StringNull()
 		}
 	}
 	for i := range data.PeersServersVrfs {
@@ -1608,6 +1835,187 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Ipv6Address = types.StringNull()
 			}
 		}
+		for ci := range data.PeersServersVrfs[i].HostnamePeersServers {
+			keys := [...]string{"fqdn-hostname", "type"}
+			keyValues := [...]string{data.PeersServersVrfs[i].HostnamePeersServers[ci].FqdnHostname.ValueString(), data.PeersServersVrfs[i].HostnamePeersServers[ci].Type.ValueString()}
+
+			var cr gjson.Result
+			r.Get("hostname.hostname-peer-server").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("fqdn-hostname"); value.Exists() && !data.PeersServersVrfs[i].HostnamePeersServers[ci].FqdnHostname.IsNull() {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].FqdnHostname = types.StringValue(value.String())
+			} else {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].FqdnHostname = types.StringNull()
+			}
+			if value := cr.Get("type"); value.Exists() && !data.PeersServersVrfs[i].HostnamePeersServers[ci].Type.IsNull() {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Type = types.StringValue(value.String())
+			} else {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Type = types.StringNull()
+			}
+			if value := cr.Get("version"); value.Exists() && !data.PeersServersVrfs[i].HostnamePeersServers[ci].Version.IsNull() {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Version = types.Int64Value(value.Int())
+			} else {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Version = types.Int64Null()
+			}
+			if value := cr.Get("key"); value.Exists() && !data.PeersServersVrfs[i].HostnamePeersServers[ci].Key.IsNull() {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Key = types.Int64Value(value.Int())
+			} else {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Key = types.Int64Null()
+			}
+			if value := cr.Get("minpoll"); value.Exists() && !data.PeersServersVrfs[i].HostnamePeersServers[ci].Minpoll.IsNull() {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Minpoll = types.Int64Value(value.Int())
+			} else {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Minpoll = types.Int64Null()
+			}
+			if value := cr.Get("maxpoll"); value.Exists() && !data.PeersServersVrfs[i].HostnamePeersServers[ci].Maxpoll.IsNull() {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Maxpoll = types.Int64Value(value.Int())
+			} else {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Maxpoll = types.Int64Null()
+			}
+			if value := cr.Get("prefer"); !data.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer.IsNull() {
+				if value.Exists() {
+					data.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer = types.BoolValue(true)
+				} else {
+					data.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer = types.BoolValue(false)
+				}
+			} else {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer = types.BoolNull()
+			}
+			if value := cr.Get("burst"); !data.PeersServersVrfs[i].HostnamePeersServers[ci].Burst.IsNull() {
+				if value.Exists() {
+					data.PeersServersVrfs[i].HostnamePeersServers[ci].Burst = types.BoolValue(true)
+				} else {
+					data.PeersServersVrfs[i].HostnamePeersServers[ci].Burst = types.BoolValue(false)
+				}
+			} else {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Burst = types.BoolNull()
+			}
+			if value := cr.Get("iburst"); !data.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst.IsNull() {
+				if value.Exists() {
+					data.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst = types.BoolValue(true)
+				} else {
+					data.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst = types.BoolValue(false)
+				}
+			} else {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst = types.BoolNull()
+			}
+			if value := cr.Get("source"); value.Exists() && !data.PeersServersVrfs[i].HostnamePeersServers[ci].Source.IsNull() {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Source = types.StringValue(value.String())
+			} else {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Source = types.StringNull()
+			}
+		}
+	}
+	for i := range data.TrustedKeys {
+		keys := [...]string{"key-number"}
+		keyValues := [...]string{strconv.FormatInt(data.TrustedKeys[i].KeyNumber.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "trusted-keys.trusted-key").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("key-number"); value.Exists() && !data.TrustedKeys[i].KeyNumber.IsNull() {
+			data.TrustedKeys[i].KeyNumber = types.Int64Value(value.Int())
+		} else {
+			data.TrustedKeys[i].KeyNumber = types.Int64Null()
+		}
+	}
+	if value := gjson.GetBytes(res, "update-calendar"); !data.UpdateCalendar.IsNull() {
+		if value.Exists() {
+			data.UpdateCalendar = types.BoolValue(true)
+		} else {
+			data.UpdateCalendar = types.BoolValue(false)
+		}
+	} else {
+		data.UpdateCalendar = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "log-internal-sync"); !data.LogInternalSync.IsNull() {
+		if value.Exists() {
+			data.LogInternalSync = types.BoolValue(true)
+		} else {
+			data.LogInternalSync = types.BoolValue(false)
+		}
+	} else {
+		data.LogInternalSync = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "passive"); !data.Passive.IsNull() {
+		if value.Exists() {
+			data.Passive = types.BoolValue(true)
+		} else {
+			data.Passive = types.BoolValue(false)
+		}
+	} else {
+		data.Passive = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "source.interface-name"); value.Exists() && !data.SourceInterfaceName.IsNull() {
+		data.SourceInterfaceName = types.StringValue(value.String())
+	} else {
+		data.SourceInterfaceName = types.StringNull()
+	}
+	for i := range data.SourceVrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.SourceVrfs[i].VrfName.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "source.vrfs.vrf").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("vrf-name"); value.Exists() && !data.SourceVrfs[i].VrfName.IsNull() {
+			data.SourceVrfs[i].VrfName = types.StringValue(value.String())
+		} else {
+			data.SourceVrfs[i].VrfName = types.StringNull()
+		}
+		if value := r.Get("interface-name"); value.Exists() && !data.SourceVrfs[i].InterfaceName.IsNull() {
+			data.SourceVrfs[i].InterfaceName = types.StringValue(value.String())
+		} else {
+			data.SourceVrfs[i].InterfaceName = types.StringNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "admin-plane.version"); value.Exists() && !data.AdminPlaneVersion.IsNull() {
 		data.AdminPlaneVersion = types.Int64Value(value.Int())
@@ -1746,61 +2154,9 @@ func (data *NTP) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("key-number"); cValue.Exists() {
 				item.KeyNumber = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("md5.encrypted"); cValue.Exists() {
-				item.Md5Encrypted = types.StringValue(cValue.String())
-			}
 			data.AuthenticationKeys = append(data.AuthenticationKeys, item)
 			return true
 		})
-	}
-	if value := gjson.GetBytes(res, "broadcastdelay"); value.Exists() {
-		data.Broadcastdelay = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "max-associations"); value.Exists() {
-		data.MaxAssociations = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "trusted-keys.trusted-key"); value.Exists() {
-		data.TrustedKeys = make([]NTPTrustedKeys, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := NTPTrustedKeys{}
-			if cValue := v.Get("key-number"); cValue.Exists() {
-				item.KeyNumber = types.Int64Value(cValue.Int())
-			}
-			data.TrustedKeys = append(data.TrustedKeys, item)
-			return true
-		})
-	}
-	if value := gjson.GetBytes(res, "update-calendar"); value.Exists() {
-		data.UpdateCalendar = types.BoolValue(true)
-	} else {
-		data.UpdateCalendar = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "log-internal-sync"); value.Exists() {
-		data.LogInternalSync = types.BoolValue(true)
-	} else {
-		data.LogInternalSync = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "source.interface-name"); value.Exists() {
-		data.SourceInterfaceName = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "source.vrfs.vrf"); value.Exists() {
-		data.SourceVrfs = make([]NTPSourceVrfs, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := NTPSourceVrfs{}
-			if cValue := v.Get("vrf-name"); cValue.Exists() {
-				item.VrfName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("interface-name"); cValue.Exists() {
-				item.InterfaceName = types.StringValue(cValue.String())
-			}
-			data.SourceVrfs = append(data.SourceVrfs, item)
-			return true
-		})
-	}
-	if value := gjson.GetBytes(res, "passive"); value.Exists() {
-		data.Passive = types.BoolValue(true)
-	} else {
-		data.Passive = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "cmac-authentication-keys.cmac-authentication-key"); value.Exists() {
 		data.CmacAuthenticationKeys = make([]NTPCmacAuthenticationKeys, 0)
@@ -1808,9 +2164,6 @@ func (data *NTP) fromBody(ctx context.Context, res []byte) {
 			item := NTPCmacAuthenticationKeys{}
 			if cValue := v.Get("key-number"); cValue.Exists() {
 				item.KeyNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("cmac.encrypted"); cValue.Exists() {
-				item.CmacEncrypted = types.StringValue(cValue.String())
 			}
 			data.CmacAuthenticationKeys = append(data.CmacAuthenticationKeys, item)
 			return true
@@ -1823,9 +2176,6 @@ func (data *NTP) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("key-number"); cValue.Exists() {
 				item.KeyNumber = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("hmac-sha1.encrypted"); cValue.Exists() {
-				item.HmacSha1Encrypted = types.StringValue(cValue.String())
-			}
 			data.HmacSha1AuthenticationKeys = append(data.HmacSha1AuthenticationKeys, item)
 			return true
 		})
@@ -1837,12 +2187,53 @@ func (data *NTP) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("key-number"); cValue.Exists() {
 				item.KeyNumber = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("hmac-sha2.encrypted"); cValue.Exists() {
-				item.HmacSha2Encrypted = types.StringValue(cValue.String())
-			}
 			data.HmacSha2AuthenticationKeys = append(data.HmacSha2AuthenticationKeys, item)
 			return true
 		})
+	}
+	if value := gjson.GetBytes(res, "broadcastdelay"); value.Exists() {
+		data.Broadcastdelay = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "drift.aging.time"); value.Exists() {
+		data.DriftAgingTime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "drift.file.bootflash"); value.Exists() {
+		data.DriftFileBootflash = types.BoolValue(true)
+	} else {
+		data.DriftFileBootflash = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "drift.file.compactflash"); value.Exists() {
+		data.DriftFileCompactflash = types.BoolValue(true)
+	} else {
+		data.DriftFileCompactflash = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "drift.file.usb"); value.Exists() {
+		data.DriftFileUsb = types.BoolValue(true)
+	} else {
+		data.DriftFileUsb = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "drift.file.disk0"); value.Exists() {
+		data.DriftFileDisk0 = types.BoolValue(true)
+	} else {
+		data.DriftFileDisk0 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "drift.file.disk1"); value.Exists() {
+		data.DriftFileDisk1 = types.BoolValue(true)
+	} else {
+		data.DriftFileDisk1 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "drift.file.disk2"); value.Exists() {
+		data.DriftFileDisk2 = types.BoolValue(true)
+	} else {
+		data.DriftFileDisk2 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "drift.file.harddisk"); value.Exists() {
+		data.DriftFileHarddisk = types.BoolValue(true)
+	} else {
+		data.DriftFileHarddisk = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "drift.file.file-name"); value.Exists() {
+		data.DriftFilename = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "interfaces.interface"); value.Exists() {
 		data.Interfaces = make([]NTPInterfaces, 0)
@@ -1850,6 +2241,11 @@ func (data *NTP) fromBody(ctx context.Context, res []byte) {
 			item := NTPInterfaces{}
 			if cValue := v.Get("interface-name"); cValue.Exists() {
 				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("broadcast-client"); cValue.Exists() {
+				item.BroadcastClient = types.BoolValue(true)
+			} else {
+				item.BroadcastClient = types.BoolValue(false)
 			}
 			if cValue := v.Get("broadcast.destination"); cValue.Exists() {
 				item.BroadcastDestination = types.StringValue(cValue.String())
@@ -1917,6 +2313,9 @@ func (data *NTP) fromBody(ctx context.Context, res []byte) {
 		data.PrimaryReferenceClock = types.BoolValue(true)
 	} else {
 		data.PrimaryReferenceClock = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "max-associations"); value.Exists() {
+		data.MaxAssociations = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "peer-server.ipv4.ipv4-peer-server"); value.Exists() {
 		data.Ipv4PeersServers = make([]NTPIpv4PeersServers, 0)
@@ -2006,6 +2405,50 @@ func (data *NTP) fromBody(ctx context.Context, res []byte) {
 				item.Ipv6Address = types.StringValue(cValue.String())
 			}
 			data.Ipv6PeersServers = append(data.Ipv6PeersServers, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "peer-server.hostname.hostname-peer-server"); value.Exists() {
+		data.HostnamePeersServers = make([]NTPHostnamePeersServers, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := NTPHostnamePeersServers{}
+			if cValue := v.Get("fqdn-hostname"); cValue.Exists() {
+				item.FqdnHostname = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type"); cValue.Exists() {
+				item.Type = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("version"); cValue.Exists() {
+				item.Version = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("key"); cValue.Exists() {
+				item.Key = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("minpoll"); cValue.Exists() {
+				item.Minpoll = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("maxpoll"); cValue.Exists() {
+				item.Maxpoll = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("prefer"); cValue.Exists() {
+				item.Prefer = types.BoolValue(true)
+			} else {
+				item.Prefer = types.BoolValue(false)
+			}
+			if cValue := v.Get("burst"); cValue.Exists() {
+				item.Burst = types.BoolValue(true)
+			} else {
+				item.Burst = types.BoolValue(false)
+			}
+			if cValue := v.Get("iburst"); cValue.Exists() {
+				item.Iburst = types.BoolValue(true)
+			} else {
+				item.Iburst = types.BoolValue(false)
+			}
+			if cValue := v.Get("source"); cValue.Exists() {
+				item.Source = types.StringValue(cValue.String())
+			}
+			data.HostnamePeersServers = append(data.HostnamePeersServers, item)
 			return true
 		})
 	}
@@ -2107,7 +2550,94 @@ func (data *NTP) fromBody(ctx context.Context, res []byte) {
 					return true
 				})
 			}
+			if cValue := v.Get("hostname.hostname-peer-server"); cValue.Exists() {
+				item.HostnamePeersServers = make([]NTPPeersServersVrfsHostnamePeersServers, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := NTPPeersServersVrfsHostnamePeersServers{}
+					if ccValue := cv.Get("fqdn-hostname"); ccValue.Exists() {
+						cItem.FqdnHostname = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("type"); ccValue.Exists() {
+						cItem.Type = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("version"); ccValue.Exists() {
+						cItem.Version = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("key"); ccValue.Exists() {
+						cItem.Key = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("minpoll"); ccValue.Exists() {
+						cItem.Minpoll = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("maxpoll"); ccValue.Exists() {
+						cItem.Maxpoll = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("prefer"); ccValue.Exists() {
+						cItem.Prefer = types.BoolValue(true)
+					} else {
+						cItem.Prefer = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("burst"); ccValue.Exists() {
+						cItem.Burst = types.BoolValue(true)
+					} else {
+						cItem.Burst = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("iburst"); ccValue.Exists() {
+						cItem.Iburst = types.BoolValue(true)
+					} else {
+						cItem.Iburst = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("source"); ccValue.Exists() {
+						cItem.Source = types.StringValue(ccValue.String())
+					}
+					item.HostnamePeersServers = append(item.HostnamePeersServers, cItem)
+					return true
+				})
+			}
 			data.PeersServersVrfs = append(data.PeersServersVrfs, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "trusted-keys.trusted-key"); value.Exists() {
+		data.TrustedKeys = make([]NTPTrustedKeys, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := NTPTrustedKeys{}
+			if cValue := v.Get("key-number"); cValue.Exists() {
+				item.KeyNumber = types.Int64Value(cValue.Int())
+			}
+			data.TrustedKeys = append(data.TrustedKeys, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "update-calendar"); value.Exists() {
+		data.UpdateCalendar = types.BoolValue(true)
+	} else {
+		data.UpdateCalendar = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "log-internal-sync"); value.Exists() {
+		data.LogInternalSync = types.BoolValue(true)
+	} else {
+		data.LogInternalSync = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "passive"); value.Exists() {
+		data.Passive = types.BoolValue(true)
+	} else {
+		data.Passive = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "source.interface-name"); value.Exists() {
+		data.SourceInterfaceName = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "source.vrfs.vrf"); value.Exists() {
+		data.SourceVrfs = make([]NTPSourceVrfs, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := NTPSourceVrfs{}
+			if cValue := v.Get("vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			data.SourceVrfs = append(data.SourceVrfs, item)
 			return true
 		})
 	}
@@ -2228,61 +2758,9 @@ func (data *NTPData) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("key-number"); cValue.Exists() {
 				item.KeyNumber = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("md5.encrypted"); cValue.Exists() {
-				item.Md5Encrypted = types.StringValue(cValue.String())
-			}
 			data.AuthenticationKeys = append(data.AuthenticationKeys, item)
 			return true
 		})
-	}
-	if value := gjson.GetBytes(res, "broadcastdelay"); value.Exists() {
-		data.Broadcastdelay = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "max-associations"); value.Exists() {
-		data.MaxAssociations = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "trusted-keys.trusted-key"); value.Exists() {
-		data.TrustedKeys = make([]NTPTrustedKeys, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := NTPTrustedKeys{}
-			if cValue := v.Get("key-number"); cValue.Exists() {
-				item.KeyNumber = types.Int64Value(cValue.Int())
-			}
-			data.TrustedKeys = append(data.TrustedKeys, item)
-			return true
-		})
-	}
-	if value := gjson.GetBytes(res, "update-calendar"); value.Exists() {
-		data.UpdateCalendar = types.BoolValue(true)
-	} else {
-		data.UpdateCalendar = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "log-internal-sync"); value.Exists() {
-		data.LogInternalSync = types.BoolValue(true)
-	} else {
-		data.LogInternalSync = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "source.interface-name"); value.Exists() {
-		data.SourceInterfaceName = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "source.vrfs.vrf"); value.Exists() {
-		data.SourceVrfs = make([]NTPSourceVrfs, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := NTPSourceVrfs{}
-			if cValue := v.Get("vrf-name"); cValue.Exists() {
-				item.VrfName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("interface-name"); cValue.Exists() {
-				item.InterfaceName = types.StringValue(cValue.String())
-			}
-			data.SourceVrfs = append(data.SourceVrfs, item)
-			return true
-		})
-	}
-	if value := gjson.GetBytes(res, "passive"); value.Exists() {
-		data.Passive = types.BoolValue(true)
-	} else {
-		data.Passive = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "cmac-authentication-keys.cmac-authentication-key"); value.Exists() {
 		data.CmacAuthenticationKeys = make([]NTPCmacAuthenticationKeys, 0)
@@ -2290,9 +2768,6 @@ func (data *NTPData) fromBody(ctx context.Context, res []byte) {
 			item := NTPCmacAuthenticationKeys{}
 			if cValue := v.Get("key-number"); cValue.Exists() {
 				item.KeyNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("cmac.encrypted"); cValue.Exists() {
-				item.CmacEncrypted = types.StringValue(cValue.String())
 			}
 			data.CmacAuthenticationKeys = append(data.CmacAuthenticationKeys, item)
 			return true
@@ -2305,9 +2780,6 @@ func (data *NTPData) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("key-number"); cValue.Exists() {
 				item.KeyNumber = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("hmac-sha1.encrypted"); cValue.Exists() {
-				item.HmacSha1Encrypted = types.StringValue(cValue.String())
-			}
 			data.HmacSha1AuthenticationKeys = append(data.HmacSha1AuthenticationKeys, item)
 			return true
 		})
@@ -2319,12 +2791,53 @@ func (data *NTPData) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("key-number"); cValue.Exists() {
 				item.KeyNumber = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("hmac-sha2.encrypted"); cValue.Exists() {
-				item.HmacSha2Encrypted = types.StringValue(cValue.String())
-			}
 			data.HmacSha2AuthenticationKeys = append(data.HmacSha2AuthenticationKeys, item)
 			return true
 		})
+	}
+	if value := gjson.GetBytes(res, "broadcastdelay"); value.Exists() {
+		data.Broadcastdelay = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "drift.aging.time"); value.Exists() {
+		data.DriftAgingTime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "drift.file.bootflash"); value.Exists() {
+		data.DriftFileBootflash = types.BoolValue(true)
+	} else {
+		data.DriftFileBootflash = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "drift.file.compactflash"); value.Exists() {
+		data.DriftFileCompactflash = types.BoolValue(true)
+	} else {
+		data.DriftFileCompactflash = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "drift.file.usb"); value.Exists() {
+		data.DriftFileUsb = types.BoolValue(true)
+	} else {
+		data.DriftFileUsb = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "drift.file.disk0"); value.Exists() {
+		data.DriftFileDisk0 = types.BoolValue(true)
+	} else {
+		data.DriftFileDisk0 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "drift.file.disk1"); value.Exists() {
+		data.DriftFileDisk1 = types.BoolValue(true)
+	} else {
+		data.DriftFileDisk1 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "drift.file.disk2"); value.Exists() {
+		data.DriftFileDisk2 = types.BoolValue(true)
+	} else {
+		data.DriftFileDisk2 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "drift.file.harddisk"); value.Exists() {
+		data.DriftFileHarddisk = types.BoolValue(true)
+	} else {
+		data.DriftFileHarddisk = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "drift.file.file-name"); value.Exists() {
+		data.DriftFilename = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "interfaces.interface"); value.Exists() {
 		data.Interfaces = make([]NTPInterfaces, 0)
@@ -2332,6 +2845,11 @@ func (data *NTPData) fromBody(ctx context.Context, res []byte) {
 			item := NTPInterfaces{}
 			if cValue := v.Get("interface-name"); cValue.Exists() {
 				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("broadcast-client"); cValue.Exists() {
+				item.BroadcastClient = types.BoolValue(true)
+			} else {
+				item.BroadcastClient = types.BoolValue(false)
 			}
 			if cValue := v.Get("broadcast.destination"); cValue.Exists() {
 				item.BroadcastDestination = types.StringValue(cValue.String())
@@ -2399,6 +2917,9 @@ func (data *NTPData) fromBody(ctx context.Context, res []byte) {
 		data.PrimaryReferenceClock = types.BoolValue(true)
 	} else {
 		data.PrimaryReferenceClock = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "max-associations"); value.Exists() {
+		data.MaxAssociations = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "peer-server.ipv4.ipv4-peer-server"); value.Exists() {
 		data.Ipv4PeersServers = make([]NTPIpv4PeersServers, 0)
@@ -2488,6 +3009,50 @@ func (data *NTPData) fromBody(ctx context.Context, res []byte) {
 				item.Ipv6Address = types.StringValue(cValue.String())
 			}
 			data.Ipv6PeersServers = append(data.Ipv6PeersServers, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "peer-server.hostname.hostname-peer-server"); value.Exists() {
+		data.HostnamePeersServers = make([]NTPHostnamePeersServers, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := NTPHostnamePeersServers{}
+			if cValue := v.Get("fqdn-hostname"); cValue.Exists() {
+				item.FqdnHostname = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type"); cValue.Exists() {
+				item.Type = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("version"); cValue.Exists() {
+				item.Version = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("key"); cValue.Exists() {
+				item.Key = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("minpoll"); cValue.Exists() {
+				item.Minpoll = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("maxpoll"); cValue.Exists() {
+				item.Maxpoll = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("prefer"); cValue.Exists() {
+				item.Prefer = types.BoolValue(true)
+			} else {
+				item.Prefer = types.BoolValue(false)
+			}
+			if cValue := v.Get("burst"); cValue.Exists() {
+				item.Burst = types.BoolValue(true)
+			} else {
+				item.Burst = types.BoolValue(false)
+			}
+			if cValue := v.Get("iburst"); cValue.Exists() {
+				item.Iburst = types.BoolValue(true)
+			} else {
+				item.Iburst = types.BoolValue(false)
+			}
+			if cValue := v.Get("source"); cValue.Exists() {
+				item.Source = types.StringValue(cValue.String())
+			}
+			data.HostnamePeersServers = append(data.HostnamePeersServers, item)
 			return true
 		})
 	}
@@ -2589,7 +3154,94 @@ func (data *NTPData) fromBody(ctx context.Context, res []byte) {
 					return true
 				})
 			}
+			if cValue := v.Get("hostname.hostname-peer-server"); cValue.Exists() {
+				item.HostnamePeersServers = make([]NTPPeersServersVrfsHostnamePeersServers, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := NTPPeersServersVrfsHostnamePeersServers{}
+					if ccValue := cv.Get("fqdn-hostname"); ccValue.Exists() {
+						cItem.FqdnHostname = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("type"); ccValue.Exists() {
+						cItem.Type = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("version"); ccValue.Exists() {
+						cItem.Version = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("key"); ccValue.Exists() {
+						cItem.Key = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("minpoll"); ccValue.Exists() {
+						cItem.Minpoll = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("maxpoll"); ccValue.Exists() {
+						cItem.Maxpoll = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("prefer"); ccValue.Exists() {
+						cItem.Prefer = types.BoolValue(true)
+					} else {
+						cItem.Prefer = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("burst"); ccValue.Exists() {
+						cItem.Burst = types.BoolValue(true)
+					} else {
+						cItem.Burst = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("iburst"); ccValue.Exists() {
+						cItem.Iburst = types.BoolValue(true)
+					} else {
+						cItem.Iburst = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("source"); ccValue.Exists() {
+						cItem.Source = types.StringValue(ccValue.String())
+					}
+					item.HostnamePeersServers = append(item.HostnamePeersServers, cItem)
+					return true
+				})
+			}
 			data.PeersServersVrfs = append(data.PeersServersVrfs, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "trusted-keys.trusted-key"); value.Exists() {
+		data.TrustedKeys = make([]NTPTrustedKeys, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := NTPTrustedKeys{}
+			if cValue := v.Get("key-number"); cValue.Exists() {
+				item.KeyNumber = types.Int64Value(cValue.Int())
+			}
+			data.TrustedKeys = append(data.TrustedKeys, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "update-calendar"); value.Exists() {
+		data.UpdateCalendar = types.BoolValue(true)
+	} else {
+		data.UpdateCalendar = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "log-internal-sync"); value.Exists() {
+		data.LogInternalSync = types.BoolValue(true)
+	} else {
+		data.LogInternalSync = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "passive"); value.Exists() {
+		data.Passive = types.BoolValue(true)
+	} else {
+		data.Passive = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "source.interface-name"); value.Exists() {
+		data.SourceInterfaceName = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "source.vrfs.vrf"); value.Exists() {
+		data.SourceVrfs = make([]NTPSourceVrfs, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := NTPSourceVrfs{}
+			if cValue := v.Get("vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			data.SourceVrfs = append(data.SourceVrfs, item)
 			return true
 		})
 	}
@@ -2649,6 +3301,81 @@ func (data *NTP) getDeletedItems(ctx context.Context, state NTP) []string {
 	if !state.AdminPlaneVersion.IsNull() && data.AdminPlaneVersion.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/admin-plane/version", state.getPath()))
 	}
+	for i := range state.SourceVrfs {
+		keys := [...]string{"vrf-name"}
+		stateKeyValues := [...]string{state.SourceVrfs[i].VrfName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SourceVrfs[i].VrfName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SourceVrfs {
+			found = true
+			if state.SourceVrfs[i].VrfName.ValueString() != data.SourceVrfs[j].VrfName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.SourceVrfs[i].InterfaceName.IsNull() && data.SourceVrfs[j].InterfaceName.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/source/vrfs/vrf%v/interface-name", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/source/vrfs/vrf%v", state.getPath(), keyString))
+		}
+	}
+	if !state.SourceInterfaceName.IsNull() && data.SourceInterfaceName.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/source/interface-name", state.getPath()))
+	}
+	if !state.Passive.IsNull() && data.Passive.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/passive", state.getPath()))
+	}
+	if !state.LogInternalSync.IsNull() && data.LogInternalSync.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/log-internal-sync", state.getPath()))
+	}
+	if !state.UpdateCalendar.IsNull() && data.UpdateCalendar.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/update-calendar", state.getPath()))
+	}
+	for i := range state.TrustedKeys {
+		keys := [...]string{"key-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.TrustedKeys[i].KeyNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.TrustedKeys[i].KeyNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.TrustedKeys {
+			found = true
+			if state.TrustedKeys[i].KeyNumber.ValueInt64() != data.TrustedKeys[j].KeyNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/trusted-keys/trusted-key%v", state.getPath(), keyString))
+		}
+	}
 	for i := range state.PeersServersVrfs {
 		keys := [...]string{"vrf-name"}
 		stateKeyValues := [...]string{state.PeersServersVrfs[i].VrfName.ValueString()}
@@ -2672,6 +3399,66 @@ func (data *NTP) getDeletedItems(ctx context.Context, state NTP) []string {
 				found = false
 			}
 			if found {
+				for ci := range state.PeersServersVrfs[i].HostnamePeersServers {
+					ckeys := [...]string{"fqdn-hostname", "type"}
+					cstateKeyValues := [...]string{state.PeersServersVrfs[i].HostnamePeersServers[ci].FqdnHostname.ValueString(), state.PeersServersVrfs[i].HostnamePeersServers[ci].Type.ValueString()}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.PeersServersVrfs[i].HostnamePeersServers[ci].FqdnHostname.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.PeersServersVrfs[i].HostnamePeersServers[ci].Type.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.PeersServersVrfs[j].HostnamePeersServers {
+						found = true
+						if state.PeersServersVrfs[i].HostnamePeersServers[ci].FqdnHostname.ValueString() != data.PeersServersVrfs[j].HostnamePeersServers[cj].FqdnHostname.ValueString() {
+							found = false
+						}
+						if state.PeersServersVrfs[i].HostnamePeersServers[ci].Type.ValueString() != data.PeersServersVrfs[j].HostnamePeersServers[cj].Type.ValueString() {
+							found = false
+						}
+						if found {
+							if !state.PeersServersVrfs[i].HostnamePeersServers[ci].Source.IsNull() && data.PeersServersVrfs[j].HostnamePeersServers[cj].Source.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/hostname/hostname-peer-server%v/source", state.getPath(), keyString, ckeyString))
+							}
+							if !state.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst.IsNull() && data.PeersServersVrfs[j].HostnamePeersServers[cj].Iburst.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/hostname/hostname-peer-server%v/iburst", state.getPath(), keyString, ckeyString))
+							}
+							if !state.PeersServersVrfs[i].HostnamePeersServers[ci].Burst.IsNull() && data.PeersServersVrfs[j].HostnamePeersServers[cj].Burst.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/hostname/hostname-peer-server%v/burst", state.getPath(), keyString, ckeyString))
+							}
+							if !state.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer.IsNull() && data.PeersServersVrfs[j].HostnamePeersServers[cj].Prefer.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/hostname/hostname-peer-server%v/prefer", state.getPath(), keyString, ckeyString))
+							}
+							if !state.PeersServersVrfs[i].HostnamePeersServers[ci].Maxpoll.IsNull() && data.PeersServersVrfs[j].HostnamePeersServers[cj].Maxpoll.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/hostname/hostname-peer-server%v/maxpoll", state.getPath(), keyString, ckeyString))
+							}
+							if !state.PeersServersVrfs[i].HostnamePeersServers[ci].Minpoll.IsNull() && data.PeersServersVrfs[j].HostnamePeersServers[cj].Minpoll.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/hostname/hostname-peer-server%v/minpoll", state.getPath(), keyString, ckeyString))
+							}
+							if !state.PeersServersVrfs[i].HostnamePeersServers[ci].Key.IsNull() && data.PeersServersVrfs[j].HostnamePeersServers[cj].Key.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/hostname/hostname-peer-server%v/key", state.getPath(), keyString, ckeyString))
+							}
+							if !state.PeersServersVrfs[i].HostnamePeersServers[ci].Version.IsNull() && data.PeersServersVrfs[j].HostnamePeersServers[cj].Version.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/hostname/hostname-peer-server%v/version", state.getPath(), keyString, ckeyString))
+							}
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/hostname/hostname-peer-server%v", state.getPath(), keyString, ckeyString))
+					}
+				}
 				for ci := range state.PeersServersVrfs[i].Ipv6PeersServers {
 					ckeys := [...]string{"address", "type"}
 					cstateKeyValues := [...]string{state.PeersServersVrfs[i].Ipv6PeersServers[ci].Address.ValueString(), state.PeersServersVrfs[i].Ipv6PeersServers[ci].Type.ValueString()}
@@ -2802,6 +3589,66 @@ func (data *NTP) getDeletedItems(ctx context.Context, state NTP) []string {
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-server/vrfs/vrf%v", state.getPath(), keyString))
 		}
 	}
+	for i := range state.HostnamePeersServers {
+		keys := [...]string{"fqdn-hostname", "type"}
+		stateKeyValues := [...]string{state.HostnamePeersServers[i].FqdnHostname.ValueString(), state.HostnamePeersServers[i].Type.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.HostnamePeersServers[i].FqdnHostname.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.HostnamePeersServers[i].Type.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.HostnamePeersServers {
+			found = true
+			if state.HostnamePeersServers[i].FqdnHostname.ValueString() != data.HostnamePeersServers[j].FqdnHostname.ValueString() {
+				found = false
+			}
+			if state.HostnamePeersServers[i].Type.ValueString() != data.HostnamePeersServers[j].Type.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.HostnamePeersServers[i].Source.IsNull() && data.HostnamePeersServers[j].Source.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-server/hostname/hostname-peer-server%v/source", state.getPath(), keyString))
+				}
+				if !state.HostnamePeersServers[i].Iburst.IsNull() && data.HostnamePeersServers[j].Iburst.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-server/hostname/hostname-peer-server%v/iburst", state.getPath(), keyString))
+				}
+				if !state.HostnamePeersServers[i].Burst.IsNull() && data.HostnamePeersServers[j].Burst.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-server/hostname/hostname-peer-server%v/burst", state.getPath(), keyString))
+				}
+				if !state.HostnamePeersServers[i].Prefer.IsNull() && data.HostnamePeersServers[j].Prefer.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-server/hostname/hostname-peer-server%v/prefer", state.getPath(), keyString))
+				}
+				if !state.HostnamePeersServers[i].Maxpoll.IsNull() && data.HostnamePeersServers[j].Maxpoll.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-server/hostname/hostname-peer-server%v/maxpoll", state.getPath(), keyString))
+				}
+				if !state.HostnamePeersServers[i].Minpoll.IsNull() && data.HostnamePeersServers[j].Minpoll.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-server/hostname/hostname-peer-server%v/minpoll", state.getPath(), keyString))
+				}
+				if !state.HostnamePeersServers[i].Key.IsNull() && data.HostnamePeersServers[j].Key.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-server/hostname/hostname-peer-server%v/key", state.getPath(), keyString))
+				}
+				if !state.HostnamePeersServers[i].Version.IsNull() && data.HostnamePeersServers[j].Version.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-server/hostname/hostname-peer-server%v/version", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-server/hostname/hostname-peer-server%v", state.getPath(), keyString))
+		}
+	}
 	for i := range state.Ipv6PeersServers {
 		keys := [...]string{"address", "type"}
 		stateKeyValues := [...]string{state.Ipv6PeersServers[i].Address.ValueString(), state.Ipv6PeersServers[i].Type.ValueString()}
@@ -2925,6 +3772,9 @@ func (data *NTP) getDeletedItems(ctx context.Context, state NTP) []string {
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-server/ipv4/ipv4-peer-server%v", state.getPath(), keyString))
 		}
 	}
+	if !state.MaxAssociations.IsNull() && data.MaxAssociations.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/max-associations", state.getPath()))
+	}
 	if !state.PrimaryReferenceClock.IsNull() && data.PrimaryReferenceClock.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/primary-reference-clock", state.getPath()))
 	}
@@ -3041,12 +3891,45 @@ func (data *NTP) getDeletedItems(ctx context.Context, state NTP) []string {
 				if !state.Interfaces[i].BroadcastDestination.IsNull() && data.Interfaces[j].BroadcastDestination.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/broadcast/destination", state.getPath(), keyString))
 				}
+				if !state.Interfaces[i].BroadcastClient.IsNull() && data.Interfaces[j].BroadcastClient.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/broadcast-client", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v", state.getPath(), keyString))
 		}
+	}
+	if !state.DriftFilename.IsNull() && data.DriftFilename.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/drift/file", state.getPath()))
+	}
+	if !state.DriftFileHarddisk.IsNull() && data.DriftFileHarddisk.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/drift/file/harddisk", state.getPath()))
+	}
+	if !state.DriftFileDisk2.IsNull() && data.DriftFileDisk2.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/drift/file/disk2", state.getPath()))
+	}
+	if !state.DriftFileDisk1.IsNull() && data.DriftFileDisk1.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/drift/file/disk1", state.getPath()))
+	}
+	if !state.DriftFileDisk0.IsNull() && data.DriftFileDisk0.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/drift/file", state.getPath()))
+	}
+	if !state.DriftFileUsb.IsNull() && data.DriftFileUsb.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/drift/file/usb", state.getPath()))
+	}
+	if !state.DriftFileCompactflash.IsNull() && data.DriftFileCompactflash.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/drift/file/compactflash", state.getPath()))
+	}
+	if !state.DriftFileBootflash.IsNull() && data.DriftFileBootflash.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/drift/file/bootflash", state.getPath()))
+	}
+	if !state.DriftAgingTime.IsNull() && data.DriftAgingTime.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/drift/aging/time", state.getPath()))
+	}
+	if !state.Broadcastdelay.IsNull() && data.Broadcastdelay.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/broadcastdelay", state.getPath()))
 	}
 	for i := range state.HmacSha2AuthenticationKeys {
 		keys := [...]string{"key-number"}
@@ -3146,87 +4029,6 @@ func (data *NTP) getDeletedItems(ctx context.Context, state NTP) []string {
 		if !found {
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/cmac-authentication-keys/cmac-authentication-key%v", state.getPath(), keyString))
 		}
-	}
-	if !state.Passive.IsNull() && data.Passive.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/passive", state.getPath()))
-	}
-	for i := range state.SourceVrfs {
-		keys := [...]string{"vrf-name"}
-		stateKeyValues := [...]string{state.SourceVrfs[i].VrfName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.SourceVrfs[i].VrfName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.SourceVrfs {
-			found = true
-			if state.SourceVrfs[i].VrfName.ValueString() != data.SourceVrfs[j].VrfName.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.SourceVrfs[i].InterfaceName.IsNull() && data.SourceVrfs[j].InterfaceName.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/source/vrfs/vrf%v/interface-name", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/source/vrfs/vrf%v", state.getPath(), keyString))
-		}
-	}
-	if !state.SourceInterfaceName.IsNull() && data.SourceInterfaceName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/source/interface-name", state.getPath()))
-	}
-	if !state.LogInternalSync.IsNull() && data.LogInternalSync.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/log-internal-sync", state.getPath()))
-	}
-	if !state.UpdateCalendar.IsNull() && data.UpdateCalendar.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/update-calendar", state.getPath()))
-	}
-	for i := range state.TrustedKeys {
-		keys := [...]string{"key-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.TrustedKeys[i].KeyNumber.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.TrustedKeys[i].KeyNumber.ValueInt64()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.TrustedKeys {
-			found = true
-			if state.TrustedKeys[i].KeyNumber.ValueInt64() != data.TrustedKeys[j].KeyNumber.ValueInt64() {
-				found = false
-			}
-			if found {
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/trusted-keys/trusted-key%v", state.getPath(), keyString))
-		}
-	}
-	if !state.MaxAssociations.IsNull() && data.MaxAssociations.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/max-associations", state.getPath()))
-	}
-	if !state.Broadcastdelay.IsNull() && data.Broadcastdelay.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/broadcastdelay", state.getPath()))
 	}
 	for i := range state.AuthenticationKeys {
 		keys := [...]string{"key-number"}
@@ -3372,12 +4174,54 @@ func (data *NTP) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.AdminPlanePrefer.IsNull() && !data.AdminPlanePrefer.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/admin-plane/prefer", data.getPath()))
 	}
+	for i := range data.SourceVrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.SourceVrfs[i].VrfName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	if !data.Passive.IsNull() && !data.Passive.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/passive", data.getPath()))
+	}
+	if !data.LogInternalSync.IsNull() && !data.LogInternalSync.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log-internal-sync", data.getPath()))
+	}
+	if !data.UpdateCalendar.IsNull() && !data.UpdateCalendar.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/update-calendar", data.getPath()))
+	}
+	for i := range data.TrustedKeys {
+		keys := [...]string{"key-number"}
+		keyValues := [...]string{strconv.FormatInt(data.TrustedKeys[i].KeyNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
 	for i := range data.PeersServersVrfs {
 		keys := [...]string{"vrf-name"}
 		keyValues := [...]string{data.PeersServersVrfs[i].VrfName.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		for ci := range data.PeersServersVrfs[i].HostnamePeersServers {
+			ckeys := [...]string{"fqdn-hostname", "type"}
+			ckeyValues := [...]string{data.PeersServersVrfs[i].HostnamePeersServers[ci].FqdnHostname.ValueString(), data.PeersServersVrfs[i].HostnamePeersServers[ci].Type.ValueString()}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+			if !data.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst.IsNull() && !data.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/hostname/hostname-peer-server%v/iburst", data.getPath(), keyString, ckeyString))
+			}
+			if !data.PeersServersVrfs[i].HostnamePeersServers[ci].Burst.IsNull() && !data.PeersServersVrfs[i].HostnamePeersServers[ci].Burst.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/hostname/hostname-peer-server%v/burst", data.getPath(), keyString, ckeyString))
+			}
+			if !data.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer.IsNull() && !data.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/hostname/hostname-peer-server%v/prefer", data.getPath(), keyString, ckeyString))
+			}
 		}
 		for ci := range data.PeersServersVrfs[i].Ipv6PeersServers {
 			ckeys := [...]string{"address", "type"}
@@ -3412,6 +4256,23 @@ func (data *NTP) getEmptyLeafsDelete(ctx context.Context) []string {
 			if !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Prefer.IsNull() && !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Prefer.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/ipv4/ipv4-peer-server%v/prefer", data.getPath(), keyString, ckeyString))
 			}
+		}
+	}
+	for i := range data.HostnamePeersServers {
+		keys := [...]string{"fqdn-hostname", "type"}
+		keyValues := [...]string{data.HostnamePeersServers[i].FqdnHostname.ValueString(), data.HostnamePeersServers[i].Type.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.HostnamePeersServers[i].Iburst.IsNull() && !data.HostnamePeersServers[i].Iburst.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/peer-server/hostname/hostname-peer-server%v/iburst", data.getPath(), keyString))
+		}
+		if !data.HostnamePeersServers[i].Burst.IsNull() && !data.HostnamePeersServers[i].Burst.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/peer-server/hostname/hostname-peer-server%v/burst", data.getPath(), keyString))
+		}
+		if !data.HostnamePeersServers[i].Prefer.IsNull() && !data.HostnamePeersServers[i].Prefer.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/peer-server/hostname/hostname-peer-server%v/prefer", data.getPath(), keyString))
 		}
 	}
 	for i := range data.Ipv6PeersServers {
@@ -3483,6 +4344,30 @@ func (data *NTP) getEmptyLeafsDelete(ctx context.Context) []string {
 		if !data.Interfaces[i].Disable.IsNull() && !data.Interfaces[i].Disable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/interface%v/disable", data.getPath(), keyString))
 		}
+		if !data.Interfaces[i].BroadcastClient.IsNull() && !data.Interfaces[i].BroadcastClient.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/interface%v/broadcast-client", data.getPath(), keyString))
+		}
+	}
+	if !data.DriftFileHarddisk.IsNull() && !data.DriftFileHarddisk.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/drift/file/harddisk", data.getPath()))
+	}
+	if !data.DriftFileDisk2.IsNull() && !data.DriftFileDisk2.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/drift/file/disk2", data.getPath()))
+	}
+	if !data.DriftFileDisk1.IsNull() && !data.DriftFileDisk1.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/drift/file/disk1", data.getPath()))
+	}
+	if !data.DriftFileDisk0.IsNull() && !data.DriftFileDisk0.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/drift/file", data.getPath()))
+	}
+	if !data.DriftFileUsb.IsNull() && !data.DriftFileUsb.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/drift/file/usb", data.getPath()))
+	}
+	if !data.DriftFileCompactflash.IsNull() && !data.DriftFileCompactflash.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/drift/file/compactflash", data.getPath()))
+	}
+	if !data.DriftFileBootflash.IsNull() && !data.DriftFileBootflash.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/drift/file/bootflash", data.getPath()))
 	}
 	for i := range data.HmacSha2AuthenticationKeys {
 		keys := [...]string{"key-number"}
@@ -3503,31 +4388,6 @@ func (data *NTP) getEmptyLeafsDelete(ctx context.Context) []string {
 	for i := range data.CmacAuthenticationKeys {
 		keys := [...]string{"key-number"}
 		keyValues := [...]string{strconv.FormatInt(data.CmacAuthenticationKeys[i].KeyNumber.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	if !data.Passive.IsNull() && !data.Passive.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/passive", data.getPath()))
-	}
-	for i := range data.SourceVrfs {
-		keys := [...]string{"vrf-name"}
-		keyValues := [...]string{data.SourceVrfs[i].VrfName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	if !data.LogInternalSync.IsNull() && !data.LogInternalSync.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log-internal-sync", data.getPath()))
-	}
-	if !data.UpdateCalendar.IsNull() && !data.UpdateCalendar.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/update-calendar", data.getPath()))
-	}
-	for i := range data.TrustedKeys {
-		keys := [...]string{"key-number"}
-		keyValues := [...]string{strconv.FormatInt(data.TrustedKeys[i].KeyNumber.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
@@ -3582,6 +4442,38 @@ func (data *NTP) getDeletePaths(ctx context.Context) []string {
 	if !data.AdminPlaneVersion.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/admin-plane/version", data.getPath()))
 	}
+	for i := range data.SourceVrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.SourceVrfs[i].VrfName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/source/vrfs/vrf%v", data.getPath(), keyString))
+	}
+	if !data.SourceInterfaceName.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/source/interface-name", data.getPath()))
+	}
+	if !data.Passive.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/passive", data.getPath()))
+	}
+	if !data.LogInternalSync.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/log-internal-sync", data.getPath()))
+	}
+	if !data.UpdateCalendar.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/update-calendar", data.getPath()))
+	}
+	for i := range data.TrustedKeys {
+		keys := [...]string{"key-number"}
+		keyValues := [...]string{strconv.FormatInt(data.TrustedKeys[i].KeyNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/trusted-keys/trusted-key%v", data.getPath(), keyString))
+	}
 	for i := range data.PeersServersVrfs {
 		keys := [...]string{"vrf-name"}
 		keyValues := [...]string{data.PeersServersVrfs[i].VrfName.ValueString()}
@@ -3591,6 +4483,16 @@ func (data *NTP) getDeletePaths(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/peer-server/vrfs/vrf%v", data.getPath(), keyString))
+	}
+	for i := range data.HostnamePeersServers {
+		keys := [...]string{"fqdn-hostname", "type"}
+		keyValues := [...]string{data.HostnamePeersServers[i].FqdnHostname.ValueString(), data.HostnamePeersServers[i].Type.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/peer-server/hostname/hostname-peer-server%v", data.getPath(), keyString))
 	}
 	for i := range data.Ipv6PeersServers {
 		keys := [...]string{"address", "type"}
@@ -3611,6 +4513,9 @@ func (data *NTP) getDeletePaths(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/peer-server/ipv4/ipv4-peer-server%v", data.getPath(), keyString))
+	}
+	if !data.MaxAssociations.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/max-associations", data.getPath()))
 	}
 	if !data.PrimaryReferenceClock.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/primary/primary-reference-clock", data.getPath()))
@@ -3637,6 +4542,36 @@ func (data *NTP) getDeletePaths(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/interface%v", data.getPath(), keyString))
+	}
+	if !data.DriftFilename.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/drift/file", data.getPath()))
+	}
+	if !data.DriftFileHarddisk.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/drift/file/harddisk", data.getPath()))
+	}
+	if !data.DriftFileDisk2.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/drift/file/disk2", data.getPath()))
+	}
+	if !data.DriftFileDisk1.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/drift/file/disk1", data.getPath()))
+	}
+	if !data.DriftFileDisk0.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/drift/file", data.getPath()))
+	}
+	if !data.DriftFileUsb.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/drift/file/usb", data.getPath()))
+	}
+	if !data.DriftFileCompactflash.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/drift/file/compactflash", data.getPath()))
+	}
+	if !data.DriftFileBootflash.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/drift/file/bootflash", data.getPath()))
+	}
+	if !data.DriftAgingTime.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/drift/aging/time", data.getPath()))
+	}
+	if !data.Broadcastdelay.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/broadcastdelay", data.getPath()))
 	}
 	for i := range data.HmacSha2AuthenticationKeys {
 		keys := [...]string{"key-number"}
@@ -3667,44 +4602,6 @@ func (data *NTP) getDeletePaths(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/cmac-authentication-keys/cmac-authentication-key%v", data.getPath(), keyString))
-	}
-	if !data.Passive.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/passive", data.getPath()))
-	}
-	for i := range data.SourceVrfs {
-		keys := [...]string{"vrf-name"}
-		keyValues := [...]string{data.SourceVrfs[i].VrfName.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/source/vrfs/vrf%v", data.getPath(), keyString))
-	}
-	if !data.SourceInterfaceName.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/source/interface-name", data.getPath()))
-	}
-	if !data.LogInternalSync.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/log-internal-sync", data.getPath()))
-	}
-	if !data.UpdateCalendar.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/update-calendar", data.getPath()))
-	}
-	for i := range data.TrustedKeys {
-		keys := [...]string{"key-number"}
-		keyValues := [...]string{strconv.FormatInt(data.TrustedKeys[i].KeyNumber.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/trusted-keys/trusted-key%v", data.getPath(), keyString))
-	}
-	if !data.MaxAssociations.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/max-associations", data.getPath()))
-	}
-	if !data.Broadcastdelay.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/broadcastdelay", data.getPath()))
 	}
 	for i := range data.AuthenticationKeys {
 		keys := [...]string{"key-number"}

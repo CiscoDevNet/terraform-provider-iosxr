@@ -36,7 +36,7 @@ import (
 func TestAccIosxrTagSet(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_tag_set.test", "set_name", "TAG_SET_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_tag_set.test", "rpl_tag_set", "tag-set TAG_SET_1\n  4297\nend-set\n"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_tag_set.test", "rpl", "tag-set TAG_SET_1\n  4297\nend-set\n"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -84,7 +84,7 @@ func iosxrTagSetImportStateIdFunc(resourceName string) resource.ImportStateIdFun
 func testAccIosxrTagSetConfig_minimum() string {
 	config := `resource "iosxr_tag_set" "test" {` + "\n"
 	config += `	set_name = "TAG_SET_1"` + "\n"
-	config += `	rpl_tag_set = "tag-set TAG_SET_1\n  4297\nend-set\n"` + "\n"
+	config += `	rpl = "tag-set TAG_SET_1\n  4297\nend-set\n"` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -96,7 +96,7 @@ func testAccIosxrTagSetConfig_minimum() string {
 func testAccIosxrTagSetConfig_all() string {
 	config := `resource "iosxr_tag_set" "test" {` + "\n"
 	config += `	set_name = "TAG_SET_1"` + "\n"
-	config += `	rpl_tag_set = "tag-set TAG_SET_1\n  4297\nend-set\n"` + "\n"
+	config += `	rpl = "tag-set TAG_SET_1\n  4297\nend-set\n"` + "\n"
 	config += `}` + "\n"
 	return config
 }

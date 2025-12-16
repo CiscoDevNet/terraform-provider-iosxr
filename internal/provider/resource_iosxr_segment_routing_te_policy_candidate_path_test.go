@@ -117,6 +117,7 @@ func testAccIosxrSegmentRoutingTEPolicyCandidatePathConfig_minimum() string {
 
 func testAccIosxrSegmentRoutingTEPolicyCandidatePathConfig_all() string {
 	config := `resource "iosxr_segment_routing_te_policy_candidate_path" "test" {` + "\n"
+	config += `	delete_mode = "all"` + "\n"
 	config += `	policy_name = "POLICY1"` + "\n"
 	config += `	path_index = 100` + "\n"
 	config += `	path_infos = [{` + "\n"

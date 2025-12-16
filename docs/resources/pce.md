@@ -15,20 +15,257 @@ This resource can manage the PCE configuration.
 ```terraform
 resource "iosxr_pce" "example" {
   address_ipv4 = "77.77.77.1"
+  address_ipv6 = "2001:db8::1"
   state_sync_ipv4s = [
     {
       address = "100.100.100.11"
     }
   ]
-  peer_filter_ipv4_access_list = "Accesslist1"
-  api_authentication_digest    = true
-  api_sibling_ipv4             = "100.100.100.2"
+  state_sync_ipv6s = [
+    {
+      address = "2001:db8::2"
+    }
+  ]
+  tcp_buffer_size                      = 256000
+  tcp_ao_keychain_name                 = "KEY_CHAIN_1"
+  tcp_ao_include_tcp_options           = true
+  tcp_ao_accept_ao_mismatch_connection = true
+  disjoint_path_maximum_attempts       = 5
+  disjoint_path_group_ids = [
+    {
+      group_id                                = 10
+      link_disjoint                           = true
+      link_disjoint_strict                    = true
+      link_disjoint_lsp_one_pcc_address_type  = "ipv4"
+      link_disjoint_lsp_one_pcc_ip_address    = "100.100.100.10"
+      link_disjoint_lsp_one_pcc_lsp_name      = "LSP_10"
+      link_disjoint_lsp_one_pcc_shortest_path = true
+      link_disjoint_lsp_one_pcc_exclude_srlg  = 10
+      link_disjoint_lsp_two_pcc_address_type  = "ipv4"
+      link_disjoint_lsp_two_pcc_ip_address    = "100.100.100.11"
+      link_disjoint_lsp_two_pcc_lsp_name      = "LSP_11"
+      link_disjoint_lsp_two_pcc_exclude_srlg  = 11
+      link_disjoint_sub_ids = [
+        {
+          sub_id                    = 12
+          strict                    = true
+          lsp_one_pcc_address_type  = "ipv4"
+          lsp_one_pcc_ip_address    = "100.100.100.12"
+          lsp_one_pcc_lsp_name      = "LSP_12"
+          lsp_one_pcc_shortest_path = true
+          lsp_one_pcc_exclude_srlg  = 12
+          lsp_two_pcc_address_type  = "ipv4"
+          lsp_two_pcc_ip_address    = "200.200.200.13"
+          lsp_two_pcc_lsp_name      = "LSP_13"
+          lsp_two_pcc_exclude_srlg  = 13
+        }
+      ]
+      node_disjoint                           = true
+      node_disjoint_strict                    = true
+      node_disjoint_lsp_one_pcc_address_type  = "ipv4"
+      node_disjoint_lsp_one_pcc_ip_address    = "100.100.100.14"
+      node_disjoint_lsp_one_pcc_lsp_name      = "LSP_14"
+      node_disjoint_lsp_one_pcc_shortest_path = true
+      node_disjoint_lsp_one_pcc_exclude_srlg  = 14
+      node_disjoint_lsp_two_pcc_address_type  = "ipv4"
+      node_disjoint_lsp_two_pcc_ip_address    = "100.100.100.15"
+      node_disjoint_lsp_two_pcc_lsp_name      = "LSP_15"
+      node_disjoint_lsp_two_pcc_exclude_srlg  = 15
+      node_disjoint_sub_ids = [
+        {
+          sub_id                    = 16
+          strict                    = true
+          lsp_one_pcc_address_type  = "ipv4"
+          lsp_one_pcc_ip_address    = "100.100.100.16"
+          lsp_one_pcc_lsp_name      = "LSP_16"
+          lsp_one_pcc_shortest_path = true
+          lsp_one_pcc_exclude_srlg  = 16
+          lsp_two_pcc_address_type  = "ipv4"
+          lsp_two_pcc_ip_address    = "100.100.100.17"
+          lsp_two_pcc_lsp_name      = "LSP_17"
+          lsp_two_pcc_exclude_srlg  = 17
+        }
+      ]
+      srlg_disjoint                           = true
+      srlg_disjoint_strict                    = true
+      srlg_disjoint_lsp_one_pcc_address_type  = "ipv4"
+      srlg_disjoint_lsp_one_pcc_ip_address    = "100.100.100.18"
+      srlg_disjoint_lsp_one_pcc_lsp_name      = "LSP_18"
+      srlg_disjoint_lsp_one_pcc_shortest_path = true
+      srlg_disjoint_lsp_one_pcc_exclude_srlg  = 18
+      srlg_disjoint_lsp_two_pcc_address_type  = "ipv4"
+      srlg_disjoint_lsp_two_pcc_ip_address    = "100.100.100.19"
+      srlg_disjoint_lsp_two_pcc_lsp_name      = "LSP_19"
+      srlg_disjoint_lsp_two_pcc_exclude_srlg  = 19
+      srlg_disjoint_sub_ids = [
+        {
+          sub_id                    = 20
+          strict                    = true
+          lsp_one_pcc_address_type  = "ipv4"
+          lsp_one_pcc_ip_address    = "100.100.100.20"
+          lsp_one_pcc_lsp_name      = "LSP_20"
+          lsp_one_pcc_shortest_path = true
+          lsp_one_pcc_exclude_srlg  = 20
+          lsp_two_pcc_address_type  = "ipv4"
+          lsp_two_pcc_ip_address    = "100.100.100.21"
+          lsp_two_pcc_lsp_name      = "LSP_21"
+          lsp_two_pcc_exclude_srlg  = 21
+        }
+      ]
+      srlg_node_disjoint                           = true
+      srlg_node_disjoint_strict                    = true
+      srlg_node_disjoint_lsp_one_pcc_address_type  = "ipv4"
+      srlg_node_disjoint_lsp_one_pcc_ip_address    = "100.100.100.22"
+      srlg_node_disjoint_lsp_one_pcc_lsp_name      = "LSP_22"
+      srlg_node_disjoint_lsp_one_pcc_shortest_path = true
+      srlg_node_disjoint_lsp_one_pcc_exclude_srlg  = 22
+      srlg_node_disjoint_lsp_two_pcc_address_type  = "ipv4"
+      srlg_node_disjoint_lsp_two_pcc_ip_address    = "100.100.100.23"
+      srlg_node_disjoint_lsp_two_pcc_lsp_name      = "LSP_23"
+      srlg_node_disjoint_lsp_two_pcc_exclude_srlg  = 23
+      srlg_node_disjoint_sub_ids = [
+        {
+          sub_id                    = 24
+          strict                    = true
+          lsp_one_pcc_address_type  = "ipv4"
+          lsp_one_pcc_ip_address    = "100.100.100.24"
+          lsp_one_pcc_lsp_name      = "LSP_24"
+          lsp_one_pcc_shortest_path = true
+          lsp_one_pcc_exclude_srlg  = 24
+          lsp_two_pcc_address_type  = "ipv4"
+          lsp_two_pcc_ip_address    = "100.100.100.25"
+          lsp_two_pcc_lsp_name      = "LSP_25"
+          lsp_two_pcc_exclude_srlg  = 25
+        }
+      ]
+    }
+  ]
+  peer_ipv4s = [
+    {
+      address                              = "200.200.200.10"
+      tcp_ao_keychain_name                 = "KEY_CHAIN_1"
+      tcp_ao_include_tcp_options           = true
+      tcp_ao_accept_ao_mismatch_connection = true
+    }
+  ]
+  peer_ipv6s = [
+    {
+      address                              = "2001:db8::10"
+      tcp_ao_keychain_name                 = "KEY_CHAIN_1"
+      tcp_ao_include_tcp_options           = true
+      tcp_ao_accept_ao_mismatch_connection = true
+    }
+  ]
+  netconf_ssh_user               = "netconf-user"
+  netconf_ssh_password_encrypted = "00071A150754"
+  api_authentication_digest      = true
+  api_sibling_ipv4               = "100.100.100.2"
+  api_vrf                        = "VRF1"
   api_users = [
     {
       user_name          = "rest-user"
       password_encrypted = "00141215174C04140B"
     }
   ]
+  api_ipv4_address                               = "100.100.100.3"
+  api_ipv6_address                               = "2001:db8::1"
+  timers_reoptimization                          = 600
+  timers_keepalive                               = 60
+  timers_minimum_peer_keepalive                  = 40
+  timers_peer_zombie                             = 120
+  timers_init_verify_restart                     = 80
+  timers_init_verify_switchover                  = 120
+  timers_init_verify_startup                     = 360
+  backoff_ratio                                  = 10
+  backoff_difference                             = 10
+  backoff_threshold                              = 10
+  logging_no_path                                = true
+  logging_fallback                               = true
+  logging_pcep_pcerr_received                    = true
+  logging_pcep_api_send_queue_congestion_disable = true
+  logging_pcep_disjointness_status               = true
+  segment_routing_strict_sid_only                = true
+  srte_affinity_bitmaps = [
+    {
+      affinity_color_name   = "COLOR_1"
+      affinity_bit_position = 1
+    }
+  ]
+  srte_segment_lists = [
+    {
+      segment_list_name = "SEGMENT_LIST_1"
+      indexes = [
+        {
+          index_number = 1
+          mpls_label   = 16100
+        }
+      ]
+    }
+  ]
+  srte_cspf_anycast_sid_inclusion = true
+  srte_cspf_sr_native             = true
+  srte_cspf_sr_native_force       = true
+  srte_p2mp_endpoint_sets = [
+    {
+      endpoint_set_name = "ENDPOINT_SET_1"
+      ipv4s = [
+        {
+          address = "100.100.100.30"
+        }
+      ]
+    }
+  ]
+  srte_p2mp_policies = [
+    {
+      policy_name      = "P2MP_POLICY_1"
+      color            = 100
+      endpoint_set     = "ENDPOINT_SET_1"
+      source_ipv4      = "100.100.100.1"
+      shutdown         = false
+      fast_reroute_lfa = true
+      treesid_mpls     = 24200
+      candidate_paths_constraints_affinity_include_any_colors = [
+        {
+          affinity_color_name = "COLOR_1"
+        }
+      ]
+      candidate_paths_constraints_affinity_include_all_colors = [
+        {
+          affinity_color_name = "COLOR_2"
+        }
+      ]
+      candidate_paths_constraints_affinity_exclude_colors = [
+        {
+          affinity_color_name = "COLOR_3"
+        }
+      ]
+      candidate_paths_preferences = [
+        {
+          preference_id               = 100
+          dynamic                     = true
+          dynamic_metric_type_latency = true
+        }
+      ]
+    }
+  ]
+  srte_p2mp_timers_reoptimization = 300
+  srte_p2mp_timers_cleanup        = 60
+  srte_p2mp_label_range_min       = 16000
+  srte_p2mp_label_range_max       = 17000
+  srte_p2mp_multipath_disable     = true
+  srte_p2mp_fast_reroute_lfa      = true
+  srte_p2mp_frr_node_set_from_ipv4s = [
+    {
+      address = "100.100.100.31"
+    }
+  ]
+  srte_p2mp_frr_node_set_to_ipv4s = [
+    {
+      address = "100.100.100.32"
+    }
+  ]
+  peer_filter_ipv4_access_list     = "ACL_1"
+  hierarchical_underlay_enable_all = true
 }
 ```
 
@@ -40,13 +277,76 @@ resource "iosxr_pce" "example" {
 - `address_ipv4` (String) IPv4 address
 - `address_ipv6` (String) IPv6 address
 - `api_authentication_digest` (Boolean) Use HTTP Digest authentication (MD5)
+- `api_ipv4_address` (String) NB-API server IPv4 address
+- `api_ipv6_address` (String) NB-API server IPv6 address
 - `api_sibling_ipv4` (String) IPv4 address of the PCE sibling
 - `api_users` (Attributes List) Northbound API username (see [below for nested schema](#nestedatt--api_users))
+- `api_vrf` (String) VRF for northbound API and PCE sibling connections.
+- `backoff_difference` (Number) Backoff common difference
+  - Range: `0`-`255`
+- `backoff_ratio` (Number) Backoff common ratio
+  - Range: `0`-`255`
+- `backoff_threshold` (Number) Backoff threshold
+  - Range: `0`-`3600`
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
+- `disjoint_path_group_ids` (Attributes List) Group ID (see [below for nested schema](#nestedatt--disjoint_path_group_ids))
+- `disjoint_path_maximum_attempts` (Number) Maximum number of attempts during disjoint path computation (default: 1000)
+  - Range: `1`-`100000`
+- `hierarchical_underlay_enable_all` (Boolean) Use all available tunnels as underlay
+- `logging_fallback` (Boolean) logging fallback messages
+- `logging_no_path` (Boolean) logging no-path messages
+- `logging_pcep_api_send_queue_congestion_disable` (Boolean) disable messages
+- `logging_pcep_disjointness_status` (Boolean) logging of disjointness status related messages
+- `logging_pcep_pcerr_received` (Boolean) logging of received PCErr messages
+- `netconf_ssh_password_encrypted` (String, Sensitive) Specify unencrypted password
+- `netconf_ssh_user` (String) Specify SSH username that will be used to log on to routers
+- `password_encrypted` (String, Sensitive) Specify unencrypted password
 - `peer_filter_ipv4_access_list` (String) Access-list for IPv4 peer filtering
+- `peer_ipv4s` (Attributes List) IPv4 address family (see [below for nested schema](#nestedatt--peer_ipv4s))
+- `peer_ipv6s` (Attributes List) IPv6 address family (see [below for nested schema](#nestedatt--peer_ipv6s))
+- `segment_routing_strict_sid_only` (Boolean) Use strict sids only
+- `srte_affinity_bitmaps` (Attributes List) Affinity color name (see [below for nested schema](#nestedatt--srte_affinity_bitmaps))
+- `srte_cspf_anycast_sid_inclusion` (Boolean) Enable Anycast SID Inclusion for all policies
+- `srte_cspf_sr_native` (Boolean) Enable SR native algorithm
+- `srte_cspf_sr_native_force` (Boolean) Must use this algorithm for all path computations
+- `srte_p2mp_endpoint_sets` (Attributes List) Endpoint-set configuration (see [below for nested schema](#nestedatt--srte_p2mp_endpoint_sets))
+- `srte_p2mp_fast_reroute_lfa` (Boolean) LFA Fast Re-route
+- `srte_p2mp_frr_node_set_from_ipv4s` (Attributes List) Specify the address AFI (see [below for nested schema](#nestedatt--srte_p2mp_frr_node_set_from_ipv4s))
+- `srte_p2mp_frr_node_set_to_ipv4s` (Attributes List) Specify the address AFI (see [below for nested schema](#nestedatt--srte_p2mp_frr_node_set_to_ipv4s))
+- `srte_p2mp_label_range_max` (Number) Maximum value of label range
+  - Range: `16`-`1048575`
+- `srte_p2mp_label_range_min` (Number) Minimum value of label range
+  - Range: `16`-`1048575`
+- `srte_p2mp_multipath_disable` (Boolean) Disable load balancing of SR P2MP across ECMP paths
+- `srte_p2mp_policies` (Attributes List) Policy configuration (see [below for nested schema](#nestedatt--srte_p2mp_policies))
+- `srte_p2mp_timers_cleanup` (Number) Delay before node is excluded from P2MP path computation after PCEP connection with it goes away
+  - Range: `1`-`86400`
+- `srte_p2mp_timers_reoptimization` (Number) How often to reoptimize all P2MP paths.
+  - Range: `60`-`3600`
+- `srte_segment_lists` (Attributes List) Segment-list name (see [below for nested schema](#nestedatt--srte_segment_lists))
 - `state_sync_ipv4s` (Attributes List) IPv4 address (see [below for nested schema](#nestedatt--state_sync_ipv4s))
+- `state_sync_ipv6s` (Attributes List) IPv6 address (see [below for nested schema](#nestedatt--state_sync_ipv6s))
+- `tcp_ao_accept_ao_mismatch_connection` (Boolean) Accept new connection even if Authentication Option mismatched
+- `tcp_ao_include_tcp_options` (Boolean) Include other TCP options in the header
+- `tcp_ao_keychain_name` (String) Configure global AO keychain based authentication
+- `tcp_buffer_size` (Number) Size of buffer in bytes
+  - Range: `204800`-`1024000`
+- `timers_init_verify_restart` (Number) Timer to wait for topology convergence after topology starts populating for restart case
+  - Range: `10`-`10000`
+- `timers_init_verify_startup` (Number) Timer to wait for topology convergence after topology starts populating for startup case
+  - Range: `10`-`10000`
+- `timers_init_verify_switchover` (Number) Timer to wait for topology convergence after topology starts populating for switchover case
+  - Range: `10`-`10000`
+- `timers_keepalive` (Number) Keepalive interval
+  - Range: `0`-`255`
+- `timers_minimum_peer_keepalive` (Number) Minimum acceptable peer proposed keepalive interval
+  - Range: `0`-`255`
+- `timers_peer_zombie` (Number) Keep LSP peer in zombie state after disconnect
+  - Range: `0`-`3600`
+- `timers_reoptimization` (Number) Topology reoptimization interval
+  - Range: `600`-`86400`
 
 ### Read-Only
 
@@ -61,7 +361,354 @@ Required:
 
 Optional:
 
-- `password_encrypted` (String) Specify unencrypted password
+- `password_encrypted` (String, Sensitive) Specify unencrypted password
+
+
+<a id="nestedatt--disjoint_path_group_ids"></a>
+### Nested Schema for `disjoint_path_group_ids`
+
+Required:
+
+- `group_id` (Number) Group ID
+  - Range: `1`-`65535`
+- `link_disjoint_lsp_one_pcc_address_type` (String) Address type
+  - Choices: `ipv4`, `ipv6`
+- `link_disjoint_lsp_one_pcc_ip_address` (String) IP address of PCC
+- `link_disjoint_lsp_one_pcc_lsp_name` (String) Name of label switched path
+- `link_disjoint_lsp_two_pcc_address_type` (String) Address type
+  - Choices: `ipv4`, `ipv6`
+- `link_disjoint_lsp_two_pcc_ip_address` (String) IP address of PCC
+- `link_disjoint_lsp_two_pcc_lsp_name` (String) Name of label switched path
+- `node_disjoint_lsp_one_pcc_address_type` (String) Address type
+  - Choices: `ipv4`, `ipv6`
+- `node_disjoint_lsp_one_pcc_ip_address` (String) IP address of PCC
+- `node_disjoint_lsp_one_pcc_lsp_name` (String) Name of label switched path
+- `node_disjoint_lsp_two_pcc_address_type` (String) Address type
+  - Choices: `ipv4`, `ipv6`
+- `node_disjoint_lsp_two_pcc_ip_address` (String) IP address of PCC
+- `node_disjoint_lsp_two_pcc_lsp_name` (String) Name of label switched path
+- `srlg_disjoint_lsp_one_pcc_address_type` (String) Address type
+  - Choices: `ipv4`, `ipv6`
+- `srlg_disjoint_lsp_one_pcc_ip_address` (String) IP address of PCC
+- `srlg_disjoint_lsp_one_pcc_lsp_name` (String) Name of label switched path
+- `srlg_disjoint_lsp_two_pcc_address_type` (String) Address type
+  - Choices: `ipv4`, `ipv6`
+- `srlg_disjoint_lsp_two_pcc_ip_address` (String) IP address of PCC
+- `srlg_disjoint_lsp_two_pcc_lsp_name` (String) Name of label switched path
+- `srlg_node_disjoint_lsp_one_pcc_address_type` (String) Address type
+  - Choices: `ipv4`, `ipv6`
+- `srlg_node_disjoint_lsp_one_pcc_ip_address` (String) IP address of PCC
+- `srlg_node_disjoint_lsp_one_pcc_lsp_name` (String) Name of label switched path
+- `srlg_node_disjoint_lsp_two_pcc_address_type` (String) Address type
+  - Choices: `ipv4`, `ipv6`
+- `srlg_node_disjoint_lsp_two_pcc_ip_address` (String) IP address of PCC
+- `srlg_node_disjoint_lsp_two_pcc_lsp_name` (String) Name of label switched path
+
+Optional:
+
+- `link_disjoint` (Boolean) Enable Link Disjointness
+- `link_disjoint_lsp_one_pcc_exclude_srlg` (Number) Exclude SRLG
+  - Range: `1`-`4294967295`
+- `link_disjoint_lsp_one_pcc_shortest_path` (Boolean) Set LSP to follow shortest-path
+- `link_disjoint_lsp_two_pcc_exclude_srlg` (Number) Exclude SRLG
+  - Range: `1`-`4294967295`
+- `link_disjoint_strict` (Boolean) Disable Fallback
+- `link_disjoint_sub_ids` (Attributes List) Sub ID (see [below for nested schema](#nestedatt--disjoint_path_group_ids--link_disjoint_sub_ids))
+- `node_disjoint` (Boolean) Enable Node Disjointness
+- `node_disjoint_lsp_one_pcc_exclude_srlg` (Number) Exclude SRLG
+  - Range: `1`-`4294967295`
+- `node_disjoint_lsp_one_pcc_shortest_path` (Boolean) Set LSP to follow shortest-path
+- `node_disjoint_lsp_two_pcc_exclude_srlg` (Number) Exclude SRLG
+  - Range: `1`-`4294967295`
+- `node_disjoint_strict` (Boolean) Disable Fallback
+- `node_disjoint_sub_ids` (Attributes List) Sub ID (see [below for nested schema](#nestedatt--disjoint_path_group_ids--node_disjoint_sub_ids))
+- `srlg_disjoint` (Boolean) Enable SRLG Disjointness
+- `srlg_disjoint_lsp_one_pcc_exclude_srlg` (Number) Exclude SRLG
+  - Range: `1`-`4294967295`
+- `srlg_disjoint_lsp_one_pcc_shortest_path` (Boolean) Set LSP to follow shortest-path
+- `srlg_disjoint_lsp_two_pcc_exclude_srlg` (Number) Exclude SRLG
+  - Range: `1`-`4294967295`
+- `srlg_disjoint_strict` (Boolean) Disable Fallback
+- `srlg_disjoint_sub_ids` (Attributes List) Sub ID (see [below for nested schema](#nestedatt--disjoint_path_group_ids--srlg_disjoint_sub_ids))
+- `srlg_node_disjoint` (Boolean) Enable SRLG Node Disjointness
+- `srlg_node_disjoint_lsp_one_pcc_exclude_srlg` (Number) Exclude SRLG
+  - Range: `1`-`4294967295`
+- `srlg_node_disjoint_lsp_one_pcc_shortest_path` (Boolean) Set LSP to follow shortest-path
+- `srlg_node_disjoint_lsp_two_pcc_exclude_srlg` (Number) Exclude SRLG
+  - Range: `1`-`4294967295`
+- `srlg_node_disjoint_strict` (Boolean) Disable Fallback
+- `srlg_node_disjoint_sub_ids` (Attributes List) Sub ID (see [below for nested schema](#nestedatt--disjoint_path_group_ids--srlg_node_disjoint_sub_ids))
+
+<a id="nestedatt--disjoint_path_group_ids--link_disjoint_sub_ids"></a>
+### Nested Schema for `disjoint_path_group_ids.link_disjoint_sub_ids`
+
+Required:
+
+- `lsp_one_pcc_address_type` (String) Address type
+  - Choices: `ipv4`, `ipv6`
+- `lsp_one_pcc_ip_address` (String) IP address of PCC
+- `lsp_one_pcc_lsp_name` (String) Name of label switched path
+- `lsp_two_pcc_address_type` (String) Address type
+  - Choices: `ipv4`, `ipv6`
+- `lsp_two_pcc_ip_address` (String) IP address of PCC
+- `lsp_two_pcc_lsp_name` (String) Name of label switched path
+- `sub_id` (Number) Sub ID
+  - Range: `1`-`65535`
+
+Optional:
+
+- `lsp_one_pcc_exclude_srlg` (Number) Exclude SRLG
+  - Range: `1`-`4294967295`
+- `lsp_one_pcc_shortest_path` (Boolean) Set LSP to follow shortest-path
+- `lsp_two_pcc_exclude_srlg` (Number) Exclude SRLG
+  - Range: `1`-`4294967295`
+- `strict` (Boolean) Disable Fallback
+
+
+<a id="nestedatt--disjoint_path_group_ids--node_disjoint_sub_ids"></a>
+### Nested Schema for `disjoint_path_group_ids.node_disjoint_sub_ids`
+
+Required:
+
+- `lsp_one_pcc_address_type` (String) Address type
+  - Choices: `ipv4`, `ipv6`
+- `lsp_one_pcc_ip_address` (String) IP address of PCC
+- `lsp_one_pcc_lsp_name` (String) Name of label switched path
+- `lsp_two_pcc_address_type` (String) Address type
+  - Choices: `ipv4`, `ipv6`
+- `lsp_two_pcc_ip_address` (String) IP address of PCC
+- `lsp_two_pcc_lsp_name` (String) Name of label switched path
+- `sub_id` (Number) Sub ID
+  - Range: `1`-`65535`
+
+Optional:
+
+- `lsp_one_pcc_exclude_srlg` (Number) Exclude SRLG
+  - Range: `1`-`4294967295`
+- `lsp_one_pcc_shortest_path` (Boolean) Set LSP to follow shortest-path
+- `lsp_two_pcc_exclude_srlg` (Number) Exclude SRLG
+  - Range: `1`-`4294967295`
+- `strict` (Boolean) Disable Fallback
+
+
+<a id="nestedatt--disjoint_path_group_ids--srlg_disjoint_sub_ids"></a>
+### Nested Schema for `disjoint_path_group_ids.srlg_disjoint_sub_ids`
+
+Required:
+
+- `lsp_one_pcc_address_type` (String) Address type
+  - Choices: `ipv4`, `ipv6`
+- `lsp_one_pcc_ip_address` (String) IP address of PCC
+- `lsp_one_pcc_lsp_name` (String) Name of label switched path
+- `lsp_two_pcc_address_type` (String) Address type
+  - Choices: `ipv4`, `ipv6`
+- `lsp_two_pcc_ip_address` (String) IP address of PCC
+- `lsp_two_pcc_lsp_name` (String) Name of label switched path
+- `sub_id` (Number) Sub ID
+  - Range: `1`-`65535`
+
+Optional:
+
+- `lsp_one_pcc_exclude_srlg` (Number) Exclude SRLG
+  - Range: `1`-`4294967295`
+- `lsp_one_pcc_shortest_path` (Boolean) Set LSP to follow shortest-path
+- `lsp_two_pcc_exclude_srlg` (Number) Exclude SRLG
+  - Range: `1`-`4294967295`
+- `strict` (Boolean) Disable Fallback
+
+
+<a id="nestedatt--disjoint_path_group_ids--srlg_node_disjoint_sub_ids"></a>
+### Nested Schema for `disjoint_path_group_ids.srlg_node_disjoint_sub_ids`
+
+Required:
+
+- `lsp_one_pcc_address_type` (String) Address type
+  - Choices: `ipv4`, `ipv6`
+- `lsp_one_pcc_ip_address` (String) IP address of PCC
+- `lsp_one_pcc_lsp_name` (String) Name of label switched path
+- `lsp_two_pcc_address_type` (String) Address type
+  - Choices: `ipv4`, `ipv6`
+- `lsp_two_pcc_ip_address` (String) IP address of PCC
+- `lsp_two_pcc_lsp_name` (String) Name of label switched path
+- `sub_id` (Number) Sub ID
+  - Range: `1`-`65535`
+
+Optional:
+
+- `lsp_one_pcc_exclude_srlg` (Number) Exclude SRLG
+  - Range: `1`-`4294967295`
+- `lsp_one_pcc_shortest_path` (Boolean) Set LSP to follow shortest-path
+- `lsp_two_pcc_exclude_srlg` (Number) Exclude SRLG
+  - Range: `1`-`4294967295`
+- `strict` (Boolean) Disable Fallback
+
+
+
+<a id="nestedatt--peer_ipv4s"></a>
+### Nested Schema for `peer_ipv4s`
+
+Required:
+
+- `address` (String) IPv4 address family
+
+Optional:
+
+- `password_encrypted` (String, Sensitive) Specify unencrypted password
+- `tcp_ao_accept_ao_mismatch_connection` (Boolean) Accept new connection even if Authentication Option mismatched
+- `tcp_ao_include_tcp_options` (Boolean) Include other TCP options in the header
+- `tcp_ao_keychain_name` (String) Configure AO keychain based authentication
+
+
+<a id="nestedatt--peer_ipv6s"></a>
+### Nested Schema for `peer_ipv6s`
+
+Required:
+
+- `address` (String) IPv6 address family
+
+Optional:
+
+- `password_encrypted` (String, Sensitive) Specify unencrypted password
+- `tcp_ao_accept_ao_mismatch_connection` (Boolean) Accept new connection even if Authentication Option mismatched
+- `tcp_ao_include_tcp_options` (Boolean) Include other TCP options in the header
+- `tcp_ao_keychain_name` (String) Configure AO keychain based authentication
+
+
+<a id="nestedatt--srte_affinity_bitmaps"></a>
+### Nested Schema for `srte_affinity_bitmaps`
+
+Required:
+
+- `affinity_bit_position` (Number) Affinity attribute bit position
+  - Range: `0`-`255`
+- `affinity_color_name` (String) Affinity color name
+
+
+<a id="nestedatt--srte_p2mp_endpoint_sets"></a>
+### Nested Schema for `srte_p2mp_endpoint_sets`
+
+Required:
+
+- `endpoint_set_name` (String) Endpoint-set configuration
+
+Optional:
+
+- `ipv4s` (Attributes List) Specify the address AFI (see [below for nested schema](#nestedatt--srte_p2mp_endpoint_sets--ipv4s))
+
+<a id="nestedatt--srte_p2mp_endpoint_sets--ipv4s"></a>
+### Nested Schema for `srte_p2mp_endpoint_sets.ipv4s`
+
+Required:
+
+- `address` (String) Specify the address AFI
+
+
+
+<a id="nestedatt--srte_p2mp_frr_node_set_from_ipv4s"></a>
+### Nested Schema for `srte_p2mp_frr_node_set_from_ipv4s`
+
+Required:
+
+- `address` (String) Specify the address AFI
+
+
+<a id="nestedatt--srte_p2mp_frr_node_set_to_ipv4s"></a>
+### Nested Schema for `srte_p2mp_frr_node_set_to_ipv4s`
+
+Required:
+
+- `address` (String) Specify the address AFI
+
+
+<a id="nestedatt--srte_p2mp_policies"></a>
+### Nested Schema for `srte_p2mp_policies`
+
+Required:
+
+- `policy_name` (String) Policy configuration
+
+Optional:
+
+- `candidate_paths_constraints_affinity_exclude_colors` (Attributes List) Affinity color name (see [below for nested schema](#nestedatt--srte_p2mp_policies--candidate_paths_constraints_affinity_exclude_colors))
+- `candidate_paths_constraints_affinity_include_all_colors` (Attributes List) Affinity color name (see [below for nested schema](#nestedatt--srte_p2mp_policies--candidate_paths_constraints_affinity_include_all_colors))
+- `candidate_paths_constraints_affinity_include_any_colors` (Attributes List) Affinity color name (see [below for nested schema](#nestedatt--srte_p2mp_policies--candidate_paths_constraints_affinity_include_any_colors))
+- `candidate_paths_preferences` (Attributes List) Policy path preference entry (see [below for nested schema](#nestedatt--srte_p2mp_policies--candidate_paths_preferences))
+- `color` (Number) Specify color for policy
+  - Range: `1`-`4294967295`
+- `endpoint_set` (String) Policy endpoint-set
+- `fast_reroute_lfa` (Boolean) LFA Fast Re-route
+- `shutdown` (Boolean) Policy admin-shutdown
+- `source_ipv4` (String) IPv4 address
+- `treesid_mpls` (Number) MPLS label
+  - Range: `16`-`1048575`
+
+<a id="nestedatt--srte_p2mp_policies--candidate_paths_constraints_affinity_exclude_colors"></a>
+### Nested Schema for `srte_p2mp_policies.candidate_paths_constraints_affinity_exclude_colors`
+
+Required:
+
+- `affinity_color_name` (String) Affinity color name
+
+
+<a id="nestedatt--srte_p2mp_policies--candidate_paths_constraints_affinity_include_all_colors"></a>
+### Nested Schema for `srte_p2mp_policies.candidate_paths_constraints_affinity_include_all_colors`
+
+Required:
+
+- `affinity_color_name` (String) Affinity color name
+
+
+<a id="nestedatt--srte_p2mp_policies--candidate_paths_constraints_affinity_include_any_colors"></a>
+### Nested Schema for `srte_p2mp_policies.candidate_paths_constraints_affinity_include_any_colors`
+
+Required:
+
+- `affinity_color_name` (String) Affinity color name
+
+
+<a id="nestedatt--srte_p2mp_policies--candidate_paths_preferences"></a>
+### Nested Schema for `srte_p2mp_policies.candidate_paths_preferences`
+
+Required:
+
+- `preference_id` (Number) Policy path preference entry
+  - Range: `100`-`100`
+
+Optional:
+
+- `dynamic` (Boolean) Dynamically computed path
+- `dynamic_metric_type_hopcount` (Boolean) Use the least number of hops for path computation
+- `dynamic_metric_type_igp` (Boolean) IGP metric type
+- `dynamic_metric_type_latency` (Boolean) Latency metric type
+- `dynamic_metric_type_te` (Boolean) TE metric type
+
+
+
+<a id="nestedatt--srte_segment_lists"></a>
+### Nested Schema for `srte_segment_lists`
+
+Required:
+
+- `segment_list_name` (String) Segment-list name
+
+Optional:
+
+- `indexes` (Attributes List) Next entry index (see [below for nested schema](#nestedatt--srte_segment_lists--indexes))
+
+<a id="nestedatt--srte_segment_lists--indexes"></a>
+### Nested Schema for `srte_segment_lists.indexes`
+
+Required:
+
+- `index_number` (Number) Next entry index
+  - Range: `1`-`65535`
+
+Optional:
+
+- `mpls_adjacency` (String) Specify hop address
+- `mpls_label` (Number) MPLS label configuration
+  - Range: `0`-`1048575`
+
 
 
 <a id="nestedatt--state_sync_ipv4s"></a>
@@ -70,6 +717,14 @@ Optional:
 Required:
 
 - `address` (String) IPv4 address
+
+
+<a id="nestedatt--state_sync_ipv6s"></a>
+### Nested Schema for `state_sync_ipv6s`
+
+Required:
+
+- `address` (String) IPv6 address
 
 ## Import
 

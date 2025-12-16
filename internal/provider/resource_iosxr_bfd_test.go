@@ -58,6 +58,7 @@ func TestAccIosxrBFD(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "dampening_bundle_member_secondary_wait", "6184"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "dampening_bundle_member_maximum_wait", "7184"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "bundle_coexistence_bob_blb", "inherit"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "ipv6_checksum_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "interfaces.0.interface_name", "GigabitEthernet0/0/0/0"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "interfaces.0.echo_disable", "disable"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "interfaces.0.echo_ipv4_source", "12.1.1.1"))
@@ -67,7 +68,6 @@ func TestAccIosxrBFD(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "interfaces.0.tx_interval", "10000"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "interfaces.0.rx_interval", "30000"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "interfaces.0.multiplier", "40"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "ipv6_checksum_disable", "true"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -123,6 +123,7 @@ func testAccIosxrBFDConfig_minimum() string {
 
 func testAccIosxrBFDConfig_all() string {
 	config := `resource "iosxr_bfd" "test" {` + "\n"
+	config += `	delete_mode = "all"` + "\n"
 	config += `	echo_disable = false` + "\n"
 	config += `	echo_latency_detect = true` + "\n"
 	config += `	echo_latency_detect_percentage = 200` + "\n"
@@ -148,6 +149,7 @@ func testAccIosxrBFDConfig_all() string {
 	config += `	dampening_bundle_member_secondary_wait = 6184` + "\n"
 	config += `	dampening_bundle_member_maximum_wait = 7184` + "\n"
 	config += `	bundle_coexistence_bob_blb = "inherit"` + "\n"
+	config += `	ipv6_checksum_disable = true` + "\n"
 	config += `	interfaces = [{` + "\n"
 	config += `		interface_name = "GigabitEthernet0/0/0/0"` + "\n"
 	config += `		echo_disable = "disable"` + "\n"
@@ -159,7 +161,6 @@ func testAccIosxrBFDConfig_all() string {
 	config += `		rx_interval = 30000` + "\n"
 	config += `		multiplier = 40` + "\n"
 	config += `		}]` + "\n"
-	config += `	ipv6_checksum_disable = true` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -197,6 +197,7 @@ func testAccIosxrRouterBGPAddressFamilyConfig_minimum() string {
 
 func testAccIosxrRouterBGPAddressFamilyConfig_all() string {
 	config := `resource "iosxr_router_bgp_address_family" "test" {` + "\n"
+	config += `	delete_mode = "all"` + "\n"
 	config += `	as_number = "65001"` + "\n"
 	config += `	af_name = "ipv4-unicast"` + "\n"
 	config += `	additional_paths_send = true` + "\n"

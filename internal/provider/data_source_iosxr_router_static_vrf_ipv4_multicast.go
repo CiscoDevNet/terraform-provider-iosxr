@@ -207,6 +207,42 @@ func (d *RouterStaticVRFIPv4MulticastDataSource) Schema(ctx context.Context, req
 					},
 				},
 			},
+			"sr_policies": schema.ListNestedAttribute{
+				MarkdownDescription: "segment routing policy",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"sr_policy_name": schema.StringAttribute{
+							MarkdownDescription: "segment routing policy",
+							Computed:            true,
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: "description of the static route",
+							Computed:            true,
+						},
+						"tag": schema.Int64Attribute{
+							MarkdownDescription: "Set tag for this route",
+							Computed:            true,
+						},
+						"distance_metric": schema.Int64Attribute{
+							MarkdownDescription: "Distance metric for this route",
+							Computed:            true,
+						},
+						"permanent": schema.BoolAttribute{
+							MarkdownDescription: "Permanent route",
+							Computed:            true,
+						},
+						"track": schema.StringAttribute{
+							MarkdownDescription: "Enable object tracking for static route",
+							Computed:            true,
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: "Set metric for this route",
+							Computed:            true,
+						},
+					},
+				},
+			},
 			"vrfs": schema.ListNestedAttribute{
 				MarkdownDescription: "Destination VRF",
 				Computed:            true,
@@ -315,6 +351,42 @@ func (d *RouterStaticVRFIPv4MulticastDataSource) Schema(ctx context.Context, req
 									},
 									"bfd_fast_detect_multiplier": schema.Int64Attribute{
 										MarkdownDescription: "Detect multiplier",
+										Computed:            true,
+									},
+									"description": schema.StringAttribute{
+										MarkdownDescription: "description of the static route",
+										Computed:            true,
+									},
+									"tag": schema.Int64Attribute{
+										MarkdownDescription: "Set tag for this route",
+										Computed:            true,
+									},
+									"distance_metric": schema.Int64Attribute{
+										MarkdownDescription: "Distance metric for this route",
+										Computed:            true,
+									},
+									"permanent": schema.BoolAttribute{
+										MarkdownDescription: "Permanent route",
+										Computed:            true,
+									},
+									"track": schema.StringAttribute{
+										MarkdownDescription: "Enable object tracking for static route",
+										Computed:            true,
+									},
+									"metric": schema.Int64Attribute{
+										MarkdownDescription: "Set metric for this route",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"sr_policies": schema.ListNestedAttribute{
+							MarkdownDescription: "segment routing policy",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"sr_policy_name": schema.StringAttribute{
+										MarkdownDescription: "segment routing policy",
 										Computed:            true,
 									},
 									"description": schema.StringAttribute{

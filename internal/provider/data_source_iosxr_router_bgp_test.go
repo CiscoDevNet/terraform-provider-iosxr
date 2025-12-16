@@ -71,7 +71,6 @@ func TestAccDataSourceIosxrRouterBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.bfd_fast_detect", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.bfd_fast_detect_strict_mode", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.bfd_fast_detect_disable", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.password", "12341C2713181F13253920"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.shutdown", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.timers_keepalive_interval", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.timers_holdtime", "30"))

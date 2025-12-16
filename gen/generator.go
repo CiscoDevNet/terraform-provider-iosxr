@@ -553,6 +553,15 @@ func augmentConfig(config *YamlConfig, modelPaths []string) {
 							continue
 						}
 						parseAttribute(ell, &config.Attributes[ia].Attributes[iaa].Attributes[iaaa])
+						if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Type == "List" {
+							elll := resolvePath(ell, config.Attributes[ia].Attributes[iaa].Attributes[iaaa].YangName)
+							for iaaaa := range config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes {
+								if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].NoAugmentConfig {
+									continue
+								}
+								parseAttribute(elll, &config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa])
+							}
+						}
 					}
 				}
 			}

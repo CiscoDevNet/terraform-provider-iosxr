@@ -526,6 +526,9 @@ func augmentConfig(config *YamlConfig, modelPaths []string) {
 		return
 	}
 
+	// Print module info
+	fmt.Printf("Processing module: %s, entry: %s\n", module, e.Name)
+
 	p := path[len(module)+1:]
 	e = resolvePath(e, p)
 

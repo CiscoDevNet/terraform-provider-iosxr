@@ -128,6 +128,7 @@ type YamlConfigAttribute struct {
 	Sensitive         bool                  `yaml:"sensitive"`
 	ExcludeTest       bool                  `yaml:"exclude_test"`
 	ExcludeExample    bool                  `yaml:"exclude_example"`
+	IncludeExample    bool                  `yaml:"include_example"`
 	Description       string                `yaml:"description"`
 	Example           string                `yaml:"example"`
 	EnumValues        []string              `yaml:"enum_values"`

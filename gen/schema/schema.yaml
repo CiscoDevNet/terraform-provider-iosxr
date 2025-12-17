@@ -30,6 +30,7 @@ attribute:
   sensitive: bool(required=False)  # Set to true if the attribute is sensitive, meaning it should not show up in clear-text in plan and logs
   exclude_test: bool(required=False)  # Set to true if the attribute should be excluded from the test
   exclude_example: bool(required=False)  # Set to true if the attribute should be excluded from the example and test
+  include_example: bool(required=False)  # Set to true to force include in documentation examples even if test_tags are present
   description: str(required=False)  # Description of the attribute
   example: any(str(), int(), bool(), required=False)  # Example value for the attribute being used for the documentation and test
   enum_values: list(str(), required=False)  # List of possible enum values

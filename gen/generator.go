@@ -436,7 +436,7 @@ func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 		if leaf.ListAttr != nil {
 			if contains([]string{"string", "union", "leafref"}, leaf.Type.Kind.String()) {
 				attr.Type = "StringList"
-			} else if contains([]string{"uint8", "uint16", "uint32", "uint64"}, leaf.Type.Kind.String()) {
+			} else if contains([]string{"int8", "int16", "int32", "int64", "uint8", "uint16", "uint32", "uint64"}, leaf.Type.Kind.String()) {
 				attr.Type = "Int64List"
 			} else {
 				panic(fmt.Sprintf("Unknown leaf-list type, attribute: %s, type: %s", attr.YangName, leaf.Type.Kind.String()))
@@ -456,16 +456,23 @@ func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 			if len(leaf.Type.Pattern) > 0 {
 				attr.StringPatterns = leaf.Type.Pattern
 			}
-		} else if contains([]string{"uint8", "uint16", "uint32", "uint64"}, leaf.Type.Kind.String()) {
+		} else if contains([]string{"int8", "int16", "int32", "int64", "uint8", "uint16", "uint32", "uint64"}, leaf.Type.Kind.String()) {
 			attr.Type = "Int64"
 			if leaf.Type.Range != nil {
-				attr.MinInt = int64(leaf.Type.Range[0].Min.Value)
+				if attr.MinInt == 0 {
+					attr.MinInt = int64(leaf.Type.Range[0].Min.Value)
+					if leaf.Type.Range[0].Min.Negative {
+						attr.MinInt = -attr.MinInt
+					}
+				}
 				max := leaf.Type.Range[0].Max.Value
 				// hack to not introduce unsigned types
 				if max > math.MaxInt64 {
 					max = math.MaxInt64
 				}
-				attr.MaxInt = int64(max)
+				if attr.MaxInt == 0 {
+					attr.MaxInt = int64(max)
+				}
 			}
 		} else if contains([]string{"boolean", "empty"}, leaf.Type.Kind.String()) {
 			if leaf.Type.Kind.String() == "boolean" {

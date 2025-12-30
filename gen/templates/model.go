@@ -213,7 +213,11 @@ func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
 	if !data.{{toGoName .TfName}}.IsNull() && !data.{{toGoName .TfName}}.IsUnknown() {
 		{{- if eq .Type "Int64"}}
 		body, _ = sjson.Set(body, "{{toJsonPath .YangName .XPath}}", strconv.FormatInt(data.{{toGoName .TfName}}.ValueInt64(), 10))
-		{{- else if and (eq .Type "Bool") (ne .TypeYangBool "boolean")}}
+		{{- else if and (eq .Type "Bool") (eq .TypeYangBool "empty")}}
+		if data.{{toGoName .TfName}}.ValueBool() {
+			body, _ = sjson.Set(body, "{{toJsonPath .YangName .XPath}}", []interface{}{nil})
+		}
+		{{- else if and (eq .Type "Bool") (eq .TypeYangBool "presence")}}
 		if data.{{toGoName .TfName}}.ValueBool() {
 			body, _ = sjson.Set(body, "{{toJsonPath .YangName .XPath}}", map[string]string{})
 		}
@@ -244,7 +248,11 @@ func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
 			if !item.{{toGoName .TfName}}.IsNull() && !item.{{toGoName .TfName}}.IsUnknown() {
 				{{- if eq .Type "Int64"}}
 				body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{toJsonPath .YangName .XPath}}", strconv.FormatInt(item.{{toGoName .TfName}}.ValueInt64(), 10))
-				{{- else if and (eq .Type "Bool") (ne .TypeYangBool "boolean")}}
+				{{- else if and (eq .Type "Bool") (eq .TypeYangBool "empty")}}
+				if item.{{toGoName .TfName}}.ValueBool() {
+					body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{toJsonPath .YangName .XPath}}", []interface{}{nil})
+				}
+				{{- else if and (eq .Type "Bool") (eq .TypeYangBool "presence")}}
 				if item.{{toGoName .TfName}}.ValueBool() {
 					body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{toJsonPath .YangName .XPath}}", map[string]string{})
 				}
@@ -275,7 +283,11 @@ func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
 					if !citem.{{toGoName .TfName}}.IsNull() && !citem.{{toGoName .TfName}}.IsUnknown() {
 						{{- if eq .Type "Int64"}}
 						body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{toJsonPath .YangName .XPath}}", strconv.FormatInt(citem.{{toGoName .TfName}}.ValueInt64(), 10))
-						{{- else if and (eq .Type "Bool") (ne .TypeYangBool "boolean")}}
+						{{- else if and (eq .Type "Bool") (eq .TypeYangBool "empty")}}
+						if citem.{{toGoName .TfName}}.ValueBool() {
+							body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{toJsonPath .YangName .XPath}}", []interface{}{nil})
+						}
+						{{- else if and (eq .Type "Bool") (eq .TypeYangBool "presence")}}
 						if citem.{{toGoName .TfName}}.ValueBool() {
 							body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{toJsonPath .YangName .XPath}}", map[string]string{})
 						}
@@ -306,7 +318,11 @@ func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
 							if !ccitem.{{toGoName .TfName}}.IsNull() && !ccitem.{{toGoName .TfName}}.IsUnknown() {
 								{{- if eq .Type "Int64"}}
 								body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{toJsonPath .YangName .XPath}}", strconv.FormatInt(ccitem.{{toGoName .TfName}}.ValueInt64(), 10))
-								{{- else if and (eq .Type "Bool") (ne .TypeYangBool "boolean")}}
+								{{- else if and (eq .Type "Bool") (eq .TypeYangBool "empty")}}
+								if ccitem.{{toGoName .TfName}}.ValueBool() {
+									body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{toJsonPath .YangName .XPath}}", []interface{}{nil})
+								}
+								{{- else if and (eq .Type "Bool") (eq .TypeYangBool "presence")}}
 								if ccitem.{{toGoName .TfName}}.ValueBool() {
 									body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{toJsonPath .YangName .XPath}}", map[string]string{})
 								}
@@ -337,7 +353,11 @@ func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
 									if !cccitem.{{toGoName .TfName}}.IsNull() && !cccitem.{{toGoName .TfName}}.IsUnknown() {
 										{{- if eq .Type "Int64"}}
 										body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{$ccclist}}"+"."+strconv.Itoa(cccindex)+"."+"{{toJsonPath .YangName .XPath}}", strconv.FormatInt(cccitem.{{toGoName .TfName}}.ValueInt64(), 10))
-										{{- else if and (eq .Type "Bool") (ne .TypeYangBool "boolean")}}
+										{{- else if and (eq .Type "Bool") (eq .TypeYangBool "empty")}}
+										if cccitem.{{toGoName .TfName}}.ValueBool() {
+											body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{$ccclist}}"+"."+strconv.Itoa(cccindex)+"."+"{{toJsonPath .YangName .XPath}}", []interface{}{nil})
+										}
+										{{- else if and (eq .Type "Bool") (eq .TypeYangBool "presence")}}
 										if cccitem.{{toGoName .TfName}}.ValueBool() {
 											body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{$ccclist}}"+"."+strconv.Itoa(cccindex)+"."+"{{toJsonPath .YangName .XPath}}", map[string]string{})
 										}

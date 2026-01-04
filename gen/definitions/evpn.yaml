@@ -3,21 +3,68 @@ name: EVPN
 path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn
 doc_category: EVPN
 attributes:
+  - yang_name: bgp/rd/two-byte-as-number
+    tf_name: bgp_rd_two_byte_as_number
+    exclude_test: true
+    example: 65001
+  - yang_name: bgp/rd/two-byte-as-assigned-number
+    tf_name: bgp_rd_two_byte_as_index
+    exclude_test: true
+    example: 100
+  - yang_name: bgp/rd/four-byte-as-number
+    tf_name: bgp_rd_four_byte_as_number
+    exclude_test: true
+    example: 65536
+  - yang_name: bgp/rd/four-byte-as-assigned-number
+    tf_name: bgp_rd_four_byte_as_index
+    exclude_test: true
+    example: 100
+  - yang_name: bgp/rd/ipv4-address
+    tf_name: bgp_rd_ipv4_address
+    example: 192.168.1.1
+  - yang_name: bgp/rd/ipv4-address-assigned-number
+    tf_name: bgp_rd_ipv4_address_index
+    example: 100
+  - yang_name: timers/recovery
+    example: 120
+  - yang_name: timers/peering
+    example: 60
+  - yang_name: timers/carving
+    example: 5
+  - yang_name: timers/ac-debounce
+    example: 2000
+  - yang_name: timers/backup-replacement-delay
+    example: 3000
+  - yang_name: timers/mac-postpone
+    example: 240
+  - yang_name: load-balancing/flow-label/static
+    example: true
   - yang_name: source/interface
     example: Loopback0
-  - yang_name: interface/interface
-    tf_name: interfaces
+  - yang_name: cost-out
+    example: true
+  - yang_name: startup-cost-in
+    example: 60
+  - yang_name: staggered-bringup-timer
+    example: 3000
+  - yang_name: logging/df-election
+    example: true
+  - yang_name: ethernet-segment/type/one/auto-generation-disable
+    example: true
+  - yang_name: groups/group
+    tf_name: groups
     type: List
     attributes:
-      - yang_name: interface-name
+      - yang_name: group-name
         id: true
-        example: "GigabitEthernet0/0/0/1"
-      - yang_name: ethernet-segment
-        tf_name: ethernet_segment_enable
-        example: true
-      - yang_name: ethernet-segment/identifier/type/zero/esi
-        tf_name: ethernet_segment_esi_zero
-        example: "01.02.03.04.05.06.07.08.09"
+        example: 10
+      - yang_name: core/interface
+        tf_name: core_interfaces
+        type: List
+        attributes:
+          - yang_name: interface-name
+            id: true
+            example: "GigabitEthernet0/0/0/2"
   - yang_name: segment-routing/srv6
     tf_name: srv6
     example: true
@@ -34,6 +81,167 @@ attributes:
   - yang_name: segment-routing/srv6/usid/allocation/wide-local-id-block
     tf_name: srv6_usid_allocation_wide_local_id_block
     example: true
+  - yang_name: ignore-mtu-mismatch
+    example: true
+  - yang_name: enforce-mtu-match
+    exclude_test: true
+    example: true
+  - yang_name: transmit-mtu-zero
+    example: true
+  - yang_name: transmit-l2-mtu
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-evpn-host-cfg:host/ipv4-address/duplicate-detection/move-count
+    tf_name: host_ipv4_duplicate_detection_move_count
+    example: 10
+  - yang_name: Cisco-IOS-XR-um-evpn-host-cfg:host/ipv4-address/duplicate-detection/move-interval
+    tf_name: host_ipv4_duplicate_detection_move_interval
+    example: 360
+  - yang_name: Cisco-IOS-XR-um-evpn-host-cfg:host/ipv4-address/duplicate-detection/freeze-time
+    tf_name: host_ipv4_duplicate_detection_freeze_time
+    example: 120
+  - yang_name: Cisco-IOS-XR-um-evpn-host-cfg:host/ipv4-address/duplicate-detection/retry-count
+    tf_name: host_ipv4_duplicate_detection_retry_count
+    example: 5
+  - yang_name: Cisco-IOS-XR-um-evpn-host-cfg:host/ipv4-address/duplicate-detection/disable
+    tf_name: host_ipv4_duplicate_detection_disable
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-evpn-host-cfg:host/ipv4-address/duplicate-detection/reset-freeze-count-interval
+    tf_name: host_ipv4_duplicate_detection_reset_freeze_count_interval
+    example: 48
+  - yang_name: Cisco-IOS-XR-um-evpn-host-cfg:host/ipv6-address/duplicate-detection/move-count
+    tf_name: host_ipv6_duplicate_detection_move_count
+    example: 10
+  - yang_name: Cisco-IOS-XR-um-evpn-host-cfg:host/ipv6-address/duplicate-detection/move-interval
+    tf_name: host_ipv6_duplicate_detection_move_interval
+    example: 360
+  - yang_name: Cisco-IOS-XR-um-evpn-host-cfg:host/ipv6-address/duplicate-detection/freeze-time
+    tf_name: host_ipv6_duplicate_detection_freeze_time
+    example: 120
+  - yang_name: Cisco-IOS-XR-um-evpn-host-cfg:host/ipv6-address/duplicate-detection/retry-count
+    tf_name: host_ipv6_duplicate_detection_retry_count
+    example: 5
+  - yang_name: Cisco-IOS-XR-um-evpn-host-cfg:host/ipv6-address/duplicate-detection/disable
+    tf_name: host_ipv6_duplicate_detection_disable
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-evpn-host-cfg:host/ipv6-address/duplicate-detection/reset-freeze-count-interval
+    tf_name: host_ipv6_duplicate_detection_reset_freeze_count_interval
+    example: 48
+  - yang_name: virtual/neighbor/neighbor
+    tf_name: virtual_neighbors
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.1
+      - yang_name: pw-id
+        id: true
+        example: 100
+      - yang_name: timers/peering
+        example: 60
+      - yang_name: timers/recovery
+        example: 120
+      - yang_name: timers/carving
+        example: 5
+      - yang_name: timers/ac-debounce
+        example: 2000
+      - yang_name: ethernet-segment/identifier/type/zero/esi
+        tf_name: ethernet_segment_esi_zero
+        optional: true
+        delete_parent: true
+        example: "01.01.01.01.01.01.01.01.01"
+      - yang_name: ethernet-segment/service-carving/manual/primary
+        tf_name: ethernet_segment_service_carving_manual_primary
+        optional: true
+        example: "100-101,103"
+      - yang_name: ethernet-segment/service-carving/manual/secondary
+        tf_name: ethernet_segment_service_carving_manual_secondary
+        optional: true
+        example: "200-201,203"
+      - yang_name: ethernet-segment/service-carving/hrw
+        tf_name: ethernet_segment_service_carving_hrw
+        exclude_test: true
+        example: true
+      - yang_name: ethernet-segment/service-carving/preference-based/weight
+        tf_name: ethernet_segment_service_carving_preference_based_weight
+        delete_parent: true
+        exclude_test: true
+        example: 100
+      - yang_name: ethernet-segment/service-carving/preference-based/access-driven
+        tf_name: ethernet_segment_service_carving_preference_based_access_driven
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: ethernet-segment/service-carving/multicast/hrw-s-g
+        tf_name: ethernet_segment_service_carving_multicast_hrw_s_g
+        delete_parent: true
+        example: true
+      - yang_name: ethernet-segment/service-carving/multicast/hrw-g
+        tf_name: ethernet_segment_service_carving_multicast_hrw_g
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: ethernet-segment/bgp/route-target
+        tf_name: ethernet_segment_bgp_rt
+        delete_parent: true
+        example: "01:01:01:01:01:01"
+  - yang_name: virtual/vfis/vfi
+    tf_name: virtual_vfis
+    type: List
+    attributes:
+      - yang_name: vfi-name
+        id: true
+        example: "VFI1"
+      - yang_name: timers/peering
+        example: 60
+      - yang_name: timers/recovery
+        example: 120
+      - yang_name: timers/carving
+        example: 5
+      - yang_name: timers/ac-debounce
+        example: 2000
+      - yang_name: ethernet-segment/identifier/type/zero/esi
+        tf_name: ethernet_segment_esi_zero
+        optional: true
+        delete_parent: true
+        example: "01.01.01.01.02.02.02.02.02"
+      - yang_name: ethernet-segment/service-carving/manual/primary
+        tf_name: ethernet_segment_service_carving_manual_primary
+        optional: true
+        example: "100-101,103"
+      - yang_name: ethernet-segment/service-carving/manual/secondary
+        tf_name: ethernet_segment_service_carving_manual_secondary
+        optional: true
+        example: "200-201,203"
+      - yang_name: ethernet-segment/service-carving/hrw
+        tf_name: ethernet_segment_service_carving_hrw
+        exclude_test: true
+        example: true
+      - yang_name: ethernet-segment/service-carving/preference-based/weight
+        tf_name: ethernet_segment_service_carving_preference_based_weight
+        delete_parent: true
+        exclude_test: true
+        example: 100
+      - yang_name: ethernet-segment/service-carving/preference-based/access-driven
+        tf_name: ethernet_segment_service_carving_preference_based_access_driven
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: ethernet-segment/bgp/route-target
+        tf_name: ethernet_segment_bgp_rt
+        delete_parent: true
+        example: "01:01:01:01:01:02"
+  - yang_name: virtual/access-evi/ethernet-segment/identifier/type/zero/esi
+    tf_name: virtual_access_evi_ethernet_segment_esi_zero
+    optional: true
+    delete_parent: true
+    example: "01.01.01.01.01.01.01.01.03"
+  - yang_name: virtual/access-evi/ethernet-segment/bgp/route-target
+    tf_name: virtual_access_evi_ethernet_segment_bgp_rt
+    delete_parent: true
+    example: "01:01:01:01:01:03"
 
 test_prerequisites:
   - path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn

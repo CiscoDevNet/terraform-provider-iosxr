@@ -1,0 +1,203 @@
+---
+name: Segment Routing TE On Demand Color
+path: Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering/Cisco-IOS-XR-infra-xtc-agent-cfg:on-demand-colors/Cisco-IOS-XR-infra-xtc-agent-cfg:on-demand-color[color=%d]
+doc_category: Segment Routing
+attributes:
+  - yang_name: color
+    id: true
+    example: 100
+  - yang_name: on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-anycast
+    tf_name: dynamic_anycast_sid_inclusion
+    example: true
+  - yang_name: on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-metric/metric-type
+    tf_name: dynamic_metric_type
+    example: latency
+  - yang_name: on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-metric/metric-margin/value-type
+    tf_name: dynamic_metric_margin_type
+    example: relative
+  - yang_name: on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-metric/metric-margin/absolute-value
+    tf_name: dynamic_metric_margin_absolute
+    exclude_test: true
+    example: 100
+  - yang_name: on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-metric/metric-margin/relative-value
+    tf_name: dynamic_metric_margin_relative
+    example: 100
+  - yang_name: on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-pce
+    tf_name: dynamic_pcep
+    example: true
+  - yang_name: on-demand-color-dyn-mpls/disjoint-path/group-id
+    tf_name: dynamic_disjoint_path_group_id
+    optional: true
+    delete_parent: true
+    example: 10
+  - yang_name: on-demand-color-dyn-mpls/disjoint-path/disjointness-type
+    tf_name: dynamic_disjoint_path_type
+    optional: true
+    delete_parent: true
+    example: link
+  - yang_name: on-demand-color-dyn-mpls/disjoint-path/sub-id
+    tf_name: dynamic_disjoint_path_sub_id
+    delete_parent: true
+    example: 1
+  - yang_name: on-demand-color-dyn-mpls/disjoint-path/shortest-path
+    tf_name: dynamic_disjoint_path_shortest_path
+    delete_parent: true
+    example: true
+  - yang_name: on-demand-color-dyn-mpls/disjoint-path/fallback-disable
+    tf_name: dynamic_disjoint_path_fallback_disable
+    delete_parent: true
+    example: true
+  - yang_name: on-demand-color-dyn-mpls/affinity-rules/affinity-rule
+    tf_name: dynamic_affinity_rules
+    type: List
+    attributes:
+      - yang_name: rule
+        tf_name: affinity_type
+        id: true
+        example: affinity-exclude-any
+      - yang_name: affinity-name
+        tf_name: affinities
+        type: List
+        attributes:
+          - yang_name: affinity-name
+            id: true
+            example: AFFINITY-1
+  - yang_name: on-demand-color-dyn-mpls/bounds/bounds/bound
+    tf_name: dynamic_bounds
+    type: List
+    attributes:
+      - yang_name: scope-type
+        tf_name: type
+        id: true
+        example: bound-scope-cumulative
+      - yang_name: metric-type
+        id: true
+        example: latency
+      - yang_name: bound-value
+        tf_name: value
+        example: 100000
+  - yang_name: constraint/segments/protection-type
+    tf_name: constraint_segments_protection_type
+    example: protected-preferred
+  - yang_name: constraint/segments/sid-algorithm
+    tf_name: constraint_segments_sid_algorithm
+    example: 128
+  - yang_name: steering/labeled-services/disable
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: true
+  - yang_name: steering/invalidation-drop
+    example: true
+  - yang_name: bandwidth
+    example: 100000
+  - yang_name: max-install-standby-c-paths
+    tf_name: max_install_standby_paths
+    exclude_test: true
+    example: 2
+  - yang_name: performance-measurement/delay-measurement/delay-profile/pm-profile-name
+    tf_name: performance_measurement_delay_profile
+    exclude_test: true
+    example: "DELAY-PROFILE-1"
+  - yang_name: performance-measurement/delay-measurement/delay-measurement-logging/delay-exceeded
+    tf_name: performance_measurement_delay_logging_delay_exceeded
+    exclude_test: true
+    example: true
+  - yang_name: performance-measurement/pm-liveness-detection/liveness-profile/pm-profile-name
+    tf_name: performance_measurement_liveness_profile
+    example: "LIVENESS-PROFILE-1"
+  - yang_name: performance-measurement/pm-liveness-detection/liveness-profile/backup/pm-profile-name
+    tf_name: performance_measurement_liveness_backup_profile
+    example: "LIVENESS-PROFILE-2"
+  - yang_name: performance-measurement/pm-liveness-detection/pm-liveness-detection-logging/pm-liveness-session-state-change
+    tf_name: performance_measurement_liveness_logging_session_state_change
+    example: true
+  - yang_name: performance-measurement/pm-liveness-detection/pm-liveness-invalidation-action
+    tf_name: performance_measurement_liveness_invalidation_action
+    example: invalid-ation-action-down
+  - yang_name: performance-measurement/pm-reverse-path/segment-list-name
+    tf_name: performance_measurement_reverse_path_segment_list
+    example: "SEG-1"
+  - yang_name: performance-measurement/pm-reverse-path/label
+    tf_name: performance_measurement_reverse_path_label
+    exclude_test: true
+    example: 16412
+  - yang_name: per-flow/enable
+    tf_name: per_flow
+    test_tags: [C8000]
+    exclude_test: true
+    example: true
+  - yang_name: per-flow/default-forward-class
+    tf_name: per_flow_forward_class_default
+    test_tags: [C8000]
+    exclude_test: true
+    example: 1
+  - yang_name: per-flow/forward-class-and-colors/forward-class-and-color
+    tf_name: per_flow_forward_classes
+    test_tags: [C8000]
+    exclude_test: true
+    type: List
+    attributes:
+      - yang_name: forward-class
+        id: true
+        example: 3
+      - yang_name: color
+        example: 200
+  - yang_name: maximum-sid-depth
+    minimum_test_value: 6
+    example: 6
+  - yang_name: bfd/enable
+    exclude_test: true
+    example: true
+  - yang_name: bfd/disable
+    exclude_test: true
+    example: true
+  - yang_name: bfd/multiplier
+    exclude_test: true
+    example: 3
+  - yang_name: bfd/minimum-interval
+    exclude_test: true
+    example: 300
+  - yang_name: bfd/invalidation-action
+    exclude_test: true
+    example: down
+  - yang_name: bfd/reverse-path/binding-label
+    tf_name: bfd_reverse_path_binding_label
+    exclude_test: true
+    example: 17510
+  - yang_name: bfd/bfd-logging/session-state-change
+    tf_name: bfd_logging_session_state_change
+    exclude_test: true
+    example: true
+  - yang_name: pce-group
+    example: "GROUP-1"
+  - yang_name: source-address/ip-address-type
+    tf_name: source_address_type
+    optional: true
+    delete_parent: true
+    example: end-point-type-ipv4
+  - yang_name: source-address/source-address
+    tf_name: source_address
+    optional: true
+    delete_parent: true
+    example: 192.168.1.1
+  - yang_name: effective-metric/metric-value-type/metric-value
+    tf_name: effective_metric_value
+    minimum_test_value: 1000
+    example: 1000
+  - yang_name: effective-metric/metric-value-type/metric-type
+    tf_name: effective_metric_type
+    default_value: default
+    minimum_test_value: '"default"'
+    example: igp
+  - yang_name: srv6/locator/locator-name
+    tf_name: srv6_locator_name
+    delete_parent: true
+    example: "LOC1"
+  - yang_name: srv6/locator/binding-sid-type
+    example: srv6-dynamic
+  - yang_name: srv6/locator/behavior
+    example: ub6-insert-reduced
+    #example: ub6-encaps-reduced
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering

@@ -1,7 +1,7 @@
 ---
 name: Router MLD VRF
 path: Cisco-IOS-XR-um-router-mld-cfg:/router/mld/vrfs/vrf[vrf-name=%s]
-doc_category: MLD
+doc_category: Multicast
 attributes:
   - yang_name: vrf-name
     reference: true

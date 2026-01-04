@@ -52,6 +52,15 @@ attributes:
   - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered
     tf_name: unnumbered
     exclude_test: true
+    example: Loopback0
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable
+    tf_name: ipv4_forwarding_enable
+    exclude_test: true
+    example: true
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:ttl-propagate/disable
+    tf_name: ipv4_ttl_propagate_disable
+    exclude_test: true
+    example: true
   - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/access-list-name-1/name
     tf_name: ipv4_access_group_ingress_acl1
     test_tags: [XRV9K]
@@ -113,6 +122,10 @@ attributes:
     example: false
   - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:enable
     tf_name: ipv6_enable
+    example: true
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:ttl-propagate/disable
+    tf_name: ipv6_ttl_propagate_disable
+    exclude_test: true
     example: true
   - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/ipv6-address
     tf_name: ipv6_addresses

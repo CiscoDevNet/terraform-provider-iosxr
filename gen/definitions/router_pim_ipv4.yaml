@@ -1,7 +1,7 @@
 ---
 name: Router PIM IPv4
 path: Cisco-IOS-XR-um-router-pim-cfg:/router/pim/address-family/ipv4
-doc_category: PIM
+doc_category: Multicast
 attributes:
   - yang_name: rp-addresses/rp-address
     tf_name: rp_addresses
@@ -17,6 +17,7 @@ attributes:
   - yang_name: rp-addresses/bidir/rp-address
     tf_name: rp_addresses_bidir
     test_tags: [XRV9K, XRD, NCS]
+    include_example: true
     type: List
     attributes:
       - yang_name: address
@@ -353,14 +354,17 @@ attributes:
       - yang_name: bidir/scope
         tf_name: bidir_scope
         test_tags: [XRV9K, XRD, NCS]
+        include_example: true
         example: 16
       - yang_name: bidir/group-list
         tf_name: bidir_group_list
         test_tags: [XRV9K, XRD, NCS]
+        include_example: true
         example: "CANDIDATE_RP_ACL"
       - yang_name: bidir/interval
         tf_name: bidir_interval
         test_tags: [XRV9K, XRD, NCS]
+        include_example: true
         example: 60
   - yang_name: auto-rp/listen/disable
     example: true
@@ -402,14 +406,17 @@ attributes:
       - yang_name: bidir/group-list
         tf_name: bidir_group_list
         test_tags: [XRV9K, XRD, NCS]
+        include_example: true
         example: "BSR_RP_ACL"
       - yang_name: bidir/priority
         tf_name: bidir_priority
         test_tags: [XRV9K, XRD, NCS]
+        include_example: true
         example: 192
       - yang_name: bidir/interval
         tf_name: bidir_interval
         test_tags: [XRV9K, XRD, NCS]
+        include_example: true
         example: 60
   - yang_name: bsr/relay/vrfs/vrf
     tf_name: bsr_relay_vrfs
@@ -420,6 +427,188 @@ attributes:
         example: "VRF1"
       - yang_name: listen
         example: true
+  - yang_name: mofrr
+    example: true
+  - yang_name: mofrr/flow
+    exclude_test: true
+    example: ACL1
+  - yang_name: mofrr/rib
+    example: ACL1
+  - yang_name: mofrr/protect
+    test_tags: [C8000]
+    include_example: true
+    example: ACL1
+  - yang_name: mofrr/local-fault-only
+    tf_name: mofrr_protect_local_fault_only
+    test_tags: [C8000]
+    include_example: true
+    example: true
+  - yang_name: mofrr/non-revertive
+    example: true
+  - yang_name: mofrr/clone/joins/join
+    tf_name: mofrr_clone_joins
+    exclude_test: true
+    type: List
+    attributes:
+      - yang_name: address
+        tf_name: source_address
+        id: true
+        example: "10.1.1.1"
+      - yang_name: to
+        tf_name: to
+        type: List
+        attributes:
+          - yang_name: address
+            tf_name: primary_address
+            id: true
+            example: "10.1.1.2"
+          - yang_name: and
+            tf_name: and
+            type: List
+            attributes:
+              - yang_name: address
+                tf_name: backup_address
+                id: true
+                example: "10.1.1.3"
+              - yang_name: masklen
+                tf_name: masklen
+                no_augment_config: true
+                type: List
+                attributes:
+                  - yang_name: mask-length
+                    tf_name: mask_length
+                    id: true
+                    type: Int64
+                    example: 32
+  - yang_name: mofrr/clone/sources/source
+    tf_name: mofrr_clone_sources
+    exclude_test: true
+    type: List
+    attributes:
+      - yang_name: address
+        tf_name: source_address
+        id: true
+        example: "10.2.1.1"
+      - yang_name: to
+        tf_name: to
+        type: List
+        attributes:
+          - yang_name: address
+            tf_name: primary_address
+            id: true
+            example: "10.2.1.2"
+          - yang_name: and
+            tf_name: and
+            type: List
+            attributes:
+              - yang_name: address
+                tf_name: backup_address
+                id: true
+                example: "10.2.1.3"
+              - yang_name: masklen
+                tf_name: masklen
+                no_augment_config: true
+                type: List
+                attributes:
+                  - yang_name: mask-length
+                    tf_name: mask_length
+                    id: true
+                    type: Int64
+                    example: 32
+  - yang_name: sr-p2mp-policies/sr-p2mp-policy
+    tf_name: sr_p2mp_policies
+    type: List
+    attributes:
+      - yang_name: sr-p2mp-policy-id
+        tf_name: policy_name
+        id: true
+        example: "POLICY1"
+      - yang_name: static-group/group-address
+        tf_name: static_groups
+        type: List
+        attributes:
+          - yang_name: group-address
+            id: true
+            example: "239.1.1.1"
+          - yang_name: group-address-only
+            tf_name: group_address_only
+            exclude_test: true
+            example: true
+          - yang_name: group-address-inc-mask
+            tf_name: group_masks
+            type: List
+            exclude_test: true
+            attributes:
+              - yang_name: group-mask-address
+                tf_name: group_inc_mask
+                id: true
+                example: "0.0.0.1"
+              - yang_name: group-address-count
+                tf_name: group_count
+                example: 5
+          #  Device returns wrong container in reply, DDTS to be filed (returns source-address-source-mask-address-inc-mask)
+          # - yang_name: source-address
+          #   tf_name: source_addresses
+          #   type: List
+          #   attributes:
+          #     - yang_name: source-address
+          #       tf_name: source_ip
+          #       id: true
+          #       example: "10.1.1.1"
+          - yang_name: group-mask-address-source-address-inc-mask
+            tf_name: group_masks_source_addresses
+            type: List
+            exclude_test: true
+            attributes:
+              - yang_name: group-mask-address
+                tf_name: group_inc_mask
+                id: true
+                example: "0.0.0.1"
+              - yang_name: source-address
+                tf_name: source_ip
+                id: true
+                example: "10.2.1.1"
+              - yang_name: group-address-count
+                tf_name: group_count
+                example: 5
+          - yang_name: source-address-source-mask-address-inc-mask
+            tf_name: source_masks
+            type: List
+            exclude_test: true
+            attributes:
+              - yang_name: source-address
+                tf_name: source_ip
+                id: true
+                example: "10.3.1.1"
+              - yang_name: source-mask-address
+                tf_name: source_inc_mask
+                id: true
+                example: "0.0.0.1"
+              - yang_name: source-address-count
+                tf_name: source_count
+                example: 5
+          - yang_name: group-mask-address-source-address-source-mask-address-inc-mask
+            tf_name: group_masks_source_masks
+            type: List
+            attributes:
+              - yang_name: group-mask-address
+                tf_name: group_inc_mask
+                id: true
+                example: "0.0.0.1"
+              - yang_name: source-address
+                tf_name: source_ip
+                id: true
+                example: "10.4.1.1"
+              - yang_name: source-mask-address
+                tf_name: source_inc_mask
+                id: true
+                example: "0.0.0.1"
+              - yang_name: group-address-count
+                tf_name: group_count
+                example: 5
+              - yang_name: source-address-count
+                tf_name: source_count
+                example: 5
   - yang_name: interfaces/interface
     tf_name: interfaces
     type: List
@@ -476,3 +665,4 @@ test_prerequisites:
                 value: PIM_POLICY
               - name: rpl-route-policy
                 value: "route-policy PIM_POLICY\\n  pass\\nend-policy\\n"
+  - path: Cisco-IOS-XR-um-router-pim-cfg:/router/pim

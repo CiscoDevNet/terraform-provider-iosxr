@@ -41,9 +41,11 @@ attributes:
     example: 10
   - yang_name: encapsulation/mpls/sequencing/both
     test_tags: [XRD, NCS]
+    include_example: true
     example: true
   - yang_name: encapsulation/mpls/sequencing/both/resync
     test_tags: [XRD, NCS]
+    include_example: true
     example: 10
   - yang_name: encapsulation/mpls/preferred-path/interface/tunnel-te/tunnel-number
     exclude_test: true
@@ -63,6 +65,7 @@ attributes:
     example: true
   - yang_name: encapsulation/mpls/switching-tlv/hide
     test_tags: [XRD, NCS]
+    include_example: true
     example: true
   - yang_name: encapsulation/mpls/tag-rewrite/ingress/vlan
     example: 100

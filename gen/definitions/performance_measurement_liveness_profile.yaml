@@ -1,7 +1,7 @@
 ---
 name: Performance Measurement Liveness Profile
 path: Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement/liveness-profile
-doc_category: System
+doc_category: Performance Monitoring
 attributes:
   - yang_name: sr-policy/default
     tf_name: sr_policy_default

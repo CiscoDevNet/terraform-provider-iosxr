@@ -1,7 +1,7 @@
 ---
 name: PCE
 path: Cisco-IOS-XR-um-pce-cfg:/pce
-doc_category: System
+doc_category: Segment Routing
 attributes:
   - yang_name: address/ipv4
     example: 77.77.77.1
@@ -428,6 +428,123 @@ attributes:
           - yang_name: mpls/adjacency
             exclude_test: true
             example: 100.100.100.2
+  - yang_name: segment-routing/traffic-eng/peer/ipv4s/ipv4
+    tf_name: srte_ipv4_peers
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: 100.100.100.26
+      - yang_name: policies/policy
+        tf_name: policies
+        type: List
+        attributes:
+          - yang_name: policy-name
+            id: true
+            example: PEER_POLICY1
+          - yang_name: candidate-paths/append-sid/mpls
+            tf_name: candidate_paths_append_sid_mpls
+            example: 16100
+          - yang_name: candidate-paths/preferences/preference
+            tf_name: candidate_paths_preferences
+            type: List
+            attributes:
+              - yang_name: preference-id
+                tf_name: preference_id
+                id: true
+                example: 100
+              - yang_name: dynamic/mpls
+                tf_name: dynamic_mpls
+                example: true
+              - yang_name: dynamic/mpls/metric/type/te
+                tf_name: dynamic_metric_type_te
+                exclude_test: true
+                example: true
+              - yang_name: dynamic/mpls/metric/type/igp
+                tf_name: dynamic_metric_type_igp
+                exclude_test: true
+                example: true
+              - yang_name: dynamic/mpls/metric/type/latency
+                tf_name: dynamic_metric_type_latency
+                example: true
+              - yang_name: dynamic/mpls/metric/type/hopcount
+                tf_name: dynamic_metric_type_hopcount
+                exclude_test: true
+                example: true
+              - yang_name: dynamic/mpls/metric/sid-limit
+                tf_name: dynamic_metric_sid_limit
+                example: 5
+              - yang_name: explicit/segment-list-names/segment-list-name
+                tf_name: explicit_segment_list_names
+                type: List
+                attributes:
+                  - yang_name: segment-list-name
+                    tf_name: segment_list_name
+                    type: String
+                    description: Identifying name for Segment-list
+                    id: true
+                    example: SEGMENT_LIST_1
+              - yang_name: constraints/segments/sid-algorithm
+                tf_name: constraints_segments_sid_algorithm
+                example: 128
+              - yang_name: constraints/segments/protection/protected-preferred
+                tf_name: constraints_segments_protection_protected_preferred
+                example: true
+              - yang_name: constraints/segments/protection/protected-only
+                tf_name: constraints_segments_protection_protected_only
+                exclude_test: true
+                example: true
+              - yang_name: constraints/segments/protection/unprotected-only
+                tf_name: constraints_segments_protection_unprotected_only
+                exclude_test: true
+                example: true
+              - yang_name: constraints/segments/protection/unprotected-preferred
+                tf_name: constraints_segments_protection_unprotected_preferred
+                exclude_test: true
+                example: true
+          - yang_name: candidate-paths/affinity/include-any/affinity-colors/affinity-color
+            tf_name: candidate_paths_affinity_include_any_colors
+            type: List
+            attributes:
+              - yang_name: affinity-color-name
+                tf_name: affinity_color_name
+                id: true
+                example: COLOR_1
+          - yang_name: candidate-paths/affinity/include-all/affinity-colors/affinity-color
+            tf_name: candidate_paths_affinity_include_all_colors
+            type: List
+            attributes:
+              - yang_name: affinity-color-name
+                tf_name: affinity_color_name
+                id: true
+                example: COLOR_2
+          - yang_name: candidate-paths/affinity/exclude/affinity-colors/affinity-color
+            tf_name: candidate_paths_affinity_exclude_colors
+            type: List
+            attributes:
+              - yang_name: affinity-color-name
+                tf_name: affinity_color_name
+                id: true
+                example: COLOR_3
+          - yang_name: color
+            example: 100
+          - yang_name: end-point/ipv4
+            tf_name: end_point_ipv4
+            example: 100.100.100.1
+          - yang_name: binding-sid/mpls
+            tf_name: binding_sid_mpls
+            example: 24200
+          - yang_name: shutdown
+            example: false
+          - yang_name: profile-id
+            example: 5
+          - yang_name: path-selection/protected
+            tf_name: path_selection_protected
+            example: true
+          - yang_name: path-selection/unprotected
+            tf_name: path_selection_unprotected
+            exclude_test: true
+            example: true
   - yang_name: segment-routing/traffic-eng/cspf/anycast-sid-inclusion
     tf_name: srte_cspf_anycast_sid_inclusion
     example: true
@@ -459,7 +576,7 @@ attributes:
         id: true
         example: P2MP_POLICY_1
       - yang_name: color
-        example: 100
+        example: 200
       - yang_name: endpoint-set
         example: ENDPOINT_SET_1
       - yang_name: source/ipv4

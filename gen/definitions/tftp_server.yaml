@@ -1,7 +1,7 @@
 ---
 name: TFTP Server
 path: Cisco-IOS-XR-um-ftp-tftp-cfg:/tftp
-doc_category: System
+doc_category: Management
 attributes:
   - yang_name: vrfs/vrf
     tf_name: vrfs

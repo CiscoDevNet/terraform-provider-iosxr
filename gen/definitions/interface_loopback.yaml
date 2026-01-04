@@ -1,0 +1,224 @@
+---
+name: Interface Loopback
+path: Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s]
+doc_category: Interface
+attributes:
+  - yang_name: interface-name
+    tf_name: name
+    string_patterns:
+      - '^Loopback[1-9]+$'
+    example: Loopback100
+  - yang_name: dampening
+    example: true
+  - yang_name: dampening/decay-half-life/value
+    tf_name: dampening_decay_half_life
+    delete_grandparent: true
+    optional: true
+    example: 2
+  - yang_name: dampening/decay-half-life/reuse-threshold/value
+    tf_name: dampening_reuse_threshold
+    optional: true
+    example: 10
+    no_delete: true
+  - yang_name: dampening/decay-half-life/reuse-threshold/suppress-threshold/value
+    tf_name: dampening_suppress_threshold
+    optional: true
+    example: 20
+    no_delete: true
+  - yang_name: dampening/decay-half-life/reuse-threshold/suppress-threshold/max-suppress-time/value
+    tf_name: dampening_max_suppress_time
+    optional: true
+    example: 30
+    no_delete: true
+  - yang_name: shutdown
+    minimum_test_value: true
+    example: true
+  - yang_name: mtu
+    exclude_test: true
+    example: 9000
+  - yang_name: logging/events/link-status
+    tf_name: logging_events_link_status
+    exclude_test: true
+    example: true
+  - yang_name: bandwidth
+    exclude_test: true
+    example: 100000
+  - yang_name: description
+    example: My Interface Description
+  - yang_name: Cisco-IOS-XR-um-statistics-cfg:load-interval
+    minimum_test_value: 30
+    example: 30
+  - yang_name: Cisco-IOS-XR-um-if-vrf-cfg:vrf
+    example: VRF1
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/address
+    tf_name: ipv4_address
+    optional: true
+    delete_parent: true
+    example: "192.168.1.1"
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/netmask
+    tf_name: ipv4_netmask
+    optional: true
+    delete_parent: true
+    example: "255.255.255.0"
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/route-tag
+    tf_name: ipv4_route_tag
+    optional: true
+    delete_parent: true
+    example: 100
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/algorithm
+    tf_name: ipv4_algorithm
+    optional: true
+    delete_parent: true
+    example: 128
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/secondaries/secondary
+    tf_name: ipv4_secondaries
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "192.168.2.1"
+      - yang_name: netmask
+        example: "255.255.255.0"
+      - yang_name: route-tag
+        example: 100
+      - yang_name: algorithm
+        example: 128
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered
+    tf_name: ipv4_unnumbered
+    exclude_test: true
+    example: GigabitEthernet0/0/0/0
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable
+    tf_name: ipv4_forwarding_enable
+    exclude_test: true
+    example: true
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:ttl-propagate/disable
+    tf_name: ipv4_ttl_propagate_disable
+    exclude_test: true
+    example: true
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:mtu
+    tf_name: ipv4_mtu
+    example: 1500
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:redirects
+    tf_name: ipv4_redirects
+    example: true
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:mask-reply
+    tf_name: ipv4_mask_reply
+    example: true
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:helper-addresses/helper-address
+    tf_name: ipv4_helper_addresses
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "192.168.1.1"
+      - yang_name: vrf
+        id: true
+        example: default
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:tcp-mss-adjust/enable
+    tf_name: ipv4_tcp_mss_adjust
+    exclude_test: true
+    example: true
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:verify/unicast/source/reachable-via/type
+    test_tags: [XRV9K]
+    optional: true
+    delete_parent: true
+    example: any
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:verify/unicast/source/reachable-via/allow-self-ping
+    test_tags: [XRV9K]
+    optional: true
+    delete_parent: true
+    example: true
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:verify/unicast/source/reachable-via/allow-default
+    test_tags: [XRV9K]
+    optional: true
+    delete_parent: true
+    example: false
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via/type
+    test_tags: [XRV9K]
+    optional: true
+    delete_parent: true
+    example: any
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via/allow-self-ping
+    test_tags: [XRV9K]
+    optional: true
+    delete_parent: true
+    example: true
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via/allow-default
+    test_tags: [XRV9K]
+    optional: true
+    delete_parent: true
+    example: false
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:enable
+    tf_name: ipv6_enable
+    example: true
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:ttl-propagate/disable
+    tf_name: ipv6_ttl_propagate_disable
+    exclude_test: true
+    example: true
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/ipv6-address
+    tf_name: ipv6_addresses
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::1"
+      - yang_name: prefix-length
+        example: 64
+      - yang_name: zone
+        default_value: "0"
+        example: "0"
+      - yang_name: route-tag
+        example: 100
+      - yang_name: algorithm
+        example: 128
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/link-local-address/address
+    tf_name: ipv6_link_local_address
+    optional: true
+    delete_parent: true
+    example: "fe80::1"
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/link-local-address/zone
+    tf_name: ipv6_link_local_zone
+    optional: true
+    delete_parent: true
+    example: "0"
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/link-local-address/route-tag
+    tf_name: ipv6_link_local_route_tag
+    optional: true
+    delete_parent: true
+    example: 100
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/eui64-addresses/eui64-address
+    tf_name: ipv6_eui64_addresses
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:2::"
+      - yang_name: prefix-length
+        example: 64
+      - yang_name: zone
+        default_value: "0"
+        example: "0"
+      - yang_name: route-tag
+        example: 100
+      - yang_name: algorithm
+        example: 128
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/autoconfig
+    tf_name: ipv6_autoconfig
+    example: false
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:mtu
+    tf_name: ipv6_mtu
+    example: 1280
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:tcp-mss-adjust/enable
+    tf_name: ipv6_tcp_mss_adjust
+    exclude_test: true
+    example: true
+  - yang_name: ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/cache-limit
+    tf_name: ipv6_nd_cache_limit
+    example: 1000
+  - yang_name: ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/prefix/default/no-adv
+    tf_name: ipv6_nd_prefix_default_no_adv
+    example: true
+  - yang_name: ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/prefix/default/no-autoconfig
+    tf_name: ipv6_nd_prefix_default_no_autoconfig
+    exclude_test: true
+    example: true

@@ -515,7 +515,7 @@ attributes:
     type: List
     attributes:
       - yang_name: affinity-attribute-name
-        tf_name: name
+        tf_name: affinity_name
         id: true
         example: 22
       - yang_name: bit-position

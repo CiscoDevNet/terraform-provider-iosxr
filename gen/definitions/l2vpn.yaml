@@ -34,6 +34,7 @@ attributes:
   - yang_name: flexible-xconnect-service/vlan-unawares/vlan-unaware
     tf_name: flexible_xconnect_service_vlan_unaware
     test_tags: [XRD, NCS]
+    include_example: true
     type: List
     attributes:
       - yang_name: service-name
@@ -59,6 +60,7 @@ attributes:
   - yang_name: flexible-xconnect-service/vlan-aware/evis/evi
     tf_name: flexible_xconnect_service_vlan_aware_evis
     test_tags: [XRD, NCS]
+    include_example: true
     type: List
     attributes:
       - yang_name: vpn-id
@@ -185,9 +187,11 @@ attributes:
     example: true
   - yang_name: load-balancing/flow/src-dst-mac
     test_tags: [NCS, XRV9K]
+    include_example: true
     example: false
   - yang_name: load-balancing/flow/src-dst-ip
     test_tags: [NCS, XRV9K]
+    include_example: true
     example: true
   - yang_name: capability/single-mode
     exclude_test: true
@@ -198,6 +202,7 @@ attributes:
     example: 20
   - yang_name: tcn-propagation
     test_tags: [XRD, NCS]
+    include_example: true
     example: true
   - yang_name: pw-grouping
     example: true
@@ -239,10 +244,3 @@ attributes:
     example: true
   - yang_name: snmp/mib/pseudowire/statistics
     example: true
-  - yang_name: xconnect/groups/group
-    tf_name: xconnect_groups
-    type: List
-    attributes:
-      - yang_name: group-name
-        id: true
-        example: P2P

@@ -1,7 +1,7 @@
 ---
 name: Router MLD
 path: Cisco-IOS-XR-um-router-mld-cfg:/router/mld
-doc_category: MLD
+doc_category: Multicast
 attributes:
   - yang_name: nsf/lifetime
     example: 300

@@ -1,0 +1,204 @@
+---
+name: Telemetry Model Driven
+path: Cisco-IOS-XR-um-telemetry-model-driven-cfg:/telemetry/model-driven
+doc_category: Management
+attributes:
+  - yang_name: max-containers-per-path
+    example: 16
+  - yang_name: max-sensor-paths
+    example: 1000
+  - yang_name: tcp-send-timeout
+    example: 30
+  - yang_name: strict-timer
+    example: true
+  - yang_name: gnmi-target-defined/cadence-factor
+    example: 5
+  - yang_name: gnmi-target-defined/minimum-cadence
+    example: 60
+  - yang_name: include/select-leaves-on-events
+    example: true
+  - yang_name: include/empty/values
+    example: true
+  - yang_name: gnmi/heartbeat/always
+    example: true
+  - yang_name: gnmi/bundling
+    example: true
+  - yang_name: gnmi/bundling/size
+    delete_parent: true
+    example: 1024
+  - yang_name: destination-groups/destination-group
+    tf_name: destination_groups
+    type: List
+    attributes:
+      - yang_name: destination-group-string
+        tf_name: name
+        id: true
+        example: DEST-GROUP-1
+      - yang_name: vrf
+        example: VRF1
+      - yang_name: address-families/address-family
+        tf_name: address_families
+        type: List
+        attributes:
+          - yang_name: af-name
+            id: true
+            example: ipv4
+          - yang_name: destination-address
+            tf_name: address
+            id: true
+            example: 10.1.1.1
+          - yang_name: port
+            id: true
+            example: 57500
+          - yang_name: encoding
+            example: json
+          - yang_name: protocol/PROTOCOL/GRPC/grpc
+            xpath: protocol/grpc
+            tf_name: protocol_grpc
+            example: true
+          - yang_name: protocol/PROTOCOL/GRPC/grpc/no-tls
+            xpath: protocol/grpc/no-tls
+            tf_name: protocol_grpc_no_tls
+            delete_parent: true
+            example: true
+          - yang_name: protocol/PROTOCOL/GRPC/grpc/tls-hostname
+            xpath: protocol/grpc/tls-hostname
+            tf_name: protocol_grpc_tls_hostname
+            delete_parent: true
+            exclude_test: true
+            example: tls.example.com
+          - yang_name: protocol/PROTOCOL/GRPC/grpc/gzip
+            xpath: protocol/grpc/gzip
+            tf_name: protocol_grpc_gzip
+            delete_parent: true
+            example: true
+          - yang_name: protocol/PROTOCOL/TCP/tcp
+            xpath: protocol/tcp
+            tf_name: protocol_tcp
+            exclude_test: true
+            example: true
+          - yang_name: protocol/PROTOCOL/UDP/udp
+            xpath: protocol/udp
+            tf_name: protocol_udp
+            exclude_test: true
+            example: true
+          - yang_name: protocol/PROTOCOL/UDP/udp/packetsize
+            xpath: protocol/udp/packetsize
+            tf_name: protocol_udp_packetsize
+            delete_parent: true
+            exclude_test: true
+            example: 1024
+      - yang_name: destinations/destination
+        tf_name: destinations
+        type: List
+        attributes:
+          - yang_name: destination-string
+            tf_name: address
+            id: true
+            example: collector.example.com
+          - yang_name: port
+            id: true
+            example: 57500
+          - yang_name: address-family
+            example: ipv4
+          - yang_name: encoding
+            example: self-describing-gpb
+          - yang_name: protocol/PROTOCOL/GRPC/grpc
+            xpath: protocol/grpc
+            tf_name: protocol_grpc
+            example: true
+            exclude_test: true
+          - yang_name: protocol/PROTOCOL/GRPC/grpc/no-tls
+            xpath: protocol/grpc/no-tls
+            tf_name: protocol_grpc_no_tls
+            delete_parent: true
+            example: true
+            exclude_test: true
+          - yang_name: protocol/PROTOCOL/GRPC/grpc/tls-hostname
+            xpath: protocol/grpc/tls-hostname
+            tf_name: protocol_grpc_tls_hostname
+            delete_parent: true
+            exclude_test: true
+            example: tls.example.com
+          - yang_name: protocol/PROTOCOL/GRPC/grpc/gzip
+            xpath: protocol/grpc/gzip
+            tf_name: protocol_grpc_gzip
+            delete_parent: true
+            example: true
+            exclude_test: true
+          - yang_name: protocol/PROTOCOL/TCP/tcp
+            xpath: protocol/tcp
+            tf_name: protocol_tcp
+            exclude_test: true
+            example: true
+          - yang_name: protocol/PROTOCOL/UDP/udp
+            xpath: protocol/udp
+            tf_name: protocol_udp
+            example: true
+          - yang_name: protocol/PROTOCOL/UDP/udp/packetsize
+            xpath: protocol/udp/packetsize
+            tf_name: protocol_udp_packetsize
+            delete_parent: true
+            example: 1024
+  - yang_name: subscriptions/subscription
+    tf_name: subscriptions
+    type: List
+    attributes:
+      - yang_name: subscription-string
+        tf_name: name
+        id: true
+        example: SUB-1
+      - yang_name: source-qos-marking
+        example: ef
+      - yang_name: source-interface
+        example: Loopback0
+      - yang_name: sensor-group-ids/sensor-group-id
+        tf_name: sensor_group_ids
+        type: List
+        attributes:
+          - yang_name: sensor-group-id-string
+            tf_name: name
+            id: true
+            example: SENSOR-GROUP-1
+          - yang_name: mode
+            exclude_test: true
+            example: target-defined
+          - yang_name: heartbeat/always
+            example: true
+          - yang_name: heartbeat/interval
+            delete_parent: true
+            example: 30000
+          - yang_name: strict-timer
+            example: true
+          - yang_name: sample-interval
+            example: 0
+      - yang_name: destination-ids/destination-id
+        tf_name: destination_ids
+        type: List
+        attributes:
+          - yang_name: destination-id-string
+            tf_name: name
+            id: true
+            example: DEST-GROUP-1
+      - yang_name: send/retry/retry-number
+        tf_name: send_retry
+        example: 5
+      - yang_name: send/retry/duration
+        tf_name: send_retry_duration
+        example: 10000
+  - yang_name: sensor-groups/sensor-group
+    tf_name: sensor_groups
+    type: List
+    attributes:
+      - yang_name: sensor-group-string
+        tf_name: name
+        id: true
+        example: SENSOR-GROUP-1
+      - yang_name: sensor-paths/sensor-path
+        tf_name: sensor_paths
+        type: List
+        attributes:
+          - yang_name: sensor-path-string
+            tf_name: name
+            id: true
+            example: Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters

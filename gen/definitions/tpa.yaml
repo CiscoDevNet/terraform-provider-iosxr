@@ -1,7 +1,7 @@
 ---
 name: TPA
 path: Cisco-IOS-XR-um-tpa-cfg:/tpa
-doc_category: System
+doc_category: Management
 default_delete_attributes: true
 test_tags: [TPA]
 attributes:

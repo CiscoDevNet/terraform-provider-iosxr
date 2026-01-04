@@ -2,7 +2,7 @@
 name: IPv6 Prefix List
 path: Cisco-IOS-XR-um-ipv6-prefix-list-cfg:/ipv6/prefix-lists/prefix-list[prefix-list-name=%s]
 no_delete_attributes: true
-doc_category: System
+doc_category: Route Policy
 attributes:
   - yang_name: prefix-list-name
     id: true
@@ -21,6 +21,9 @@ attributes:
         example: permit
       - yang_name: prefix
         example: "2001:db8::"
+      - yang_name: zone
+        example: 1
+        default_value: 0
       - yang_name: mask
         example: 32
       - yang_name: match-prefix-length/eq

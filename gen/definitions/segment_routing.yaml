@@ -22,4 +22,5 @@ attributes:
     minimum_test_value: 29999
     example: 29999
   - yang_name: enable
+    default_value: true
     example: true

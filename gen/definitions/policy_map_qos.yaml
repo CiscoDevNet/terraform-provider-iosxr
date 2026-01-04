@@ -5,7 +5,7 @@ no_delete_attributes: true
 doc_category: QoS
 attributes:
   - yang_name: policy-map-name
-    example: PM1
+    example: PM-QOS
   - yang_name: description
     example: My description
   - yang_name: class
@@ -50,10 +50,12 @@ attributes:
       - yang_name: police/burst/value
         tf_name: police_burst_value
         test_tags: [XRV9K, NCS]
+        include_example: true
         example: 500
       - yang_name: police/burst/unit
         tf_name: police_burst_unit
         test_tags: [XRV9K, NCS]
+        include_example: true
         example: bytes
       - yang_name: police/peak-rate/value
         tf_name: police_peak_rate_value
@@ -64,10 +66,12 @@ attributes:
       - yang_name: police/peak-burst/value
         tf_name: police_peak_burst_value
         test_tags: [XRV9K, NCS]
+        include_example: true
         example: 1000
       - yang_name: police/peak-burst/unit
         tf_name: police_peak_burst_unit
         test_tags: [XRV9K, NCS]
+        include_example: true
         example: bytes
       - yang_name: police/conform-action/transmit
         tf_name: police_conform_action_transmit
@@ -221,27 +225,33 @@ attributes:
       - yang_name: random-detect-default
         tf_name: random_detect_default
         test_tags: [XRV9K]
+        include_example: true
         example: true
       - yang_name: random-detect
         tf_name: random_detect
         type: List
         test_tags: [NCS, C8000]
+        include_example: true
         attributes:
           - yang_name: minimum-threshold-value
             id: true
             test_tags: [NCS, C8000]
+            include_example: true
             example: 100
           - yang_name: minimum-threshold-unit
             id: true
             test_tags: [NCS, C8000]
+            include_example: true
             example: ms
           - yang_name: maximum-threshold-value
             id: true
             test_tags: [NCS, C8000]
+            include_example: true
             example: 200
           - yang_name: maximum-threshold-unit
             id: true
             test_tags: [NCS, C8000]
+            include_example: true
             example: ms
       - yang_name: service-policy/name
         tf_name: service_policy_name
@@ -249,6 +259,7 @@ attributes:
       - yang_name: set/traffic-class
         tf_name: set_traffic_class
         test_tags: [NCS, C8000]
+        include_example: true
         example: 1
       - yang_name: set/cos
         tf_name: set_cos
@@ -257,6 +268,7 @@ attributes:
       - yang_name: set/discard-class
         tf_name: set_discard_class
         test_tags: [XRV9K]
+        include_example: true
         example: 1
       - yang_name: set/dscp
         tf_name: set_dscp

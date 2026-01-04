@@ -31,7 +31,7 @@ attributes:
     example: true
   - yang_name: dampening/decay-half-life/value
     tf_name: dampening_decay_half_life
-    delete_parent: true
+    delete_grandparent: true
     optional: true
     example: 2
   - yang_name: dampening/decay-half-life/reuse-threshold/value
@@ -52,12 +52,13 @@ attributes:
   - yang_name: dampening/decay-half-life/reuse-threshold/suppress-threshold/max-suppress-time/restart-penalty/value
     tf_name: dampening_restart_penalty
     optional: true
+    exclude_test: true
     example: 40
     no_delete: true
-    exclude_test: true
   - yang_name: Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/input
     tf_name: service_policy_input
     test_tags: [XRV9K]
+    include_example: true
     type: List
     no_augment_config: true
     description: "Configure a policy in the input direction"
@@ -72,6 +73,7 @@ attributes:
   - yang_name: Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/output
     tf_name: service_policy_output
     test_tags: [XRV9K]
+    include_example: true
     type: List
     no_augment_config: true
     description: "Configure a policy in the output direction"
@@ -114,8 +116,8 @@ attributes:
     example: false
     exclude_test: true
   - yang_name: shutdown
-    minimum_test_value: false
-    example: false
+    minimum_test_value: true
+    example: true
   - yang_name: mtu
     example: 9000
   - yang_name: logging/events/link-status
@@ -167,6 +169,7 @@ attributes:
   - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered
     tf_name: ipv4_unnumbered
     exclude_test: true
+    example: Loopback0
   - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:point-to-point
     tf_name: ipv4_point_to_point
     example: true
@@ -194,6 +197,14 @@ attributes:
     example: true
   - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:tcp-mss-adjust/enable
     tf_name: ipv4_tcp_mss_adjust
+    exclude_test: true
+    example: true
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable
+    tf_name: ipv4_forwarding_enable
+    exclude_test: true
+    example: true
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:ttl-propagate/disable
+    tf_name: ipv4_ttl_propagate_disable
     exclude_test: true
     example: true
   - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:verify/unicast/source/reachable-via/type
@@ -284,6 +295,10 @@ attributes:
     example: 0
   - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:enable
     tf_name: ipv6_enable
+    example: true
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:ttl-propagate/disable
+    tf_name: ipv6_ttl_propagate_disable
+    exclude_test: true
     example: true
   - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/ipv6-address
     tf_name: ipv6_addresses
@@ -475,6 +490,143 @@ attributes:
       - yang_name: sampler-map-name
         id: true
         example: SMAP1
+  # frequency-synchronization/
+  - yang_name: Cisco-IOS-XR-um-frequency-synchronization-cfg:frequency/synchronization
+    tf_name: frequency_synchronization
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-frequency-synchronization-cfg:frequency/synchronization/ssm/disable
+    tf_name: frequency_synchronization_ssm_disable
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-frequency-synchronization-cfg:frequency/synchronization/priority
+    tf_name: frequency_synchronization_priority
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 10
+  - yang_name: Cisco-IOS-XR-um-frequency-synchronization-cfg:frequency/synchronization/time-of-day-priority
+    tf_name: frequency_synchronization_time_of_day_priority
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 10
+  # quality/transmit/
+  - yang_name: Cisco-IOS-XR-um-frequency-synchronization-cfg:frequency/synchronization/quality/transmit/lowest/itu-t/option/one
+    tf_name: frequency_synchronization_quality_transmit_lowest_itu_t_option_one
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example:
+  - yang_name: Cisco-IOS-XR-um-frequency-synchronization-cfg:frequency/synchronization/quality/transmit/lowest/itu-t/option/two/generation/one
+    tf_name: frequency_synchronization_quality_transmit_lowest_itu_t_option_two_generation_one
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example: e-prtc
+  - yang_name: Cisco-IOS-XR-um-frequency-synchronization-cfg:frequency/synchronization/quality/transmit/lowest/itu-t/option/two/generation/two
+    tf_name: frequency_synchronization_quality_transmit_lowest_itu_t_option_two_generation_two
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: e-prtc
+  - yang_name: Cisco-IOS-XR-um-frequency-synchronization-cfg:frequency/synchronization/quality/transmit/highest/itu-t/option/one
+    tf_name: frequency_synchronization_quality_transmit_highest_itu_t_option_one
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example:
+  - yang_name: Cisco-IOS-XR-um-frequency-synchronization-cfg:frequency/synchronization/quality/transmit/highest/itu-t/option/two/generation/one
+    tf_name: frequency_synchronization_quality_transmit_highest_itu_t_option_two_generation_one
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example: e-prtc
+  - yang_name: Cisco-IOS-XR-um-frequency-synchronization-cfg:frequency/synchronization/quality/transmit/highest/itu-t/option/two/generation/two
+    tf_name: frequency_synchronization_quality_transmit_highest_itu_t_option_two_generation_two
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: e-prtc
+  - yang_name: Cisco-IOS-XR-um-frequency-synchronization-cfg:frequency/synchronization/quality/transmit/exact/itu-t/option/one
+    tf_name: frequency_synchronization_quality_transmit_exact_itu_t_option_one
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example:
+  - yang_name: Cisco-IOS-XR-um-frequency-synchronization-cfg:frequency/synchronization/quality/transmit/exact/itu-t/option/two/generation/one
+    tf_name: frequency_synchronization_quality_transmit_exact_itu_t_option_two_generation_one
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example: e-prtc
+  - yang_name: Cisco-IOS-XR-um-frequency-synchronization-cfg:frequency/synchronization/quality/transmit/exact/itu-t/option/two/generation/two
+    tf_name: frequency_synchronization_quality_transmit_exact_itu_t_option_two_generation_two
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example: e-prtc
+  # quality/receive/
+  - yang_name: Cisco-IOS-XR-um-frequency-synchronization-cfg:frequency/synchronization/quality/receive/lowest/itu-t/option/one
+    tf_name: frequency_synchronization_quality_receive_lowest_itu_t_option_one
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example:
+  - yang_name: Cisco-IOS-XR-um-frequency-synchronization-cfg:frequency/synchronization/quality/receive/lowest/itu-t/option/two/generation/one
+    tf_name: frequency_synchronization_quality_receive_lowest_itu_t_option_two_generation_one
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example: e-prtc
+  - yang_name: Cisco-IOS-XR-um-frequency-synchronization-cfg:frequency/synchronization/quality/receive/lowest/itu-t/option/two/generation/two
+    tf_name: frequency_synchronization_quality_receive_lowest_itu_t_option_two_generation_two
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: e-prtc
+  - yang_name: Cisco-IOS-XR-um-frequency-synchronization-cfg:frequency/synchronization/quality/receive/highest/itu-t/option/one
+    tf_name: frequency_synchronization_quality_receive_highest_itu_t_option_one
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example:
+  - yang_name: Cisco-IOS-XR-um-frequency-synchronization-cfg:frequency/synchronization/quality/receive/highest/itu-t/option/two/generation/one
+    tf_name: frequency_synchronization_quality_receive_highest_itu_t_option_two_generation_one
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example: e-prtc
+  - yang_name: Cisco-IOS-XR-um-frequency-synchronization-cfg:frequency/synchronization/quality/receive/highest/itu-t/option/two/generation/two
+    tf_name: frequency_synchronization_quality_receive_highest_itu_t_option_two_generation_two
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: e-prtc
+  - yang_name: Cisco-IOS-XR-um-frequency-synchronization-cfg:frequency/synchronization/quality/receive/exact/itu-t/option/one
+    tf_name: frequency_synchronization_quality_receive_exact_itu_t_option_one
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example:
+  - yang_name: Cisco-IOS-XR-um-frequency-synchronization-cfg:frequency/synchronization/quality/receive/exact/itu-t/option/two/generation/one
+    tf_name: frequency_synchronization_quality_receive_exact_itu_t_option_two_generation_one
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example: e-prtc
+  - yang_name: Cisco-IOS-XR-um-frequency-synchronization-cfg:frequency/synchronization/quality/receive/exact/itu-t/option/two/generation/two
+    tf_name: frequency_synchronization_quality_receive_exact_itu_t_option_two_generation_two
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example: e-prtc
+  - yang_name: Cisco-IOS-XR-um-frequency-synchronization-cfg:frequency/synchronization/wait-to-restore
+    tf_name: frequency_synchronization_wait_to_restore
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 5
+  - yang_name: Cisco-IOS-XR-um-frequency-synchronization-cfg:frequency/synchronization/selection/input
+    tf_name: frequency_synchronization_selection_input
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: true
   - yang_name: Cisco-IOS-XR-um-if-arp-cfg:arp/timeout
     tf_name: arp_timeout
     example: 30
@@ -482,6 +634,7 @@ attributes:
     tf_name: arp_learning_disable
     example: true
     exclude_test: true
+    include_example: true
   - yang_name: Cisco-IOS-XR-um-if-arp-cfg:arp/learning/local
     tf_name: arp_learning_local
     example: true
@@ -538,6 +691,7 @@ attributes:
   - yang_name: Cisco-IOS-XR-um-if-mac-address-cfg:mac-address
     tf_name: mac_address
     test_tags: [XRV9K]
+    include_example: true
     example: "aa:bb:cc:dd:ee:ff"
   - yang_name: Cisco-IOS-XR-um-if-mpls-cfg:mpls/mtu
     tf_name: mpls_mtu
@@ -578,11 +732,29 @@ attributes:
   - yang_name: Cisco-IOS-XR-um-lldp-cfg:lldp/tagged
     tf_name: lldp_tagged
     test_tags: [NCS, C8000]
+    include_example: true
     exclude_test: true
     example: true
+  - yang_name: Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/keychain-name
+    tf_name: macsec_psk_keychain_name
+    exclude_test: true
+    example: KEY1
+  - yang_name: Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/fallback-psk-keychain
+    tf_name: macsec_fallback_psk_keychain
+    exclude_test: true
+    example: KEY2
+  - yang_name: Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/policy
+    tf_name: macsec_policy
+    exclude_test: true
+    example: POLICY1
+  - yang_name: Cisco-IOS-XR-um-macsec-cfg:eap/policy
+    tf_name: macsec_eap_policy
+    exclude_test: true
+    example: POLICY2
   - yang_name: Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session
     tf_name: monitor_sessions
     test_tags: [NCS, C8000]
+    include_example: true
     type: List
     attributes:
       - yang_name: session-name
@@ -607,6 +779,483 @@ attributes:
       - yang_name: acl-ipv6/acl-name
         tf_name: acl_ipv6_name
         example: ACL2
+      - yang_name: mirror/first
+        exclude_test: true
+        example: 256
+      - yang_name: mirror/interval
+        exclude_test: true
+        example: 512
+  # ptp/
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp
+    test_tags: [NCS, C8000]
+    include_example: true
+    tf_name: ptp
+    example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/profile
+    tf_name: ptp_profile
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: "Profile-1"
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/transport/ipv4
+    tf_name: ptp_transport_ipv4
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/transport/ethernet
+    tf_name: ptp_transport_ethernet
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/transport/ipv6
+    tf_name: ptp_transport_ipv6
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/clock/operation/one-step
+    tf_name: ptp_clock_operation_one_step
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/clock/operation/two-step
+    tf_name: ptp_clock_operation_two_step
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/announce/interval
+    tf_name: ptp_announce_interval
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: "2"
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/announce/frequency
+    tf_name: ptp_announce_frequency
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example: "4"
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/announce/timeout
+    tf_name: ptp_announce_timeout
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 5
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/announce/grant-duration
+    tf_name: ptp_announce_grant_duration
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 300
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/sync/interval
+    tf_name: ptp_sync_interval
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: "2"
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/sync/frequency
+    tf_name: ptp_sync_frequency
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example: "4"
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/sync/grant-duration
+    tf_name: ptp_sync_grant_duration
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 300
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/sync/timeout
+    tf_name: ptp_sync_timeout
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 3000
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/delay-request/interval
+    tf_name: ptp_delay_request_interval
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: "2"
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/delay-request/frequency
+    tf_name: ptp_delay_request_frequency
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example: "4"
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/cos
+    tf_name: ptp_cos
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 6
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/event-cos
+    tf_name: ptp_cos_event
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 6
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/general-cos
+    tf_name: ptp_cos_general
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 6
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/dscp
+    tf_name: ptp_dscp
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 46
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/event-dscp
+    tf_name: ptp_dscp_event
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 46
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/general-dscp
+    tf_name: ptp_dscp_general
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 46
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/ipv4-ttl
+    tf_name: ptp_ipv4_ttl
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 10
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/ipv6-hop-limit
+    tf_name: ptp_ipv6_hop_limit
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 10
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/delay-asymmetry
+    tf_name: ptp_delay_asymmetry_value
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 1000
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/nanoseconds
+    tf_name: ptp_delay_asymmetry_unit_nanoseconds
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/microseconds
+    tf_name: ptp_delay_asymmetry_unit_microseconds
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/milliseconds
+    tf_name: ptp_delay_asymmetry_unit_milliseconds
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/delay-response/grant-duration
+    tf_name: ptp_delay_response_grant_duration
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 300
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/delay-response/timeout
+    tf_name: ptp_delay_response_timeout
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 3000
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/unicast-grant/invalid-request/reduce
+    tf_name: ptp_unicast_grant_invalid_request_reduce
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/unicast-grant/invalid-request/deny
+    tf_name: ptp_unicast_grant_invalid_request_deny
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/multicast
+    tf_name: ptp_multicast
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/multicast/mixed
+    tf_name: ptp_multicast_mixed
+    delete_parent: true
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/multicast/disable
+    tf_name: ptp_multicast_disable
+    delete_parent: true
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/multicast/target-address/ethernet/mac-address-01-1b-19-00-00-00
+    tf_name: ptp_multicast_target_address_mac_forwardable
+    delete_parent: true
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/multicast/target-address/ethernet/mac-address-01-80-c2-00-00-0e
+    tf_name: ptp_multicast_target_address_mac_non_forwardable
+    delete_parent: true
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/port/state/subordinate-only
+    tf_name: ptp_port_state_slave_only
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/port/state/primary-only
+    tf_name: ptp_port_state_master_only
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/port/state/any
+    tf_name: ptp_port_state_any
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/source/ipv4/address/ipv4-address
+    tf_name: ptp_source_ipv4_address
+    test_tags: [NCS, C8000]
+    exclude_test: true
+    example: "10.1.1.1"
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/source/ipv4/address/disable
+    tf_name: ptp_source_ipv4_address_disable
+    test_tags: [NCS, C8000]
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/source/ipv6/address/ipv6-address
+    tf_name: ptp_source_ipv6_address
+    test_tags: [NCS, C8000]
+    exclude_test: true
+    example: "2001:db8::1"
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/source/ipv6/address/disable
+    tf_name: ptp_source_ipv6_address_disable
+    test_tags: [NCS, C8000]
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/local-priority
+    tf_name: ptp_local_priority
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 128
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/subordinate/ipv4s/ipv4-non-negotiated
+    tf_name: ptp_slave_ipv4s
+    test_tags: [NCS, C8000]
+    include_example: true
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "10.2.2.2"
+      - yang_name: non-negotiated
+        example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/subordinate/ipv6s/ipv6
+    tf_name: ptp_slave_ipv6s
+    test_tags: [NCS, C8000]
+    include_example: true
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8::2"
+      - yang_name: non-negotiated
+        example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/subordinate/ethernets/ethernet
+    tf_name: ptp_slave_ethernets
+    test_tags: [NCS, C8000]
+    include_example: true
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "00:11:22:33:44:55"
+      - yang_name: non-negotiated
+        example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/primary/ipv4s/ipv4
+    tf_name: ptp_master_ipv4s
+    test_tags: [NCS, C8000]
+    include_example: true
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "10.3.3.3"
+      - yang_name: priority
+        example: 100
+      - yang_name: clock-class
+        example: 6
+      - yang_name: multicast
+        example: true
+      - yang_name: multicast/mixed
+        delete_parent: true
+        example: true
+      - yang_name: non-negotiated
+        example: true
+      - yang_name: delay-asymmetry
+        example: 50
+      - yang_name: nanoseconds
+        exclude_test: true
+        example: true
+      - yang_name: microseconds
+        example: true
+      - yang_name: milliseconds
+        exclude_test: true
+        example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/primary/ipv6s/ipv6
+    tf_name: ptp_master_ipv6s
+    test_tags: [NCS, C8000]
+    include_example: true
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8::3"
+      - yang_name: priority
+        example: 100
+      - yang_name: clock-class
+        example: 6
+      - yang_name: multicast
+        example: true
+      - yang_name: multicast/mixed
+        delete_parent: true
+        example: true
+      - yang_name: non-negotiated
+        example: true
+      - yang_name: delay-asymmetry
+        example: 50
+      - yang_name: nanoseconds
+        exclude_test: true
+        example: true
+      - yang_name: microseconds
+        example: true
+      - yang_name: milliseconds
+        exclude_test: true
+        example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/primary/ethernets/ethernet
+    tf_name: ptp_master_ethernets
+    test_tags: [NCS, C8000]
+    include_example: true
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "aa:bb:cc:dd:ee:f4"
+      - yang_name: priority
+        example: 100
+      - yang_name: clock-class
+        example: 6
+      - yang_name: multicast
+        example: true
+      - yang_name: multicast/mixed
+        delete_parent: true
+        example: true
+      - yang_name: non-negotiated
+        example: true
+      - yang_name: delay-asymmetry
+        example: 50
+      - yang_name: nanoseconds
+        exclude_test: true
+        example: true
+      - yang_name: microseconds
+        example: true
+      - yang_name: milliseconds
+        exclude_test: true
+        example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/interop/profile/default
+    tf_name: ptp_interop_profile_default
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/interop/profile/g-8265-1
+    tf_name: ptp_interop_profile_g_8265_1
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/interop/profile/g-8275-1
+    tf_name: ptp_interop_profile_g_8275_1
+    test_tags: [NCS, C8000]
+    include_example: true
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/interop/profile/g-8275-2
+    tf_name: ptp_interop_profile_g_8275_2
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/interop/domain
+    tf_name: ptp_interop_domain
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 24
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/interop/egress-conversion/priority1
+    tf_name: ptp_interop_egress_conversion_priority1
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 128
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/interop/egress-conversion/priority2
+    tf_name: ptp_interop_egress_conversion_priority2
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 128
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/interop/egress-conversion/clock-accuracy
+    tf_name: ptp_interop_egress_conversion_clock_accuracy
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 33
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/interop/egress-conversion/offset-scaled-log-variance
+    tf_name: ptp_interop_egress_conversion_offset_scaled_log_variance
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 5
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/interop/egress-conversion/clock-class/default
+    tf_name: ptp_interop_egress_conversion_clock_class_default
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 6
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/interop/egress-conversion/clock-class/mappings/mapping
+    tf_name: ptp_interop_egress_conversion_clock_class_mappings
+    test_tags: [NCS, C8000]
+    include_example: true
+    type: List
+    attributes:
+      - yang_name: clock-class-to-map-from
+        id: true
+        example: 6
+      - yang_name: clock-class-to-map-to
+        example: 13
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/interop/ingress-conversion/priority1
+    tf_name: ptp_interop_ingress_conversion_priority1
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 128
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/interop/ingress-conversion/priority2
+    tf_name: ptp_interop_ingress_conversion_priority2
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 128
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/interop/ingress-conversion/clock-accuracy
+    tf_name: ptp_interop_ingress_conversion_clock_accuracy
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 33
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/interop/ingress-conversion/offset-scaled-log-variance
+    tf_name: ptp_interop_ingress_conversion_offset_scaled_log_variance
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 5
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/interop/ingress-conversion/clock-class/default
+    tf_name: ptp_interop_ingress_conversion_clock_class_default
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: 6
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/interop/ingress-conversion/clock-class/mappings/mapping
+    tf_name: ptp_interop_ingress_conversion_clock_class_mappings
+    test_tags: [NCS, C8000]
+    include_example: true
+    type: List
+    attributes:
+      - yang_name: clock-class-to-map-from
+        id: true
+        example: 13
+      - yang_name: clock-class-to-map-to
+        example: 6
 
 test_prerequisites:
   - path: Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PMAP-IN]

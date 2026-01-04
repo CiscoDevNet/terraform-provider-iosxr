@@ -1,7 +1,7 @@
 ---
 name: CLI Alias
 path: Cisco-IOS-XR-um-cli-alias-cfg:/alias
-doc_category: System
+doc_category: General
 attributes:
   - yang_name: aliases/alias
     tf_name: aliases

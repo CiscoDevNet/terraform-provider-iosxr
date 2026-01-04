@@ -1,0 +1,313 @@
+---
+name: AAA Authorization
+path: Cisco-IOS-XR-um-aaa-cfg:/aaa/authorization
+doc_category: AAA
+test_tags: [AAA]
+attributes:
+  # exec/
+  - yang_name: exec/authorization-list
+    tf_name: exec
+    minimum_test_value: '["AAA-EXEC"]'
+    type: List
+    attributes:
+      - yang_name: list-name
+        tf_name: list
+        id: true
+        minimum_test_value: '"AAA-EXEC"'
+        example: AAA-EXEC
+      - yang_name: local
+        tf_name: a1_local
+        description: "Use local password for authorization"
+        exclude_test: true
+        example: true
+      - yang_name: none
+        tf_name: a1_none
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-1/tacacs
+        tf_name: a1_tacacs
+        minimum_test_value: true
+        example: true
+      - yang_name: groups/group-1/radius
+        tf_name: a1_radius
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-1/server-group-name
+        tf_name: a1_group
+        exclude_test: true
+        example: AAA
+      - yang_name: groups/group-2/local
+        tf_name: a2_local
+        description: "Use local password for authorization"
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-2/none
+        tf_name: a2_none
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-2/tacacs
+        tf_name: a2_tacacs
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-2/radius
+        tf_name: a2_radius
+        example: true
+      - yang_name: groups/group-2/server-group-name
+        tf_name: a2_group
+        exclude_test: true
+        example: AAA2
+      - yang_name: groups/group-3/local
+        tf_name: a3_local
+        description: "Use local password for authorization"
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-3/none
+        tf_name: a3_none
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-3/tacacs
+        tf_name: a3_tacacs
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-3/radius
+        tf_name: a3_radius
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-3/server-group-name
+        tf_name: a3_group
+        example: AAA3
+      - yang_name: groups/group-4/local
+        tf_name: a4_local
+        description: "Use local password for authorization"
+        example: true
+      - yang_name: groups/group-4/none
+        tf_name: a4_none
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-4/tacacs
+        tf_name: a4_tacacs
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-4/radius
+        tf_name: a4_radius
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-4/server-group-name
+        tf_name: a4_group
+        exclude_test: true
+        example: AAA4
+  # eventmanager/
+  - yang_name: eventmanager/authorization-list
+    tf_name: eventmanager
+    minimum_test_value: '["AAA-EVENTMANAGER"]'
+    type: List
+    attributes:
+      - yang_name: list-name
+        tf_name: list
+        id: true
+        minimum_test_value: '"AAA-EVENTMANAGER"'
+        example: AAA-EVENTMANAGER
+      - yang_name: local
+        tf_name: a1_local
+        description: "Use local password for authorization"
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-1/tacacs
+        tf_name: a1_tacacs
+        minimum_test_value: true
+        example: true
+      - yang_name: groups/group-1/server-group-name
+        tf_name: a1_group
+        exclude_test: true
+        example: AAA
+      - yang_name: groups/group-2/local
+        tf_name: a2_local
+        description: "Use local password for authorization"
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-2/tacacs
+        tf_name: a2_tacacs
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-2/server-group-name
+        tf_name: a2_group
+        exclude_test: true
+        example: AAA2
+  # commands/
+  - yang_name: commands/authorization-list
+    tf_name: commands
+    minimum_test_value: '["AAA-COMMANDS"]'
+    type: List
+    attributes:
+      - yang_name: list-name
+        tf_name: list
+        id: true
+        minimum_test_value: '"AAA-COMMANDS"'
+        example: AAA-COMMANDS
+      - yang_name: local
+        tf_name: a1_local
+        description: "Use local password for authorization"
+        exclude_test: true
+        example: true
+      - yang_name: none
+        tf_name: a1_none
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-1/tacacs
+        tf_name: a1_tacacs
+        minimum_test_value: true
+        example: true
+      - yang_name: groups/group-1/server-group-name
+        tf_name: a1_group
+        exclude_test: true
+        example: AAA
+      - yang_name: groups/group-2/local
+        tf_name: a2_local
+        description: "Use local password for authorization"
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-2/none
+        tf_name: a2_none
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-2/tacacs
+        tf_name: a2_tacacs
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-2/server-group-name
+        tf_name: a2_group
+        example: AAA2
+      - yang_name: groups/group-3/local
+        tf_name: a3_local
+        description: "Use local password for authorization"
+        example: true
+      - yang_name: groups/group-3/none
+        tf_name: a3_none
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-3/tacacs
+        tf_name: a3_tacacs
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-3/server-group-name
+        tf_name: a3_group
+        exclude_test: true
+        example: AAA3
+      - yang_name: groups/group-4/local
+        tf_name: a4_local
+        description: "Use local password for authorization"
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-4/none
+        tf_name: a4_none
+        example: true
+      - yang_name: groups/group-4/tacacs
+        tf_name: a4_tacacs
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-4/server-group-name
+        tf_name: a4_group
+        exclude_test: true
+        example: AAA4
+  # network/
+  - yang_name: network/authorization-list
+    tf_name: network
+    minimum_test_value: '["AAA-NETWORK"]'
+    type: List
+    attributes:
+      - yang_name: list-name
+        tf_name: list
+        id: true
+        minimum_test_value: '"AAA-NETWORK"'
+        example: AAA-NETWORK
+      - yang_name: local
+        tf_name: a1_local
+        description: "Use local password for authorization"
+        exclude_test: true
+        example: true
+      - yang_name: none
+        tf_name: a1_none
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-1/tacacs
+        tf_name: a1_tacacs
+        minimum_test_value: true
+        example: true
+      - yang_name: groups/group-1/radius
+        tf_name: a1_radius
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-1/server-group-name
+        tf_name: a1_group
+        exclude_test: true
+        example: AAA
+      - yang_name: groups/group-2/local
+        tf_name: a2_local
+        description: "Use local password for authorization"
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-2/none
+        tf_name: a2_none
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-2/tacacs
+        tf_name: a2_tacacs
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-2/radius
+        tf_name: a2_radius
+        example: true
+      - yang_name: groups/group-2/server-group-name
+        tf_name: a2_group
+        exclude_test: true
+        example: AAA2
+      - yang_name: groups/group-3/local
+        tf_name: a3_local
+        description: "Use local password for authorization"
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-3/none
+        tf_name: a3_none
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-3/tacacs
+        tf_name: a3_tacacs
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-3/radius
+        tf_name: a3_radius
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-3/server-group-name
+        tf_name: a3_group
+        example: AAA3
+      - yang_name: groups/group-4/local
+        tf_name: a4_local
+        description: "Use local password for authorization"
+        example: true
+      - yang_name: groups/group-4/none
+        tf_name: a4_none
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-4/tacacs
+        tf_name: a4_tacacs
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-4/radius
+        tf_name: a4_radius
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-4/server-group-name
+        tf_name: a4_group
+        exclude_test: true
+        example: AAA4
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group[server-group-name=AAA2]
+    attributes:
+      - name: server-group-name
+        value: AAA2
+  - path: Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group[server-group-name=AAA3]
+    attributes:
+      - name: server-group-name
+        value: AAA3

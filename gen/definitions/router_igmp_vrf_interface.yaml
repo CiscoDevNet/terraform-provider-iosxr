@@ -1,13 +1,13 @@
 ---
 name: Router IGMP VRF Interface
 path: Cisco-IOS-XR-um-router-igmp-cfg:/router/igmp/vrfs/vrf[vrf-name=%s]/interfaces/interface[interface-name=%s]
-doc_category: IGMP
+doc_category: Multicast
 attributes:
   - yang_name: vrf-name
     reference: true
     example: "VRF1"
   - yang_name: interface-name
-    example: "GigabitEthernet0/0/0/1"
+    example: "GigabitEthernet0/0/0/2"
   - yang_name: version
     example: 3
   - yang_name: router/enable
@@ -180,3 +180,8 @@ attributes:
 
 test_prerequisites:
   - path: Cisco-IOS-XR-um-router-igmp-cfg:/router/igmp
+  - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]
+    attributes:
+      - name: vrf-name
+        value: VRF1
+    dependencies: [0]

@@ -1,7 +1,7 @@
 ---
 name: Control Plane
 path: Cisco-IOS-XR-um-control-plane-cfg:/control-plane
-doc_category: System
+doc_category: Management
 attributes:
     # inband/interfaces/interface
   - yang_name: management-plane/inband/interfaces/interface
@@ -292,7 +292,6 @@ attributes:
           - yang_name: address
             id: true
             example: "2001:db8:1:1::1"
-
     # inband/interfaces/all
   - yang_name: management-plane/inband/interfaces/all/allow/ssh
     tf_name: mgmt_inband_all_ssh
@@ -611,7 +610,6 @@ attributes:
       - yang_name: address
         id: true
         example: "2001:db8:1:1::1"
-
     # out-of-band/interfaces/interface
   - yang_name: management-plane/out-of-band/interfaces/interface
     tf_name: mgmt_oob_interfaces
@@ -908,7 +906,6 @@ attributes:
     tf_name: mgmt_oob_inband_behavior
     exclude_test: true
     example: true
-
     # out-of-band/interfaces/all
   - yang_name: management-plane/out-of-band/interfaces/all/allow/ssh
     tf_name: mgmt_oob_all_ssh

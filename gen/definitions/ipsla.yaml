@@ -1,14 +1,15 @@
 ---
 name: IPSLA
 path: Cisco-IOS-XR-um-ipsla-cfg:/ipsla
-doc_category: System
-no_delete_attributes: true
+doc_category: Performance Monitoring
 test_tags: [XRV9K, NCS, C8000]
 attributes:
   - yang_name: low-memory
     example: 100000
   - yang_name: key-chain
     example: "KEY_CHAIN"
+  - yang_name: hw-timestamp/disable
+    example: true
   - yang_name: operations/operation
     tf_name: operations
     type: List
@@ -101,7 +102,6 @@ attributes:
             example: 300
           - yang_name: buckets
             example: 10
-
       # ICMP Path Echo Operation Type
       - yang_name: type/icmp/path-echo
         tf_name: icmp_path_echo
@@ -175,7 +175,6 @@ attributes:
         tf_name: icmp_path_echo_statistics_hourly_maximum_paths
         exclude_test: true
         example: 128
-
       # ICMP Path Jitter Operation Type
       - yang_name: type/icmp/path-jitter
         tf_name: icmp_path_jitter
@@ -217,7 +216,6 @@ attributes:
         tf_name: icmp_path_jitter_destination_ipv4
         exclude_test: true
         example: "10.1.1.2"
-
       # UDP Echo Operation Type
       - yang_name: type/udp/echo
         tf_name: udp_echo
@@ -293,7 +291,6 @@ attributes:
       - yang_name: type/udp/echo/history/lives
         tf_name: udp_echo_history_lives
         example: 2
-
       # UDP Jitter Operation Type
       - yang_name: type/udp/jitter
         tf_name: udp_jitter
@@ -378,7 +375,6 @@ attributes:
             example: 300
           - yang_name: buckets
             example: 10
-
       # MPLS LSP Ping Operation Type
       - yang_name: type/mpls/lsp/ping
         tf_name: mpls_lsp_ping
@@ -455,7 +451,6 @@ attributes:
             example: 300
           - yang_name: buckets
             example: 10
-
       # MPLS LSP Trace Operation Type
       - yang_name: type/mpls/lsp/trace
         tf_name: mpls_lsp_trace
@@ -517,8 +512,6 @@ attributes:
         tf_name: mpls_lsp_trace_statistics_hourly_distribution_interval
         exclude_test: true
         example: 20
-
-  # Schedule Container
   - yang_name: schedule/operations/operation
     tf_name: schedules
     type: List
@@ -591,3 +584,9 @@ attributes:
       - yang_name: ageout
         tf_name: ageout
         example: 300
+  - yang_name: server/twamp
+    example: true
+  - yang_name: server/twamp/port
+    example: 862
+  - yang_name: server/twamp/timer/inactivity
+    example: 600

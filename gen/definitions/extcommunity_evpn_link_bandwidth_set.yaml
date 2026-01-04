@@ -1,0 +1,12 @@
+---
+name: Extcommunity EVPN Link Bandwidth Set
+path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/extended-community-evpn-bandwidth-sets/extended-community-evpn-bandwidth-set[set-name=%s]
+no_delete_attributes: true
+doc_category: Route Policy
+attributes:
+  - yang_name: set-name
+    example: EVPN1
+  - yang_name: rpl-extended-community-evpn-bandwidth-set
+    tf_name: rpl
+    description: "Configures an extended community EVPN link bandwidth set"
+    example: "extcommunity-set evpn-link-bandwidth EVPN1\\n  0:65001,\\n  1:65001\\nend-set\\n"

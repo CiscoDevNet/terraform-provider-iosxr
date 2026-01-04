@@ -8,10 +8,134 @@ attributes:
   - yang_name: vrf-name
     reference: true
     example: VRF1
+  - yang_name: mpls/activate/interfaces/interface
+    tf_name: mpls_activate_interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: GigabitEthernet0/0/0/1
   - yang_name: default-information/originate
     example: true
   - yang_name: default-metric
     example: 125
+  - yang_name: socket/receive-buffer-size/receive-buffer-size-number
+    tf_name: socket_receive_buffer_size
+    delete_parent: true
+    example: 1024
+  - yang_name: socket/receive-buffer-size/bgp-read-buffer-size-number
+    tf_name: socket_receive_buffer_size_read
+    delete_parent: true
+    example: 1024
+  - yang_name: socket/send-buffer-size/send-buffer-size-number
+    tf_name: socket_send_buffer_size
+    delete_parent: true
+    example: 4096
+  - yang_name: socket/send-buffer-size/bgp-write-buffer-size
+    tf_name: socket_send_buffer_size_write
+    delete_parent: true
+    example: 4096
+  - yang_name: nexthop/mpls/forwarding/ibgp
+    example: true
+  - yang_name: nexthop/resolution/allow-default
+    example: true
+  - yang_name: timers/bgp/keepalive-interval
+    example: 0
+  - yang_name: timers/bgp/KEEPALIVE-INTERVAL/ZERO/zero
+    xpath: timers/bgp/zero
+    tf_name: timers_bgp_keepalive_zero
+    example: true
+  - yang_name: timers/bgp/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/ZERO/zero
+    xpath: timers/bgp/zero/zero
+    tf_name: timers_bgp_keepalive_zero_holdtime_zero
+    delete_parent: true
+    example: true
+  - yang_name: timers/bgp/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME/minimum-acceptable-holdtime
+    xpath: timers/bgp/zero/minimum-acceptable-holdtime
+    tf_name: timers_bgp_keepalive_zero_minimum_acceptable_holdtime
+    delete_parent: true
+    exclude_test: true
+    example: 30
+  - yang_name: timers/bgp/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/holdtime-number
+    xpath: timers/bgp/holdtime/holdtime-number
+    tf_name: timers_bgp_holdtime
+    delete_parent: true
+    example: 30
+    exclude_test: true
+  - yang_name: timers/bgp/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME/minimum-acceptable-holdtime
+    xpath: timers/bgp/holdtime/minimum-acceptable-holdtime
+    tf_name: timers_bgp_holdtime_minimum_acceptable_holdtime
+    delete_parent: true
+    example: 30
+    exclude_test: true
+  - yang_name: bgp/redistribute-internal
+    example: true
+  - yang_name: bgp/router-id
+    example: 22.22.22.22
+  - yang_name: bgp/unsafe-ebgp-policy
+    example: true
+  - yang_name: bgp/auto-policy-soft-reset/disable
+    example: true
+  - yang_name: bgp/bestpath/cost-community/ignore
+    example: true
+  - yang_name: bgp/bestpath/compare-routerid
+    example: true
+  - yang_name: bgp/bestpath/aigp/ignore
+    example: true
+  - yang_name: bgp/bestpath/igp-metric/ignore
+    example: true
+  - yang_name: bgp/bestpath/med/missing-as-worst
+    example: true
+  - yang_name: bgp/bestpath/med/always
+    example: true
+    exclude_test: true
+  - yang_name: bgp/bestpath/as-path/ignore
+    example: true
+  - yang_name: bgp/bestpath/as-path/multipath-relax
+    example: true
+  - yang_name: bgp/bestpath/origin-as/use/validity
+    example: true
+  - yang_name: bgp/bestpath/origin-as/allow/invalid
+    example: true
+  - yang_name: bgp/bestpath/sr-policy/SR-POLICY/PREFER/prefer
+    xpath: bgp/bestpath/sr-policy/prefer
+    tf_name: bgp_bestpath_sr_policy_prefer
+    example: true
+  - yang_name: bgp/bestpath/sr-policy/SR-POLICY/FORCE/force
+    xpath: bgp/bestpath/sr-policy/force
+    tf_name: bgp_bestpath_sr_policy_force
+    exclude_test: true
+    example: true
+  - yang_name: bgp/default/local-preference
+    example: 200
+  - yang_name: bgp/enforce-first-as/disable
+    example: true
+  - yang_name: bgp/fast-external-fallover/disable
+    example: true
+  - yang_name: bgp/log/neighbor/changes/disable
+    example: true
+  - yang_name: bgp/log/message/disable
+    example: true
+  - yang_name: bgp/multipath/use/cluster-list-length
+    example: true
+  - yang_name: bgp/origin-as/validation/signal/ibgp
+    example: true
+  - yang_name: bgp/origin-as/validation/time/TIME/OFF/off
+    xpath: bgp/origin-as/validation/time/off
+    tf_name: bgp_origin_as_validation_time_off
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: bgp/origin-as/validation/time/TIME/PREFIX-VALIDATION-TIME/prefix-validation-time
+    xpath: bgp/origin-as/validation/time/prefix-validation-time
+    tf_name: bgp_origin_as_validation_time
+    delete_parent: true
+    exclude_test: true
+    example: 45
+  - yang_name: bfd/minimum-interval
+    example: 10
+  - yang_name: bfd/multiplier
+    example: 4
   - yang_name: rd/RD/AUTO/auto
     xpath: rd/auto
     tf_name: rd_auto
@@ -53,41 +177,6 @@ attributes:
     delete_parent: true
     example: 2
     exclude_test: true
-  - yang_name: timers/bgp/keepalive-interval
-    example: 0
-  - yang_name: timers/bgp/KEEPALIVE-INTERVAL/ZERO/zero
-    xpath: timers/bgp/zero
-    tf_name: timers_bgp_keepalive_zero
-    example: true
-  - yang_name: timers/bgp/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/ZERO/zero
-    xpath: timers/bgp/zero/zero
-    tf_name: timers_bgp_keepalive_zero_holdtime_zero
-    delete_parent: true
-    example: true
-  - yang_name: timers/bgp/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME/minimum-acceptable-holdtime
-    xpath: timers/bgp/zero/minimum-acceptable-holdtime
-    tf_name: timers_bgp_keepalive_zero_minimum_acceptable_holdtime
-    delete_parent: true
-    exclude_test: true
-    example: 30
-  - yang_name: timers/bgp/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/holdtime-number
-    xpath: timers/bgp/holdtime/holdtime-number
-    tf_name: timers_bgp_holdtime
-    delete_parent: true
-    example: 30
-    exclude_test: true
-  - yang_name: timers/bgp/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME/minimum-acceptable-holdtime
-    xpath: timers/bgp/holdtime/minimum-acceptable-holdtime
-    tf_name: timers_bgp_holdtime_minimum_acceptable_holdtime
-    delete_parent: true
-    example: 30
-    exclude_test: true
-  - yang_name: bgp/router-id
-    example: 22.22.22.22
-  - yang_name: bfd/minimum-interval
-    example: 10
-  - yang_name: bfd/multiplier
-    example: 4
   - yang_name: neighbors/neighbor
     tf_name: neighbors
     type: List
@@ -95,12 +184,35 @@ attributes:
       - yang_name: address
         id: true
         example: 10.1.1.2
+      - yang_name: evpn-link-bandwidth
+        example: true
+      - yang_name: evpn-link-bandwidth/EVPN-LINK-BANDWIDTH/PER-PATH/per-path/per-path-evpn-link-bandwidth-number
+        xpath: evpn-link-bandwidth/per-path/per-path-evpn-link-bandwidth-number
+        tf_name: evpn_link_bandwidth_per_path_number
+        optional: true
+        delete_parent: true
+        example: 100
+      - yang_name: evpn-link-bandwidth/EVPN-LINK-BANDWIDTH/INHERITANCE-DISABLE/inheritance-disable
+        xpath: evpn-link-bandwidth/inheritance-disable
+        tf_name: evpn_link_bandwidth_inheritance_disable
+        delete_parent: true
+        exclude_test: true
+        example: true
       - yang_name: remote-as
         example: 65002
-      - yang_name: description
-        example: My Neighbor Description
+      - yang_name: maximum-peers
+        example: 1000
+      - yang_name: remote-as-list
+        exclude_test: true
+        example: LIST-1
+      - yang_name: as-path-loopcheck/out
+        example: enable
       - yang_name: use/neighbor-group
+        exclude_test: true
         example: GROUP1
+      - yang_name: use/session-group
+        exclude_test: true
+        example: SGROUP1
       - yang_name: advertisement-interval/advertisement-interval-time-in-seconds
         tf_name: advertisement_interval_seconds
         delete_parent: true
@@ -110,11 +222,42 @@ attributes:
         delete_parent: true
         example: 500
         exclude_test: true
+      - yang_name: description
+        example: My Neighbor Description
       - yang_name: ignore-connected-check
         example: true
       - yang_name: ebgp-multihop/maximum-hop-count
         optional: true
         example: 10
+      - yang_name: ebgp-multihop/mpls
+        example: true
+      - yang_name: tcp/mss/MSS/TCP-INITIAL-MAXIMUM-SEGMENT-SIZE/tcp-initial-maximum-segment-size
+        xpath: tcp/mss/tcp-initial-maximum-segment-size
+        tf_name: tcp_mss_value
+        example: 1460
+      - yang_name: tcp/mss/MSS/INHERITANCE-DISABLE/inheritance-disable
+        xpath: tcp/mss/inheritance-disable
+        tf_name: tcp_mss_inheritance_disable
+        exclude_test: true
+        example: true
+      - yang_name: tcp/mtu-discovery
+        example: true
+      - yang_name: tcp/mtu-discovery/inheritance-disable
+        exclude_test: true
+        example: true
+      - yang_name: tcp/ip-only-preferred
+        exclude_test: true
+        example: true
+      - yang_name: tcp/ip-only-preferred/inheritance-disable
+        exclude_test: true
+        example: true
+      - yang_name: bmp-activate/servers/server
+        tf_name: bmp_activate_servers
+        type: List
+        attributes:
+          - yang_name: server-number
+            id: true
+            example: 1
       - yang_name: bfd/minimum-interval
         example: 10
       - yang_name: bfd/multiplier
@@ -122,10 +265,28 @@ attributes:
       - yang_name: bfd/fast-detect
         example: true
       - yang_name: bfd/fast-detect/strict-mode
-        example: false
+        exclude_test: true
+        example: true
       - yang_name: bfd/fast-detect/disable
-        exclude_example: true
+        exclude_test: true
         example: false
+      - yang_name: bfd/fast-detect/strict-mode-negotiate
+        exclude_test: true
+        example: true
+      - yang_name: bfd/fast-detect/strict-mode-negotiate/override
+        example: true
+      - yang_name: keychain/KEYCHAIN/KEYCHAIN-NAME/keychain-name
+        xpath: keychain/keychain-name
+        tf_name: keychain_name
+        delete_parent: true
+        exclude_test: true
+        example: "KEY-1"
+      - yang_name: keychain/KEYCHAIN/INHERITANCE-DISABLE/inheritance-disable
+        xpath: keychain/inheritance-disable
+        tf_name: keychain_inheritance_disable
+        delete_parent: true
+        exclude_test: true
+        example: true
       - yang_name: local-as/LOCAL-AS/INHERITANCE-DISABLE/inheritance-disable
         xpath: local-as/inheritance-disable
         tf_name: local_as_inheritance_disable
@@ -170,6 +331,27 @@ attributes:
         optional: true
         example: false
         description: "Prevent password from being inherited from parent"
+      - yang_name: receive-buffer-size/receive-buffer-size-number
+        tf_name: receive_buffer_size
+        delete_parent: true
+        example: 1024
+      - yang_name: receive-buffer-size/bgp-read-buffer-size-byte
+        tf_name: receive_buffer_size_read
+        delete_parent: true
+        example: 1024
+      - yang_name: send-buffer-size/send-buffer-size-number
+        tf_name: send_buffer_size
+        delete_parent: true
+        example: 4096
+      - yang_name: send-buffer-size/bgp-write-buffer-size-byte
+        tf_name: send_buffer_size_write
+        delete_parent: true
+        example: 4096
+      - yang_name: fast-fallover
+        example: true
+      - yang_name: fast-fallover/inheritance-disable
+        exclude_test: true
+        example: true
       - yang_name: shutdown
         example: false
       - yang_name: timers/keepalive-interval
@@ -201,10 +383,330 @@ attributes:
         delete_parent: true
         exclude_test: true
         example: 30
+      - yang_name: local/address/ADDRESS/IP-ADDRESS/ip-address
+        xpath: local/address/ip-address
+        tf_name: local_address
+        delete_parent: true
+        example: 192.168.1.1
+      - yang_name: local/address/ADDRESS/INHERITANCE-DISABLE/inheritance-disable
+        xpath: local/address/inheritance-disable
+        tf_name: local_address_inheritance_disable
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: log/neighbor/changes/CHANGES/DETAIL/detail
+        xpath: log/neighbor/changes/detail
+        tf_name: log_neighbor_changes_detail
+        delete_parent: true
+        example: true
+      - yang_name: log/neighbor/changes/CHANGES/DISABLE/disable
+        xpath: log/neighbor/changes/disable
+        tf_name: log_neighbor_changes_disable
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: log/neighbor/changes/CHANGES/INHERITANCE-DISABLE/inheritance-disable
+        xpath: log/neighbor/changes/inheritance-disable
+        tf_name: log_neighbor_changes_inheritance_disable
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: log/message/in/IN/LOG-BUFFER-SIZE/log-buffer-size
+        xpath: log/message/in/log-buffer-size
+        tf_name: log_message_in_size
+        delete_parent: true
+        example: 256
+      - yang_name: log/message/in/IN/DISABLE/disable
+        xpath: log/message/in/disable
+        tf_name: log_message_in_disable
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: log/message/in/IN/INHERITANCE-DISABLE/inheritance-disable
+        xpath: log/message/in/inheritance-disable
+        tf_name: log_message_in_inheritance_disable
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: log/message/out/OUT/LOG-BUFFER-SIZE/log-buffer-size
+        xpath: log/message/out/log-buffer-size
+        tf_name: log_message_out_size
+        delete_parent: true
+        example: 256
+      - yang_name: log/message/out/OUT/DISABLE/disable
+        xpath: log/message/out/disable
+        tf_name: log_message_out_disable
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: log/message/out/OUT/INHERITANCE-DISABLE/inheritance-disable
+        xpath: log/message/out/inheritance-disable
+        tf_name: log_message_out_inheritance_disable
+        delete_parent: true
+        exclude_test: true
+        example: true
       - yang_name: update-source
         example: GigabitEthernet0/0/0/1
+      - yang_name: local-address-subnet/address
+        tf_name: local_address_subnet_prefix
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: 192.168.1.0
+      - yang_name: local-address-subnet/address-prefix
+        tf_name: local_address_subnet_mask
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: 24
+      - yang_name: dmz-link-bandwidth
+        example: true
+      - yang_name: dmz-link-bandwidth/inheritance-disable
+        exclude_test: true
+        example: true
+      - yang_name: ebgp-recv-extcommunity-dmz
+        example: true
+      - yang_name: ebgp-recv-extcommunity-dmz/inheritance-disable
+        exclude_test: true
+        example: true
+      - yang_name: ebgp-send-extcommunity-dmz
+        tf_name: ebgp_send_extcommunity_dmz
+        exclude_test: true
+        example: true
+      - yang_name: ebgp-send-extcommunity-dmz/EBGP-SEND-EXTCOMMUNITY-DMZ/CUMULATIVE/cumulative
+        xpath: ebgp-send-extcommunity-dmz/cumulative
+        tf_name: ebgp_send_extcommunity_dmz_cumulative
+        delete_parent: true
+        example: true
+      - yang_name: ebgp-send-extcommunity-dmz/EBGP-SEND-EXTCOMMUNITY-DMZ/INHERITANCE-DISABLE/inheritance-disable
+        xpath: ebgp-send-extcommunity-dmz/inheritance-disable
+        tf_name: ebgp_send_extcommunity_dmz_inheritance_disable
+        delete_parent: true
+        exclude_test: true
+        example: true
       - yang_name: ttl-security
         example: false
+      - yang_name: ttl-security/inheritance-disable
+        exclude_test: true
+        example: true
+      - yang_name: session-open-mode
+        example: passive-only
+      - yang_name: dscp
+        example: ef
+      - yang_name: precedence
+        exclude_test: true
+        example: internet
+      - yang_name: capability/additional-paths/send
+        example: true
+      - yang_name: capability/additional-paths/send/disable
+        exclude_test: true
+        example: true
+      - yang_name: capability/additional-paths/receive
+        example: true
+      - yang_name: capability/additional-paths/receive/disable
+        exclude_test: true
+        example: true
+      - yang_name: capability/suppress/all
+        example: true
+      - yang_name: capability/suppress/all/inheritance-disable
+        exclude_test: true
+        example: true
+      - yang_name: capability/suppress/extended-nexthop-encoding
+        example: true
+      - yang_name: capability/suppress/extended-nexthop-encoding/inheritance-disable
+        exclude_test: true
+        example: true
+      - yang_name: capability/suppress/four-byte-as
+        example: true
+      - yang_name: capability/suppress/four-byte-as/inheritance-disable
+        exclude_test: true
+        example: true
+      - yang_name: graceful-restart/graceful-restart-enable
+        tf_name: graceful_restart
+        exclude_test: true
+        example: true
+      - yang_name: graceful-restart/graceful-restart-enable/disable
+        tf_name: graceful_restart_disable
+        exclude_test: true
+        example: true
+      - yang_name: graceful-restart/helper-only
+        exclude_test: true
+        example: true
+      - yang_name: graceful-restart/helper-only/inheritance-disable
+        tf_name: graceful_restart_helper_only_inheritance_disable
+        exclude_test: true
+        example: true
+      - yang_name: graceful-restart/restart-time
+        exclude_test: true
+        example: 90
+      - yang_name: graceful-restart/stalepath-time
+        exclude_test: true
+        example: 120
+      - yang_name: enforce-first-as
+        example: enable
+      - yang_name: cluster-id/CLUSTER-ID/ROUTE-REFLECTOR-NUMBER/route-reflector-number
+        xpath: cluster-id/route-reflector-number
+        tf_name: cluster_id_32bit_format
+        delete_parent: true
+        exclude_test: true
+        example: 100010
+      - yang_name: cluster-id/CLUSTER-ID/ROUTE-REFLECTOR-IP-ADDRESS/route-reflector-ip-address
+        xpath: cluster-id/route-reflector-ip-address
+        tf_name: cluster_id_ip_format
+        delete_parent: true
+        exclude_test: true
+        example: "192.168.1.1"
+      - yang_name: idle-watch-time
+        example: 240
+      - yang_name: allowas-in/number-of-occurrences-of-as-number
+        tf_name: allowas_in
+        example: 3
+      - yang_name: egress-engineering
+        exclude_test: true
+        example: true
+      - yang_name: egress-engineering/inheritance-disable
+        exclude_test: true
+        example: true
+      - yang_name: peer-set/peer-sets
+        tf_name: peer_sets
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: peer
+            id: true
+            example: 1
+      - yang_name: ao/AO/KEY-CHAIN-NAME/key-chain-name/key-chain-name
+        xpath: ao/key-chain-name/key-chain-name
+        tf_name: ao_key_chain_name
+        delete_parent: true
+        exclude_test: true
+        example: "AO-KEY-1"
+      - yang_name: ao/AO/KEY-CHAIN-NAME/key-chain-name/include-tcp-options
+        xpath: ao/key-chain-name/include-tcp-options
+        tf_name: ao_key_chain_include_tcp_options
+        delete_parent: true
+        exclude_test: true
+        example: "enable"
+      - yang_name: ao/AO/KEY-CHAIN-NAME/key-chain-name/accept-ao-mismatch-connection
+        xpath: ao/key-chain-name/accept-ao-mismatch-connection
+        tf_name: ao_key_chain_accept_mismatch
+        exclude_test: true
+        example: "enable"
+      - yang_name: ao/AO/INHERITANCE-DISABLE/inheritance-disable
+        tf_name: ao_inheritance_disable
+        xpath: ao/inheritance-disable
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: dampening
+        example: enable
+      - yang_name: as-override
+        example: enable
+      - yang_name: default-policy-action/in
+        example: reject
+      - yang_name: default-policy-action/out
+        example: reject
+      - yang_name: origin-as/validation/disable
+        exclude_test: true
+        example: true
+      # Device bug: Cannot be configured. Does not show in device UM output. DDTS to be filed.
+      # - yang_name: send-community-ebgp
+      #   example: true
+      # - yang_name: send-community-ebgp/inheritance-disable
+      #   exclude_test: true
+      #   example: true
+      - yang_name: send-extended-community-ebgp
+        example: true
+      - yang_name: send-extended-community-ebgp/inheritance-disable
+        exclude_test: true
+        example: true
+      - yang_name: bestpath/origin-as/allow/invalid
+        example: true
+      - yang_name: update/in/filtering/message/buffers/buffers-number
+        tf_name: update_in_filtering_message_buffers
+        optional: true
+        delete_parent: true
+        example: 10
+      - yang_name: update/in/filtering/message/buffers/buffer-list
+        tf_name: update_in_filtering_message_buffers_type
+        optional: true
+        delete_parent: true
+        example: non-circular
+      - yang_name: update/in/filtering/logging/disable
+        example: true
+      - yang_name: update/in/filtering/attribute-filter/group
+        example: "GROUP1"
+      - yang_name: update/in/labeled-unicast/equivalent
+        example: true
+      - yang_name: update/in/labeled-unicast/equivalent/inheritance-disable
+        exclude_test: true
+        example: true
+      - yang_name: update/in/error-handling/ERROR-HANDLING/AVOID-RESET/avoid-reset
+        xpath: update/in/error-handling/avoid-reset
+        tf_name: update_in_error_handling_avoid_reset
+        exclude_test: true
+        example: enable
+      - yang_name: update/in/error-handling/ERROR-HANDLING/TREAT-AS-WITHDRAW/treat-as-withdraw
+        xpath: update/in/error-handling/treat-as-withdraw
+        tf_name: update_in_error_handling_treat_as_withdraw
+        example: enable
+      - yang_name: graceful-maintenance/activate
+        example: true
+      - yang_name: graceful-maintenance/activate/inheritance-disable
+        exclude_test: true
+        example: true
+      - yang_name: graceful-maintenance/local-preference/LOCAL-PREFERENCE/LOCAL-PREFERENCE-NUMBER/local-preference-number
+        xpath: graceful-maintenance/local-preference/local-preference-number
+        tf_name: graceful_maintenance_local_preference
+        delete_parent: true
+        example: 200
+      - yang_name: graceful-maintenance/local-preference/LOCAL-PREFERENCE/INHERITANCE-DISABLE/inheritance-disable
+        xpath: graceful-maintenance/local-preference/inheritance-disable
+        tf_name: graceful_maintenance_local_preference_inheritance_disable
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: graceful-maintenance/as-prepends/AS-PREPENDS/PREPENDS-NUMBER/prepends-number
+        xpath: graceful-maintenance/as-prepends/prepends-number
+        tf_name: graceful_maintenance_as_prepends_number
+        delete_parent: true
+        example: 3
+      - yang_name: graceful-maintenance/as-prepends/AS-PREPENDS/INHERITANCE-DISABLE/inheritance-disable
+        xpath: graceful-maintenance/as-prepends/inheritance-disable
+        tf_name: graceful_maintenance_as_prepends_inheritance_disable
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: graceful-maintenance/bandwidth-aware/BANDWIDTH-AWARE/PERCENTAGE-THRESHOLD/percentage-threshold/percentage-threshold-number
+        xpath: graceful-maintenance/bandwidth-aware/percentage-threshold/percentage-threshold-number
+        tf_name: graceful_maintenance_bandwidth_aware_percentage_threshold
+        optional: true
+        delete_parent: true
+        example: 75
+      - yang_name: graceful-maintenance/bandwidth-aware/BANDWIDTH-AWARE/PERCENTAGE-THRESHOLD/percentage-threshold/optional-high-threshold
+        xpath: graceful-maintenance/bandwidth-aware/percentage-threshold/optional-high-threshold
+        tf_name: graceful_maintenance_bandwidth_aware_percentage_threshold_high
+        delete_parent: true
+        example: 80
+      - yang_name: graceful-maintenance/bandwidth-aware/BANDWIDTH-AWARE/BANDWIDTH-THRESHOLD/bandwidth-threshold/bandwidth-threshold-number
+        xpath: graceful-maintenance/bandwidth-aware/bandwidth-threshold/bandwidth-threshold-number
+        tf_name: graceful_maintenance_bandwidth_aware_bandwidth_threshold
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: 75000
+      - yang_name: graceful-maintenance/bandwidth-aware/BANDWIDTH-AWARE/BANDWIDTH-THRESHOLD/bandwidth-threshold/optional-high-threshold-number
+        xpath: graceful-maintenance/bandwidth-aware/bandwidth-threshold/optional-high-threshold-number
+        tf_name: graceful_maintenance_bandwidth_aware_bandwidth_threshold_high
+        delete_parent: true
+        exclude_test: true
+        example: 80000
+      - yang_name: graceful-maintenance/bandwidth-aware/BANDWIDTH-AWARE/INHERITANCE-DISABLE/inheritance-disable
+        xpath: graceful-maintenance/bandwidth-aware/inheritance-disable
+        tf_name: graceful_maintenance_bandwidth_aware_inheritance_disable
+        delete_parent: true
+        exclude_test: true
+        example: true
 
 test_prerequisites:
   - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]
@@ -213,12 +715,15 @@ test_prerequisites:
         value: 65001
       - name: bgp/router-id
         value: 22.22.22.22
+  - path: Cisco-IOS-XR-um-router-bgp-cfg:/bmp/servers
     lists:
-      - name: neighbor-groups/neighbor-group
-        key: neighbor-group-name
+      - name: server
+        key: server-number
         items:
           - attributes:
-              - name: neighbor-group-name
-                value: GROUP1
-              - name: remote-as
-                value: 65001
+              - name: server-number
+                value: 1
+              - name: host/host-name
+                value: 192.168.1.100
+              - name: host/port
+                value: 5000

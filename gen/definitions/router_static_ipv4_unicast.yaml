@@ -1,7 +1,7 @@
 ---
 name: Router Static IPv4 Unicast
 path: Cisco-IOS-XR-um-router-static-cfg:/router/static/address-family/ipv4/unicast/prefixes/prefix[prefix-address=%s][prefix-length=%d]
-doc_category: Routing
+doc_category: Static Routing
 attributes:
   - yang_name: prefix-address
     example: 100.0.1.0

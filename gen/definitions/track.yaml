@@ -1,7 +1,7 @@
 ---
-name: Object Tracking
+name: Track
 path: Cisco-IOS-XR-um-track-cfg:/tracks/track[track-name=%s]
-doc_category: System
+doc_category: Performance Monitoring
 attributes:
   - yang_name: track-name
     example: "TRACK1"

@@ -1,7 +1,7 @@
 ---
 name: LLDP
 path: Cisco-IOS-XR-um-lldp-cfg:/lldp
-doc_category: System
+doc_category: Management
 attributes:
   - yang_name: holdtime
     example: 50
@@ -40,9 +40,11 @@ attributes:
   - yang_name: subinterfaces-tagged
     tf_name: subinterfaces_tagged
     test_tags: [NCS]
+    include_example: true
     example: true
   - yang_name: management/enable
     test_tags: [NCS, C8000]
+    include_example: true
     example: true
   - yang_name: priorityaddr/enable
     example: true

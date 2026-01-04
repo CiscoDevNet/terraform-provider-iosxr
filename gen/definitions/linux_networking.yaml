@@ -15,6 +15,7 @@ attributes:
     delete_grandparent: true
     example: true
     test_tags: [NCS, C8000]
+    include_example: true
   - yang_name: statistics-synchronization/from-xr/every/twom
     tf_name: statistics_synchronization_two_minutes
     delete_grandparent: true
@@ -106,6 +107,7 @@ attributes:
         delete_grandparent: true
         example: true
         test_tags: [NCS, C8000]
+        include_example: true
   - yang_name: vrfs/vrf
     tf_name: vrfs
     type: List

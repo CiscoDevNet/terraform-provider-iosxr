@@ -1,0 +1,31 @@
+---
+name: Frequency Synchronization
+path: Cisco-IOS-XR-um-frequency-synchronization-cfg:/frequency/synchronization
+doc_category: System
+test_tags: [NCS, C8000]
+attributes:
+  - yang_name: quality/itu-t/option/one
+    example: true
+  - yang_name: quality/itu-t/option/two/generation/one
+    exclude_test: true
+    example: true
+  - yang_name: quality/itu-t/option/two/generation/two
+    exclude_test: true
+    example: true
+  - yang_name: clock-interface/timing-mode/system
+    example: true
+  - yang_name: clock-interface/timing-mode/independent
+    exclude_test: true
+    example: true
+  - yang_name: system/timing-mode/line-only
+    exclude_test: true
+    example: true
+  - yang_name: system/timing-mode/clock-only
+    example: true
+  - yang_name: log/selection/changes
+    example: true
+  - yang_name: log/selection/errors
+    exclude_test: true
+    example: true
+  - yang_name: clock-identity/mac-address
+    example: "00:11:22:33:44:55"

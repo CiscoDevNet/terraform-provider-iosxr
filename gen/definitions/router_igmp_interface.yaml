@@ -1,7 +1,7 @@
 ---
 name: Router IGMP Interface
 path: Cisco-IOS-XR-um-router-igmp-cfg:/router/igmp/interfaces/interface[interface-name=%s]
-doc_category: IGMP
+doc_category: Multicast
 attributes:
   - yang_name: interface-name
     example: "GigabitEthernet0/0/0/1"

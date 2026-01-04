@@ -1,7 +1,7 @@
 ---
 name: SSH
 path: Cisco-IOS-XR-um-ssh-cfg:/ssh
-doc_category: System
+doc_category: Management
 default_delete_attributes: true
 test_tags: [SSH]
 attributes:

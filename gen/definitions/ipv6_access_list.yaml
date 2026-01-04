@@ -33,9 +33,6 @@ attributes:
       - yang_name: permit/counter
         example: COUNTER
         exclude_test: true
-      - yang_name: permit/capture
-        example: true
-        exclude_test: true
       - yang_name: permit/range/start-protocol
         example: start
         exclude_test: true
@@ -81,7 +78,6 @@ attributes:
       - yang_name: permit/source/port/range/end-value
         tf_name: permit_source_port_range_end
         example: 200
-
       - yang_name: permit/destination/address
         example: 5::5
         exclude_test: true
@@ -235,6 +231,9 @@ attributes:
       - yang_name: permit/nexthop3/vrf
         example: 29
         exclude_test: true
+      - yang_name: permit/capture
+        example: true
+        exclude_test: true
       - yang_name: permit/log
         example: true
       - yang_name: permit/log-input
@@ -246,7 +245,6 @@ attributes:
       - yang_name: permit/set/ttl
         example: 255
         exclude_test: true
-
       - yang_name: deny/protocol
         example: tcp
         exclude_test: true
@@ -261,15 +259,6 @@ attributes:
         exclude_test: true
       - yang_name: deny/counter
         example: COUNTER
-        exclude_test: true
-      - yang_name: deny/capture
-        example: true
-        exclude_test: true
-      - yang_name: deny/icmp-off
-        example: true
-        exclude_test: true
-      - yang_name: deny/icmp-on
-        example: true
         exclude_test: true
       - yang_name: deny/range/start-protocol
         example: gre
@@ -447,6 +436,9 @@ attributes:
       - yang_name: deny/police/priority
         example: critical
         exclude_test: true
+      - yang_name: deny/capture
+        example: true
+        exclude_test: true
       - yang_name: deny/log
         example: true
         exclude_test: true
@@ -458,4 +450,10 @@ attributes:
         exclude_test: true
       - yang_name: deny/set/ttl
         example: 255
+        exclude_test: true
+      - yang_name: deny/icmp-off
+        example: true
+        exclude_test: true
+      - yang_name: deny/icmp-on
+        example: true
         exclude_test: true

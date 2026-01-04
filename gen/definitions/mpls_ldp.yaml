@@ -2,7 +2,6 @@
 name: MPLS LDP
 path: Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp
 doc_category: MPLS
-#skip_minimum_test: true
 attributes:
   - yang_name: router-id
     minimum_test_value: '"1.2.3.4"'
@@ -77,7 +76,6 @@ attributes:
     example: 100
   - yang_name: capabilities/sac
     example: true
-    #exclude_test: true
   - yang_name: capabilities/sac/ipv4-disable
     type: Bool
     type_yang_bool: presence

@@ -1,0 +1,264 @@
+---
+name: Crypto
+path: Cisco-IOS-XR-um-crypto-cfg:/crypto
+doc_category: Crypto
+attributes:
+  # ca/trustpoint/system-trustpoint
+  - yang_name: ca/trustpoint/system-trustpoint/description
+    tf_name: ca_trustpoint_system_description
+    example: System trustpoint description
+  - yang_name: ca/trustpoint/system-trustpoint/enrollment/retry/count
+    tf_name: ca_trustpoint_system_enrollment_retry_count
+    example: 10
+  - yang_name: ca/trustpoint/system-trustpoint/enrollment/retry/period
+    tf_name: ca_trustpoint_system_enrollment_retry_period
+    example: 5
+  - yang_name: ca/trustpoint/system-trustpoint/enrollment/url
+    tf_name: ca_trustpoint_system_enrollment_url
+    example: http://ca.example.com
+  - yang_name: ca/trustpoint/system-trustpoint/enrollment/terminal
+    tf_name: ca_trustpoint_system_enrollment_terminal
+    exclude_test: true
+    example: true
+  - yang_name: ca/trustpoint/system-trustpoint/enrollment/self
+    tf_name: ca_trustpoint_system_enrollment_self
+    exclude_test: true
+    example: true
+  - yang_name: ca/trustpoint/system-trustpoint/sftp-username
+    tf_name: ca_trustpoint_system_sftp_username
+    example: sftpuser
+  - yang_name: ca/trustpoint/system-trustpoint/sftp-password/password
+    tf_name: ca_trustpoint_system_sftp_password
+    example: 1511021F0725
+  - yang_name: ca/trustpoint/system-trustpoint/auto-enroll
+    tf_name: ca_trustpoint_system_auto_enroll
+    example: 80
+  - yang_name: ca/trustpoint/system-trustpoint/renewal-message-type/pkcsreq
+    tf_name: ca_trustpoint_system_renewal_message_type_pkcsreq
+    example: true
+  - yang_name: ca/trustpoint/system-trustpoint/renewal-message-type/renewalreq
+    tf_name: ca_trustpoint_system_renewal_message_type_renewalreq
+    exclude_test: true
+    example: true
+  - yang_name: ca/trustpoint/system-trustpoint/skip-challenge-password
+    tf_name: ca_trustpoint_system_skip_challenge_password
+    example: true
+  - yang_name: ca/trustpoint/system-trustpoint/rsakeypair
+    tf_name: ca_trustpoint_system_rsa_keypair
+    example: KEY1
+  - yang_name: ca/trustpoint/system-trustpoint/ca-keypair/rsa
+    tf_name: ca_trustpoint_system_ca_keypair_rsa
+    exclude_test: true
+    example: KEY1
+  # ca-keypair
+  - yang_name: ca/trustpoint/system-trustpoint/ca-keypair/ecdsanistp256
+    tf_name: ca_trustpoint_system_ca_keypair_ecdsanistp256
+    exclude_test: true
+    example: KEY2
+  - yang_name: ca/trustpoint/system-trustpoint/ca-keypair/ecdsanistp384
+    tf_name: ca_trustpoint_system_ca_keypair_ecdsanistp384
+    exclude_test: true
+    example: KEY3
+  - yang_name: ca/trustpoint/system-trustpoint/ca-keypair/ecdsanistp521
+    tf_name: ca_trustpoint_system_ca_keypair_ecdsanistp521
+    example: KEY4
+  - yang_name: ca/trustpoint/system-trustpoint/ca-keypair/dsa
+    tf_name: ca_trustpoint_system_ca_keypair_dsa
+    exclude_test: true
+    example: KEY5
+  - yang_name: ca/trustpoint/system-trustpoint/ca-keypair/ed25519
+    tf_name: ca_trustpoint_system_ca_keypair_ed25519
+    exclude_test: true
+    example: KEY6
+  # keypair
+  - yang_name: ca/trustpoint/system-trustpoint/keypair/rsa
+    tf_name: ca_trustpoint_system_keypair_rsa
+    exclude_test: true
+    example: KEY7
+  - yang_name: ca/trustpoint/system-trustpoint/keypair/ecdsanistp256
+    tf_name: ca_trustpoint_system_keypair_ecdsanistp256
+    exclude_test: true
+    example: KEY8
+  - yang_name: ca/trustpoint/system-trustpoint/keypair/ecdsanistp384
+    tf_name: ca_trustpoint_system_keypair_ecdsanistp384
+    exclude_test: true
+    example: KEY9
+  - yang_name: ca/trustpoint/system-trustpoint/keypair/ecdsanistp521
+    tf_name: ca_trustpoint_system_keypair_ecdsanistp521
+    exclude_test: true
+    example: KEY10
+  - yang_name: ca/trustpoint/system-trustpoint/keypair/dsa
+    tf_name: ca_trustpoint_system_keypair_dsa
+    exclude_test: true
+    example: KEY11
+  - yang_name: ca/trustpoint/system-trustpoint/keypair/ed25519
+    tf_name: ca_trustpoint_system_keypair_ed25519
+    exclude_test: true
+    example: KEY12
+  - yang_name: ca/trustpoint/system-trustpoint/crl/optional
+    tf_name: ca_trustpoint_system_crl_optional
+    minimum_test_value: true
+    example: true
+  - yang_name: ca/trustpoint/system-trustpoint/query/url
+    tf_name: ca_trustpoint_system_query_url
+    example: ldap://ca.example.com/certsrv
+  - yang_name: ca/trustpoint/system-trustpoint/ip-address/ipv4-address
+    tf_name: ca_trustpoint_system_ip_address
+    example: 10.1.1.1
+  - yang_name: ca/trustpoint/system-trustpoint/ip-address/none
+    tf_name: ca_trustpoint_system_ip_address_none
+    exclude_test: true
+    example: true
+  - yang_name: ca/trustpoint/system-trustpoint/subject-name
+    tf_name: ca_trustpoint_system_subject_name
+    example: CN=Router1,OU=Network,O=Example,C=US
+  - yang_name: ca/trustpoint/system-trustpoint/subject-name-ca-certificate
+    tf_name: ca_trustpoint_system_subject_name_ca_certificate
+    example: CN=CA,OU=Security,O=Example,C=US
+  - yang_name: ca/trustpoint/system-trustpoint/subject-alternative-name
+    tf_name: ca_trustpoint_system_subject_alternative_name
+    example: DNS:router1.example.com,IP:192.168.1.1
+  - yang_name: ca/trustpoint/system-trustpoint/serial-number
+    tf_name: ca_trustpoint_system_serial_number
+    example: true
+  - yang_name: ca/trustpoint/system-trustpoint/serial-number/none
+    tf_name: ca_trustpoint_system_serial_number_none
+    exclude_test: true
+    example: true
+  - yang_name: ca/trustpoint/system-trustpoint/vrf
+    tf_name: ca_trustpoint_system_vrf
+    example: VRF1
+  - yang_name: ca/trustpoint/system-trustpoint/lifetime/ca-certificate
+    tf_name: ca_trustpoint_system_lifetime_ca_certificate
+    example: 90
+  - yang_name: ca/trustpoint/system-trustpoint/lifetime/certificate
+    tf_name: ca_trustpoint_system_lifetime_certificate
+    example: 90
+  - yang_name: ca/trustpoint/system-trustpoint/message-digest
+    tf_name: ca_trustpoint_system_message_digest
+    example: sha256
+  # ca/trustpoint/trustpoints (list)
+  - yang_name: ca/trustpoint/trustpoints/trustpoint
+    tf_name: ca_trustpoints
+    type: List
+    minimum_test_value: '[trustpoint-name="TP1"]'
+    attributes:
+      - yang_name: trustpoint-name
+        id: true
+        example: TP1
+      - yang_name: description
+        example: Custom trustpoint
+      - yang_name: enrollment/retry/count
+        tf_name: enrollment_retry_count
+        example: 10
+      - yang_name: enrollment/retry/period
+        tf_name: enrollment_retry_period
+        example: 5
+      - yang_name: enrollment/url
+        tf_name: enrollment_url
+        example: http://ca.example.com
+      - yang_name: enrollment/terminal
+        tf_name: enrollment_terminal
+        exclude_test: true
+        example: true
+      - yang_name: sftp-username
+        tf_name: sftp_username
+        example: sftpuser
+      - yang_name: sftp-password/password
+        tf_name: sftp_password
+        sensitive: true
+        example: 1511021F0725
+      - yang_name: auto-enroll
+        tf_name: auto_enroll
+        example: 80
+      - yang_name: renewal-message-type/pkcsreq
+        tf_name: renewal_message_type_pkcsreq
+        exclude_test: true
+        example: true
+      - yang_name: renewal-message-type/renewalreq
+        tf_name: renewal_message_type_renewalreq
+        example: true
+      - yang_name: skip-challenge-password
+        tf_name: skip_challenge_password
+        example: true
+      - yang_name: rsakeypair
+        example: KEY1
+      - yang_name: crl/optional
+        tf_name: crl_optional
+        minimum_test_value: true
+        example: true
+      - yang_name: query/url
+        tf_name: query_url
+        example: ldap://ca.example.com/certsrv
+      - yang_name: ip-address/ipv4-address
+        tf_name: ip_address
+        example: 10.1.1.2
+      - yang_name: ip-address/none
+        tf_name: ip_address_none
+        exclude_test: true
+        example: true
+      - yang_name: subject-name
+        tf_name: subject_name
+        example: CN=Router2,OU=Network,O=Example,C=US
+      - yang_name: subject-alternative-name
+        tf_name: subject_alternative_name
+        example: DNS:router2.example.com,IP:192.168.1.2
+      - yang_name: serial-number
+        tf_name: serial_number
+        example: true
+      - yang_name: serial-number/none
+        tf_name: serial_number_none
+        exclude_test: true
+        example: true
+      - yang_name: vrf
+        example: VRF1
+      - yang_name: message-digest
+        tf_name: message_digest
+        example: sha256
+      - yang_name: method/est/credential/certificate
+        tf_name: method_est_credential_certificate
+        example: EST-BOOTSTRAP
+  - yang_name: ca/openssh/trustpoints/trustpoint
+    tf_name: ca_openssh_trustpoints
+    type: List
+    minimum_test_value: '[trustpoint-name="OPENSSH-TP1"]'
+    attributes:
+      - yang_name: trustpoint-name
+        id: true
+        example: OPENSSH-TP1
+      - yang_name: rsakeypair
+        example: KEY1
+  - yang_name: ca/http-proxy
+    tf_name: ca_http_proxy
+    example: proxy.example.com
+  - yang_name: ca/port
+    tf_name: ca_http_proxy_port
+    example: 8080
+  - yang_name: ca/source-interface/ipv4
+    tf_name: ca_source_interface_ipv4
+    example: Loopback0
+  - yang_name: ca/source-interface/ipv6
+    tf_name: ca_source_interface_ipv6
+    exclude_test: true
+    example: Loopback0
+  - yang_name: ca/rsa/one-thousand-twenty-four/disable
+    tf_name: ca_rsa_1024_disable
+    example: true
+  - yang_name: ca/fqdn-check/ip-address/allow
+    tf_name: ca_fqdn_check_ip_address_allow
+    example: true
+  - yang_name: ca/crl/curl-timeout
+    tf_name: ca_crl_curl_timeout
+    example: 10
+  - yang_name: fips-mode
+    example: true
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-domain-cfg:/domain/ipv4/hosts/host[host-name=proxy.example.com]
+    attributes:
+      - name: host-name
+        value: proxy.example.com
+    lists:
+      - name: ip-address
+        values:
+          - "1.1.1.1"

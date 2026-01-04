@@ -4,22 +4,23 @@ path: Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-segment-routing-srv6-
 doc_category: Segment Routing
 attributes:
   - yang_name: enable
-    minimum_test_value: true
+    default_value: true
     example: true
   - yang_name: sid-holdtime
+    minimum_test_value: 10
     example: 10
   - yang_name: logging/locator-status
     example: true
   - yang_name: formats/formats/format
     tf_name: formats
     type: List
-    exclude_test: true
     attributes:
       - yang_name: name
         id: true
         example: "usid-f3216"
-      # - yang_name: format-enable
-      #   example: true
+      - yang_name: format-enable
+        default_value: true
+        example: true
       - yang_name: usid/local-id-block-ranges/lib-start
         test_tags: [XRV9K, NCS, C8000]
         exclude_test: true
@@ -37,6 +38,7 @@ attributes:
     type: List
     attributes:
       - yang_name: locator-enable
+        default_value: true
         example: true
       - yang_name: name
         id: true
@@ -55,15 +57,19 @@ attributes:
         example: 128
   - yang_name: encapsulation/traffic-class/option
     test_tags: [XRV9K]
+    include_example: true
     example: value
   - yang_name: encapsulation/traffic-class/value
     test_tags: [XRV9K]
+    include_example: true
     example: 1
   - yang_name: encapsulation/hop-limit/option
     test_tags: [XRV9K]
+    include_example: true
     example: count
   - yang_name: encapsulation/hop-limit/value
     test_tags: [XRV9K]
+    include_example: true
     example: 1
   - yang_name: encapsulation/source-address
     example: fccc:0:214::1

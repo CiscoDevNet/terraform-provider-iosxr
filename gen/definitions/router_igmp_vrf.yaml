@@ -1,7 +1,7 @@
 ---
 name: Router IGMP VRF
 path: Cisco-IOS-XR-um-router-igmp-cfg:/router/igmp/vrfs/vrf[vrf-name=%s]
-doc_category: IGMP
+doc_category: Multicast
 attributes:
   - yang_name: vrf-name
     reference: true

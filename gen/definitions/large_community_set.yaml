@@ -1,0 +1,12 @@
+---
+name: Large Community Set
+path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/large-community-sets/large-community-set[set-name=%s]
+no_delete_attributes: true
+doc_category: Route Policy
+attributes:
+  - yang_name: set-name
+    example: LARGE1
+  - yang_name: large-community-set-as-text
+    tf_name: rpl
+    description: "Configures large community set"
+    example: "large-community-set LARGE1\\n  0:65001:1,\\n  0:65002:*,\\n  [65536..40001]:201001:301001,\\n  ios-regex '^65000:.*:.*'\\nend-set\\n"

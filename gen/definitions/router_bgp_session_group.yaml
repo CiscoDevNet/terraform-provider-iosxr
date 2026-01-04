@@ -1,0 +1,484 @@
+---
+name: Router BGP Session Group
+path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/session-groups/session-group[session-group-name=%s]
+doc_category: BGP
+attributes:
+  - yang_name: as-number
+    example: 65001
+  - yang_name: session-group-name
+    tf_name: name
+    id: true
+    example: SGROUP1
+  - yang_name: remote-as
+    example: 65001
+  - yang_name: remote-as-list
+    exclude_test: true
+    example: LIST-1
+  - yang_name: maximum-peers
+    example: 1000
+  - yang_name: send-community-ebgp
+    exclude_test: true
+    example: true
+  - yang_name: send-community-ebgp/inheritance-disable
+    exclude_test: true
+    example: true
+  - yang_name: send-extended-community-ebgp
+    exclude_test: true
+    example: true
+  - yang_name: send-extended-community-ebgp/inheritance-disable
+    exclude_test: true
+    example: true
+  - yang_name: as-path-loopcheck/out
+    example: enable
+  - yang_name: dampening
+    example: enable
+  - yang_name: as-override
+    example: enable
+  - yang_name: use/session-group
+    exclude_test: true
+    example: SGROUP2
+  - yang_name: advertisement-interval/advertisement-interval-time-in-seconds
+    tf_name: advertisement_interval_seconds
+    delete_parent: true
+    example: 10
+  - yang_name: advertisement-interval/advertisement-interval-time-in-milliseconds
+    tf_name: advertisement_interval_milliseconds
+    delete_parent: true
+    example: 500
+    exclude_test: true
+  - yang_name: description
+    example: Session Group Description
+  - yang_name: ignore-connected-check
+    exclude_test: true
+    example: true
+  - yang_name: ignore-connected-check/inheritance-disable
+    exclude_test: true
+    example: true
+  - yang_name: internal-vpn-client
+    example: true
+  - yang_name: ebgp-multihop/maximum-hop-count
+    optional: true
+    exclude_test: true
+    example: 10
+  - yang_name: ebgp-multihop/mpls
+    exclude_test: true
+    example: true
+  - yang_name: tcp/mss/MSS/TCP-INITIAL-MAXIMUM-SEGMENT-SIZE/tcp-initial-maximum-segment-size
+    xpath: tcp/mss/tcp-initial-maximum-segment-size
+    tf_name: tcp_mss_value
+    example: 1460
+  - yang_name: tcp/mss/MSS/INHERITANCE-DISABLE/inheritance-disable
+    xpath: tcp/mss/inheritance-disable
+    tf_name: tcp_mss_inheritance_disable
+    exclude_test: true
+    example: true
+  - yang_name: tcp/mtu-discovery
+    example: true
+  - yang_name: tcp/mtu-discovery/inheritance-disable
+    exclude_test: true
+    example: true
+  - yang_name: tcp/ip-only-preferred
+    exclude_test: true
+    example: true
+  - yang_name: tcp/ip-only-preferred/inheritance-disable
+    exclude_test: true
+    example: true
+  - yang_name: bmp-activate/servers/server
+    tf_name: bmp_activate_servers
+    type: List
+    attributes:
+      - yang_name: server-number
+        id: true
+        example: 1
+  - yang_name: bfd/minimum-interval
+    example: 10
+  - yang_name: bfd/multiplier
+    example: 4
+  - yang_name: bfd/fast-detect
+    example: true
+  - yang_name: bfd/fast-detect/strict-mode
+    exclude_test: true
+    example: true
+  - yang_name: bfd/fast-detect/disable
+    exclude_test: true
+    example: false
+  - yang_name: bfd/fast-detect/strict-mode-negotiate
+    exclude_test: true
+    example: true
+  - yang_name: bfd/fast-detect/strict-mode-negotiate/override
+    example: true
+  - yang_name: keychain/KEYCHAIN/KEYCHAIN-NAME/keychain-name
+    xpath: keychain/keychain-name
+    tf_name: keychain_name
+    delete_parent: true
+    exclude_test: true
+    example: "KEY-1"
+  - yang_name: keychain/KEYCHAIN/INHERITANCE-DISABLE/inheritance-disable
+    xpath: keychain/inheritance-disable
+    tf_name: keychain_inheritance_disable
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: local-as/LOCAL-AS/INHERITANCE-DISABLE/inheritance-disable
+    xpath: local-as/inheritance-disable
+    tf_name: local_as_inheritance_disable
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: local-as/LOCAL-AS/AS/as/as-number
+    xpath: local-as/as/as-number
+    tf_name: local_as
+    optional: true
+    delete_grandparent: true
+    exclude_test: true
+    example: "10"
+  - yang_name: local-as/LOCAL-AS/AS/as/no-prepend
+    xpath: local-as/as/no-prepend
+    tf_name: local_as_no_prepend
+    delete_grandparent: true
+    example: true
+    exclude_test: true
+  - yang_name: local-as/LOCAL-AS/AS/as/no-prepend/replace-as
+    xpath: local-as/as/no-prepend/replace-as
+    tf_name: local_as_no_prepend_replace_as
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: local-as/LOCAL-AS/AS/as/no-prepend/replace-as/dual-as
+    xpath: local-as/as/no-prepend/replace-as/dual-as
+    tf_name: local_as_no_prepend_replace_as_dual_as
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: password/PASSWORD/PASSWORD/password
+    tf_name: password
+    xpath: password/password
+    type: String
+    sensitive: true
+    write_only: true
+    no_augment_config: true
+    optional: true
+    example: 030752180500
+    description: "Specifies a password will follow"
+  - yang_name: password/PASSWORD/INHERITANCE-DISABLE/inheritance-disable
+    tf_name: password_inheritance_disable
+    xpath: password/inheritance-disable
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    exclude_test: true
+    example: false
+    description: "Prevent password from being inherited from parent"
+  - yang_name: receive-buffer-size/receive-buffer-size-number
+    tf_name: receive_buffer_size
+    delete_parent: true
+    example: 1024
+  - yang_name: receive-buffer-size/bgp-read-buffer-size-byte
+    tf_name: receive_buffer_size_read
+    delete_parent: true
+    example: 1024
+  - yang_name: send-buffer-size/send-buffer-size-number
+    tf_name: send_buffer_size
+    delete_parent: true
+    example: 4096
+  - yang_name: send-buffer-size/bgp-write-buffer-size-byte
+    tf_name: send_buffer_size_write
+    delete_parent: true
+    example: 4096
+  - yang_name: shutdown
+    example: false
+  - yang_name: timers/keepalive-interval
+    example: 10
+  - yang_name: timers/KEEPALIVE-INTERVAL/ZERO/zero
+    xpath: timers/zero
+    tf_name: timers_keepalive_zero
+    example: true
+    exclude_test: true
+  - yang_name: timers/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/ZERO/zero
+    xpath: timers/zero/zero
+    tf_name: timers_keepalive_zero_holdtime_zero
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: timers/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME/minimum-acceptable-holdtime
+    xpath: timers/zero/minimum-acceptable-holdtime
+    tf_name: timers_keepalive_zero_minimum_acceptable_holdtime
+    delete_parent: true
+    exclude_test: true
+    example: 30
+  - yang_name: timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/holdtime-number
+    xpath: timers/holdtime/holdtime-number
+    tf_name: timers_holdtime
+    delete_parent: true
+    example: 30
+  - yang_name: timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME/minimum-acceptable-holdtime
+    xpath: timers/holdtime/minimum-acceptable-holdtime
+    tf_name: timers_holdtime_minimum_acceptable_holdtime
+    delete_parent: true
+    example: 30
+  - yang_name: local/address/ADDRESS/IP-ADDRESS/ip-address
+    xpath: local/address/ip-address
+    tf_name: local_address
+    delete_parent: true
+    example: 192.168.1.1
+  - yang_name: local/address/ADDRESS/INHERITANCE-DISABLE/inheritance-disable
+    xpath: local/address/inheritance-disable
+    tf_name: local_address_inheritance_disable
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: log/neighbor/changes/CHANGES/DETAIL/detail
+    xpath: log/neighbor/changes/detail
+    tf_name: log_neighbor_changes_detail
+    delete_parent: true
+    example: true
+  - yang_name: log/neighbor/changes/CHANGES/DISABLE/disable
+    xpath: log/neighbor/changes/disable
+    tf_name: log_neighbor_changes_disable
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: log/neighbor/changes/CHANGES/INHERITANCE-DISABLE/inheritance-disable
+    xpath: log/neighbor/changes/inheritance-disable
+    tf_name: log_neighbor_changes_inheritance_disable
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: log/message/in/IN/LOG-BUFFER-SIZE/log-buffer-size
+    xpath: log/message/in/log-buffer-size
+    tf_name: log_message_in_size
+    delete_parent: true
+    example: 256
+  - yang_name: log/message/in/IN/DISABLE/disable
+    xpath: log/message/in/disable
+    tf_name: log_message_in_disable
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: log/message/in/IN/INHERITANCE-DISABLE/inheritance-disable
+    xpath: log/message/in/inheritance-disable
+    tf_name: log_message_in_inheritance_disable
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: log/message/out/OUT/LOG-BUFFER-SIZE/log-buffer-size
+    xpath: log/message/out/log-buffer-size
+    tf_name: log_message_out_size
+    delete_parent: true
+    example: 256
+  - yang_name: log/message/out/OUT/DISABLE/disable
+    xpath: log/message/out/disable
+    tf_name: log_message_out_disable
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: log/message/out/OUT/INHERITANCE-DISABLE/inheritance-disable
+    xpath: log/message/out/inheritance-disable
+    tf_name: log_message_out_inheritance_disable
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: update-source
+    example: Loopback0
+  - yang_name: local-address-subnet/address
+    tf_name: local_address_subnet_prefix
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 192.168.1.0
+  - yang_name: local-address-subnet/address-prefix
+    tf_name: local_address_subnet_mask
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 24
+  - yang_name: dmz-link-bandwidth
+    exclude_test: true
+    example: true
+  - yang_name: dmz-link-bandwidth/inheritance-disable
+    exclude_test: true
+    example: true
+  - yang_name: ebgp-recv-extcommunity-dmz
+    exclude_test: true
+    example: true
+  - yang_name: ebgp-recv-extcommunity-dmz/inheritance-disable
+    exclude_test: true
+    example: true
+  - yang_name: ebgp-send-extcommunity-dmz
+    tf_name: ebgp_send_extcommunity_dmz
+    exclude_test: true
+    example: true
+  - yang_name: ebgp-send-extcommunity-dmz/EBGP-SEND-EXTCOMMUNITY-DMZ/CUMULATIVE/cumulative
+    xpath: ebgp-send-extcommunity-dmz/cumulative
+    tf_name: ebgp_send_extcommunity_dmz_cumulative
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: ebgp-send-extcommunity-dmz/EBGP-SEND-EXTCOMMUNITY-DMZ/INHERITANCE-DISABLE/inheritance-disable
+    xpath: ebgp-send-extcommunity-dmz/inheritance-disable
+    tf_name: ebgp_send_extcommunity_dmz_inheritance_disable
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: ttl-security
+    exclude_test: true
+    example: false
+  - yang_name: ttl-security/inheritance-disable
+    exclude_test: true
+    example: true
+  - yang_name: session-open-mode
+    example: active-only
+  - yang_name: dscp
+    example: ef
+  - yang_name: precedence
+    exclude_test: true
+    example: internet
+  - yang_name: capability/additional-paths/send
+    example: true
+  - yang_name: capability/additional-paths/send/disable
+    exclude_test: true
+    example: true
+  - yang_name: capability/additional-paths/receive
+    example: true
+  - yang_name: capability/additional-paths/receive/disable
+    exclude_test: true
+    example: true
+  - yang_name: capability/suppress/all
+    example: true
+  - yang_name: capability/suppress/all/inheritance-disable
+    exclude_test: true
+    example: true
+  - yang_name: capability/suppress/extended-nexthop-encoding
+    example: true
+  - yang_name: capability/suppress/extended-nexthop-encoding/inheritance-disable
+    exclude_test: true
+    example: true
+  - yang_name: capability/suppress/four-byte-as
+    example: true
+  - yang_name: capability/suppress/four-byte-as/inheritance-disable
+    exclude_test: true
+    example: true
+  - yang_name: graceful-restart/graceful-restart-enable
+    tf_name: graceful_restart
+    exclude_test: true
+    example: true
+  - yang_name: graceful-restart/graceful-restart-enable/disable
+    tf_name: graceful_restart_disable
+    exclude_test: true
+    example: true
+  - yang_name: graceful-restart/helper-only
+    exclude_test: true
+    example: true
+  - yang_name: graceful-restart/helper-only/inheritance-disable
+    tf_name: graceful_restart_helper_only_inheritance_disable
+    exclude_test: true
+    example: true
+  - yang_name: graceful-restart/restart-time
+    exclude_test: true
+    example: 90
+  - yang_name: graceful-restart/stalepath-time
+    exclude_test: true
+    example: 120
+  - yang_name: enforce-first-as
+    exclude_test: true
+    example: enable
+  - yang_name: cluster-id/CLUSTER-ID/ROUTE-REFLECTOR-NUMBER/route-reflector-number
+    xpath: cluster-id/route-reflector-number
+    tf_name: cluster_id_32bit_format
+    delete_parent: true
+    example: 100010
+  - yang_name: cluster-id/CLUSTER-ID/ROUTE-REFLECTOR-IP-ADDRESS/route-reflector-ip-address
+    xpath: cluster-id/route-reflector-ip-address
+    tf_name: cluster_id_ip_format
+    delete_parent: true
+    exclude_test: true
+    example: "192.168.1.1"
+  - yang_name: idle-watch-time
+    example: 240
+  - yang_name: allowas-in/number-of-occurrences-of-as-number
+    tf_name: allowas_in
+    example: 3
+  - yang_name: egress-engineering
+    example: true
+  - yang_name: egress-engineering/inheritance-disable
+    exclude_test: true
+    example: true
+  - yang_name: peer-set/peer-sets
+    tf_name: peer_sets
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: peer
+        id: true
+        example: 1
+  - yang_name: ao/AO/KEY-CHAIN-NAME/key-chain-name/key-chain-name
+    xpath: ao/key-chain-name/key-chain-name
+    tf_name: ao_key_chain_name
+    delete_parent: true
+    exclude_test: true
+    example: "AO-KEY-1"
+  - yang_name: ao/AO/KEY-CHAIN-NAME/key-chain-name/include-tcp-options
+    xpath: ao/key-chain-name/include-tcp-options
+    tf_name: ao_key_chain_include_tcp_options
+    delete_parent: true
+    exclude_test: true
+    example: "enable"
+  - yang_name: ao/AO/KEY-CHAIN-NAME/key-chain-name/accept-ao-mismatch-connection
+    xpath: ao/key-chain-name/accept-ao-mismatch-connection
+    tf_name: ao_key_chain_accept_mismatch
+    exclude_test: true
+    example: "enable"
+  - yang_name: ao/AO/INHERITANCE-DISABLE/inheritance-disable
+    tf_name: ao_inheritance_disable
+    xpath: ao/inheritance-disable
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: default-policy-action/in
+    example: reject
+  - yang_name: default-policy-action/out
+    example: reject
+  - yang_name: fast-fallover
+    example: true
+  - yang_name: fast-fallover/inheritance-disable
+    exclude_test: true
+    example: true
+  - yang_name: update/in/labeled-unicast/equivalent
+    example: true
+  - yang_name: update/in/labeled-unicast/equivalent/inheritance-disable
+    exclude_test: true
+    example: true
+  - yang_name: update/in/error-handling/ERROR-HANDLING/AVOID-RESET/avoid-reset
+    xpath: update/in/error-handling/avoid-reset
+    tf_name: update_in_error_handling_avoid_reset
+    exclude_test: true
+    example: enable
+  - yang_name: update/in/error-handling/ERROR-HANDLING/TREAT-AS-WITHDRAW/treat-as-withdraw
+    xpath: update/in/error-handling/treat-as-withdraw
+    tf_name: update_in_error_handling_treat_as_withdraw
+    example: enable
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]
+    attributes:
+      - name: as-number
+        value: 65001
+  - path: Cisco-IOS-XR-um-router-bgp-cfg:/bmp/servers
+    lists:
+      - name: server
+        key: server-number
+        items:
+          - attributes:
+              - name: server-number
+                value: 1
+              - name: host/host-name
+                value: 192.168.1.100
+              - name: host/port
+                value: 5000
+  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]
+    attributes:
+      - name: route-policy-name
+        value: ROUTE_POLICY_1
+      - name: rpl-route-policy
+        value: "route-policy ROUTE_POLICY_1\\n  pass\\nend-policy\\n"

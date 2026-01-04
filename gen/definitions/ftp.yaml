@@ -1,7 +1,7 @@
 ---
 name: FTP
 path: Cisco-IOS-XR-um-ftp-tftp-cfg:/ftp
-doc_category: System
+doc_category: Management
 attributes:
   - yang_name: client/vrfs/vrf
     tf_name: client_vrfs

@@ -1,7 +1,8 @@
 ---
 name: CDP
 path: Cisco-IOS-XR-um-cdp-cfg:/cdp
-doc_category: System
+doc_category: Management
+test_tags: [XRV9K, XRD, NCS]
 attributes:
   - yang_name: enable
     minimum_test_value: true

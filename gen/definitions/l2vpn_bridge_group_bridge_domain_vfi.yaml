@@ -145,29 +145,37 @@ attributes:
     example: true
   - yang_name: autodiscovery/bgp/signaling-protocol/bgp
     test_tags: [C8000]
+    include_example: true
     example: true
   - yang_name: autodiscovery/bgp/signaling-protocol/bgp/ve-id
     test_tags: [C8000]
+    include_example: true
     example: 100
   - yang_name: autodiscovery/bgp/signaling-protocol/bgp/ve-range
     test_tags: [C8000]
+    include_example: true
     example: 50
   - yang_name: autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/transmit
     test_tags: [C8000]
+    include_example: true
     exclude_test: true
     example: true
   - yang_name: autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/receive
     test_tags: [C8000]
+    include_example: true
     exclude_test: true
     example: true
   - yang_name: autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/both
     test_tags: [C8000]
+    include_example: true
     example: true
   - yang_name: autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/static
     test_tags: [C8000]
+    include_example: true
     example: true
   - yang_name: autodiscovery/bgp/signaling-protocol/ldp
     test_tags: [NCS]
+    include_example: true
     example: true
   - yang_name: autodiscovery/bgp/signaling-protocol/ldp/vpls-id/two-byte-as-number
     tf_name: autodiscovery_bgp_signaling_protocol_ldp_vpls_id_two_byte_as_number
@@ -182,10 +190,12 @@ attributes:
   - yang_name: autodiscovery/bgp/signaling-protocol/ldp/vpls-id/ipv4-address
     tf_name: autodiscovery_bgp_signaling_protocol_ldp_vpls_id_ipv4_address
     test_tags: [NCS]
+    include_example: true
     example: 10.0.0.1
   - yang_name: autodiscovery/bgp/signaling-protocol/ldp/vpls-id/ipv4-address-assigned-number
     tf_name: autodiscovery_bgp_signaling_protocol_ldp_vpls_id_ipv4_address_index
     test_tags: [NCS]
+    include_example: true
     example: 1
   - yang_name: autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/transmit
     test_tags: [NCS]
@@ -197,9 +207,11 @@ attributes:
     example: true
   - yang_name: autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/both
     test_tags: [NCS]
+    include_example: true
     example: true
   - yang_name: autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/static
     test_tags: [NCS]
+    include_example: true
     example: true
   - yang_name: autodiscovery/bgp/table-policy
     exclude_test: true
@@ -241,6 +253,7 @@ attributes:
       - yang_name: dhcp/ipv4/snoop/profile
         tf_name: dhcp_ipv4_snooping_profile
         test_tags: [NCS]
+        include_example: true
         example: DHCP_PROFILE
       - yang_name: dhcp/ipv4/none
         test_tags: [NCS]
@@ -248,9 +261,11 @@ attributes:
         example: true
       - yang_name: igmp/snooping/profile
         test_tags: [NCS]
+        include_example: true
         example: IGMP_PROFILE
       - yang_name: mld/snooping/profile
         test_tags: [NCS]
+        include_example: true
         example: MLD_PROFILE
 
 test_prerequisites:

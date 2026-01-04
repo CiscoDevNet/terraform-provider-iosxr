@@ -1,26 +1,55 @@
 ---
 name: EVPN Segment Routing SRv6 EVI
 path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn/evis/segment-routing/srv6/evi[vpn-id=%v]
-no_delete_attributes: true
+#no_delete_attributes: true
 doc_category: EVPN
 attributes:
   - yang_name: vpn-id
-    example: 1235
+    example: 103
   - yang_name: description
     example: My Description
-  - yang_name: bgp/route-target/import/two-byte-as-rts/two-byte-as-rt
-    tf_name: bgp_route_target_import_two_byte_as_format
+  - yang_name: bgp/rd/two-byte-as-number
+    tf_name: bgp_rd_two_byte_as_number
+    optional: true
+    exclude_test: true
+    example: 65001
+  - yang_name: bgp/rd/two-byte-as-assigned-number
+    tf_name: bgp_rd_two_byte_as_index
+    optional: true
+    exclude_test: true
+    example: 103
+  - yang_name: bgp/rd/four-byte-as-number
+    tf_name: bgp_rd_four_byte_as_number
+    optional: true
+    example: 65536
+  - yang_name: bgp/rd/four-byte-as-assigned-number
+    tf_name: bgp_rd_four_byte_as_index
+    optional: true
+    example: 103
+  - yang_name: bgp/rd/ipv4-address
+    tf_name: bgp_rd_ipv4_address
+    optional: true
+    exclude_test: true
+    example: 192.168.1.1
+  - yang_name: bgp/rd/ipv4-address-assigned-number
+    tf_name: bgp_rd_ipv4_address_index
+    optional: true
+    exclude_test: true
+    example: 103
+  - yang_name: bgp/route-target/export/two-byte-as-rts/two-byte-as-rt
+    tf_name: bgp_route_target_two_byte_as_format
     type: List
+    exclude_test: true
     attributes:
       - yang_name: two-byte-as-number
         tf_name: as_number
         id: true
-        example: 1
+        example: 65001
       - yang_name: assigned-number
         id: true
-        example: 1
-  - yang_name: bgp/route-target/import/four-byte-as-rts/four-byte-as-rt
-    tf_name: bgp_route_target_import_four_byte_as_format
+        example: 103
+  - yang_name: bgp/route-target/four-byte-as-rts/four-byte-as-rt
+    tf_name: bgp_route_target_four_byte_as_format
     type: List
     exclude_test: true
     attributes:
@@ -30,7 +59,41 @@ attributes:
         example: 65536
       - yang_name: assigned-number
         id: true
-        example: 1
+        example: 103
+  - yang_name: bgp/route-target/ipv4-address-rts/ipv4-address-rt
+    tf_name: bgp_route_target_ipv4_address_format
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: ipv4-address
+        id: true
+        example: 192.168.1.1
+      - yang_name: assigned-number
+        id: true
+        example: 103
+  - yang_name: bgp/route-target/import/two-byte-as-rts/two-byte-as-rt
+    tf_name: bgp_route_target_import_two_byte_as_format
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: two-byte-as-number
+        tf_name: as_number
+        id: true
+        example: 65001
+      - yang_name: assigned-number
+        id: true
+        example: 103
+  - yang_name: bgp/route-target/import/four-byte-as-rts/four-byte-as-rt
+    tf_name: bgp_route_target_import_four_byte_as_format
+    type: List
+    attributes:
+      - yang_name: four-byte-as-number
+        tf_name: as_number
+        id: true
+        example: 65536
+      - yang_name: assigned-number
+        id: true
+        example: 103
   - yang_name: bgp/route-target/import/ipv4-address-rts/ipv4-address-rt
     tf_name: bgp_route_target_import_ipv4_address_format
     type: List
@@ -38,25 +101,25 @@ attributes:
     attributes:
       - yang_name: ipv4-address
         id: true
-        example: 1.1.1.1
+        example: 192.168.1.1
       - yang_name: assigned-number
         id: true
-        example: 1
+        example: 103
   - yang_name: bgp/route-target/export/two-byte-as-rts/two-byte-as-rt
     tf_name: bgp_route_target_export_two_byte_as_format
     type: List
+    exclude_test: true
     attributes:
       - yang_name: two-byte-as-number
         tf_name: as_number
         id: true
-        example: 1
+        example: 65001
       - yang_name: assigned-number
         id: true
-        example: 1
+        example: 103
   - yang_name: bgp/route-target/export/four-byte-as-rts/four-byte-as-rt
     tf_name: bgp_route_target_export_four_byte_as_format
     type: List
-    exclude_test: true
     attributes:
       - yang_name: four-byte-as-number
         tf_name: as_number
@@ -64,7 +127,7 @@ attributes:
         example: 65536
       - yang_name: assigned-number
         id: true
-        example: 1
+        example: 103
   - yang_name: bgp/route-target/export/ipv4-address-rts/ipv4-address-rt
     tf_name: bgp_route_target_export_ipv4_address_format
     type: List
@@ -72,11 +135,58 @@ attributes:
     attributes:
       - yang_name: ipv4-address
         id: true
-        example: 1.1.1.1
+        example: 192.168.1.1
       - yang_name: assigned-number
         id: true
-        example: 1
+        example: 103
+  - yang_name: bgp/table-policy
+    exclude_test: true
+    example: EVI_POLICY_1
+  - yang_name: bgp/implicit-import-disable
+    exclude_test: true
+    example: true
+  - yang_name: bgp/route-policy/import
+    example: EVI_POLICY_1
+  - yang_name: bgp/route-policy/export
+    example: EVI_POLICY_1
+  - yang_name: preferred-nexthop/lowest-ip
+    exclude_test: true
+    example: true
+  - yang_name: preferred-nexthop/highest-ip
+    exclude_test: true
+    example: true
+  - yang_name: preferred-nexthop/modulo
+    example: true
   - yang_name: advertise-mac
+    exclude_test: true
+    example: true
+  - yang_name: advertise-mac/bvi-mac
+    exclude_test: true
+    example: true
+  - yang_name: unknown-unicast-suppression
+    example: true
+  - yang_name: ignore-mtu-mismatch
+    example: true
+  - yang_name: ignore-mtu-mismatch/disable-deprecated
+    example: true
+  - yang_name: enforce-mtu-match
+    exclude_test: true
+    example: true
+  - yang_name: transmit-mtu-zero
+    example: true
+  - yang_name: transmit-mtu-zero/disable-deprecated
+    example: true
+  - yang_name: transmit-l2-mtu
+    exclude_test: true
+    example: true
+  - yang_name: re-origination-disable
+    example: true
+  - yang_name: etree
+    example: true
+  - yang_name: etree/rt-leaf
+    example: true
+  - yang_name: bvi-coupled-mode
+    exclude_test: true
     example: true
   - yang_name: locators/locator
     tf_name: locators
@@ -85,23 +195,36 @@ attributes:
       - yang_name: locator-name
         id: true
         example: LOC12
-        description: "EVI locator to use for EVPN SID allocation"
       - yang_name: usid/allocation/wide-local-id-block
         example: true
-        description: "Enable uSID wide function knob for the locator"
         exclude_test: true
 
 test_prerequisites:
+  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=EVI_POLICY_1]
+    attributes:
+      - name: route-policy-name
+        value: EVI_POLICY_1
+      - name: rpl-route-policy
+        value: "route-policy EVI_POLICY_1\\n  pass\\nend-policy\\n"
   - path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn
-  - path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn/segment-routing/srv6
-    dependencies: [0]
-  - path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn/segment-routing/srv6/locators/locator[locator-name=LOC1]
-    attributes:
-      - name: locator-name
-        value: LOC1
-    dependencies: [0,1]
-  - path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn/interface/interface[interface-name=GigabitEthernet0/0/0/1]
-    attributes:
-      - name: ethernet-segment/identifier/type/zero/esi
-        value: 01.02.03.04.05.06.07.08.09
-    dependencies: [0,1,2]
+
+# test_prerequisites:
+#   - path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn
+#   - path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn/segment-routing/srv6
+#     dependencies: [0]
+#   - path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn/segment-routing/srv6/locators/locator[locator-name=LOC1]
+#     attributes:
+#       - name: locator-name
+#         value: LOC1
+#     dependencies: [1]
+#   - path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn/interface/interface[interface-name=GigabitEthernet0/0/0/1]
+#     attributes:
+#       - name: ethernet-segment/identifier/type/zero/esi
+#         value: 01.02.03.04.05.06.07.08.09
+#     dependencies: [2]
+#   - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=EVI_POLICY_1]
+#     attributes:
+#       - name: route-policy-name
+#         value: EVI_POLICY_1
+#       - name: rpl-route-policy
+#         value: "route-policy EVI_POLICY_1\\n  pass\\nend-policy\\n"

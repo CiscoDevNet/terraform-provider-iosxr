@@ -1,8 +1,7 @@
 ---
 name: AAA Authentication
 path: Cisco-IOS-XR-um-aaa-cfg:/aaa/authentication
-doc_category: System
-default_delete_attributes: true
+doc_category: AAA
 test_tags: [AAA]
 attributes:
   - yang_name: login/authentication-list
@@ -98,6 +97,10 @@ attributes:
         example: AAA4
 
 test_prerequisites:
+  - path: Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group[server-group-name=AAA2]
+    attributes:
+      - name: server-group-name
+        value: AAA2
   - path: Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group[server-group-name=AAA3]
     attributes:
       - name: server-group-name

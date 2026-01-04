@@ -28,7 +28,8 @@ attributes:
     example: true
   - yang_name: multipath/include/locations/location
     tf_name: multipath_locations
-    test_tags: [NCS, C8000, XRV9K]
+    test_tags: [XRV9K, NCS]
+    include_example: true
     type: List
     attributes:
       - yang_name: location-id

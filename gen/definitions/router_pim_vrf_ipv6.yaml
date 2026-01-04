@@ -1,7 +1,7 @@
 ---
 name: Router PIM VRF IPv6
 path: Cisco-IOS-XR-um-router-pim-cfg:/router/pim/vrfs/vrf[vrf-name=%s]/address-family/ipv6
-doc_category: PIM
+doc_category: Multicast
 attributes:
   - yang_name: vrf-name
     reference: true
@@ -20,6 +20,7 @@ attributes:
   - yang_name: rp-addresses/bidir/rp-address
     tf_name: rp_addresses_bidir
     test_tags: [XRV9K, XRD, NCS]
+    include_example: true
     type: List
     attributes:
       - yang_name: address
@@ -252,14 +253,17 @@ attributes:
       - yang_name: bidir/group-list
         tf_name: bidir_group_list
         test_tags: [XRV9K, XRD, NCS]
+        include_example: true
         example: "BSR_RP_ACL_V6"
       - yang_name: bidir/priority
         tf_name: bidir_priority
         test_tags: [XRV9K, XRD, NCS]
+        include_example: true
         example: 192
       - yang_name: bidir/interval
         tf_name: bidir_interval
         test_tags: [XRV9K, XRD, NCS]
+        include_example: true
         example: 60
   - yang_name: bsr/relay/vrfs/vrf
     tf_name: bsr_relay_vrfs
@@ -326,7 +330,9 @@ test_prerequisites:
                 value: PIM_POLICY
               - name: rpl-route-policy
                 value: "route-policy PIM_POLICY\\n  pass\\nend-policy\\n"
+  - path: Cisco-IOS-XR-um-router-pim-cfg:/router/pim
   - path: Cisco-IOS-XR-um-router-pim-cfg:/router/pim/vrfs/vrf[vrf-name=VRF1]
     attributes:
       - name: vrf-name
         value: VRF1
+    dependencies: [1]

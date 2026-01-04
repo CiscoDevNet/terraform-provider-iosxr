@@ -1,0 +1,115 @@
+---
+name: RSVP
+path: Cisco-IOS-XR-um-rsvp-cfg:/rsvp
+doc_category: MPLS
+attributes:
+  - yang_name: signalling/graceful-restart
+    minimum_test_value: true
+    example: true
+  - yang_name: signalling/graceful-restart-lsp-type
+    tf_name: signalling_graceful_restart_lsp_ctype
+    example: true
+  - yang_name: signalling/graceful-restart-recovery-time
+    example: 300
+  - yang_name: signalling/graceful-restart-restart-time
+    example: 220
+  - yang_name: signalling/hello/graceful-restart/refresh/interval
+    example: 3000
+  - yang_name: signalling/hello/graceful-restart/refresh/misses
+    example: 5
+  - yang_name: signalling/event-per-pulse
+    example: 60
+  - yang_name: signalling/prefix-filtering/access-list
+    tf_name: signalling_prefix_filtering_acl
+    example: ACL1
+  - yang_name: signalling/prefix-filtering/default-deny-action/drop
+    example: true
+  - yang_name: signalling/message-bundle/disable
+    example: true
+  - yang_name: signalling/nodeid-subobject/disable
+    example: true
+  - yang_name: signalling/patherr/state-removal/disable
+    example: true
+  - yang_name: signalling/checksum/disable
+    example: true
+  - yang_name: signalling/out-of-band/vrf
+    tf_name: signalling_oob_vrf
+    example: VRF1
+  - yang_name: authentication/key-source/key-chain
+    tf_name: authentication_key_chain
+    example: KEY1
+  - yang_name: authentication/window-size
+    example: 32
+  - yang_name: authentication/life-time
+    example: 60
+  - yang_name: authentication/retransmit
+    example: 120
+  - yang_name: neighbors/neighbor
+    tf_name: neighbors
+    type: List
+    attributes:
+      - yang_name: neighbor-address
+        tf_name: address
+        id: true
+        example: 192.168.1.1
+      - yang_name: authentication/key-source/key-chain
+        tf_name: authentication_key_chain
+        example: KEY1
+      - yang_name: authentication/window-size
+        example: 32
+      - yang_name: authentication/life-time
+        example: 60
+  - yang_name: bandwidth/mam/percentage/max-reservable/max-reservable-bandwidth
+    tf_name: bandwidth_mam_percentage_max_reservable_bandwidth
+    optional: true
+    delete_parent: true
+    example: 10000
+  - yang_name: bandwidth/mam/percentage/max-reservable/bc0
+    tf_name: bandwidth_mam_percentage_max_reservable_bc0
+    delete_parent: true
+    example: 2000
+  - yang_name: bandwidth/mam/percentage/max-reservable/bc1
+    tf_name: bandwidth_mam_percentage_max_reservable_bc1
+    delete_parent: true
+    example: 2000
+  - yang_name: bandwidth/rdm/percentage/max-reservable-bc0/bc0
+    tf_name: bandwidth_rdm_percentage_max_reservable_bc0
+    optional: true
+    delete_parent: true
+    example: 10000
+  - yang_name: bandwidth/rdm/percentage/max-reservable-bc0/bc1
+    tf_name: bandwidth_rdm_percentage_max_reservable_bc1
+    delete_parent: true
+    example: 2000
+  - yang_name: latency/threshold
+    example: 120
+  - yang_name: logging/events/nsr
+    example: true
+  - yang_name: logging/events/issu
+    example: true
+  - yang_name: ltrace-buffer/multiplier/multiplier-factor
+    tf_name: ltrace_buffer_multiplier
+    optional: true
+    delete_parent: true
+    example: 3
+  - yang_name: ltrace-buffer/multiplier/rare
+    delete_parent: true
+    example: true
+  - yang_name: ltrace-buffer/multiplier/common
+    delete_parent: true
+    example: true
+  - yang_name: ltrace-buffer/multiplier/sig
+    delete_parent: true
+    example: true
+  - yang_name: ltrace-buffer/multiplier/sig-err
+    delete_parent: true
+    example: true
+  - yang_name: ltrace-buffer/multiplier/intf
+    delete_parent: true
+    example: true
+  - yang_name: ltrace-buffer/multiplier/dbg-err
+    delete_parent: true
+    example: true
+  - yang_name: ltrace-buffer/multiplier/sync
+    delete_parent: true
+    example: true

@@ -1,7 +1,7 @@
 ---
 name: Performance Measurement Delay Profile
 path: Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement/delay-profile
-doc_category: System
+doc_category: Performance Monitoring
 attributes:
   - yang_name: interfaces/default
     tf_name: interfaces_default

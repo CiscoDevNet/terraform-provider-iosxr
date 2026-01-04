@@ -5,24 +5,86 @@ doc_category: OSPF
 attributes:
   - yang_name: process-name
     example: OSPF1
+  - yang_name: mpls/traffic-eng/router-id/ip-address
+    tf_name: mpls_traffic_eng_router_id_ipv4_address
+    example: 10.1.1.1
+  - yang_name: mpls/traffic-eng/router-id/interface
+    tf_name: mpls_traffic_eng_router_id_interface_name
+    exclude_test: true
+    example: Loopback0
+  - yang_name: mpls/traffic-eng/multicast-intact
+    example: true
+  - yang_name: mpls/traffic-eng/autoroute-exclude/route-policy
+    tf_name: mpls_traffic_eng_autoroute_exclude_route_policy
+    example: "ROUTE_POLICY_1"
+  - yang_name: mpls/traffic-eng/igp-intact
+    example: true
+  - yang_name: mpls/traffic-eng/ldp-sync-update
+    example: true
   - yang_name: mpls/ldp/sync
     example: false
+  - yang_name: mpls/ldp/sync-igp-shortcuts
+    example: false
+  - yang_name: mpls/ldp/auto-config
+    example: true
+  - yang_name: cost
+    example: 5000
+  - yang_name: cost-fallback/anomaly/delay/igp-metric/increment
+    exclude_test: true
+    example: 100
+  - yang_name: cost-fallback/anomaly/delay/igp-metric/multiplier
+    exclude_test: true
+    example: 2
+  - yang_name: cost-fallback/anomaly/delay/igp-metric/value
+    example: 500
+  - yang_name: cost-fallback/anomaly/delay/te-metric/increment
+    exclude_test: true
+    example: 200
+  - yang_name: cost-fallback/anomaly/delay/te-metric/multiplier
+    exclude_test: true
+    example: 3
+  - yang_name: cost-fallback/anomaly/delay/te-metric/value
+    example: 600
   - yang_name: hello-interval
     example: 10
   - yang_name: dead-interval
     example: 40
   - yang_name: priority
     example: 10
+  - yang_name: retransmit-interval
+    example: 1000
+  - yang_name: transmit-delay
+    example: 100
+  - yang_name: flood-reduction/enable
+    example: true
+  - yang_name: flood-reduction/disable
+    exclude_test: true
+    example: false
+  - yang_name: demand-circuit/enable
+    example: true
+  - yang_name: demand-circuit/disable
+    exclude_test: true
+    example: false
   - yang_name: mtu-ignore/enable
     example: true
   - yang_name: mtu-ignore/disable
-    exclude_example: true
+    exclude_test: true
+    example: false
+  - yang_name: database-filter/all/out/enable
+    example: true
+  - yang_name: database-filter/all/out/disable
+    exclude_test: true
     example: false
   - yang_name: passive/enable
-    exclude_example: true
+    exclude_test: true
     example: false
   - yang_name: passive/disable
     example: true
+  - yang_name: log/adjacency/changes/detail
+    example: true
+  - yang_name: log/adjacency/changes/disable
+    exclude_test: true
+    example: false
   - yang_name: router-id
     example: 10.11.12.13
   - yang_name: redistribute/connected
@@ -32,6 +94,19 @@ attributes:
     example: 1
   - yang_name: redistribute/connected/metric-type
     example: 1
+  - yang_name: redistribute/connected/route-policy
+    tf_name: redistribute_connected_route_policy
+    example: "ROUTE_POLICY_1"
+  - yang_name: redistribute/connected/metric/default-metric
+    tf_name: redistribute_connected_metric
+    example: 100
+  - yang_name: redistribute/connected/metric/use-rib-metric
+    exclude_test: true
+    example: false
+  - yang_name: redistribute/connected/lsa-type/summary
+    example: true
+  - yang_name: redistribute/connected/nssa-only
+    example: true
   - yang_name: redistribute/static
     description: "Redistribute static routes"
     example: true
@@ -39,34 +114,19 @@ attributes:
     example: 2
   - yang_name: redistribute/static/metric-type
     example: 1
-  - yang_name: bfd/fast-detect
+  - yang_name: redistribute/static/route-policy
+    tf_name: redistribute_static_route_policy
+    example: "ROUTE_POLICY_1"
+  - yang_name: redistribute/static/metric/default-metric
+    tf_name: redistribute_static_metric
+    exclude_test: true
+    example: 100
+  - yang_name: redistribute/static/metric/use-rib-metric
     example: true
-  - yang_name: bfd/minimum-interval
-    example: 300
-  - yang_name: bfd/multiplier
-    example: 3
-  - yang_name: default-information/originate
-    exclude_example: true
+  - yang_name: redistribute/static/lsa-type/summary
     example: true
-  - yang_name: default-information/originate/always
+  - yang_name: redistribute/static/nssa-only
     example: true
-  - yang_name: default-information/originate/metric-type
-    example: 1
-  - yang_name: auto-cost/reference-bandwidth
-    example: 100000
-  - yang_name: auto-cost/disable
-    example: false
-  - yang_name: segment-routing/mpls
-    example: true
-  - yang_name: segment-routing/sr-prefer
-    example: true
-  - yang_name: areas/area
-    tf_name: areas
-    type: List
-    attributes:
-      - yang_name: area-id
-        id: true
-        example: 0
   - yang_name: redistribute/bgp/as
     tf_name: redistribute_bgp
     description: "Redistribute BGP routes"
@@ -79,6 +139,20 @@ attributes:
         example: 3
       - yang_name: metric-type
         example: 1
+      - yang_name: route-policy
+        example: "ROUTE_POLICY_1"
+      - yang_name: preserve-med
+        example: true
+      - yang_name: metric/default-metric
+        tf_name: metric
+        example: 100
+      - yang_name: metric/use-rib-metric
+        exclude_test: true
+        example: false
+      - yang_name: lsa-type/summary
+        example: true
+      - yang_name: nssa-only
+        example: true
   - yang_name: redistribute/isis
     tf_name: redistribute_isis
     description: "Redistribute ISIS routes"
@@ -88,15 +162,29 @@ attributes:
         id: true
         example: P1
       - yang_name: level-1
-        example: true
+        exclude_test: true
+        example: false
       - yang_name: level-2
+        exclude_test: true
         example: false
       - yang_name: level-1-2
-        example: false
+        example: true
       - yang_name: tag
         example: 3
       - yang_name: metric-type
         example: 1
+      - yang_name: route-policy
+        example: "ROUTE_POLICY_1"
+      - yang_name: metric/default-metric
+        tf_name: metric
+        example: 100
+      - yang_name: metric/use-rib-metric
+        exclude_test: true
+        example: false
+      - yang_name: lsa-type/summary
+        example: true
+      - yang_name: nssa-only
+        example: true
   - yang_name: redistribute/ospf
     tf_name: redistribute_ospf
     description: "Redistribute OSPF routes"
@@ -105,13 +193,783 @@ attributes:
       - yang_name: instance-name
         id: true
         example: OSPF2
-      - yang_name: match/internal
-        example: true
-      - yang_name: match/external
-        example: false
-      - yang_name: match/nssa-external
-        example: false
       - yang_name: tag
         example: 4
       - yang_name: metric-type
         example: 1
+      - yang_name: route-policy
+        example: "ROUTE_POLICY_1"
+      - yang_name: match/internal
+        example: true
+      - yang_name: match/external
+        exclude_test: true
+        example: false
+      - yang_name: match/external/one
+        exclude_test: true
+        example: false
+      - yang_name: match/external/two
+        example: true
+      - yang_name: match/nssa-external
+        exclude_test: true
+        example: true
+      - yang_name: match/nssa-external/one
+        exclude_test: true
+        example: true
+      - yang_name: match/nssa-external/two
+        example: true
+      - yang_name: metric/default-metric
+        tf_name: metric
+        example: 100
+      - yang_name: metric/use-rib-metric
+        exclude_test: true
+        example: true
+      - yang_name: lsa-type/summary
+        example: true
+      - yang_name: nssa-only
+        example: true
+  - yang_name: distribute-list/in/access-list
+    tf_name: distribute_list_in_acl
+    example: "ACL_1"
+  - yang_name: distribute-list/in/route-policy
+    exclude_test: true
+    example: "ROUTE_POLICY_1"
+  - yang_name: distribute-list/out/access-list
+    tf_name: distribute_list_out_acl
+    example: "ACL_1"
+  - yang_name: distribute-list/out/connected/access-list
+    tf_name: distribute_list_out_connected_acl
+    example: "ACL_1"
+  - yang_name: distribute-list/out/static/access-list
+    tf_name: distribute_list_out_static_acl
+    example: "ACL_1"
+  - yang_name: distribute-list/out/bgp/as
+    tf_name: distribute_list_out_bgp_as
+    example: "65001"
+  - yang_name: distribute-list/out/bgp/access-list
+    tf_name: distribute_list_out_bgp_acl
+    example: "ACL_1"
+  - yang_name: distribute-list/out/ospf/instance-name
+    tf_name: distribute_list_out_ospf_instance_name
+    example: "OSPF2"
+  - yang_name: distribute-list/out/ospf/access-list
+    tf_name: distribute_list_out_ospf_acl
+    example: "ACL_1"
+  - yang_name: packet-size
+    example: 1400
+  - yang_name: bfd/fast-detect
+    example: true
+  - yang_name: bfd/fast-detect/strict-mode
+    example: true
+  - yang_name: bfd/minimum-interval
+    example: 300
+  - yang_name: bfd/multiplier
+    example: 3
+  - yang_name: security/ttl
+    example: true
+  - yang_name: security/ttl/hops
+    example: 10
+  - yang_name: prefix-suppression/enable
+    tf_name: prefix_suppression
+    example: true
+  - yang_name: prefix-suppression/secondary-address/enable
+    tf_name: prefix_suppression_secondary_address
+    example: true
+  - yang_name: default-information/originate
+    exclude_test: true
+    example: true
+  - yang_name: default-information/originate/always
+    example: true
+  - yang_name: default-information/originate/metric
+    example: 100
+  - yang_name: default-information/originate/metric-type
+    example: 1
+  - yang_name: default-information/originate/route-policy
+    example: "ROUTE_POLICY_1"
+  - yang_name: default-metric
+    example: 1000
+  - yang_name: distance/administrative-distance/source-addresses/source-address
+    tf_name: distance_sources
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "192.168.1.0"
+      - yang_name: wildcard
+        id: true
+        example: "0.0.0.255"
+      - yang_name: distance
+        example: 100
+      - yang_name: access-list-name
+        tf_name: acl
+        example: "ACL_1"
+  - yang_name: distance/ospf/intra-area
+    example: 101
+  - yang_name: distance/ospf/inter-area
+    example: 102
+  - yang_name: distance/ospf/external
+    example: 103
+  - yang_name: auto-cost/reference-bandwidth
+    example: 100000
+  - yang_name: auto-cost/disable
+    example: false
+  - yang_name: ignore/lsa/mospf
+    example: true
+  - yang_name: capability/opaque/disable
+    exclude_test: true
+    example: true
+  - yang_name: capability/lls/disable
+    exclude_test: true
+    example: true
+  - yang_name: capability/type7/prefer
+    example: true
+  # max-metric
+  - yang_name: max-metric/router-lsa
+    example: true
+  - yang_name: max-metric/router-lsa/include-stub
+    delete_parent: true
+    example: true
+  - yang_name: max-metric/router-lsa/summary-lsa
+    tf_name: max_metric_router_lsa_summary_lsa
+    delete_parent: true
+    example: true
+  - yang_name: max-metric/router-lsa/summary-lsa/metric
+    tf_name: max_metric_router_lsa_summary_lsa_metric
+    example: 1000
+  - yang_name: max-metric/router-lsa/external-lsa
+    tf_name: max_metric_router_lsa_external_lsa
+    delete_parent: true
+    example: true
+  - yang_name: max-metric/router-lsa/external-lsa/metric
+    tf_name: max_metric_router_lsa_external_lsa_metric
+    example: 2000
+  # max-metric on-startup
+  - yang_name: max-metric/router-lsa-on-startup/originate-time
+    tf_name: max_metric_router_lsa_on_startup_time
+    example: 300
+  - yang_name: max-metric/router-lsa-on-startup/wait-for-bgp
+    tf_name: max_metric_router_lsa_on_startup_wait_for_bgp
+    exclude_test: true
+    example: true
+  - yang_name: max-metric/router-lsa-on-startup/include-stub
+    tf_name: max_metric_router_lsa_on_startup_include_stub
+    example: true
+  - yang_name: max-metric/router-lsa-on-startup/summary-lsa
+    tf_name: max_metric_router_lsa_on_startup_summary_lsa
+    example: true
+  - yang_name: max-metric/router-lsa-on-startup/summary-lsa/metric
+    tf_name: max_metric_router_lsa_on_startup_summary_lsa_metric
+    example: 1000
+  - yang_name: max-metric/router-lsa-on-startup/external-lsa
+    tf_name: max_metric_router_lsa_on_startup_external_lsa
+    example: true
+  - yang_name: max-metric/router-lsa-on-startup/external-lsa/metric
+    tf_name: max_metric_router_lsa_on_startup_external_lsa_metric
+    example: 2000
+  # max-metric on-switchover
+  - yang_name: max-metric/router-lsa-on-switchover/originate-time
+    tf_name: max_metric_router_lsa_on_switchover_time
+    example: 300
+  - yang_name: max-metric/router-lsa-on-switchover/wait-for-bgp
+    tf_name: max_metric_router_lsa_on_switchover_wait_for_bgp
+    exclude_test: true
+    example: true
+  - yang_name: max-metric/router-lsa-on-switchover/include-stub
+    tf_name: max_metric_router_lsa_on_switchover_include_stub
+    example: true
+  - yang_name: max-metric/router-lsa-on-switchover/summary-lsa
+    tf_name: max_metric_router_lsa_on_switchover_summary_lsa
+    example: true
+  - yang_name: max-metric/router-lsa-on-switchover/summary-lsa/metric
+    tf_name: max_metric_router_lsa_on_switchover_summary_lsa_metric
+    example: 1000
+  - yang_name: max-metric/router-lsa-on-switchover/external-lsa
+    tf_name: max_metric_router_lsa_on_switchover_external_lsa
+    example: true
+  - yang_name: max-metric/router-lsa-on-switchover/external-lsa/metric
+    tf_name: max_metric_router_lsa_on_switchover_external_lsa_metric
+    example: 2000
+  # max-metric on-proc-restart
+  - yang_name: max-metric/router-lsa-on-proc-restart/originate-time
+    tf_name: max_metric_router_lsa_on_proc_restart_time
+    example: 300
+  - yang_name: max-metric/router-lsa-on-proc-restart/wait-for-bgp
+    tf_name: max_metric_router_lsa_on_proc_restart_wait_for_bgp
+    exclude_test: true
+    example: true
+  - yang_name: max-metric/router-lsa-on-proc-restart/include-stub
+    tf_name: max_metric_router_lsa_on_proc_restart_include_stub
+    example: true
+  - yang_name: max-metric/router-lsa-on-proc-restart/summary-lsa
+    tf_name: max_metric_router_lsa_on_proc_restart_summary_lsa
+    example: true
+  - yang_name: max-metric/router-lsa-on-proc-restart/summary-lsa/metric
+    tf_name: max_metric_router_lsa_on_proc_restart_summary_lsa_metric
+    example: 1000
+  - yang_name: max-metric/router-lsa-on-proc-restart/external-lsa
+    tf_name: max_metric_router_lsa_on_proc_restart_external_lsa
+    example: true
+  - yang_name: max-metric/router-lsa-on-proc-restart/external-lsa/metric
+    tf_name: max_metric_router_lsa_on_proc_restart_external_lsa_metric
+    example: 2000
+  - yang_name: max-lsa/max-lsa
+    tf_name: max_lsa
+    optional: true
+    delete_parent: true
+    example: 20000
+  - yang_name: max-lsa/threshold
+    delete_parent: true
+    example: 75
+  - yang_name: max-lsa/warning-only
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: max-lsa/ignore-time
+    delete_parent: true
+    example: 60
+  - yang_name: max-lsa/ignore-count
+    delete_parent: true
+    example: 10
+  - yang_name: max-lsa/reset-time
+    delete_parent: true
+    example: 120
+  - yang_name: timers/throttle/spf/initial-delay
+    tf_name: timers_throttle_spf_initial_delay
+    optional: true
+    delete_parent: true
+    example: 500
+  - yang_name: timers/throttle/spf/second-delay
+    tf_name: timers_throttle_spf_second_delay
+    optional: true
+    delete_parent: true
+    example: 1000
+  - yang_name: timers/throttle/spf/maximum-delay
+    tf_name: timers_throttle_spf_maximum_delay
+    optional: true
+    delete_parent: true
+    example: 2000
+  - yang_name: timers/throttle/lsa/all/initial-delay
+    tf_name: timers_throttle_lsa_all_initial_delay
+    optional: true
+    delete_parent: true
+    example: 500
+  - yang_name: timers/throttle/lsa/all/minimum-delay
+    tf_name: timers_throttle_lsa_all_minimum_delay
+    optional: true
+    delete_parent: true
+    example: 1000
+  - yang_name: timers/throttle/lsa/all/maximum-delay
+    tf_name: timers_throttle_lsa_all_maximum_delay
+    optional: true
+    delete_parent: true
+    example: 2000
+  - yang_name: timers/throttle/fast-reroute
+    example: 1000
+  - yang_name: timers/lsa/group-pacing
+    example: 60
+  - yang_name: timers/lsa/min-arrival
+    example: 60
+  - yang_name: timers/lsa/refresh
+    example: 2100
+  - yang_name: timers/pacing/flood
+    example: 10
+  - yang_name: timers/graceful-shutdown/initial/delay
+    example: 60
+  - yang_name: timers/graceful-shutdown/retain/routes
+    example: 60
+  - yang_name: nsf/interval
+    example: 120
+  - yang_name: nsf/lifetime
+    example: 300
+  - yang_name: nsf/flush-delay-time
+    example: 60
+  - yang_name: nsf/cisco
+    exclude_test: true
+    example: true
+  - yang_name: nsf/cisco/enforce/global
+    exclude_test: true
+    example: true
+  - yang_name: nsf/ietf
+    example: true
+  - yang_name: nsf/ietf-strict-lsa-checking
+    example: true
+  - yang_name: nsf/ietf-helper/disable
+    example: true
+  - yang_name: address-family/ipv4/unicast
+    example: true
+  - yang_name: maximum/interfaces
+    example: 500
+  - yang_name: maximum/paths
+    example: 16
+  - yang_name: maximum/redistributed-prefixes/prefixes
+    tf_name: maximum_redistributed_prefixes
+    optional: true
+    delete_parent: true
+    example: 1000
+  - yang_name: maximum/redistributed-prefixes/threshold
+    delete_parent: true
+    example: 75
+  - yang_name: maximum/redistributed-prefixes/warning-only
+    delete_parent: true
+    example: true
+  - yang_name: queue/limit/high
+    example: 1000
+  - yang_name: queue/limit/medium
+    example: 1000
+  - yang_name: queue/limit/low
+    example: 1000
+  - yang_name: queue/dispatch/incoming
+    example: 60
+  - yang_name: queue/dispatch/rate-limited-lsa
+    example: 60
+  - yang_name: queue/dispatch/flush-lsa
+    example: 120
+  - yang_name: queue/dispatch/spf-lsa-limit
+    example: 120
+  - yang_name: summary-prefixes/summary-prefix
+    tf_name: summary_prefixes
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "192.168.1.0"
+      - yang_name: mask
+        id: true
+        example: "255.255.255.0"
+      - yang_name: not-advertise
+        example: true
+      - yang_name: tag
+        exclude_test: true
+        example: 10
+  - yang_name: spf/prefix-priority/route-policy
+    example: "ROUTE_POLICY_1"
+  # fast-reroute/per-prefix
+  - yang_name: fast-reroute/per-prefix/enable
+    tf_name: fast_reroute_per_prefix
+    example: true
+  - yang_name: fast-reroute/per-prefix/priority-limit/critical
+    example: true
+    exclude_test: true
+  - yang_name: fast-reroute/per-prefix/priority-limit/high
+    example: true
+    exclude_test: true
+  - yang_name: fast-reroute/per-prefix/priority-limit/medium
+    example: true
+  - yang_name: fast-reroute/per-prefix/tiebreaker/downstream/index
+    tf_name: fast_reroute_per_prefix_tiebreaker_downstream_index
+    example: 10
+  - yang_name: fast-reroute/per-prefix/tiebreaker/downstream/disable
+    tf_name: fast_reroute_per_prefix_tiebreaker_downstream_disable
+    example: true
+    exclude_test: true
+  - yang_name: fast-reroute/per-prefix/tiebreaker/lc-disjoint/index
+    tf_name: fast_reroute_per_prefix_tiebreaker_lc_disjoint_index
+    example: 20
+  - yang_name: fast-reroute/per-prefix/tiebreaker/lc-disjoint/disable
+    tf_name: fast_reroute_per_prefix_tiebreaker_lc_disjoint_disable
+    example: true
+    exclude_test: true
+  - yang_name: fast-reroute/per-prefix/tiebreaker/lowest-backup-metric/index
+    tf_name: fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_index
+    example: 30
+  - yang_name: fast-reroute/per-prefix/tiebreaker/lowest-backup-metric/disable
+    tf_name: fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_disable
+    example: true
+    exclude_test: true
+  - yang_name: fast-reroute/per-prefix/tiebreaker/node-protecting/index
+    tf_name: fast_reroute_per_prefix_tiebreaker_node_protecting_index
+    example: 40
+  - yang_name: fast-reroute/per-prefix/tiebreaker/node-protecting/disable
+    tf_name: fast_reroute_per_prefix_tiebreaker_node_protecting_disable
+    example: true
+    exclude_test: true
+  - yang_name: fast-reroute/per-prefix/tiebreaker/primary-path/index
+    tf_name: fast_reroute_per_prefix_tiebreaker_primary_path_index
+    example: 50
+  - yang_name: fast-reroute/per-prefix/tiebreaker/primary-path/disable
+    tf_name: fast_reroute_per_prefix_tiebreaker_primary_path_disable
+    example: true
+    exclude_test: true
+  - yang_name: fast-reroute/per-prefix/tiebreaker/secondary-path/index
+    tf_name: fast_reroute_per_prefix_tiebreaker_secondary_path_index
+    example: 60
+  - yang_name: fast-reroute/per-prefix/tiebreaker/secondary-path/disable
+    tf_name: fast_reroute_per_prefix_tiebreaker_secondary_path_disable
+    example: true
+    exclude_test: true
+  - yang_name: fast-reroute/per-prefix/tiebreaker/interface-disjoint/index
+    tf_name: fast_reroute_per_prefix_tiebreaker_interface_disjoint_index
+    example: 70
+  - yang_name: fast-reroute/per-prefix/tiebreaker/interface-disjoint/disable
+    tf_name: fast_reroute_per_prefix_tiebreaker_interface_disjoint_disable
+    example: true
+    exclude_test: true
+  - yang_name: fast-reroute/per-prefix/tiebreaker/srlg-disjoint/index
+    tf_name: fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index
+    example: 80
+  - yang_name: fast-reroute/per-prefix/tiebreaker/srlg-disjoint/disable
+    tf_name: fast_reroute_per_prefix_tiebreaker_srlg_disjoint_disable
+    example: true
+    exclude_test: true
+  - yang_name: fast-reroute/per-prefix/load-sharing/disable
+    tf_name: fast_reroute_per_prefix_load_sharing_disable
+    example: true
+  - yang_name: fast-reroute/per-prefix/srlg-protection/weighted-global
+    tf_name: fast_reroute_per_prefix_srlg_protection_weighted_global
+    example: true
+  - yang_name: fast-reroute/per-prefix/exclude/interfaces/interface
+    tf_name: fast_reroute_per_prefix_exclude_interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: GigabitEthernet0/0/0/1
+  - yang_name: fast-reroute/per-prefix/lfa-candidate/interfaces/interface
+    tf_name: fast_reroute_per_prefix_lfa_candidate_interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: GigabitEthernet0/0/0/2
+  - yang_name: fast-reroute/per-prefix/use-candidate-only/enable
+    tf_name: fast_reroute_per_prefix_use_candidate_only_enable
+    example: true
+  - yang_name: fast-reroute/per-prefix/use-candidate-only/disable
+    tf_name: fast_reroute_per_prefix_use_candidate_only_disable
+    exclude_test: true
+    example: true
+  - yang_name: fast-reroute/per-prefix/remote-lfa/tunnel/mpls-ldp
+    tf_name: fast_reroute_per_prefix_remote_lfa_tunnel_mpls_ldp
+    example: true
+  - yang_name: fast-reroute/per-prefix/remote-lfa/disable
+    tf_name: fast_reroute_per_prefix_remote_lfa_disable
+    exclude_test: true
+    example: true
+  - yang_name: fast-reroute/per-prefix/remote-lfa/maximum-cost
+    tf_name: fast_reroute_per_prefix_remote_lfa_maximum_cost
+    example: 500
+  - yang_name: fast-reroute/per-prefix/ti-lfa/enable
+    tf_name: fast_reroute_per_prefix_ti_lfa_enable
+    example: true
+  - yang_name: fast-reroute/per-prefix/ti-lfa/disable
+    tf_name: fast_reroute_per_prefix_ti_lfa_disable
+    exclude_test: true
+    example: true
+  # fast-reroute/per-link
+  - yang_name: fast-reroute/per-link/enable
+    tf_name: fast_reroute_per_link
+    exclude_test: true
+    example: true
+  - yang_name: fast-reroute/per-link/priority-limit/critical
+    exclude_test: true
+    example: true
+  - yang_name: fast-reroute/per-link/priority-limit/high
+    exclude_test: true
+    example: true
+  - yang_name: fast-reroute/per-link/priority-limit/medium
+    example: true
+  - yang_name: fast-reroute/per-link/exclude/interfaces/interface
+    tf_name: fast_reroute_per_link_exclude_interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: GigabitEthernet0/0/0/3
+  - yang_name: fast-reroute/per-link/lfa-candidate/interfaces/interface
+    tf_name: fast_reroute_per_link_lfa_candidate_interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: GigabitEthernet0/0/0/4
+  - yang_name: fast-reroute/per-link/use-candidate-only/enable
+    tf_name: fast_reroute_per_link_use_candidate_only_enable
+    example: true
+  - yang_name: fast-reroute/per-link/use-candidate-only/disable
+    tf_name: fast_reroute_per_link_use_candidate_only_disable
+    exclude_test: true
+    example: true
+  - yang_name: fast-reroute/disable
+    exclude_test: true
+    example: true
+  - yang_name: loopback/stub-network/enable
+    example: true
+  - yang_name: loopback/stub-network/disable
+    exclude_test: true
+    example: false
+  - yang_name: link-down/fast-detect
+    example: true
+  - yang_name: weight
+    example: 1000
+  - yang_name: delay/normalize/interval
+    delete_parent: true
+    minimum_test_value: 2000
+    example: 2000
+  - yang_name: delay/normalize/offset
+    default_value: 0
+    example: 0
+  - yang_name: microloop/avoidance
+    example: true
+  - yang_name: microloop/avoidance/protected
+    exclude_test: true
+    example: true
+  - yang_name: microloop/avoidance/segment-routing
+    example: true
+  - yang_name: microloop/avoidance-rib-update-delay
+    example: 3000
+  - yang_name: segment-routing/mpls
+    example: true
+  - yang_name: segment-routing/disable
+    exclude_test: true
+    example: false
+  - yang_name: segment-routing/global-block/minimum-mpls-label
+    tf_name: segment_routing_global_block_lower_bound
+    optional: true
+    delete_parent: true
+    example: 16000
+  - yang_name: segment-routing/global-block/maximum-mpls-label
+    tf_name: segment_routing_global_block_upper_bound
+    optional: true
+    delete_parent: true
+    example: 32000
+  - yang_name: segment-routing/prefix-sid-map/advertise-local
+    example: true
+  - yang_name: segment-routing/prefix-sid-map/receive/disable
+    example: true
+  - yang_name: segment-routing/sr-prefer
+    example: true
+  - yang_name: segment-routing/sr-prefer/prefix-list
+    example: "PREFIX_LIST_1"
+  - yang_name: segment-routing/forwarding/mpls
+    example: true
+  - yang_name: segment-routing/forwarding/disable
+    exclude_test: true
+    example: false
+  - yang_name: affinity-map/affinity-attributes/affinity-attribute
+    tf_name: affinity_maps
+    type: List
+    attributes:
+      - yang_name: affinity-attribute-name
+        tf_name: affinity_name
+        id: true
+        example: "AFFINITY_1"
+      - yang_name: bit-position
+        example: 1
+  - yang_name: flex-algos/flex-algo
+    tf_name: flex_algos
+    type: List
+    attributes:
+      - yang_name: algorithm-number
+        tf_name: number
+        id: true
+        example: 128
+      - yang_name: priority
+        example: 10
+      - yang_name: microloop/avoidance/disable
+        example: true
+      - yang_name: prefix-metric
+        example: true
+      - yang_name: metric-type/delay
+        tf_name: metric_type_delay
+        example: true
+      - yang_name: metric-type/te-metric
+        tf_name: metric_type_te_metric
+        exclude_test: true
+        example: true
+      - yang_name: advertise-definition
+        example: true
+      - yang_name: fast-reroute/disable
+        example: true
+      - yang_name: affinity/exclude-any/affinity-attributes/affinity-attribute
+        tf_name: affinity_exclude_any
+        type: List
+        attributes:
+          - yang_name: affinity-attribute-name
+            tf_name: affinity_name
+            id: true
+            example: "AFFINITY-1"
+      - yang_name: affinity/include-any/affinity-attributes/affinity-attribute
+        tf_name: affinity_include_any
+        type: List
+        attributes:
+          - yang_name: affinity-attribute-name
+            tf_name: affinity_name
+            id: true
+            example: "AFFINITY-1"
+      - yang_name: affinity/include-all/affinity-attributes/affinity-attribute
+        tf_name: affinity_include_all
+        type: List
+        attributes:
+          - yang_name: affinity-attribute-name
+            tf_name: affinity_name
+            id: true
+            example: "AFFINITY-1"
+      - yang_name: srlg/exclude-any/srlgs/srlg
+        tf_name: srlg_exclude_any
+        type: List
+        attributes:
+          - yang_name: srlg-name
+            id: true
+            example: "SRLG-EXCLUDE-1"
+  - yang_name: authentication-key/encrypted
+    tf_name: authentication_key_encrypted
+    sensitive: true
+    write_only: true
+    example: "110A1016141D4B"
+  - yang_name: message-digest-keys/message-digest-key
+    tf_name: message_digest_keys
+    type: List
+    attributes:
+      - yang_name: message-digest-key-id
+        tf_name: key_id
+        id: true
+        example: 1
+      - yang_name: md5/encrypted
+        tf_name: md5_encrypted
+        sensitive: true
+        write_only: true
+        example: "01100F175804"
+  - yang_name: authentication
+    example: true
+  - yang_name: authentication/message-digest
+    example: true
+  - yang_name: authentication/keychain-name
+    example: "KEY1"
+  - yang_name: authentication/null
+    exclude_test: true
+    example: true
+  - yang_name: network/broadcast
+    exclude_test: true
+    example: true
+  - yang_name: network/non-broadcast
+    exclude_test: true
+    example: true
+  - yang_name: network/point-to-point
+    example: true
+  - yang_name: network/point-to-multipoint
+    exclude_test: true
+    example: true
+  - yang_name: external-out/enable
+    example: true
+  - yang_name: external-out/disable
+    exclude_test: true
+    example: false
+  - yang_name: summary-in/enable
+    example: true
+  - yang_name: summary-in/disable
+    exclude_test: true
+    example: false
+  - yang_name: adjacency/stagger/disable
+    exclude_test: true
+    example: true
+  - yang_name: adjacency/stagger/initial-number-of-neighbors
+    tf_name: adjacency_stagger_initial_neighbors
+    example: 10
+  - yang_name: adjacency/stagger/maximum-simultaneous-neighbors
+    tf_name: adjacency_stagger_simultaneous_neighbors
+    example: 20
+  - yang_name: snmp/context
+    example: "CONTEXT1"
+  - yang_name: snmp/trap/rate-limit
+    example: 30
+  - yang_name: snmp/trap/max-number-of-traps
+    tf_name: snmp_trap_rate_limit_max
+    example: 100
+  - yang_name: monitor-convergence
+    example: true
+  - yang_name: monitor-convergence/prefix-list
+    example: "PREFIX_LIST_1"
+  - yang_name: monitor-convergence/track-summary-routes
+    example: true
+  - yang_name: monitor-convergence/track-external-routes
+    example: true
+  - yang_name: monitor-convergence/track-ip-frr
+    example: true
+  - yang_name: ucmp/enable
+    tf_name: ucmp
+    example: true
+  - yang_name: ucmp/enable/variance
+    tf_name: ucmp_variance
+    default_value: 200
+    example: 200
+  - yang_name: ucmp/enable/prefix-list
+    tf_name: ucmp_prefix_list
+    example: "PREFIX_LIST_1"
+  - yang_name: ucmp/exclude/interfaces/interface
+    tf_name: ucmp_exclude_interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: "GigabitEthernet0/0/0/1"
+  - yang_name: ucmp/delay-interval
+    example: 2000
+  - yang_name: srlg/admin-weight
+    example: 10
+  - yang_name: srlg/names/name
+    tf_name: srlg_names
+    type: List
+    attributes:
+      - yang_name: srlg-name
+        id: true
+        example: "SRLG-1"
+      - yang_name: admin-weight
+        example: 5
+  - yang_name: max-external-lsa/max-external-lsa
+    tf_name: max_external_lsa
+    optional: true
+    delete_parent: true
+    example: 1000
+  - yang_name: max-external-lsa/threshold-value
+    tf_name: max_external_lsa_threshold
+    delete_parent: true
+    example: 75
+  - yang_name: max-external-lsa/suppress-neighbor
+    delete_parent: true
+    example: true
+  - yang_name: max-external-lsa/warning-only
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: exchange-timer/exchange-timer
+    tf_name: exchange_timer
+    optional: true
+    delete_parent: true
+    example: 60
+  - yang_name: exchange-timer/hold-time
+    delete_parent: true
+    example: 120
+  - yang_name: exchange-timer/recovery-count
+    delete_parent: true
+    example: 10
+  - yang_name: distribute/link-state
+    example: true
+  - yang_name: distribute/link-state/instance-id
+    example: 1
+  - yang_name: distribute/link-state/throttle
+    example: 60
+  - yang_name: distribute/link-state/excl-external
+    example: true
+  - yang_name: distribute/link-state/allow-prefix/route-policy
+    example: "ROUTE_POLICY_1"
+  - yang_name: distribute/link-state/follow-on
+    example: 1200
+  - yang_name: nsr
+    example: true
+  - yang_name: nsr/disable
+    exclude_test: true
+    example: true
+  - yang_name: protocol/shutdown
+    example: true
+  - yang_name: protocol/shutdown/host-mode
+    exclude_test: true
+    example: true
+  - yang_name: protocol/shutdown/on-reload
+    example: true
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]
+    attributes:
+      - name: route-policy-name
+        value: ROUTE_POLICY_1
+      - name: rpl-route-policy
+        value: "route-policy ROUTE_POLICY_1\\n  pass\\nend-policy\\n"

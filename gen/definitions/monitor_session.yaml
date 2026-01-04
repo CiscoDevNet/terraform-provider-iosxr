@@ -1,0 +1,123 @@
+---
+name: Monitor Session
+path: Cisco-IOS-XR-um-monitor-session-cfg:/monitor-sessions
+doc_category: System
+test_tags: [NCS, C8000]
+no_delete_attributes: true
+attributes:
+  - yang_name: monitor-session
+    tf_name: monitor_sessions
+    test_tags: [NCS, C8000]
+    include_example: true
+    type: List
+    attributes:
+      - yang_name: session-name
+        id: true
+        minimum_test_value: '"SPAN1"'
+        example: "SPAN1"
+      - yang_name: traffic-type
+        minimum_test_value: '"ethernet"'
+        requires_replace: true
+        example: "ethernet"
+      - yang_name: destination/interface
+        delete_parent: true
+        example: GigabitEthernet0/0/0/1
+      - yang_name: destination/pseudowire
+        example: true
+        exclude_test: true
+      - yang_name: destination/file/size
+        exclude_test: true
+        example: 1024
+      - yang_name: destination/file/buffer-type/linear
+        exclude_test: true
+        example: true
+      - yang_name: destination/file/format/pcapng
+        exclude_test: true
+        example: true
+      - yang_name: destination/file/filter
+        exclude_test: true
+        example: "tcp port 80"
+      - yang_name: destination/file/always-on
+        exclude_test: true
+        example: true
+        # requires destination file
+      - yang_name: drops/packet-processing
+        exclude_test: true
+        example: true
+      - yang_name: drops/traffic-management
+        exclude_test: true
+        example: true
+      - yang_name: drops/rx
+        exclude_test: true
+        example: true
+      - yang_name: drops/tx
+        exclude_test: true
+        example: true
+      - yang_name: drops/filter
+        exclude_test: true
+        example: "udp port 53"
+      - yang_name: rx/interface
+        test_tags: [NCS]
+        exclude_test: true
+        example: GigabitEthernet0/0/0/1
+      - yang_name: rx/pseudowire
+        test_tags: [NCS]
+        exclude_test: true
+        example: true
+      - yang_name: tx/interface
+        test_tags: [NCS]
+        exclude_test: true
+        example: GigabitEthernet0/0/0/1
+      - yang_name: tx/pseudowire
+        test_tags: [NCS]
+        exclude_test: true
+        example: true
+      - yang_name: inject-interface
+        exclude_test: true
+        example: GigabitEthernet0/0/0/1
+      - yang_name: discard-class
+        example: 1
+      - yang_name: traffic-class
+        example: 5
+      - yang_name: mirror/first
+        example: 256
+      - yang_name: mirror/interval
+        exclude_test: true
+        example: 512
+      - yang_name: protocol-capture/rx
+        exclude_test: true
+        example: true
+      - yang_name: protocol-capture/tx
+        exclude_test: true
+        example: true
+      - yang_name: protocol-capture/filter
+        exclude_test: true
+        example: "arp"
+      - yang_name: rate-limit/rx
+        exclude_test: true
+        example: 1000000
+      - yang_name: rate-limit/tx
+        exclude_test: true
+        example: 2000000
+  - yang_name: router-id
+    minimum_test_value: "1"
+    example: 1
+  - yang_name: default-capture-disable
+    minimum_test_value: "true"
+    example: true
+  - yang_name: local-capture-capacity
+    tf_name: local_capture_capacity_size
+    exclude_test: true
+    example: 1
+  - yang_name: kb
+    tf_name: local_capture_unit_kb
+    exclude_test: true
+    example: true
+  - yang_name: mb
+    tf_name: local_capture_unit_mb
+    exclude_test: true
+    example: true
+  - yang_name: gb
+    tf_name: local_capture_unit_gb
+    exclude_test: true
+    example: true

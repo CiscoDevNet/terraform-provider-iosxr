@@ -1,7 +1,7 @@
 ---
 name: Performance Measurement Interface
 path: Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement/interfaces/interface[interface-name=%s]
-doc_category: System
+doc_category: Performance Monitoring
 attributes:
   - yang_name: interface-name
     example: GigabitEthernet0/0/0/1
@@ -29,13 +29,16 @@ attributes:
   - yang_name: path-tracing
     description: "Enable path-tracing"
     test_tags: [XRV9K, NCS, C8000]
+    include_example: true
     example: true
   - yang_name: path-tracing/interface-id
     test_tags: [XRV9K, NCS, C8000]
+    include_example: true
     example: 100
   - yang_name: path-tracing/timestamp/template/st0
     tf_name: path_tracing_timestamp_template_st0
     test_tags: [XRV9K]
+    include_example: true
     example: true
   - yang_name: path-tracing/timestamp/template/st1
     tf_name: path_tracing_timestamp_template_st1

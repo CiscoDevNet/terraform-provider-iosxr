@@ -188,6 +188,22 @@ var models = []string{
 	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-um-snmp-server-mroutemib-cfg.yang",
 	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg.yang",
 	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-um-logging-correlator-cfg.yang",
+	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-um-telemetry-model-driven-cfg.yang",
+	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-um-vty-pool-cfg.yang",
+	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-um-icmp-cfg.yang",
+	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-npu-hw-profile-cfg.yang",
+	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-um-macsec-cfg.yang",
+	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-um-ptp-cfg.yang",
+	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-um-frequency-synchronization-cfg.yang",
+	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-optics-speed-cfg.yang",
+	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-optics-driver-cfg.yang",
+	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-controller-optics-cfg.yang",
+	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-wanphy-ui-cfg.yang",
+	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-um-aaa-radius-server-cfg.yang",
+	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-um-rsvp-cfg.yang",
+	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-um-8000-hw-module-profile-cfg.yang",
+	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-um-evpn-host-cfg.yang",
+	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-8000-fib-platform-cfg.yang",
 }
 
 const (

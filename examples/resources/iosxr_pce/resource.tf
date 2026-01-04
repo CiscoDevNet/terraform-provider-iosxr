@@ -187,6 +187,53 @@ resource "iosxr_pce" "example" {
       ]
     }
   ]
+  srte_ipv4_peers = [
+    {
+      address = "100.100.100.26"
+      policies = [
+        {
+          policy_name                     = "PEER_POLICY1"
+          candidate_paths_append_sid_mpls = 16100
+          candidate_paths_preferences = [
+            {
+              preference_id               = 100
+              dynamic_mpls                = true
+              dynamic_metric_type_latency = true
+              dynamic_metric_sid_limit    = 5
+              explicit_segment_list_names = [
+                {
+                  segment_list_name = "SEGMENT_LIST_1"
+                }
+              ]
+              constraints_segments_sid_algorithm                  = 128
+              constraints_segments_protection_protected_preferred = true
+            }
+          ]
+          candidate_paths_affinity_include_any_colors = [
+            {
+              affinity_color_name = "COLOR_1"
+            }
+          ]
+          candidate_paths_affinity_include_all_colors = [
+            {
+              affinity_color_name = "COLOR_2"
+            }
+          ]
+          candidate_paths_affinity_exclude_colors = [
+            {
+              affinity_color_name = "COLOR_3"
+            }
+          ]
+          color                    = 100
+          end_point_ipv4           = "100.100.100.1"
+          binding_sid_mpls         = 24200
+          shutdown                 = false
+          profile_id               = 5
+          path_selection_protected = true
+        }
+      ]
+    }
+  ]
   srte_cspf_anycast_sid_inclusion = true
   srte_cspf_sr_native             = true
   srte_cspf_sr_native_force       = true
@@ -203,7 +250,7 @@ resource "iosxr_pce" "example" {
   srte_p2mp_policies = [
     {
       policy_name      = "P2MP_POLICY_1"
-      color            = 100
+      color            = 200
       endpoint_set     = "ENDPOINT_SET_1"
       source_ipv4      = "100.100.100.1"
       shutdown         = false

@@ -172,8 +172,8 @@ resource "iosxr_router_isis" "example" {
   ]
   affinity_maps = [
     {
-      name         = "22"
-      bit_position = 4
+      affinity_name = "22"
+      bit_position  = 4
     }
   ]
   ignore_lsp_errors_disable          = true
@@ -382,9 +382,9 @@ resource "iosxr_router_isis" "example" {
 
 Required:
 
+- `affinity_name` (String) Affinity attribute name
 - `bit_position` (Number) Bit position for affinity attribute value
   - Range: `0`-`255`
-- `name` (String) Affinity attribute name
 
 
 <a id="nestedatt--flex_algos"></a>

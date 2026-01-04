@@ -82,7 +82,6 @@ func TestAccIosxrL2VPN(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "pw_routing_bgp_rd_four_byte_as_assigned_number", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "snmp_mib_interface_format_external", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "snmp_mib_pseudowire_statistics", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "xconnect_groups.0.group_name", "P2P"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -199,9 +198,6 @@ func testAccIosxrL2VPNConfig_all() string {
 	config += `	pw_routing_bgp_rd_four_byte_as_assigned_number = 1` + "\n"
 	config += `	snmp_mib_interface_format_external = true` + "\n"
 	config += `	snmp_mib_pseudowire_statistics = true` + "\n"
-	config += `	xconnect_groups = [{` + "\n"
-	config += `		group_name = "P2P"` + "\n"
-	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

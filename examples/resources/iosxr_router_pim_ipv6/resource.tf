@@ -6,6 +6,13 @@ resource "iosxr_router_pim_ipv6" "example" {
       override    = true
     }
   ]
+  rp_addresses_bidir = [
+    {
+      address     = "2001:db8::2"
+      access_list = "BIDIR_ACL_V6"
+      override    = true
+    }
+  ]
   rp_static_deny                              = "DENY_ACL_V6"
   accept_register                             = "REGISTER_ACL_V6"
   suppress_data_registers                     = true
@@ -76,10 +83,13 @@ resource "iosxr_router_pim_ipv6" "example" {
   bsr_candidate_bsr_priority                  = 100
   bsr_candidate_rps = [
     {
-      address    = "2001:db8::13"
-      group_list = "BSR_RP_ACL_V6"
-      priority   = 192
-      interval   = 60
+      address          = "2001:db8::13"
+      group_list       = "BSR_RP_ACL_V6"
+      priority         = 192
+      interval         = 60
+      bidir_group_list = "BSR_RP_ACL_V6"
+      bidir_priority   = 192
+      bidir_interval   = 60
     }
   ]
   bsr_relay_vrfs = [

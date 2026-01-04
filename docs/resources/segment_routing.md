@@ -31,6 +31,7 @@ resource "iosxr_segment_routing" "example" {
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 - `enable` (Boolean) enable SR
+  - Default value: `true`
 - `global_block_lower_bound` (Number) SRGB Lower Bound
   - Range: `16000`-`1048574`
 - `global_block_upper_bound` (Number) SRGB Upper Bound

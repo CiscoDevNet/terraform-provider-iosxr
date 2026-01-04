@@ -291,18 +291,6 @@ func (d *L2VPNDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 				MarkdownDescription: "Enable MIB pseudowire statistics (for low scale, <16K PWs)",
 				Computed:            true,
 			},
-			"xconnect_groups": schema.ListNestedAttribute{
-				MarkdownDescription: "Specify the group the cross connects belong to",
-				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"group_name": schema.StringAttribute{
-							MarkdownDescription: "Specify the group the cross connects belong to",
-							Computed:            true,
-						},
-					},
-				},
-			},
 		},
 	}
 }

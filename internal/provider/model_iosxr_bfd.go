@@ -125,7 +125,7 @@ func (data BFD) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.EchoDisable.IsNull() && !data.EchoDisable.IsUnknown() {
 		if data.EchoDisable.ValueBool() {
-			body, _ = sjson.Set(body, "echo.disable", map[string]string{})
+			body, _ = sjson.Set(body, "echo.disable", []interface{}{nil})
 		}
 	}
 	if !data.EchoLatencyDetect.IsNull() && !data.EchoLatencyDetect.IsUnknown() {
@@ -141,7 +141,7 @@ func (data BFD) toBody(ctx context.Context) string {
 	}
 	if !data.EchoStartupValidateForce.IsNull() && !data.EchoStartupValidateForce.IsUnknown() {
 		if data.EchoStartupValidateForce.ValueBool() {
-			body, _ = sjson.Set(body, "echo.startup.validate.force", map[string]string{})
+			body, _ = sjson.Set(body, "echo.startup.validate.force", []interface{}{nil})
 		}
 	}
 	if !data.EchoIpv4Source.IsNull() && !data.EchoIpv4Source.IsUnknown() {
@@ -152,7 +152,7 @@ func (data BFD) toBody(ctx context.Context) string {
 	}
 	if !data.TrapSinglehopPreMapped.IsNull() && !data.TrapSinglehopPreMapped.IsUnknown() {
 		if data.TrapSinglehopPreMapped.ValueBool() {
-			body, _ = sjson.Set(body, "trap.singlehop.pre-mapped", map[string]string{})
+			body, _ = sjson.Set(body, "trap.singlehop.pre-mapped", []interface{}{nil})
 		}
 	}
 	if !data.MultihopTtlDropThreshold.IsNull() && !data.MultihopTtlDropThreshold.IsUnknown() {
@@ -172,17 +172,17 @@ func (data BFD) toBody(ctx context.Context) string {
 	}
 	if !data.DampeningExtensionsDownMonitoring.IsNull() && !data.DampeningExtensionsDownMonitoring.IsUnknown() {
 		if data.DampeningExtensionsDownMonitoring.ValueBool() {
-			body, _ = sjson.Set(body, "dampening.extensions.down-monitoring", map[string]string{})
+			body, _ = sjson.Set(body, "dampening.extensions.down-monitoring", []interface{}{nil})
 		}
 	}
 	if !data.DampeningDisable.IsNull() && !data.DampeningDisable.IsUnknown() {
 		if data.DampeningDisable.ValueBool() {
-			body, _ = sjson.Set(body, "dampening.disable", map[string]string{})
+			body, _ = sjson.Set(body, "dampening.disable", []interface{}{nil})
 		}
 	}
 	if !data.DampeningBundleMemberL3OnlyMode.IsNull() && !data.DampeningBundleMemberL3OnlyMode.IsUnknown() {
 		if data.DampeningBundleMemberL3OnlyMode.ValueBool() {
-			body, _ = sjson.Set(body, "dampening.bundle-member.l3-only-mode", map[string]string{})
+			body, _ = sjson.Set(body, "dampening.bundle-member.l3-only-mode", []interface{}{nil})
 		}
 	}
 	if !data.DampeningBundleMemberInitialWait.IsNull() && !data.DampeningBundleMemberInitialWait.IsUnknown() {
@@ -199,7 +199,7 @@ func (data BFD) toBody(ctx context.Context) string {
 	}
 	if !data.Ipv6ChecksumDisable.IsNull() && !data.Ipv6ChecksumDisable.IsUnknown() {
 		if data.Ipv6ChecksumDisable.ValueBool() {
-			body, _ = sjson.Set(body, "ipv6.checksum.disable", map[string]string{})
+			body, _ = sjson.Set(body, "ipv6.checksum.disable", []interface{}{nil})
 		}
 	}
 	if len(data.MultipathLocations) > 0 {
@@ -224,12 +224,12 @@ func (data BFD) toBody(ctx context.Context) string {
 			}
 			if !item.Ipv6ChecksumDisable.IsNull() && !item.Ipv6ChecksumDisable.IsUnknown() {
 				if item.Ipv6ChecksumDisable.ValueBool() {
-					body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"ipv6.checksum.disable", map[string]string{})
+					body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"ipv6.checksum.disable", []interface{}{nil})
 				}
 			}
 			if !item.Disable.IsNull() && !item.Disable.IsUnknown() {
 				if item.Disable.ValueBool() {
-					body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"disable", map[string]string{})
+					body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"disable", []interface{}{nil})
 				}
 			}
 			if !item.LocalAddress.IsNull() && !item.LocalAddress.IsUnknown() {

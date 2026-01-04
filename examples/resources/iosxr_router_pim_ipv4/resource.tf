@@ -6,6 +6,13 @@ resource "iosxr_router_pim_ipv4" "example" {
       override    = true
     }
   ]
+  rp_addresses_bidir = [
+    {
+      address     = "10.1.1.2"
+      access_list = "BIDIR_ACL"
+      override    = true
+    }
+  ]
   rp_static_deny                                 = "DENY_ACL"
   accept_register                                = "REGISTER_ACL"
   suppress_data_registers                        = true
@@ -96,10 +103,13 @@ resource "iosxr_router_pim_ipv4" "example" {
   auto_rp_mapping_agent_interval              = 60
   auto_rp_candidate_rps = [
     {
-      interface_name = "Loopback0"
-      scope          = 16
-      group_list     = "CANDIDATE_RP_ACL"
-      interval       = 60
+      interface_name   = "Loopback0"
+      scope            = 16
+      group_list       = "CANDIDATE_RP_ACL"
+      interval         = 60
+      bidir_scope      = 16
+      bidir_group_list = "CANDIDATE_RP_ACL"
+      bidir_interval   = 60
     }
   ]
   auto_rp_listen_disable = true
@@ -114,16 +124,43 @@ resource "iosxr_router_pim_ipv4" "example" {
   bsr_candidate_bsr_priority      = 100
   bsr_candidate_rps = [
     {
-      address    = "10.1.1.13"
-      group_list = "BSR_RP_ACL"
-      priority   = 192
-      interval   = 60
+      address          = "10.1.1.13"
+      group_list       = "BSR_RP_ACL"
+      priority         = 192
+      interval         = 60
+      bidir_group_list = "BSR_RP_ACL"
+      bidir_priority   = 192
+      bidir_interval   = 60
     }
   ]
   bsr_relay_vrfs = [
     {
       vrf_name = "VRF1"
       listen   = true
+    }
+  ]
+  mofrr                          = true
+  mofrr_rib                      = "ACL1"
+  mofrr_protect                  = "ACL1"
+  mofrr_protect_local_fault_only = true
+  mofrr_non_revertive            = true
+  sr_p2mp_policies = [
+    {
+      policy_name = "POLICY1"
+      static_groups = [
+        {
+          group_address = "239.1.1.1"
+          group_masks_source_masks = [
+            {
+              group_inc_mask  = "0.0.0.1"
+              source_ip       = "10.4.1.1"
+              source_inc_mask = "0.0.0.1"
+              group_count     = 5
+              source_count    = 5
+            }
+          ]
+        }
+      ]
     }
   ]
   interfaces = [

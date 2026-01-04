@@ -1,6 +1,7 @@
 resource "iosxr_vrf" "example" {
   vrf_name                                                  = "VRF4"
   description                                               = "My VRF Description"
+  fallback_vrf                                              = "VRF2"
   evpn_route_sync                                           = 100
   ipv4_unicast                                              = true
   ipv4_unicast_import_route_policy                          = "VRF_IMPORT_POLICY_1"

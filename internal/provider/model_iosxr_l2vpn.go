@@ -70,7 +70,6 @@ type L2VPN struct {
 	PwRoutingBgpRdIpv4AddressAssignedNumber               types.Int64                                 `tfsdk:"pw_routing_bgp_rd_ipv4_address_assigned_number"`
 	SnmpMibInterfaceFormatExternal                        types.Bool                                  `tfsdk:"snmp_mib_interface_format_external"`
 	SnmpMibPseudowireStatistics                           types.Bool                                  `tfsdk:"snmp_mib_pseudowire_statistics"`
-	XconnectGroups                                        []L2VPNXconnectGroups                       `tfsdk:"xconnect_groups"`
 }
 
 type L2VPNData struct {
@@ -108,7 +107,6 @@ type L2VPNData struct {
 	PwRoutingBgpRdIpv4AddressAssignedNumber               types.Int64                                 `tfsdk:"pw_routing_bgp_rd_ipv4_address_assigned_number"`
 	SnmpMibInterfaceFormatExternal                        types.Bool                                  `tfsdk:"snmp_mib_interface_format_external"`
 	SnmpMibPseudowireStatistics                           types.Bool                                  `tfsdk:"snmp_mib_pseudowire_statistics"`
-	XconnectGroups                                        []L2VPNXconnectGroups                       `tfsdk:"xconnect_groups"`
 }
 type L2VPNRedundancyIccpGroups struct {
 	GroupNumber       types.Int64                           `tfsdk:"group_number"`
@@ -123,9 +121,6 @@ type L2VPNFlexibleXconnectServiceVlanUnaware struct {
 type L2VPNFlexibleXconnectServiceVlanAwareEvis struct {
 	VpnId      types.Int64                                           `tfsdk:"vpn_id"`
 	Interfaces []L2VPNFlexibleXconnectServiceVlanAwareEvisInterfaces `tfsdk:"interfaces"`
-}
-type L2VPNXconnectGroups struct {
-	GroupName types.String `tfsdk:"group_name"`
 }
 type L2VPNRedundancyIccpGroupsInterfaces struct {
 	InterfaceName  types.String `tfsdk:"interface_name"`
@@ -359,14 +354,6 @@ func (data L2VPN) toBody(ctx context.Context) string {
 						body, _ = sjson.Set(body, "flexible-xconnect-service.vlan-aware.evis.evi"+"."+strconv.Itoa(index)+"."+"interfaces.interface"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())
 					}
 				}
-			}
-		}
-	}
-	if len(data.XconnectGroups) > 0 {
-		body, _ = sjson.Set(body, "xconnect.groups.group", []interface{}{})
-		for index, item := range data.XconnectGroups {
-			if !item.GroupName.IsNull() && !item.GroupName.IsUnknown() {
-				body, _ = sjson.Set(body, "xconnect.groups.group"+"."+strconv.Itoa(index)+"."+"group-name", item.GroupName.ValueString())
 			}
 		}
 	}
@@ -832,35 +819,6 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.SnmpMibPseudowireStatistics = types.BoolNull()
 	}
-	for i := range data.XconnectGroups {
-		keys := [...]string{"group-name"}
-		keyValues := [...]string{data.XconnectGroups[i].GroupName.ValueString()}
-
-		var r gjson.Result
-		gjson.GetBytes(res, "xconnect.groups.group").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("group-name"); value.Exists() && !data.XconnectGroups[i].GroupName.IsNull() {
-			data.XconnectGroups[i].GroupName = types.StringValue(value.String())
-		} else {
-			data.XconnectGroups[i].GroupName = types.StringNull()
-		}
-	}
 }
 
 // End of section. //template:end updateFromBody
@@ -1087,17 +1045,6 @@ func (data *L2VPN) fromBody(ctx context.Context, res []byte) {
 		data.SnmpMibPseudowireStatistics = types.BoolValue(true)
 	} else {
 		data.SnmpMibPseudowireStatistics = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "xconnect.groups.group"); value.Exists() {
-		data.XconnectGroups = make([]L2VPNXconnectGroups, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := L2VPNXconnectGroups{}
-			if cValue := v.Get("group-name"); cValue.Exists() {
-				item.GroupName = types.StringValue(cValue.String())
-			}
-			data.XconnectGroups = append(data.XconnectGroups, item)
-			return true
-		})
 	}
 }
 
@@ -1326,17 +1273,6 @@ func (data *L2VPNData) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.SnmpMibPseudowireStatistics = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "xconnect.groups.group"); value.Exists() {
-		data.XconnectGroups = make([]L2VPNXconnectGroups, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := L2VPNXconnectGroups{}
-			if cValue := v.Get("group-name"); cValue.Exists() {
-				item.GroupName = types.StringValue(cValue.String())
-			}
-			data.XconnectGroups = append(data.XconnectGroups, item)
-			return true
-		})
-	}
 }
 
 // End of section. //template:end fromBodyData
@@ -1345,36 +1281,6 @@ func (data *L2VPNData) fromBody(ctx context.Context, res []byte) {
 
 func (data *L2VPN) getDeletedItems(ctx context.Context, state L2VPN) []string {
 	deletedItems := make([]string, 0)
-	for i := range state.XconnectGroups {
-		keys := [...]string{"group-name"}
-		stateKeyValues := [...]string{state.XconnectGroups[i].GroupName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.XconnectGroups[i].GroupName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.XconnectGroups {
-			found = true
-			if state.XconnectGroups[i].GroupName.ValueString() != data.XconnectGroups[j].GroupName.ValueString() {
-				found = false
-			}
-			if found {
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/xconnect/groups/group%v", state.getPath(), keyString))
-		}
-	}
 	if !state.SnmpMibPseudowireStatistics.IsNull() && data.SnmpMibPseudowireStatistics.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/snmp/mib/pseudowire/statistics", state.getPath()))
 	}
@@ -1702,14 +1608,6 @@ func (data *L2VPN) getDeletedItems(ctx context.Context, state L2VPN) []string {
 
 func (data *L2VPN) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	for i := range data.XconnectGroups {
-		keys := [...]string{"group-name"}
-		keyValues := [...]string{data.XconnectGroups[i].GroupName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
 	if !data.SnmpMibPseudowireStatistics.IsNull() && !data.SnmpMibPseudowireStatistics.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/snmp/mib/pseudowire/statistics", data.getPath()))
 	}
@@ -1832,16 +1730,6 @@ func (data *L2VPN) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *L2VPN) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	for i := range data.XconnectGroups {
-		keys := [...]string{"group-name"}
-		keyValues := [...]string{data.XconnectGroups[i].GroupName.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/xconnect/groups/group%v", data.getPath(), keyString))
-	}
 	if !data.SnmpMibPseudowireStatistics.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/snmp/mib/pseudowire/statistics", data.getPath()))
 	}

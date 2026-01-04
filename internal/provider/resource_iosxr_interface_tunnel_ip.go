@@ -158,6 +158,14 @@ func (r *InterfaceTunnelIPResource) Schema(ctx context.Context, req resource.Sch
 					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
 				},
 			},
+			"ipv4_forwarding_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("enable ipv4 forwarding on a interface").String,
+				Optional:            true,
+			},
+			"ipv4_ttl_propagate_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable ipv4 ttl propagation on this interface").String,
+				Optional:            true,
+			},
 			"ipv4_access_group_ingress_acl1": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Access-list name").String,
 				Optional:            true,
@@ -228,6 +236,10 @@ func (r *InterfaceTunnelIPResource) Schema(ctx context.Context, req resource.Sch
 			},
 			"ipv6_enable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable IPv6 on interface").String,
+				Optional:            true,
+			},
+			"ipv6_ttl_propagate_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable ipv6 ttl propagation on this interface").String,
 				Optional:            true,
 			},
 			"ipv6_addresses": schema.ListNestedAttribute{

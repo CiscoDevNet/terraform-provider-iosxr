@@ -35,7 +35,7 @@ import (
 
 func TestAccIosxrRouterIGMPVRFInterface(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_igmp_vrf_interface.test", "interface_name", "GigabitEthernet0/0/0/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_igmp_vrf_interface.test", "interface_name", "GigabitEthernet0/0/0/2"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_igmp_vrf_interface.test", "version", "3"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_igmp_vrf_interface.test", "router_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_igmp_vrf_interface.test", "dvmrp_enable", "true"))
@@ -101,6 +101,14 @@ resource "iosxr_gnmi" "PreReq0" {
 	}
 }
 
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
+	attributes = {
+		"vrf-name" = "VRF1"
+	}
+	depends_on = [iosxr_gnmi.PreReq0, ]
+}
+
 `
 
 // End of section. //template:end testPrerequisites
@@ -110,9 +118,9 @@ resource "iosxr_gnmi" "PreReq0" {
 func testAccIosxrRouterIGMPVRFInterfaceConfig_minimum() string {
 	config := `resource "iosxr_router_igmp_vrf_interface" "test" {` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
-	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	interface_name = "GigabitEthernet0/0/0/2"` + "\n"
 	config += `	router_enable = true` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -125,7 +133,7 @@ func testAccIosxrRouterIGMPVRFInterfaceConfig_all() string {
 	config := `resource "iosxr_router_igmp_vrf_interface" "test" {` + "\n"
 	config += `	delete_mode = "all"` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
-	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	interface_name = "GigabitEthernet0/0/0/2"` + "\n"
 	config += `	version = 3` + "\n"
 	config += `	router_enable = true` + "\n"
 	config += `	dvmrp_enable = true` + "\n"
@@ -150,7 +158,7 @@ func testAccIosxrRouterIGMPVRFInterfaceConfig_all() string {
 	config += `			include = true` + "\n"
 	config += `		}]` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

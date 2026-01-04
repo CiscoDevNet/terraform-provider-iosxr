@@ -128,10 +128,6 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 								stringvalidator.LengthBetween(1, 64),
 							},
 						},
-						"permit_capture": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Capture matched packet").String,
-							Optional:            true,
-						},
 						"permit_range_start_protocol": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("An IPv6 Protocol").String,
 							Optional:            true,
@@ -522,6 +518,10 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 								stringvalidator.LengthBetween(1, 32),
 							},
 						},
+						"permit_capture": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Capture matched packet").String,
+							Optional:            true,
+						},
 						"permit_log": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Log matches against this entry").String,
 							Optional:            true,
@@ -569,18 +569,6 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 64),
 							},
-						},
-						"deny_capture": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Capture matched packet").String,
-							Optional:            true,
-						},
-						"deny_icmp_off": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Do not generate the ICMP message").String,
-							Optional:            true,
-						},
-						"deny_icmp_on": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Generate the ICMP message").String,
-							Optional:            true,
 						},
 						"deny_range_start_protocol": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("An IPv6 Protocol").String,
@@ -906,6 +894,10 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 								stringvalidator.OneOf("critical", "high", "low", "medium"),
 							},
 						},
+						"deny_capture": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Capture matched packet").String,
+							Optional:            true,
+						},
 						"deny_log": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Log matches against this entry").String,
 							Optional:            true,
@@ -927,6 +919,14 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 							Validators: []validator.Int64{
 								int64validator.Between(0, 255),
 							},
+						},
+						"deny_icmp_off": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Do not generate the ICMP message").String,
+							Optional:            true,
+						},
+						"deny_icmp_on": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Generate the ICMP message").String,
+							Optional:            true,
 						},
 					},
 				},

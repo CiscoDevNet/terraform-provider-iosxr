@@ -1,5 +1,15 @@
 resource "iosxr_logging_vrf" "example" {
   vrf_name = "default"
+  hostnames = [
+    {
+      name                    = "server.cisco.com"
+      severity                = "info"
+      port                    = 514
+      operator                = "equals"
+      facility                = "local0"
+      hostname_source_address = "1.1.1.2"
+    }
+  ]
   host_ipv4_addresses = [
     {
       ipv4_address        = "1.1.1.1"

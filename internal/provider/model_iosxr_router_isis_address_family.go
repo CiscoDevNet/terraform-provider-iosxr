@@ -550,12 +550,12 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 	}
 	if !data.AdvertisePassiveOnly.IsNull() && !data.AdvertisePassiveOnly.IsUnknown() {
 		if data.AdvertisePassiveOnly.ValueBool() {
-			body, _ = sjson.Set(body, "advertise.passive-only", map[string]string{})
+			body, _ = sjson.Set(body, "advertise.passive-only", []interface{}{nil})
 		}
 	}
 	if !data.AdvertiseLinkAttributes.IsNull() && !data.AdvertiseLinkAttributes.IsUnknown() {
 		if data.AdvertiseLinkAttributes.ValueBool() {
-			body, _ = sjson.Set(body, "advertise.link.attributes", map[string]string{})
+			body, _ = sjson.Set(body, "advertise.link.attributes", []interface{}{nil})
 		}
 	}
 	if !data.MicroloopAvoidance.IsNull() && !data.MicroloopAvoidance.IsUnknown() {
@@ -565,7 +565,7 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 	}
 	if !data.MicroloopAvoidanceProtected.IsNull() && !data.MicroloopAvoidanceProtected.IsUnknown() {
 		if data.MicroloopAvoidanceProtected.ValueBool() {
-			body, _ = sjson.Set(body, "microloop.avoidance.enable.protected", map[string]string{})
+			body, _ = sjson.Set(body, "microloop.avoidance.enable.protected", []interface{}{nil})
 		}
 	}
 	if !data.MicroloopAvoidanceSegmentRoutingRoutePolicy.IsNull() && !data.MicroloopAvoidanceSegmentRoutingRoutePolicy.IsUnknown() {
@@ -584,7 +584,7 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 	}
 	if !data.MetricStyleNarrowTransition.IsNull() && !data.MetricStyleNarrowTransition.IsUnknown() {
 		if data.MetricStyleNarrowTransition.ValueBool() {
-			body, _ = sjson.Set(body, "metric-style.narrow.transition", map[string]string{})
+			body, _ = sjson.Set(body, "metric-style.narrow.transition", []interface{}{nil})
 		}
 	}
 	if !data.MetricStyleWide.IsNull() && !data.MetricStyleWide.IsUnknown() {
@@ -594,12 +594,12 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 	}
 	if !data.MetricStyleWideTransition.IsNull() && !data.MetricStyleWideTransition.IsUnknown() {
 		if data.MetricStyleWideTransition.ValueBool() {
-			body, _ = sjson.Set(body, "metric-style.wide.transition", map[string]string{})
+			body, _ = sjson.Set(body, "metric-style.wide.transition", []interface{}{nil})
 		}
 	}
 	if !data.MetricStyleTransition.IsNull() && !data.MetricStyleTransition.IsUnknown() {
 		if data.MetricStyleTransition.ValueBool() {
-			body, _ = sjson.Set(body, "metric-style.transition", map[string]string{})
+			body, _ = sjson.Set(body, "metric-style.transition", []interface{}{nil})
 		}
 	}
 	if !data.SpfIntervalMaximumWait.IsNull() && !data.SpfIntervalMaximumWait.IsUnknown() {
@@ -654,17 +654,17 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 	}
 	if !data.AdjacencyCheckDisable.IsNull() && !data.AdjacencyCheckDisable.IsUnknown() {
 		if data.AdjacencyCheckDisable.ValueBool() {
-			body, _ = sjson.Set(body, "adjacency-check.disable", map[string]string{})
+			body, _ = sjson.Set(body, "adjacency-check.disable", []interface{}{nil})
 		}
 	}
 	if !data.RouteSourceFirstHop.IsNull() && !data.RouteSourceFirstHop.IsUnknown() {
 		if data.RouteSourceFirstHop.ValueBool() {
-			body, _ = sjson.Set(body, "route.source.first-hop", map[string]string{})
+			body, _ = sjson.Set(body, "route.source.first-hop", []interface{}{nil})
 		}
 	}
 	if !data.AttachedBitReceiveIgnore.IsNull() && !data.AttachedBitReceiveIgnore.IsUnknown() {
 		if data.AttachedBitReceiveIgnore.ValueBool() {
-			body, _ = sjson.Set(body, "attached-bit.receive.ignore", map[string]string{})
+			body, _ = sjson.Set(body, "attached-bit.receive.ignore", []interface{}{nil})
 		}
 	}
 	if !data.AttachedBitSend.IsNull() && !data.AttachedBitSend.IsUnknown() {
@@ -678,12 +678,12 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 	}
 	if !data.FastReroutePerPrefixUseCandidateOnly.IsNull() && !data.FastReroutePerPrefixUseCandidateOnly.IsUnknown() {
 		if data.FastReroutePerPrefixUseCandidateOnly.ValueBool() {
-			body, _ = sjson.Set(body, "fast-reroute.per-prefix.use-candidate-only", map[string]string{})
+			body, _ = sjson.Set(body, "fast-reroute.per-prefix.use-candidate-only", []interface{}{nil})
 		}
 	}
 	if !data.FastReroutePerPrefixSrlgProtectionWeightedGlobal.IsNull() && !data.FastReroutePerPrefixSrlgProtectionWeightedGlobal.IsUnknown() {
 		if data.FastReroutePerPrefixSrlgProtectionWeightedGlobal.ValueBool() {
-			body, _ = sjson.Set(body, "fast-reroute.per-prefix.srlg-protection.weighted-global", map[string]string{})
+			body, _ = sjson.Set(body, "fast-reroute.per-prefix.srlg-protection.weighted-global", []interface{}{nil})
 		}
 	}
 	if !data.FastReroutePerPrefixRemoteLfaPrefixList.IsNull() && !data.FastReroutePerPrefixRemoteLfaPrefixList.IsUnknown() {
@@ -691,7 +691,7 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 	}
 	if !data.FastReroutePerPrefixLoadSharingDisable.IsNull() && !data.FastReroutePerPrefixLoadSharingDisable.IsUnknown() {
 		if data.FastReroutePerPrefixLoadSharingDisable.ValueBool() {
-			body, _ = sjson.Set(body, "fast-reroute.per-prefix.load-sharing.disable", map[string]string{})
+			body, _ = sjson.Set(body, "fast-reroute.per-prefix.load-sharing.disable", []interface{}{nil})
 		}
 	}
 	if !data.FastReroutePerPrefixTiebreakerDownstreamIndex.IsNull() && !data.FastReroutePerPrefixTiebreakerDownstreamIndex.IsUnknown() {
@@ -717,7 +717,7 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 	}
 	if !data.FastReroutePerLinkUseCandidateOnly.IsNull() && !data.FastReroutePerLinkUseCandidateOnly.IsUnknown() {
 		if data.FastReroutePerLinkUseCandidateOnly.ValueBool() {
-			body, _ = sjson.Set(body, "fast-reroute.per-link.use-candidate-only", map[string]string{})
+			body, _ = sjson.Set(body, "fast-reroute.per-link.use-candidate-only", []interface{}{nil})
 		}
 	}
 	if !data.FastReroutePerLinkPriorityLimit.IsNull() && !data.FastReroutePerLinkPriorityLimit.IsUnknown() {
@@ -733,12 +733,12 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 	}
 	if !data.SegmentRoutingBundleMemberAdjSid.IsNull() && !data.SegmentRoutingBundleMemberAdjSid.IsUnknown() {
 		if data.SegmentRoutingBundleMemberAdjSid.ValueBool() {
-			body, _ = sjson.Set(body, "segment-routing.bundle-member-adj-sid", map[string]string{})
+			body, _ = sjson.Set(body, "segment-routing.bundle-member-adj-sid", []interface{}{nil})
 		}
 	}
 	if !data.SegmentRoutingLabeledOnly.IsNull() && !data.SegmentRoutingLabeledOnly.IsUnknown() {
 		if data.SegmentRoutingLabeledOnly.ValueBool() {
-			body, _ = sjson.Set(body, "segment-routing.labeled-only", map[string]string{})
+			body, _ = sjson.Set(body, "segment-routing.labeled-only", []interface{}{nil})
 		}
 	}
 	if !data.SegmentRoutingProtectedAdjacencySidDelay.IsNull() && !data.SegmentRoutingProtectedAdjacencySidDelay.IsUnknown() {
@@ -746,12 +746,12 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 	}
 	if !data.SegmentRoutingMplsEnable.IsNull() && !data.SegmentRoutingMplsEnable.IsUnknown() {
 		if data.SegmentRoutingMplsEnable.ValueBool() {
-			body, _ = sjson.Set(body, "segment-routing.mpls.enable", map[string]string{})
+			body, _ = sjson.Set(body, "segment-routing.mpls.enable", []interface{}{nil})
 		}
 	}
 	if !data.SegmentRoutingMplsSrPrefer.IsNull() && !data.SegmentRoutingMplsSrPrefer.IsUnknown() {
 		if data.SegmentRoutingMplsSrPrefer.ValueBool() {
-			body, _ = sjson.Set(body, "segment-routing.mpls.sr-prefer", map[string]string{})
+			body, _ = sjson.Set(body, "segment-routing.mpls.sr-prefer", []interface{}{nil})
 		}
 	}
 	if !data.SegmentRoutingMplsUnlabeledProtectionPrefixList.IsNull() && !data.SegmentRoutingMplsUnlabeledProtectionPrefixList.IsUnknown() {
@@ -762,7 +762,7 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 	}
 	if !data.SegmentRoutingMplsUnlabeledProtectionDisable.IsNull() && !data.SegmentRoutingMplsUnlabeledProtectionDisable.IsUnknown() {
 		if data.SegmentRoutingMplsUnlabeledProtectionDisable.ValueBool() {
-			body, _ = sjson.Set(body, "segment-routing.mpls.unlabeled.protection.disable", map[string]string{})
+			body, _ = sjson.Set(body, "segment-routing.mpls.unlabeled.protection.disable", []interface{}{nil})
 		}
 	}
 	if !data.SegmentRoutingMplsPrefixSidMapReceive.IsNull() && !data.SegmentRoutingMplsPrefixSidMapReceive.IsUnknown() {
@@ -772,7 +772,7 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 	}
 	if !data.SegmentRoutingMplsPrefixSidMapReceiveDisable.IsNull() && !data.SegmentRoutingMplsPrefixSidMapReceiveDisable.IsUnknown() {
 		if data.SegmentRoutingMplsPrefixSidMapReceiveDisable.ValueBool() {
-			body, _ = sjson.Set(body, "segment-routing.mpls.prefix-sid-map.receive.disable", map[string]string{})
+			body, _ = sjson.Set(body, "segment-routing.mpls.prefix-sid-map.receive.disable", []interface{}{nil})
 		}
 	}
 	if !data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal.IsNull() && !data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal.IsUnknown() {
@@ -782,7 +782,7 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 	}
 	if !data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide.IsNull() && !data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide.IsUnknown() {
 		if data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide.ValueBool() {
-			body, _ = sjson.Set(body, "segment-routing.mpls.prefix-sid-map.advertise-local.domain-wide", map[string]string{})
+			body, _ = sjson.Set(body, "segment-routing.mpls.prefix-sid-map.advertise-local.domain-wide", []interface{}{nil})
 		}
 	}
 	if !data.SegmentRoutingMplsConnectedPrefixSidMap.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMap.IsUnknown() {
@@ -797,7 +797,7 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 	}
 	if !data.MplsLdpAutoConfig.IsNull() && !data.MplsLdpAutoConfig.IsUnknown() {
 		if data.MplsLdpAutoConfig.ValueBool() {
-			body, _ = sjson.Set(body, "mpls.ldp.auto-config", map[string]string{})
+			body, _ = sjson.Set(body, "mpls.ldp.auto-config", []interface{}{nil})
 		}
 	}
 	if !data.MplsTrafficEngRouterIdIpv4Address.IsNull() && !data.MplsTrafficEngRouterIdIpv4Address.IsUnknown() {
@@ -808,22 +808,22 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 	}
 	if !data.MplsTrafficEngIgpIntact.IsNull() && !data.MplsTrafficEngIgpIntact.IsUnknown() {
 		if data.MplsTrafficEngIgpIntact.ValueBool() {
-			body, _ = sjson.Set(body, "mpls.traffic-eng.igp-intact", map[string]string{})
+			body, _ = sjson.Set(body, "mpls.traffic-eng.igp-intact", []interface{}{nil})
 		}
 	}
 	if !data.MplsTrafficEngMulticastIntact.IsNull() && !data.MplsTrafficEngMulticastIntact.IsUnknown() {
 		if data.MplsTrafficEngMulticastIntact.ValueBool() {
-			body, _ = sjson.Set(body, "mpls.traffic-eng.multicast-intact", map[string]string{})
+			body, _ = sjson.Set(body, "mpls.traffic-eng.multicast-intact", []interface{}{nil})
 		}
 	}
 	if !data.MplsTrafficEngTunnelRestricted.IsNull() && !data.MplsTrafficEngTunnelRestricted.IsUnknown() {
 		if data.MplsTrafficEngTunnelRestricted.ValueBool() {
-			body, _ = sjson.Set(body, "mpls.traffic-eng.tunnel.restricted", map[string]string{})
+			body, _ = sjson.Set(body, "mpls.traffic-eng.tunnel.restricted", []interface{}{nil})
 		}
 	}
 	if !data.MplsTrafficEngTunnelPreferred.IsNull() && !data.MplsTrafficEngTunnelPreferred.IsUnknown() {
 		if data.MplsTrafficEngTunnelPreferred.ValueBool() {
-			body, _ = sjson.Set(body, "mpls.traffic-eng.tunnel.preferred", map[string]string{})
+			body, _ = sjson.Set(body, "mpls.traffic-eng.tunnel.preferred", []interface{}{nil})
 		}
 	}
 	if !data.MplsTrafficEngTunnelMetric.IsNull() && !data.MplsTrafficEngTunnelMetric.IsUnknown() {
@@ -831,22 +831,22 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 	}
 	if !data.MplsTrafficEngTunnelAnycastPreferIgpCost.IsNull() && !data.MplsTrafficEngTunnelAnycastPreferIgpCost.IsUnknown() {
 		if data.MplsTrafficEngTunnelAnycastPreferIgpCost.ValueBool() {
-			body, _ = sjson.Set(body, "mpls.traffic-eng.tunnel.anycast-prefer-igp-cost", map[string]string{})
+			body, _ = sjson.Set(body, "mpls.traffic-eng.tunnel.anycast-prefer-igp-cost", []interface{}{nil})
 		}
 	}
 	if !data.MplsTrafficEngLevel12.IsNull() && !data.MplsTrafficEngLevel12.IsUnknown() {
 		if data.MplsTrafficEngLevel12.ValueBool() {
-			body, _ = sjson.Set(body, "mpls.traffic-eng.traffic-eng-level.level-one-two", map[string]string{})
+			body, _ = sjson.Set(body, "mpls.traffic-eng.traffic-eng-level.level-one-two", []interface{}{nil})
 		}
 	}
 	if !data.MplsTrafficEngLevel1.IsNull() && !data.MplsTrafficEngLevel1.IsUnknown() {
 		if data.MplsTrafficEngLevel1.ValueBool() {
-			body, _ = sjson.Set(body, "mpls.traffic-eng.traffic-eng-level.level-one", map[string]string{})
+			body, _ = sjson.Set(body, "mpls.traffic-eng.traffic-eng-level.level-one", []interface{}{nil})
 		}
 	}
 	if !data.MplsTrafficEngLevel2Only.IsNull() && !data.MplsTrafficEngLevel2Only.IsUnknown() {
 		if data.MplsTrafficEngLevel2Only.ValueBool() {
-			body, _ = sjson.Set(body, "mpls.traffic-eng.traffic-eng-level.level-two-only", map[string]string{})
+			body, _ = sjson.Set(body, "mpls.traffic-eng.traffic-eng-level.level-two-only", []interface{}{nil})
 		}
 	}
 	if !data.PrefixUnreachable.IsNull() && !data.PrefixUnreachable.IsUnknown() {
@@ -865,7 +865,7 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 	}
 	if !data.PrefixUnreachableRxProcessEnable.IsNull() && !data.PrefixUnreachableRxProcessEnable.IsUnknown() {
 		if data.PrefixUnreachableRxProcessEnable.ValueBool() {
-			body, _ = sjson.Set(body, "prefix-unreachable.rx-process-enable", map[string]string{})
+			body, _ = sjson.Set(body, "prefix-unreachable.rx-process-enable", []interface{}{nil})
 		}
 	}
 	if len(data.DistanceSources) > 0 {
@@ -905,7 +905,7 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 			}
 			if !item.DownFlagClear.IsNull() && !item.DownFlagClear.IsUnknown() {
 				if item.DownFlagClear.ValueBool() {
-					body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"down-flag-clear", map[string]string{})
+					body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"down-flag-clear", []interface{}{nil})
 				}
 			}
 		}
@@ -938,7 +938,7 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 			}
 			if !item.MatchInternal.IsNull() && !item.MatchInternal.IsUnknown() {
 				if item.MatchInternal.ValueBool() {
-					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.internal", map[string]string{})
+					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.internal", []interface{}{nil})
 				}
 			}
 			if !item.MatchExternal.IsNull() && !item.MatchExternal.IsUnknown() {
@@ -980,7 +980,7 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 			}
 			if !item.Explicit.IsNull() && !item.Explicit.IsUnknown() {
 				if item.Explicit.ValueBool() {
-					body, _ = sjson.Set(body, "summary-prefix.ip-addresses.ip-address"+"."+strconv.Itoa(index)+"."+"explicit", map[string]string{})
+					body, _ = sjson.Set(body, "summary-prefix.ip-addresses.ip-address"+"."+strconv.Itoa(index)+"."+"explicit", []interface{}{nil})
 				}
 			}
 			if !item.AdvUnreachable.IsNull() && !item.AdvUnreachable.IsUnknown() {
@@ -993,12 +993,12 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 			}
 			if !item.UnreachableTagExcludePrefixes.IsNull() && !item.UnreachableTagExcludePrefixes.IsUnknown() {
 				if item.UnreachableTagExcludePrefixes.ValueBool() {
-					body, _ = sjson.Set(body, "summary-prefix.ip-addresses.ip-address"+"."+strconv.Itoa(index)+"."+"adv-unreachable.unreachable-component-tag.exclude", map[string]string{})
+					body, _ = sjson.Set(body, "summary-prefix.ip-addresses.ip-address"+"."+strconv.Itoa(index)+"."+"adv-unreachable.unreachable-component-tag.exclude", []interface{}{nil})
 				}
 			}
 			if !item.PartitionRepair.IsNull() && !item.PartitionRepair.IsUnknown() {
 				if item.PartitionRepair.ValueBool() {
-					body, _ = sjson.Set(body, "summary-prefix.ip-addresses.ip-address"+"."+strconv.Itoa(index)+"."+"partition-repair", map[string]string{})
+					body, _ = sjson.Set(body, "summary-prefix.ip-addresses.ip-address"+"."+strconv.Itoa(index)+"."+"partition-repair", []interface{}{nil})
 				}
 			}
 		}
@@ -1027,7 +1027,7 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 			}
 			if !item.NarrowTransition.IsNull() && !item.NarrowTransition.IsUnknown() {
 				if item.NarrowTransition.ValueBool() {
-					body, _ = sjson.Set(body, "metric-style-levels.metric-style-level"+"."+strconv.Itoa(index)+"."+"narrow.transition", map[string]string{})
+					body, _ = sjson.Set(body, "metric-style-levels.metric-style-level"+"."+strconv.Itoa(index)+"."+"narrow.transition", []interface{}{nil})
 				}
 			}
 			if !item.Wide.IsNull() && !item.Wide.IsUnknown() {
@@ -1037,12 +1037,12 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 			}
 			if !item.WideTransition.IsNull() && !item.WideTransition.IsUnknown() {
 				if item.WideTransition.ValueBool() {
-					body, _ = sjson.Set(body, "metric-style-levels.metric-style-level"+"."+strconv.Itoa(index)+"."+"wide.transition", map[string]string{})
+					body, _ = sjson.Set(body, "metric-style-levels.metric-style-level"+"."+strconv.Itoa(index)+"."+"wide.transition", []interface{}{nil})
 				}
 			}
 			if !item.Transition.IsNull() && !item.Transition.IsUnknown() {
 				if item.Transition.ValueBool() {
-					body, _ = sjson.Set(body, "metric-style-levels.metric-style-level"+"."+strconv.Itoa(index)+"."+"transition", map[string]string{})
+					body, _ = sjson.Set(body, "metric-style-levels.metric-style-level"+"."+strconv.Itoa(index)+"."+"transition", []interface{}{nil})
 				}
 			}
 		}
@@ -1225,12 +1225,12 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 			}
 			if !item.IndexPhpDisable.IsNull() && !item.IndexPhpDisable.IsUnknown() {
 				if item.IndexPhpDisable.ValueBool() {
-					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.address"+"."+strconv.Itoa(index)+"."+"index.php-disable", map[string]string{})
+					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.address"+"."+strconv.Itoa(index)+"."+"index.php-disable", []interface{}{nil})
 				}
 			}
 			if !item.IndexExplicitNull.IsNull() && !item.IndexExplicitNull.IsUnknown() {
 				if item.IndexExplicitNull.ValueBool() {
-					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.address"+"."+strconv.Itoa(index)+"."+"index.explicit-null", map[string]string{})
+					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.address"+"."+strconv.Itoa(index)+"."+"index.explicit-null", []interface{}{nil})
 				}
 			}
 			if !item.AbsoluteId.IsNull() && !item.AbsoluteId.IsUnknown() {
@@ -1241,12 +1241,12 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 			}
 			if !item.AbsolutePhpDisable.IsNull() && !item.AbsolutePhpDisable.IsUnknown() {
 				if item.AbsolutePhpDisable.ValueBool() {
-					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.address"+"."+strconv.Itoa(index)+"."+"absolute.php-disable", map[string]string{})
+					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.address"+"."+strconv.Itoa(index)+"."+"absolute.php-disable", []interface{}{nil})
 				}
 			}
 			if !item.AbsoluteExplicitNull.IsNull() && !item.AbsoluteExplicitNull.IsUnknown() {
 				if item.AbsoluteExplicitNull.ValueBool() {
-					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.address"+"."+strconv.Itoa(index)+"."+"absolute.explicit-null", map[string]string{})
+					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.address"+"."+strconv.Itoa(index)+"."+"absolute.explicit-null", []interface{}{nil})
 				}
 			}
 		}
@@ -1271,12 +1271,12 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 			}
 			if !item.IndexPhpDisable.IsNull() && !item.IndexPhpDisable.IsUnknown() {
 				if item.IndexPhpDisable.ValueBool() {
-					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address"+"."+strconv.Itoa(index)+"."+"index.php-disable", map[string]string{})
+					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address"+"."+strconv.Itoa(index)+"."+"index.php-disable", []interface{}{nil})
 				}
 			}
 			if !item.IndexExplicitNull.IsNull() && !item.IndexExplicitNull.IsUnknown() {
 				if item.IndexExplicitNull.ValueBool() {
-					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address"+"."+strconv.Itoa(index)+"."+"index.explicit-null", map[string]string{})
+					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address"+"."+strconv.Itoa(index)+"."+"index.explicit-null", []interface{}{nil})
 				}
 			}
 			if !item.AbsoluteId.IsNull() && !item.AbsoluteId.IsUnknown() {
@@ -1287,12 +1287,12 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 			}
 			if !item.AbsolutePhpDisable.IsNull() && !item.AbsolutePhpDisable.IsUnknown() {
 				if item.AbsolutePhpDisable.ValueBool() {
-					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address"+"."+strconv.Itoa(index)+"."+"absolute.php-disable", map[string]string{})
+					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address"+"."+strconv.Itoa(index)+"."+"absolute.php-disable", []interface{}{nil})
 				}
 			}
 			if !item.AbsoluteExplicitNull.IsNull() && !item.AbsoluteExplicitNull.IsUnknown() {
 				if item.AbsoluteExplicitNull.ValueBool() {
-					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address"+"."+strconv.Itoa(index)+"."+"absolute.explicit-null", map[string]string{})
+					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address"+"."+strconv.Itoa(index)+"."+"absolute.explicit-null", []interface{}{nil})
 				}
 			}
 		}
@@ -1314,12 +1314,12 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 			}
 			if !item.IndexPhpDisable.IsNull() && !item.IndexPhpDisable.IsUnknown() {
 				if item.IndexPhpDisable.ValueBool() {
-					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.strict-spf-address"+"."+strconv.Itoa(index)+"."+"index.php-disable", map[string]string{})
+					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.strict-spf-address"+"."+strconv.Itoa(index)+"."+"index.php-disable", []interface{}{nil})
 				}
 			}
 			if !item.IndexExplicitNull.IsNull() && !item.IndexExplicitNull.IsUnknown() {
 				if item.IndexExplicitNull.ValueBool() {
-					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.strict-spf-address"+"."+strconv.Itoa(index)+"."+"index.explicit-null", map[string]string{})
+					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.strict-spf-address"+"."+strconv.Itoa(index)+"."+"index.explicit-null", []interface{}{nil})
 				}
 			}
 			if !item.AbsoluteId.IsNull() && !item.AbsoluteId.IsUnknown() {
@@ -1330,12 +1330,12 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 			}
 			if !item.AbsolutePhpDisable.IsNull() && !item.AbsolutePhpDisable.IsUnknown() {
 				if item.AbsolutePhpDisable.ValueBool() {
-					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.strict-spf-address"+"."+strconv.Itoa(index)+"."+"absolute.php-disable", map[string]string{})
+					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.strict-spf-address"+"."+strconv.Itoa(index)+"."+"absolute.php-disable", []interface{}{nil})
 				}
 			}
 			if !item.AbsoluteExplicitNull.IsNull() && !item.AbsoluteExplicitNull.IsUnknown() {
 				if item.AbsoluteExplicitNull.ValueBool() {
-					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.strict-spf-address"+"."+strconv.Itoa(index)+"."+"absolute.explicit-null", map[string]string{})
+					body, _ = sjson.Set(body, "segment-routing.mpls.connected-prefix-sid-map.addresses.strict-spf-address"+"."+strconv.Itoa(index)+"."+"absolute.explicit-null", []interface{}{nil})
 				}
 			}
 		}
@@ -1387,12 +1387,12 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 			}
 			if !item.Ipv4.IsNull() && !item.Ipv4.IsUnknown() {
 				if item.Ipv4.ValueBool() {
-					body, _ = sjson.Set(body, "partition-detect.tracks.track"+"."+strconv.Itoa(index)+"."+"ipv4", map[string]string{})
+					body, _ = sjson.Set(body, "partition-detect.tracks.track"+"."+strconv.Itoa(index)+"."+"ipv4", []interface{}{nil})
 				}
 			}
 			if !item.Ipv6.IsNull() && !item.Ipv6.IsUnknown() {
 				if item.Ipv6.ValueBool() {
-					body, _ = sjson.Set(body, "partition-detect.tracks.track"+"."+strconv.Itoa(index)+"."+"ipv6", map[string]string{})
+					body, _ = sjson.Set(body, "partition-detect.tracks.track"+"."+strconv.Itoa(index)+"."+"ipv6", []interface{}{nil})
 				}
 			}
 		}

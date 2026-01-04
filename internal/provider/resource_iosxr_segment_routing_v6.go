@@ -32,6 +32,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -81,8 +82,10 @@ func (r *SegmentRoutingV6Resource) Schema(ctx context.Context, req resource.Sche
 				},
 			},
 			"enable": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable SRv6").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Enable SRv6").AddDefaultValueDescription("true").String,
 				Optional:            true,
+				Computed:            true,
+				Default:             booldefault.StaticBool(true),
 			},
 			"sid_holdtime": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Configure SID holdtime for a stale/freed SID").AddIntegerRangeDescription(0, 60).String,
@@ -106,6 +109,12 @@ func (r *SegmentRoutingV6Resource) Schema(ctx context.Context, req resource.Sche
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
+						},
+						"format_enable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable a SRv6 format").AddDefaultValueDescription("true").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             booldefault.StaticBool(true),
 						},
 						"usid_local_id_block_ranges_lib_start": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Start of LIB").AddIntegerRangeDescription(57344, 57344).String,
@@ -137,8 +146,10 @@ func (r *SegmentRoutingV6Resource) Schema(ctx context.Context, req resource.Sche
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"locator_enable": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Enable a SRv6 locator").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Enable a SRv6 locator").AddDefaultValueDescription("true").String,
 							Optional:            true,
+							Computed:            true,
+							Default:             booldefault.StaticBool(true),
 						},
 						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Locator name").String,

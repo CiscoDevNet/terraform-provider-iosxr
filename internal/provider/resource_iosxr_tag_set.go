@@ -83,7 +83,7 @@ func (r *TagSetResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"rpl": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configures a tag-set").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configures a tag set").String,
 				Required:            true,
 			},
 		},

@@ -39,6 +39,7 @@ func TestAccIosxrIPv6PrefixList(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_prefix_list.test", "sequences.0.sequence_number", "4096"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_prefix_list.test", "sequences.0.permission", "permit"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_prefix_list.test", "sequences.0.prefix", "2001:db8::"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_prefix_list.test", "sequences.0.zone", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_prefix_list.test", "sequences.0.mask", "32"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_prefix_list.test", "sequences.0.match_prefix_length_ge", "64"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_prefix_list.test", "sequences.0.match_prefix_length_le", "128"))
@@ -104,6 +105,7 @@ func testAccIosxrIPv6PrefixListConfig_all() string {
 	config += `		sequence_number = 4096` + "\n"
 	config += `		permission = "permit"` + "\n"
 	config += `		prefix = "2001:db8::"` + "\n"
+	config += `		zone = "1"` + "\n"
 	config += `		mask = 32` + "\n"
 	config += `		match_prefix_length_ge = 64` + "\n"
 	config += `		match_prefix_length_le = 128` + "\n"

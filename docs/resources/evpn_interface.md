@@ -14,13 +14,24 @@ This resource can manage the EVPN Interface configuration.
 
 ```terraform
 resource "iosxr_evpn_interface" "example" {
-  interface_name                                          = "Bundle-Ether12"
-  core_isolation_group                                    = 11
-  ethernet_segment_identifier_type_zero_esi               = "01.00.01.01.00.00.00.01.1"
-  ethernet_segment_load_balancing_mode_all_active         = false
-  ethernet_segment_load_balancing_mode_port_active        = false
-  ethernet_segment_load_balancing_mode_single_active      = true
-  ethernet_segment_load_balancing_mode_single_flow_active = false
+  interface_name                                                  = "Bundle-Ether12"
+  core_isolation_group                                            = 11
+  timers_peering                                                  = 60
+  timers_recovery                                                 = 120
+  timers_carving                                                  = 5
+  timers_ac_debounce                                              = 2000
+  ethernet_segment_esi_zero                                       = "01.01.01.01.01.01.01.01.04"
+  ethernet_segment_load_balancing_mode_port_active                = true
+  ethernet_segment_force_single_homed                             = true
+  ethernet_segment_service_carving_hrw                            = true
+  ethernet_segment_service_carving_multicast_hrw_s_g              = true
+  ethernet_segment_service_carving_preference_based_weight        = 100
+  ethernet_segment_service_carving_preference_based_access_driven = true
+  ethernet_segment_bgp_rt                                         = "01:01:01:01:01:04"
+  ethernet_segment_convergence_reroute                            = true
+  ethernet_segment_convergence_mac_mobility                       = true
+  ethernet_segment_convergence_nexthop_tracking                   = true
+  access_signal_bundle_down                                       = true
 }
 ```
 
@@ -29,20 +40,42 @@ resource "iosxr_evpn_interface" "example" {
 
 ### Required
 
-- `ethernet_segment_identifier_type_zero_esi` (String) ESI value
 - `interface_name` (String) Specify interface name
 
 ### Optional
 
+- `access_signal_bundle_down` (Boolean) Signal Bundle Down
 - `core_isolation_group` (Number) Core isolation group
   - Range: `1`-`4294967295`
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
+- `ethernet_segment_bgp_rt` (String) Set ES-Import Route Target
+- `ethernet_segment_convergence_mac_mobility` (Boolean) MAC-Mobility triggered reconvergence
+- `ethernet_segment_convergence_nexthop_tracking` (Boolean) Enable EVPN procedures to be influenced by BGP nexthop reachability
+- `ethernet_segment_convergence_reroute` (Boolean) Redirect unicast traffic to backup peer
+- `ethernet_segment_esi_zero` (String) ESI value
+- `ethernet_segment_force_single_homed` (Boolean) Ethernet segment is to remain single-home
 - `ethernet_segment_load_balancing_mode_all_active` (Boolean) All-Active load balancing
 - `ethernet_segment_load_balancing_mode_port_active` (Boolean) Port-Active load balancing
 - `ethernet_segment_load_balancing_mode_single_active` (Boolean) Single-Active load balancing
 - `ethernet_segment_load_balancing_mode_single_flow_active` (Boolean) Single-Flow-Active load balancing
+- `ethernet_segment_service_carving_hrw` (Boolean) HRW mode of carving services
+- `ethernet_segment_service_carving_manual_primary` (String) Primary services list
+- `ethernet_segment_service_carving_manual_secondary` (String) Secondary services list
+- `ethernet_segment_service_carving_multicast_hrw_g` (Boolean) HRW *,g mode
+- `ethernet_segment_service_carving_multicast_hrw_s_g` (Boolean) HRW s,g mode
+- `ethernet_segment_service_carving_preference_based_access_driven` (Boolean) Access-Driven DF Election
+- `ethernet_segment_service_carving_preference_based_weight` (Number) Preference value
+  - Range: `0`-`65535`
+- `timers_ac_debounce` (Number) Interface-specific AC Debounce timer
+  - Range: `0`-`300000`
+- `timers_carving` (Number) Interface-specific carving timer
+  - Range: `0`-`300`
+- `timers_peering` (Number) Interface-specific peering timer
+  - Range: `0`-`300`
+- `timers_recovery` (Number) Interface-specific recovery timer
+  - Range: `0`-`3600`
 
 ### Read-Only
 

@@ -40,28 +40,48 @@ type EVPNEVI struct {
 	DeleteMode                            types.String                                   `tfsdk:"delete_mode"`
 	VpnId                                 types.Int64                                    `tfsdk:"vpn_id"`
 	Description                           types.String                                   `tfsdk:"description"`
-	LoadBalancing                         types.Bool                                     `tfsdk:"load_balancing"`
-	LoadBalancingFlowLabelStatic          types.Bool                                     `tfsdk:"load_balancing_flow_label_static"`
 	BgpRdTwoByteAsNumber                  types.Int64                                    `tfsdk:"bgp_rd_two_byte_as_number"`
-	BgpRdTwoByteAsAssignedNumber          types.Int64                                    `tfsdk:"bgp_rd_two_byte_as_assigned_number"`
+	BgpRdTwoByteAsIndex                   types.Int64                                    `tfsdk:"bgp_rd_two_byte_as_index"`
 	BgpRdFourByteAsNumber                 types.Int64                                    `tfsdk:"bgp_rd_four_byte_as_number"`
-	BgpRdFourByteAsAssignedNumber         types.Int64                                    `tfsdk:"bgp_rd_four_byte_as_assigned_number"`
+	BgpRdFourByteAsIndex                  types.Int64                                    `tfsdk:"bgp_rd_four_byte_as_index"`
 	BgpRdIpv4Address                      types.String                                   `tfsdk:"bgp_rd_ipv4_address"`
-	BgpRdIpv4AddressAssignedNumber        types.Int64                                    `tfsdk:"bgp_rd_ipv4_address_assigned_number"`
+	BgpRdIpv4AddressIndex                 types.Int64                                    `tfsdk:"bgp_rd_ipv4_address_index"`
+	BgpRouteTargetTwoByteAsFormat         []EVPNEVIBgpRouteTargetTwoByteAsFormat         `tfsdk:"bgp_route_target_two_byte_as_format"`
+	BgpRouteTargetFourByteAsFormat        []EVPNEVIBgpRouteTargetFourByteAsFormat        `tfsdk:"bgp_route_target_four_byte_as_format"`
+	BgpRouteTargetIpv4AddressFormat       []EVPNEVIBgpRouteTargetIpv4AddressFormat       `tfsdk:"bgp_route_target_ipv4_address_format"`
 	BgpRouteTargetImportTwoByteAsFormat   []EVPNEVIBgpRouteTargetImportTwoByteAsFormat   `tfsdk:"bgp_route_target_import_two_byte_as_format"`
 	BgpRouteTargetImportFourByteAsFormat  []EVPNEVIBgpRouteTargetImportFourByteAsFormat  `tfsdk:"bgp_route_target_import_four_byte_as_format"`
 	BgpRouteTargetImportIpv4AddressFormat []EVPNEVIBgpRouteTargetImportIpv4AddressFormat `tfsdk:"bgp_route_target_import_ipv4_address_format"`
 	BgpRouteTargetExportTwoByteAsFormat   []EVPNEVIBgpRouteTargetExportTwoByteAsFormat   `tfsdk:"bgp_route_target_export_two_byte_as_format"`
 	BgpRouteTargetExportFourByteAsFormat  []EVPNEVIBgpRouteTargetExportFourByteAsFormat  `tfsdk:"bgp_route_target_export_four_byte_as_format"`
 	BgpRouteTargetExportIpv4AddressFormat []EVPNEVIBgpRouteTargetExportIpv4AddressFormat `tfsdk:"bgp_route_target_export_ipv4_address_format"`
+	BgpTablePolicy                        types.String                                   `tfsdk:"bgp_table_policy"`
+	BgpImplicitImportDisable              types.Bool                                     `tfsdk:"bgp_implicit_import_disable"`
 	BgpRoutePolicyImport                  types.String                                   `tfsdk:"bgp_route_policy_import"`
 	BgpRoutePolicyExport                  types.String                                   `tfsdk:"bgp_route_policy_export"`
+	LoadBalancing                         types.Bool                                     `tfsdk:"load_balancing"`
+	LoadBalancingFlowLabelStatic          types.Bool                                     `tfsdk:"load_balancing_flow_label_static"`
+	PreferredNexthopLowestIp              types.Bool                                     `tfsdk:"preferred_nexthop_lowest_ip"`
+	PreferredNexthopHighestIp             types.Bool                                     `tfsdk:"preferred_nexthop_highest_ip"`
+	PreferredNexthopModulo                types.Bool                                     `tfsdk:"preferred_nexthop_modulo"`
 	AdvertiseMac                          types.Bool                                     `tfsdk:"advertise_mac"`
+	AdvertiseMacBviMac                    types.Bool                                     `tfsdk:"advertise_mac_bvi_mac"`
 	UnknownUnicastSuppression             types.Bool                                     `tfsdk:"unknown_unicast_suppression"`
 	ControlWordDisable                    types.Bool                                     `tfsdk:"control_word_disable"`
+	IgnoreMtuMismatch                     types.Bool                                     `tfsdk:"ignore_mtu_mismatch"`
+	IgnoreMtuMismatchDisableDeprecated    types.Bool                                     `tfsdk:"ignore_mtu_mismatch_disable_deprecated"`
+	EnforceMtuMatch                       types.Bool                                     `tfsdk:"enforce_mtu_match"`
+	TransmitMtuZero                       types.Bool                                     `tfsdk:"transmit_mtu_zero"`
+	TransmitMtuZeroDisableDeprecated      types.Bool                                     `tfsdk:"transmit_mtu_zero_disable_deprecated"`
+	TransmitL2Mtu                         types.Bool                                     `tfsdk:"transmit_l2_mtu"`
+	ReOriginationDisable                  types.Bool                                     `tfsdk:"re_origination_disable"`
+	MulticastSourceConnected              types.Bool                                     `tfsdk:"multicast_source_connected"`
+	ProxyIgmpSnooping                     types.Bool                                     `tfsdk:"proxy_igmp_snooping"`
 	Etree                                 types.Bool                                     `tfsdk:"etree"`
 	EtreeLeaf                             types.Bool                                     `tfsdk:"etree_leaf"`
 	EtreeRtLeaf                           types.Bool                                     `tfsdk:"etree_rt_leaf"`
+	VpwsSingleActiveBackupSuppression     types.Bool                                     `tfsdk:"vpws_single_active_backup_suppression"`
+	BviCoupledMode                        types.Bool                                     `tfsdk:"bvi_coupled_mode"`
 }
 
 type EVPNEVIData struct {
@@ -69,28 +89,60 @@ type EVPNEVIData struct {
 	Id                                    types.String                                   `tfsdk:"id"`
 	VpnId                                 types.Int64                                    `tfsdk:"vpn_id"`
 	Description                           types.String                                   `tfsdk:"description"`
-	LoadBalancing                         types.Bool                                     `tfsdk:"load_balancing"`
-	LoadBalancingFlowLabelStatic          types.Bool                                     `tfsdk:"load_balancing_flow_label_static"`
 	BgpRdTwoByteAsNumber                  types.Int64                                    `tfsdk:"bgp_rd_two_byte_as_number"`
-	BgpRdTwoByteAsAssignedNumber          types.Int64                                    `tfsdk:"bgp_rd_two_byte_as_assigned_number"`
+	BgpRdTwoByteAsIndex                   types.Int64                                    `tfsdk:"bgp_rd_two_byte_as_index"`
 	BgpRdFourByteAsNumber                 types.Int64                                    `tfsdk:"bgp_rd_four_byte_as_number"`
-	BgpRdFourByteAsAssignedNumber         types.Int64                                    `tfsdk:"bgp_rd_four_byte_as_assigned_number"`
+	BgpRdFourByteAsIndex                  types.Int64                                    `tfsdk:"bgp_rd_four_byte_as_index"`
 	BgpRdIpv4Address                      types.String                                   `tfsdk:"bgp_rd_ipv4_address"`
-	BgpRdIpv4AddressAssignedNumber        types.Int64                                    `tfsdk:"bgp_rd_ipv4_address_assigned_number"`
+	BgpRdIpv4AddressIndex                 types.Int64                                    `tfsdk:"bgp_rd_ipv4_address_index"`
+	BgpRouteTargetTwoByteAsFormat         []EVPNEVIBgpRouteTargetTwoByteAsFormat         `tfsdk:"bgp_route_target_two_byte_as_format"`
+	BgpRouteTargetFourByteAsFormat        []EVPNEVIBgpRouteTargetFourByteAsFormat        `tfsdk:"bgp_route_target_four_byte_as_format"`
+	BgpRouteTargetIpv4AddressFormat       []EVPNEVIBgpRouteTargetIpv4AddressFormat       `tfsdk:"bgp_route_target_ipv4_address_format"`
 	BgpRouteTargetImportTwoByteAsFormat   []EVPNEVIBgpRouteTargetImportTwoByteAsFormat   `tfsdk:"bgp_route_target_import_two_byte_as_format"`
 	BgpRouteTargetImportFourByteAsFormat  []EVPNEVIBgpRouteTargetImportFourByteAsFormat  `tfsdk:"bgp_route_target_import_four_byte_as_format"`
 	BgpRouteTargetImportIpv4AddressFormat []EVPNEVIBgpRouteTargetImportIpv4AddressFormat `tfsdk:"bgp_route_target_import_ipv4_address_format"`
 	BgpRouteTargetExportTwoByteAsFormat   []EVPNEVIBgpRouteTargetExportTwoByteAsFormat   `tfsdk:"bgp_route_target_export_two_byte_as_format"`
 	BgpRouteTargetExportFourByteAsFormat  []EVPNEVIBgpRouteTargetExportFourByteAsFormat  `tfsdk:"bgp_route_target_export_four_byte_as_format"`
 	BgpRouteTargetExportIpv4AddressFormat []EVPNEVIBgpRouteTargetExportIpv4AddressFormat `tfsdk:"bgp_route_target_export_ipv4_address_format"`
+	BgpTablePolicy                        types.String                                   `tfsdk:"bgp_table_policy"`
+	BgpImplicitImportDisable              types.Bool                                     `tfsdk:"bgp_implicit_import_disable"`
 	BgpRoutePolicyImport                  types.String                                   `tfsdk:"bgp_route_policy_import"`
 	BgpRoutePolicyExport                  types.String                                   `tfsdk:"bgp_route_policy_export"`
+	LoadBalancing                         types.Bool                                     `tfsdk:"load_balancing"`
+	LoadBalancingFlowLabelStatic          types.Bool                                     `tfsdk:"load_balancing_flow_label_static"`
+	PreferredNexthopLowestIp              types.Bool                                     `tfsdk:"preferred_nexthop_lowest_ip"`
+	PreferredNexthopHighestIp             types.Bool                                     `tfsdk:"preferred_nexthop_highest_ip"`
+	PreferredNexthopModulo                types.Bool                                     `tfsdk:"preferred_nexthop_modulo"`
 	AdvertiseMac                          types.Bool                                     `tfsdk:"advertise_mac"`
+	AdvertiseMacBviMac                    types.Bool                                     `tfsdk:"advertise_mac_bvi_mac"`
 	UnknownUnicastSuppression             types.Bool                                     `tfsdk:"unknown_unicast_suppression"`
 	ControlWordDisable                    types.Bool                                     `tfsdk:"control_word_disable"`
+	IgnoreMtuMismatch                     types.Bool                                     `tfsdk:"ignore_mtu_mismatch"`
+	IgnoreMtuMismatchDisableDeprecated    types.Bool                                     `tfsdk:"ignore_mtu_mismatch_disable_deprecated"`
+	EnforceMtuMatch                       types.Bool                                     `tfsdk:"enforce_mtu_match"`
+	TransmitMtuZero                       types.Bool                                     `tfsdk:"transmit_mtu_zero"`
+	TransmitMtuZeroDisableDeprecated      types.Bool                                     `tfsdk:"transmit_mtu_zero_disable_deprecated"`
+	TransmitL2Mtu                         types.Bool                                     `tfsdk:"transmit_l2_mtu"`
+	ReOriginationDisable                  types.Bool                                     `tfsdk:"re_origination_disable"`
+	MulticastSourceConnected              types.Bool                                     `tfsdk:"multicast_source_connected"`
+	ProxyIgmpSnooping                     types.Bool                                     `tfsdk:"proxy_igmp_snooping"`
 	Etree                                 types.Bool                                     `tfsdk:"etree"`
 	EtreeLeaf                             types.Bool                                     `tfsdk:"etree_leaf"`
 	EtreeRtLeaf                           types.Bool                                     `tfsdk:"etree_rt_leaf"`
+	VpwsSingleActiveBackupSuppression     types.Bool                                     `tfsdk:"vpws_single_active_backup_suppression"`
+	BviCoupledMode                        types.Bool                                     `tfsdk:"bvi_coupled_mode"`
+}
+type EVPNEVIBgpRouteTargetTwoByteAsFormat struct {
+	AsNumber       types.Int64 `tfsdk:"as_number"`
+	AssignedNumber types.Int64 `tfsdk:"assigned_number"`
+}
+type EVPNEVIBgpRouteTargetFourByteAsFormat struct {
+	AsNumber       types.Int64 `tfsdk:"as_number"`
+	AssignedNumber types.Int64 `tfsdk:"assigned_number"`
+}
+type EVPNEVIBgpRouteTargetIpv4AddressFormat struct {
+	Ipv4Address    types.String `tfsdk:"ipv4_address"`
+	AssignedNumber types.Int64  `tfsdk:"assigned_number"`
 }
 type EVPNEVIBgpRouteTargetImportTwoByteAsFormat struct {
 	AsNumber       types.Int64 `tfsdk:"as_number"`
@@ -141,6 +193,38 @@ func (data EVPNEVI) toBody(ctx context.Context) string {
 	if !data.Description.IsNull() && !data.Description.IsUnknown() {
 		body, _ = sjson.Set(body, "description", data.Description.ValueString())
 	}
+	if !data.BgpRdTwoByteAsNumber.IsNull() && !data.BgpRdTwoByteAsNumber.IsUnknown() {
+		body, _ = sjson.Set(body, "bgp.rd.two-byte-as-number", strconv.FormatInt(data.BgpRdTwoByteAsNumber.ValueInt64(), 10))
+	}
+	if !data.BgpRdTwoByteAsIndex.IsNull() && !data.BgpRdTwoByteAsIndex.IsUnknown() {
+		body, _ = sjson.Set(body, "bgp.rd.two-byte-as-assigned-number", strconv.FormatInt(data.BgpRdTwoByteAsIndex.ValueInt64(), 10))
+	}
+	if !data.BgpRdFourByteAsNumber.IsNull() && !data.BgpRdFourByteAsNumber.IsUnknown() {
+		body, _ = sjson.Set(body, "bgp.rd.four-byte-as-number", strconv.FormatInt(data.BgpRdFourByteAsNumber.ValueInt64(), 10))
+	}
+	if !data.BgpRdFourByteAsIndex.IsNull() && !data.BgpRdFourByteAsIndex.IsUnknown() {
+		body, _ = sjson.Set(body, "bgp.rd.four-byte-as-assigned-number", strconv.FormatInt(data.BgpRdFourByteAsIndex.ValueInt64(), 10))
+	}
+	if !data.BgpRdIpv4Address.IsNull() && !data.BgpRdIpv4Address.IsUnknown() {
+		body, _ = sjson.Set(body, "bgp.rd.ipv4-address", data.BgpRdIpv4Address.ValueString())
+	}
+	if !data.BgpRdIpv4AddressIndex.IsNull() && !data.BgpRdIpv4AddressIndex.IsUnknown() {
+		body, _ = sjson.Set(body, "bgp.rd.ipv4-address-assigned-number", strconv.FormatInt(data.BgpRdIpv4AddressIndex.ValueInt64(), 10))
+	}
+	if !data.BgpTablePolicy.IsNull() && !data.BgpTablePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "bgp.table-policy", data.BgpTablePolicy.ValueString())
+	}
+	if !data.BgpImplicitImportDisable.IsNull() && !data.BgpImplicitImportDisable.IsUnknown() {
+		if data.BgpImplicitImportDisable.ValueBool() {
+			body, _ = sjson.Set(body, "bgp.implicit-import-disable", map[string]string{})
+		}
+	}
+	if !data.BgpRoutePolicyImport.IsNull() && !data.BgpRoutePolicyImport.IsUnknown() {
+		body, _ = sjson.Set(body, "bgp.route-policy.import", data.BgpRoutePolicyImport.ValueString())
+	}
+	if !data.BgpRoutePolicyExport.IsNull() && !data.BgpRoutePolicyExport.IsUnknown() {
+		body, _ = sjson.Set(body, "bgp.route-policy.export", data.BgpRoutePolicyExport.ValueString())
+	}
 	if !data.LoadBalancing.IsNull() && !data.LoadBalancing.IsUnknown() {
 		if data.LoadBalancing.ValueBool() {
 			body, _ = sjson.Set(body, "load-balancing", map[string]string{})
@@ -151,33 +235,29 @@ func (data EVPNEVI) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "load-balancing.flow-label.static", map[string]string{})
 		}
 	}
-	if !data.BgpRdTwoByteAsNumber.IsNull() && !data.BgpRdTwoByteAsNumber.IsUnknown() {
-		body, _ = sjson.Set(body, "bgp.rd.two-byte-as-number", strconv.FormatInt(data.BgpRdTwoByteAsNumber.ValueInt64(), 10))
+	if !data.PreferredNexthopLowestIp.IsNull() && !data.PreferredNexthopLowestIp.IsUnknown() {
+		if data.PreferredNexthopLowestIp.ValueBool() {
+			body, _ = sjson.Set(body, "preferred-nexthop.lowest-ip", map[string]string{})
+		}
 	}
-	if !data.BgpRdTwoByteAsAssignedNumber.IsNull() && !data.BgpRdTwoByteAsAssignedNumber.IsUnknown() {
-		body, _ = sjson.Set(body, "bgp.rd.two-byte-as-assigned-number", strconv.FormatInt(data.BgpRdTwoByteAsAssignedNumber.ValueInt64(), 10))
+	if !data.PreferredNexthopHighestIp.IsNull() && !data.PreferredNexthopHighestIp.IsUnknown() {
+		if data.PreferredNexthopHighestIp.ValueBool() {
+			body, _ = sjson.Set(body, "preferred-nexthop.highest-ip", map[string]string{})
+		}
 	}
-	if !data.BgpRdFourByteAsNumber.IsNull() && !data.BgpRdFourByteAsNumber.IsUnknown() {
-		body, _ = sjson.Set(body, "bgp.rd.four-byte-as-number", strconv.FormatInt(data.BgpRdFourByteAsNumber.ValueInt64(), 10))
-	}
-	if !data.BgpRdFourByteAsAssignedNumber.IsNull() && !data.BgpRdFourByteAsAssignedNumber.IsUnknown() {
-		body, _ = sjson.Set(body, "bgp.rd.four-byte-as-assigned-number", strconv.FormatInt(data.BgpRdFourByteAsAssignedNumber.ValueInt64(), 10))
-	}
-	if !data.BgpRdIpv4Address.IsNull() && !data.BgpRdIpv4Address.IsUnknown() {
-		body, _ = sjson.Set(body, "bgp.rd.ipv4-address", data.BgpRdIpv4Address.ValueString())
-	}
-	if !data.BgpRdIpv4AddressAssignedNumber.IsNull() && !data.BgpRdIpv4AddressAssignedNumber.IsUnknown() {
-		body, _ = sjson.Set(body, "bgp.rd.ipv4-address-assigned-number", strconv.FormatInt(data.BgpRdIpv4AddressAssignedNumber.ValueInt64(), 10))
-	}
-	if !data.BgpRoutePolicyImport.IsNull() && !data.BgpRoutePolicyImport.IsUnknown() {
-		body, _ = sjson.Set(body, "bgp.route-policy.import", data.BgpRoutePolicyImport.ValueString())
-	}
-	if !data.BgpRoutePolicyExport.IsNull() && !data.BgpRoutePolicyExport.IsUnknown() {
-		body, _ = sjson.Set(body, "bgp.route-policy.export", data.BgpRoutePolicyExport.ValueString())
+	if !data.PreferredNexthopModulo.IsNull() && !data.PreferredNexthopModulo.IsUnknown() {
+		if data.PreferredNexthopModulo.ValueBool() {
+			body, _ = sjson.Set(body, "preferred-nexthop.modulo", map[string]string{})
+		}
 	}
 	if !data.AdvertiseMac.IsNull() && !data.AdvertiseMac.IsUnknown() {
 		if data.AdvertiseMac.ValueBool() {
 			body, _ = sjson.Set(body, "advertise-mac", map[string]string{})
+		}
+	}
+	if !data.AdvertiseMacBviMac.IsNull() && !data.AdvertiseMacBviMac.IsUnknown() {
+		if data.AdvertiseMacBviMac.ValueBool() {
+			body, _ = sjson.Set(body, "advertise-mac.bvi-mac", map[string]string{})
 		}
 	}
 	if !data.UnknownUnicastSuppression.IsNull() && !data.UnknownUnicastSuppression.IsUnknown() {
@@ -188,6 +268,51 @@ func (data EVPNEVI) toBody(ctx context.Context) string {
 	if !data.ControlWordDisable.IsNull() && !data.ControlWordDisable.IsUnknown() {
 		if data.ControlWordDisable.ValueBool() {
 			body, _ = sjson.Set(body, "control-word-disable", map[string]string{})
+		}
+	}
+	if !data.IgnoreMtuMismatch.IsNull() && !data.IgnoreMtuMismatch.IsUnknown() {
+		if data.IgnoreMtuMismatch.ValueBool() {
+			body, _ = sjson.Set(body, "ignore-mtu-mismatch", map[string]string{})
+		}
+	}
+	if !data.IgnoreMtuMismatchDisableDeprecated.IsNull() && !data.IgnoreMtuMismatchDisableDeprecated.IsUnknown() {
+		if data.IgnoreMtuMismatchDisableDeprecated.ValueBool() {
+			body, _ = sjson.Set(body, "ignore-mtu-mismatch.disable-deprecated", map[string]string{})
+		}
+	}
+	if !data.EnforceMtuMatch.IsNull() && !data.EnforceMtuMatch.IsUnknown() {
+		if data.EnforceMtuMatch.ValueBool() {
+			body, _ = sjson.Set(body, "enforce-mtu-match", map[string]string{})
+		}
+	}
+	if !data.TransmitMtuZero.IsNull() && !data.TransmitMtuZero.IsUnknown() {
+		if data.TransmitMtuZero.ValueBool() {
+			body, _ = sjson.Set(body, "transmit-mtu-zero", map[string]string{})
+		}
+	}
+	if !data.TransmitMtuZeroDisableDeprecated.IsNull() && !data.TransmitMtuZeroDisableDeprecated.IsUnknown() {
+		if data.TransmitMtuZeroDisableDeprecated.ValueBool() {
+			body, _ = sjson.Set(body, "transmit-mtu-zero.disable-deprecated", map[string]string{})
+		}
+	}
+	if !data.TransmitL2Mtu.IsNull() && !data.TransmitL2Mtu.IsUnknown() {
+		if data.TransmitL2Mtu.ValueBool() {
+			body, _ = sjson.Set(body, "transmit-l2-mtu", map[string]string{})
+		}
+	}
+	if !data.ReOriginationDisable.IsNull() && !data.ReOriginationDisable.IsUnknown() {
+		if data.ReOriginationDisable.ValueBool() {
+			body, _ = sjson.Set(body, "re-origination-disable", map[string]string{})
+		}
+	}
+	if !data.MulticastSourceConnected.IsNull() && !data.MulticastSourceConnected.IsUnknown() {
+		if data.MulticastSourceConnected.ValueBool() {
+			body, _ = sjson.Set(body, "multicast.source-connected", map[string]string{})
+		}
+	}
+	if !data.ProxyIgmpSnooping.IsNull() && !data.ProxyIgmpSnooping.IsUnknown() {
+		if data.ProxyIgmpSnooping.ValueBool() {
+			body, _ = sjson.Set(body, "proxy.igmp-snooping", map[string]string{})
 		}
 	}
 	if !data.Etree.IsNull() && !data.Etree.IsUnknown() {
@@ -203,6 +328,49 @@ func (data EVPNEVI) toBody(ctx context.Context) string {
 	if !data.EtreeRtLeaf.IsNull() && !data.EtreeRtLeaf.IsUnknown() {
 		if data.EtreeRtLeaf.ValueBool() {
 			body, _ = sjson.Set(body, "etree.rt-leaf", map[string]string{})
+		}
+	}
+	if !data.VpwsSingleActiveBackupSuppression.IsNull() && !data.VpwsSingleActiveBackupSuppression.IsUnknown() {
+		if data.VpwsSingleActiveBackupSuppression.ValueBool() {
+			body, _ = sjson.Set(body, "vpws-single-active-backup-suppression", map[string]string{})
+		}
+	}
+	if !data.BviCoupledMode.IsNull() && !data.BviCoupledMode.IsUnknown() {
+		if data.BviCoupledMode.ValueBool() {
+			body, _ = sjson.Set(body, "bvi-coupled-mode", map[string]string{})
+		}
+	}
+	if len(data.BgpRouteTargetTwoByteAsFormat) > 0 {
+		body, _ = sjson.Set(body, "bgp.route-target.export.two-byte-as-rts.two-byte-as-rt", []interface{}{})
+		for index, item := range data.BgpRouteTargetTwoByteAsFormat {
+			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "bgp.route-target.export.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(index)+"."+"two-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
+			}
+			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "bgp.route-target.export.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(index)+"."+"assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.BgpRouteTargetFourByteAsFormat) > 0 {
+		body, _ = sjson.Set(body, "bgp.route-target.four-byte-as-rts.four-byte-as-rt", []interface{}{})
+		for index, item := range data.BgpRouteTargetFourByteAsFormat {
+			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "bgp.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(index)+"."+"four-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
+			}
+			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "bgp.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(index)+"."+"assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.BgpRouteTargetIpv4AddressFormat) > 0 {
+		body, _ = sjson.Set(body, "bgp.route-target.ipv4-address-rts.ipv4-address-rt", []interface{}{})
+		for index, item := range data.BgpRouteTargetIpv4AddressFormat {
+			if !item.Ipv4Address.IsNull() && !item.Ipv4Address.IsUnknown() {
+				body, _ = sjson.Set(body, "bgp.route-target.ipv4-address-rts.ipv4-address-rt"+"."+strconv.Itoa(index)+"."+"ipv4-address", item.Ipv4Address.ValueString())
+			}
+			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "bgp.route-target.ipv4-address-rts.ipv4-address-rt"+"."+strconv.Itoa(index)+"."+"assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+			}
 		}
 	}
 	if len(data.BgpRouteTargetImportTwoByteAsFormat) > 0 {
@@ -284,53 +452,137 @@ func (data *EVPNEVI) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Description = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "load-balancing"); !data.LoadBalancing.IsNull() {
-		if value.Exists() {
-			data.LoadBalancing = types.BoolValue(true)
-		} else {
-			data.LoadBalancing = types.BoolValue(false)
-		}
-	} else {
-		data.LoadBalancing = types.BoolNull()
-	}
-	if value := gjson.GetBytes(res, "load-balancing.flow-label.static"); !data.LoadBalancingFlowLabelStatic.IsNull() {
-		if value.Exists() {
-			data.LoadBalancingFlowLabelStatic = types.BoolValue(true)
-		} else {
-			data.LoadBalancingFlowLabelStatic = types.BoolValue(false)
-		}
-	} else {
-		data.LoadBalancingFlowLabelStatic = types.BoolNull()
-	}
 	if value := gjson.GetBytes(res, "bgp.rd.two-byte-as-number"); value.Exists() && !data.BgpRdTwoByteAsNumber.IsNull() {
 		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
 	} else {
 		data.BgpRdTwoByteAsNumber = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bgp.rd.two-byte-as-assigned-number"); value.Exists() && !data.BgpRdTwoByteAsAssignedNumber.IsNull() {
-		data.BgpRdTwoByteAsAssignedNumber = types.Int64Value(value.Int())
+	if value := gjson.GetBytes(res, "bgp.rd.two-byte-as-assigned-number"); value.Exists() && !data.BgpRdTwoByteAsIndex.IsNull() {
+		data.BgpRdTwoByteAsIndex = types.Int64Value(value.Int())
 	} else {
-		data.BgpRdTwoByteAsAssignedNumber = types.Int64Null()
+		data.BgpRdTwoByteAsIndex = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bgp.rd.four-byte-as-number"); value.Exists() && !data.BgpRdFourByteAsNumber.IsNull() {
 		data.BgpRdFourByteAsNumber = types.Int64Value(value.Int())
 	} else {
 		data.BgpRdFourByteAsNumber = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bgp.rd.four-byte-as-assigned-number"); value.Exists() && !data.BgpRdFourByteAsAssignedNumber.IsNull() {
-		data.BgpRdFourByteAsAssignedNumber = types.Int64Value(value.Int())
+	if value := gjson.GetBytes(res, "bgp.rd.four-byte-as-assigned-number"); value.Exists() && !data.BgpRdFourByteAsIndex.IsNull() {
+		data.BgpRdFourByteAsIndex = types.Int64Value(value.Int())
 	} else {
-		data.BgpRdFourByteAsAssignedNumber = types.Int64Null()
+		data.BgpRdFourByteAsIndex = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bgp.rd.ipv4-address"); value.Exists() && !data.BgpRdIpv4Address.IsNull() {
 		data.BgpRdIpv4Address = types.StringValue(value.String())
 	} else {
 		data.BgpRdIpv4Address = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "bgp.rd.ipv4-address-assigned-number"); value.Exists() && !data.BgpRdIpv4AddressAssignedNumber.IsNull() {
-		data.BgpRdIpv4AddressAssignedNumber = types.Int64Value(value.Int())
+	if value := gjson.GetBytes(res, "bgp.rd.ipv4-address-assigned-number"); value.Exists() && !data.BgpRdIpv4AddressIndex.IsNull() {
+		data.BgpRdIpv4AddressIndex = types.Int64Value(value.Int())
 	} else {
-		data.BgpRdIpv4AddressAssignedNumber = types.Int64Null()
+		data.BgpRdIpv4AddressIndex = types.Int64Null()
+	}
+	for i := range data.BgpRouteTargetTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "assigned-number"}
+		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "bgp.route-target.export.two-byte-as-rts.two-byte-as-rt").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("two-byte-as-number"); value.Exists() && !data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.IsNull() {
+			data.BgpRouteTargetTwoByteAsFormat[i].AsNumber = types.Int64Value(value.Int())
+		} else {
+			data.BgpRouteTargetTwoByteAsFormat[i].AsNumber = types.Int64Null()
+		}
+		if value := r.Get("assigned-number"); value.Exists() && !data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.IsNull() {
+			data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber = types.Int64Value(value.Int())
+		} else {
+			data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber = types.Int64Null()
+		}
+	}
+	for i := range data.BgpRouteTargetFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "assigned-number"}
+		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "bgp.route-target.four-byte-as-rts.four-byte-as-rt").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("four-byte-as-number"); value.Exists() && !data.BgpRouteTargetFourByteAsFormat[i].AsNumber.IsNull() {
+			data.BgpRouteTargetFourByteAsFormat[i].AsNumber = types.Int64Value(value.Int())
+		} else {
+			data.BgpRouteTargetFourByteAsFormat[i].AsNumber = types.Int64Null()
+		}
+		if value := r.Get("assigned-number"); value.Exists() && !data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.IsNull() {
+			data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber = types.Int64Value(value.Int())
+		} else {
+			data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber = types.Int64Null()
+		}
+	}
+	for i := range data.BgpRouteTargetIpv4AddressFormat {
+		keys := [...]string{"ipv4-address", "assigned-number"}
+		keyValues := [...]string{data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "bgp.route-target.ipv4-address-rts.ipv4-address-rt").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("ipv4-address"); value.Exists() && !data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.IsNull() {
+			data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address = types.StringValue(value.String())
+		} else {
+			data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address = types.StringNull()
+		}
+		if value := r.Get("assigned-number"); value.Exists() && !data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.IsNull() {
+			data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber = types.Int64Value(value.Int())
+		} else {
+			data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber = types.Int64Null()
+		}
 	}
 	for i := range data.BgpRouteTargetImportTwoByteAsFormat {
 		keys := [...]string{"two-byte-as-number", "assigned-number"}
@@ -536,6 +788,20 @@ func (data *EVPNEVI) updateFromBody(ctx context.Context, res []byte) {
 			data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber = types.Int64Null()
 		}
 	}
+	if value := gjson.GetBytes(res, "bgp.table-policy"); value.Exists() && !data.BgpTablePolicy.IsNull() {
+		data.BgpTablePolicy = types.StringValue(value.String())
+	} else {
+		data.BgpTablePolicy = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "bgp.implicit-import-disable"); !data.BgpImplicitImportDisable.IsNull() {
+		if value.Exists() {
+			data.BgpImplicitImportDisable = types.BoolValue(true)
+		} else {
+			data.BgpImplicitImportDisable = types.BoolValue(false)
+		}
+	} else {
+		data.BgpImplicitImportDisable = types.BoolNull()
+	}
 	if value := gjson.GetBytes(res, "bgp.route-policy.import"); value.Exists() && !data.BgpRoutePolicyImport.IsNull() {
 		data.BgpRoutePolicyImport = types.StringValue(value.String())
 	} else {
@@ -546,6 +812,51 @@ func (data *EVPNEVI) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.BgpRoutePolicyExport = types.StringNull()
 	}
+	if value := gjson.GetBytes(res, "load-balancing"); !data.LoadBalancing.IsNull() {
+		if value.Exists() {
+			data.LoadBalancing = types.BoolValue(true)
+		} else {
+			data.LoadBalancing = types.BoolValue(false)
+		}
+	} else {
+		data.LoadBalancing = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "load-balancing.flow-label.static"); !data.LoadBalancingFlowLabelStatic.IsNull() {
+		if value.Exists() {
+			data.LoadBalancingFlowLabelStatic = types.BoolValue(true)
+		} else {
+			data.LoadBalancingFlowLabelStatic = types.BoolValue(false)
+		}
+	} else {
+		data.LoadBalancingFlowLabelStatic = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "preferred-nexthop.lowest-ip"); !data.PreferredNexthopLowestIp.IsNull() {
+		if value.Exists() {
+			data.PreferredNexthopLowestIp = types.BoolValue(true)
+		} else {
+			data.PreferredNexthopLowestIp = types.BoolValue(false)
+		}
+	} else {
+		data.PreferredNexthopLowestIp = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "preferred-nexthop.highest-ip"); !data.PreferredNexthopHighestIp.IsNull() {
+		if value.Exists() {
+			data.PreferredNexthopHighestIp = types.BoolValue(true)
+		} else {
+			data.PreferredNexthopHighestIp = types.BoolValue(false)
+		}
+	} else {
+		data.PreferredNexthopHighestIp = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "preferred-nexthop.modulo"); !data.PreferredNexthopModulo.IsNull() {
+		if value.Exists() {
+			data.PreferredNexthopModulo = types.BoolValue(true)
+		} else {
+			data.PreferredNexthopModulo = types.BoolValue(false)
+		}
+	} else {
+		data.PreferredNexthopModulo = types.BoolNull()
+	}
 	if value := gjson.GetBytes(res, "advertise-mac"); !data.AdvertiseMac.IsNull() {
 		if value.Exists() {
 			data.AdvertiseMac = types.BoolValue(true)
@@ -554,6 +865,15 @@ func (data *EVPNEVI) updateFromBody(ctx context.Context, res []byte) {
 		}
 	} else {
 		data.AdvertiseMac = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "advertise-mac.bvi-mac"); !data.AdvertiseMacBviMac.IsNull() {
+		if value.Exists() {
+			data.AdvertiseMacBviMac = types.BoolValue(true)
+		} else {
+			data.AdvertiseMacBviMac = types.BoolValue(false)
+		}
+	} else {
+		data.AdvertiseMacBviMac = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "unknown-unicast-suppression"); !data.UnknownUnicastSuppression.IsNull() {
 		if value.Exists() {
@@ -572,6 +892,87 @@ func (data *EVPNEVI) updateFromBody(ctx context.Context, res []byte) {
 		}
 	} else {
 		data.ControlWordDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ignore-mtu-mismatch"); !data.IgnoreMtuMismatch.IsNull() {
+		if value.Exists() {
+			data.IgnoreMtuMismatch = types.BoolValue(true)
+		} else {
+			data.IgnoreMtuMismatch = types.BoolValue(false)
+		}
+	} else {
+		data.IgnoreMtuMismatch = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ignore-mtu-mismatch.disable-deprecated"); !data.IgnoreMtuMismatchDisableDeprecated.IsNull() {
+		if value.Exists() {
+			data.IgnoreMtuMismatchDisableDeprecated = types.BoolValue(true)
+		} else {
+			data.IgnoreMtuMismatchDisableDeprecated = types.BoolValue(false)
+		}
+	} else {
+		data.IgnoreMtuMismatchDisableDeprecated = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "enforce-mtu-match"); !data.EnforceMtuMatch.IsNull() {
+		if value.Exists() {
+			data.EnforceMtuMatch = types.BoolValue(true)
+		} else {
+			data.EnforceMtuMatch = types.BoolValue(false)
+		}
+	} else {
+		data.EnforceMtuMatch = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "transmit-mtu-zero"); !data.TransmitMtuZero.IsNull() {
+		if value.Exists() {
+			data.TransmitMtuZero = types.BoolValue(true)
+		} else {
+			data.TransmitMtuZero = types.BoolValue(false)
+		}
+	} else {
+		data.TransmitMtuZero = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "transmit-mtu-zero.disable-deprecated"); !data.TransmitMtuZeroDisableDeprecated.IsNull() {
+		if value.Exists() {
+			data.TransmitMtuZeroDisableDeprecated = types.BoolValue(true)
+		} else {
+			data.TransmitMtuZeroDisableDeprecated = types.BoolValue(false)
+		}
+	} else {
+		data.TransmitMtuZeroDisableDeprecated = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "transmit-l2-mtu"); !data.TransmitL2Mtu.IsNull() {
+		if value.Exists() {
+			data.TransmitL2Mtu = types.BoolValue(true)
+		} else {
+			data.TransmitL2Mtu = types.BoolValue(false)
+		}
+	} else {
+		data.TransmitL2Mtu = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "re-origination-disable"); !data.ReOriginationDisable.IsNull() {
+		if value.Exists() {
+			data.ReOriginationDisable = types.BoolValue(true)
+		} else {
+			data.ReOriginationDisable = types.BoolValue(false)
+		}
+	} else {
+		data.ReOriginationDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "multicast.source-connected"); !data.MulticastSourceConnected.IsNull() {
+		if value.Exists() {
+			data.MulticastSourceConnected = types.BoolValue(true)
+		} else {
+			data.MulticastSourceConnected = types.BoolValue(false)
+		}
+	} else {
+		data.MulticastSourceConnected = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "proxy.igmp-snooping"); !data.ProxyIgmpSnooping.IsNull() {
+		if value.Exists() {
+			data.ProxyIgmpSnooping = types.BoolValue(true)
+		} else {
+			data.ProxyIgmpSnooping = types.BoolValue(false)
+		}
+	} else {
+		data.ProxyIgmpSnooping = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "etree"); !data.Etree.IsNull() {
 		if value.Exists() {
@@ -600,6 +1001,24 @@ func (data *EVPNEVI) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.EtreeRtLeaf = types.BoolNull()
 	}
+	if value := gjson.GetBytes(res, "vpws-single-active-backup-suppression"); !data.VpwsSingleActiveBackupSuppression.IsNull() {
+		if value.Exists() {
+			data.VpwsSingleActiveBackupSuppression = types.BoolValue(true)
+		} else {
+			data.VpwsSingleActiveBackupSuppression = types.BoolValue(false)
+		}
+	} else {
+		data.VpwsSingleActiveBackupSuppression = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "bvi-coupled-mode"); !data.BviCoupledMode.IsNull() {
+		if value.Exists() {
+			data.BviCoupledMode = types.BoolValue(true)
+		} else {
+			data.BviCoupledMode = types.BoolValue(false)
+		}
+	} else {
+		data.BviCoupledMode = types.BoolNull()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -610,33 +1029,65 @@ func (data *EVPNEVI) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "load-balancing"); value.Exists() {
-		data.LoadBalancing = types.BoolValue(true)
-	} else {
-		data.LoadBalancing = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "load-balancing.flow-label.static"); value.Exists() {
-		data.LoadBalancingFlowLabelStatic = types.BoolValue(true)
-	} else {
-		data.LoadBalancingFlowLabelStatic = types.BoolValue(false)
-	}
 	if value := gjson.GetBytes(res, "bgp.rd.two-byte-as-number"); value.Exists() {
 		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "bgp.rd.two-byte-as-assigned-number"); value.Exists() {
-		data.BgpRdTwoByteAsAssignedNumber = types.Int64Value(value.Int())
+		data.BgpRdTwoByteAsIndex = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "bgp.rd.four-byte-as-number"); value.Exists() {
 		data.BgpRdFourByteAsNumber = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "bgp.rd.four-byte-as-assigned-number"); value.Exists() {
-		data.BgpRdFourByteAsAssignedNumber = types.Int64Value(value.Int())
+		data.BgpRdFourByteAsIndex = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "bgp.rd.ipv4-address"); value.Exists() {
 		data.BgpRdIpv4Address = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "bgp.rd.ipv4-address-assigned-number"); value.Exists() {
-		data.BgpRdIpv4AddressAssignedNumber = types.Int64Value(value.Int())
+		data.BgpRdIpv4AddressIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "bgp.route-target.export.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
+		data.BgpRouteTargetTwoByteAsFormat = make([]EVPNEVIBgpRouteTargetTwoByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := EVPNEVIBgpRouteTargetTwoByteAsFormat{}
+			if cValue := v.Get("two-byte-as-number"); cValue.Exists() {
+				item.AsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetTwoByteAsFormat = append(data.BgpRouteTargetTwoByteAsFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "bgp.route-target.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
+		data.BgpRouteTargetFourByteAsFormat = make([]EVPNEVIBgpRouteTargetFourByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := EVPNEVIBgpRouteTargetFourByteAsFormat{}
+			if cValue := v.Get("four-byte-as-number"); cValue.Exists() {
+				item.AsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetFourByteAsFormat = append(data.BgpRouteTargetFourByteAsFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "bgp.route-target.ipv4-address-rts.ipv4-address-rt"); value.Exists() {
+		data.BgpRouteTargetIpv4AddressFormat = make([]EVPNEVIBgpRouteTargetIpv4AddressFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := EVPNEVIBgpRouteTargetIpv4AddressFormat{}
+			if cValue := v.Get("ipv4-address"); cValue.Exists() {
+				item.Ipv4Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetIpv4AddressFormat = append(data.BgpRouteTargetIpv4AddressFormat, item)
+			return true
+		})
 	}
 	if value := gjson.GetBytes(res, "bgp.route-target.import.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetImportTwoByteAsFormat = make([]EVPNEVIBgpRouteTargetImportTwoByteAsFormat, 0)
@@ -722,16 +1173,54 @@ func (data *EVPNEVI) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
+	if value := gjson.GetBytes(res, "bgp.table-policy"); value.Exists() {
+		data.BgpTablePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "bgp.implicit-import-disable"); value.Exists() {
+		data.BgpImplicitImportDisable = types.BoolValue(true)
+	} else {
+		data.BgpImplicitImportDisable = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "bgp.route-policy.import"); value.Exists() {
 		data.BgpRoutePolicyImport = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "bgp.route-policy.export"); value.Exists() {
 		data.BgpRoutePolicyExport = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "load-balancing"); value.Exists() {
+		data.LoadBalancing = types.BoolValue(true)
+	} else {
+		data.LoadBalancing = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "load-balancing.flow-label.static"); value.Exists() {
+		data.LoadBalancingFlowLabelStatic = types.BoolValue(true)
+	} else {
+		data.LoadBalancingFlowLabelStatic = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "preferred-nexthop.lowest-ip"); value.Exists() {
+		data.PreferredNexthopLowestIp = types.BoolValue(true)
+	} else {
+		data.PreferredNexthopLowestIp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "preferred-nexthop.highest-ip"); value.Exists() {
+		data.PreferredNexthopHighestIp = types.BoolValue(true)
+	} else {
+		data.PreferredNexthopHighestIp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "preferred-nexthop.modulo"); value.Exists() {
+		data.PreferredNexthopModulo = types.BoolValue(true)
+	} else {
+		data.PreferredNexthopModulo = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "advertise-mac"); value.Exists() {
 		data.AdvertiseMac = types.BoolValue(true)
 	} else {
 		data.AdvertiseMac = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "advertise-mac.bvi-mac"); value.Exists() {
+		data.AdvertiseMacBviMac = types.BoolValue(true)
+	} else {
+		data.AdvertiseMacBviMac = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "unknown-unicast-suppression"); value.Exists() {
 		data.UnknownUnicastSuppression = types.BoolValue(true)
@@ -742,6 +1231,51 @@ func (data *EVPNEVI) fromBody(ctx context.Context, res []byte) {
 		data.ControlWordDisable = types.BoolValue(true)
 	} else {
 		data.ControlWordDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ignore-mtu-mismatch"); value.Exists() {
+		data.IgnoreMtuMismatch = types.BoolValue(true)
+	} else {
+		data.IgnoreMtuMismatch = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ignore-mtu-mismatch.disable-deprecated"); value.Exists() {
+		data.IgnoreMtuMismatchDisableDeprecated = types.BoolValue(true)
+	} else {
+		data.IgnoreMtuMismatchDisableDeprecated = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "enforce-mtu-match"); value.Exists() {
+		data.EnforceMtuMatch = types.BoolValue(true)
+	} else {
+		data.EnforceMtuMatch = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transmit-mtu-zero"); value.Exists() {
+		data.TransmitMtuZero = types.BoolValue(true)
+	} else {
+		data.TransmitMtuZero = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transmit-mtu-zero.disable-deprecated"); value.Exists() {
+		data.TransmitMtuZeroDisableDeprecated = types.BoolValue(true)
+	} else {
+		data.TransmitMtuZeroDisableDeprecated = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transmit-l2-mtu"); value.Exists() {
+		data.TransmitL2Mtu = types.BoolValue(true)
+	} else {
+		data.TransmitL2Mtu = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "re-origination-disable"); value.Exists() {
+		data.ReOriginationDisable = types.BoolValue(true)
+	} else {
+		data.ReOriginationDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "multicast.source-connected"); value.Exists() {
+		data.MulticastSourceConnected = types.BoolValue(true)
+	} else {
+		data.MulticastSourceConnected = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "proxy.igmp-snooping"); value.Exists() {
+		data.ProxyIgmpSnooping = types.BoolValue(true)
+	} else {
+		data.ProxyIgmpSnooping = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "etree"); value.Exists() {
 		data.Etree = types.BoolValue(true)
@@ -757,6 +1291,16 @@ func (data *EVPNEVI) fromBody(ctx context.Context, res []byte) {
 		data.EtreeRtLeaf = types.BoolValue(true)
 	} else {
 		data.EtreeRtLeaf = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "vpws-single-active-backup-suppression"); value.Exists() {
+		data.VpwsSingleActiveBackupSuppression = types.BoolValue(true)
+	} else {
+		data.VpwsSingleActiveBackupSuppression = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bvi-coupled-mode"); value.Exists() {
+		data.BviCoupledMode = types.BoolValue(true)
+	} else {
+		data.BviCoupledMode = types.BoolValue(false)
 	}
 }
 
@@ -768,33 +1312,65 @@ func (data *EVPNEVIData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "load-balancing"); value.Exists() {
-		data.LoadBalancing = types.BoolValue(true)
-	} else {
-		data.LoadBalancing = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "load-balancing.flow-label.static"); value.Exists() {
-		data.LoadBalancingFlowLabelStatic = types.BoolValue(true)
-	} else {
-		data.LoadBalancingFlowLabelStatic = types.BoolValue(false)
-	}
 	if value := gjson.GetBytes(res, "bgp.rd.two-byte-as-number"); value.Exists() {
 		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "bgp.rd.two-byte-as-assigned-number"); value.Exists() {
-		data.BgpRdTwoByteAsAssignedNumber = types.Int64Value(value.Int())
+		data.BgpRdTwoByteAsIndex = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "bgp.rd.four-byte-as-number"); value.Exists() {
 		data.BgpRdFourByteAsNumber = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "bgp.rd.four-byte-as-assigned-number"); value.Exists() {
-		data.BgpRdFourByteAsAssignedNumber = types.Int64Value(value.Int())
+		data.BgpRdFourByteAsIndex = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "bgp.rd.ipv4-address"); value.Exists() {
 		data.BgpRdIpv4Address = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "bgp.rd.ipv4-address-assigned-number"); value.Exists() {
-		data.BgpRdIpv4AddressAssignedNumber = types.Int64Value(value.Int())
+		data.BgpRdIpv4AddressIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "bgp.route-target.export.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
+		data.BgpRouteTargetTwoByteAsFormat = make([]EVPNEVIBgpRouteTargetTwoByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := EVPNEVIBgpRouteTargetTwoByteAsFormat{}
+			if cValue := v.Get("two-byte-as-number"); cValue.Exists() {
+				item.AsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetTwoByteAsFormat = append(data.BgpRouteTargetTwoByteAsFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "bgp.route-target.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
+		data.BgpRouteTargetFourByteAsFormat = make([]EVPNEVIBgpRouteTargetFourByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := EVPNEVIBgpRouteTargetFourByteAsFormat{}
+			if cValue := v.Get("four-byte-as-number"); cValue.Exists() {
+				item.AsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetFourByteAsFormat = append(data.BgpRouteTargetFourByteAsFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "bgp.route-target.ipv4-address-rts.ipv4-address-rt"); value.Exists() {
+		data.BgpRouteTargetIpv4AddressFormat = make([]EVPNEVIBgpRouteTargetIpv4AddressFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := EVPNEVIBgpRouteTargetIpv4AddressFormat{}
+			if cValue := v.Get("ipv4-address"); cValue.Exists() {
+				item.Ipv4Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetIpv4AddressFormat = append(data.BgpRouteTargetIpv4AddressFormat, item)
+			return true
+		})
 	}
 	if value := gjson.GetBytes(res, "bgp.route-target.import.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetImportTwoByteAsFormat = make([]EVPNEVIBgpRouteTargetImportTwoByteAsFormat, 0)
@@ -880,16 +1456,54 @@ func (data *EVPNEVIData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
+	if value := gjson.GetBytes(res, "bgp.table-policy"); value.Exists() {
+		data.BgpTablePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "bgp.implicit-import-disable"); value.Exists() {
+		data.BgpImplicitImportDisable = types.BoolValue(true)
+	} else {
+		data.BgpImplicitImportDisable = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "bgp.route-policy.import"); value.Exists() {
 		data.BgpRoutePolicyImport = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "bgp.route-policy.export"); value.Exists() {
 		data.BgpRoutePolicyExport = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "load-balancing"); value.Exists() {
+		data.LoadBalancing = types.BoolValue(true)
+	} else {
+		data.LoadBalancing = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "load-balancing.flow-label.static"); value.Exists() {
+		data.LoadBalancingFlowLabelStatic = types.BoolValue(true)
+	} else {
+		data.LoadBalancingFlowLabelStatic = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "preferred-nexthop.lowest-ip"); value.Exists() {
+		data.PreferredNexthopLowestIp = types.BoolValue(true)
+	} else {
+		data.PreferredNexthopLowestIp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "preferred-nexthop.highest-ip"); value.Exists() {
+		data.PreferredNexthopHighestIp = types.BoolValue(true)
+	} else {
+		data.PreferredNexthopHighestIp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "preferred-nexthop.modulo"); value.Exists() {
+		data.PreferredNexthopModulo = types.BoolValue(true)
+	} else {
+		data.PreferredNexthopModulo = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "advertise-mac"); value.Exists() {
 		data.AdvertiseMac = types.BoolValue(true)
 	} else {
 		data.AdvertiseMac = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "advertise-mac.bvi-mac"); value.Exists() {
+		data.AdvertiseMacBviMac = types.BoolValue(true)
+	} else {
+		data.AdvertiseMacBviMac = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "unknown-unicast-suppression"); value.Exists() {
 		data.UnknownUnicastSuppression = types.BoolValue(true)
@@ -900,6 +1514,51 @@ func (data *EVPNEVIData) fromBody(ctx context.Context, res []byte) {
 		data.ControlWordDisable = types.BoolValue(true)
 	} else {
 		data.ControlWordDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ignore-mtu-mismatch"); value.Exists() {
+		data.IgnoreMtuMismatch = types.BoolValue(true)
+	} else {
+		data.IgnoreMtuMismatch = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ignore-mtu-mismatch.disable-deprecated"); value.Exists() {
+		data.IgnoreMtuMismatchDisableDeprecated = types.BoolValue(true)
+	} else {
+		data.IgnoreMtuMismatchDisableDeprecated = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "enforce-mtu-match"); value.Exists() {
+		data.EnforceMtuMatch = types.BoolValue(true)
+	} else {
+		data.EnforceMtuMatch = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transmit-mtu-zero"); value.Exists() {
+		data.TransmitMtuZero = types.BoolValue(true)
+	} else {
+		data.TransmitMtuZero = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transmit-mtu-zero.disable-deprecated"); value.Exists() {
+		data.TransmitMtuZeroDisableDeprecated = types.BoolValue(true)
+	} else {
+		data.TransmitMtuZeroDisableDeprecated = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transmit-l2-mtu"); value.Exists() {
+		data.TransmitL2Mtu = types.BoolValue(true)
+	} else {
+		data.TransmitL2Mtu = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "re-origination-disable"); value.Exists() {
+		data.ReOriginationDisable = types.BoolValue(true)
+	} else {
+		data.ReOriginationDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "multicast.source-connected"); value.Exists() {
+		data.MulticastSourceConnected = types.BoolValue(true)
+	} else {
+		data.MulticastSourceConnected = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "proxy.igmp-snooping"); value.Exists() {
+		data.ProxyIgmpSnooping = types.BoolValue(true)
+	} else {
+		data.ProxyIgmpSnooping = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "etree"); value.Exists() {
 		data.Etree = types.BoolValue(true)
@@ -916,6 +1575,16 @@ func (data *EVPNEVIData) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.EtreeRtLeaf = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "vpws-single-active-backup-suppression"); value.Exists() {
+		data.VpwsSingleActiveBackupSuppression = types.BoolValue(true)
+	} else {
+		data.VpwsSingleActiveBackupSuppression = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bvi-coupled-mode"); value.Exists() {
+		data.BviCoupledMode = types.BoolValue(true)
+	} else {
+		data.BviCoupledMode = types.BoolValue(false)
+	}
 }
 
 // End of section. //template:end fromBodyData
@@ -924,6 +1593,12 @@ func (data *EVPNEVIData) fromBody(ctx context.Context, res []byte) {
 
 func (data *EVPNEVI) getDeletedItems(ctx context.Context, state EVPNEVI) []string {
 	deletedItems := make([]string, 0)
+	if !state.BviCoupledMode.IsNull() && data.BviCoupledMode.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bvi-coupled-mode", state.getPath()))
+	}
+	if !state.VpwsSingleActiveBackupSuppression.IsNull() && data.VpwsSingleActiveBackupSuppression.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/vpws-single-active-backup-suppression", state.getPath()))
+	}
 	if !state.EtreeRtLeaf.IsNull() && data.EtreeRtLeaf.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/etree/rt-leaf", state.getPath()))
 	}
@@ -933,20 +1608,71 @@ func (data *EVPNEVI) getDeletedItems(ctx context.Context, state EVPNEVI) []strin
 	if !state.Etree.IsNull() && data.Etree.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/etree", state.getPath()))
 	}
+	if !state.ProxyIgmpSnooping.IsNull() && data.ProxyIgmpSnooping.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/proxy/igmp-snooping", state.getPath()))
+	}
+	if !state.MulticastSourceConnected.IsNull() && data.MulticastSourceConnected.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/multicast/source-connected", state.getPath()))
+	}
+	if !state.ReOriginationDisable.IsNull() && data.ReOriginationDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/re-origination-disable", state.getPath()))
+	}
+	if !state.TransmitL2Mtu.IsNull() && data.TransmitL2Mtu.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/transmit-l2-mtu", state.getPath()))
+	}
+	if !state.TransmitMtuZeroDisableDeprecated.IsNull() && data.TransmitMtuZeroDisableDeprecated.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/transmit-mtu-zero/disable-deprecated", state.getPath()))
+	}
+	if !state.TransmitMtuZero.IsNull() && data.TransmitMtuZero.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/transmit-mtu-zero", state.getPath()))
+	}
+	if !state.EnforceMtuMatch.IsNull() && data.EnforceMtuMatch.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/enforce-mtu-match", state.getPath()))
+	}
+	if !state.IgnoreMtuMismatchDisableDeprecated.IsNull() && data.IgnoreMtuMismatchDisableDeprecated.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ignore-mtu-mismatch/disable-deprecated", state.getPath()))
+	}
+	if !state.IgnoreMtuMismatch.IsNull() && data.IgnoreMtuMismatch.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ignore-mtu-mismatch", state.getPath()))
+	}
 	if !state.ControlWordDisable.IsNull() && data.ControlWordDisable.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/control-word-disable", state.getPath()))
 	}
 	if !state.UnknownUnicastSuppression.IsNull() && data.UnknownUnicastSuppression.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/unknown-unicast-suppression", state.getPath()))
 	}
+	if !state.AdvertiseMacBviMac.IsNull() && data.AdvertiseMacBviMac.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise-mac/bvi-mac", state.getPath()))
+	}
 	if !state.AdvertiseMac.IsNull() && data.AdvertiseMac.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise-mac", state.getPath()))
+	}
+	if !state.PreferredNexthopModulo.IsNull() && data.PreferredNexthopModulo.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/preferred-nexthop/modulo", state.getPath()))
+	}
+	if !state.PreferredNexthopHighestIp.IsNull() && data.PreferredNexthopHighestIp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/preferred-nexthop/highest-ip", state.getPath()))
+	}
+	if !state.PreferredNexthopLowestIp.IsNull() && data.PreferredNexthopLowestIp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/preferred-nexthop/lowest-ip", state.getPath()))
+	}
+	if !state.LoadBalancingFlowLabelStatic.IsNull() && data.LoadBalancingFlowLabelStatic.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/load-balancing/flow-label/static", state.getPath()))
+	}
+	if !state.LoadBalancing.IsNull() && data.LoadBalancing.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/load-balancing", state.getPath()))
 	}
 	if !state.BgpRoutePolicyExport.IsNull() && data.BgpRoutePolicyExport.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/route-policy/export", state.getPath()))
 	}
 	if !state.BgpRoutePolicyImport.IsNull() && data.BgpRoutePolicyImport.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/route-policy/import", state.getPath()))
+	}
+	if !state.BgpImplicitImportDisable.IsNull() && data.BgpImplicitImportDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/implicit-import-disable", state.getPath()))
+	}
+	if !state.BgpTablePolicy.IsNull() && data.BgpTablePolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/table-policy", state.getPath()))
 	}
 	for i := range state.BgpRouteTargetExportIpv4AddressFormat {
 		keys := [...]string{"ipv4-address", "assigned-number"}
@@ -1164,29 +1890,131 @@ func (data *EVPNEVI) getDeletedItems(ctx context.Context, state EVPNEVI) []strin
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt%v", state.getPath(), keyString))
 		}
 	}
-	if !state.BgpRdIpv4AddressAssignedNumber.IsNull() && data.BgpRdIpv4AddressAssignedNumber.IsNull() {
+	for i := range state.BgpRouteTargetIpv4AddressFormat {
+		keys := [...]string{"ipv4-address", "assigned-number"}
+		stateKeyValues := [...]string{state.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(state.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.BgpRouteTargetIpv4AddressFormat {
+			found = true
+			if state.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString() != data.BgpRouteTargetIpv4AddressFormat[j].Ipv4Address.ValueString() {
+				found = false
+			}
+			if state.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64() != data.BgpRouteTargetIpv4AddressFormat[j].AssignedNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/route-target/ipv4-address-rts/ipv4-address-rt%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.BgpRouteTargetFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "assigned-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.BgpRouteTargetFourByteAsFormat {
+			found = true
+			if state.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64() != data.BgpRouteTargetFourByteAsFormat[j].AsNumber.ValueInt64() {
+				found = false
+			}
+			if state.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64() != data.BgpRouteTargetFourByteAsFormat[j].AssignedNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/route-target/four-byte-as-rts/four-byte-as-rt%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.BgpRouteTargetTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "assigned-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.BgpRouteTargetTwoByteAsFormat {
+			found = true
+			if state.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64() != data.BgpRouteTargetTwoByteAsFormat[j].AsNumber.ValueInt64() {
+				found = false
+			}
+			if state.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64() != data.BgpRouteTargetTwoByteAsFormat[j].AssignedNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt%v", state.getPath(), keyString))
+		}
+	}
+	if !state.BgpRdIpv4AddressIndex.IsNull() && data.BgpRdIpv4AddressIndex.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/rd/ipv4-address-assigned-number", state.getPath()))
 	}
 	if !state.BgpRdIpv4Address.IsNull() && data.BgpRdIpv4Address.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/rd/ipv4-address", state.getPath()))
 	}
-	if !state.BgpRdFourByteAsAssignedNumber.IsNull() && data.BgpRdFourByteAsAssignedNumber.IsNull() {
+	if !state.BgpRdFourByteAsIndex.IsNull() && data.BgpRdFourByteAsIndex.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/rd/four-byte-as-assigned-number", state.getPath()))
 	}
 	if !state.BgpRdFourByteAsNumber.IsNull() && data.BgpRdFourByteAsNumber.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/rd/four-byte-as-number", state.getPath()))
 	}
-	if !state.BgpRdTwoByteAsAssignedNumber.IsNull() && data.BgpRdTwoByteAsAssignedNumber.IsNull() {
+	if !state.BgpRdTwoByteAsIndex.IsNull() && data.BgpRdTwoByteAsIndex.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/rd/two-byte-as-assigned-number", state.getPath()))
 	}
 	if !state.BgpRdTwoByteAsNumber.IsNull() && data.BgpRdTwoByteAsNumber.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/rd/two-byte-as-number", state.getPath()))
-	}
-	if !state.LoadBalancingFlowLabelStatic.IsNull() && data.LoadBalancingFlowLabelStatic.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/load-balancing/flow-label/static", state.getPath()))
-	}
-	if !state.LoadBalancing.IsNull() && data.LoadBalancing.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/load-balancing", state.getPath()))
 	}
 	if !state.Description.IsNull() && data.Description.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/description", state.getPath()))
@@ -1200,6 +2028,12 @@ func (data *EVPNEVI) getDeletedItems(ctx context.Context, state EVPNEVI) []strin
 
 func (data *EVPNEVI) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.BviCoupledMode.IsNull() && !data.BviCoupledMode.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bvi-coupled-mode", data.getPath()))
+	}
+	if !data.VpwsSingleActiveBackupSuppression.IsNull() && !data.VpwsSingleActiveBackupSuppression.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/vpws-single-active-backup-suppression", data.getPath()))
+	}
 	if !data.EtreeRtLeaf.IsNull() && !data.EtreeRtLeaf.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/etree/rt-leaf", data.getPath()))
 	}
@@ -1209,14 +2043,62 @@ func (data *EVPNEVI) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.Etree.IsNull() && !data.Etree.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/etree", data.getPath()))
 	}
+	if !data.ProxyIgmpSnooping.IsNull() && !data.ProxyIgmpSnooping.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/proxy/igmp-snooping", data.getPath()))
+	}
+	if !data.MulticastSourceConnected.IsNull() && !data.MulticastSourceConnected.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/multicast/source-connected", data.getPath()))
+	}
+	if !data.ReOriginationDisable.IsNull() && !data.ReOriginationDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/re-origination-disable", data.getPath()))
+	}
+	if !data.TransmitL2Mtu.IsNull() && !data.TransmitL2Mtu.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transmit-l2-mtu", data.getPath()))
+	}
+	if !data.TransmitMtuZeroDisableDeprecated.IsNull() && !data.TransmitMtuZeroDisableDeprecated.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transmit-mtu-zero/disable-deprecated", data.getPath()))
+	}
+	if !data.TransmitMtuZero.IsNull() && !data.TransmitMtuZero.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transmit-mtu-zero", data.getPath()))
+	}
+	if !data.EnforceMtuMatch.IsNull() && !data.EnforceMtuMatch.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/enforce-mtu-match", data.getPath()))
+	}
+	if !data.IgnoreMtuMismatchDisableDeprecated.IsNull() && !data.IgnoreMtuMismatchDisableDeprecated.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ignore-mtu-mismatch/disable-deprecated", data.getPath()))
+	}
+	if !data.IgnoreMtuMismatch.IsNull() && !data.IgnoreMtuMismatch.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ignore-mtu-mismatch", data.getPath()))
+	}
 	if !data.ControlWordDisable.IsNull() && !data.ControlWordDisable.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/control-word-disable", data.getPath()))
 	}
 	if !data.UnknownUnicastSuppression.IsNull() && !data.UnknownUnicastSuppression.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/unknown-unicast-suppression", data.getPath()))
 	}
+	if !data.AdvertiseMacBviMac.IsNull() && !data.AdvertiseMacBviMac.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise-mac/bvi-mac", data.getPath()))
+	}
 	if !data.AdvertiseMac.IsNull() && !data.AdvertiseMac.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise-mac", data.getPath()))
+	}
+	if !data.PreferredNexthopModulo.IsNull() && !data.PreferredNexthopModulo.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/preferred-nexthop/modulo", data.getPath()))
+	}
+	if !data.PreferredNexthopHighestIp.IsNull() && !data.PreferredNexthopHighestIp.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/preferred-nexthop/highest-ip", data.getPath()))
+	}
+	if !data.PreferredNexthopLowestIp.IsNull() && !data.PreferredNexthopLowestIp.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/preferred-nexthop/lowest-ip", data.getPath()))
+	}
+	if !data.LoadBalancingFlowLabelStatic.IsNull() && !data.LoadBalancingFlowLabelStatic.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/load-balancing/flow-label/static", data.getPath()))
+	}
+	if !data.LoadBalancing.IsNull() && !data.LoadBalancing.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/load-balancing", data.getPath()))
+	}
+	if !data.BgpImplicitImportDisable.IsNull() && !data.BgpImplicitImportDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bgp/implicit-import-disable", data.getPath()))
 	}
 	for i := range data.BgpRouteTargetExportIpv4AddressFormat {
 		keys := [...]string{"ipv4-address", "assigned-number"}
@@ -1266,11 +2148,29 @@ func (data *EVPNEVI) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
-	if !data.LoadBalancingFlowLabelStatic.IsNull() && !data.LoadBalancingFlowLabelStatic.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/load-balancing/flow-label/static", data.getPath()))
+	for i := range data.BgpRouteTargetIpv4AddressFormat {
+		keys := [...]string{"ipv4-address", "assigned-number"}
+		keyValues := [...]string{data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
 	}
-	if !data.LoadBalancing.IsNull() && !data.LoadBalancing.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/load-balancing", data.getPath()))
+	for i := range data.BgpRouteTargetFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "assigned-number"}
+		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.BgpRouteTargetTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "assigned-number"}
+		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
 	}
 	return emptyLeafsDelete
 }
@@ -1281,6 +2181,12 @@ func (data *EVPNEVI) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *EVPNEVI) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
+	if !data.BviCoupledMode.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bvi-coupled-mode", data.getPath()))
+	}
+	if !data.VpwsSingleActiveBackupSuppression.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/vpws-single-active-backup-suppression", data.getPath()))
+	}
 	if !data.EtreeRtLeaf.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/etree/rt-leaf", data.getPath()))
 	}
@@ -1290,20 +2196,71 @@ func (data *EVPNEVI) getDeletePaths(ctx context.Context) []string {
 	if !data.Etree.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/etree", data.getPath()))
 	}
+	if !data.ProxyIgmpSnooping.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/proxy/igmp-snooping", data.getPath()))
+	}
+	if !data.MulticastSourceConnected.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/multicast/source-connected", data.getPath()))
+	}
+	if !data.ReOriginationDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/re-origination-disable", data.getPath()))
+	}
+	if !data.TransmitL2Mtu.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/transmit-l2-mtu", data.getPath()))
+	}
+	if !data.TransmitMtuZeroDisableDeprecated.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/transmit-mtu-zero/disable-deprecated", data.getPath()))
+	}
+	if !data.TransmitMtuZero.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/transmit-mtu-zero", data.getPath()))
+	}
+	if !data.EnforceMtuMatch.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/enforce-mtu-match", data.getPath()))
+	}
+	if !data.IgnoreMtuMismatchDisableDeprecated.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ignore-mtu-mismatch/disable-deprecated", data.getPath()))
+	}
+	if !data.IgnoreMtuMismatch.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ignore-mtu-mismatch", data.getPath()))
+	}
 	if !data.ControlWordDisable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/control-word-disable", data.getPath()))
 	}
 	if !data.UnknownUnicastSuppression.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/unknown-unicast-suppression", data.getPath()))
 	}
+	if !data.AdvertiseMacBviMac.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise-mac/bvi-mac", data.getPath()))
+	}
 	if !data.AdvertiseMac.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise-mac", data.getPath()))
+	}
+	if !data.PreferredNexthopModulo.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/preferred-nexthop/modulo", data.getPath()))
+	}
+	if !data.PreferredNexthopHighestIp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/preferred-nexthop/highest-ip", data.getPath()))
+	}
+	if !data.PreferredNexthopLowestIp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/preferred-nexthop/lowest-ip", data.getPath()))
+	}
+	if !data.LoadBalancingFlowLabelStatic.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/load-balancing/flow-label/static", data.getPath()))
+	}
+	if !data.LoadBalancing.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/load-balancing", data.getPath()))
 	}
 	if !data.BgpRoutePolicyExport.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-policy/export", data.getPath()))
 	}
 	if !data.BgpRoutePolicyImport.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-policy/import", data.getPath()))
+	}
+	if !data.BgpImplicitImportDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/implicit-import-disable", data.getPath()))
+	}
+	if !data.BgpTablePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/table-policy", data.getPath()))
 	}
 	for i := range data.BgpRouteTargetExportIpv4AddressFormat {
 		keys := [...]string{"ipv4-address", "assigned-number"}
@@ -1365,29 +2322,53 @@ func (data *EVPNEVI) getDeletePaths(ctx context.Context) []string {
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt%v", data.getPath(), keyString))
 	}
-	if !data.BgpRdIpv4AddressAssignedNumber.IsNull() {
+	for i := range data.BgpRouteTargetIpv4AddressFormat {
+		keys := [...]string{"ipv4-address", "assigned-number"}
+		keyValues := [...]string{data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/ipv4-address-rts/ipv4-address-rt%v", data.getPath(), keyString))
+	}
+	for i := range data.BgpRouteTargetFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "assigned-number"}
+		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/four-byte-as-rts/four-byte-as-rt%v", data.getPath(), keyString))
+	}
+	for i := range data.BgpRouteTargetTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "assigned-number"}
+		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt%v", data.getPath(), keyString))
+	}
+	if !data.BgpRdIpv4AddressIndex.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/rd/ipv4-address-assigned-number", data.getPath()))
 	}
 	if !data.BgpRdIpv4Address.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/rd/ipv4-address", data.getPath()))
 	}
-	if !data.BgpRdFourByteAsAssignedNumber.IsNull() {
+	if !data.BgpRdFourByteAsIndex.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/rd/four-byte-as-assigned-number", data.getPath()))
 	}
 	if !data.BgpRdFourByteAsNumber.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/rd/four-byte-as-number", data.getPath()))
 	}
-	if !data.BgpRdTwoByteAsAssignedNumber.IsNull() {
+	if !data.BgpRdTwoByteAsIndex.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/rd/two-byte-as-assigned-number", data.getPath()))
 	}
 	if !data.BgpRdTwoByteAsNumber.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/rd/two-byte-as-number", data.getPath()))
-	}
-	if !data.LoadBalancingFlowLabelStatic.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/load-balancing/flow-label/static", data.getPath()))
-	}
-	if !data.LoadBalancing.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/load-balancing", data.getPath()))
 	}
 	if !data.Description.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/description", data.getPath()))

@@ -155,6 +155,22 @@ func TestAccDataSourceIosxrRouterPIMIPv4(t *testing.T) {
 	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_pim_ipv4.test", "bsr_relay_vrfs.0.vrf_name", "VRF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_pim_ipv4.test", "bsr_relay_vrfs.0.listen", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_pim_ipv4.test", "mofrr", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_pim_ipv4.test", "mofrr_rib", "ACL1"))
+	if os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_pim_ipv4.test", "mofrr_protect", "ACL1"))
+	}
+	if os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_pim_ipv4.test", "mofrr_protect_local_fault_only", "true"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_pim_ipv4.test", "mofrr_non_revertive", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_pim_ipv4.test", "sr_p2mp_policies.0.policy_name", "POLICY1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_pim_ipv4.test", "sr_p2mp_policies.0.static_groups.0.group_address", "239.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_pim_ipv4.test", "sr_p2mp_policies.0.static_groups.0.group_masks_source_masks.0.group_inc_mask", "0.0.0.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_pim_ipv4.test", "sr_p2mp_policies.0.static_groups.0.group_masks_source_masks.0.source_ip", "10.4.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_pim_ipv4.test", "sr_p2mp_policies.0.static_groups.0.group_masks_source_masks.0.source_inc_mask", "0.0.0.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_pim_ipv4.test", "sr_p2mp_policies.0.static_groups.0.group_masks_source_masks.0.group_count", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_pim_ipv4.test", "sr_p2mp_policies.0.static_groups.0.group_masks_source_masks.0.source_count", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_pim_ipv4.test", "interfaces.0.interface_name", "GigabitEthernet0/0/0/1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_pim_ipv4.test", "interfaces.0.enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_pim_ipv4.test", "interfaces.0.dr_priority", "100"))
@@ -203,6 +219,12 @@ resource "iosxr_gnmi" "PreReq0" {
 			]
 		},
 	]
+}
+
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-router-pim-cfg:/router/pim"
+	attributes = {
+	}
 }
 
 `
@@ -352,6 +374,28 @@ func testAccDataSourceIosxrRouterPIMIPv4Config() string {
 	config += `		vrf_name = "VRF1"` + "\n"
 	config += `		listen = true` + "\n"
 	config += `	}]` + "\n"
+	config += `	mofrr = true` + "\n"
+	config += `	mofrr_rib = "ACL1"` + "\n"
+	if os.Getenv("C8000") != "" {
+		config += `	mofrr_protect = "ACL1"` + "\n"
+	}
+	if os.Getenv("C8000") != "" {
+		config += `	mofrr_protect_local_fault_only = true` + "\n"
+	}
+	config += `	mofrr_non_revertive = true` + "\n"
+	config += `	sr_p2mp_policies = [{` + "\n"
+	config += `		policy_name = "POLICY1"` + "\n"
+	config += `		static_groups = [{` + "\n"
+	config += `			group_address = "239.1.1.1"` + "\n"
+	config += `			group_masks_source_masks = [{` + "\n"
+	config += `				group_inc_mask = "0.0.0.1"` + "\n"
+	config += `				source_ip = "10.4.1.1"` + "\n"
+	config += `				source_inc_mask = "0.0.0.1"` + "\n"
+	config += `				group_count = 5` + "\n"
+	config += `				source_count = 5` + "\n"
+	config += `			}]` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
 	config += `	interfaces = [{` + "\n"
 	config += `		interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `		enable = true` + "\n"
@@ -370,7 +414,7 @@ func testAccDataSourceIosxrRouterPIMIPv4Config() string {
 	config += `		bfd_fast_detect = true` + "\n"
 	config += `		bsr_border = true` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

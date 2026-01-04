@@ -169,13 +169,32 @@ func TestAccIosxrPCE(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_segment_lists.0.segment_list_name", "SEGMENT_LIST_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_segment_lists.0.indexes.0.index_number", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_segment_lists.0.indexes.0.mpls_label", "16100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.address", "100.100.100.26"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.policy_name", "PEER_POLICY1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.candidate_paths_append_sid_mpls", "16100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.candidate_paths_preferences.0.preference_id", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.candidate_paths_preferences.0.dynamic_mpls", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.candidate_paths_preferences.0.dynamic_metric_type_latency", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.candidate_paths_preferences.0.dynamic_metric_sid_limit", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.candidate_paths_preferences.0.explicit_segment_list_names.0.segment_list_name", "SEGMENT_LIST_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.candidate_paths_preferences.0.constraints_segments_sid_algorithm", "128"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.candidate_paths_preferences.0.constraints_segments_protection_protected_preferred", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.candidate_paths_affinity_include_any_colors.0.affinity_color_name", "COLOR_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.candidate_paths_affinity_include_all_colors.0.affinity_color_name", "COLOR_2"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.candidate_paths_affinity_exclude_colors.0.affinity_color_name", "COLOR_3"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.color", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.end_point_ipv4", "100.100.100.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.binding_sid_mpls", "24200"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.shutdown", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.profile_id", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.path_selection_protected", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_cspf_anycast_sid_inclusion", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_cspf_sr_native", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_cspf_sr_native_force", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_endpoint_sets.0.endpoint_set_name", "ENDPOINT_SET_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_endpoint_sets.0.ipv4s.0.address", "100.100.100.30"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_policies.0.policy_name", "P2MP_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_policies.0.color", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_policies.0.color", "200"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_policies.0.endpoint_set", "ENDPOINT_SET_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_policies.0.source_ipv4", "100.100.100.1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_policies.0.shutdown", "false"))
@@ -437,6 +456,39 @@ func testAccIosxrPCEConfig_all() string {
 	config += `			mpls_label = 16100` + "\n"
 	config += `		}]` + "\n"
 	config += `		}]` + "\n"
+	config += `	srte_ipv4_peers = [{` + "\n"
+	config += `		address = "100.100.100.26"` + "\n"
+	config += `		policies = [{` + "\n"
+	config += `			policy_name = "PEER_POLICY1"` + "\n"
+	config += `			candidate_paths_append_sid_mpls = 16100` + "\n"
+	config += `			candidate_paths_preferences = [{` + "\n"
+	config += `				preference_id = 100` + "\n"
+	config += `				dynamic_mpls = true` + "\n"
+	config += `				dynamic_metric_type_latency = true` + "\n"
+	config += `				dynamic_metric_sid_limit = 5` + "\n"
+	config += `				explicit_segment_list_names = [{` + "\n"
+	config += `					segment_list_name = "SEGMENT_LIST_1"` + "\n"
+	config += `				}]` + "\n"
+	config += `				constraints_segments_sid_algorithm = 128` + "\n"
+	config += `				constraints_segments_protection_protected_preferred = true` + "\n"
+	config += `			}]` + "\n"
+	config += `			candidate_paths_affinity_include_any_colors = [{` + "\n"
+	config += `				affinity_color_name = "COLOR_1"` + "\n"
+	config += `			}]` + "\n"
+	config += `			candidate_paths_affinity_include_all_colors = [{` + "\n"
+	config += `				affinity_color_name = "COLOR_2"` + "\n"
+	config += `			}]` + "\n"
+	config += `			candidate_paths_affinity_exclude_colors = [{` + "\n"
+	config += `				affinity_color_name = "COLOR_3"` + "\n"
+	config += `			}]` + "\n"
+	config += `			color = 100` + "\n"
+	config += `			end_point_ipv4 = "100.100.100.1"` + "\n"
+	config += `			binding_sid_mpls = 24200` + "\n"
+	config += `			shutdown = false` + "\n"
+	config += `			profile_id = 5` + "\n"
+	config += `			path_selection_protected = true` + "\n"
+	config += `		}]` + "\n"
+	config += `		}]` + "\n"
 	config += `	srte_cspf_anycast_sid_inclusion = true` + "\n"
 	config += `	srte_cspf_sr_native = true` + "\n"
 	config += `	srte_cspf_sr_native_force = true` + "\n"
@@ -448,7 +500,7 @@ func testAccIosxrPCEConfig_all() string {
 	config += `		}]` + "\n"
 	config += `	srte_p2mp_policies = [{` + "\n"
 	config += `		policy_name = "P2MP_POLICY_1"` + "\n"
-	config += `		color = 100` + "\n"
+	config += `		color = 200` + "\n"
 	config += `		endpoint_set = "ENDPOINT_SET_1"` + "\n"
 	config += `		source_ipv4 = "100.100.100.1"` + "\n"
 	config += `		shutdown = false` + "\n"

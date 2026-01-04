@@ -710,7 +710,7 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
+						"affinity_name": schema.StringAttribute{
 							MarkdownDescription: "Affinity attribute name",
 							Computed:            true,
 						},

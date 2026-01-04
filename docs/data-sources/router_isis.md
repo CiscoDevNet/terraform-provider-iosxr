@@ -137,8 +137,8 @@ data "iosxr_router_isis" "example" {
 
 Read-Only:
 
+- `affinity_name` (String) Affinity attribute name
 - `bit_position` (Number) Bit position for affinity attribute value
-- `name` (String) Affinity attribute name
 
 
 <a id="nestedatt--flex_algos"></a>

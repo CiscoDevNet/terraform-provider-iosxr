@@ -36,6 +36,12 @@ import (
 func TestAccIosxrLoggingVRF(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "vrf_name", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "hostnames.0.name", "server.cisco.com"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "hostnames.0.severity", "info"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "hostnames.0.port", "514"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "hostnames.0.operator", "equals"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "hostnames.0.facility", "local0"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "hostnames.0.hostname_source_address", "1.1.1.2"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "host_ipv4_addresses.0.ipv4_address", "1.1.1.1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "host_ipv4_addresses.0.severity", "info"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "host_ipv4_addresses.0.port", "514"))
@@ -51,11 +57,11 @@ func TestAccIosxrLoggingVRF(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrLoggingVRFConfig_minimum(),
+			Config: testAccIosxrLoggingVRFPrerequisitesConfig + testAccIosxrLoggingVRFConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrLoggingVRFConfig_all(),
+		Config: testAccIosxrLoggingVRFPrerequisitesConfig + testAccIosxrLoggingVRFConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -87,6 +93,22 @@ func iosxrLoggingVRFImportStateIdFunc(resourceName string) resource.ImportStateI
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccIosxrLoggingVRFPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-domain-cfg:/domain/ipv4/hosts/host[host-name=server.cisco.com]"
+	attributes = {
+		"host-name" = "server.cisco.com"
+	}
+	lists = [
+		{
+			name = "ip-address"
+			
+			values = ["1.1.1.1", ]
+		},
+	]
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
@@ -99,6 +121,7 @@ func testAccIosxrLoggingVRFConfig_minimum() string {
 	config += `		ipv4_address = "1.1.1.1"` + "\n"
 	config += `		severity = "info"` + "\n"
 	config += `		}]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -111,6 +134,14 @@ func testAccIosxrLoggingVRFConfig_all() string {
 	config := `resource "iosxr_logging_vrf" "test" {` + "\n"
 	config += `	delete_mode = "all"` + "\n"
 	config += `	vrf_name = "default"` + "\n"
+	config += `	hostnames = [{` + "\n"
+	config += `		name = "server.cisco.com"` + "\n"
+	config += `		severity = "info"` + "\n"
+	config += `		port = 514` + "\n"
+	config += `		operator = "equals"` + "\n"
+	config += `		facility = "local0"` + "\n"
+	config += `		hostname_source_address = "1.1.1.2"` + "\n"
+	config += `		}]` + "\n"
 	config += `	host_ipv4_addresses = [{` + "\n"
 	config += `		ipv4_address = "1.1.1.1"` + "\n"
 	config += `		severity = "info"` + "\n"
@@ -127,6 +158,7 @@ func testAccIosxrLoggingVRFConfig_all() string {
 	config += `		facility = "local0"` + "\n"
 	config += `		ipv6_source_address = "2001:db8::2"` + "\n"
 	config += `		}]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

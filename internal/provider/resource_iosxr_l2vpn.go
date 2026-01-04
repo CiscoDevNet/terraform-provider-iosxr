@@ -378,22 +378,6 @@ func (r *L2VPNResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				MarkdownDescription: helpers.NewAttributeDescription("Enable MIB pseudowire statistics (for low scale, <16K PWs)").String,
 				Optional:            true,
 			},
-			"xconnect_groups": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify the group the cross connects belong to").String,
-				Optional:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"group_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specify the group the cross connects belong to").String,
-							Required:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
-							},
-						},
-					},
-				},
-			},
 		},
 	}
 }

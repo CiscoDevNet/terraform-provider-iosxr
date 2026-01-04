@@ -87,6 +87,55 @@ func (r *LoggingVRFResource) Schema(ctx context.Context, req resource.SchemaRequ
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
+			"hostnames": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Name of the logging host").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of the logging host").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9._-]+`), ""),
+							},
+						},
+						"severity": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set severity of  messages for particular remote host/vrf").AddStringEnumDescription("alerts", "critical", "debugging", "emergencies", "error", "info", "notifications", "warning").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("alerts", "critical", "debugging", "emergencies", "error", "info", "notifications", "warning"),
+							},
+						},
+						"port": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set UDP port for this remote host/vrf").AddIntegerRangeDescription(0, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+						"operator": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set severity operator of  messages for particular remote host/vrf").AddStringEnumDescription("equals", "equals-or-higher", "not-equals").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("equals", "equals-or-higher", "not-equals"),
+							},
+						},
+						"facility": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Modify message logging facilities").AddStringEnumDescription("all", "audit", "auth", "authpriv", "console", "daemon", "kern", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7", "mail", "ntp", "syslog", "user").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("all", "audit", "auth", "authpriv", "console", "daemon", "kern", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7", "mail", "ntp", "syslog", "user"),
+							},
+						},
+						"hostname_source_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("hostname source address").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
 			"host_ipv4_addresses": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IPV4 address of the logging host").String,
 				Optional:            true,

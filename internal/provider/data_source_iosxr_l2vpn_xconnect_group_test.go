@@ -36,18 +36,32 @@ func TestAccDataSourceIosxrL2VPNXconnectGroup(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "p2ps.0.p2p_xconnect_name", "XC"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "p2ps.0.description", "My P2P Description"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "p2ps.0.interfaces.0.interface_name", "Bundle-Ether11"))
-	if os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "p2ps.0.interworking_ipv4", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "p2ps.0.evpn_target_neighbors_segment_routing.0.vpn_id", "7000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "p2ps.0.evpn_target_neighbors_segment_routing.0.remote_ac_id", "8000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "p2ps.0.evpn_target_neighbors_segment_routing.0.source", "7001"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "p2ps.0.evpn_target_neighbors_segment_routing.0.segment_routing_srv6_locator", "LOC12"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "mp2mps.0.instance_name", "MP2MP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "mp2mps.0.vpn_id", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "mp2mps.0.mtu", "1500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "mp2mps.0.shutdown", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "mp2mps.0.l2_encapsulation", "ethernet"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "mp2mps.0.control_word_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "mp2mps.0.autodiscovery_bgp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "mp2mps.0.autodiscovery_bgp_rd_four_byte_as_number", "65536"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "mp2mps.0.autodiscovery_bgp_rd_four_byte_as_index", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "mp2mps.0.autodiscovery_bgp_route_target_import_four_byte_as_format.0.four_byte_as_number", "65536"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "mp2mps.0.autodiscovery_bgp_route_target_import_four_byte_as_format.0.assigned_number", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "mp2mps.0.autodiscovery_bgp_route_target_export_four_byte_as_format.0.four_byte_as_number", "65536"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "mp2mps.0.autodiscovery_bgp_route_target_export_four_byte_as_format.0.assigned_number", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "mp2mps.0.autodiscovery_bgp_signaling_protocol_bgp_ce_ids.0.local_ce_id_value", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "mp2mps.0.autodiscovery_bgp_signaling_protocol_bgp_ce_ids.0.interfaces.0.interface_name", "GigabitEthernet0/0/0/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "mp2mps.0.autodiscovery_bgp_signaling_protocol_bgp_ce_ids.0.interfaces.0.remote_ce_ids.0.remote_ce_id_value", "20"))
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "mp2mps.0.autodiscovery_bgp_signaling_protocol_bgp_ce_ids.0.vpws_seamless_integration", "true"))
 	}
-	if os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "p2ps.0.interworking_ethernet", "true"))
-	}
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "p2ps.0.ipv4_neighbors.0.address", "1.1.1.1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "p2ps.0.ipv4_neighbors.0.pw_id", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "p2ps.0.ipv4_neighbors.0.pw_class", "PW_CLASS_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "p2ps.0.ipv4_neighbors.0.bandwidth", "1000000000"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "p2ps.0.ipv4_neighbors.0.mpls_static_label_local", "1002"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "p2ps.0.ipv4_neighbors.0.mpls_static_label_remote", "1003"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "mp2mps.0.autodiscovery_bgp_signaling_protocol_bgp_ce_range", "11"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "mp2mps.0.autodiscovery_bgp_signaling_protocol_bgp_load_balancing_flow_label_both", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group.test", "mp2mps.0.autodiscovery_bgp_route_policy_export", "EXPORT_POLICY"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -71,10 +85,21 @@ resource "iosxr_gnmi" "PreReq0" {
 }
 
 resource "iosxr_gnmi" "PreReq1" {
-	path = "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/xconnect/groups/group[group-name=P2P]"
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies"
 	attributes = {
-		"group-name" = "P2P"
 	}
+	lists = [
+		{
+			name = "route-policy"
+			key = "route-policy-name"
+			items = [
+				{
+					"route-policy-name" = "EXPORT_POLICY"
+					"rpl-route-policy" = "route-policy EXPORT_POLICY\n  pass\nend-policy\n"
+				},
+			]
+		},
+	]
 	depends_on = [iosxr_gnmi.PreReq0, ]
 }
 
@@ -94,20 +119,46 @@ func testAccDataSourceIosxrL2VPNXconnectGroupConfig() string {
 	config += `		interfaces = [{` + "\n"
 	config += `			interface_name = "Bundle-Ether11"` + "\n"
 	config += `		}]` + "\n"
-	if os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
-		config += `		interworking_ipv4 = true` + "\n"
-	}
-	if os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
-		config += `		interworking_ethernet = true` + "\n"
-	}
-	config += `		ipv4_neighbors = [{` + "\n"
-	config += `			address = "1.1.1.1"` + "\n"
-	config += `			pw_id = 1` + "\n"
-	config += `			pw_class = "PW_CLASS_1"` + "\n"
-	config += `			bandwidth = 1000000000` + "\n"
-	config += `			mpls_static_label_local = 1002` + "\n"
-	config += `			mpls_static_label_remote = 1003` + "\n"
+	config += `		evpn_target_neighbors_segment_routing = [{` + "\n"
+	config += `			vpn_id = 7000` + "\n"
+	config += `			remote_ac_id = 8000` + "\n"
+	config += `			source = 7001` + "\n"
+	config += `			segment_routing_srv6_locator = "LOC12"` + "\n"
 	config += `		}]` + "\n"
+	config += `	}]` + "\n"
+	config += `	mp2mps = [{` + "\n"
+	config += `		instance_name = "MP2MP1"` + "\n"
+	config += `		vpn_id = 100` + "\n"
+	config += `		mtu = 1500` + "\n"
+	config += `		shutdown = false` + "\n"
+	config += `		l2_encapsulation = "ethernet"` + "\n"
+	config += `		control_word_disable = true` + "\n"
+	config += `		autodiscovery_bgp = true` + "\n"
+	config += `		autodiscovery_bgp_rd_four_byte_as_number = 65536` + "\n"
+	config += `		autodiscovery_bgp_rd_four_byte_as_index = 100` + "\n"
+	config += `		autodiscovery_bgp_route_target_import_four_byte_as_format = [{` + "\n"
+	config += `			four_byte_as_number = 65536` + "\n"
+	config += `			assigned_number = 100` + "\n"
+	config += `		}]` + "\n"
+	config += `		autodiscovery_bgp_route_target_export_four_byte_as_format = [{` + "\n"
+	config += `			four_byte_as_number = 65536` + "\n"
+	config += `			assigned_number = 200` + "\n"
+	config += `		}]` + "\n"
+	config += `		autodiscovery_bgp_signaling_protocol_bgp_ce_ids = [{` + "\n"
+	config += `			local_ce_id_value = 10` + "\n"
+	config += `			interfaces = [{` + "\n"
+	config += `				interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `				remote_ce_ids = [{` + "\n"
+	config += `					remote_ce_id_value = 20` + "\n"
+	config += `				}]` + "\n"
+	config += `			}]` + "\n"
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `			vpws_seamless_integration = true` + "\n"
+	}
+	config += `		}]` + "\n"
+	config += `		autodiscovery_bgp_signaling_protocol_bgp_ce_range = 11` + "\n"
+	config += `		autodiscovery_bgp_signaling_protocol_bgp_load_balancing_flow_label_both = true` + "\n"
+	config += `		autodiscovery_bgp_route_policy_export = "EXPORT_POLICY"` + "\n"
 	config += `	}]` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"

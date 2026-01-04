@@ -198,6 +198,12 @@ resource "iosxr_gnmi" "PreReq0" {
 	]
 }
 
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-router-pim-cfg:/router/pim"
+	attributes = {
+	}
+}
+
 `
 
 // End of section. //template:end testPrerequisites
@@ -207,7 +213,7 @@ resource "iosxr_gnmi" "PreReq0" {
 func testAccIosxrRouterPIMIPv6Config_minimum() string {
 	config := `resource "iosxr_router_pim_ipv6" "test" {` + "\n"
 	config += `	register_source = "Loopback0"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -336,7 +342,7 @@ func testAccIosxrRouterPIMIPv6Config_all() string {
 	config += `		bfd_fast_detect = true` + "\n"
 	config += `		bsr_border = true` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

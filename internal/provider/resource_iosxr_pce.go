@@ -1058,6 +1058,208 @@ func (r *PCEResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					},
 				},
 			},
+			"srte_ipv4_peers": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 address of the PCEP peer").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4 address of the PCEP peer").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+						"policies": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of SR-TE Policy").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"policy_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Name of SR-TE Policy").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 128),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+										},
+									},
+									"candidate_paths_append_sid_mpls": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("MPLS label").AddIntegerRangeDescription(1, 1048575).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 1048575),
+										},
+									},
+									"candidate_paths_preferences": schema.ListNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Policy path-option preference entry").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"preference_id": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Policy path-option preference entry").AddIntegerRangeDescription(1, 65535).String,
+													Required:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(1, 65535),
+													},
+												},
+												"dynamic_mpls": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("MPLS path type").String,
+													Optional:            true,
+												},
+												"dynamic_metric_type_te": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("TE metric type").String,
+													Optional:            true,
+												},
+												"dynamic_metric_type_igp": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("IGP metric type").String,
+													Optional:            true,
+												},
+												"dynamic_metric_type_latency": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Latency metric type").String,
+													Optional:            true,
+												},
+												"dynamic_metric_type_hopcount": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Hopcount metric type").String,
+													Optional:            true,
+												},
+												"dynamic_metric_sid_limit": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("SID limit").AddIntegerRangeDescription(1, 255).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(1, 255),
+													},
+												},
+												"explicit_segment_list_names": schema.ListNestedAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Identifying name for Segment-list").String,
+													Optional:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"segment_list_name": schema.StringAttribute{
+																MarkdownDescription: helpers.NewAttributeDescription("Identifying name for Segment-list").String,
+																Required:            true,
+															},
+														},
+													},
+												},
+												"constraints_segments_sid_algorithm": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Prefix-SID algorithm").AddIntegerRangeDescription(128, 255).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(128, 255),
+													},
+												},
+												"constraints_segments_protection_protected_preferred": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Protected adj-SID preferred (default)").String,
+													Optional:            true,
+												},
+												"constraints_segments_protection_protected_only": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Protected adj-SID only").String,
+													Optional:            true,
+												},
+												"constraints_segments_protection_unprotected_only": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Unprotected adj-SID only").String,
+													Optional:            true,
+												},
+												"constraints_segments_protection_unprotected_preferred": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Unprotected adj-SID preferred").String,
+													Optional:            true,
+												},
+											},
+										},
+									},
+									"candidate_paths_affinity_include_any_colors": schema.ListNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"affinity_color_name": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.LengthBetween(1, 32),
+													},
+												},
+											},
+										},
+									},
+									"candidate_paths_affinity_include_all_colors": schema.ListNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"affinity_color_name": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.LengthBetween(1, 32),
+													},
+												},
+											},
+										},
+									},
+									"candidate_paths_affinity_exclude_colors": schema.ListNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"affinity_color_name": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.LengthBetween(1, 32),
+													},
+												},
+											},
+										},
+									},
+									"color": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Specify color for policy").AddIntegerRangeDescription(1, 4294967295).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 4294967295),
+										},
+									},
+									"end_point_ipv4": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IPv4 address").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+										},
+									},
+									"binding_sid_mpls": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("MPLS label").AddIntegerRangeDescription(16, 1048575).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(16, 1048575),
+										},
+									},
+									"shutdown": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Policy admin-shutdown").String,
+										Optional:            true,
+									},
+									"profile_id": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Policy configuration profile that the PCC should apply to this policy").AddIntegerRangeDescription(1, 65535).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65535),
+										},
+									},
+									"path_selection_protected": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Use local protected if possible").String,
+										Optional:            true,
+									},
+									"path_selection_unprotected": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Force use of unprotected adjacency SIDs").String,
+										Optional:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 			"srte_cspf_anycast_sid_inclusion": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable Anycast SID Inclusion for all policies").String,
 				Optional:            true,

@@ -35,7 +35,7 @@ import (
 
 func TestAccIosxrPolicyMapQoS(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_policy_map_qos.test", "policy_map_name", "PM1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_policy_map_qos.test", "policy_map_name", "PM-QOS"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_policy_map_qos.test", "description", "My description"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_policy_map_qos.test", "classes.0.name", "class-default"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_policy_map_qos.test", "classes.0.type", "qos"))
@@ -129,7 +129,7 @@ func iosxrPolicyMapQoSImportStateIdFunc(resourceName string) resource.ImportStat
 
 func testAccIosxrPolicyMapQoSConfig_minimum() string {
 	config := `resource "iosxr_policy_map_qos" "test" {` + "\n"
-	config += `	policy_map_name = "PM1"` + "\n"
+	config += `	policy_map_name = "PM-QOS"` + "\n"
 	config += `	classes = [{` + "\n"
 	config += `		name = "class-default"` + "\n"
 	config += `		type = "qos"` + "\n"
@@ -145,7 +145,7 @@ func testAccIosxrPolicyMapQoSConfig_minimum() string {
 
 func testAccIosxrPolicyMapQoSConfig_all() string {
 	config := `resource "iosxr_policy_map_qos" "test" {` + "\n"
-	config += `	policy_map_name = "PM1"` + "\n"
+	config += `	policy_map_name = "PM-QOS"` + "\n"
 	config += `	description = "My description"` + "\n"
 	config += `	classes = [{` + "\n"
 	config += `		name = "class-default"` + "\n"

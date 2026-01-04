@@ -33,41 +33,110 @@ import (
 
 func TestAccDataSourceIosxrSegmentRoutingTE(t *testing.T) {
 	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "te_latency", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "max_install_standby_paths", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "kshortest_paths", "120"))
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "separate_next_hop", "true"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "maximum_sid_depth", "6"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "effective_metric_admin_distance_metric_types.0.metric_type", "igp"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "effective_metric_admin_distance_metric_types.0.admin_distance", "40"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "effective_metric_admin_distance_flex_algo_metric_types.0.metric_type", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "effective_metric_admin_distance_flex_algo_metric_types.0.admin_distance", "40"))
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "steering_labeled_services_disable_on_demand_policies", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "steering_labeled_services_disable_all_policies", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "steering_labeled_services_disable_pcep_policies", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "steering_labeled_services_disable_local_policies", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "steering_labeled_services_disable_bgp_sr_te_policies", "true"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "segment_lists_srv6_topology_check", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "segment_lists_srv6_sid_format", "micro-sid"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "segment_lists_srv6_explicit_segments.0.path_name", "SEG-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "segment_lists_srv6_explicit_segments.0.srv6_segments.0.index", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "segment_lists_srv6_explicit_segments.0.srv6_segments.0.address", "fcbb:bb00:100::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "segment_lists_srv6_explicit_segments.0.srv6_segments.0.hop_type", "srv6sid"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "segment_lists_srv6_explicit_segments.0.srv6_topology_check", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "segment_lists_sr_mpls_explicit_segments.0.path_name", "SR-MPLS-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "segment_lists_sr_mpls_explicit_segments.0.sr_mpls_segments.0.index", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "segment_lists_sr_mpls_explicit_segments.0.sr_mpls_segments.0.type", "mpls-label"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "segment_lists_sr_mpls_explicit_segments.0.sr_mpls_segments.0.address", "192.168.1.2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "segment_lists_sr_mpls_explicit_segments.0.sr_mpls_segments.0.mpls_label", "16200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "segment_lists_sr_mpls_explicit_segments.0.sr_mpls_segments.0.address_type", "2"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "logging_pcep_peer_status", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "logging_policy_status", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pcc_report_all", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pcc_source_address", "88.88.88.8"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pcc_delegation_timeout", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "cspf_cache_size", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "timers_candidate_path_cleanup_delay", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "timers_initial_verify_restart", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "timers_initial_verify_switchover", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "timers_initial_verify_startup", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "timers_delete_delay", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "timers_cleanup_delay", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "timers_install_delay", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "timers_periodic_reoptimization", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "resource_lists.0.path_name", "RESOURCE-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "resource_lists.0.resources.0.index", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "resource_lists.0.resources.0.type", "ipv4-address"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "resource_lists.0.resources.0.address", "192.168.1.2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "distribute_link_state", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "distribute_link_state_throttle", "15"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "distribute_link_state_report_candidate_path_inactive", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "bfd_timers_session_bringup", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "binding_sid_rules_explicit", "enforce-srlb"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "binding_sid_rules_dynamic", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "interfaces.0.interface_name", "GigabitEthernet0/0/0/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "interfaces.0.affinities.0.affinity_name", "AFFINITY-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "interfaces.0.metric", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pce_peers_ipv4.0.pce_address", "192.168.1.2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pce_peers_ipv4.0.pce_group", "PCE-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pce_peers_ipv4.0.precedence", "110"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pce_peers_ipv6.0.pce_address", "2001:db8:1::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pce_peers_ipv6.0.pce_group", "PCE-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pce_peers_ipv6.0.precedence", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pce_peers_ipv6.0.tcp_ao_keychain", "KEY-2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pce_peers_ipv6.0.tcp_ao_include_tcp_options", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pcc_profiles.0.profile_id", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pcc_profiles.0.steering_invalidation_drop", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pcc_profiles.0.auto_route_include_all_ipv4", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pcc_profiles.0.auto_route_include_all_ipv6", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pcc_profiles.0.auto_route_force_sr_include", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pcc_profiles.0.auto_route_forward_class", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pcc_profiles.0.auto_route_metric_type", "relative"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pcc_profiles.0.auto_route_metric_relative_value", "-10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pcc_profiles.0.auto_route_metric_constant_value", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pcc_redundancy_pcc_centric", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pcc_dead_timer", "60"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pcc_initiated_state", "15"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pcc_initiated_orphan", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pce_peers.0.pce_address", "66.66.66.6"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pce_peers.0.precedence", "122"))
-	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "on_demand_colors.0.dynamic_anycast_sid_inclusion", "true"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "on_demand_colors.0.dynamic_metric_type", "te"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "on_demand_colors.0.color", "266"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "on_demand_colors.0.srv6_locator_name", "LOC11"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "on_demand_colors.0.srv6_locator_behavior", "ub6-insert-reduced"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "on_demand_colors.0.srv6_locator_binding_sid_type", "srv6-dynamic"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "on_demand_colors.0.source_address", "fccc:0:213::1"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "on_demand_colors.0.source_address_type", "end-point-type-ipv6"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "on_demand_colors.0.effective_metric_value", "4444"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "on_demand_colors.0.effective_metric_type", "igp"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "on_demand_colors.0.constraint_segments_protection_type", "protected-only"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "on_demand_colors.0.constraint_segments_sid_algorithm", "128"))
-	}
-	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "policies.0.policy_name", "POLICY1"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "policies.0.srv6_locator_name", "Locator11"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "policies.0.srv6_locator_binding_sid_type", "srv6-dynamic"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "policies.0.srv6_locator_behavior", "ub6-insert-reduced"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "policies.0.source_address", "fccc:0:103::1"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "policies.0.source_address_type", "end-point-type-ipv6"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "policies.0.policy_color_endpoint_color", "65534"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "policies.0.policy_color_endpoint_type", "end-point-type-ipv6"))
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "policies.0.policy_color_endpoint_address", "fccc:0:215::1"))
-	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pcc_keepalive_timer", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pcc_initiated_state", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pcc_initiated_orphan", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pcc_delegation_timeout", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pcc_report_all", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pcc_source_address_ipv4", "192.168.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "pcc_source_address_ipv6", "2001:db8:1::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "traces.0.buffer_name", "bsid"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "traces.0.trace_count", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "path_disable_algo_checks_strict_spf_areas.0.area_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "path_disable_algo_checks_strict_spf_areas.0.protocol", "ospf"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "path_disable_algo_checks_strict_spf_all_areas", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "affinity_maps.0.affinity_name", "AFFINITY-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "affinity_maps.0.bit_position", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "candidate_paths.0.path_type", "candidate-path-type-bgp-srte"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "candidate_paths.0.source_address_selection", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "candidate_paths.0.source_address_type", "end-point-type-ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "candidate_paths.0.source_address", "192.168.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "srv6_locator", "LOC1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "srv6_locator_binding_sid_type", "srv6-dynamic"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "srv6_locator_behavior", "ub6-insert-reduced"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te.test", "srv6_maximum_sid_depth", "6"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -91,47 +160,145 @@ func TestAccDataSourceIosxrSegmentRoutingTE(t *testing.T) {
 func testAccDataSourceIosxrSegmentRoutingTEConfig() string {
 	config := `resource "iosxr_segment_routing_te" "test" {` + "\n"
 	config += `	delete_mode = "attributes"` + "\n"
+	config += `	te_latency = true` + "\n"
+	config += `	max_install_standby_paths = 2` + "\n"
+	config += `	kshortest_paths = 120` + "\n"
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	separate_next_hop = true` + "\n"
+	}
+	config += `	maximum_sid_depth = 6` + "\n"
+	config += `	effective_metric_admin_distance_metric_types = [{` + "\n"
+	config += `		metric_type = "igp"` + "\n"
+	config += `		admin_distance = 40` + "\n"
+	config += `	}]` + "\n"
+	config += `	effective_metric_admin_distance_flex_algo_metric_types = [{` + "\n"
+	config += `		metric_type = 0` + "\n"
+	config += `		admin_distance = 40` + "\n"
+	config += `	}]` + "\n"
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	steering_labeled_services_disable_on_demand_policies = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	steering_labeled_services_disable_all_policies = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	steering_labeled_services_disable_pcep_policies = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	steering_labeled_services_disable_local_policies = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	steering_labeled_services_disable_bgp_sr_te_policies = true` + "\n"
+	}
+	config += `	segment_lists_srv6_topology_check = true` + "\n"
+	config += `	segment_lists_srv6_sid_format = "micro-sid"` + "\n"
+	config += `	segment_lists_srv6_explicit_segments = [{` + "\n"
+	config += `		path_name = "SEG-1"` + "\n"
+	config += `		srv6_segments = [{` + "\n"
+	config += `			index = 1` + "\n"
+	config += `			address = "fcbb:bb00:100::1"` + "\n"
+	config += `			hop_type = "srv6sid"` + "\n"
+	config += `		}]` + "\n"
+	config += `		srv6_topology_check = true` + "\n"
+	config += `	}]` + "\n"
+	config += `	segment_lists_sr_mpls_explicit_segments = [{` + "\n"
+	config += `		path_name = "SR-MPLS-1"` + "\n"
+	config += `		sr_mpls_segments = [{` + "\n"
+	config += `			index = 1` + "\n"
+	config += `			type = "mpls-label"` + "\n"
+	config += `			address = "192.168.1.2"` + "\n"
+	config += `			mpls_label = 16200` + "\n"
+	config += `			address_type = 2` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
 	config += `	logging_pcep_peer_status = true` + "\n"
 	config += `	logging_policy_status = true` + "\n"
-	config += `	pcc_report_all = true` + "\n"
-	config += `	pcc_source_address = "88.88.88.8"` + "\n"
-	config += `	pcc_delegation_timeout = 10` + "\n"
-	config += `	pcc_dead_timer = 60` + "\n"
-	config += `	pcc_initiated_state = 15` + "\n"
-	config += `	pcc_initiated_orphan = 10` + "\n"
-	config += `	pce_peers = [{` + "\n"
-	config += `		pce_address = "66.66.66.6"` + "\n"
-	config += `		precedence = 122` + "\n"
+	config += `	cspf_cache_size = 1000` + "\n"
+	config += `	timers_candidate_path_cleanup_delay = 60` + "\n"
+	config += `	timers_initial_verify_restart = 60` + "\n"
+	config += `	timers_initial_verify_switchover = 120` + "\n"
+	config += `	timers_initial_verify_startup = 60` + "\n"
+	config += `	timers_delete_delay = 60` + "\n"
+	config += `	timers_cleanup_delay = 60` + "\n"
+	config += `	timers_install_delay = 60` + "\n"
+	config += `	timers_periodic_reoptimization = 120` + "\n"
+	config += `	resource_lists = [{` + "\n"
+	config += `		path_name = "RESOURCE-1"` + "\n"
+	config += `		resources = [{` + "\n"
+	config += `			index = 1` + "\n"
+	config += `			type = "ipv4-address"` + "\n"
+	config += `			address = "192.168.1.2"` + "\n"
+	config += `		}]` + "\n"
 	config += `	}]` + "\n"
-	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
-		config += `	on_demand_colors = [{` + "\n"
-		config += `		dynamic_anycast_sid_inclusion = true` + "\n"
-		config += `		dynamic_metric_type = "te"` + "\n"
-		config += `		color = 266` + "\n"
-		config += `		srv6_locator_name = "LOC11"` + "\n"
-		config += `		srv6_locator_behavior = "ub6-insert-reduced"` + "\n"
-		config += `		srv6_locator_binding_sid_type = "srv6-dynamic"` + "\n"
-		config += `		source_address = "fccc:0:213::1"` + "\n"
-		config += `		source_address_type = "end-point-type-ipv6"` + "\n"
-		config += `		effective_metric_value = 4444` + "\n"
-		config += `		effective_metric_type = "igp"` + "\n"
-		config += `		constraint_segments_protection_type = "protected-only"` + "\n"
-		config += `		constraint_segments_sid_algorithm = 128` + "\n"
-		config += `	}]` + "\n"
-	}
-	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
-		config += `	policies = [{` + "\n"
-		config += `		policy_name = "POLICY1"` + "\n"
-		config += `		srv6_locator_name = "Locator11"` + "\n"
-		config += `		srv6_locator_binding_sid_type = "srv6-dynamic"` + "\n"
-		config += `		srv6_locator_behavior = "ub6-insert-reduced"` + "\n"
-		config += `		source_address = "fccc:0:103::1"` + "\n"
-		config += `		source_address_type = "end-point-type-ipv6"` + "\n"
-		config += `		policy_color_endpoint_color = 65534` + "\n"
-		config += `		policy_color_endpoint_type = "end-point-type-ipv6"` + "\n"
-		config += `		policy_color_endpoint_address = "fccc:0:215::1"` + "\n"
-		config += `	}]` + "\n"
-	}
+	config += `	distribute_link_state = true` + "\n"
+	config += `	distribute_link_state_throttle = 15` + "\n"
+	config += `	distribute_link_state_report_candidate_path_inactive = true` + "\n"
+	config += `	bfd_timers_session_bringup = 120` + "\n"
+	config += `	binding_sid_rules_explicit = "enforce-srlb"` + "\n"
+	config += `	binding_sid_rules_dynamic = "disable"` + "\n"
+	config += `	interfaces = [{` + "\n"
+	config += `		interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `		affinities = [{` + "\n"
+	config += `			affinity_name = "AFFINITY-1"` + "\n"
+	config += `		}]` + "\n"
+	config += `		metric = 1000` + "\n"
+	config += `	}]` + "\n"
+	config += `	pce_peers_ipv4 = [{` + "\n"
+	config += `		pce_address = "192.168.1.2"` + "\n"
+	config += `		password_encrypted = "14141B180F0B6A"` + "\n"
+	config += `		pce_group = "PCE-1"` + "\n"
+	config += `		precedence = 110` + "\n"
+	config += `	}]` + "\n"
+	config += `	pce_peers_ipv6 = [{` + "\n"
+	config += `		pce_address = "2001:db8:1::1"` + "\n"
+	config += `		pce_group = "PCE-1"` + "\n"
+	config += `		precedence = 120` + "\n"
+	config += `		tcp_ao_keychain = "KEY-2"` + "\n"
+	config += `		tcp_ao_include_tcp_options = true` + "\n"
+	config += `	}]` + "\n"
+	config += `	pcc_profiles = [{` + "\n"
+	config += `		profile_id = 10` + "\n"
+	config += `		steering_invalidation_drop = true` + "\n"
+	config += `		auto_route_include_all_ipv4 = true` + "\n"
+	config += `		auto_route_include_all_ipv6 = true` + "\n"
+	config += `		auto_route_force_sr_include = true` + "\n"
+	config += `		auto_route_forward_class = 1` + "\n"
+	config += `		auto_route_metric_type = "relative"` + "\n"
+	config += `		auto_route_metric_relative_value = -10` + "\n"
+	config += `		auto_route_metric_constant_value = 100` + "\n"
+	config += `	}]` + "\n"
+	config += `	pcc_redundancy_pcc_centric = true` + "\n"
+	config += `	pcc_dead_timer = 60` + "\n"
+	config += `	pcc_keepalive_timer = 60` + "\n"
+	config += `	pcc_initiated_state = 120` + "\n"
+	config += `	pcc_initiated_orphan = 120` + "\n"
+	config += `	pcc_delegation_timeout = 120` + "\n"
+	config += `	pcc_report_all = true` + "\n"
+	config += `	pcc_source_address_ipv4 = "192.168.1.1"` + "\n"
+	config += `	pcc_source_address_ipv6 = "2001:db8:1::1"` + "\n"
+	config += `	traces = [{` + "\n"
+	config += `		buffer_name = "bsid"` + "\n"
+	config += `		trace_count = 1000` + "\n"
+	config += `	}]` + "\n"
+	config += `	path_disable_algo_checks_strict_spf_areas = [{` + "\n"
+	config += `		area_id = 1` + "\n"
+	config += `		protocol = "ospf"` + "\n"
+	config += `	}]` + "\n"
+	config += `	path_disable_algo_checks_strict_spf_all_areas = true` + "\n"
+	config += `	affinity_maps = [{` + "\n"
+	config += `		affinity_name = "AFFINITY-1"` + "\n"
+	config += `		bit_position = 1` + "\n"
+	config += `	}]` + "\n"
+	config += `	candidate_paths = [{` + "\n"
+	config += `		path_type = "candidate-path-type-bgp-srte"` + "\n"
+	config += `		source_address_selection = true` + "\n"
+	config += `		source_address_type = "end-point-type-ipv4"` + "\n"
+	config += `		source_address = "192.168.1.1"` + "\n"
+	config += `	}]` + "\n"
+	config += `	srv6_locator = "LOC1"` + "\n"
+	config += `	srv6_locator_binding_sid_type = "srv6-dynamic"` + "\n"
+	config += `	srv6_locator_behavior = "ub6-insert-reduced"` + "\n"
+	config += `	srv6_maximum_sid_depth = 6` + "\n"
 	config += `}` + "\n"
 
 	config += `

@@ -35,18 +35,20 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type L2VPNXconnectGroup struct {
-	Device     types.String             `tfsdk:"device"`
-	Id         types.String             `tfsdk:"id"`
-	DeleteMode types.String             `tfsdk:"delete_mode"`
-	GroupName  types.String             `tfsdk:"group_name"`
-	P2ps       []L2VPNXconnectGroupP2ps `tfsdk:"p2ps"`
+	Device     types.String               `tfsdk:"device"`
+	Id         types.String               `tfsdk:"id"`
+	DeleteMode types.String               `tfsdk:"delete_mode"`
+	GroupName  types.String               `tfsdk:"group_name"`
+	P2ps       []L2VPNXconnectGroupP2ps   `tfsdk:"p2ps"`
+	Mp2mps     []L2VPNXconnectGroupMp2mps `tfsdk:"mp2mps"`
 }
 
 type L2VPNXconnectGroupData struct {
-	Device    types.String             `tfsdk:"device"`
-	Id        types.String             `tfsdk:"id"`
-	GroupName types.String             `tfsdk:"group_name"`
-	P2ps      []L2VPNXconnectGroupP2ps `tfsdk:"p2ps"`
+	Device    types.String               `tfsdk:"device"`
+	Id        types.String               `tfsdk:"id"`
+	GroupName types.String               `tfsdk:"group_name"`
+	P2ps      []L2VPNXconnectGroupP2ps   `tfsdk:"p2ps"`
+	Mp2mps    []L2VPNXconnectGroupMp2mps `tfsdk:"mp2mps"`
 }
 type L2VPNXconnectGroupP2ps struct {
 	P2pXconnectName                    types.String                                               `tfsdk:"p2p_xconnect_name"`
@@ -62,6 +64,38 @@ type L2VPNXconnectGroupP2ps struct {
 	EvpnTargetNeighborsSegmentRouting  []L2VPNXconnectGroupP2psEvpnTargetNeighborsSegmentRouting  `tfsdk:"evpn_target_neighbors_segment_routing"`
 	EvpnServiceNeighborsSegmentRouting []L2VPNXconnectGroupP2psEvpnServiceNeighborsSegmentRouting `tfsdk:"evpn_service_neighbors_segment_routing"`
 }
+type L2VPNXconnectGroupMp2mps struct {
+	InstanceName                                                       types.String                                                                 `tfsdk:"instance_name"`
+	VpnId                                                              types.Int64                                                                  `tfsdk:"vpn_id"`
+	Mtu                                                                types.Int64                                                                  `tfsdk:"mtu"`
+	Shutdown                                                           types.Bool                                                                   `tfsdk:"shutdown"`
+	L2Encapsulation                                                    types.String                                                                 `tfsdk:"l2_encapsulation"`
+	Interworking                                                       types.String                                                                 `tfsdk:"interworking"`
+	ControlWordDisable                                                 types.Bool                                                                   `tfsdk:"control_word_disable"`
+	AutodiscoveryBgp                                                   types.Bool                                                                   `tfsdk:"autodiscovery_bgp"`
+	AutodiscoveryBgpRdAuto                                             types.Bool                                                                   `tfsdk:"autodiscovery_bgp_rd_auto"`
+	AutodiscoveryBgpRdTwoByteAsNumber                                  types.Int64                                                                  `tfsdk:"autodiscovery_bgp_rd_two_byte_as_number"`
+	AutodiscoveryBgpRdTwoByteAsIndex                                   types.Int64                                                                  `tfsdk:"autodiscovery_bgp_rd_two_byte_as_index"`
+	AutodiscoveryBgpRdFourByteAsNumber                                 types.Int64                                                                  `tfsdk:"autodiscovery_bgp_rd_four_byte_as_number"`
+	AutodiscoveryBgpRdFourByteAsIndex                                  types.Int64                                                                  `tfsdk:"autodiscovery_bgp_rd_four_byte_as_index"`
+	AutodiscoveryBgpRdIpv4Address                                      types.String                                                                 `tfsdk:"autodiscovery_bgp_rd_ipv4_address"`
+	AutodiscoveryBgpRdIpv4AddressIndex                                 types.Int64                                                                  `tfsdk:"autodiscovery_bgp_rd_ipv4_address_index"`
+	AutodiscoveryBgpRouteTargetImportTwoByteAsFormat                   []L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportTwoByteAsFormat   `tfsdk:"autodiscovery_bgp_route_target_import_two_byte_as_format"`
+	AutodiscoveryBgpRouteTargetImportFourByteAsFormat                  []L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportFourByteAsFormat  `tfsdk:"autodiscovery_bgp_route_target_import_four_byte_as_format"`
+	AutodiscoveryBgpRouteTargetImportIpv4AddressFormat                 []L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportIpv4AddressFormat `tfsdk:"autodiscovery_bgp_route_target_import_ipv4_address_format"`
+	AutodiscoveryBgpRouteTargetExportTwoByteAsFormat                   []L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportTwoByteAsFormat   `tfsdk:"autodiscovery_bgp_route_target_export_two_byte_as_format"`
+	AutodiscoveryBgpRouteTargetExportFourByteAsFormat                  []L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportFourByteAsFormat  `tfsdk:"autodiscovery_bgp_route_target_export_four_byte_as_format"`
+	AutodiscoveryBgpRouteTargetExportIpv4AddressFormat                 []L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportIpv4AddressFormat `tfsdk:"autodiscovery_bgp_route_target_export_ipv4_address_format"`
+	AutodiscoveryBgpRouteTargetTwoByteAsFormat                         []L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetTwoByteAsFormat         `tfsdk:"autodiscovery_bgp_route_target_two_byte_as_format"`
+	AutodiscoveryBgpRouteTargetFourByteAsFormat                        []L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetFourByteAsFormat        `tfsdk:"autodiscovery_bgp_route_target_four_byte_as_format"`
+	AutodiscoveryBgpRouteTargetIpv4AddressFormat                       []L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetIpv4AddressFormat       `tfsdk:"autodiscovery_bgp_route_target_ipv4_address_format"`
+	AutodiscoveryBgpSignalingProtocolBgpCeIds                          []L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIds          `tfsdk:"autodiscovery_bgp_signaling_protocol_bgp_ce_ids"`
+	AutodiscoveryBgpSignalingProtocolBgpCeRange                        types.Int64                                                                  `tfsdk:"autodiscovery_bgp_signaling_protocol_bgp_ce_range"`
+	AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit types.Bool                                                                   `tfsdk:"autodiscovery_bgp_signaling_protocol_bgp_load_balancing_flow_label_transmit"`
+	AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive  types.Bool                                                                   `tfsdk:"autodiscovery_bgp_signaling_protocol_bgp_load_balancing_flow_label_receive"`
+	AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth     types.Bool                                                                   `tfsdk:"autodiscovery_bgp_signaling_protocol_bgp_load_balancing_flow_label_both"`
+	AutodiscoveryBgpRoutePolicyExport                                  types.String                                                                 `tfsdk:"autodiscovery_bgp_route_policy_export"`
+}
 type L2VPNXconnectGroupP2psInterfaces struct {
 	InterfaceName types.String `tfsdk:"interface_name"`
 }
@@ -69,24 +103,24 @@ type L2VPNXconnectGroupP2psBackupInterfaces struct {
 	InterfaceName types.String `tfsdk:"interface_name"`
 }
 type L2VPNXconnectGroupP2psIpv4Neighbors struct {
-	Address               types.String `tfsdk:"address"`
-	PwId                  types.Int64  `tfsdk:"pw_id"`
-	PwClass               types.String `tfsdk:"pw_class"`
-	Bandwidth             types.Int64  `tfsdk:"bandwidth"`
-	BackupNeighbors       types.List   `tfsdk:"backup_neighbors"`
-	MplsStaticLabelLocal  types.Int64  `tfsdk:"mpls_static_label_local"`
-	MplsStaticLabelRemote types.Int64  `tfsdk:"mpls_static_label_remote"`
-	TagImposeVlan         types.Int64  `tfsdk:"tag_impose_vlan"`
+	Address               types.String                                         `tfsdk:"address"`
+	PwId                  types.Int64                                          `tfsdk:"pw_id"`
+	PwClass               types.String                                         `tfsdk:"pw_class"`
+	Bandwidth             types.Int64                                          `tfsdk:"bandwidth"`
+	BackupNeighbors       []L2VPNXconnectGroupP2psIpv4NeighborsBackupNeighbors `tfsdk:"backup_neighbors"`
+	MplsStaticLabelLocal  types.Int64                                          `tfsdk:"mpls_static_label_local"`
+	MplsStaticLabelRemote types.Int64                                          `tfsdk:"mpls_static_label_remote"`
+	TagImposeVlan         types.Int64                                          `tfsdk:"tag_impose_vlan"`
 }
 type L2VPNXconnectGroupP2psIpv6Neighbors struct {
-	Address               types.String `tfsdk:"address"`
-	PwId                  types.Int64  `tfsdk:"pw_id"`
-	PwClass               types.String `tfsdk:"pw_class"`
-	BackupNeighbors       types.List   `tfsdk:"backup_neighbors"`
-	MplsStaticLabelLocal  types.Int64  `tfsdk:"mpls_static_label_local"`
-	MplsStaticLabelRemote types.Int64  `tfsdk:"mpls_static_label_remote"`
-	TagImposeVlan         types.Int64  `tfsdk:"tag_impose_vlan"`
-	SourceIpv6Address     types.String `tfsdk:"source_ipv6_address"`
+	Address               types.String                                         `tfsdk:"address"`
+	PwId                  types.Int64                                          `tfsdk:"pw_id"`
+	PwClass               types.String                                         `tfsdk:"pw_class"`
+	BackupNeighbors       []L2VPNXconnectGroupP2psIpv6NeighborsBackupNeighbors `tfsdk:"backup_neighbors"`
+	MplsStaticLabelLocal  types.Int64                                          `tfsdk:"mpls_static_label_local"`
+	MplsStaticLabelRemote types.Int64                                          `tfsdk:"mpls_static_label_remote"`
+	TagImposeVlan         types.Int64                                          `tfsdk:"tag_impose_vlan"`
+	SourceIpv6Address     types.String                                         `tfsdk:"source_ipv6_address"`
 }
 type L2VPNXconnectGroupP2psEvpnTargetNeighbors struct {
 	VpnId      types.Int64  `tfsdk:"vpn_id"`
@@ -109,6 +143,68 @@ type L2VPNXconnectGroupP2psEvpnServiceNeighborsSegmentRouting struct {
 	VpnId                     types.Int64  `tfsdk:"vpn_id"`
 	ServiceId                 types.Int64  `tfsdk:"service_id"`
 	SegmentRoutingSrv6Locator types.String `tfsdk:"segment_routing_srv6_locator"`
+}
+type L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportTwoByteAsFormat struct {
+	TwoByteAsNumber types.Int64 `tfsdk:"two_byte_as_number"`
+	AssignedNumber  types.Int64 `tfsdk:"assigned_number"`
+}
+type L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportFourByteAsFormat struct {
+	FourByteAsNumber types.Int64 `tfsdk:"four_byte_as_number"`
+	AssignedNumber   types.Int64 `tfsdk:"assigned_number"`
+}
+type L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportIpv4AddressFormat struct {
+	Ipv4Address    types.String `tfsdk:"ipv4_address"`
+	AssignedNumber types.Int64  `tfsdk:"assigned_number"`
+}
+type L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportTwoByteAsFormat struct {
+	TwoByteAsNumber types.Int64 `tfsdk:"two_byte_as_number"`
+	AssignedNumber  types.Int64 `tfsdk:"assigned_number"`
+}
+type L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportFourByteAsFormat struct {
+	FourByteAsNumber types.Int64 `tfsdk:"four_byte_as_number"`
+	AssignedNumber   types.Int64 `tfsdk:"assigned_number"`
+}
+type L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportIpv4AddressFormat struct {
+	Ipv4Address    types.String `tfsdk:"ipv4_address"`
+	AssignedNumber types.Int64  `tfsdk:"assigned_number"`
+}
+type L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetTwoByteAsFormat struct {
+	TwoByteAsNumber types.Int64 `tfsdk:"two_byte_as_number"`
+	AssignedNumber  types.Int64 `tfsdk:"assigned_number"`
+}
+type L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetFourByteAsFormat struct {
+	FourByteAsNumber types.Int64 `tfsdk:"four_byte_as_number"`
+	AssignedNumber   types.Int64 `tfsdk:"assigned_number"`
+}
+type L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetIpv4AddressFormat struct {
+	Ipv4Address    types.String `tfsdk:"ipv4_address"`
+	AssignedNumber types.Int64  `tfsdk:"assigned_number"`
+}
+type L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIds struct {
+	LocalCeIdValue          types.Int64                                                                   `tfsdk:"local_ce_id_value"`
+	Interfaces              []L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIdsInterfaces `tfsdk:"interfaces"`
+	VpwsSeamlessIntegration types.Bool                                                                    `tfsdk:"vpws_seamless_integration"`
+}
+type L2VPNXconnectGroupP2psIpv4NeighborsBackupNeighbors struct {
+	Address               types.String `tfsdk:"address"`
+	PwId                  types.Int64  `tfsdk:"pw_id"`
+	PwClass               types.String `tfsdk:"pw_class"`
+	MplsStaticLabelLocal  types.Int64  `tfsdk:"mpls_static_label_local"`
+	MplsStaticLabelRemote types.Int64  `tfsdk:"mpls_static_label_remote"`
+}
+type L2VPNXconnectGroupP2psIpv6NeighborsBackupNeighbors struct {
+	Address               types.String `tfsdk:"address"`
+	PwId                  types.Int64  `tfsdk:"pw_id"`
+	PwClass               types.String `tfsdk:"pw_class"`
+	MplsStaticLabelLocal  types.Int64  `tfsdk:"mpls_static_label_local"`
+	MplsStaticLabelRemote types.Int64  `tfsdk:"mpls_static_label_remote"`
+}
+type L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIdsInterfaces struct {
+	InterfaceName types.String                                                                             `tfsdk:"interface_name"`
+	RemoteCeIds   []L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIdsInterfacesRemoteCeIds `tfsdk:"remote_ce_ids"`
+}
+type L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIdsInterfacesRemoteCeIds struct {
+	RemoteCeIdValue types.Int64 `tfsdk:"remote_ce_id_value"`
 }
 
 // End of section. //template:end types
@@ -182,8 +278,6 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 					if !citem.Bandwidth.IsNull() && !citem.Bandwidth.IsUnknown() {
 						body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.ipv4s.ipv4"+"."+strconv.Itoa(cindex)+"."+"bandwidth", strconv.FormatInt(citem.Bandwidth.ValueInt64(), 10))
 					}
-					if !citem.BackupNeighbors.IsNull() && !citem.BackupNeighbors.IsUnknown() {
-					}
 					if !citem.MplsStaticLabelLocal.IsNull() && !citem.MplsStaticLabelLocal.IsUnknown() {
 						body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.ipv4s.ipv4"+"."+strconv.Itoa(cindex)+"."+"mpls.static.label.local", strconv.FormatInt(citem.MplsStaticLabelLocal.ValueInt64(), 10))
 					}
@@ -192,6 +286,26 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 					}
 					if !citem.TagImposeVlan.IsNull() && !citem.TagImposeVlan.IsUnknown() {
 						body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.ipv4s.ipv4"+"."+strconv.Itoa(cindex)+"."+"tag-impose.vlan", strconv.FormatInt(citem.TagImposeVlan.ValueInt64(), 10))
+					}
+					if len(citem.BackupNeighbors) > 0 {
+						body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.ipv4s.ipv4"+"."+strconv.Itoa(cindex)+"."+"backup.neighbors.neighbor", []interface{}{})
+						for ccindex, ccitem := range citem.BackupNeighbors {
+							if !ccitem.Address.IsNull() && !ccitem.Address.IsUnknown() {
+								body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.ipv4s.ipv4"+"."+strconv.Itoa(cindex)+"."+"backup.neighbors.neighbor"+"."+strconv.Itoa(ccindex)+"."+"address", ccitem.Address.ValueString())
+							}
+							if !ccitem.PwId.IsNull() && !ccitem.PwId.IsUnknown() {
+								body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.ipv4s.ipv4"+"."+strconv.Itoa(cindex)+"."+"backup.neighbors.neighbor"+"."+strconv.Itoa(ccindex)+"."+"pw-id", strconv.FormatInt(ccitem.PwId.ValueInt64(), 10))
+							}
+							if !ccitem.PwClass.IsNull() && !ccitem.PwClass.IsUnknown() {
+								body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.ipv4s.ipv4"+"."+strconv.Itoa(cindex)+"."+"backup.neighbors.neighbor"+"."+strconv.Itoa(ccindex)+"."+"pw-class", ccitem.PwClass.ValueString())
+							}
+							if !ccitem.MplsStaticLabelLocal.IsNull() && !ccitem.MplsStaticLabelLocal.IsUnknown() {
+								body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.ipv4s.ipv4"+"."+strconv.Itoa(cindex)+"."+"backup.neighbors.neighbor"+"."+strconv.Itoa(ccindex)+"."+"mpls.static.label.local", strconv.FormatInt(ccitem.MplsStaticLabelLocal.ValueInt64(), 10))
+							}
+							if !ccitem.MplsStaticLabelRemote.IsNull() && !ccitem.MplsStaticLabelRemote.IsUnknown() {
+								body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.ipv4s.ipv4"+"."+strconv.Itoa(cindex)+"."+"backup.neighbors.neighbor"+"."+strconv.Itoa(ccindex)+"."+"mpls.static.label.remote", strconv.FormatInt(ccitem.MplsStaticLabelRemote.ValueInt64(), 10))
+							}
+						}
 					}
 				}
 			}
@@ -207,8 +321,6 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 					if !citem.PwClass.IsNull() && !citem.PwClass.IsUnknown() {
 						body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.ipv6s.ipv6"+"."+strconv.Itoa(cindex)+"."+"pw-class", citem.PwClass.ValueString())
 					}
-					if !citem.BackupNeighbors.IsNull() && !citem.BackupNeighbors.IsUnknown() {
-					}
 					if !citem.MplsStaticLabelLocal.IsNull() && !citem.MplsStaticLabelLocal.IsUnknown() {
 						body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.ipv6s.ipv6"+"."+strconv.Itoa(cindex)+"."+"mpls.static.label.local", strconv.FormatInt(citem.MplsStaticLabelLocal.ValueInt64(), 10))
 					}
@@ -220,6 +332,26 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 					}
 					if !citem.SourceIpv6Address.IsNull() && !citem.SourceIpv6Address.IsUnknown() {
 						body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.ipv6s.ipv6"+"."+strconv.Itoa(cindex)+"."+"source.ipv6-address", citem.SourceIpv6Address.ValueString())
+					}
+					if len(citem.BackupNeighbors) > 0 {
+						body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.ipv6s.ipv6"+"."+strconv.Itoa(cindex)+"."+"backup.neighbors.neighbor", []interface{}{})
+						for ccindex, ccitem := range citem.BackupNeighbors {
+							if !ccitem.Address.IsNull() && !ccitem.Address.IsUnknown() {
+								body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.ipv6s.ipv6"+"."+strconv.Itoa(cindex)+"."+"backup.neighbors.neighbor"+"."+strconv.Itoa(ccindex)+"."+"address", ccitem.Address.ValueString())
+							}
+							if !ccitem.PwId.IsNull() && !ccitem.PwId.IsUnknown() {
+								body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.ipv6s.ipv6"+"."+strconv.Itoa(cindex)+"."+"backup.neighbors.neighbor"+"."+strconv.Itoa(ccindex)+"."+"pw-id", strconv.FormatInt(ccitem.PwId.ValueInt64(), 10))
+							}
+							if !ccitem.PwClass.IsNull() && !ccitem.PwClass.IsUnknown() {
+								body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.ipv6s.ipv6"+"."+strconv.Itoa(cindex)+"."+"backup.neighbors.neighbor"+"."+strconv.Itoa(ccindex)+"."+"pw-class", ccitem.PwClass.ValueString())
+							}
+							if !ccitem.MplsStaticLabelLocal.IsNull() && !ccitem.MplsStaticLabelLocal.IsUnknown() {
+								body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.ipv6s.ipv6"+"."+strconv.Itoa(cindex)+"."+"backup.neighbors.neighbor"+"."+strconv.Itoa(ccindex)+"."+"mpls.static.label.local", strconv.FormatInt(ccitem.MplsStaticLabelLocal.ValueInt64(), 10))
+							}
+							if !ccitem.MplsStaticLabelRemote.IsNull() && !ccitem.MplsStaticLabelRemote.IsUnknown() {
+								body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.ipv6s.ipv6"+"."+strconv.Itoa(cindex)+"."+"backup.neighbors.neighbor"+"."+strconv.Itoa(ccindex)+"."+"mpls.static.label.remote", strconv.FormatInt(ccitem.MplsStaticLabelRemote.ValueInt64(), 10))
+							}
+						}
 					}
 				}
 			}
@@ -282,6 +414,213 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 					}
 					if !citem.SegmentRoutingSrv6Locator.IsNull() && !citem.SegmentRoutingSrv6Locator.IsUnknown() {
 						body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.evpn.evi.segment-routing-services.service"+"."+strconv.Itoa(cindex)+"."+"segment-routing.srv6.locator", citem.SegmentRoutingSrv6Locator.ValueString())
+					}
+				}
+			}
+		}
+	}
+	if len(data.Mp2mps) > 0 {
+		body, _ = sjson.Set(body, "mp2mps.mp2mp", []interface{}{})
+		for index, item := range data.Mp2mps {
+			if !item.InstanceName.IsNull() && !item.InstanceName.IsUnknown() {
+				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"instance-name", item.InstanceName.ValueString())
+			}
+			if !item.VpnId.IsNull() && !item.VpnId.IsUnknown() {
+				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"vpn-id", strconv.FormatInt(item.VpnId.ValueInt64(), 10))
+			}
+			if !item.Mtu.IsNull() && !item.Mtu.IsUnknown() {
+				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"mtu", strconv.FormatInt(item.Mtu.ValueInt64(), 10))
+			}
+			if !item.Shutdown.IsNull() && !item.Shutdown.IsUnknown() {
+				if item.Shutdown.ValueBool() {
+					body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"shutdown", map[string]string{})
+				}
+			}
+			if !item.L2Encapsulation.IsNull() && !item.L2Encapsulation.IsUnknown() {
+				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"l2-encapsulation", item.L2Encapsulation.ValueString())
+			}
+			if !item.Interworking.IsNull() && !item.Interworking.IsUnknown() {
+				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"interworking", item.Interworking.ValueString())
+			}
+			if !item.ControlWordDisable.IsNull() && !item.ControlWordDisable.IsUnknown() {
+				if item.ControlWordDisable.ValueBool() {
+					body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"control-word.disable", map[string]string{})
+				}
+			}
+			if !item.AutodiscoveryBgp.IsNull() && !item.AutodiscoveryBgp.IsUnknown() {
+				if item.AutodiscoveryBgp.ValueBool() {
+					body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp", map[string]string{})
+				}
+			}
+			if !item.AutodiscoveryBgpRdAuto.IsNull() && !item.AutodiscoveryBgpRdAuto.IsUnknown() {
+				if item.AutodiscoveryBgpRdAuto.ValueBool() {
+					body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.rd.auto", map[string]string{})
+				}
+			}
+			if !item.AutodiscoveryBgpRdTwoByteAsNumber.IsNull() && !item.AutodiscoveryBgpRdTwoByteAsNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.rd.two-byte-as-number", strconv.FormatInt(item.AutodiscoveryBgpRdTwoByteAsNumber.ValueInt64(), 10))
+			}
+			if !item.AutodiscoveryBgpRdTwoByteAsIndex.IsNull() && !item.AutodiscoveryBgpRdTwoByteAsIndex.IsUnknown() {
+				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.rd.two-byte-as-assigned-number", strconv.FormatInt(item.AutodiscoveryBgpRdTwoByteAsIndex.ValueInt64(), 10))
+			}
+			if !item.AutodiscoveryBgpRdFourByteAsNumber.IsNull() && !item.AutodiscoveryBgpRdFourByteAsNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.rd.four-byte-as-number", strconv.FormatInt(item.AutodiscoveryBgpRdFourByteAsNumber.ValueInt64(), 10))
+			}
+			if !item.AutodiscoveryBgpRdFourByteAsIndex.IsNull() && !item.AutodiscoveryBgpRdFourByteAsIndex.IsUnknown() {
+				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.rd.four-byte-as-assigned-number", strconv.FormatInt(item.AutodiscoveryBgpRdFourByteAsIndex.ValueInt64(), 10))
+			}
+			if !item.AutodiscoveryBgpRdIpv4Address.IsNull() && !item.AutodiscoveryBgpRdIpv4Address.IsUnknown() {
+				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.rd.ipv4-address", item.AutodiscoveryBgpRdIpv4Address.ValueString())
+			}
+			if !item.AutodiscoveryBgpRdIpv4AddressIndex.IsNull() && !item.AutodiscoveryBgpRdIpv4AddressIndex.IsUnknown() {
+				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.rd.ipv4-address-assigned-number", strconv.FormatInt(item.AutodiscoveryBgpRdIpv4AddressIndex.ValueInt64(), 10))
+			}
+			if !item.AutodiscoveryBgpSignalingProtocolBgpCeRange.IsNull() && !item.AutodiscoveryBgpSignalingProtocolBgpCeRange.IsUnknown() {
+				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.signaling-protocol.bgp.ce-range", strconv.FormatInt(item.AutodiscoveryBgpSignalingProtocolBgpCeRange.ValueInt64(), 10))
+			}
+			if !item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.IsNull() && !item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.IsUnknown() {
+				if item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.ValueBool() {
+					body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.transmit", map[string]string{})
+				}
+			}
+			if !item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.IsNull() && !item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.IsUnknown() {
+				if item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.ValueBool() {
+					body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.receive", map[string]string{})
+				}
+			}
+			if !item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.IsNull() && !item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.IsUnknown() {
+				if item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.ValueBool() {
+					body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.both", map[string]string{})
+				}
+			}
+			if !item.AutodiscoveryBgpRoutePolicyExport.IsNull() && !item.AutodiscoveryBgpRoutePolicyExport.IsUnknown() {
+				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-policy.export", item.AutodiscoveryBgpRoutePolicyExport.ValueString())
+			}
+			if len(item.AutodiscoveryBgpRouteTargetImportTwoByteAsFormat) > 0 {
+				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.import.two-byte-as-rts.two-byte-as-rt", []interface{}{})
+				for cindex, citem := range item.AutodiscoveryBgpRouteTargetImportTwoByteAsFormat {
+					if !citem.TwoByteAsNumber.IsNull() && !citem.TwoByteAsNumber.IsUnknown() {
+						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.import.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(cindex)+"."+"two-byte-as-number", strconv.FormatInt(citem.TwoByteAsNumber.ValueInt64(), 10))
+					}
+					if !citem.AssignedNumber.IsNull() && !citem.AssignedNumber.IsUnknown() {
+						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.import.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(cindex)+"."+"assigned-number", strconv.FormatInt(citem.AssignedNumber.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.AutodiscoveryBgpRouteTargetImportFourByteAsFormat) > 0 {
+				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.import.four-byte-as-rts.four-byte-as-rt", []interface{}{})
+				for cindex, citem := range item.AutodiscoveryBgpRouteTargetImportFourByteAsFormat {
+					if !citem.FourByteAsNumber.IsNull() && !citem.FourByteAsNumber.IsUnknown() {
+						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.import.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(cindex)+"."+"four-byte-as-number", strconv.FormatInt(citem.FourByteAsNumber.ValueInt64(), 10))
+					}
+					if !citem.AssignedNumber.IsNull() && !citem.AssignedNumber.IsUnknown() {
+						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.import.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(cindex)+"."+"assigned-number", strconv.FormatInt(citem.AssignedNumber.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.AutodiscoveryBgpRouteTargetImportIpv4AddressFormat) > 0 {
+				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.import.ipv4-address-rts.ipv4-address-rt", []interface{}{})
+				for cindex, citem := range item.AutodiscoveryBgpRouteTargetImportIpv4AddressFormat {
+					if !citem.Ipv4Address.IsNull() && !citem.Ipv4Address.IsUnknown() {
+						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.import.ipv4-address-rts.ipv4-address-rt"+"."+strconv.Itoa(cindex)+"."+"ipv4-address", citem.Ipv4Address.ValueString())
+					}
+					if !citem.AssignedNumber.IsNull() && !citem.AssignedNumber.IsUnknown() {
+						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.import.ipv4-address-rts.ipv4-address-rt"+"."+strconv.Itoa(cindex)+"."+"assigned-number", strconv.FormatInt(citem.AssignedNumber.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.AutodiscoveryBgpRouteTargetExportTwoByteAsFormat) > 0 {
+				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.export.two-byte-as-rts.two-byte-as-rt", []interface{}{})
+				for cindex, citem := range item.AutodiscoveryBgpRouteTargetExportTwoByteAsFormat {
+					if !citem.TwoByteAsNumber.IsNull() && !citem.TwoByteAsNumber.IsUnknown() {
+						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.export.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(cindex)+"."+"two-byte-as-number", strconv.FormatInt(citem.TwoByteAsNumber.ValueInt64(), 10))
+					}
+					if !citem.AssignedNumber.IsNull() && !citem.AssignedNumber.IsUnknown() {
+						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.export.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(cindex)+"."+"assigned-number", strconv.FormatInt(citem.AssignedNumber.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.AutodiscoveryBgpRouteTargetExportFourByteAsFormat) > 0 {
+				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.export.four-byte-as-rts.four-byte-as-rt", []interface{}{})
+				for cindex, citem := range item.AutodiscoveryBgpRouteTargetExportFourByteAsFormat {
+					if !citem.FourByteAsNumber.IsNull() && !citem.FourByteAsNumber.IsUnknown() {
+						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.export.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(cindex)+"."+"four-byte-as-number", strconv.FormatInt(citem.FourByteAsNumber.ValueInt64(), 10))
+					}
+					if !citem.AssignedNumber.IsNull() && !citem.AssignedNumber.IsUnknown() {
+						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.export.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(cindex)+"."+"assigned-number", strconv.FormatInt(citem.AssignedNumber.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.AutodiscoveryBgpRouteTargetExportIpv4AddressFormat) > 0 {
+				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.export.ipv4-address-rts.ipv4-address-rt", []interface{}{})
+				for cindex, citem := range item.AutodiscoveryBgpRouteTargetExportIpv4AddressFormat {
+					if !citem.Ipv4Address.IsNull() && !citem.Ipv4Address.IsUnknown() {
+						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.export.ipv4-address-rts.ipv4-address-rt"+"."+strconv.Itoa(cindex)+"."+"ipv4-address", citem.Ipv4Address.ValueString())
+					}
+					if !citem.AssignedNumber.IsNull() && !citem.AssignedNumber.IsUnknown() {
+						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.export.ipv4-address-rts.ipv4-address-rt"+"."+strconv.Itoa(cindex)+"."+"assigned-number", strconv.FormatInt(citem.AssignedNumber.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.AutodiscoveryBgpRouteTargetTwoByteAsFormat) > 0 {
+				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.two-byte-as-rts.two-byte-as-rt", []interface{}{})
+				for cindex, citem := range item.AutodiscoveryBgpRouteTargetTwoByteAsFormat {
+					if !citem.TwoByteAsNumber.IsNull() && !citem.TwoByteAsNumber.IsUnknown() {
+						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(cindex)+"."+"two-byte-as-number", strconv.FormatInt(citem.TwoByteAsNumber.ValueInt64(), 10))
+					}
+					if !citem.AssignedNumber.IsNull() && !citem.AssignedNumber.IsUnknown() {
+						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(cindex)+"."+"assigned-number", strconv.FormatInt(citem.AssignedNumber.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.AutodiscoveryBgpRouteTargetFourByteAsFormat) > 0 {
+				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.four-byte-as-rts.four-byte-as-rt", []interface{}{})
+				for cindex, citem := range item.AutodiscoveryBgpRouteTargetFourByteAsFormat {
+					if !citem.FourByteAsNumber.IsNull() && !citem.FourByteAsNumber.IsUnknown() {
+						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(cindex)+"."+"four-byte-as-number", strconv.FormatInt(citem.FourByteAsNumber.ValueInt64(), 10))
+					}
+					if !citem.AssignedNumber.IsNull() && !citem.AssignedNumber.IsUnknown() {
+						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(cindex)+"."+"assigned-number", strconv.FormatInt(citem.AssignedNumber.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.AutodiscoveryBgpRouteTargetIpv4AddressFormat) > 0 {
+				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.ipv4-address-rts.ipv4-address-rt", []interface{}{})
+				for cindex, citem := range item.AutodiscoveryBgpRouteTargetIpv4AddressFormat {
+					if !citem.Ipv4Address.IsNull() && !citem.Ipv4Address.IsUnknown() {
+						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.ipv4-address-rts.ipv4-address-rt"+"."+strconv.Itoa(cindex)+"."+"ipv4-address", citem.Ipv4Address.ValueString())
+					}
+					if !citem.AssignedNumber.IsNull() && !citem.AssignedNumber.IsUnknown() {
+						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.ipv4-address-rts.ipv4-address-rt"+"."+strconv.Itoa(cindex)+"."+"assigned-number", strconv.FormatInt(citem.AssignedNumber.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.AutodiscoveryBgpSignalingProtocolBgpCeIds) > 0 {
+				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.signaling-protocol.bgp.ce-id", []interface{}{})
+				for cindex, citem := range item.AutodiscoveryBgpSignalingProtocolBgpCeIds {
+					if !citem.LocalCeIdValue.IsNull() && !citem.LocalCeIdValue.IsUnknown() {
+						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.signaling-protocol.bgp.ce-id"+"."+strconv.Itoa(cindex)+"."+"local-ce-id-value", strconv.FormatInt(citem.LocalCeIdValue.ValueInt64(), 10))
+					}
+					if !citem.VpwsSeamlessIntegration.IsNull() && !citem.VpwsSeamlessIntegration.IsUnknown() {
+						if citem.VpwsSeamlessIntegration.ValueBool() {
+							body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.signaling-protocol.bgp.ce-id"+"."+strconv.Itoa(cindex)+"."+"vpws-seamless-integration", map[string]string{})
+						}
+					}
+					if len(citem.Interfaces) > 0 {
+						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.signaling-protocol.bgp.ce-id"+"."+strconv.Itoa(cindex)+"."+"interface", []interface{}{})
+						for ccindex, ccitem := range citem.Interfaces {
+							if !ccitem.InterfaceName.IsNull() && !ccitem.InterfaceName.IsUnknown() {
+								body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.signaling-protocol.bgp.ce-id"+"."+strconv.Itoa(cindex)+"."+"interface"+"."+strconv.Itoa(ccindex)+"."+"interface-name", ccitem.InterfaceName.ValueString())
+							}
+							if len(ccitem.RemoteCeIds) > 0 {
+								body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.signaling-protocol.bgp.ce-id"+"."+strconv.Itoa(cindex)+"."+"interface"+"."+strconv.Itoa(ccindex)+"."+"remote-ce-id", []interface{}{})
+								for cccindex, cccitem := range ccitem.RemoteCeIds {
+									if !cccitem.RemoteCeIdValue.IsNull() && !cccitem.RemoteCeIdValue.IsUnknown() {
+										body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.signaling-protocol.bgp.ce-id"+"."+strconv.Itoa(cindex)+"."+"interface"+"."+strconv.Itoa(ccindex)+"."+"remote-ce-id"+"."+strconv.Itoa(cccindex)+"."+"remote-ce-id-value", strconv.FormatInt(cccitem.RemoteCeIdValue.ValueInt64(), 10))
+									}
+								}
+							}
+						}
 					}
 				}
 			}
@@ -447,6 +786,55 @@ func (data *L2VPNXconnectGroup) updateFromBody(ctx context.Context, res []byte) 
 			} else {
 				data.P2ps[i].Ipv4Neighbors[ci].Bandwidth = types.Int64Null()
 			}
+			for cci := range data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors {
+				keys := [...]string{"address", "pw-id"}
+				keyValues := [...]string{data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].Address.ValueString(), strconv.FormatInt(data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].PwId.ValueInt64(), 10)}
+
+				var ccr gjson.Result
+				cr.Get("backup.neighbors.neighbor").ForEach(
+					func(_, v gjson.Result) bool {
+						found := false
+						for ik := range keys {
+							if v.Get(keys[ik]).String() == keyValues[ik] {
+								found = true
+								continue
+							}
+							found = false
+							break
+						}
+						if found {
+							ccr = v
+							return false
+						}
+						return true
+					},
+				)
+				if value := ccr.Get("address"); value.Exists() && !data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].Address.IsNull() {
+					data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].Address = types.StringValue(value.String())
+				} else {
+					data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].Address = types.StringNull()
+				}
+				if value := ccr.Get("pw-id"); value.Exists() && !data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].PwId.IsNull() {
+					data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].PwId = types.Int64Value(value.Int())
+				} else {
+					data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].PwId = types.Int64Null()
+				}
+				if value := ccr.Get("pw-class"); value.Exists() && !data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].PwClass.IsNull() {
+					data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].PwClass = types.StringValue(value.String())
+				} else {
+					data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].PwClass = types.StringNull()
+				}
+				if value := ccr.Get("mpls.static.label.local"); value.Exists() && !data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].MplsStaticLabelLocal.IsNull() {
+					data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].MplsStaticLabelLocal = types.Int64Value(value.Int())
+				} else {
+					data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].MplsStaticLabelLocal = types.Int64Null()
+				}
+				if value := ccr.Get("mpls.static.label.remote"); value.Exists() && !data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].MplsStaticLabelRemote.IsNull() {
+					data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].MplsStaticLabelRemote = types.Int64Value(value.Int())
+				} else {
+					data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].MplsStaticLabelRemote = types.Int64Null()
+				}
+			}
 			if value := cr.Get("mpls.static.label.local"); value.Exists() && !data.P2ps[i].Ipv4Neighbors[ci].MplsStaticLabelLocal.IsNull() {
 				data.P2ps[i].Ipv4Neighbors[ci].MplsStaticLabelLocal = types.Int64Value(value.Int())
 			} else {
@@ -500,6 +888,55 @@ func (data *L2VPNXconnectGroup) updateFromBody(ctx context.Context, res []byte) 
 				data.P2ps[i].Ipv6Neighbors[ci].PwClass = types.StringValue(value.String())
 			} else {
 				data.P2ps[i].Ipv6Neighbors[ci].PwClass = types.StringNull()
+			}
+			for cci := range data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors {
+				keys := [...]string{"address", "pw-id"}
+				keyValues := [...]string{data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].Address.ValueString(), strconv.FormatInt(data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].PwId.ValueInt64(), 10)}
+
+				var ccr gjson.Result
+				cr.Get("backup.neighbors.neighbor").ForEach(
+					func(_, v gjson.Result) bool {
+						found := false
+						for ik := range keys {
+							if v.Get(keys[ik]).String() == keyValues[ik] {
+								found = true
+								continue
+							}
+							found = false
+							break
+						}
+						if found {
+							ccr = v
+							return false
+						}
+						return true
+					},
+				)
+				if value := ccr.Get("address"); value.Exists() && !data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].Address.IsNull() {
+					data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].Address = types.StringValue(value.String())
+				} else {
+					data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].Address = types.StringNull()
+				}
+				if value := ccr.Get("pw-id"); value.Exists() && !data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].PwId.IsNull() {
+					data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].PwId = types.Int64Value(value.Int())
+				} else {
+					data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].PwId = types.Int64Null()
+				}
+				if value := ccr.Get("pw-class"); value.Exists() && !data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].PwClass.IsNull() {
+					data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].PwClass = types.StringValue(value.String())
+				} else {
+					data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].PwClass = types.StringNull()
+				}
+				if value := ccr.Get("mpls.static.label.local"); value.Exists() && !data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].MplsStaticLabelLocal.IsNull() {
+					data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].MplsStaticLabelLocal = types.Int64Value(value.Int())
+				} else {
+					data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].MplsStaticLabelLocal = types.Int64Null()
+				}
+				if value := ccr.Get("mpls.static.label.remote"); value.Exists() && !data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].MplsStaticLabelRemote.IsNull() {
+					data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].MplsStaticLabelRemote = types.Int64Value(value.Int())
+				} else {
+					data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].MplsStaticLabelRemote = types.Int64Null()
+				}
 			}
 			if value := cr.Get("mpls.static.label.local"); value.Exists() && !data.P2ps[i].Ipv6Neighbors[ci].MplsStaticLabelLocal.IsNull() {
 				data.P2ps[i].Ipv6Neighbors[ci].MplsStaticLabelLocal = types.Int64Value(value.Int())
@@ -689,6 +1126,560 @@ func (data *L2VPNXconnectGroup) updateFromBody(ctx context.Context, res []byte) 
 			}
 		}
 	}
+	for i := range data.Mp2mps {
+		keys := [...]string{"instance-name"}
+		keyValues := [...]string{data.Mp2mps[i].InstanceName.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "mp2mps.mp2mp").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("instance-name"); value.Exists() && !data.Mp2mps[i].InstanceName.IsNull() {
+			data.Mp2mps[i].InstanceName = types.StringValue(value.String())
+		} else {
+			data.Mp2mps[i].InstanceName = types.StringNull()
+		}
+		if value := r.Get("vpn-id"); value.Exists() && !data.Mp2mps[i].VpnId.IsNull() {
+			data.Mp2mps[i].VpnId = types.Int64Value(value.Int())
+		} else {
+			data.Mp2mps[i].VpnId = types.Int64Null()
+		}
+		if value := r.Get("mtu"); value.Exists() && !data.Mp2mps[i].Mtu.IsNull() {
+			data.Mp2mps[i].Mtu = types.Int64Value(value.Int())
+		} else {
+			data.Mp2mps[i].Mtu = types.Int64Null()
+		}
+		if value := r.Get("shutdown"); !data.Mp2mps[i].Shutdown.IsNull() {
+			if value.Exists() {
+				data.Mp2mps[i].Shutdown = types.BoolValue(true)
+			} else {
+				data.Mp2mps[i].Shutdown = types.BoolValue(false)
+			}
+		} else {
+			data.Mp2mps[i].Shutdown = types.BoolNull()
+		}
+		if value := r.Get("l2-encapsulation"); value.Exists() && !data.Mp2mps[i].L2Encapsulation.IsNull() {
+			data.Mp2mps[i].L2Encapsulation = types.StringValue(value.String())
+		} else {
+			data.Mp2mps[i].L2Encapsulation = types.StringNull()
+		}
+		if value := r.Get("interworking"); value.Exists() && !data.Mp2mps[i].Interworking.IsNull() {
+			data.Mp2mps[i].Interworking = types.StringValue(value.String())
+		} else {
+			data.Mp2mps[i].Interworking = types.StringNull()
+		}
+		if value := r.Get("control-word.disable"); !data.Mp2mps[i].ControlWordDisable.IsNull() {
+			if value.Exists() {
+				data.Mp2mps[i].ControlWordDisable = types.BoolValue(true)
+			} else {
+				data.Mp2mps[i].ControlWordDisable = types.BoolValue(false)
+			}
+		} else {
+			data.Mp2mps[i].ControlWordDisable = types.BoolNull()
+		}
+		if value := r.Get("autodiscovery.bgp"); !data.Mp2mps[i].AutodiscoveryBgp.IsNull() {
+			if value.Exists() {
+				data.Mp2mps[i].AutodiscoveryBgp = types.BoolValue(true)
+			} else {
+				data.Mp2mps[i].AutodiscoveryBgp = types.BoolValue(false)
+			}
+		} else {
+			data.Mp2mps[i].AutodiscoveryBgp = types.BoolNull()
+		}
+		if value := r.Get("autodiscovery.bgp.rd.auto"); !data.Mp2mps[i].AutodiscoveryBgpRdAuto.IsNull() {
+			if value.Exists() {
+				data.Mp2mps[i].AutodiscoveryBgpRdAuto = types.BoolValue(true)
+			} else {
+				data.Mp2mps[i].AutodiscoveryBgpRdAuto = types.BoolValue(false)
+			}
+		} else {
+			data.Mp2mps[i].AutodiscoveryBgpRdAuto = types.BoolNull()
+		}
+		if value := r.Get("autodiscovery.bgp.rd.two-byte-as-number"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRdTwoByteAsNumber.IsNull() {
+			data.Mp2mps[i].AutodiscoveryBgpRdTwoByteAsNumber = types.Int64Value(value.Int())
+		} else {
+			data.Mp2mps[i].AutodiscoveryBgpRdTwoByteAsNumber = types.Int64Null()
+		}
+		if value := r.Get("autodiscovery.bgp.rd.two-byte-as-assigned-number"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRdTwoByteAsIndex.IsNull() {
+			data.Mp2mps[i].AutodiscoveryBgpRdTwoByteAsIndex = types.Int64Value(value.Int())
+		} else {
+			data.Mp2mps[i].AutodiscoveryBgpRdTwoByteAsIndex = types.Int64Null()
+		}
+		if value := r.Get("autodiscovery.bgp.rd.four-byte-as-number"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRdFourByteAsNumber.IsNull() {
+			data.Mp2mps[i].AutodiscoveryBgpRdFourByteAsNumber = types.Int64Value(value.Int())
+		} else {
+			data.Mp2mps[i].AutodiscoveryBgpRdFourByteAsNumber = types.Int64Null()
+		}
+		if value := r.Get("autodiscovery.bgp.rd.four-byte-as-assigned-number"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRdFourByteAsIndex.IsNull() {
+			data.Mp2mps[i].AutodiscoveryBgpRdFourByteAsIndex = types.Int64Value(value.Int())
+		} else {
+			data.Mp2mps[i].AutodiscoveryBgpRdFourByteAsIndex = types.Int64Null()
+		}
+		if value := r.Get("autodiscovery.bgp.rd.ipv4-address"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRdIpv4Address.IsNull() {
+			data.Mp2mps[i].AutodiscoveryBgpRdIpv4Address = types.StringValue(value.String())
+		} else {
+			data.Mp2mps[i].AutodiscoveryBgpRdIpv4Address = types.StringNull()
+		}
+		if value := r.Get("autodiscovery.bgp.rd.ipv4-address-assigned-number"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRdIpv4AddressIndex.IsNull() {
+			data.Mp2mps[i].AutodiscoveryBgpRdIpv4AddressIndex = types.Int64Value(value.Int())
+		} else {
+			data.Mp2mps[i].AutodiscoveryBgpRdIpv4AddressIndex = types.Int64Null()
+		}
+		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat {
+			keys := [...]string{"two-byte-as-number", "assigned-number"}
+			keyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
+
+			var cr gjson.Result
+			r.Get("autodiscovery.bgp.route-target.import.two-byte-as-rts.two-byte-as-rt").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("two-byte-as-number"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].TwoByteAsNumber.IsNull() {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].TwoByteAsNumber = types.Int64Value(value.Int())
+			} else {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].TwoByteAsNumber = types.Int64Null()
+			}
+			if value := cr.Get("assigned-number"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].AssignedNumber.IsNull() {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].AssignedNumber = types.Int64Value(value.Int())
+			} else {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].AssignedNumber = types.Int64Null()
+			}
+		}
+		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat {
+			keys := [...]string{"four-byte-as-number", "assigned-number"}
+			keyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
+
+			var cr gjson.Result
+			r.Get("autodiscovery.bgp.route-target.import.four-byte-as-rts.four-byte-as-rt").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("four-byte-as-number"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].FourByteAsNumber.IsNull() {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].FourByteAsNumber = types.Int64Value(value.Int())
+			} else {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].FourByteAsNumber = types.Int64Null()
+			}
+			if value := cr.Get("assigned-number"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].AssignedNumber.IsNull() {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].AssignedNumber = types.Int64Value(value.Int())
+			} else {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].AssignedNumber = types.Int64Null()
+			}
+		}
+		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat {
+			keys := [...]string{"ipv4-address", "assigned-number"}
+			keyValues := [...]string{data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].Ipv4Address.ValueString(), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].AssignedNumber.ValueInt64(), 10)}
+
+			var cr gjson.Result
+			r.Get("autodiscovery.bgp.route-target.import.ipv4-address-rts.ipv4-address-rt").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("ipv4-address"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].Ipv4Address.IsNull() {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].Ipv4Address = types.StringValue(value.String())
+			} else {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].Ipv4Address = types.StringNull()
+			}
+			if value := cr.Get("assigned-number"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].AssignedNumber.IsNull() {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].AssignedNumber = types.Int64Value(value.Int())
+			} else {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].AssignedNumber = types.Int64Null()
+			}
+		}
+		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat {
+			keys := [...]string{"two-byte-as-number", "assigned-number"}
+			keyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
+
+			var cr gjson.Result
+			r.Get("autodiscovery.bgp.route-target.export.two-byte-as-rts.two-byte-as-rt").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("two-byte-as-number"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].TwoByteAsNumber.IsNull() {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].TwoByteAsNumber = types.Int64Value(value.Int())
+			} else {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].TwoByteAsNumber = types.Int64Null()
+			}
+			if value := cr.Get("assigned-number"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].AssignedNumber.IsNull() {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].AssignedNumber = types.Int64Value(value.Int())
+			} else {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].AssignedNumber = types.Int64Null()
+			}
+		}
+		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat {
+			keys := [...]string{"four-byte-as-number", "assigned-number"}
+			keyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
+
+			var cr gjson.Result
+			r.Get("autodiscovery.bgp.route-target.export.four-byte-as-rts.four-byte-as-rt").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("four-byte-as-number"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].FourByteAsNumber.IsNull() {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].FourByteAsNumber = types.Int64Value(value.Int())
+			} else {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].FourByteAsNumber = types.Int64Null()
+			}
+			if value := cr.Get("assigned-number"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].AssignedNumber.IsNull() {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].AssignedNumber = types.Int64Value(value.Int())
+			} else {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].AssignedNumber = types.Int64Null()
+			}
+		}
+		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat {
+			keys := [...]string{"ipv4-address", "assigned-number"}
+			keyValues := [...]string{data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].Ipv4Address.ValueString(), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].AssignedNumber.ValueInt64(), 10)}
+
+			var cr gjson.Result
+			r.Get("autodiscovery.bgp.route-target.export.ipv4-address-rts.ipv4-address-rt").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("ipv4-address"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].Ipv4Address.IsNull() {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].Ipv4Address = types.StringValue(value.String())
+			} else {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].Ipv4Address = types.StringNull()
+			}
+			if value := cr.Get("assigned-number"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].AssignedNumber.IsNull() {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].AssignedNumber = types.Int64Value(value.Int())
+			} else {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].AssignedNumber = types.Int64Null()
+			}
+		}
+		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat {
+			keys := [...]string{"two-byte-as-number", "assigned-number"}
+			keyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
+
+			var cr gjson.Result
+			r.Get("autodiscovery.bgp.route-target.two-byte-as-rts.two-byte-as-rt").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("two-byte-as-number"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].TwoByteAsNumber.IsNull() {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].TwoByteAsNumber = types.Int64Value(value.Int())
+			} else {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].TwoByteAsNumber = types.Int64Null()
+			}
+			if value := cr.Get("assigned-number"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].AssignedNumber.IsNull() {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].AssignedNumber = types.Int64Value(value.Int())
+			} else {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].AssignedNumber = types.Int64Null()
+			}
+		}
+		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat {
+			keys := [...]string{"four-byte-as-number", "assigned-number"}
+			keyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
+
+			var cr gjson.Result
+			r.Get("autodiscovery.bgp.route-target.four-byte-as-rts.four-byte-as-rt").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("four-byte-as-number"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].FourByteAsNumber.IsNull() {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].FourByteAsNumber = types.Int64Value(value.Int())
+			} else {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].FourByteAsNumber = types.Int64Null()
+			}
+			if value := cr.Get("assigned-number"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].AssignedNumber.IsNull() {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].AssignedNumber = types.Int64Value(value.Int())
+			} else {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].AssignedNumber = types.Int64Null()
+			}
+		}
+		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat {
+			keys := [...]string{"ipv4-address", "assigned-number"}
+			keyValues := [...]string{data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].Ipv4Address.ValueString(), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].AssignedNumber.ValueInt64(), 10)}
+
+			var cr gjson.Result
+			r.Get("autodiscovery.bgp.route-target.ipv4-address-rts.ipv4-address-rt").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("ipv4-address"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].Ipv4Address.IsNull() {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].Ipv4Address = types.StringValue(value.String())
+			} else {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].Ipv4Address = types.StringNull()
+			}
+			if value := cr.Get("assigned-number"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].AssignedNumber.IsNull() {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].AssignedNumber = types.Int64Value(value.Int())
+			} else {
+				data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].AssignedNumber = types.Int64Null()
+			}
+		}
+		for ci := range data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds {
+			keys := [...]string{"local-ce-id-value"}
+			keyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].LocalCeIdValue.ValueInt64(), 10)}
+
+			var cr gjson.Result
+			r.Get("autodiscovery.bgp.signaling-protocol.bgp.ce-id").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("local-ce-id-value"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].LocalCeIdValue.IsNull() {
+				data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].LocalCeIdValue = types.Int64Value(value.Int())
+			} else {
+				data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].LocalCeIdValue = types.Int64Null()
+			}
+			for cci := range data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces {
+				keys := [...]string{"interface-name"}
+				keyValues := [...]string{data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces[cci].InterfaceName.ValueString()}
+
+				var ccr gjson.Result
+				cr.Get("interface").ForEach(
+					func(_, v gjson.Result) bool {
+						found := false
+						for ik := range keys {
+							if v.Get(keys[ik]).String() == keyValues[ik] {
+								found = true
+								continue
+							}
+							found = false
+							break
+						}
+						if found {
+							ccr = v
+							return false
+						}
+						return true
+					},
+				)
+				if value := ccr.Get("interface-name"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces[cci].InterfaceName.IsNull() {
+					data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces[cci].InterfaceName = types.StringValue(value.String())
+				} else {
+					data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces[cci].InterfaceName = types.StringNull()
+				}
+				for ccci := range data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces[cci].RemoteCeIds {
+					keys := [...]string{"remote-ce-id-value"}
+					keyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces[cci].RemoteCeIds[ccci].RemoteCeIdValue.ValueInt64(), 10)}
+
+					var cccr gjson.Result
+					ccr.Get("remote-ce-id").ForEach(
+						func(_, v gjson.Result) bool {
+							found := false
+							for ik := range keys {
+								if v.Get(keys[ik]).String() == keyValues[ik] {
+									found = true
+									continue
+								}
+								found = false
+								break
+							}
+							if found {
+								cccr = v
+								return false
+							}
+							return true
+						},
+					)
+					if value := cccr.Get("remote-ce-id-value"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces[cci].RemoteCeIds[ccci].RemoteCeIdValue.IsNull() {
+						data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces[cci].RemoteCeIds[ccci].RemoteCeIdValue = types.Int64Value(value.Int())
+					} else {
+						data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces[cci].RemoteCeIds[ccci].RemoteCeIdValue = types.Int64Null()
+					}
+				}
+			}
+			if value := cr.Get("vpws-seamless-integration"); !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration.IsNull() {
+				if value.Exists() {
+					data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration = types.BoolValue(true)
+				} else {
+					data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration = types.BoolValue(false)
+				}
+			} else {
+				data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration = types.BoolNull()
+			}
+		}
+		if value := r.Get("autodiscovery.bgp.signaling-protocol.bgp.ce-range"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeRange.IsNull() {
+			data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeRange = types.Int64Value(value.Int())
+		} else {
+			data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeRange = types.Int64Null()
+		}
+		if value := r.Get("autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.transmit"); !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.IsNull() {
+			if value.Exists() {
+				data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolValue(true)
+			} else {
+				data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolValue(false)
+			}
+		} else {
+			data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolNull()
+		}
+		if value := r.Get("autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.receive"); !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.IsNull() {
+			if value.Exists() {
+				data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolValue(true)
+			} else {
+				data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolValue(false)
+			}
+		} else {
+			data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolNull()
+		}
+		if value := r.Get("autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.both"); !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.IsNull() {
+			if value.Exists() {
+				data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolValue(true)
+			} else {
+				data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolValue(false)
+			}
+		} else {
+			data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolNull()
+		}
+		if value := r.Get("autodiscovery.bgp.route-policy.export"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRoutePolicyExport.IsNull() {
+			data.Mp2mps[i].AutodiscoveryBgpRoutePolicyExport = types.StringValue(value.String())
+		} else {
+			data.Mp2mps[i].AutodiscoveryBgpRoutePolicyExport = types.StringNull()
+		}
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -754,6 +1745,29 @@ func (data *L2VPNXconnectGroup) fromBody(ctx context.Context, res []byte) {
 					if ccValue := cv.Get("bandwidth"); ccValue.Exists() {
 						cItem.Bandwidth = types.Int64Value(ccValue.Int())
 					}
+					if ccValue := cv.Get("backup.neighbors.neighbor"); ccValue.Exists() {
+						cItem.BackupNeighbors = make([]L2VPNXconnectGroupP2psIpv4NeighborsBackupNeighbors, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := L2VPNXconnectGroupP2psIpv4NeighborsBackupNeighbors{}
+							if cccValue := ccv.Get("address"); cccValue.Exists() {
+								ccItem.Address = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("pw-id"); cccValue.Exists() {
+								ccItem.PwId = types.Int64Value(cccValue.Int())
+							}
+							if cccValue := ccv.Get("pw-class"); cccValue.Exists() {
+								ccItem.PwClass = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("mpls.static.label.local"); cccValue.Exists() {
+								ccItem.MplsStaticLabelLocal = types.Int64Value(cccValue.Int())
+							}
+							if cccValue := ccv.Get("mpls.static.label.remote"); cccValue.Exists() {
+								ccItem.MplsStaticLabelRemote = types.Int64Value(cccValue.Int())
+							}
+							cItem.BackupNeighbors = append(cItem.BackupNeighbors, ccItem)
+							return true
+						})
+					}
 					if ccValue := cv.Get("mpls.static.label.local"); ccValue.Exists() {
 						cItem.MplsStaticLabelLocal = types.Int64Value(ccValue.Int())
 					}
@@ -779,6 +1793,29 @@ func (data *L2VPNXconnectGroup) fromBody(ctx context.Context, res []byte) {
 					}
 					if ccValue := cv.Get("pw-class"); ccValue.Exists() {
 						cItem.PwClass = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("backup.neighbors.neighbor"); ccValue.Exists() {
+						cItem.BackupNeighbors = make([]L2VPNXconnectGroupP2psIpv6NeighborsBackupNeighbors, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := L2VPNXconnectGroupP2psIpv6NeighborsBackupNeighbors{}
+							if cccValue := ccv.Get("address"); cccValue.Exists() {
+								ccItem.Address = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("pw-id"); cccValue.Exists() {
+								ccItem.PwId = types.Int64Value(cccValue.Int())
+							}
+							if cccValue := ccv.Get("pw-class"); cccValue.Exists() {
+								ccItem.PwClass = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("mpls.static.label.local"); cccValue.Exists() {
+								ccItem.MplsStaticLabelLocal = types.Int64Value(cccValue.Int())
+							}
+							if cccValue := ccv.Get("mpls.static.label.remote"); cccValue.Exists() {
+								ccItem.MplsStaticLabelRemote = types.Int64Value(cccValue.Int())
+							}
+							cItem.BackupNeighbors = append(cItem.BackupNeighbors, ccItem)
+							return true
+						})
 					}
 					if ccValue := cv.Get("mpls.static.label.local"); ccValue.Exists() {
 						cItem.MplsStaticLabelLocal = types.Int64Value(ccValue.Int())
@@ -871,6 +1908,252 @@ func (data *L2VPNXconnectGroup) fromBody(ctx context.Context, res []byte) {
 				})
 			}
 			data.P2ps = append(data.P2ps, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "mp2mps.mp2mp"); value.Exists() {
+		data.Mp2mps = make([]L2VPNXconnectGroupMp2mps, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := L2VPNXconnectGroupMp2mps{}
+			if cValue := v.Get("instance-name"); cValue.Exists() {
+				item.InstanceName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("vpn-id"); cValue.Exists() {
+				item.VpnId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("mtu"); cValue.Exists() {
+				item.Mtu = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("shutdown"); cValue.Exists() {
+				item.Shutdown = types.BoolValue(true)
+			} else {
+				item.Shutdown = types.BoolValue(false)
+			}
+			if cValue := v.Get("l2-encapsulation"); cValue.Exists() {
+				item.L2Encapsulation = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("interworking"); cValue.Exists() {
+				item.Interworking = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("control-word.disable"); cValue.Exists() {
+				item.ControlWordDisable = types.BoolValue(true)
+			} else {
+				item.ControlWordDisable = types.BoolValue(false)
+			}
+			if cValue := v.Get("autodiscovery.bgp"); cValue.Exists() {
+				item.AutodiscoveryBgp = types.BoolValue(true)
+			} else {
+				item.AutodiscoveryBgp = types.BoolValue(false)
+			}
+			if cValue := v.Get("autodiscovery.bgp.rd.auto"); cValue.Exists() {
+				item.AutodiscoveryBgpRdAuto = types.BoolValue(true)
+			} else {
+				item.AutodiscoveryBgpRdAuto = types.BoolValue(false)
+			}
+			if cValue := v.Get("autodiscovery.bgp.rd.two-byte-as-number"); cValue.Exists() {
+				item.AutodiscoveryBgpRdTwoByteAsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("autodiscovery.bgp.rd.two-byte-as-assigned-number"); cValue.Exists() {
+				item.AutodiscoveryBgpRdTwoByteAsIndex = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("autodiscovery.bgp.rd.four-byte-as-number"); cValue.Exists() {
+				item.AutodiscoveryBgpRdFourByteAsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("autodiscovery.bgp.rd.four-byte-as-assigned-number"); cValue.Exists() {
+				item.AutodiscoveryBgpRdFourByteAsIndex = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("autodiscovery.bgp.rd.ipv4-address"); cValue.Exists() {
+				item.AutodiscoveryBgpRdIpv4Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("autodiscovery.bgp.rd.ipv4-address-assigned-number"); cValue.Exists() {
+				item.AutodiscoveryBgpRdIpv4AddressIndex = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("autodiscovery.bgp.route-target.import.two-byte-as-rts.two-byte-as-rt"); cValue.Exists() {
+				item.AutodiscoveryBgpRouteTargetImportTwoByteAsFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportTwoByteAsFormat, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportTwoByteAsFormat{}
+					if ccValue := cv.Get("two-byte-as-number"); ccValue.Exists() {
+						cItem.TwoByteAsNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("assigned-number"); ccValue.Exists() {
+						cItem.AssignedNumber = types.Int64Value(ccValue.Int())
+					}
+					item.AutodiscoveryBgpRouteTargetImportTwoByteAsFormat = append(item.AutodiscoveryBgpRouteTargetImportTwoByteAsFormat, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("autodiscovery.bgp.route-target.import.four-byte-as-rts.four-byte-as-rt"); cValue.Exists() {
+				item.AutodiscoveryBgpRouteTargetImportFourByteAsFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportFourByteAsFormat, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportFourByteAsFormat{}
+					if ccValue := cv.Get("four-byte-as-number"); ccValue.Exists() {
+						cItem.FourByteAsNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("assigned-number"); ccValue.Exists() {
+						cItem.AssignedNumber = types.Int64Value(ccValue.Int())
+					}
+					item.AutodiscoveryBgpRouteTargetImportFourByteAsFormat = append(item.AutodiscoveryBgpRouteTargetImportFourByteAsFormat, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("autodiscovery.bgp.route-target.import.ipv4-address-rts.ipv4-address-rt"); cValue.Exists() {
+				item.AutodiscoveryBgpRouteTargetImportIpv4AddressFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportIpv4AddressFormat, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportIpv4AddressFormat{}
+					if ccValue := cv.Get("ipv4-address"); ccValue.Exists() {
+						cItem.Ipv4Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("assigned-number"); ccValue.Exists() {
+						cItem.AssignedNumber = types.Int64Value(ccValue.Int())
+					}
+					item.AutodiscoveryBgpRouteTargetImportIpv4AddressFormat = append(item.AutodiscoveryBgpRouteTargetImportIpv4AddressFormat, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("autodiscovery.bgp.route-target.export.two-byte-as-rts.two-byte-as-rt"); cValue.Exists() {
+				item.AutodiscoveryBgpRouteTargetExportTwoByteAsFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportTwoByteAsFormat, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportTwoByteAsFormat{}
+					if ccValue := cv.Get("two-byte-as-number"); ccValue.Exists() {
+						cItem.TwoByteAsNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("assigned-number"); ccValue.Exists() {
+						cItem.AssignedNumber = types.Int64Value(ccValue.Int())
+					}
+					item.AutodiscoveryBgpRouteTargetExportTwoByteAsFormat = append(item.AutodiscoveryBgpRouteTargetExportTwoByteAsFormat, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("autodiscovery.bgp.route-target.export.four-byte-as-rts.four-byte-as-rt"); cValue.Exists() {
+				item.AutodiscoveryBgpRouteTargetExportFourByteAsFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportFourByteAsFormat, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportFourByteAsFormat{}
+					if ccValue := cv.Get("four-byte-as-number"); ccValue.Exists() {
+						cItem.FourByteAsNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("assigned-number"); ccValue.Exists() {
+						cItem.AssignedNumber = types.Int64Value(ccValue.Int())
+					}
+					item.AutodiscoveryBgpRouteTargetExportFourByteAsFormat = append(item.AutodiscoveryBgpRouteTargetExportFourByteAsFormat, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("autodiscovery.bgp.route-target.export.ipv4-address-rts.ipv4-address-rt"); cValue.Exists() {
+				item.AutodiscoveryBgpRouteTargetExportIpv4AddressFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportIpv4AddressFormat, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportIpv4AddressFormat{}
+					if ccValue := cv.Get("ipv4-address"); ccValue.Exists() {
+						cItem.Ipv4Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("assigned-number"); ccValue.Exists() {
+						cItem.AssignedNumber = types.Int64Value(ccValue.Int())
+					}
+					item.AutodiscoveryBgpRouteTargetExportIpv4AddressFormat = append(item.AutodiscoveryBgpRouteTargetExportIpv4AddressFormat, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("autodiscovery.bgp.route-target.two-byte-as-rts.two-byte-as-rt"); cValue.Exists() {
+				item.AutodiscoveryBgpRouteTargetTwoByteAsFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetTwoByteAsFormat, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetTwoByteAsFormat{}
+					if ccValue := cv.Get("two-byte-as-number"); ccValue.Exists() {
+						cItem.TwoByteAsNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("assigned-number"); ccValue.Exists() {
+						cItem.AssignedNumber = types.Int64Value(ccValue.Int())
+					}
+					item.AutodiscoveryBgpRouteTargetTwoByteAsFormat = append(item.AutodiscoveryBgpRouteTargetTwoByteAsFormat, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("autodiscovery.bgp.route-target.four-byte-as-rts.four-byte-as-rt"); cValue.Exists() {
+				item.AutodiscoveryBgpRouteTargetFourByteAsFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetFourByteAsFormat, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetFourByteAsFormat{}
+					if ccValue := cv.Get("four-byte-as-number"); ccValue.Exists() {
+						cItem.FourByteAsNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("assigned-number"); ccValue.Exists() {
+						cItem.AssignedNumber = types.Int64Value(ccValue.Int())
+					}
+					item.AutodiscoveryBgpRouteTargetFourByteAsFormat = append(item.AutodiscoveryBgpRouteTargetFourByteAsFormat, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("autodiscovery.bgp.route-target.ipv4-address-rts.ipv4-address-rt"); cValue.Exists() {
+				item.AutodiscoveryBgpRouteTargetIpv4AddressFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetIpv4AddressFormat, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetIpv4AddressFormat{}
+					if ccValue := cv.Get("ipv4-address"); ccValue.Exists() {
+						cItem.Ipv4Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("assigned-number"); ccValue.Exists() {
+						cItem.AssignedNumber = types.Int64Value(ccValue.Int())
+					}
+					item.AutodiscoveryBgpRouteTargetIpv4AddressFormat = append(item.AutodiscoveryBgpRouteTargetIpv4AddressFormat, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("autodiscovery.bgp.signaling-protocol.bgp.ce-id"); cValue.Exists() {
+				item.AutodiscoveryBgpSignalingProtocolBgpCeIds = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIds, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIds{}
+					if ccValue := cv.Get("local-ce-id-value"); ccValue.Exists() {
+						cItem.LocalCeIdValue = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("interface"); ccValue.Exists() {
+						cItem.Interfaces = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIdsInterfaces, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIdsInterfaces{}
+							if cccValue := ccv.Get("interface-name"); cccValue.Exists() {
+								ccItem.InterfaceName = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("remote-ce-id"); cccValue.Exists() {
+								ccItem.RemoteCeIds = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIdsInterfacesRemoteCeIds, 0)
+								cccValue.ForEach(func(ccck, cccv gjson.Result) bool {
+									cccItem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIdsInterfacesRemoteCeIds{}
+									if ccccValue := cccv.Get("remote-ce-id-value"); ccccValue.Exists() {
+										cccItem.RemoteCeIdValue = types.Int64Value(ccccValue.Int())
+									}
+									ccItem.RemoteCeIds = append(ccItem.RemoteCeIds, cccItem)
+									return true
+								})
+							}
+							cItem.Interfaces = append(cItem.Interfaces, ccItem)
+							return true
+						})
+					}
+					if ccValue := cv.Get("vpws-seamless-integration"); ccValue.Exists() {
+						cItem.VpwsSeamlessIntegration = types.BoolValue(true)
+					} else {
+						cItem.VpwsSeamlessIntegration = types.BoolValue(false)
+					}
+					item.AutodiscoveryBgpSignalingProtocolBgpCeIds = append(item.AutodiscoveryBgpSignalingProtocolBgpCeIds, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("autodiscovery.bgp.signaling-protocol.bgp.ce-range"); cValue.Exists() {
+				item.AutodiscoveryBgpSignalingProtocolBgpCeRange = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.transmit"); cValue.Exists() {
+				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolValue(true)
+			} else {
+				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolValue(false)
+			}
+			if cValue := v.Get("autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.receive"); cValue.Exists() {
+				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolValue(true)
+			} else {
+				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolValue(false)
+			}
+			if cValue := v.Get("autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.both"); cValue.Exists() {
+				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolValue(true)
+			} else {
+				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolValue(false)
+			}
+			if cValue := v.Get("autodiscovery.bgp.route-policy.export"); cValue.Exists() {
+				item.AutodiscoveryBgpRoutePolicyExport = types.StringValue(cValue.String())
+			}
+			data.Mp2mps = append(data.Mp2mps, item)
 			return true
 		})
 	}
@@ -939,6 +2222,29 @@ func (data *L2VPNXconnectGroupData) fromBody(ctx context.Context, res []byte) {
 					if ccValue := cv.Get("bandwidth"); ccValue.Exists() {
 						cItem.Bandwidth = types.Int64Value(ccValue.Int())
 					}
+					if ccValue := cv.Get("backup.neighbors.neighbor"); ccValue.Exists() {
+						cItem.BackupNeighbors = make([]L2VPNXconnectGroupP2psIpv4NeighborsBackupNeighbors, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := L2VPNXconnectGroupP2psIpv4NeighborsBackupNeighbors{}
+							if cccValue := ccv.Get("address"); cccValue.Exists() {
+								ccItem.Address = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("pw-id"); cccValue.Exists() {
+								ccItem.PwId = types.Int64Value(cccValue.Int())
+							}
+							if cccValue := ccv.Get("pw-class"); cccValue.Exists() {
+								ccItem.PwClass = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("mpls.static.label.local"); cccValue.Exists() {
+								ccItem.MplsStaticLabelLocal = types.Int64Value(cccValue.Int())
+							}
+							if cccValue := ccv.Get("mpls.static.label.remote"); cccValue.Exists() {
+								ccItem.MplsStaticLabelRemote = types.Int64Value(cccValue.Int())
+							}
+							cItem.BackupNeighbors = append(cItem.BackupNeighbors, ccItem)
+							return true
+						})
+					}
 					if ccValue := cv.Get("mpls.static.label.local"); ccValue.Exists() {
 						cItem.MplsStaticLabelLocal = types.Int64Value(ccValue.Int())
 					}
@@ -964,6 +2270,29 @@ func (data *L2VPNXconnectGroupData) fromBody(ctx context.Context, res []byte) {
 					}
 					if ccValue := cv.Get("pw-class"); ccValue.Exists() {
 						cItem.PwClass = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("backup.neighbors.neighbor"); ccValue.Exists() {
+						cItem.BackupNeighbors = make([]L2VPNXconnectGroupP2psIpv6NeighborsBackupNeighbors, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := L2VPNXconnectGroupP2psIpv6NeighborsBackupNeighbors{}
+							if cccValue := ccv.Get("address"); cccValue.Exists() {
+								ccItem.Address = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("pw-id"); cccValue.Exists() {
+								ccItem.PwId = types.Int64Value(cccValue.Int())
+							}
+							if cccValue := ccv.Get("pw-class"); cccValue.Exists() {
+								ccItem.PwClass = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("mpls.static.label.local"); cccValue.Exists() {
+								ccItem.MplsStaticLabelLocal = types.Int64Value(cccValue.Int())
+							}
+							if cccValue := ccv.Get("mpls.static.label.remote"); cccValue.Exists() {
+								ccItem.MplsStaticLabelRemote = types.Int64Value(cccValue.Int())
+							}
+							cItem.BackupNeighbors = append(cItem.BackupNeighbors, ccItem)
+							return true
+						})
 					}
 					if ccValue := cv.Get("mpls.static.label.local"); ccValue.Exists() {
 						cItem.MplsStaticLabelLocal = types.Int64Value(ccValue.Int())
@@ -1059,6 +2388,252 @@ func (data *L2VPNXconnectGroupData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
+	if value := gjson.GetBytes(res, "mp2mps.mp2mp"); value.Exists() {
+		data.Mp2mps = make([]L2VPNXconnectGroupMp2mps, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := L2VPNXconnectGroupMp2mps{}
+			if cValue := v.Get("instance-name"); cValue.Exists() {
+				item.InstanceName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("vpn-id"); cValue.Exists() {
+				item.VpnId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("mtu"); cValue.Exists() {
+				item.Mtu = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("shutdown"); cValue.Exists() {
+				item.Shutdown = types.BoolValue(true)
+			} else {
+				item.Shutdown = types.BoolValue(false)
+			}
+			if cValue := v.Get("l2-encapsulation"); cValue.Exists() {
+				item.L2Encapsulation = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("interworking"); cValue.Exists() {
+				item.Interworking = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("control-word.disable"); cValue.Exists() {
+				item.ControlWordDisable = types.BoolValue(true)
+			} else {
+				item.ControlWordDisable = types.BoolValue(false)
+			}
+			if cValue := v.Get("autodiscovery.bgp"); cValue.Exists() {
+				item.AutodiscoveryBgp = types.BoolValue(true)
+			} else {
+				item.AutodiscoveryBgp = types.BoolValue(false)
+			}
+			if cValue := v.Get("autodiscovery.bgp.rd.auto"); cValue.Exists() {
+				item.AutodiscoveryBgpRdAuto = types.BoolValue(true)
+			} else {
+				item.AutodiscoveryBgpRdAuto = types.BoolValue(false)
+			}
+			if cValue := v.Get("autodiscovery.bgp.rd.two-byte-as-number"); cValue.Exists() {
+				item.AutodiscoveryBgpRdTwoByteAsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("autodiscovery.bgp.rd.two-byte-as-assigned-number"); cValue.Exists() {
+				item.AutodiscoveryBgpRdTwoByteAsIndex = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("autodiscovery.bgp.rd.four-byte-as-number"); cValue.Exists() {
+				item.AutodiscoveryBgpRdFourByteAsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("autodiscovery.bgp.rd.four-byte-as-assigned-number"); cValue.Exists() {
+				item.AutodiscoveryBgpRdFourByteAsIndex = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("autodiscovery.bgp.rd.ipv4-address"); cValue.Exists() {
+				item.AutodiscoveryBgpRdIpv4Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("autodiscovery.bgp.rd.ipv4-address-assigned-number"); cValue.Exists() {
+				item.AutodiscoveryBgpRdIpv4AddressIndex = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("autodiscovery.bgp.route-target.import.two-byte-as-rts.two-byte-as-rt"); cValue.Exists() {
+				item.AutodiscoveryBgpRouteTargetImportTwoByteAsFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportTwoByteAsFormat, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportTwoByteAsFormat{}
+					if ccValue := cv.Get("two-byte-as-number"); ccValue.Exists() {
+						cItem.TwoByteAsNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("assigned-number"); ccValue.Exists() {
+						cItem.AssignedNumber = types.Int64Value(ccValue.Int())
+					}
+					item.AutodiscoveryBgpRouteTargetImportTwoByteAsFormat = append(item.AutodiscoveryBgpRouteTargetImportTwoByteAsFormat, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("autodiscovery.bgp.route-target.import.four-byte-as-rts.four-byte-as-rt"); cValue.Exists() {
+				item.AutodiscoveryBgpRouteTargetImportFourByteAsFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportFourByteAsFormat, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportFourByteAsFormat{}
+					if ccValue := cv.Get("four-byte-as-number"); ccValue.Exists() {
+						cItem.FourByteAsNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("assigned-number"); ccValue.Exists() {
+						cItem.AssignedNumber = types.Int64Value(ccValue.Int())
+					}
+					item.AutodiscoveryBgpRouteTargetImportFourByteAsFormat = append(item.AutodiscoveryBgpRouteTargetImportFourByteAsFormat, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("autodiscovery.bgp.route-target.import.ipv4-address-rts.ipv4-address-rt"); cValue.Exists() {
+				item.AutodiscoveryBgpRouteTargetImportIpv4AddressFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportIpv4AddressFormat, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetImportIpv4AddressFormat{}
+					if ccValue := cv.Get("ipv4-address"); ccValue.Exists() {
+						cItem.Ipv4Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("assigned-number"); ccValue.Exists() {
+						cItem.AssignedNumber = types.Int64Value(ccValue.Int())
+					}
+					item.AutodiscoveryBgpRouteTargetImportIpv4AddressFormat = append(item.AutodiscoveryBgpRouteTargetImportIpv4AddressFormat, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("autodiscovery.bgp.route-target.export.two-byte-as-rts.two-byte-as-rt"); cValue.Exists() {
+				item.AutodiscoveryBgpRouteTargetExportTwoByteAsFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportTwoByteAsFormat, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportTwoByteAsFormat{}
+					if ccValue := cv.Get("two-byte-as-number"); ccValue.Exists() {
+						cItem.TwoByteAsNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("assigned-number"); ccValue.Exists() {
+						cItem.AssignedNumber = types.Int64Value(ccValue.Int())
+					}
+					item.AutodiscoveryBgpRouteTargetExportTwoByteAsFormat = append(item.AutodiscoveryBgpRouteTargetExportTwoByteAsFormat, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("autodiscovery.bgp.route-target.export.four-byte-as-rts.four-byte-as-rt"); cValue.Exists() {
+				item.AutodiscoveryBgpRouteTargetExportFourByteAsFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportFourByteAsFormat, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportFourByteAsFormat{}
+					if ccValue := cv.Get("four-byte-as-number"); ccValue.Exists() {
+						cItem.FourByteAsNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("assigned-number"); ccValue.Exists() {
+						cItem.AssignedNumber = types.Int64Value(ccValue.Int())
+					}
+					item.AutodiscoveryBgpRouteTargetExportFourByteAsFormat = append(item.AutodiscoveryBgpRouteTargetExportFourByteAsFormat, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("autodiscovery.bgp.route-target.export.ipv4-address-rts.ipv4-address-rt"); cValue.Exists() {
+				item.AutodiscoveryBgpRouteTargetExportIpv4AddressFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportIpv4AddressFormat, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetExportIpv4AddressFormat{}
+					if ccValue := cv.Get("ipv4-address"); ccValue.Exists() {
+						cItem.Ipv4Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("assigned-number"); ccValue.Exists() {
+						cItem.AssignedNumber = types.Int64Value(ccValue.Int())
+					}
+					item.AutodiscoveryBgpRouteTargetExportIpv4AddressFormat = append(item.AutodiscoveryBgpRouteTargetExportIpv4AddressFormat, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("autodiscovery.bgp.route-target.two-byte-as-rts.two-byte-as-rt"); cValue.Exists() {
+				item.AutodiscoveryBgpRouteTargetTwoByteAsFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetTwoByteAsFormat, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetTwoByteAsFormat{}
+					if ccValue := cv.Get("two-byte-as-number"); ccValue.Exists() {
+						cItem.TwoByteAsNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("assigned-number"); ccValue.Exists() {
+						cItem.AssignedNumber = types.Int64Value(ccValue.Int())
+					}
+					item.AutodiscoveryBgpRouteTargetTwoByteAsFormat = append(item.AutodiscoveryBgpRouteTargetTwoByteAsFormat, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("autodiscovery.bgp.route-target.four-byte-as-rts.four-byte-as-rt"); cValue.Exists() {
+				item.AutodiscoveryBgpRouteTargetFourByteAsFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetFourByteAsFormat, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetFourByteAsFormat{}
+					if ccValue := cv.Get("four-byte-as-number"); ccValue.Exists() {
+						cItem.FourByteAsNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("assigned-number"); ccValue.Exists() {
+						cItem.AssignedNumber = types.Int64Value(ccValue.Int())
+					}
+					item.AutodiscoveryBgpRouteTargetFourByteAsFormat = append(item.AutodiscoveryBgpRouteTargetFourByteAsFormat, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("autodiscovery.bgp.route-target.ipv4-address-rts.ipv4-address-rt"); cValue.Exists() {
+				item.AutodiscoveryBgpRouteTargetIpv4AddressFormat = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetIpv4AddressFormat, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpRouteTargetIpv4AddressFormat{}
+					if ccValue := cv.Get("ipv4-address"); ccValue.Exists() {
+						cItem.Ipv4Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("assigned-number"); ccValue.Exists() {
+						cItem.AssignedNumber = types.Int64Value(ccValue.Int())
+					}
+					item.AutodiscoveryBgpRouteTargetIpv4AddressFormat = append(item.AutodiscoveryBgpRouteTargetIpv4AddressFormat, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("autodiscovery.bgp.signaling-protocol.bgp.ce-id"); cValue.Exists() {
+				item.AutodiscoveryBgpSignalingProtocolBgpCeIds = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIds, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIds{}
+					if ccValue := cv.Get("local-ce-id-value"); ccValue.Exists() {
+						cItem.LocalCeIdValue = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("interface"); ccValue.Exists() {
+						cItem.Interfaces = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIdsInterfaces, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIdsInterfaces{}
+							if cccValue := ccv.Get("interface-name"); cccValue.Exists() {
+								ccItem.InterfaceName = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("remote-ce-id"); cccValue.Exists() {
+								ccItem.RemoteCeIds = make([]L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIdsInterfacesRemoteCeIds, 0)
+								cccValue.ForEach(func(ccck, cccv gjson.Result) bool {
+									cccItem := L2VPNXconnectGroupMp2mpsAutodiscoveryBgpSignalingProtocolBgpCeIdsInterfacesRemoteCeIds{}
+									if ccccValue := cccv.Get("remote-ce-id-value"); ccccValue.Exists() {
+										cccItem.RemoteCeIdValue = types.Int64Value(ccccValue.Int())
+									}
+									ccItem.RemoteCeIds = append(ccItem.RemoteCeIds, cccItem)
+									return true
+								})
+							}
+							cItem.Interfaces = append(cItem.Interfaces, ccItem)
+							return true
+						})
+					}
+					if ccValue := cv.Get("vpws-seamless-integration"); ccValue.Exists() {
+						cItem.VpwsSeamlessIntegration = types.BoolValue(true)
+					} else {
+						cItem.VpwsSeamlessIntegration = types.BoolValue(false)
+					}
+					item.AutodiscoveryBgpSignalingProtocolBgpCeIds = append(item.AutodiscoveryBgpSignalingProtocolBgpCeIds, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("autodiscovery.bgp.signaling-protocol.bgp.ce-range"); cValue.Exists() {
+				item.AutodiscoveryBgpSignalingProtocolBgpCeRange = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.transmit"); cValue.Exists() {
+				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolValue(true)
+			} else {
+				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolValue(false)
+			}
+			if cValue := v.Get("autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.receive"); cValue.Exists() {
+				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolValue(true)
+			} else {
+				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolValue(false)
+			}
+			if cValue := v.Get("autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.both"); cValue.Exists() {
+				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolValue(true)
+			} else {
+				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolValue(false)
+			}
+			if cValue := v.Get("autodiscovery.bgp.route-policy.export"); cValue.Exists() {
+				item.AutodiscoveryBgpRoutePolicyExport = types.StringValue(cValue.String())
+			}
+			data.Mp2mps = append(data.Mp2mps, item)
+			return true
+		})
+	}
 }
 
 // End of section. //template:end fromBodyData
@@ -1067,6 +2642,510 @@ func (data *L2VPNXconnectGroupData) fromBody(ctx context.Context, res []byte) {
 
 func (data *L2VPNXconnectGroup) getDeletedItems(ctx context.Context, state L2VPNXconnectGroup) []string {
 	deletedItems := make([]string, 0)
+	for i := range state.Mp2mps {
+		keys := [...]string{"instance-name"}
+		stateKeyValues := [...]string{state.Mp2mps[i].InstanceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Mp2mps[i].InstanceName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Mp2mps {
+			found = true
+			if state.Mp2mps[i].InstanceName.ValueString() != data.Mp2mps[j].InstanceName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.Mp2mps[i].AutodiscoveryBgpRoutePolicyExport.IsNull() && data.Mp2mps[j].AutodiscoveryBgpRoutePolicyExport.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/route-policy/export", state.getPath(), keyString))
+				}
+				if !state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.IsNull() && data.Mp2mps[j].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/both", state.getPath(), keyString))
+				}
+				if !state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.IsNull() && data.Mp2mps[j].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/receive", state.getPath(), keyString))
+				}
+				if !state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.IsNull() && data.Mp2mps[j].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/transmit", state.getPath(), keyString))
+				}
+				if !state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeRange.IsNull() && data.Mp2mps[j].AutodiscoveryBgpSignalingProtocolBgpCeRange.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/signaling-protocol/bgp/ce-range", state.getPath(), keyString))
+				}
+				for ci := range state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds {
+					ckeys := [...]string{"local-ce-id-value"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].LocalCeIdValue.ValueInt64(), 10)}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].LocalCeIdValue.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Mp2mps[j].AutodiscoveryBgpSignalingProtocolBgpCeIds {
+						found = true
+						if state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].LocalCeIdValue.ValueInt64() != data.Mp2mps[j].AutodiscoveryBgpSignalingProtocolBgpCeIds[cj].LocalCeIdValue.ValueInt64() {
+							found = false
+						}
+						if found {
+							if !state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration.IsNull() && data.Mp2mps[j].AutodiscoveryBgpSignalingProtocolBgpCeIds[cj].VpwsSeamlessIntegration.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/signaling-protocol/bgp/ce-id%v/vpws-seamless-integration", state.getPath(), keyString, ckeyString))
+							}
+							for cci := range state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces {
+								cckeys := [...]string{"interface-name"}
+								ccstateKeyValues := [...]string{state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces[cci].InterfaceName.ValueString()}
+								cckeyString := ""
+								for ccki := range cckeys {
+									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
+								}
+
+								ccemptyKeys := true
+								if !reflect.ValueOf(state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces[cci].InterfaceName.ValueString()).IsZero() {
+									ccemptyKeys = false
+								}
+								if ccemptyKeys {
+									continue
+								}
+
+								found := false
+								for ccj := range data.Mp2mps[j].AutodiscoveryBgpSignalingProtocolBgpCeIds[cj].Interfaces {
+									found = true
+									if state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces[cci].InterfaceName.ValueString() != data.Mp2mps[j].AutodiscoveryBgpSignalingProtocolBgpCeIds[cj].Interfaces[ccj].InterfaceName.ValueString() {
+										found = false
+									}
+									if found {
+										for ccci := range state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces[cci].RemoteCeIds {
+											ccckeys := [...]string{"remote-ce-id-value"}
+											cccstateKeyValues := [...]string{strconv.FormatInt(state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces[cci].RemoteCeIds[ccci].RemoteCeIdValue.ValueInt64(), 10)}
+											ccckeyString := ""
+											for cccki := range ccckeys {
+												ccckeyString += "[" + ccckeys[cccki] + "=" + cccstateKeyValues[cccki] + "]"
+											}
+
+											cccemptyKeys := true
+											if !reflect.ValueOf(state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces[cci].RemoteCeIds[ccci].RemoteCeIdValue.ValueInt64()).IsZero() {
+												cccemptyKeys = false
+											}
+											if cccemptyKeys {
+												continue
+											}
+
+											found := false
+											for cccj := range data.Mp2mps[j].AutodiscoveryBgpSignalingProtocolBgpCeIds[cj].Interfaces[ccj].RemoteCeIds {
+												found = true
+												if state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces[cci].RemoteCeIds[ccci].RemoteCeIdValue.ValueInt64() != data.Mp2mps[j].AutodiscoveryBgpSignalingProtocolBgpCeIds[cj].Interfaces[ccj].RemoteCeIds[cccj].RemoteCeIdValue.ValueInt64() {
+													found = false
+												}
+												if found {
+													break
+												}
+											}
+											if !found {
+												deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/signaling-protocol/bgp/ce-id%v/interface%v/remote-ce-id%v", state.getPath(), keyString, ckeyString, cckeyString, ccckeyString))
+											}
+										}
+										break
+									}
+								}
+								if !found {
+									deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/signaling-protocol/bgp/ce-id%v/interface%v", state.getPath(), keyString, ckeyString, cckeyString))
+								}
+							}
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/signaling-protocol/bgp/ce-id%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				for ci := range state.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat {
+					ckeys := [...]string{"ipv4-address", "assigned-number"}
+					cstateKeyValues := [...]string{state.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].Ipv4Address.ValueString(), strconv.FormatInt(state.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].AssignedNumber.ValueInt64(), 10)}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].Ipv4Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].AssignedNumber.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Mp2mps[j].AutodiscoveryBgpRouteTargetIpv4AddressFormat {
+						found = true
+						if state.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].Ipv4Address.ValueString() != data.Mp2mps[j].AutodiscoveryBgpRouteTargetIpv4AddressFormat[cj].Ipv4Address.ValueString() {
+							found = false
+						}
+						if state.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].AssignedNumber.ValueInt64() != data.Mp2mps[j].AutodiscoveryBgpRouteTargetIpv4AddressFormat[cj].AssignedNumber.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/route-target/ipv4-address-rts/ipv4-address-rt%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				for ci := range state.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat {
+					ckeys := [...]string{"four-byte-as-number", "assigned-number"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(state.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].FourByteAsNumber.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].AssignedNumber.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Mp2mps[j].AutodiscoveryBgpRouteTargetFourByteAsFormat {
+						found = true
+						if state.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].FourByteAsNumber.ValueInt64() != data.Mp2mps[j].AutodiscoveryBgpRouteTargetFourByteAsFormat[cj].FourByteAsNumber.ValueInt64() {
+							found = false
+						}
+						if state.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].AssignedNumber.ValueInt64() != data.Mp2mps[j].AutodiscoveryBgpRouteTargetFourByteAsFormat[cj].AssignedNumber.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/route-target/four-byte-as-rts/four-byte-as-rt%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				for ci := range state.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat {
+					ckeys := [...]string{"two-byte-as-number", "assigned-number"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(state.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].TwoByteAsNumber.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].AssignedNumber.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Mp2mps[j].AutodiscoveryBgpRouteTargetTwoByteAsFormat {
+						found = true
+						if state.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].TwoByteAsNumber.ValueInt64() != data.Mp2mps[j].AutodiscoveryBgpRouteTargetTwoByteAsFormat[cj].TwoByteAsNumber.ValueInt64() {
+							found = false
+						}
+						if state.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].AssignedNumber.ValueInt64() != data.Mp2mps[j].AutodiscoveryBgpRouteTargetTwoByteAsFormat[cj].AssignedNumber.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/route-target/two-byte-as-rts/two-byte-as-rt%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				for ci := range state.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat {
+					ckeys := [...]string{"ipv4-address", "assigned-number"}
+					cstateKeyValues := [...]string{state.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].Ipv4Address.ValueString(), strconv.FormatInt(state.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].AssignedNumber.ValueInt64(), 10)}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].Ipv4Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].AssignedNumber.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Mp2mps[j].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat {
+						found = true
+						if state.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].Ipv4Address.ValueString() != data.Mp2mps[j].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[cj].Ipv4Address.ValueString() {
+							found = false
+						}
+						if state.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].AssignedNumber.ValueInt64() != data.Mp2mps[j].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[cj].AssignedNumber.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				for ci := range state.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat {
+					ckeys := [...]string{"four-byte-as-number", "assigned-number"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(state.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].FourByteAsNumber.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].AssignedNumber.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Mp2mps[j].AutodiscoveryBgpRouteTargetExportFourByteAsFormat {
+						found = true
+						if state.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].FourByteAsNumber.ValueInt64() != data.Mp2mps[j].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[cj].FourByteAsNumber.ValueInt64() {
+							found = false
+						}
+						if state.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].AssignedNumber.ValueInt64() != data.Mp2mps[j].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[cj].AssignedNumber.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				for ci := range state.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat {
+					ckeys := [...]string{"two-byte-as-number", "assigned-number"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(state.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].TwoByteAsNumber.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].AssignedNumber.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Mp2mps[j].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat {
+						found = true
+						if state.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].TwoByteAsNumber.ValueInt64() != data.Mp2mps[j].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[cj].TwoByteAsNumber.ValueInt64() {
+							found = false
+						}
+						if state.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].AssignedNumber.ValueInt64() != data.Mp2mps[j].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[cj].AssignedNumber.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				for ci := range state.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat {
+					ckeys := [...]string{"ipv4-address", "assigned-number"}
+					cstateKeyValues := [...]string{state.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].Ipv4Address.ValueString(), strconv.FormatInt(state.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].AssignedNumber.ValueInt64(), 10)}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].Ipv4Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].AssignedNumber.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Mp2mps[j].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat {
+						found = true
+						if state.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].Ipv4Address.ValueString() != data.Mp2mps[j].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[cj].Ipv4Address.ValueString() {
+							found = false
+						}
+						if state.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].AssignedNumber.ValueInt64() != data.Mp2mps[j].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[cj].AssignedNumber.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				for ci := range state.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat {
+					ckeys := [...]string{"four-byte-as-number", "assigned-number"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(state.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].FourByteAsNumber.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].AssignedNumber.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Mp2mps[j].AutodiscoveryBgpRouteTargetImportFourByteAsFormat {
+						found = true
+						if state.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].FourByteAsNumber.ValueInt64() != data.Mp2mps[j].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[cj].FourByteAsNumber.ValueInt64() {
+							found = false
+						}
+						if state.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].AssignedNumber.ValueInt64() != data.Mp2mps[j].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[cj].AssignedNumber.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				for ci := range state.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat {
+					ckeys := [...]string{"two-byte-as-number", "assigned-number"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(state.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].TwoByteAsNumber.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].AssignedNumber.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Mp2mps[j].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat {
+						found = true
+						if state.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].TwoByteAsNumber.ValueInt64() != data.Mp2mps[j].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[cj].TwoByteAsNumber.ValueInt64() {
+							found = false
+						}
+						if state.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].AssignedNumber.ValueInt64() != data.Mp2mps[j].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[cj].AssignedNumber.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				if !state.Mp2mps[i].AutodiscoveryBgpRdIpv4AddressIndex.IsNull() && data.Mp2mps[j].AutodiscoveryBgpRdIpv4AddressIndex.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/rd/ipv4-address-assigned-number", state.getPath(), keyString))
+				}
+				if !state.Mp2mps[i].AutodiscoveryBgpRdIpv4Address.IsNull() && data.Mp2mps[j].AutodiscoveryBgpRdIpv4Address.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/rd/ipv4-address", state.getPath(), keyString))
+				}
+				if !state.Mp2mps[i].AutodiscoveryBgpRdFourByteAsIndex.IsNull() && data.Mp2mps[j].AutodiscoveryBgpRdFourByteAsIndex.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/rd/four-byte-as-assigned-number", state.getPath(), keyString))
+				}
+				if !state.Mp2mps[i].AutodiscoveryBgpRdFourByteAsNumber.IsNull() && data.Mp2mps[j].AutodiscoveryBgpRdFourByteAsNumber.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/rd/four-byte-as-number", state.getPath(), keyString))
+				}
+				if !state.Mp2mps[i].AutodiscoveryBgpRdTwoByteAsIndex.IsNull() && data.Mp2mps[j].AutodiscoveryBgpRdTwoByteAsIndex.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/rd/two-byte-as-assigned-number", state.getPath(), keyString))
+				}
+				if !state.Mp2mps[i].AutodiscoveryBgpRdTwoByteAsNumber.IsNull() && data.Mp2mps[j].AutodiscoveryBgpRdTwoByteAsNumber.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/rd/two-byte-as-number", state.getPath(), keyString))
+				}
+				if !state.Mp2mps[i].AutodiscoveryBgpRdAuto.IsNull() && data.Mp2mps[j].AutodiscoveryBgpRdAuto.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/rd/auto", state.getPath(), keyString))
+				}
+				if !state.Mp2mps[i].AutodiscoveryBgp.IsNull() && data.Mp2mps[j].AutodiscoveryBgp.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp", state.getPath(), keyString))
+				}
+				if !state.Mp2mps[i].ControlWordDisable.IsNull() && data.Mp2mps[j].ControlWordDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/control-word/disable", state.getPath(), keyString))
+				}
+				if !state.Mp2mps[i].Interworking.IsNull() && data.Mp2mps[j].Interworking.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/interworking", state.getPath(), keyString))
+				}
+				if !state.Mp2mps[i].L2Encapsulation.IsNull() && data.Mp2mps[j].L2Encapsulation.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/l2-encapsulation", state.getPath(), keyString))
+				}
+				if !state.Mp2mps[i].Shutdown.IsNull() && data.Mp2mps[j].Shutdown.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/shutdown", state.getPath(), keyString))
+				}
+				if !state.Mp2mps[i].Mtu.IsNull() && data.Mp2mps[j].Mtu.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/mtu", state.getPath(), keyString))
+				}
+				if !state.Mp2mps[i].VpnId.IsNull() && data.Mp2mps[j].VpnId.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v/vpn-id", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/mp2mps/mp2mp%v", state.getPath(), keyString))
+		}
+	}
 	for i := range state.P2ps {
 		keys := [...]string{"p2p-xconnect-name"}
 		stateKeyValues := [...]string{state.P2ps[i].P2pXconnectName.ValueString()}
@@ -1299,6 +3378,51 @@ func (data *L2VPNXconnectGroup) getDeletedItems(ctx context.Context, state L2VPN
 							if !state.P2ps[i].Ipv6Neighbors[ci].MplsStaticLabelLocal.IsNull() && data.P2ps[j].Ipv6Neighbors[cj].MplsStaticLabelLocal.IsNull() {
 								deletedItems = append(deletedItems, fmt.Sprintf("%v/p2ps/p2p%v/neighbor/ipv6s/ipv6%v/mpls/static/label/local", state.getPath(), keyString, ckeyString))
 							}
+							for cci := range state.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors {
+								cckeys := [...]string{"address", "pw-id"}
+								ccstateKeyValues := [...]string{state.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].Address.ValueString(), strconv.FormatInt(state.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].PwId.ValueInt64(), 10)}
+								cckeyString := ""
+								for ccki := range cckeys {
+									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
+								}
+
+								ccemptyKeys := true
+								if !reflect.ValueOf(state.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].Address.ValueString()).IsZero() {
+									ccemptyKeys = false
+								}
+								if !reflect.ValueOf(state.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].PwId.ValueInt64()).IsZero() {
+									ccemptyKeys = false
+								}
+								if ccemptyKeys {
+									continue
+								}
+
+								found := false
+								for ccj := range data.P2ps[j].Ipv6Neighbors[cj].BackupNeighbors {
+									found = true
+									if state.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].Address.ValueString() != data.P2ps[j].Ipv6Neighbors[cj].BackupNeighbors[ccj].Address.ValueString() {
+										found = false
+									}
+									if state.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].PwId.ValueInt64() != data.P2ps[j].Ipv6Neighbors[cj].BackupNeighbors[ccj].PwId.ValueInt64() {
+										found = false
+									}
+									if found {
+										if !state.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].MplsStaticLabelRemote.IsNull() && data.P2ps[j].Ipv6Neighbors[cj].BackupNeighbors[ccj].MplsStaticLabelRemote.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/p2ps/p2p%v/neighbor/ipv6s/ipv6%v/backup/neighbors/neighbor%v/mpls/static/label/remote", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										if !state.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].MplsStaticLabelLocal.IsNull() && data.P2ps[j].Ipv6Neighbors[cj].BackupNeighbors[ccj].MplsStaticLabelLocal.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/p2ps/p2p%v/neighbor/ipv6s/ipv6%v/backup/neighbors/neighbor%v/mpls/static/label/local", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										if !state.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].PwClass.IsNull() && data.P2ps[j].Ipv6Neighbors[cj].BackupNeighbors[ccj].PwClass.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/p2ps/p2p%v/neighbor/ipv6s/ipv6%v/backup/neighbors/neighbor%v/pw-class", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										break
+									}
+								}
+								if !found {
+									deletedItems = append(deletedItems, fmt.Sprintf("%v/p2ps/p2p%v/neighbor/ipv6s/ipv6%v/backup/neighbors/neighbor%v", state.getPath(), keyString, ckeyString, cckeyString))
+								}
+							}
 							if !state.P2ps[i].Ipv6Neighbors[ci].PwClass.IsNull() && data.P2ps[j].Ipv6Neighbors[cj].PwClass.IsNull() {
 								deletedItems = append(deletedItems, fmt.Sprintf("%v/p2ps/p2p%v/neighbor/ipv6s/ipv6%v/pw-class", state.getPath(), keyString, ckeyString))
 							}
@@ -1346,6 +3470,51 @@ func (data *L2VPNXconnectGroup) getDeletedItems(ctx context.Context, state L2VPN
 							}
 							if !state.P2ps[i].Ipv4Neighbors[ci].MplsStaticLabelLocal.IsNull() && data.P2ps[j].Ipv4Neighbors[cj].MplsStaticLabelLocal.IsNull() {
 								deletedItems = append(deletedItems, fmt.Sprintf("%v/p2ps/p2p%v/neighbor/ipv4s/ipv4%v/mpls/static/label/local", state.getPath(), keyString, ckeyString))
+							}
+							for cci := range state.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors {
+								cckeys := [...]string{"address", "pw-id"}
+								ccstateKeyValues := [...]string{state.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].Address.ValueString(), strconv.FormatInt(state.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].PwId.ValueInt64(), 10)}
+								cckeyString := ""
+								for ccki := range cckeys {
+									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
+								}
+
+								ccemptyKeys := true
+								if !reflect.ValueOf(state.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].Address.ValueString()).IsZero() {
+									ccemptyKeys = false
+								}
+								if !reflect.ValueOf(state.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].PwId.ValueInt64()).IsZero() {
+									ccemptyKeys = false
+								}
+								if ccemptyKeys {
+									continue
+								}
+
+								found := false
+								for ccj := range data.P2ps[j].Ipv4Neighbors[cj].BackupNeighbors {
+									found = true
+									if state.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].Address.ValueString() != data.P2ps[j].Ipv4Neighbors[cj].BackupNeighbors[ccj].Address.ValueString() {
+										found = false
+									}
+									if state.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].PwId.ValueInt64() != data.P2ps[j].Ipv4Neighbors[cj].BackupNeighbors[ccj].PwId.ValueInt64() {
+										found = false
+									}
+									if found {
+										if !state.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].MplsStaticLabelRemote.IsNull() && data.P2ps[j].Ipv4Neighbors[cj].BackupNeighbors[ccj].MplsStaticLabelRemote.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/p2ps/p2p%v/neighbor/ipv4s/ipv4%v/backup/neighbors/neighbor%v/mpls/static/label/remote", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										if !state.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].MplsStaticLabelLocal.IsNull() && data.P2ps[j].Ipv4Neighbors[cj].BackupNeighbors[ccj].MplsStaticLabelLocal.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/p2ps/p2p%v/neighbor/ipv4s/ipv4%v/backup/neighbors/neighbor%v/mpls/static/label/local", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										if !state.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].PwClass.IsNull() && data.P2ps[j].Ipv4Neighbors[cj].BackupNeighbors[ccj].PwClass.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/p2ps/p2p%v/neighbor/ipv4s/ipv4%v/backup/neighbors/neighbor%v/pw-class", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										break
+									}
+								}
+								if !found {
+									deletedItems = append(deletedItems, fmt.Sprintf("%v/p2ps/p2p%v/neighbor/ipv4s/ipv4%v/backup/neighbors/neighbor%v", state.getPath(), keyString, ckeyString, cckeyString))
+								}
 							}
 							if !state.P2ps[i].Ipv4Neighbors[ci].Bandwidth.IsNull() && data.P2ps[j].Ipv4Neighbors[cj].Bandwidth.IsNull() {
 								deletedItems = append(deletedItems, fmt.Sprintf("%v/p2ps/p2p%v/neighbor/ipv4s/ipv4%v/bandwidth", state.getPath(), keyString, ckeyString))
@@ -1445,6 +3614,134 @@ func (data *L2VPNXconnectGroup) getDeletedItems(ctx context.Context, state L2VPN
 
 func (data *L2VPNXconnectGroup) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	for i := range data.Mp2mps {
+		keys := [...]string{"instance-name"}
+		keyValues := [...]string{data.Mp2mps[i].InstanceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.IsNull() && !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/both", data.getPath(), keyString))
+		}
+		if !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.IsNull() && !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/receive", data.getPath(), keyString))
+		}
+		if !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.IsNull() && !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/transmit", data.getPath(), keyString))
+		}
+		for ci := range data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds {
+			ckeys := [...]string{"local-ce-id-value"}
+			ckeyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].LocalCeIdValue.ValueInt64(), 10)}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+			if !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration.IsNull() && !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/signaling-protocol/bgp/ce-id%v/vpws-seamless-integration", data.getPath(), keyString, ckeyString))
+			}
+			for cci := range data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces {
+				cckeys := [...]string{"interface-name"}
+				cckeyValues := [...]string{data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces[cci].InterfaceName.ValueString()}
+				cckeyString := ""
+				for ccki := range cckeys {
+					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
+				}
+				for ccci := range data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces[cci].RemoteCeIds {
+					ccckeys := [...]string{"remote-ce-id-value"}
+					ccckeyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].Interfaces[cci].RemoteCeIds[ccci].RemoteCeIdValue.ValueInt64(), 10)}
+					ccckeyString := ""
+					for cccki := range ccckeys {
+						ccckeyString += "[" + ccckeys[cccki] + "=" + ccckeyValues[cccki] + "]"
+					}
+				}
+			}
+		}
+		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat {
+			ckeys := [...]string{"ipv4-address", "assigned-number"}
+			ckeyValues := [...]string{data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].Ipv4Address.ValueString(), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetIpv4AddressFormat[ci].AssignedNumber.ValueInt64(), 10)}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+		}
+		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat {
+			ckeys := [...]string{"four-byte-as-number", "assigned-number"}
+			ckeyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetFourByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+		}
+		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat {
+			ckeys := [...]string{"two-byte-as-number", "assigned-number"}
+			ckeyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetTwoByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+		}
+		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat {
+			ckeys := [...]string{"ipv4-address", "assigned-number"}
+			ckeyValues := [...]string{data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].Ipv4Address.ValueString(), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[ci].AssignedNumber.ValueInt64(), 10)}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+		}
+		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat {
+			ckeys := [...]string{"four-byte-as-number", "assigned-number"}
+			ckeyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportFourByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+		}
+		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat {
+			ckeys := [...]string{"two-byte-as-number", "assigned-number"}
+			ckeyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+		}
+		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat {
+			ckeys := [...]string{"ipv4-address", "assigned-number"}
+			ckeyValues := [...]string{data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].Ipv4Address.ValueString(), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[ci].AssignedNumber.ValueInt64(), 10)}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+		}
+		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat {
+			ckeys := [...]string{"four-byte-as-number", "assigned-number"}
+			ckeyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportFourByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+		}
+		for ci := range data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat {
+			ckeys := [...]string{"two-byte-as-number", "assigned-number"}
+			ckeyValues := [...]string{strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.Mp2mps[i].AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[ci].AssignedNumber.ValueInt64(), 10)}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+		}
+		if !data.Mp2mps[i].AutodiscoveryBgpRdAuto.IsNull() && !data.Mp2mps[i].AutodiscoveryBgpRdAuto.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp/rd/auto", data.getPath(), keyString))
+		}
+		if !data.Mp2mps[i].AutodiscoveryBgp.IsNull() && !data.Mp2mps[i].AutodiscoveryBgp.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mp2mps/mp2mp%v/autodiscovery/bgp", data.getPath(), keyString))
+		}
+		if !data.Mp2mps[i].ControlWordDisable.IsNull() && !data.Mp2mps[i].ControlWordDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mp2mps/mp2mp%v/control-word/disable", data.getPath(), keyString))
+		}
+		if !data.Mp2mps[i].Shutdown.IsNull() && !data.Mp2mps[i].Shutdown.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mp2mps/mp2mp%v/shutdown", data.getPath(), keyString))
+		}
+	}
 	for i := range data.P2ps {
 		keys := [...]string{"p2p-xconnect-name"}
 		keyValues := [...]string{data.P2ps[i].P2pXconnectName.ValueString()}
@@ -1491,6 +3788,14 @@ func (data *L2VPNXconnectGroup) getEmptyLeafsDelete(ctx context.Context) []strin
 			for cki := range ckeys {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
+			for cci := range data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors {
+				cckeys := [...]string{"address", "pw-id"}
+				cckeyValues := [...]string{data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].Address.ValueString(), strconv.FormatInt(data.P2ps[i].Ipv6Neighbors[ci].BackupNeighbors[cci].PwId.ValueInt64(), 10)}
+				cckeyString := ""
+				for ccki := range cckeys {
+					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
+				}
+			}
 		}
 		for ci := range data.P2ps[i].Ipv4Neighbors {
 			ckeys := [...]string{"address", "pw-id"}
@@ -1498,6 +3803,14 @@ func (data *L2VPNXconnectGroup) getEmptyLeafsDelete(ctx context.Context) []strin
 			ckeyString := ""
 			for cki := range ckeys {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+			for cci := range data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors {
+				cckeys := [...]string{"address", "pw-id"}
+				cckeyValues := [...]string{data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].Address.ValueString(), strconv.FormatInt(data.P2ps[i].Ipv4Neighbors[ci].BackupNeighbors[cci].PwId.ValueInt64(), 10)}
+				cckeyString := ""
+				for ccki := range cckeys {
+					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
+				}
 			}
 		}
 		for ci := range data.P2ps[i].BackupInterfaces {
@@ -1532,6 +3845,16 @@ func (data *L2VPNXconnectGroup) getEmptyLeafsDelete(ctx context.Context) []strin
 
 func (data *L2VPNXconnectGroup) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
+	for i := range data.Mp2mps {
+		keys := [...]string{"instance-name"}
+		keyValues := [...]string{data.Mp2mps[i].InstanceName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mp2mps/mp2mp%v", data.getPath(), keyString))
+	}
 	for i := range data.P2ps {
 		keys := [...]string{"p2p-xconnect-name"}
 		keyValues := [...]string{data.P2ps[i].P2pXconnectName.ValueString()}

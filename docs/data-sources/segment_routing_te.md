@@ -26,61 +26,240 @@ data "iosxr_segment_routing_te" "example" {
 
 ### Read-Only
 
+- `affinity_maps` (Attributes List) Affinity-map entry (see [below for nested schema](#nestedatt--affinity_maps))
+- `bfd_timers_session_bringup` (Number) How long to wait for new BFD session to come up
+- `binding_sid_rules_dynamic` (String) Binding SID dynamic rule. Applicable for SR-MPLS and SRv6 policies
+- `binding_sid_rules_explicit` (String) Binding sid explicit rule
+- `candidate_paths` (Attributes List) Configurations for candidate paths of specific type. (see [below for nested schema](#nestedatt--candidate_paths))
+- `cspf_cache_size` (Number) Configure maximum size of the CSPF cache size in MiB
+- `distribute_link_state` (Boolean) Distribute policy information to BGP link-state
+- `distribute_link_state_report_candidate_path_inactive` (Boolean) Enable reporting of inactive candidate paths
+- `distribute_link_state_throttle` (Number) Set throttle update in seconds (default: 0 seconds)
+- `effective_metric_admin_distance_flex_algo_metric_types` (Attributes List) Administrative distance advertised for this metric type (see [below for nested schema](#nestedatt--effective_metric_admin_distance_flex_algo_metric_types))
+- `effective_metric_admin_distance_metric_types` (Attributes List) Administrative distance advertised for this metric type (see [below for nested schema](#nestedatt--effective_metric_admin_distance_metric_types))
 - `id` (String) The path of the retrieved object.
+- `interfaces` (Attributes List) SR-TE interface (see [below for nested schema](#nestedatt--interfaces))
+- `kshortest_paths` (Number) Maximum number of attempted paths for cumulative bounds (default 100)
 - `logging_pcep_peer_status` (Boolean) Enable logging for pcep peer status
 - `logging_policy_status` (Boolean) Enable logging for policy status
-- `on_demand_colors` (Attributes List) On-demand color configuration (see [below for nested schema](#nestedatt--on_demand_colors))
+- `max_install_standby_paths` (Number) Allow additional candidate paths to warm up non forwarding LSPs
+- `maximum_sid_depth` (Number) Maximum SID Depth Configuration
+- `path_disable_algo_checks_strict_spf_all_areas` (Boolean) Disable check for all IGP areas
+- `path_disable_algo_checks_strict_spf_areas` (Attributes List) IGP area (see [below for nested schema](#nestedatt--path_disable_algo_checks_strict_spf_areas))
 - `pcc_dead_timer` (Number) Amount of time after which the peer can declare this session down, if no PCEP message has been received
 - `pcc_delegation_timeout` (Number) Maximum time delegated SR-TE policies can remain up without an active connection to a PCE
 - `pcc_initiated_orphan` (Number) Amount of time that PCE initiated policy remains delegated to a peer that has gone down
 - `pcc_initiated_state` (Number) Amount of time that PCE initiated policy can exist as an orphan before it is cleaned up
+- `pcc_keepalive_timer` (Number) Maximum time between two consecutive PCEP messages sent by this node
+- `pcc_profiles` (Attributes List) Path profile configuration (see [below for nested schema](#nestedatt--pcc_profiles))
+- `pcc_redundancy_pcc_centric` (Boolean) Enable PCC centric model, where PCC only allows the lowest precedence PCE to initiate policies. THIS COMMAND IS DEPRECATED
+- `pcc_redundancy_pce_centric` (Boolean) Enable PCE centric model
 - `pcc_report_all` (Boolean) Report all local SR policies to connected PCEP peers
-- `pcc_source_address` (String) Local source IP address to use on PCEP sessions
-- `pce_peers` (Attributes List) PCE peer (see [below for nested schema](#nestedatt--pce_peers))
-- `policies` (Attributes List) Policy configuration (see [below for nested schema](#nestedatt--policies))
-
-<a id="nestedatt--on_demand_colors"></a>
-### Nested Schema for `on_demand_colors`
-
-Read-Only:
-
-- `color` (Number) Color
-- `constraint_segments_protection_type` (String) Protection Type
-- `constraint_segments_sid_algorithm` (Number) '0' for regular SIDs, '1' for strict-spf SIDs, '128' - '255' for flexible algorithm SIDs
-- `dynamic_anycast_sid_inclusion` (Boolean) Anycast Prefix SID Inclusion. Applicable for SR-MPLS and SRv6 policies
-- `dynamic_metric_type` (String) Metric Type
-- `effective_metric_enable` (Boolean) True only
-- `effective_metric_type` (String) Metric type, advertised to other protocols
-- `effective_metric_value` (Number) Integer value of metric
-- `source_address` (String) Source address
-- `source_address_type` (String) IP address type
-- `srv6_enable` (Boolean) True only
+- `pcc_source_address_ipv4` (String) Local source IP address to use on PCEP sessions
+- `pcc_source_address_ipv6` (String) Local source IP address to use on PCEP sessions
+- `pce_peers_ipv4` (Attributes List) PCE peer (see [below for nested schema](#nestedatt--pce_peers_ipv4))
+- `pce_peers_ipv6` (Attributes List) PCE peer (see [below for nested schema](#nestedatt--pce_peers_ipv6))
+- `resource_lists` (Attributes List) Resource-list configuration (see [below for nested schema](#nestedatt--resource_lists))
+- `segment_lists_sr_mpls_explicit_segments` (Attributes List) Segment-list configuration (see [below for nested schema](#nestedatt--segment_lists_sr_mpls_explicit_segments))
+- `segment_lists_srv6_explicit_segments` (Attributes List) Segment-list configuration (see [below for nested schema](#nestedatt--segment_lists_srv6_explicit_segments))
+- `segment_lists_srv6_sid_format` (String) Segment-lists configuration
+- `segment_lists_srv6_topology_check` (Boolean) Enable topology check for all SRv6 segment-lists
+- `separate_next_hop` (Boolean) Use Next Hop Separation in Forwarding
+- `srv6_locator` (String) SRv6 locator name
 - `srv6_locator_behavior` (String) SRv6 USID Behavior
 - `srv6_locator_binding_sid_type` (String) Binding Segment ID type
-- `srv6_locator_name` (String) SRv6 locator name
+- `srv6_maximum_sid_depth` (Number) SRv6 Maximum SID Depth Configuration
+- `steering_labeled_services_disable_all_policies` (Boolean) Disable steering for labeled services for all policies
+- `steering_labeled_services_disable_bgp_sr_te_policies` (Boolean) Disable steering for labeled services for BGP-SRTE policies
+- `steering_labeled_services_disable_local_policies` (Boolean) Disable steering for labeled services for local policies
+- `steering_labeled_services_disable_on_demand_policies` (Boolean) Disable steering for labeled services for on-demand policies
+- `steering_labeled_services_disable_pcep_policies` (Boolean) Disable steering for labeled services for PCE initiated policies
+- `te_latency` (Boolean) Use TE-latency algorithm
+- `timers_candidate_path_cleanup_delay` (Number) Delay before cleaning up candidate paths
+- `timers_cleanup_delay` (Number) Delay before cleaning up previous path
+- `timers_delete_delay` (Number) Delete delay value in seconds
+- `timers_initial_verify_restart` (Number) Timer to wait for topology convergence after topology starts populating for restart case
+- `timers_initial_verify_startup` (Number) Timer to wait for topology convergence after topology starts populating for startup case
+- `timers_initial_verify_switchover` (Number) Timer to wait for topology convergence after topology starts populating for switchover case
+- `timers_install_delay` (Number) Delay before switching to a reoptimized path
+- `timers_periodic_reoptimization` (Number) How often to perform periodic reoptimization of policies
+- `traces` (Attributes List) Trace count for provided buffer (see [below for nested schema](#nestedatt--traces))
 
-
-<a id="nestedatt--pce_peers"></a>
-### Nested Schema for `pce_peers`
+<a id="nestedatt--affinity_maps"></a>
+### Nested Schema for `affinity_maps`
 
 Read-Only:
 
+- `affinity_name` (String) Affinity-map bit-position
+- `bit_position` (Number) Affinity-map bit-position
+
+
+<a id="nestedatt--candidate_paths"></a>
+### Nested Schema for `candidate_paths`
+
+Read-Only:
+
+- `path_type` (String) Candidate-path type
+- `source_address` (String) Source address
+- `source_address_selection` (Boolean) True only
+- `source_address_type` (String) IP address type
+
+
+<a id="nestedatt--effective_metric_admin_distance_flex_algo_metric_types"></a>
+### Nested Schema for `effective_metric_admin_distance_flex_algo_metric_types`
+
+Read-Only:
+
+- `admin_distance` (Number) AdminDistance
+- `metric_type` (Number) FlexAlgoMetricType
+
+
+<a id="nestedatt--effective_metric_admin_distance_metric_types"></a>
+### Nested Schema for `effective_metric_admin_distance_metric_types`
+
+Read-Only:
+
+- `admin_distance` (Number) AdminDistance
+- `metric_type` (String) MetricType
+
+
+<a id="nestedatt--interfaces"></a>
+### Nested Schema for `interfaces`
+
+Read-Only:
+
+- `affinities` (Attributes List) Set user defined interface attribute flags (see [below for nested schema](#nestedatt--interfaces--affinities))
+- `interface_name` (String) SR-TE Interface name
+- `metric` (Number) Interface TE metric configuration
+
+<a id="nestedatt--interfaces--affinities"></a>
+### Nested Schema for `interfaces.affinities`
+
+Read-Only:
+
+- `affinity_name` (String) Interface affinity names
+
+
+
+<a id="nestedatt--path_disable_algo_checks_strict_spf_areas"></a>
+### Nested Schema for `path_disable_algo_checks_strict_spf_areas`
+
+Read-Only:
+
+- `area_id` (Number) Area identifier
+- `protocol` (String) IGP protocol
+
+
+<a id="nestedatt--pcc_profiles"></a>
+### Nested Schema for `pcc_profiles`
+
+Read-Only:
+
+- `auto_route_force_sr_include` (Boolean) Force SR traffic over autoroute policy
+- `auto_route_forward_class` (Number) Forward class associated with the policy
+- `auto_route_include_all_ipv4` (Boolean) Include all IPv4 prefixes to autoroute
+- `auto_route_include_all_ipv6` (Boolean) Include all eligible IPv6 prefixes
+- `auto_route_metric_constant_value` (Number) Autoroute constant metric
+- `auto_route_metric_relative_value` (Number) Autoroute relative metric
+- `auto_route_metric_type` (String) Metric type
+- `profile_id` (Number) Profile unique identifier
+- `steering_invalidation_drop` (Boolean) Enable path invalidation drop
+
+
+<a id="nestedatt--pce_peers_ipv4"></a>
+### Nested Schema for `pce_peers_ipv4`
+
+Read-Only:
+
+- `password_encrypted` (String, Sensitive) PCC Peer MD5 Password
 - `pce_address` (String) Remote PCE address
+- `pce_group` (String) Name of the PCE group - maximum 16 characters
 - `precedence` (Number) Precedence value of this PCE
+- `tcp_ao_include_tcp_options` (Boolean) Include other TCP options in the header
+- `tcp_ao_keychain` (String) Name of the keychain
 
 
-<a id="nestedatt--policies"></a>
-### Nested Schema for `policies`
+<a id="nestedatt--pce_peers_ipv6"></a>
+### Nested Schema for `pce_peers_ipv6`
 
 Read-Only:
 
-- `policy_color_endpoint_address` (String) End point address
-- `policy_color_endpoint_color` (Number) Color
-- `policy_color_endpoint_type` (String) End point type
-- `policy_name` (String) Policy name
-- `source_address` (String) Source address
-- `source_address_type` (String) IP address type
-- `srv6_enable` (Boolean) True only
-- `srv6_locator_behavior` (String) SRv6 USID Behavior
-- `srv6_locator_binding_sid_type` (String) Binding Segment ID type
-- `srv6_locator_name` (String) SRv6 locator name
+- `password_encrypted` (String, Sensitive) PCC Peer MD5 Password
+- `pce_address` (String) Remote PCE address
+- `pce_group` (String) Name of the PCE group - maximum 16 characters
+- `precedence` (Number) Precedence value of this PCE
+- `tcp_ao_include_tcp_options` (Boolean) Include other TCP options in the header
+- `tcp_ao_keychain` (String) Name of the keychain
+
+
+<a id="nestedatt--resource_lists"></a>
+### Nested Schema for `resource_lists`
+
+Read-Only:
+
+- `path_name` (String) Resource-list name
+- `resources` (Attributes List) Configure Resource at the index (see [below for nested schema](#nestedatt--resource_lists--resources))
+
+<a id="nestedatt--resource_lists--resources"></a>
+### Nested Schema for `resource_lists.resources`
+
+Read-Only:
+
+- `address` (String) IPv4 Address
+- `index` (Number) Resource index
+- `type` (String) Resource type
+
+
+
+<a id="nestedatt--segment_lists_sr_mpls_explicit_segments"></a>
+### Nested Schema for `segment_lists_sr_mpls_explicit_segments`
+
+Read-Only:
+
+- `path_name` (String) Segment-list name
+- `sr_mpls_segments` (Attributes List) Configure Segment/hop at the index (see [below for nested schema](#nestedatt--segment_lists_sr_mpls_explicit_segments--sr_mpls_segments))
+
+<a id="nestedatt--segment_lists_sr_mpls_explicit_segments--sr_mpls_segments"></a>
+### Nested Schema for `segment_lists_sr_mpls_explicit_segments.sr_mpls_segments`
+
+Read-Only:
+
+- `address` (String) IP Address
+- `address_type` (Number) IP address types
+- `adjacency_address` (String) IP Adjacency Address
+- `index` (Number) Segment index
+- `interface_identifier` (Number) Interface Identifier
+- `mpls_label` (Number) MPLS Label
+- `prefix_length` (Number) Prefix Length
+- `type` (String) Segment/hop type
+- `validate_flag` (Number) Validate No Validate
+
+
+
+<a id="nestedatt--segment_lists_srv6_explicit_segments"></a>
+### Nested Schema for `segment_lists_srv6_explicit_segments`
+
+Read-Only:
+
+- `path_name` (String) Segment-list name
+- `srv6_segments` (Attributes List) SRv6 segment configuration for the given index (see [below for nested schema](#nestedatt--segment_lists_srv6_explicit_segments--srv6_segments))
+- `srv6_topology_check` (Boolean) Enable Topology check for the given SRv6 segment-list
+
+<a id="nestedatt--segment_lists_srv6_explicit_segments--srv6_segments"></a>
+### Nested Schema for `segment_lists_srv6_explicit_segments.srv6_segments`
+
+Read-Only:
+
+- `address` (String) IPv6 Address
+- `hop_type` (String) SRv6 hop type
+- `index` (Number) Segment index
+
+
+
+<a id="nestedatt--traces"></a>
+### Nested Schema for `traces`
+
+Read-Only:
+
+- `buffer_name` (String) Buffer name
+- `trace_count` (Number) Trace count

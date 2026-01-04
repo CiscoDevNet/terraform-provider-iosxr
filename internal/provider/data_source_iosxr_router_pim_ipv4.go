@@ -589,6 +589,238 @@ func (d *RouterPIMIPv4DataSource) Schema(ctx context.Context, req datasource.Sch
 					},
 				},
 			},
+			"mofrr": schema.BoolAttribute{
+				MarkdownDescription: "PIM Mofrr",
+				Computed:            true,
+			},
+			"mofrr_flow": schema.StringAttribute{
+				MarkdownDescription: "Multicast Only FRR",
+				Computed:            true,
+			},
+			"mofrr_rib": schema.StringAttribute{
+				MarkdownDescription: "Use the rib keyword to restrict switchover triggers to RIB events",
+				Computed:            true,
+			},
+			"mofrr_protect": schema.StringAttribute{
+				MarkdownDescription: "Immediate Switchover to secondary based on infra events",
+				Computed:            true,
+			},
+			"mofrr_protect_local_fault_only": schema.BoolAttribute{
+				MarkdownDescription: "Protect multicast flows against local faults alone",
+				Computed:            true,
+			},
+			"mofrr_non_revertive": schema.BoolAttribute{
+				MarkdownDescription: "Non-revertive MoFRR",
+				Computed:            true,
+			},
+			"mofrr_clone_joins": schema.ListNestedAttribute{
+				MarkdownDescription: "Use the join keyword to clone S,G as S1,G joins as S2,G joins",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"source_address": schema.StringAttribute{
+							MarkdownDescription: "Source S",
+							Computed:            true,
+						},
+						"to": schema.ListNestedAttribute{
+							MarkdownDescription: "to",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"primary_address": schema.StringAttribute{
+										MarkdownDescription: "Source S1",
+										Computed:            true,
+									},
+									"and": schema.ListNestedAttribute{
+										MarkdownDescription: "and",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"backup_address": schema.StringAttribute{
+													MarkdownDescription: "Source S2",
+													Computed:            true,
+												},
+												"masklen": schema.ListNestedAttribute{
+													MarkdownDescription: "",
+													Computed:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"mask_length": schema.Int64Attribute{
+																MarkdownDescription: "",
+																Computed:            true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"mofrr_clone_sources": schema.ListNestedAttribute{
+				MarkdownDescription: "Use the source keyword to clone S,G as S1,G traffic and S2,G traffic",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"source_address": schema.StringAttribute{
+							MarkdownDescription: "Source S",
+							Computed:            true,
+						},
+						"to": schema.ListNestedAttribute{
+							MarkdownDescription: "to",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"primary_address": schema.StringAttribute{
+										MarkdownDescription: "Source S1",
+										Computed:            true,
+									},
+									"and": schema.ListNestedAttribute{
+										MarkdownDescription: "and",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"backup_address": schema.StringAttribute{
+													MarkdownDescription: "Source S2",
+													Computed:            true,
+												},
+												"masklen": schema.ListNestedAttribute{
+													MarkdownDescription: "",
+													Computed:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"mask_length": schema.Int64Attribute{
+																MarkdownDescription: "",
+																Computed:            true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"sr_p2mp_policies": schema.ListNestedAttribute{
+				MarkdownDescription: "Segment-routing P2MP policy",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"policy_name": schema.StringAttribute{
+							MarkdownDescription: "Segment-routing P2MP policy",
+							Computed:            true,
+						},
+						"static_groups": schema.ListNestedAttribute{
+							MarkdownDescription: "ipv4 static multicast group",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"group_address": schema.StringAttribute{
+										MarkdownDescription: "ipv4 static multicast group",
+										Computed:            true,
+									},
+									"group_address_only": schema.BoolAttribute{
+										MarkdownDescription: "Group-address without increment mask/source-address",
+										Computed:            true,
+									},
+									"group_masks": schema.ListNestedAttribute{
+										MarkdownDescription: "Increment mask for group address",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"group_inc_mask": schema.StringAttribute{
+													MarkdownDescription: "Increment mask for group address",
+													Computed:            true,
+												},
+												"group_count": schema.Int64Attribute{
+													MarkdownDescription: "No. of group addresses to join",
+													Computed:            true,
+												},
+											},
+										},
+									},
+									"group_masks_source_addresses": schema.ListNestedAttribute{
+										MarkdownDescription: "Increment mask for group address",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"group_inc_mask": schema.StringAttribute{
+													MarkdownDescription: "Increment mask for group address",
+													Computed:            true,
+												},
+												"source_ip": schema.StringAttribute{
+													MarkdownDescription: "Source address to join",
+													Computed:            true,
+												},
+												"group_count": schema.Int64Attribute{
+													MarkdownDescription: "No. of group addresses to join",
+													Computed:            true,
+												},
+											},
+										},
+									},
+									"source_masks": schema.ListNestedAttribute{
+										MarkdownDescription: "Increment mask for group address",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"source_ip": schema.StringAttribute{
+													MarkdownDescription: "Source address to join",
+													Computed:            true,
+												},
+												"source_inc_mask": schema.StringAttribute{
+													MarkdownDescription: "Increment mask for source address",
+													Computed:            true,
+												},
+												"source_count": schema.Int64Attribute{
+													MarkdownDescription: "No. of source addresses to join",
+													Computed:            true,
+												},
+											},
+										},
+									},
+									"group_masks_source_masks": schema.ListNestedAttribute{
+										MarkdownDescription: "Increment mask for group address",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"group_inc_mask": schema.StringAttribute{
+													MarkdownDescription: "Increment mask for group address",
+													Computed:            true,
+												},
+												"source_ip": schema.StringAttribute{
+													MarkdownDescription: "Source address to join",
+													Computed:            true,
+												},
+												"source_inc_mask": schema.StringAttribute{
+													MarkdownDescription: "Increment mask for source address",
+													Computed:            true,
+												},
+												"group_count": schema.Int64Attribute{
+													MarkdownDescription: "No. of group addresses to join",
+													Computed:            true,
+												},
+												"source_count": schema.Int64Attribute{
+													MarkdownDescription: "No. of source addresses to join",
+													Computed:            true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 			"interfaces": schema.ListNestedAttribute{
 				MarkdownDescription: "Select an interface to configure",
 				Computed:            true,

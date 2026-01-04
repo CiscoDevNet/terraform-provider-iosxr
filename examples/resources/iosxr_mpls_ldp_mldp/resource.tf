@@ -32,22 +32,4 @@ resource "iosxr_mpls_ldp_mldp" "example" {
       rib_unicast_always                = true
     }
   ]
-  vrfs = [
-    {
-      vrf_name = "VRF1"
-      address_families = [
-        {
-          name                              = "ipv4"
-          make_before_break_delay           = 60
-          make_before_break_delete_delay    = 40
-          make_before_break_route_policy    = "LDP_POLICY_1"
-          mofrr_enable                      = true
-          mofrr_route_policy                = "LDP_POLICY_1"
-          forwarding_recursive              = true
-          forwarding_recursive_route_policy = "LDP_POLICY_1"
-          rib_unicast_always                = true
-        }
-      ]
-    }
-  ]
 }

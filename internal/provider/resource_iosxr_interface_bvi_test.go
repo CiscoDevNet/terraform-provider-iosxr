@@ -147,6 +147,149 @@ func TestAccIosxrInterfaceBVI(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "proxy_arp", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "host_routing", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "mac_address", "aa:bb:cc:dd:ee:ff"))
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_profile", "Profile-1"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_transport_ethernet", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_clock_operation_one_step", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_announce_interval", "2"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_announce_timeout", "5"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_announce_grant_duration", "300"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_sync_interval", "2"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_sync_grant_duration", "300"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_sync_timeout", "3000"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_delay_request_interval", "2"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_cos", "6"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_cos_event", "6"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_cos_general", "6"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_dscp", "46"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_dscp_event", "46"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_dscp_general", "46"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_ipv4_ttl", "10"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_ipv6_hop_limit", "10"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_delay_asymmetry_value", "1000"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_delay_asymmetry_unit_microseconds", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_delay_response_grant_duration", "300"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_delay_response_timeout", "3000"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_unicast_grant_invalid_request_reduce", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_multicast", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_multicast_mixed", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_multicast_target_address_mac_forwardable", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_port_state_master_only", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_local_priority", "128"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_slave_ipv4s.0.address", "10.2.2.2"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_slave_ipv4s.0.non_negotiated", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_slave_ipv6s.0.address", "2001:db8::2"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_slave_ipv6s.0.non_negotiated", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_slave_ethernets.0.address", "00:11:22:33:44:55"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_slave_ethernets.0.non_negotiated", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_interop_profile_g_8275_2", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_interop_domain", "24"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_interop_egress_conversion_priority1", "128"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_interop_egress_conversion_priority2", "128"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_interop_egress_conversion_clock_accuracy", "33"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_interop_egress_conversion_offset_scaled_log_variance", "5"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_interop_egress_conversion_clock_class_default", "6"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_interop_egress_conversion_clock_class_mappings.0.clock_class_to_map_from", "6"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_interop_egress_conversion_clock_class_mappings.0.clock_class_to_map_to", "13"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_interop_ingress_conversion_priority1", "128"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_interop_ingress_conversion_priority2", "128"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_interop_ingress_conversion_clock_accuracy", "33"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_interop_ingress_conversion_offset_scaled_log_variance", "5"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_interop_ingress_conversion_clock_class_default", "6"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_interop_ingress_conversion_clock_class_mappings.0.clock_class_to_map_from", "13"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "ptp_interop_ingress_conversion_clock_class_mappings.0.clock_class_to_map_to", "6"))
+	}
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -416,6 +559,159 @@ func testAccIosxrInterfaceBVIConfig_all() string {
 	config += `	proxy_arp = true` + "\n"
 	config += `	host_routing = true` + "\n"
 	config += `	mac_address = "aa:bb:cc:dd:ee:ff"` + "\n"
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_profile = "Profile-1"` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_transport_ethernet = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_clock_operation_one_step = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_announce_interval = "2"` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_announce_timeout = 5` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_announce_grant_duration = 300` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_sync_interval = "2"` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_sync_grant_duration = 300` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_sync_timeout = 3000` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_delay_request_interval = "2"` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_cos = 6` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_cos_event = 6` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_cos_general = 6` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_dscp = 46` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_dscp_event = 46` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_dscp_general = 46` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_ipv4_ttl = 10` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_ipv6_hop_limit = 10` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_delay_asymmetry_value = 1000` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_delay_asymmetry_unit_microseconds = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_delay_response_grant_duration = 300` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_delay_response_timeout = 3000` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_unicast_grant_invalid_request_reduce = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_multicast = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_multicast_mixed = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_multicast_target_address_mac_forwardable = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_port_state_master_only = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_local_priority = 128` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_slave_ipv4s = [{` + "\n"
+		config += `		address = "10.2.2.2"` + "\n"
+		config += `		non_negotiated = true` + "\n"
+		config += `		}]` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_slave_ipv6s = [{` + "\n"
+		config += `		address = "2001:db8::2"` + "\n"
+		config += `		non_negotiated = true` + "\n"
+		config += `		}]` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_slave_ethernets = [{` + "\n"
+		config += `		address = "00:11:22:33:44:55"` + "\n"
+		config += `		non_negotiated = true` + "\n"
+		config += `		}]` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_interop_profile_g_8275_2 = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_interop_domain = 24` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_interop_egress_conversion_priority1 = 128` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_interop_egress_conversion_priority2 = 128` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_interop_egress_conversion_clock_accuracy = 33` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_interop_egress_conversion_offset_scaled_log_variance = 5` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_interop_egress_conversion_clock_class_default = 6` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_interop_egress_conversion_clock_class_mappings = [{` + "\n"
+		config += `		clock_class_to_map_from = 6` + "\n"
+		config += `		clock_class_to_map_to = 13` + "\n"
+		config += `		}]` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_interop_ingress_conversion_priority1 = 128` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_interop_ingress_conversion_priority2 = 128` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_interop_ingress_conversion_clock_accuracy = 33` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_interop_ingress_conversion_offset_scaled_log_variance = 5` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_interop_ingress_conversion_clock_class_default = 6` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_interop_ingress_conversion_clock_class_mappings = [{` + "\n"
+		config += `		clock_class_to_map_from = 13` + "\n"
+		config += `		clock_class_to_map_to = 6` + "\n"
+		config += `		}]` + "\n"
+	}
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config

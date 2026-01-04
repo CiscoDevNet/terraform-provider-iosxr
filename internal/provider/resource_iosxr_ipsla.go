@@ -73,6 +73,13 @@ func (r *IPSLAResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"delete_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.").AddStringEnumDescription("all", "attributes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("all", "attributes"),
+				},
+			},
 			"low_memory": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Configure low memory water mark (default 20M)").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
@@ -87,6 +94,10 @@ func (r *IPSLAResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					stringvalidator.LengthBetween(1, 32),
 					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
+			},
+			"hw_timestamp_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable hardware timestamp").String,
+				Optional:            true,
 			},
 			"operations": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Operation number").String,
@@ -1057,6 +1068,24 @@ func (r *IPSLAResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					},
 				},
 			},
+			"server_twamp": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPSLA IPPM TWAMP server configuration").String,
+				Optional:            true,
+			},
+			"server_twamp_port": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPPM server port").AddIntegerRangeDescription(1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
+				},
+			},
+			"server_twamp_timer_inactivity": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPPM server inactivity timer").AddIntegerRangeDescription(1, 6000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 6000),
+				},
+			},
 		},
 	}
 }
@@ -1287,6 +1316,11 @@ func (r *IPSLAResource) Delete(ctx context.Context, req resource.DeleteRequest, 
 	if device.Managed {
 		var ops []gnmi.SetOperation
 		deleteMode := "all"
+		if state.DeleteMode.ValueString() == "all" {
+			deleteMode = "all"
+		} else if state.DeleteMode.ValueString() == "attributes" {
+			deleteMode = "attributes"
+		}
 
 		if deleteMode == "all" {
 			ops = append(ops, gnmi.Delete(state.Id.ValueString()))

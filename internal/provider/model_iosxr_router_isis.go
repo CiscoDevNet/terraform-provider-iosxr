@@ -324,8 +324,8 @@ type RouterISISNets struct {
 	NetId types.String `tfsdk:"net_id"`
 }
 type RouterISISAffinityMaps struct {
-	Name        types.String `tfsdk:"name"`
-	BitPosition types.Int64  `tfsdk:"bit_position"`
+	AffinityName types.String `tfsdk:"affinity_name"`
+	BitPosition  types.Int64  `tfsdk:"bit_position"`
 }
 type RouterISISSrlgNames struct {
 	SrlgName            types.String                             `tfsdk:"srlg_name"`
@@ -397,7 +397,7 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 	}
 	if !data.ReceiveApplicationFlexAlgoDelayAppOnly.IsNull() && !data.ReceiveApplicationFlexAlgoDelayAppOnly.IsUnknown() {
 		if data.ReceiveApplicationFlexAlgoDelayAppOnly.ValueBool() {
-			body, _ = sjson.Set(body, "receive.application.flex-algo.delay.app-only", map[string]string{})
+			body, _ = sjson.Set(body, "receive.application.flex-algo.delay.app-only", []interface{}{nil})
 		}
 	}
 	if !data.LspRefreshInterval.IsNull() && !data.LspRefreshInterval.IsUnknown() {
@@ -405,7 +405,7 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 	}
 	if !data.OorSetOverloadBitDisable.IsNull() && !data.OorSetOverloadBitDisable.IsUnknown() {
 		if data.OorSetOverloadBitDisable.ValueBool() {
-			body, _ = sjson.Set(body, "oor-set-overload-bit.disable", map[string]string{})
+			body, _ = sjson.Set(body, "oor-set-overload-bit.disable", []interface{}{nil})
 		}
 	}
 	if !data.SetOverloadBit.IsNull() && !data.SetOverloadBit.IsUnknown() {
@@ -423,12 +423,12 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 	}
 	if !data.SetOverloadBitAdvertiseExternal.IsNull() && !data.SetOverloadBitAdvertiseExternal.IsUnknown() {
 		if data.SetOverloadBitAdvertiseExternal.ValueBool() {
-			body, _ = sjson.Set(body, "set-overload-bit.advertise.external", map[string]string{})
+			body, _ = sjson.Set(body, "set-overload-bit.advertise.external", []interface{}{nil})
 		}
 	}
 	if !data.SetOverloadBitAdvertiseInterlevel.IsNull() && !data.SetOverloadBitAdvertiseInterlevel.IsUnknown() {
 		if data.SetOverloadBitAdvertiseInterlevel.ValueBool() {
-			body, _ = sjson.Set(body, "set-overload-bit.advertise.interlevel", map[string]string{})
+			body, _ = sjson.Set(body, "set-overload-bit.advertise.interlevel", []interface{}{nil})
 		}
 	}
 	if !data.LspMtu.IsNull() && !data.LspMtu.IsUnknown() {
@@ -439,7 +439,7 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 	}
 	if !data.Nsr.IsNull() && !data.Nsr.IsUnknown() {
 		if data.Nsr.ValueBool() {
-			body, _ = sjson.Set(body, "nsr", map[string]string{})
+			body, _ = sjson.Set(body, "nsr", []interface{}{nil})
 		}
 	}
 	if !data.NsrRestartTime.IsNull() && !data.NsrRestartTime.IsUnknown() {
@@ -447,12 +447,12 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 	}
 	if !data.NsfCisco.IsNull() && !data.NsfCisco.IsUnknown() {
 		if data.NsfCisco.ValueBool() {
-			body, _ = sjson.Set(body, "nsf.cisco", map[string]string{})
+			body, _ = sjson.Set(body, "nsf.cisco", []interface{}{nil})
 		}
 	}
 	if !data.NsfIetf.IsNull() && !data.NsfIetf.IsUnknown() {
 		if data.NsfIetf.ValueBool() {
-			body, _ = sjson.Set(body, "nsf.ietf", map[string]string{})
+			body, _ = sjson.Set(body, "nsf.ietf", []interface{}{nil})
 		}
 	}
 	if !data.NsfLifetime.IsNull() && !data.NsfLifetime.IsUnknown() {
@@ -489,7 +489,7 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 	}
 	if !data.HostnameDynamicDisable.IsNull() && !data.HostnameDynamicDisable.IsUnknown() {
 		if data.HostnameDynamicDisable.ValueBool() {
-			body, _ = sjson.Set(body, "hostname.dynamic.disable", map[string]string{})
+			body, _ = sjson.Set(body, "hostname.dynamic.disable", []interface{}{nil})
 		}
 	}
 	if !data.IsType.IsNull() && !data.IsType.IsUnknown() {
@@ -502,32 +502,32 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 	}
 	if !data.MultiPartTlvDisableNeighbor.IsNull() && !data.MultiPartTlvDisableNeighbor.IsUnknown() {
 		if data.MultiPartTlvDisableNeighbor.ValueBool() {
-			body, _ = sjson.Set(body, "multi-part-tlv.disable.neighbor", map[string]string{})
+			body, _ = sjson.Set(body, "multi-part-tlv.disable.neighbor", []interface{}{nil})
 		}
 	}
 	if !data.MultiPartTlvDisablePrefixTlvs.IsNull() && !data.MultiPartTlvDisablePrefixTlvs.IsUnknown() {
 		if data.MultiPartTlvDisablePrefixTlvs.ValueBool() {
-			body, _ = sjson.Set(body, "multi-part-tlv.disable.prefix-tlvs", map[string]string{})
+			body, _ = sjson.Set(body, "multi-part-tlv.disable.prefix-tlvs", []interface{}{nil})
 		}
 	}
 	if !data.MultiPartTlvDisableRouterCapability.IsNull() && !data.MultiPartTlvDisableRouterCapability.IsUnknown() {
 		if data.MultiPartTlvDisableRouterCapability.ValueBool() {
-			body, _ = sjson.Set(body, "multi-part-tlv.disable.router-capability", map[string]string{})
+			body, _ = sjson.Set(body, "multi-part-tlv.disable.router-capability", []interface{}{nil})
 		}
 	}
 	if !data.LogAdjacencyChanges.IsNull() && !data.LogAdjacencyChanges.IsUnknown() {
 		if data.LogAdjacencyChanges.ValueBool() {
-			body, _ = sjson.Set(body, "log.adjacency.changes", map[string]string{})
+			body, _ = sjson.Set(body, "log.adjacency.changes", []interface{}{nil})
 		}
 	}
 	if !data.LogPduDrops.IsNull() && !data.LogPduDrops.IsUnknown() {
 		if data.LogPduDrops.ValueBool() {
-			body, _ = sjson.Set(body, "log.pdu.drops", map[string]string{})
+			body, _ = sjson.Set(body, "log.pdu.drops", []interface{}{nil})
 		}
 	}
 	if !data.LogFormatBrief.IsNull() && !data.LogFormatBrief.IsUnknown() {
 		if data.LogFormatBrief.ValueBool() {
-			body, _ = sjson.Set(body, "log.format.brief", map[string]string{})
+			body, _ = sjson.Set(body, "log.format.brief", []interface{}{nil})
 		}
 	}
 	if !data.LspPasswordAcceptEncrypted.IsNull() && !data.LspPasswordAcceptEncrypted.IsUnknown() {
@@ -538,17 +538,17 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 	}
 	if !data.LspPasswordTextSendOnly.IsNull() && !data.LspPasswordTextSendOnly.IsUnknown() {
 		if data.LspPasswordTextSendOnly.ValueBool() {
-			body, _ = sjson.Set(body, "lsp-password.lsp-password-option.text.password-options.send-only", map[string]string{})
+			body, _ = sjson.Set(body, "lsp-password.lsp-password-option.text.password-options.send-only", []interface{}{nil})
 		}
 	}
 	if !data.LspPasswordTextSnpSendOnly.IsNull() && !data.LspPasswordTextSnpSendOnly.IsUnknown() {
 		if data.LspPasswordTextSnpSendOnly.ValueBool() {
-			body, _ = sjson.Set(body, "lsp-password.lsp-password-option.text.password-options.snp.send-only", map[string]string{})
+			body, _ = sjson.Set(body, "lsp-password.lsp-password-option.text.password-options.snp.send-only", []interface{}{nil})
 		}
 	}
 	if !data.LspPasswordTextEnablePoi.IsNull() && !data.LspPasswordTextEnablePoi.IsUnknown() {
 		if data.LspPasswordTextEnablePoi.ValueBool() {
-			body, _ = sjson.Set(body, "lsp-password.lsp-password-option.text.password-options.enable-poi", map[string]string{})
+			body, _ = sjson.Set(body, "lsp-password.lsp-password-option.text.password-options.enable-poi", []interface{}{nil})
 		}
 	}
 	if !data.LspPasswordHmacMd5Encrypted.IsNull() && !data.LspPasswordHmacMd5Encrypted.IsUnknown() {
@@ -556,17 +556,17 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 	}
 	if !data.LspPasswordHmacMd5SendOnly.IsNull() && !data.LspPasswordHmacMd5SendOnly.IsUnknown() {
 		if data.LspPasswordHmacMd5SendOnly.ValueBool() {
-			body, _ = sjson.Set(body, "lsp-password.lsp-password-option.hmac-md5.password-options.send-only", map[string]string{})
+			body, _ = sjson.Set(body, "lsp-password.lsp-password-option.hmac-md5.password-options.send-only", []interface{}{nil})
 		}
 	}
 	if !data.LspPasswordHmacMd5SnpSendOnly.IsNull() && !data.LspPasswordHmacMd5SnpSendOnly.IsUnknown() {
 		if data.LspPasswordHmacMd5SnpSendOnly.ValueBool() {
-			body, _ = sjson.Set(body, "lsp-password.lsp-password-option.hmac-md5.password-options.snp.send-only", map[string]string{})
+			body, _ = sjson.Set(body, "lsp-password.lsp-password-option.hmac-md5.password-options.snp.send-only", []interface{}{nil})
 		}
 	}
 	if !data.LspPasswordHmacMd5EnablePoi.IsNull() && !data.LspPasswordHmacMd5EnablePoi.IsUnknown() {
 		if data.LspPasswordHmacMd5EnablePoi.ValueBool() {
-			body, _ = sjson.Set(body, "lsp-password.lsp-password-option.hmac-md5.password-options.enable-poi", map[string]string{})
+			body, _ = sjson.Set(body, "lsp-password.lsp-password-option.hmac-md5.password-options.enable-poi", []interface{}{nil})
 		}
 	}
 	if !data.LspPasswordKeychain.IsNull() && !data.LspPasswordKeychain.IsUnknown() {
@@ -574,27 +574,27 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 	}
 	if !data.LspPasswordKeychainSendOnly.IsNull() && !data.LspPasswordKeychainSendOnly.IsUnknown() {
 		if data.LspPasswordKeychainSendOnly.ValueBool() {
-			body, _ = sjson.Set(body, "lsp-password.lsp-password-option.keychain.send-only", map[string]string{})
+			body, _ = sjson.Set(body, "lsp-password.lsp-password-option.keychain.send-only", []interface{}{nil})
 		}
 	}
 	if !data.LspPasswordKeychainSnpSendOnly.IsNull() && !data.LspPasswordKeychainSnpSendOnly.IsUnknown() {
 		if data.LspPasswordKeychainSnpSendOnly.ValueBool() {
-			body, _ = sjson.Set(body, "lsp-password.lsp-password-option.keychain.snp.send-only", map[string]string{})
+			body, _ = sjson.Set(body, "lsp-password.lsp-password-option.keychain.snp.send-only", []interface{}{nil})
 		}
 	}
 	if !data.LspPasswordKeychainEnablePoi.IsNull() && !data.LspPasswordKeychainEnablePoi.IsUnknown() {
 		if data.LspPasswordKeychainEnablePoi.ValueBool() {
-			body, _ = sjson.Set(body, "lsp-password.lsp-password-option.keychain.enable-poi", map[string]string{})
+			body, _ = sjson.Set(body, "lsp-password.lsp-password-option.keychain.enable-poi", []interface{}{nil})
 		}
 	}
 	if !data.AuthenticationCheckDisable.IsNull() && !data.AuthenticationCheckDisable.IsUnknown() {
 		if data.AuthenticationCheckDisable.ValueBool() {
-			body, _ = sjson.Set(body, "authentication-check.disable", map[string]string{})
+			body, _ = sjson.Set(body, "authentication-check.disable", []interface{}{nil})
 		}
 	}
 	if !data.IidDisable.IsNull() && !data.IidDisable.IsUnknown() {
 		if data.IidDisable.ValueBool() {
-			body, _ = sjson.Set(body, "iid.disable", map[string]string{})
+			body, _ = sjson.Set(body, "iid.disable", []interface{}{nil})
 		}
 	}
 	if !data.MplsLdpSync.IsNull() && !data.MplsLdpSync.IsUnknown() {
@@ -607,7 +607,7 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 	}
 	if !data.ProtocolShutdown.IsNull() && !data.ProtocolShutdown.IsUnknown() {
 		if data.ProtocolShutdown.ValueBool() {
-			body, _ = sjson.Set(body, "protocol.shutdown", map[string]string{})
+			body, _ = sjson.Set(body, "protocol.shutdown", []interface{}{nil})
 		}
 	}
 	if !data.MinLspArrivalInitialWait.IsNull() && !data.MinLspArrivalInitialWait.IsUnknown() {
@@ -634,32 +634,32 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 	}
 	if !data.MaxMetricExternal.IsNull() && !data.MaxMetricExternal.IsUnknown() {
 		if data.MaxMetricExternal.ValueBool() {
-			body, _ = sjson.Set(body, "max-metric.external", map[string]string{})
+			body, _ = sjson.Set(body, "max-metric.external", []interface{}{nil})
 		}
 	}
 	if !data.MaxMetricInterlevel.IsNull() && !data.MaxMetricInterlevel.IsUnknown() {
 		if data.MaxMetricInterlevel.ValueBool() {
-			body, _ = sjson.Set(body, "max-metric.interlevel", map[string]string{})
+			body, _ = sjson.Set(body, "max-metric.interlevel", []interface{}{nil})
 		}
 	}
 	if !data.MaxMetricDefaultRoute.IsNull() && !data.MaxMetricDefaultRoute.IsUnknown() {
 		if data.MaxMetricDefaultRoute.ValueBool() {
-			body, _ = sjson.Set(body, "max-metric.default-route", map[string]string{})
+			body, _ = sjson.Set(body, "max-metric.default-route", []interface{}{nil})
 		}
 	}
 	if !data.MaxMetricSrv6Locator.IsNull() && !data.MaxMetricSrv6Locator.IsUnknown() {
 		if data.MaxMetricSrv6Locator.ValueBool() {
-			body, _ = sjson.Set(body, "max-metric.srv6-locator", map[string]string{})
+			body, _ = sjson.Set(body, "max-metric.srv6-locator", []interface{}{nil})
 		}
 	}
 	if !data.MaxMetricTe.IsNull() && !data.MaxMetricTe.IsUnknown() {
 		if data.MaxMetricTe.ValueBool() {
-			body, _ = sjson.Set(body, "max-metric.te", map[string]string{})
+			body, _ = sjson.Set(body, "max-metric.te", []interface{}{nil})
 		}
 	}
 	if !data.MaxMetricDelay.IsNull() && !data.MaxMetricDelay.IsUnknown() {
 		if data.MaxMetricDelay.ValueBool() {
-			body, _ = sjson.Set(body, "max-metric.delay", map[string]string{})
+			body, _ = sjson.Set(body, "max-metric.delay", []interface{}{nil})
 		}
 	}
 	if !data.DistributeLinkState.IsNull() && !data.DistributeLinkState.IsUnknown() {
@@ -678,12 +678,12 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 	}
 	if !data.DistributeLinkStateExcludeInterarea.IsNull() && !data.DistributeLinkStateExcludeInterarea.IsUnknown() {
 		if data.DistributeLinkStateExcludeInterarea.ValueBool() {
-			body, _ = sjson.Set(body, "distribute.link-state.exclude-interarea", map[string]string{})
+			body, _ = sjson.Set(body, "distribute.link-state.exclude-interarea", []interface{}{nil})
 		}
 	}
 	if !data.DistributeLinkStateExcludeExternal.IsNull() && !data.DistributeLinkStateExcludeExternal.IsUnknown() {
 		if data.DistributeLinkStateExcludeExternal.ValueBool() {
-			body, _ = sjson.Set(body, "distribute.link-state.exclude-external", map[string]string{})
+			body, _ = sjson.Set(body, "distribute.link-state.exclude-external", []interface{}{nil})
 		}
 	}
 	if !data.DistributeLinkStateRoutePolicy.IsNull() && !data.DistributeLinkStateRoutePolicy.IsUnknown() {
@@ -714,7 +714,7 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 	}
 	if !data.IgnoreLspErrorsDisable.IsNull() && !data.IgnoreLspErrorsDisable.IsUnknown() {
 		if data.IgnoreLspErrorsDisable.ValueBool() {
-			body, _ = sjson.Set(body, "ignore-lsp-errors.disable", map[string]string{})
+			body, _ = sjson.Set(body, "ignore-lsp-errors.disable", []interface{}{nil})
 		}
 	}
 	if !data.PurgeTransmitStrict.IsNull() && !data.PurgeTransmitStrict.IsUnknown() {
@@ -755,12 +755,12 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 			}
 			if !item.AdvertiseExternal.IsNull() && !item.AdvertiseExternal.IsUnknown() {
 				if item.AdvertiseExternal.ValueBool() {
-					body, _ = sjson.Set(body, "set-overload-bit-levels.set-overload-bit-level"+"."+strconv.Itoa(index)+"."+"advertise.external", map[string]string{})
+					body, _ = sjson.Set(body, "set-overload-bit-levels.set-overload-bit-level"+"."+strconv.Itoa(index)+"."+"advertise.external", []interface{}{nil})
 				}
 			}
 			if !item.AdvertiseInterlevel.IsNull() && !item.AdvertiseInterlevel.IsUnknown() {
 				if item.AdvertiseInterlevel.ValueBool() {
-					body, _ = sjson.Set(body, "set-overload-bit-levels.set-overload-bit-level"+"."+strconv.Itoa(index)+"."+"advertise.interlevel", map[string]string{})
+					body, _ = sjson.Set(body, "set-overload-bit-levels.set-overload-bit-level"+"."+strconv.Itoa(index)+"."+"advertise.interlevel", []interface{}{nil})
 				}
 			}
 		}
@@ -812,17 +812,17 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 			}
 			if !item.Neighbor.IsNull() && !item.Neighbor.IsUnknown() {
 				if item.Neighbor.ValueBool() {
-					body, _ = sjson.Set(body, "multi-part-tlv.disable-levels.disable-level"+"."+strconv.Itoa(index)+"."+"neighbor", map[string]string{})
+					body, _ = sjson.Set(body, "multi-part-tlv.disable-levels.disable-level"+"."+strconv.Itoa(index)+"."+"neighbor", []interface{}{nil})
 				}
 			}
 			if !item.PrefixTlvs.IsNull() && !item.PrefixTlvs.IsUnknown() {
 				if item.PrefixTlvs.ValueBool() {
-					body, _ = sjson.Set(body, "multi-part-tlv.disable-levels.disable-level"+"."+strconv.Itoa(index)+"."+"prefix-tlvs", map[string]string{})
+					body, _ = sjson.Set(body, "multi-part-tlv.disable-levels.disable-level"+"."+strconv.Itoa(index)+"."+"prefix-tlvs", []interface{}{nil})
 				}
 			}
 			if !item.RouterCapability.IsNull() && !item.RouterCapability.IsUnknown() {
 				if item.RouterCapability.ValueBool() {
-					body, _ = sjson.Set(body, "multi-part-tlv.disable-levels.disable-level"+"."+strconv.Itoa(index)+"."+"router-capability", map[string]string{})
+					body, _ = sjson.Set(body, "multi-part-tlv.disable-levels.disable-level"+"."+strconv.Itoa(index)+"."+"router-capability", []interface{}{nil})
 				}
 			}
 		}
@@ -860,17 +860,17 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 			}
 			if !item.TextSendOnly.IsNull() && !item.TextSendOnly.IsUnknown() {
 				if item.TextSendOnly.ValueBool() {
-					body, _ = sjson.Set(body, "lsp-password-levels.lsp-password-level"+"."+strconv.Itoa(index)+"."+"text.password-options.send-only", map[string]string{})
+					body, _ = sjson.Set(body, "lsp-password-levels.lsp-password-level"+"."+strconv.Itoa(index)+"."+"text.password-options.send-only", []interface{}{nil})
 				}
 			}
 			if !item.TextSnpSendOnly.IsNull() && !item.TextSnpSendOnly.IsUnknown() {
 				if item.TextSnpSendOnly.ValueBool() {
-					body, _ = sjson.Set(body, "lsp-password-levels.lsp-password-level"+"."+strconv.Itoa(index)+"."+"text.password-options.snp.send-only", map[string]string{})
+					body, _ = sjson.Set(body, "lsp-password-levels.lsp-password-level"+"."+strconv.Itoa(index)+"."+"text.password-options.snp.send-only", []interface{}{nil})
 				}
 			}
 			if !item.TextEnablePoi.IsNull() && !item.TextEnablePoi.IsUnknown() {
 				if item.TextEnablePoi.ValueBool() {
-					body, _ = sjson.Set(body, "lsp-password-levels.lsp-password-level"+"."+strconv.Itoa(index)+"."+"text.password-options.enable-poi", map[string]string{})
+					body, _ = sjson.Set(body, "lsp-password-levels.lsp-password-level"+"."+strconv.Itoa(index)+"."+"text.password-options.enable-poi", []interface{}{nil})
 				}
 			}
 			if !item.HmacMd5Encrypted.IsNull() && !item.HmacMd5Encrypted.IsUnknown() {
@@ -878,17 +878,17 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 			}
 			if !item.HmacMd5SendOnly.IsNull() && !item.HmacMd5SendOnly.IsUnknown() {
 				if item.HmacMd5SendOnly.ValueBool() {
-					body, _ = sjson.Set(body, "lsp-password-levels.lsp-password-level"+"."+strconv.Itoa(index)+"."+"hmac-md5.password-options.send-only", map[string]string{})
+					body, _ = sjson.Set(body, "lsp-password-levels.lsp-password-level"+"."+strconv.Itoa(index)+"."+"hmac-md5.password-options.send-only", []interface{}{nil})
 				}
 			}
 			if !item.HmacMd5SnpSendOnly.IsNull() && !item.HmacMd5SnpSendOnly.IsUnknown() {
 				if item.HmacMd5SnpSendOnly.ValueBool() {
-					body, _ = sjson.Set(body, "lsp-password-levels.lsp-password-level"+"."+strconv.Itoa(index)+"."+"hmac-md5.password-options.snp.send-only", map[string]string{})
+					body, _ = sjson.Set(body, "lsp-password-levels.lsp-password-level"+"."+strconv.Itoa(index)+"."+"hmac-md5.password-options.snp.send-only", []interface{}{nil})
 				}
 			}
 			if !item.HmacMd5EnablePoi.IsNull() && !item.HmacMd5EnablePoi.IsUnknown() {
 				if item.HmacMd5EnablePoi.ValueBool() {
-					body, _ = sjson.Set(body, "lsp-password-levels.lsp-password-level"+"."+strconv.Itoa(index)+"."+"hmac-md5.password-options.enable-poi", map[string]string{})
+					body, _ = sjson.Set(body, "lsp-password-levels.lsp-password-level"+"."+strconv.Itoa(index)+"."+"hmac-md5.password-options.enable-poi", []interface{}{nil})
 				}
 			}
 			if !item.KeychainName.IsNull() && !item.KeychainName.IsUnknown() {
@@ -896,17 +896,17 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 			}
 			if !item.KeychainSendOnly.IsNull() && !item.KeychainSendOnly.IsUnknown() {
 				if item.KeychainSendOnly.ValueBool() {
-					body, _ = sjson.Set(body, "lsp-password-levels.lsp-password-level"+"."+strconv.Itoa(index)+"."+"keychain.send-only", map[string]string{})
+					body, _ = sjson.Set(body, "lsp-password-levels.lsp-password-level"+"."+strconv.Itoa(index)+"."+"keychain.send-only", []interface{}{nil})
 				}
 			}
 			if !item.KeychainSnpSendOnly.IsNull() && !item.KeychainSnpSendOnly.IsUnknown() {
 				if item.KeychainSnpSendOnly.ValueBool() {
-					body, _ = sjson.Set(body, "lsp-password-levels.lsp-password-level"+"."+strconv.Itoa(index)+"."+"keychain.snp.send-only", map[string]string{})
+					body, _ = sjson.Set(body, "lsp-password-levels.lsp-password-level"+"."+strconv.Itoa(index)+"."+"keychain.snp.send-only", []interface{}{nil})
 				}
 			}
 			if !item.KeychainEnablePoi.IsNull() && !item.KeychainEnablePoi.IsUnknown() {
 				if item.KeychainEnablePoi.ValueBool() {
-					body, _ = sjson.Set(body, "lsp-password-levels.lsp-password-level"+"."+strconv.Itoa(index)+"."+"keychain.enable-poi", map[string]string{})
+					body, _ = sjson.Set(body, "lsp-password-levels.lsp-password-level"+"."+strconv.Itoa(index)+"."+"keychain.enable-poi", []interface{}{nil})
 				}
 			}
 		}
@@ -944,32 +944,32 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 			}
 			if !item.External.IsNull() && !item.External.IsUnknown() {
 				if item.External.ValueBool() {
-					body, _ = sjson.Set(body, "max-metric-levels.max-metric-level"+"."+strconv.Itoa(index)+"."+"external", map[string]string{})
+					body, _ = sjson.Set(body, "max-metric-levels.max-metric-level"+"."+strconv.Itoa(index)+"."+"external", []interface{}{nil})
 				}
 			}
 			if !item.Interlevel.IsNull() && !item.Interlevel.IsUnknown() {
 				if item.Interlevel.ValueBool() {
-					body, _ = sjson.Set(body, "max-metric-levels.max-metric-level"+"."+strconv.Itoa(index)+"."+"interlevel", map[string]string{})
+					body, _ = sjson.Set(body, "max-metric-levels.max-metric-level"+"."+strconv.Itoa(index)+"."+"interlevel", []interface{}{nil})
 				}
 			}
 			if !item.DefaultRoute.IsNull() && !item.DefaultRoute.IsUnknown() {
 				if item.DefaultRoute.ValueBool() {
-					body, _ = sjson.Set(body, "max-metric-levels.max-metric-level"+"."+strconv.Itoa(index)+"."+"default-route", map[string]string{})
+					body, _ = sjson.Set(body, "max-metric-levels.max-metric-level"+"."+strconv.Itoa(index)+"."+"default-route", []interface{}{nil})
 				}
 			}
 			if !item.Srv6Locator.IsNull() && !item.Srv6Locator.IsUnknown() {
 				if item.Srv6Locator.ValueBool() {
-					body, _ = sjson.Set(body, "max-metric-levels.max-metric-level"+"."+strconv.Itoa(index)+"."+"srv6-locator", map[string]string{})
+					body, _ = sjson.Set(body, "max-metric-levels.max-metric-level"+"."+strconv.Itoa(index)+"."+"srv6-locator", []interface{}{nil})
 				}
 			}
 			if !item.Te.IsNull() && !item.Te.IsUnknown() {
 				if item.Te.ValueBool() {
-					body, _ = sjson.Set(body, "max-metric-levels.max-metric-level"+"."+strconv.Itoa(index)+"."+"te", map[string]string{})
+					body, _ = sjson.Set(body, "max-metric-levels.max-metric-level"+"."+strconv.Itoa(index)+"."+"te", []interface{}{nil})
 				}
 			}
 			if !item.Delay.IsNull() && !item.Delay.IsUnknown() {
 				if item.Delay.ValueBool() {
-					body, _ = sjson.Set(body, "max-metric-levels.max-metric-level"+"."+strconv.Itoa(index)+"."+"delay", map[string]string{})
+					body, _ = sjson.Set(body, "max-metric-levels.max-metric-level"+"."+strconv.Itoa(index)+"."+"delay", []interface{}{nil})
 				}
 			}
 		}
@@ -996,8 +996,8 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 	if len(data.AffinityMaps) > 0 {
 		body, _ = sjson.Set(body, "affinity-maps.affinity-map", []interface{}{})
 		for index, item := range data.AffinityMaps {
-			if !item.Name.IsNull() && !item.Name.IsUnknown() {
-				body, _ = sjson.Set(body, "affinity-maps.affinity-map"+"."+strconv.Itoa(index)+"."+"affinity-attribute-name", item.Name.ValueString())
+			if !item.AffinityName.IsNull() && !item.AffinityName.IsUnknown() {
+				body, _ = sjson.Set(body, "affinity-maps.affinity-map"+"."+strconv.Itoa(index)+"."+"affinity-attribute-name", item.AffinityName.ValueString())
 			}
 			if !item.BitPosition.IsNull() && !item.BitPosition.IsUnknown() {
 				body, _ = sjson.Set(body, "affinity-maps.affinity-map"+"."+strconv.Itoa(index)+"."+"bit-position", strconv.FormatInt(item.BitPosition.ValueInt64(), 10))
@@ -1046,12 +1046,12 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 			}
 			if !item.AdvertiseDefinition.IsNull() && !item.AdvertiseDefinition.IsUnknown() {
 				if item.AdvertiseDefinition.ValueBool() {
-					body, _ = sjson.Set(body, "flex-algoes.flex-algo"+"."+strconv.Itoa(index)+"."+"advertise-definition", map[string]string{})
+					body, _ = sjson.Set(body, "flex-algoes.flex-algo"+"."+strconv.Itoa(index)+"."+"advertise-definition", []interface{}{nil})
 				}
 			}
 			if !item.PrefixMetric.IsNull() && !item.PrefixMetric.IsUnknown() {
 				if item.PrefixMetric.ValueBool() {
-					body, _ = sjson.Set(body, "flex-algoes.flex-algo"+"."+strconv.Itoa(index)+"."+"prefix-metric", map[string]string{})
+					body, _ = sjson.Set(body, "flex-algoes.flex-algo"+"."+strconv.Itoa(index)+"."+"prefix-metric", []interface{}{nil})
 				}
 			}
 			if !item.AutoCostReferenceBandwidth.IsNull() && !item.AutoCostReferenceBandwidth.IsUnknown() {
@@ -1062,7 +1062,7 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 			}
 			if !item.AutoCostReferenceGroupMode.IsNull() && !item.AutoCostReferenceGroupMode.IsUnknown() {
 				if item.AutoCostReferenceGroupMode.ValueBool() {
-					body, _ = sjson.Set(body, "flex-algoes.flex-algo"+"."+strconv.Itoa(index)+"."+"auto-cost.reference.group-mode", map[string]string{})
+					body, _ = sjson.Set(body, "flex-algoes.flex-algo"+"."+strconv.Itoa(index)+"."+"auto-cost.reference.group-mode", []interface{}{nil})
 				}
 			}
 			if !item.AffinityExcludeAny.IsNull() && !item.AffinityExcludeAny.IsUnknown() {
@@ -1102,27 +1102,27 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 			}
 			if !item.FastRerouteDisable.IsNull() && !item.FastRerouteDisable.IsUnknown() {
 				if item.FastRerouteDisable.ValueBool() {
-					body, _ = sjson.Set(body, "flex-algoes.flex-algo"+"."+strconv.Itoa(index)+"."+"fast-reroute.disable", map[string]string{})
+					body, _ = sjson.Set(body, "flex-algoes.flex-algo"+"."+strconv.Itoa(index)+"."+"fast-reroute.disable", []interface{}{nil})
 				}
 			}
 			if !item.MicroloopAvoidanceDisable.IsNull() && !item.MicroloopAvoidanceDisable.IsUnknown() {
 				if item.MicroloopAvoidanceDisable.ValueBool() {
-					body, _ = sjson.Set(body, "flex-algoes.flex-algo"+"."+strconv.Itoa(index)+"."+"microloop.avoidance.disable", map[string]string{})
+					body, _ = sjson.Set(body, "flex-algoes.flex-algo"+"."+strconv.Itoa(index)+"."+"microloop.avoidance.disable", []interface{}{nil})
 				}
 			}
 			if !item.DataPlaneSegmentRouting.IsNull() && !item.DataPlaneSegmentRouting.IsUnknown() {
 				if item.DataPlaneSegmentRouting.ValueBool() {
-					body, _ = sjson.Set(body, "flex-algoes.flex-algo"+"."+strconv.Itoa(index)+"."+"data-plane.segment-routing", map[string]string{})
+					body, _ = sjson.Set(body, "flex-algoes.flex-algo"+"."+strconv.Itoa(index)+"."+"data-plane.segment-routing", []interface{}{nil})
 				}
 			}
 			if !item.DataPlaneIp.IsNull() && !item.DataPlaneIp.IsUnknown() {
 				if item.DataPlaneIp.ValueBool() {
-					body, _ = sjson.Set(body, "flex-algoes.flex-algo"+"."+strconv.Itoa(index)+"."+"data-plane.ip", map[string]string{})
+					body, _ = sjson.Set(body, "flex-algoes.flex-algo"+"."+strconv.Itoa(index)+"."+"data-plane.ip", []interface{}{nil})
 				}
 			}
 			if !item.UcmpDisable.IsNull() && !item.UcmpDisable.IsUnknown() {
 				if item.UcmpDisable.ValueBool() {
-					body, _ = sjson.Set(body, "flex-algoes.flex-algo"+"."+strconv.Itoa(index)+"."+"ucmp.disable", map[string]string{})
+					body, _ = sjson.Set(body, "flex-algoes.flex-algo"+"."+strconv.Itoa(index)+"."+"ucmp.disable", []interface{}{nil})
 				}
 			}
 			if len(item.AddressFamilies) > 0 {
@@ -2351,7 +2351,7 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 	}
 	for i := range data.AffinityMaps {
 		keys := [...]string{"affinity-attribute-name"}
-		keyValues := [...]string{data.AffinityMaps[i].Name.ValueString()}
+		keyValues := [...]string{data.AffinityMaps[i].AffinityName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "affinity-maps.affinity-map").ForEach(
@@ -2372,10 +2372,10 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("affinity-attribute-name"); value.Exists() && !data.AffinityMaps[i].Name.IsNull() {
-			data.AffinityMaps[i].Name = types.StringValue(value.String())
+		if value := r.Get("affinity-attribute-name"); value.Exists() && !data.AffinityMaps[i].AffinityName.IsNull() {
+			data.AffinityMaps[i].AffinityName = types.StringValue(value.String())
 		} else {
-			data.AffinityMaps[i].Name = types.StringNull()
+			data.AffinityMaps[i].AffinityName = types.StringNull()
 		}
 		if value := r.Get("bit-position"); value.Exists() && !data.AffinityMaps[i].BitPosition.IsNull() {
 			data.AffinityMaps[i].BitPosition = types.Int64Value(value.Int())
@@ -3310,7 +3310,7 @@ func (data *RouterISIS) fromBody(ctx context.Context, res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAffinityMaps{}
 			if cValue := v.Get("affinity-attribute-name"); cValue.Exists() {
-				item.Name = types.StringValue(cValue.String())
+				item.AffinityName = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("bit-position"); cValue.Exists() {
 				item.BitPosition = types.Int64Value(cValue.Int())
@@ -4108,7 +4108,7 @@ func (data *RouterISISData) fromBody(ctx context.Context, res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAffinityMaps{}
 			if cValue := v.Get("affinity-attribute-name"); cValue.Exists() {
-				item.Name = types.StringValue(cValue.String())
+				item.AffinityName = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("bit-position"); cValue.Exists() {
 				item.BitPosition = types.Int64Value(cValue.Int())
@@ -4511,14 +4511,14 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 	}
 	for i := range state.AffinityMaps {
 		keys := [...]string{"affinity-attribute-name"}
-		stateKeyValues := [...]string{state.AffinityMaps[i].Name.ValueString()}
+		stateKeyValues := [...]string{state.AffinityMaps[i].AffinityName.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.AffinityMaps[i].Name.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.AffinityMaps[i].AffinityName.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -4528,7 +4528,7 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 		found := false
 		for j := range data.AffinityMaps {
 			found = true
-			if state.AffinityMaps[i].Name.ValueString() != data.AffinityMaps[j].Name.ValueString() {
+			if state.AffinityMaps[i].AffinityName.ValueString() != data.AffinityMaps[j].AffinityName.ValueString() {
 				found = false
 			}
 			if found {
@@ -5359,7 +5359,7 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context) []string {
 	}
 	for i := range data.AffinityMaps {
 		keys := [...]string{"affinity-attribute-name"}
-		keyValues := [...]string{data.AffinityMaps[i].Name.ValueString()}
+		keyValues := [...]string{data.AffinityMaps[i].AffinityName.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
@@ -5707,7 +5707,7 @@ func (data *RouterISIS) getDeletePaths(ctx context.Context) []string {
 	}
 	for i := range data.AffinityMaps {
 		keys := [...]string{"affinity-attribute-name"}
-		keyValues := [...]string{data.AffinityMaps[i].Name.ValueString()}
+		keyValues := [...]string{data.AffinityMaps[i].AffinityName.ValueString()}
 
 		keyString := ""
 		for ki := range keys {

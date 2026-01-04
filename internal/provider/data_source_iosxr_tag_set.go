@@ -72,7 +72,7 @@ func (d *TagSetDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				Required:            true,
 			},
 			"rpl": schema.StringAttribute{
-				MarkdownDescription: "Configures a tag-set",
+				MarkdownDescription: "Configures a tag set",
 				Computed:            true,
 			},
 		},

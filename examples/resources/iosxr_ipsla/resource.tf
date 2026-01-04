@@ -1,6 +1,7 @@
 resource "iosxr_ipsla" "example" {
-  low_memory = 100000
-  key_chain  = "KEY_CHAIN"
+  low_memory           = 100000
+  key_chain            = "KEY_CHAIN"
+  hw_timestamp_disable = true
   operations = [
     {
       operation_number                                 = 1
@@ -46,4 +47,7 @@ resource "iosxr_ipsla" "example" {
       ageout             = 300
     }
   ]
+  server_twamp                  = true
+  server_twamp_port             = 862
+  server_twamp_timer_inactivity = 600
 }

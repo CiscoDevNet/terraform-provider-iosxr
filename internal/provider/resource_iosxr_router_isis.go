@@ -928,7 +928,7 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
+						"affinity_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Affinity attribute name").String,
 							Required:            true,
 							Validators: []validator.String{

@@ -137,9 +137,33 @@ func (d *L2VPNXconnectGroupDataSource) Schema(ctx context.Context, req datasourc
 										MarkdownDescription: "bandwidth",
 										Computed:            true,
 									},
-									"backup_neighbors": schema.ListAttribute{
+									"backup_neighbors": schema.ListNestedAttribute{
 										MarkdownDescription: "Specify the peer to cross connect",
 										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"address": schema.StringAttribute{
+													MarkdownDescription: "Specify the peer to cross connect",
+													Computed:            true,
+												},
+												"pw_id": schema.Int64Attribute{
+													MarkdownDescription: "Specify the pseudowire id",
+													Computed:            true,
+												},
+												"pw_class": schema.StringAttribute{
+													MarkdownDescription: "PW class template name to use for the backup PW",
+													Computed:            true,
+												},
+												"mpls_static_label_local": schema.Int64Attribute{
+													MarkdownDescription: "Local pseudowire label",
+													Computed:            true,
+												},
+												"mpls_static_label_remote": schema.Int64Attribute{
+													MarkdownDescription: "Remote pseudowire label",
+													Computed:            true,
+												},
+											},
+										},
 									},
 									"mpls_static_label_local": schema.Int64Attribute{
 										MarkdownDescription: "Local pseudowire label",
@@ -173,9 +197,33 @@ func (d *L2VPNXconnectGroupDataSource) Schema(ctx context.Context, req datasourc
 										MarkdownDescription: "PW class template name to use for this XC",
 										Computed:            true,
 									},
-									"backup_neighbors": schema.ListAttribute{
+									"backup_neighbors": schema.ListNestedAttribute{
 										MarkdownDescription: "Specify the peer to cross connect",
 										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"address": schema.StringAttribute{
+													MarkdownDescription: "Specify the peer to cross connect",
+													Computed:            true,
+												},
+												"pw_id": schema.Int64Attribute{
+													MarkdownDescription: "Specify the pseudowire id",
+													Computed:            true,
+												},
+												"pw_class": schema.StringAttribute{
+													MarkdownDescription: "PW class template name to use for the backup PW",
+													Computed:            true,
+												},
+												"mpls_static_label_local": schema.Int64Attribute{
+													MarkdownDescription: "Local pseudowire label",
+													Computed:            true,
+												},
+												"mpls_static_label_remote": schema.Int64Attribute{
+													MarkdownDescription: "Remote pseudowire label",
+													Computed:            true,
+												},
+											},
+										},
 									},
 									"mpls_static_label_local": schema.Int64Attribute{
 										MarkdownDescription: "Local pseudowire label",
@@ -283,6 +331,278 @@ func (d *L2VPNXconnectGroupDataSource) Schema(ctx context.Context, req datasourc
 									},
 								},
 							},
+						},
+					},
+				},
+			},
+			"mp2mps": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify the MP2MP instance name",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"instance_name": schema.StringAttribute{
+							MarkdownDescription: "Specify the MP2MP instance name",
+							Computed:            true,
+						},
+						"vpn_id": schema.Int64Attribute{
+							MarkdownDescription: "VPN Identifier (VPN ID)",
+							Computed:            true,
+						},
+						"mtu": schema.Int64Attribute{
+							MarkdownDescription: "Set maximum transmission unit (payload) for this VPN MP2MP Instance",
+							Computed:            true,
+						},
+						"shutdown": schema.BoolAttribute{
+							MarkdownDescription: "shutdown the L2VPN MP2MP Instance",
+							Computed:            true,
+						},
+						"l2_encapsulation": schema.StringAttribute{
+							MarkdownDescription: "Configure the L2 encapsulation for this L2VPN MP2MP Instance",
+							Computed:            true,
+						},
+						"interworking": schema.StringAttribute{
+							MarkdownDescription: "Configure the interworking option for this L2VPN MP2MP Instance",
+							Computed:            true,
+						},
+						"control_word_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable control-word",
+							Computed:            true,
+						},
+						"autodiscovery_bgp": schema.BoolAttribute{
+							MarkdownDescription: "Enable BGP auto-discovery in this MP2MP",
+							Computed:            true,
+						},
+						"autodiscovery_bgp_rd_auto": schema.BoolAttribute{
+							MarkdownDescription: "Automatic route distinguisher",
+							Computed:            true,
+						},
+						"autodiscovery_bgp_rd_two_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: "Two Byte AS number",
+							Computed:            true,
+						},
+						"autodiscovery_bgp_rd_two_byte_as_index": schema.Int64Attribute{
+							MarkdownDescription: "AS:nn (hex or decimal format)",
+							Computed:            true,
+						},
+						"autodiscovery_bgp_rd_four_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: "Four Byte AS number",
+							Computed:            true,
+						},
+						"autodiscovery_bgp_rd_four_byte_as_index": schema.Int64Attribute{
+							MarkdownDescription: "AS:nn (hex or decimal format)",
+							Computed:            true,
+						},
+						"autodiscovery_bgp_rd_ipv4_address": schema.StringAttribute{
+							MarkdownDescription: "IP address",
+							Computed:            true,
+						},
+						"autodiscovery_bgp_rd_ipv4_address_index": schema.Int64Attribute{
+							MarkdownDescription: "IP-address:nn (hex or decimal format)",
+							Computed:            true,
+						},
+						"autodiscovery_bgp_route_target_import_two_byte_as_format": schema.ListNestedAttribute{
+							MarkdownDescription: "Two Byte AS Number Route Target",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"two_byte_as_number": schema.Int64Attribute{
+										MarkdownDescription: "Two Byte AS Number",
+										Computed:            true,
+									},
+									"assigned_number": schema.Int64Attribute{
+										MarkdownDescription: "AS:nn (hex or decimal format)",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"autodiscovery_bgp_route_target_import_four_byte_as_format": schema.ListNestedAttribute{
+							MarkdownDescription: "Four Byte AS number Route Target",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"four_byte_as_number": schema.Int64Attribute{
+										MarkdownDescription: "Four Byte AS number",
+										Computed:            true,
+									},
+									"assigned_number": schema.Int64Attribute{
+										MarkdownDescription: "AS:nn (hex or decimal format)",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"autodiscovery_bgp_route_target_import_ipv4_address_format": schema.ListNestedAttribute{
+							MarkdownDescription: "IP address",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"ipv4_address": schema.StringAttribute{
+										MarkdownDescription: "IP address",
+										Computed:            true,
+									},
+									"assigned_number": schema.Int64Attribute{
+										MarkdownDescription: "IP-address:nn (hex or decimal format)",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"autodiscovery_bgp_route_target_export_two_byte_as_format": schema.ListNestedAttribute{
+							MarkdownDescription: "Two Byte AS Number Route Target",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"two_byte_as_number": schema.Int64Attribute{
+										MarkdownDescription: "Two Byte AS Number",
+										Computed:            true,
+									},
+									"assigned_number": schema.Int64Attribute{
+										MarkdownDescription: "AS:nn (hex or decimal format)",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"autodiscovery_bgp_route_target_export_four_byte_as_format": schema.ListNestedAttribute{
+							MarkdownDescription: "Four Byte AS number Route Target",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"four_byte_as_number": schema.Int64Attribute{
+										MarkdownDescription: "Four Byte AS number",
+										Computed:            true,
+									},
+									"assigned_number": schema.Int64Attribute{
+										MarkdownDescription: "AS:nn (hex or decimal format)",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"autodiscovery_bgp_route_target_export_ipv4_address_format": schema.ListNestedAttribute{
+							MarkdownDescription: "IP address",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"ipv4_address": schema.StringAttribute{
+										MarkdownDescription: "IP address",
+										Computed:            true,
+									},
+									"assigned_number": schema.Int64Attribute{
+										MarkdownDescription: "IP-address:nn (hex or decimal format)",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"autodiscovery_bgp_route_target_two_byte_as_format": schema.ListNestedAttribute{
+							MarkdownDescription: "Two Byte AS Number Route Target",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"two_byte_as_number": schema.Int64Attribute{
+										MarkdownDescription: "Two Byte AS Number",
+										Computed:            true,
+									},
+									"assigned_number": schema.Int64Attribute{
+										MarkdownDescription: "AS:nn (hex or decimal format)",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"autodiscovery_bgp_route_target_four_byte_as_format": schema.ListNestedAttribute{
+							MarkdownDescription: "Four Byte AS number Route Target",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"four_byte_as_number": schema.Int64Attribute{
+										MarkdownDescription: "Four Byte AS number",
+										Computed:            true,
+									},
+									"assigned_number": schema.Int64Attribute{
+										MarkdownDescription: "AS:nn (hex or decimal format)",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"autodiscovery_bgp_route_target_ipv4_address_format": schema.ListNestedAttribute{
+							MarkdownDescription: "IP address",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"ipv4_address": schema.StringAttribute{
+										MarkdownDescription: "IP address",
+										Computed:            true,
+									},
+									"assigned_number": schema.Int64Attribute{
+										MarkdownDescription: "IP-address:nn (hex or decimal format)",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"autodiscovery_bgp_signaling_protocol_bgp_ce_ids": schema.ListNestedAttribute{
+							MarkdownDescription: "Local Customer Edge Identifier (CE ID)",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"local_ce_id_value": schema.Int64Attribute{
+										MarkdownDescription: "Local Customer Edge Identifier (CE ID)",
+										Computed:            true,
+									},
+									"interfaces": schema.ListNestedAttribute{
+										MarkdownDescription: "Specify the attachment circuit",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"interface_name": schema.StringAttribute{
+													MarkdownDescription: "Specify the attachment circuit",
+													Computed:            true,
+												},
+												"remote_ce_ids": schema.ListNestedAttribute{
+													MarkdownDescription: "Remote Customer Edge Identifier",
+													Computed:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"remote_ce_id_value": schema.Int64Attribute{
+																MarkdownDescription: "Remote Customer Edge Identifier",
+																Computed:            true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+									"vpws_seamless_integration": schema.BoolAttribute{
+										MarkdownDescription: "EVPN-VPWS Seamless Integration with BGP-AD VPWS",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"autodiscovery_bgp_signaling_protocol_bgp_ce_range": schema.Int64Attribute{
+							MarkdownDescription: "Local Customer Edge Block Configurable Range",
+							Computed:            true,
+						},
+						"autodiscovery_bgp_signaling_protocol_bgp_load_balancing_flow_label_transmit": schema.BoolAttribute{
+							MarkdownDescription: "Insert Flow label when transmit ",
+							Computed:            true,
+						},
+						"autodiscovery_bgp_signaling_protocol_bgp_load_balancing_flow_label_receive": schema.BoolAttribute{
+							MarkdownDescription: "Discard Flow label when receive",
+							Computed:            true,
+						},
+						"autodiscovery_bgp_signaling_protocol_bgp_load_balancing_flow_label_both": schema.BoolAttribute{
+							MarkdownDescription: "Insert/Discard Flow label when transmit/recceive",
+							Computed:            true,
+						},
+						"autodiscovery_bgp_route_policy_export": schema.StringAttribute{
+							MarkdownDescription: "Export route policy",
+							Computed:            true,
 						},
 					},
 				},

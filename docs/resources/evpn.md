@@ -14,12 +14,29 @@ This resource can manage the EVPN configuration.
 
 ```terraform
 resource "iosxr_evpn" "example" {
-  source_interface = "Loopback0"
-  interfaces = [
+  bgp_rd_ipv4_address                               = "192.168.1.1"
+  bgp_rd_ipv4_address_index                         = 100
+  timers_recovery                                   = 120
+  timers_peering                                    = 60
+  timers_carving                                    = 5
+  timers_ac_debounce                                = 2000
+  timers_backup_replacement_delay                   = 3000
+  timers_mac_postpone                               = 240
+  load_balancing_flow_label_static                  = true
+  source_interface                                  = "Loopback0"
+  cost_out                                          = true
+  startup_cost_in                                   = 60
+  staggered_bringup_timer                           = 3000
+  logging_df_election                               = true
+  ethernet_segment_type_one_auto_generation_disable = true
+  groups = [
     {
-      interface_name            = "GigabitEthernet0/0/0/1"
-      ethernet_segment_enable   = true
-      ethernet_segment_esi_zero = "01.02.03.04.05.06.07.08.09"
+      group_name = 10
+      core_interfaces = [
+        {
+          interface_name = "GigabitEthernet0/0/0/2"
+        }
+      ]
     }
   ]
   srv6 = true
@@ -29,7 +46,49 @@ resource "iosxr_evpn" "example" {
       usid_allocation_wide_local_id_block = true
     }
   ]
-  srv6_usid_allocation_wide_local_id_block = true
+  srv6_usid_allocation_wide_local_id_block                  = true
+  ignore_mtu_mismatch                                       = true
+  transmit_mtu_zero                                         = true
+  host_ipv4_duplicate_detection_move_count                  = 10
+  host_ipv4_duplicate_detection_move_interval               = 360
+  host_ipv4_duplicate_detection_freeze_time                 = 120
+  host_ipv4_duplicate_detection_retry_count                 = "5"
+  host_ipv4_duplicate_detection_reset_freeze_count_interval = 48
+  host_ipv6_duplicate_detection_move_count                  = 10
+  host_ipv6_duplicate_detection_move_interval               = 360
+  host_ipv6_duplicate_detection_freeze_time                 = 120
+  host_ipv6_duplicate_detection_retry_count                 = "5"
+  host_ipv6_duplicate_detection_reset_freeze_count_interval = 48
+  virtual_neighbors = [
+    {
+      address                                            = "192.168.1.1"
+      pw_id                                              = 100
+      timers_peering                                     = 60
+      timers_recovery                                    = 120
+      timers_carving                                     = 5
+      timers_ac_debounce                                 = 2000
+      ethernet_segment_esi_zero                          = "01.01.01.01.01.01.01.01.01"
+      ethernet_segment_service_carving_manual_primary    = "100-101,103"
+      ethernet_segment_service_carving_manual_secondary  = "200-201,203"
+      ethernet_segment_service_carving_multicast_hrw_s_g = true
+      ethernet_segment_bgp_rt                            = "01:01:01:01:01:01"
+    }
+  ]
+  virtual_vfis = [
+    {
+      vfi_name                                          = "VFI1"
+      timers_peering                                    = 60
+      timers_recovery                                   = 120
+      timers_carving                                    = 5
+      timers_ac_debounce                                = 2000
+      ethernet_segment_esi_zero                         = "01.01.01.01.02.02.02.02.02"
+      ethernet_segment_service_carving_manual_primary   = "100-101,103"
+      ethernet_segment_service_carving_manual_secondary = "200-201,203"
+      ethernet_segment_bgp_rt                           = "01:01:01:01:01:02"
+    }
+  ]
+  virtual_access_evi_ethernet_segment_esi_zero = "01.01.01.01.01.01.01.01.03"
+  virtual_access_evi_ethernet_segment_bgp_rt   = "01:01:01:01:01:03"
 }
 ```
 
@@ -38,30 +97,97 @@ resource "iosxr_evpn" "example" {
 
 ### Optional
 
+- `bgp_rd_four_byte_as_index` (Number) AS:nn (hex or decimal format)
+  - Range: `0`-`65535`
+- `bgp_rd_four_byte_as_number` (Number) Four Byte AS number
+  - Range: `65536`-`4294967295`
+- `bgp_rd_ipv4_address` (String) IP address
+- `bgp_rd_ipv4_address_index` (Number) IP-address:nn (hex or decimal format)
+  - Range: `0`-`65535`
+- `bgp_rd_two_byte_as_index` (Number) AS:nn (hex or decimal format)
+  - Range: `0`-`4294967295`
+- `bgp_rd_two_byte_as_number` (Number) Two Byte AS Number
+  - Range: `1`-`65535`
+- `cost_out` (Boolean) Configure global EVPN cost-out
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
-- `interfaces` (Attributes List) Specify interface name (see [below for nested schema](#nestedatt--interfaces))
+- `enforce_mtu_match` (Boolean) Enforce matching of local and remote MTUs
+- `ethernet_segment_type_one_auto_generation_disable` (Boolean) Disable ESI auto-generation
+- `groups` (Attributes List) Configure EVPN group (see [below for nested schema](#nestedatt--groups))
+- `host_ipv4_duplicate_detection_disable` (Boolean) Disable duplicate detection for MAC, IPv4 or IPv6 addresses.
+- `host_ipv4_duplicate_detection_freeze_time` (Number) Length of time to lock the IP address after it has been detected as duplicate. Default is 30s.
+  - Range: `5`-`3600`
+- `host_ipv4_duplicate_detection_move_count` (Number) Number of moves to occur in move-interval seconds before freezing the IP. Default is 5.
+  - Range: `1`-`1000`
+- `host_ipv4_duplicate_detection_move_interval` (Number) Interval to watch for subsequent mac moves before freezing the IP. Default is 180s.
+  - Range: `5`-`3600`
+- `host_ipv4_duplicate_detection_reset_freeze_count_interval` (Number) Interval after which the count of duplicate detection events used to determine whether IPv4 needs to be permanently frozen, is reset. Default is 24 hours.
+  - Range: `1`-`48`
+- `host_ipv4_duplicate_detection_retry_count` (String) Number of times to unfreeze an IP address before permanently freezing it. Default is 3 times.
+- `host_ipv6_duplicate_detection_disable` (Boolean) Disable duplicate detection for MAC, IPv4 or IPv6 addresses.
+- `host_ipv6_duplicate_detection_freeze_time` (Number) Length of time to lock the IP address after it has been detected as duplicate. Default is 30s.
+  - Range: `5`-`3600`
+- `host_ipv6_duplicate_detection_move_count` (Number) Number of moves to occur in move-interval seconds before freezing the IP. Default is 5.
+  - Range: `1`-`1000`
+- `host_ipv6_duplicate_detection_move_interval` (Number) Interval to watch for subsequent mac moves before freezing the IP. Default is 180s.
+  - Range: `5`-`3600`
+- `host_ipv6_duplicate_detection_reset_freeze_count_interval` (Number) Interval after which the count of duplicate detection events used to determine whether IPv6 needs to be permanently frozen, is reset. Default is 24 hours.
+  - Range: `1`-`48`
+- `host_ipv6_duplicate_detection_retry_count` (String) Number of times to unfreeze an IP address before permanently freezing it. Default is 3 times.
+- `ignore_mtu_mismatch` (Boolean) Ignore mismatch of local and remote MTUs
+- `load_balancing_flow_label_static` (Boolean) Static configuration of Flow Label
+- `logging_df_election` (Boolean) Enable Designated Forwarder election logging
 - `source_interface` (String) Configure EVPN router-id implicitly through Loopback Interface
 - `srv6` (Boolean) SRv6 configuration for EVPN
 - `srv6_locators` (Attributes List) Default locator to use for EVPN SID allocation (see [below for nested schema](#nestedatt--srv6_locators))
 - `srv6_usid_allocation_wide_local_id_block` (Boolean) Enable uSID wide function global knob
+- `staggered_bringup_timer` (Number) Staggered bringup timer delay timer
+  - Range: `0`-`300000`
+- `startup_cost_in` (Number) Cost-in after reload timer
+  - Range: `30`-`86400`
+- `timers_ac_debounce` (Number) Global AC Debounce timer
+  - Range: `0`-`300000`
+- `timers_backup_replacement_delay` (Number) When receiving a new backup route, delay installation for this amount of time timer
+  - Range: `0`-`300000`
+- `timers_carving` (Number) Global carving timer
+  - Range: `0`-`300`
+- `timers_mac_postpone` (Number) Global MAC withdraw postpone timer
+  - Range: `0`-`300`
+- `timers_peering` (Number) Global peering timer
+  - Range: `0`-`300`
+- `timers_recovery` (Number) Global recovery timer
+  - Range: `0`-`3600`
+- `transmit_l2_mtu` (Boolean) Transmit L2 MTU of attachment circuit
+- `transmit_mtu_zero` (Boolean) Transmit MTU zero to remote instead of actual local MTU
+- `virtual_access_evi_ethernet_segment_bgp_rt` (String) Set ES-Import Route Target
+- `virtual_access_evi_ethernet_segment_esi_zero` (String) ESI value
+- `virtual_neighbors` (Attributes List) Specify the peer to cross connect (see [below for nested schema](#nestedatt--virtual_neighbors))
+- `virtual_vfis` (Attributes List) Specify the virtual forwarding interface name (see [below for nested schema](#nestedatt--virtual_vfis))
 
 ### Read-Only
 
 - `id` (String) The path of the object.
 
-<a id="nestedatt--interfaces"></a>
-### Nested Schema for `interfaces`
+<a id="nestedatt--groups"></a>
+### Nested Schema for `groups`
 
 Required:
 
-- `ethernet_segment_esi_zero` (String) ESI value
-- `interface_name` (String) Specify interface name
+- `group_name` (Number) Configure EVPN group
+  - Range: `1`-`4294967295`
 
 Optional:
 
-- `ethernet_segment_enable` (Boolean) Ethernet Segment configuration commands
+- `core_interfaces` (Attributes List) configure EVPN group core interface (see [below for nested schema](#nestedatt--groups--core_interfaces))
+
+<a id="nestedatt--groups--core_interfaces"></a>
+### Nested Schema for `groups.core_interfaces`
+
+Required:
+
+- `interface_name` (String) configure EVPN group core interface
+
 
 
 <a id="nestedatt--srv6_locators"></a>
@@ -74,6 +200,64 @@ Required:
 Optional:
 
 - `usid_allocation_wide_local_id_block` (Boolean) Enable uSID wide function knob for the locator
+
+
+<a id="nestedatt--virtual_neighbors"></a>
+### Nested Schema for `virtual_neighbors`
+
+Required:
+
+- `address` (String) IPv4 address of the peer
+- `pw_id` (Number) Specify the pseudowire id
+  - Range: `1`-`4294967295`
+
+Optional:
+
+- `ethernet_segment_bgp_rt` (String) Set ES-Import Route Target
+- `ethernet_segment_esi_zero` (String) ESI value
+- `ethernet_segment_service_carving_hrw` (Boolean) HRW mode of carving services
+- `ethernet_segment_service_carving_manual_primary` (String) Primary services list
+- `ethernet_segment_service_carving_manual_secondary` (String) Secondary services list
+- `ethernet_segment_service_carving_multicast_hrw_g` (Boolean) HRW *,g mode
+- `ethernet_segment_service_carving_multicast_hrw_s_g` (Boolean) HRW s,g mode
+- `ethernet_segment_service_carving_preference_based_access_driven` (Boolean) Access-Driven DF Election
+- `ethernet_segment_service_carving_preference_based_weight` (Number) Preference value
+  - Range: `0`-`65535`
+- `timers_ac_debounce` (Number) Access PW-specific AC Debounce timer
+  - Range: `0`-`300000`
+- `timers_carving` (Number) Access PW-specific carving timer
+  - Range: `0`-`300`
+- `timers_peering` (Number) Access PW-specific peering timer
+  - Range: `0`-`300`
+- `timers_recovery` (Number) Access PW-specific recovery timer
+  - Range: `0`-`3600`
+
+
+<a id="nestedatt--virtual_vfis"></a>
+### Nested Schema for `virtual_vfis`
+
+Required:
+
+- `vfi_name` (String) Specify the virtual forwarding interface name
+
+Optional:
+
+- `ethernet_segment_bgp_rt` (String) Set ES-Import Route Target
+- `ethernet_segment_esi_zero` (String) ESI value
+- `ethernet_segment_service_carving_hrw` (Boolean) HRW mode of carving services
+- `ethernet_segment_service_carving_manual_primary` (String) Primary services list
+- `ethernet_segment_service_carving_manual_secondary` (String) Secondary services list
+- `ethernet_segment_service_carving_preference_based_access_driven` (Boolean) Access-Driven DF Election
+- `ethernet_segment_service_carving_preference_based_weight` (Number) Preference value
+  - Range: `0`-`65535`
+- `timers_ac_debounce` (Number) Access VFI-specific AC Debounce timer
+  - Range: `0`-`300000`
+- `timers_carving` (Number) Access VFI-specific carving timer
+  - Range: `0`-`300`
+- `timers_peering` (Number) Access VFI-specific peering timer
+  - Range: `0`-`300`
+- `timers_recovery` (Number) Access VFI-specific recovery timer
+  - Range: `0`-`3600`
 
 ## Import
 

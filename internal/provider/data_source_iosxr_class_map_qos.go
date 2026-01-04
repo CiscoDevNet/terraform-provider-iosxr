@@ -83,8 +83,23 @@ func (d *ClassMapQoSDataSource) Schema(ctx context.Context, req datasource.Schem
 				MarkdownDescription: "Set description for this class-map",
 				Computed:            true,
 			},
+			"match_access_group_ipv4": schema.ListAttribute{
+				MarkdownDescription: "IPv4 access list",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"match_access_group_ipv6": schema.ListAttribute{
+				MarkdownDescription: "IPv6 access list",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
 			"match_cos": schema.ListAttribute{
 				MarkdownDescription: "COS value",
+				ElementType:         types.Int64Type,
+				Computed:            true,
+			},
+			"match_cos_inner": schema.ListAttribute{
+				MarkdownDescription: "inner cos value (Upto 8 values)",
 				ElementType:         types.Int64Type,
 				Computed:            true,
 			},
@@ -129,6 +144,11 @@ func (d *ClassMapQoSDataSource) Schema(ctx context.Context, req datasource.Schem
 				ElementType:         types.StringType,
 				Computed:            true,
 			},
+			"match_discard_class": schema.ListAttribute{
+				MarkdownDescription: "Discard CLass Id",
+				ElementType:         types.Int64Type,
+				Computed:            true,
+			},
 			"match_dscp": schema.ListAttribute{
 				MarkdownDescription: "DSCP value",
 				ElementType:         types.StringType,
@@ -144,9 +164,55 @@ func (d *ClassMapQoSDataSource) Schema(ctx context.Context, req datasource.Schem
 				ElementType:         types.StringType,
 				Computed:            true,
 			},
+			"match_ethertype": schema.ListAttribute{
+				MarkdownDescription: "Ethertype Value",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"match_fragment_type_dont_fragment": schema.BoolAttribute{
+				MarkdownDescription: "Match don't-Fragment bit",
+				Computed:            true,
+			},
+			"match_fragment_type_first_fragment": schema.BoolAttribute{
+				MarkdownDescription: "Match first fragment bit",
+				Computed:            true,
+			},
+			"match_fragment_type_is_fragment": schema.BoolAttribute{
+				MarkdownDescription: "Match is-fragment bit",
+				Computed:            true,
+			},
+			"match_fragment_type_last_fragment": schema.BoolAttribute{
+				MarkdownDescription: "Match last fragment bit",
+				Computed:            true,
+			},
+			"match_ipv4_icmp_code": schema.ListAttribute{
+				MarkdownDescription: "IPv4 ICMP code",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"match_ipv4_icmp_type": schema.ListAttribute{
+				MarkdownDescription: "IPv4 ICMP type",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"match_ipv6_icmp_code": schema.ListAttribute{
+				MarkdownDescription: "ICMP code",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"match_ipv6_icmp_type": schema.ListAttribute{
+				MarkdownDescription: "ICMP type",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
 			"match_mpls_experimental_topmost": schema.ListAttribute{
 				MarkdownDescription: "MPLS experimental label",
 				ElementType:         types.Int64Type,
+				Computed:            true,
+			},
+			"match_packet_length": schema.ListAttribute{
+				MarkdownDescription: "IP Packet Length",
+				ElementType:         types.StringType,
 				Computed:            true,
 			},
 			"match_precedence": schema.ListAttribute{
@@ -215,6 +281,14 @@ func (d *ClassMapQoSDataSource) Schema(ctx context.Context, req datasource.Schem
 				ElementType:         types.StringType,
 				Computed:            true,
 			},
+			"match_tcp_flag": schema.Int64Attribute{
+				MarkdownDescription: "TCP flags value",
+				Computed:            true,
+			},
+			"match_tcp_flag_any": schema.BoolAttribute{
+				MarkdownDescription: "Match based on any bit set",
+				Computed:            true,
+			},
 			"match_traffic_class": schema.ListAttribute{
 				MarkdownDescription: "Traffic Class Id",
 				ElementType:         types.StringType,
@@ -222,6 +296,11 @@ func (d *ClassMapQoSDataSource) Schema(ctx context.Context, req datasource.Schem
 			},
 			"match_vlan": schema.ListAttribute{
 				MarkdownDescription: "Vlan Id",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"match_vlan_inner": schema.ListAttribute{
+				MarkdownDescription: "inner Vlan Id",
 				ElementType:         types.StringType,
 				Computed:            true,
 			},

@@ -35,16 +35,16 @@ import (
 
 func TestAccIosxrClassMapQoS(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_class_map_qos.test", "class_map_name", "TEST"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_class_map_qos.test", "class_map_name", "CM-QOS"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_class_map_qos.test", "match_any", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_class_map_qos.test", "description", "description1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_class_map_qos.test", "description", "QoS Class Map"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_class_map_qos.test", "match_cos_inner.0", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_class_map_qos.test", "match_discard_class.0", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_class_map_qos.test", "match_dscp.0", "46"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_class_map_qos.test", "match_dscp_ipv4.0", "46"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_class_map_qos.test", "match_dscp_ipv6.0", "46"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_class_map_qos.test", "match_mpls_experimental_topmost.0", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_class_map_qos.test", "match_precedence.0", "5"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_class_map_qos.test", "match_precedence_ipv4.0", "5"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_class_map_qos.test", "match_precedence_ipv6.0", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_class_map_qos.test", "match_qos_group.0", "1"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
@@ -92,7 +92,8 @@ func iosxrClassMapQoSImportStateIdFunc(resourceName string) resource.ImportState
 
 func testAccIosxrClassMapQoSConfig_minimum() string {
 	config := `resource "iosxr_class_map_qos" "test" {` + "\n"
-	config += `	class_map_name = "TEST"` + "\n"
+	config += `	class_map_name = "CM-QOS"` + "\n"
+	config += `	match_any = true` + "\n"
 	config += `	match_dscp = ["46"]` + "\n"
 	config += `}` + "\n"
 	return config
@@ -104,16 +105,16 @@ func testAccIosxrClassMapQoSConfig_minimum() string {
 
 func testAccIosxrClassMapQoSConfig_all() string {
 	config := `resource "iosxr_class_map_qos" "test" {` + "\n"
-	config += `	class_map_name = "TEST"` + "\n"
+	config += `	class_map_name = "CM-QOS"` + "\n"
 	config += `	match_any = true` + "\n"
-	config += `	description = "description1"` + "\n"
+	config += `	description = "QoS Class Map"` + "\n"
+	config += `	match_cos_inner = [4]` + "\n"
+	config += `	match_discard_class = [1]` + "\n"
 	config += `	match_dscp = ["46"]` + "\n"
 	config += `	match_dscp_ipv4 = ["46"]` + "\n"
 	config += `	match_dscp_ipv6 = ["46"]` + "\n"
 	config += `	match_mpls_experimental_topmost = [5]` + "\n"
 	config += `	match_precedence = ["5"]` + "\n"
-	config += `	match_precedence_ipv4 = ["5"]` + "\n"
-	config += `	match_precedence_ipv6 = ["5"]` + "\n"
 	config += `	match_qos_group = ["1"]` + "\n"
 	config += `}` + "\n"
 	return config

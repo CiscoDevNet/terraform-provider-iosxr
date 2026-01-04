@@ -37,11 +37,22 @@ func TestAccIosxrEVPNInterface(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "interface_name", "Bundle-Ether12"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "core_isolation_group", "11"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_identifier_type_zero_esi", "01.00.01.01.00.00.00.01.1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_load_balancing_mode_all_active", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_load_balancing_mode_port_active", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_load_balancing_mode_single_active", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_load_balancing_mode_single_flow_active", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "timers_peering", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "timers_recovery", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "timers_carving", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "timers_ac_debounce", "2000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_esi_zero", "01.01.01.01.01.01.01.01.04"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_load_balancing_mode_port_active", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_force_single_homed", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_service_carving_hrw", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_service_carving_multicast_hrw_s_g", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_service_carving_preference_based_weight", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_service_carving_preference_based_access_driven", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_bgp_rt", "01:01:01:01:01:04"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_convergence_reroute", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_convergence_mac_mobility", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_convergence_nexthop_tracking", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "access_signal_bundle_down", "true"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -97,7 +108,6 @@ resource "iosxr_gnmi" "PreReq0" {
 func testAccIosxrEVPNInterfaceConfig_minimum() string {
 	config := `resource "iosxr_evpn_interface" "test" {` + "\n"
 	config += `	interface_name = "Bundle-Ether12"` + "\n"
-	config += `	ethernet_segment_identifier_type_zero_esi = "01.00.01.01.00.00.00.01.1"` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
@@ -112,11 +122,22 @@ func testAccIosxrEVPNInterfaceConfig_all() string {
 	config += `	delete_mode = "all"` + "\n"
 	config += `	interface_name = "Bundle-Ether12"` + "\n"
 	config += `	core_isolation_group = 11` + "\n"
-	config += `	ethernet_segment_identifier_type_zero_esi = "01.00.01.01.00.00.00.01.1"` + "\n"
-	config += `	ethernet_segment_load_balancing_mode_all_active = false` + "\n"
-	config += `	ethernet_segment_load_balancing_mode_port_active = false` + "\n"
-	config += `	ethernet_segment_load_balancing_mode_single_active = true` + "\n"
-	config += `	ethernet_segment_load_balancing_mode_single_flow_active = false` + "\n"
+	config += `	timers_peering = 60` + "\n"
+	config += `	timers_recovery = 120` + "\n"
+	config += `	timers_carving = 5` + "\n"
+	config += `	timers_ac_debounce = 2000` + "\n"
+	config += `	ethernet_segment_esi_zero = "01.01.01.01.01.01.01.01.04"` + "\n"
+	config += `	ethernet_segment_load_balancing_mode_port_active = true` + "\n"
+	config += `	ethernet_segment_force_single_homed = true` + "\n"
+	config += `	ethernet_segment_service_carving_hrw = true` + "\n"
+	config += `	ethernet_segment_service_carving_multicast_hrw_s_g = true` + "\n"
+	config += `	ethernet_segment_service_carving_preference_based_weight = 100` + "\n"
+	config += `	ethernet_segment_service_carving_preference_based_access_driven = true` + "\n"
+	config += `	ethernet_segment_bgp_rt = "01:01:01:01:01:04"` + "\n"
+	config += `	ethernet_segment_convergence_reroute = true` + "\n"
+	config += `	ethernet_segment_convergence_mac_mobility = true` + "\n"
+	config += `	ethernet_segment_convergence_nexthop_tracking = true` + "\n"
+	config += `	access_signal_bundle_down = true` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config

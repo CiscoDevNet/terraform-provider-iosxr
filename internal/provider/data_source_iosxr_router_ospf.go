@@ -71,8 +71,68 @@ func (d *RouterOSPFDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Name for this OSPF process",
 				Required:            true,
 			},
+			"mpls_traffic_eng_router_id_ipv4_address": schema.StringAttribute{
+				MarkdownDescription: "configure this node",
+				Computed:            true,
+			},
+			"mpls_traffic_eng_router_id_interface_name": schema.StringAttribute{
+				MarkdownDescription: "MPLS TE interface configuration for this OSPF process",
+				Computed:            true,
+			},
+			"mpls_traffic_eng_multicast_intact": schema.BoolAttribute{
+				MarkdownDescription: "Publish multicast-intact paths to RIB",
+				Computed:            true,
+			},
+			"mpls_traffic_eng_autoroute_exclude_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Route Policy to exclude TE paths from routes",
+				Computed:            true,
+			},
+			"mpls_traffic_eng_igp_intact": schema.BoolAttribute{
+				MarkdownDescription: "Retain one or more IPv4 nexthops with tunnel nexthops",
+				Computed:            true,
+			},
+			"mpls_traffic_eng_ldp_sync_update": schema.BoolAttribute{
+				MarkdownDescription: "Enable LDP sync induced metric propagation",
+				Computed:            true,
+			},
 			"mpls_ldp_sync": schema.BoolAttribute{
 				MarkdownDescription: "Enable LDP IGP synchronization",
+				Computed:            true,
+			},
+			"mpls_ldp_sync_igp_shortcuts": schema.BoolAttribute{
+				MarkdownDescription: "LDP sync for igp-shortcut tunnels",
+				Computed:            true,
+			},
+			"mpls_ldp_auto_config": schema.BoolAttribute{
+				MarkdownDescription: "Enable LDP IGP interface auto-configuration",
+				Computed:            true,
+			},
+			"cost": schema.Int64Attribute{
+				MarkdownDescription: "Interface cost",
+				Computed:            true,
+			},
+			"cost_fallback_anomaly_delay_igp_metric_increment": schema.Int64Attribute{
+				MarkdownDescription: "Increment the IGP cost by the specified value",
+				Computed:            true,
+			},
+			"cost_fallback_anomaly_delay_igp_metric_multiplier": schema.Int64Attribute{
+				MarkdownDescription: "Multiply the IGP cost by the specified value",
+				Computed:            true,
+			},
+			"cost_fallback_anomaly_delay_igp_metric_value": schema.Int64Attribute{
+				MarkdownDescription: "Set the IGP cost to the specified value",
+				Computed:            true,
+			},
+			"cost_fallback_anomaly_delay_te_metric_increment": schema.Int64Attribute{
+				MarkdownDescription: "Increment the TE metric by the specified value",
+				Computed:            true,
+			},
+			"cost_fallback_anomaly_delay_te_metric_multiplier": schema.Int64Attribute{
+				MarkdownDescription: "Multiply the TE metric by the specified value",
+				Computed:            true,
+			},
+			"cost_fallback_anomaly_delay_te_metric_value": schema.Int64Attribute{
+				MarkdownDescription: "Set the TE cost to the specified value",
 				Computed:            true,
 			},
 			"hello_interval": schema.Int64Attribute{
@@ -87,6 +147,30 @@ func (d *RouterOSPFDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Router priority",
 				Computed:            true,
 			},
+			"retransmit_interval": schema.Int64Attribute{
+				MarkdownDescription: "Time between retransmitting lost link state advertisements",
+				Computed:            true,
+			},
+			"transmit_delay": schema.Int64Attribute{
+				MarkdownDescription: "Estimated time needed to send link-state update packet",
+				Computed:            true,
+			},
+			"flood_reduction_enable": schema.BoolAttribute{
+				MarkdownDescription: "Enable OSPF Flood Reduction",
+				Computed:            true,
+			},
+			"flood_reduction_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable OSPF Flood Reduction",
+				Computed:            true,
+			},
+			"demand_circuit_enable": schema.BoolAttribute{
+				MarkdownDescription: "Enable OSPF demand circuit",
+				Computed:            true,
+			},
+			"demand_circuit_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable OSPF demand circuit",
+				Computed:            true,
+			},
 			"mtu_ignore_enable": schema.BoolAttribute{
 				MarkdownDescription: "Ignores the MTU in DBD packets",
 				Computed:            true,
@@ -95,12 +179,28 @@ func (d *RouterOSPFDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Disable ignoring the MTU in DBD packets",
 				Computed:            true,
 			},
+			"database_filter_all_out_enable": schema.BoolAttribute{
+				MarkdownDescription: "Enable filtering",
+				Computed:            true,
+			},
+			"database_filter_all_out_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable filtering",
+				Computed:            true,
+			},
 			"passive_enable": schema.BoolAttribute{
 				MarkdownDescription: "Enable passive",
 				Computed:            true,
 			},
 			"passive_disable": schema.BoolAttribute{
 				MarkdownDescription: "Disable passive",
+				Computed:            true,
+			},
+			"log_adjacency_changes_detail": schema.BoolAttribute{
+				MarkdownDescription: "Log all state changes",
+				Computed:            true,
+			},
+			"log_adjacency_changes_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable logging",
 				Computed:            true,
 			},
 			"router_id": schema.StringAttribute{
@@ -119,6 +219,26 @@ func (d *RouterOSPFDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "OSPF exterior metric type for redistributed routes",
 				Computed:            true,
 			},
+			"redistribute_connected_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Apply route-policy to redistribution",
+				Computed:            true,
+			},
+			"redistribute_connected_metric": schema.Int64Attribute{
+				MarkdownDescription: "OSPF default metric",
+				Computed:            true,
+			},
+			"redistribute_connected_metric_use_rib_metric": schema.BoolAttribute{
+				MarkdownDescription: "Use metric from RIB",
+				Computed:            true,
+			},
+			"redistribute_connected_lsa_type_summary": schema.BoolAttribute{
+				MarkdownDescription: "LSA type 3",
+				Computed:            true,
+			},
+			"redistribute_connected_nssa_only": schema.BoolAttribute{
+				MarkdownDescription: "Redistribute to NSSA areas only",
+				Computed:            true,
+			},
 			"redistribute_static": schema.BoolAttribute{
 				MarkdownDescription: "Redistribute static routes",
 				Computed:            true,
@@ -131,57 +251,25 @@ func (d *RouterOSPFDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "OSPF exterior metric type for redistributed routes",
 				Computed:            true,
 			},
-			"bfd_fast_detect": schema.BoolAttribute{
-				MarkdownDescription: "Enable Fast detection",
+			"redistribute_static_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Apply route-policy to redistribution",
 				Computed:            true,
 			},
-			"bfd_minimum_interval": schema.Int64Attribute{
-				MarkdownDescription: "Minimum interval",
+			"redistribute_static_metric": schema.Int64Attribute{
+				MarkdownDescription: "OSPF default metric",
 				Computed:            true,
 			},
-			"bfd_multiplier": schema.Int64Attribute{
-				MarkdownDescription: "Detect multiplier",
+			"redistribute_static_metric_use_rib_metric": schema.BoolAttribute{
+				MarkdownDescription: "Use metric from RIB",
 				Computed:            true,
 			},
-			"default_information_originate": schema.BoolAttribute{
-				MarkdownDescription: "Distribute a default route",
+			"redistribute_static_lsa_type_summary": schema.BoolAttribute{
+				MarkdownDescription: "LSA type 3",
 				Computed:            true,
 			},
-			"default_information_originate_always": schema.BoolAttribute{
-				MarkdownDescription: "Always advertise default route",
+			"redistribute_static_nssa_only": schema.BoolAttribute{
+				MarkdownDescription: "Redistribute to NSSA areas only",
 				Computed:            true,
-			},
-			"default_information_originate_metric_type": schema.Int64Attribute{
-				MarkdownDescription: "OSPF metric type for default routes",
-				Computed:            true,
-			},
-			"auto_cost_reference_bandwidth": schema.Int64Attribute{
-				MarkdownDescription: "Specify reference bandwidth for OSPF cost computations",
-				Computed:            true,
-			},
-			"auto_cost_disable": schema.BoolAttribute{
-				MarkdownDescription: "Assign OSPF cost based on interface type",
-				Computed:            true,
-			},
-			"segment_routing_mpls": schema.BoolAttribute{
-				MarkdownDescription: "SR using MPLS dataplane",
-				Computed:            true,
-			},
-			"segment_routing_sr_prefer": schema.BoolAttribute{
-				MarkdownDescription: "Prefer segment routing labels over LDP labels",
-				Computed:            true,
-			},
-			"areas": schema.ListNestedAttribute{
-				MarkdownDescription: "Enter the OSPF area configuration submode",
-				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"area_id": schema.StringAttribute{
-							MarkdownDescription: "Enter the OSPF area configuration submode",
-							Computed:            true,
-						},
-					},
-				},
 			},
 			"redistribute_bgp": schema.ListNestedAttribute{
 				MarkdownDescription: "Redistribute BGP routes",
@@ -198,6 +286,30 @@ func (d *RouterOSPFDataSource) Schema(ctx context.Context, req datasource.Schema
 						},
 						"metric_type": schema.StringAttribute{
 							MarkdownDescription: "OSPF exterior metric type for redistributed routes",
+							Computed:            true,
+						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: "Apply route-policy to redistribution",
+							Computed:            true,
+						},
+						"preserve_med": schema.BoolAttribute{
+							MarkdownDescription: "Preserve med of BGP routes",
+							Computed:            true,
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: "OSPF default metric",
+							Computed:            true,
+						},
+						"metric_use_rib_metric": schema.BoolAttribute{
+							MarkdownDescription: "Use metric from RIB",
+							Computed:            true,
+						},
+						"lsa_type_summary": schema.BoolAttribute{
+							MarkdownDescription: "LSA type 3",
+							Computed:            true,
+						},
+						"nssa_only": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute to NSSA areas only",
 							Computed:            true,
 						},
 					},
@@ -232,6 +344,26 @@ func (d *RouterOSPFDataSource) Schema(ctx context.Context, req datasource.Schema
 							MarkdownDescription: "OSPF exterior metric type for redistributed routes",
 							Computed:            true,
 						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: "Apply route-policy to redistribution",
+							Computed:            true,
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: "OSPF default metric",
+							Computed:            true,
+						},
+						"metric_use_rib_metric": schema.BoolAttribute{
+							MarkdownDescription: "Use metric from RIB",
+							Computed:            true,
+						},
+						"lsa_type_summary": schema.BoolAttribute{
+							MarkdownDescription: "LSA type 3",
+							Computed:            true,
+						},
+						"nssa_only": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute to NSSA areas only",
+							Computed:            true,
+						},
 					},
 				},
 			},
@@ -244,18 +376,6 @@ func (d *RouterOSPFDataSource) Schema(ctx context.Context, req datasource.Schema
 							MarkdownDescription: "Open Shortest Path First (OSPF)",
 							Computed:            true,
 						},
-						"match_internal": schema.BoolAttribute{
-							MarkdownDescription: "Redistribute OSPF internal routes",
-							Computed:            true,
-						},
-						"match_external": schema.BoolAttribute{
-							MarkdownDescription: "Redistribute OSPF external routes",
-							Computed:            true,
-						},
-						"match_nssa_external": schema.BoolAttribute{
-							MarkdownDescription: "Redistribute OSPF NSSA external routes",
-							Computed:            true,
-						},
 						"tag": schema.Int64Attribute{
 							MarkdownDescription: "Set tag for routes redistributed into OSPF",
 							Computed:            true,
@@ -264,8 +384,1118 @@ func (d *RouterOSPFDataSource) Schema(ctx context.Context, req datasource.Schema
 							MarkdownDescription: "OSPF exterior metric type for redistributed routes",
 							Computed:            true,
 						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: "Apply route-policy to redistribution",
+							Computed:            true,
+						},
+						"match_internal": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF internal routes",
+							Computed:            true,
+						},
+						"match_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF external routes",
+							Computed:            true,
+						},
+						"match_external_one": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute external type 1 routes",
+							Computed:            true,
+						},
+						"match_external_two": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute external type 2 routes",
+							Computed:            true,
+						},
+						"match_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF NSSA external routes",
+							Computed:            true,
+						},
+						"match_nssa_external_one": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute NSSA external type 1 routes",
+							Computed:            true,
+						},
+						"match_nssa_external_two": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute NSSA external type 2 routes",
+							Computed:            true,
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: "OSPF default metric",
+							Computed:            true,
+						},
+						"metric_use_rib_metric": schema.BoolAttribute{
+							MarkdownDescription: "Use metric from RIB",
+							Computed:            true,
+						},
+						"lsa_type_summary": schema.BoolAttribute{
+							MarkdownDescription: "LSA type 3",
+							Computed:            true,
+						},
+						"nssa_only": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute to NSSA areas only",
+							Computed:            true,
+						},
 					},
 				},
+			},
+			"distribute_list_in_acl": schema.StringAttribute{
+				MarkdownDescription: "In-bound access-list name",
+				Computed:            true,
+			},
+			"distribute_list_in_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Route Policy to filter OSPF prefixes",
+				Computed:            true,
+			},
+			"distribute_list_out_acl": schema.StringAttribute{
+				MarkdownDescription: "access-list name",
+				Computed:            true,
+			},
+			"distribute_list_out_connected_acl": schema.StringAttribute{
+				MarkdownDescription: "access-list name",
+				Computed:            true,
+			},
+			"distribute_list_out_static_acl": schema.StringAttribute{
+				MarkdownDescription: "access-list name",
+				Computed:            true,
+			},
+			"distribute_list_out_bgp_as": schema.StringAttribute{
+				MarkdownDescription: "bgp as-number",
+				Computed:            true,
+			},
+			"distribute_list_out_bgp_acl": schema.StringAttribute{
+				MarkdownDescription: "access-list name",
+				Computed:            true,
+			},
+			"distribute_list_out_ospf_instance_name": schema.StringAttribute{
+				MarkdownDescription: "Open Shortest Path First (OSPF)",
+				Computed:            true,
+			},
+			"distribute_list_out_ospf_acl": schema.StringAttribute{
+				MarkdownDescription: "access-list name",
+				Computed:            true,
+			},
+			"packet_size": schema.Int64Attribute{
+				MarkdownDescription: "Customize size of OSPF packets upto MTU",
+				Computed:            true,
+			},
+			"bfd_fast_detect": schema.BoolAttribute{
+				MarkdownDescription: "Enable Fast detection",
+				Computed:            true,
+			},
+			"bfd_fast_detect_strict_mode": schema.BoolAttribute{
+				MarkdownDescription: "Hold down neighbor session until BFD session is up",
+				Computed:            true,
+			},
+			"bfd_minimum_interval": schema.Int64Attribute{
+				MarkdownDescription: "Minimum interval",
+				Computed:            true,
+			},
+			"bfd_multiplier": schema.Int64Attribute{
+				MarkdownDescription: "Detect multiplier",
+				Computed:            true,
+			},
+			"security_ttl": schema.BoolAttribute{
+				MarkdownDescription: "Enable ttl security",
+				Computed:            true,
+			},
+			"security_ttl_hops": schema.Int64Attribute{
+				MarkdownDescription: "IP hops",
+				Computed:            true,
+			},
+			"prefix_suppression": schema.BoolAttribute{
+				MarkdownDescription: "Enable primary address suppression",
+				Computed:            true,
+			},
+			"prefix_suppression_secondary_address": schema.BoolAttribute{
+				MarkdownDescription: "Enable secondary address suppression",
+				Computed:            true,
+			},
+			"default_information_originate": schema.BoolAttribute{
+				MarkdownDescription: "Distribute a default route",
+				Computed:            true,
+			},
+			"default_information_originate_always": schema.BoolAttribute{
+				MarkdownDescription: "Always advertise default route",
+				Computed:            true,
+			},
+			"default_information_originate_metric": schema.Int64Attribute{
+				MarkdownDescription: "OSPF default metric",
+				Computed:            true,
+			},
+			"default_information_originate_metric_type": schema.Int64Attribute{
+				MarkdownDescription: "OSPF metric type for default routes",
+				Computed:            true,
+			},
+			"default_information_originate_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Apply route-policy to default-information origination",
+				Computed:            true,
+			},
+			"default_metric": schema.Int64Attribute{
+				MarkdownDescription: "Default metric",
+				Computed:            true,
+			},
+			"distance_sources": schema.ListNestedAttribute{
+				MarkdownDescription: "source address",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "IP Source address",
+							Computed:            true,
+						},
+						"wildcard": schema.StringAttribute{
+							MarkdownDescription: "IP wild card bits -- inverted mask",
+							Computed:            true,
+						},
+						"distance": schema.Int64Attribute{
+							MarkdownDescription: "Administrative distance",
+							Computed:            true,
+						},
+						"acl": schema.StringAttribute{
+							MarkdownDescription: "Access Control List name",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"distance_ospf_intra_area": schema.Int64Attribute{
+				MarkdownDescription: "Intra-area routes",
+				Computed:            true,
+			},
+			"distance_ospf_inter_area": schema.Int64Attribute{
+				MarkdownDescription: "Inter-area routes",
+				Computed:            true,
+			},
+			"distance_ospf_external": schema.Int64Attribute{
+				MarkdownDescription: "External type 5 and type 7 routes",
+				Computed:            true,
+			},
+			"auto_cost_reference_bandwidth": schema.Int64Attribute{
+				MarkdownDescription: "Specify reference bandwidth for OSPF cost computations",
+				Computed:            true,
+			},
+			"auto_cost_disable": schema.BoolAttribute{
+				MarkdownDescription: "Assign OSPF cost based on interface type",
+				Computed:            true,
+			},
+			"ignore_lsa_mospf": schema.BoolAttribute{
+				MarkdownDescription: "MOSPF Type 6 LSA",
+				Computed:            true,
+			},
+			"capability_opaque_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable Opaque LSA capability",
+				Computed:            true,
+			},
+			"capability_lls_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable Link Local Signalling capability",
+				Computed:            true,
+			},
+			"capability_type7_prefer": schema.BoolAttribute{
+				MarkdownDescription: "Prefer type7 externals over type5",
+				Computed:            true,
+			},
+			"max_metric_router_lsa": schema.BoolAttribute{
+				MarkdownDescription: "Maximum metric in self-originated router-LSAs",
+				Computed:            true,
+			},
+			"max_metric_router_lsa_include_stub": schema.BoolAttribute{
+				MarkdownDescription: "Set maximum metric for stub links in router-LSAs",
+				Computed:            true,
+			},
+			"max_metric_router_lsa_summary_lsa": schema.BoolAttribute{
+				MarkdownDescription: "Override summary-lsa metric with max-metric value",
+				Computed:            true,
+			},
+			"max_metric_router_lsa_summary_lsa_metric": schema.Int64Attribute{
+				MarkdownDescription: "Override summary-lsa metric with max-metric value",
+				Computed:            true,
+			},
+			"max_metric_router_lsa_external_lsa": schema.BoolAttribute{
+				MarkdownDescription: "Override external-lsa metric with max-metric value",
+				Computed:            true,
+			},
+			"max_metric_router_lsa_external_lsa_metric": schema.Int64Attribute{
+				MarkdownDescription: "Override external-lsa metric with max-metric value",
+				Computed:            true,
+			},
+			"max_metric_router_lsa_on_startup_time": schema.Int64Attribute{
+				MarkdownDescription: "Time in seconds to originate router-LSA with max-metric",
+				Computed:            true,
+			},
+			"max_metric_router_lsa_on_startup_wait_for_bgp": schema.BoolAttribute{
+				MarkdownDescription: "Let BGP decide when to originate router-LSA with normal metric",
+				Computed:            true,
+			},
+			"max_metric_router_lsa_on_startup_include_stub": schema.BoolAttribute{
+				MarkdownDescription: "Set maximum metric for stub links in router-LSAs",
+				Computed:            true,
+			},
+			"max_metric_router_lsa_on_startup_summary_lsa": schema.BoolAttribute{
+				MarkdownDescription: "Overriding metric in summary-LSAs (default 16711680)",
+				Computed:            true,
+			},
+			"max_metric_router_lsa_on_startup_summary_lsa_metric": schema.Int64Attribute{
+				MarkdownDescription: "Overriding metric in summary-LSAs (default 16711680)",
+				Computed:            true,
+			},
+			"max_metric_router_lsa_on_startup_external_lsa": schema.BoolAttribute{
+				MarkdownDescription: "Override external-lsa metric with max-metric value",
+				Computed:            true,
+			},
+			"max_metric_router_lsa_on_startup_external_lsa_metric": schema.Int64Attribute{
+				MarkdownDescription: "Override external-lsa metric with max-metric value",
+				Computed:            true,
+			},
+			"max_metric_router_lsa_on_switchover_time": schema.Int64Attribute{
+				MarkdownDescription: "Time in seconds to originate router-LSA with max-metric",
+				Computed:            true,
+			},
+			"max_metric_router_lsa_on_switchover_wait_for_bgp": schema.BoolAttribute{
+				MarkdownDescription: "Let BGP decide when to originate router-LSA with normal metric",
+				Computed:            true,
+			},
+			"max_metric_router_lsa_on_switchover_include_stub": schema.BoolAttribute{
+				MarkdownDescription: "Set maximum metric for stub links in router-LSAs",
+				Computed:            true,
+			},
+			"max_metric_router_lsa_on_switchover_summary_lsa": schema.BoolAttribute{
+				MarkdownDescription: "Overriding metric in summary-LSAs (default 16711680)",
+				Computed:            true,
+			},
+			"max_metric_router_lsa_on_switchover_summary_lsa_metric": schema.Int64Attribute{
+				MarkdownDescription: "Overriding metric in summary-LSAs (default 16711680)",
+				Computed:            true,
+			},
+			"max_metric_router_lsa_on_switchover_external_lsa": schema.BoolAttribute{
+				MarkdownDescription: "Override external-lsa metric with max-metric value",
+				Computed:            true,
+			},
+			"max_metric_router_lsa_on_switchover_external_lsa_metric": schema.Int64Attribute{
+				MarkdownDescription: "Override external-lsa metric with max-metric value",
+				Computed:            true,
+			},
+			"max_metric_router_lsa_on_proc_restart_time": schema.Int64Attribute{
+				MarkdownDescription: "Time in seconds to originate router-LSA with max-metric",
+				Computed:            true,
+			},
+			"max_metric_router_lsa_on_proc_restart_wait_for_bgp": schema.BoolAttribute{
+				MarkdownDescription: "Let BGP decide when to originate router-LSA with normal metric",
+				Computed:            true,
+			},
+			"max_metric_router_lsa_on_proc_restart_include_stub": schema.BoolAttribute{
+				MarkdownDescription: "Set maximum metric for stub links in router-LSAs",
+				Computed:            true,
+			},
+			"max_metric_router_lsa_on_proc_restart_summary_lsa": schema.BoolAttribute{
+				MarkdownDescription: "Overriding metric in summary-LSAs (default 16711680)",
+				Computed:            true,
+			},
+			"max_metric_router_lsa_on_proc_restart_summary_lsa_metric": schema.Int64Attribute{
+				MarkdownDescription: "Overriding metric in summary-LSAs (default 16711680)",
+				Computed:            true,
+			},
+			"max_metric_router_lsa_on_proc_restart_external_lsa": schema.BoolAttribute{
+				MarkdownDescription: "Override external-lsa metric with max-metric value",
+				Computed:            true,
+			},
+			"max_metric_router_lsa_on_proc_restart_external_lsa_metric": schema.Int64Attribute{
+				MarkdownDescription: "Override external-lsa metric with max-metric value",
+				Computed:            true,
+			},
+			"max_lsa": schema.Int64Attribute{
+				MarkdownDescription: "Maximum number of LSAs OSPF process will receive",
+				Computed:            true,
+			},
+			"max_lsa_threshold": schema.Int64Attribute{
+				MarkdownDescription: "Threshold value (%) at which to generate a warning msg",
+				Computed:            true,
+			},
+			"max_lsa_warning_only": schema.BoolAttribute{
+				MarkdownDescription: "Only give warning message when limit is exceeded",
+				Computed:            true,
+			},
+			"max_lsa_ignore_time": schema.Int64Attribute{
+				MarkdownDescription: "time during which all adjacencies are suppressed",
+				Computed:            true,
+			},
+			"max_lsa_ignore_count": schema.Int64Attribute{
+				MarkdownDescription: "maximum number of times adjacencies can be suppressed",
+				Computed:            true,
+			},
+			"max_lsa_reset_time": schema.Int64Attribute{
+				MarkdownDescription: "time after which ignore-count is reset to zero",
+				Computed:            true,
+			},
+			"timers_throttle_spf_initial_delay": schema.Int64Attribute{
+				MarkdownDescription: "OSPF SPF throttle timers",
+				Computed:            true,
+			},
+			"timers_throttle_spf_second_delay": schema.Int64Attribute{
+				MarkdownDescription: "Delay between first and second SPF calculation in milliseconds",
+				Computed:            true,
+			},
+			"timers_throttle_spf_maximum_delay": schema.Int64Attribute{
+				MarkdownDescription: "Maximum wait time in milliseconds for SPF calculations",
+				Computed:            true,
+			},
+			"timers_throttle_lsa_all_initial_delay": schema.Int64Attribute{
+				MarkdownDescription: "For all types of OSPF LSAs",
+				Computed:            true,
+			},
+			"timers_throttle_lsa_all_minimum_delay": schema.Int64Attribute{
+				MarkdownDescription: "Minimum delay between originating the same LSA in milliseconds",
+				Computed:            true,
+			},
+			"timers_throttle_lsa_all_maximum_delay": schema.Int64Attribute{
+				MarkdownDescription: "Maximum delay between originating the same LSA in milliseconds",
+				Computed:            true,
+			},
+			"timers_throttle_fast_reroute": schema.Int64Attribute{
+				MarkdownDescription: "Fast-reroute throttle timer",
+				Computed:            true,
+			},
+			"timers_lsa_group_pacing": schema.Int64Attribute{
+				MarkdownDescription: "OSPF LSA group pacing timer",
+				Computed:            true,
+			},
+			"timers_lsa_min_arrival": schema.Int64Attribute{
+				MarkdownDescription: "OSPF MinLSArrival timer",
+				Computed:            true,
+			},
+			"timers_lsa_refresh": schema.Int64Attribute{
+				MarkdownDescription: "OSPF LSA refresh interval",
+				Computed:            true,
+			},
+			"timers_pacing_flood": schema.Int64Attribute{
+				MarkdownDescription: "OSPF flood pacing timer",
+				Computed:            true,
+			},
+			"timers_graceful_shutdown_initial_delay": schema.Int64Attribute{
+				MarkdownDescription: "Delay before starting graceful shutdown",
+				Computed:            true,
+			},
+			"timers_graceful_shutdown_retain_routes": schema.Int64Attribute{
+				MarkdownDescription: "Time to keep routes active after graceful shutdown",
+				Computed:            true,
+			},
+			"nsf_interval": schema.Int64Attribute{
+				MarkdownDescription: "Minimum interval between NSF restarts (seconds)",
+				Computed:            true,
+			},
+			"nsf_lifetime": schema.Int64Attribute{
+				MarkdownDescription: "Maximum route lifetime following restart (seconds)",
+				Computed:            true,
+			},
+			"nsf_flush_delay_time": schema.Int64Attribute{
+				MarkdownDescription: "Maximum time allowed for external route learning (seconds)",
+				Computed:            true,
+			},
+			"nsf_cisco": schema.BoolAttribute{
+				MarkdownDescription: "Enable Cisco Non Stop Forwarding",
+				Computed:            true,
+			},
+			"nsf_cisco_enforce_global": schema.BoolAttribute{
+				MarkdownDescription: "For the whole OSPF process",
+				Computed:            true,
+			},
+			"nsf_ietf": schema.BoolAttribute{
+				MarkdownDescription: "Enable ietf graceful restart",
+				Computed:            true,
+			},
+			"nsf_ietf_strict_lsa_checking": schema.BoolAttribute{
+				MarkdownDescription: "terminate graceful restart helper mode if lsa changed",
+				Computed:            true,
+			},
+			"nsf_ietf_helper_disable": schema.BoolAttribute{
+				MarkdownDescription: "router's helper support disabled",
+				Computed:            true,
+			},
+			"address_family_ipv4_unicast": schema.BoolAttribute{
+				MarkdownDescription: "unicast topology",
+				Computed:            true,
+			},
+			"maximum_interfaces": schema.Int64Attribute{
+				MarkdownDescription: "Limit number of interfaces",
+				Computed:            true,
+			},
+			"maximum_paths": schema.Int64Attribute{
+				MarkdownDescription: "Limit number of paths",
+				Computed:            true,
+			},
+			"maximum_redistributed_prefixes": schema.Int64Attribute{
+				MarkdownDescription: "Limit number of redistributed prefixes",
+				Computed:            true,
+			},
+			"maximum_redistributed_prefixes_threshold": schema.Int64Attribute{
+				MarkdownDescription: "Threshold value (%) at which to generate a warning msg",
+				Computed:            true,
+			},
+			"maximum_redistributed_prefixes_warning_only": schema.BoolAttribute{
+				MarkdownDescription: "Only give warning messsage when limit is exceeded",
+				Computed:            true,
+			},
+			"queue_limit_high": schema.Int64Attribute{
+				MarkdownDescription: "High watermark for incoming high priority events (hello)",
+				Computed:            true,
+			},
+			"queue_limit_medium": schema.Int64Attribute{
+				MarkdownDescription: "High watermark for incoming medium priority events (LSA ACK)",
+				Computed:            true,
+			},
+			"queue_limit_low": schema.Int64Attribute{
+				MarkdownDescription: "High watermark for incoming low priority events (DBD/LSUpd/Req)",
+				Computed:            true,
+			},
+			"queue_dispatch_incoming": schema.Int64Attribute{
+				MarkdownDescription: "Number of continuous incoming events processed",
+				Computed:            true,
+			},
+			"queue_dispatch_rate_limited_lsa": schema.Int64Attribute{
+				MarkdownDescription: "Number of rate-limited LSAs processed",
+				Computed:            true,
+			},
+			"queue_dispatch_flush_lsa": schema.Int64Attribute{
+				MarkdownDescription: "Number of LSAs flushed",
+				Computed:            true,
+			},
+			"queue_dispatch_spf_lsa_limit": schema.Int64Attribute{
+				MarkdownDescription: "Number of summary or external LSAs processed per run",
+				Computed:            true,
+			},
+			"summary_prefixes": schema.ListNestedAttribute{
+				MarkdownDescription: "Configure IP address summaries",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "IP summary prefix address",
+							Computed:            true,
+						},
+						"mask": schema.StringAttribute{
+							MarkdownDescription: "IP smmary address mask",
+							Computed:            true,
+						},
+						"not_advertise": schema.BoolAttribute{
+							MarkdownDescription: "Suppress routes that match the specified prefix/mask pair",
+							Computed:            true,
+						},
+						"tag": schema.Int64Attribute{
+							MarkdownDescription: "Set tag",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"spf_prefix_priority_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Specify the route-policy to prioritize route install",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix": schema.BoolAttribute{
+				MarkdownDescription: "Enable per-prefix Computation",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_priority_limit_critical": schema.BoolAttribute{
+				MarkdownDescription: "Compute for critical priority prefixes only",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_priority_limit_high": schema.BoolAttribute{
+				MarkdownDescription: "Compute for critical & high priority prefixes ",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_priority_limit_medium": schema.BoolAttribute{
+				MarkdownDescription: "Compute for critical, high & medium priority prefixes ",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_downstream_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_downstream_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable tiebreaker",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_lc_disjoint_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_lc_disjoint_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable tiebreaker",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable tiebreaker",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_node_protecting_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_node_protecting_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable tiebreaker",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_primary_path_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_primary_path_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable tiebreaker",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_secondary_path_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_secondary_path_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable tiebreaker",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_interface_disjoint_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_interface_disjoint_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable tiebreaker",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_srlg_disjoint_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable tiebreaker",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_load_sharing_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable load sharing",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_srlg_protection_weighted_global": schema.BoolAttribute{
+				MarkdownDescription: "weighted global srlg protection",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_exclude_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "Exclude an interface from Per-prefix LFA",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: "Exclude an interface from Per-prefix LFA",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"fast_reroute_per_prefix_lfa_candidate_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "Include an interface to LFA candidate in computation",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: "Include an interface to LFA candidate in computation",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"fast_reroute_per_prefix_use_candidate_only_enable": schema.BoolAttribute{
+				MarkdownDescription: "Enable backup selection from candidate-list only",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_use_candidate_only_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable backup selection from candidate-list only",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_remote_lfa_tunnel_mpls_ldp": schema.BoolAttribute{
+				MarkdownDescription: "MPLS LDP tunnel",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_remote_lfa_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable remote LFA computation",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_remote_lfa_maximum_cost": schema.Int64Attribute{
+				MarkdownDescription: "Maximum path cost to remote LFA",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_ti_lfa_enable": schema.BoolAttribute{
+				MarkdownDescription: "Enable TI LFA computation",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_ti_lfa_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable TI LFA computation",
+				Computed:            true,
+			},
+			"fast_reroute_per_link": schema.BoolAttribute{
+				MarkdownDescription: "Enable per-link Computation",
+				Computed:            true,
+			},
+			"fast_reroute_per_link_priority_limit_critical": schema.BoolAttribute{
+				MarkdownDescription: "Compute for critical priority prefixes only",
+				Computed:            true,
+			},
+			"fast_reroute_per_link_priority_limit_high": schema.BoolAttribute{
+				MarkdownDescription: "Compute for critical & high priority prefixes ",
+				Computed:            true,
+			},
+			"fast_reroute_per_link_priority_limit_medium": schema.BoolAttribute{
+				MarkdownDescription: "Compute for critical, high & medium priority prefixes ",
+				Computed:            true,
+			},
+			"fast_reroute_per_link_exclude_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "Exclude an interface from Per-link LFA",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: "Exclude an interface from Per-link LFA",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"fast_reroute_per_link_lfa_candidate_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "Include an interface to LFA candidate in computation",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: "Include an interface to LFA candidate in computation",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"fast_reroute_per_link_use_candidate_only_enable": schema.BoolAttribute{
+				MarkdownDescription: "Enable backup selection from candidate-list only",
+				Computed:            true,
+			},
+			"fast_reroute_per_link_use_candidate_only_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable backup selection from candidate-list only",
+				Computed:            true,
+			},
+			"fast_reroute_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable IP Fast Reroute",
+				Computed:            true,
+			},
+			"loopback_stub_network_enable": schema.BoolAttribute{
+				MarkdownDescription: "Enable advertising loopback as a stub network",
+				Computed:            true,
+			},
+			"loopback_stub_network_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable advertising loopback as a stub network",
+				Computed:            true,
+			},
+			"link_down_fast_detect": schema.BoolAttribute{
+				MarkdownDescription: "Enable fast or early detection of link-down events",
+				Computed:            true,
+			},
+			"weight": schema.Int64Attribute{
+				MarkdownDescription: "Interface weight",
+				Computed:            true,
+			},
+			"delay_normalize_interval": schema.Int64Attribute{
+				MarkdownDescription: "Normalization interval",
+				Computed:            true,
+			},
+			"delay_normalize_offset": schema.Int64Attribute{
+				MarkdownDescription: "Normalization offset",
+				Computed:            true,
+			},
+			"microloop_avoidance": schema.BoolAttribute{
+				MarkdownDescription: "Avoid microloops",
+				Computed:            true,
+			},
+			"microloop_avoidance_protected": schema.BoolAttribute{
+				MarkdownDescription: "Avoid microloops for protected prefixes only",
+				Computed:            true,
+			},
+			"microloop_avoidance_segment_routing": schema.BoolAttribute{
+				MarkdownDescription: "Enable segment routing microloop avoidance",
+				Computed:            true,
+			},
+			"microloop_avoidance_rib_update_delay": schema.Int64Attribute{
+				MarkdownDescription: "Delay to introduce between SPF and RIB update",
+				Computed:            true,
+			},
+			"segment_routing_mpls": schema.BoolAttribute{
+				MarkdownDescription: "SR using MPLS dataplane",
+				Computed:            true,
+			},
+			"segment_routing_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable Segment Routing ",
+				Computed:            true,
+			},
+			"segment_routing_global_block_lower_bound": schema.Int64Attribute{
+				MarkdownDescription: "MPLS label range for SID allocation",
+				Computed:            true,
+			},
+			"segment_routing_global_block_upper_bound": schema.Int64Attribute{
+				MarkdownDescription: "Maximum MPLS label value for Segment Routing",
+				Computed:            true,
+			},
+			"segment_routing_prefix_sid_map_advertise_local": schema.BoolAttribute{
+				MarkdownDescription: "Advertise and use local mapping server entries",
+				Computed:            true,
+			},
+			"segment_routing_prefix_sid_map_receive_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable the usage of remote mapping server advertisements",
+				Computed:            true,
+			},
+			"segment_routing_sr_prefer": schema.BoolAttribute{
+				MarkdownDescription: "Prefer segment routing labels over LDP labels",
+				Computed:            true,
+			},
+			"segment_routing_sr_prefer_prefix_list": schema.StringAttribute{
+				MarkdownDescription: "Filter prefixes for which SR preference is applied",
+				Computed:            true,
+			},
+			"segment_routing_forwarding_mpls": schema.BoolAttribute{
+				MarkdownDescription: "Use MPLS for Segment-routing forwarding",
+				Computed:            true,
+			},
+			"segment_routing_forwarding_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable Segment-routing on process interfaces",
+				Computed:            true,
+			},
+			"affinity_maps": schema.ListNestedAttribute{
+				MarkdownDescription: "Affinity attribute name",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"affinity_name": schema.StringAttribute{
+							MarkdownDescription: "Affinity attribute name",
+							Computed:            true,
+						},
+						"bit_position": schema.Int64Attribute{
+							MarkdownDescription: "Bit position for affinity attribute value",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"flex_algos": schema.ListNestedAttribute{
+				MarkdownDescription: "Flex Algorithm definition",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"number": schema.Int64Attribute{
+							MarkdownDescription: "Flex Algorithm definition",
+							Computed:            true,
+						},
+						"priority": schema.Int64Attribute{
+							MarkdownDescription: "Flex-Algo definition priority",
+							Computed:            true,
+						},
+						"microloop_avoidance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable microloop avoidance for Flex-Algo",
+							Computed:            true,
+						},
+						"prefix_metric": schema.BoolAttribute{
+							MarkdownDescription: "Advertise the Flex-Algo Definition",
+							Computed:            true,
+						},
+						"metric_type_delay": schema.BoolAttribute{
+							MarkdownDescription: "Use delay as metric",
+							Computed:            true,
+						},
+						"metric_type_te_metric": schema.BoolAttribute{
+							MarkdownDescription: "Use te-metric",
+							Computed:            true,
+						},
+						"advertise_definition": schema.BoolAttribute{
+							MarkdownDescription: "Advertise the Flex-Algo Definition",
+							Computed:            true,
+						},
+						"fast_reroute_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable Fast ReRoute for Flex-Algo",
+							Computed:            true,
+						},
+						"affinity_exclude_any": schema.ListNestedAttribute{
+							MarkdownDescription: "Affinity attribute name",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"affinity_name": schema.StringAttribute{
+										MarkdownDescription: "Affinity attribute name",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"affinity_include_any": schema.ListNestedAttribute{
+							MarkdownDescription: "Affinity attribute name",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"affinity_name": schema.StringAttribute{
+										MarkdownDescription: "Affinity attribute name",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"affinity_include_all": schema.ListNestedAttribute{
+							MarkdownDescription: "Affinity attribute name",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"affinity_name": schema.StringAttribute{
+										MarkdownDescription: "Affinity attribute name",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"srlg_exclude_any": schema.ListNestedAttribute{
+							MarkdownDescription: "srlg name",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"srlg_name": schema.StringAttribute{
+										MarkdownDescription: "srlg name",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"authentication_key_encrypted": schema.StringAttribute{
+				MarkdownDescription: "Specifies an ENCRYPTED password (key) will follow",
+				Computed:            true,
+				Sensitive:           true,
+			},
+			"message_digest_keys": schema.ListNestedAttribute{
+				MarkdownDescription: "Message digest authentication password (key)",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"key_id": schema.Int64Attribute{
+							MarkdownDescription: "Message digest authentication password (key)",
+							Computed:            true,
+						},
+						"md5_encrypted": schema.StringAttribute{
+							MarkdownDescription: "Specifies an ENCRYPTED password (key) will follow",
+							Computed:            true,
+							Sensitive:           true,
+						},
+					},
+				},
+			},
+			"authentication": schema.BoolAttribute{
+				MarkdownDescription: "Enable authentication",
+				Computed:            true,
+			},
+			"authentication_message_digest": schema.BoolAttribute{
+				MarkdownDescription: "Use message-digest authentication",
+				Computed:            true,
+			},
+			"authentication_keychain_name": schema.StringAttribute{
+				MarkdownDescription: "Specify keychain name",
+				Computed:            true,
+			},
+			"authentication_null": schema.BoolAttribute{
+				MarkdownDescription: "Use no authentication",
+				Computed:            true,
+			},
+			"network_broadcast": schema.BoolAttribute{
+				MarkdownDescription: "Specify OSPF broadcast multi-access network",
+				Computed:            true,
+			},
+			"network_non_broadcast": schema.BoolAttribute{
+				MarkdownDescription: "Specify OSPF NBMA network",
+				Computed:            true,
+			},
+			"network_point_to_point": schema.BoolAttribute{
+				MarkdownDescription: "Specify OSPF point-to-point network",
+				Computed:            true,
+			},
+			"network_point_to_multipoint": schema.BoolAttribute{
+				MarkdownDescription: "Specify OSPF point-to-multipoint network",
+				Computed:            true,
+			},
+			"external_out_enable": schema.BoolAttribute{
+				MarkdownDescription: "Enable advertisement of intra-area routes as external",
+				Computed:            true,
+			},
+			"external_out_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable advertisement of intra-area routes as external",
+				Computed:            true,
+			},
+			"summary_in_enable": schema.BoolAttribute{
+				MarkdownDescription: "Enable advertisement of external prefixes as inter-area",
+				Computed:            true,
+			},
+			"summary_in_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable advertisement of external prefixes as inter-area",
+				Computed:            true,
+			},
+			"adjacency_stagger_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable stagger OSPF adjacency bring up",
+				Computed:            true,
+			},
+			"adjacency_stagger_initial_neighbors": schema.Int64Attribute{
+				MarkdownDescription: "Initial number of neighbors to bring up per area (default 2)",
+				Computed:            true,
+			},
+			"adjacency_stagger_simultaneous_neighbors": schema.Int64Attribute{
+				MarkdownDescription: "Maximum simultaneous neighbors to bring up (default 64)",
+				Computed:            true,
+			},
+			"snmp_context": schema.StringAttribute{
+				MarkdownDescription: "Specified SNMP context for OSPF instance",
+				Computed:            true,
+			},
+			"snmp_trap_rate_limit": schema.Int64Attribute{
+				MarkdownDescription: "Adjust trap rate-limit parameters",
+				Computed:            true,
+			},
+			"snmp_trap_rate_limit_max": schema.Int64Attribute{
+				MarkdownDescription: "Max number of traps sent in window time",
+				Computed:            true,
+			},
+			"monitor_convergence": schema.BoolAttribute{
+				MarkdownDescription: "Enables OSPF route convergence monitoring",
+				Computed:            true,
+			},
+			"monitor_convergence_prefix_list": schema.StringAttribute{
+				MarkdownDescription: "Enables Individual Prefix Monitoring",
+				Computed:            true,
+			},
+			"monitor_convergence_track_summary_routes": schema.BoolAttribute{
+				MarkdownDescription: "Enables Tracking Summary(Inter-Area) Prefix Monitoring",
+				Computed:            true,
+			},
+			"monitor_convergence_track_external_routes": schema.BoolAttribute{
+				MarkdownDescription: "Enables Tracking External(Type-5/7) Prefix Monitoring",
+				Computed:            true,
+			},
+			"monitor_convergence_track_ip_frr": schema.BoolAttribute{
+				MarkdownDescription: "Enables Tracking IP-Frr Convergence",
+				Computed:            true,
+			},
+			"ucmp": schema.BoolAttribute{
+				MarkdownDescription: "Enable ucmp",
+				Computed:            true,
+			},
+			"ucmp_variance": schema.Int64Attribute{
+				MarkdownDescription: "Set the Variance for UCMP path metric",
+				Computed:            true,
+			},
+			"ucmp_prefix_list": schema.StringAttribute{
+				MarkdownDescription: "Filter prefixes for which UCMP path are calculated",
+				Computed:            true,
+			},
+			"ucmp_exclude_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "Exclude an interface during UCMP computation",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: "Exclude an interface during UCMP computation",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"ucmp_delay_interval": schema.Int64Attribute{
+				MarkdownDescription: "Interval between SPF and start of the UCMP calculation",
+				Computed:            true,
+			},
+			"srlg_admin_weight": schema.Int64Attribute{
+				MarkdownDescription: "Default admin weight for all SRLG values",
+				Computed:            true,
+			},
+			"srlg_names": schema.ListNestedAttribute{
+				MarkdownDescription: "Weighted SRLG name configuration",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"srlg_name": schema.StringAttribute{
+							MarkdownDescription: "Weighted SRLG name configuration",
+							Computed:            true,
+						},
+						"admin_weight": schema.Int64Attribute{
+							MarkdownDescription: "Default admin weight for all SRLG values",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"max_external_lsa": schema.Int64Attribute{
+				MarkdownDescription: "Maximum number of External LSAs per ASBR",
+				Computed:            true,
+			},
+			"max_external_lsa_threshold": schema.Int64Attribute{
+				MarkdownDescription: "Threshold value (%) at which to generate a warning msg",
+				Computed:            true,
+			},
+			"max_external_lsa_suppress_neighbor": schema.BoolAttribute{
+				MarkdownDescription: "Suppress the neighbor when limit is crossed",
+				Computed:            true,
+			},
+			"max_external_lsa_warning_only": schema.BoolAttribute{
+				MarkdownDescription: "Only give warning message when limit is exceeded",
+				Computed:            true,
+			},
+			"exchange_timer": schema.Int64Attribute{
+				MarkdownDescription: "Time after which interface will be brought down if adjacency is stuck in exchange/loading",
+				Computed:            true,
+			},
+			"exchange_timer_hold_time": schema.Int64Attribute{
+				MarkdownDescription: "Time after which interface will be brought up to recover adjacencies",
+				Computed:            true,
+			},
+			"exchange_timer_recovery_count": schema.Int64Attribute{
+				MarkdownDescription: "Number of times recovery will be attempted",
+				Computed:            true,
+			},
+			"distribute_link_state": schema.BoolAttribute{
+				MarkdownDescription: "Distribute the link-state database to external services",
+				Computed:            true,
+			},
+			"distribute_link_state_instance_id": schema.Int64Attribute{
+				MarkdownDescription: "Set distribution process instance identifier",
+				Computed:            true,
+			},
+			"distribute_link_state_throttle": schema.Int64Attribute{
+				MarkdownDescription: "Throttle time between successive LSA updates",
+				Computed:            true,
+			},
+			"distribute_link_state_excl_external": schema.BoolAttribute{
+				MarkdownDescription: "Filter advertisement of external prefixes",
+				Computed:            true,
+			},
+			"distribute_link_state_allow_prefix_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Specify the route-policy to allow a set of prefixes",
+				Computed:            true,
+			},
+			"distribute_link_state_follow_on": schema.Int64Attribute{
+				MarkdownDescription: "Follow on time between successive LSA updates",
+				Computed:            true,
+			},
+			"nsr": schema.BoolAttribute{
+				MarkdownDescription: "Enable NSR for all VRFs in this process",
+				Computed:            true,
+			},
+			"nsr_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable NSR for all VRFs in this process",
+				Computed:            true,
+			},
+			"protocol_shutdown": schema.BoolAttribute{
+				MarkdownDescription: "Shutdown the OSPF protocol",
+				Computed:            true,
+			},
+			"protocol_shutdown_host_mode": schema.BoolAttribute{
+				MarkdownDescription: "Only traffic destined for this box allowed",
+				Computed:            true,
+			},
+			"protocol_shutdown_on_reload": schema.BoolAttribute{
+				MarkdownDescription: "Shutdown post reload only",
+				Computed:            true,
 			},
 		},
 	}

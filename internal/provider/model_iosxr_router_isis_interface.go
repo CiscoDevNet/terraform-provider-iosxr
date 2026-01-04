@@ -207,7 +207,7 @@ func (data RouterISISInterface) toBody(ctx context.Context) string {
 	}
 	if !data.MeshGroupBlocked.IsNull() && !data.MeshGroupBlocked.IsUnknown() {
 		if data.MeshGroupBlocked.ValueBool() {
-			body, _ = sjson.Set(body, "mesh-group.blocked", map[string]string{})
+			body, _ = sjson.Set(body, "mesh-group.blocked", []interface{}{nil})
 		}
 	}
 	if !data.State.IsNull() && !data.State.IsUnknown() {
@@ -239,7 +239,7 @@ func (data RouterISISInterface) toBody(ctx context.Context) string {
 	}
 	if !data.HelloPasswordTextSendOnly.IsNull() && !data.HelloPasswordTextSendOnly.IsUnknown() {
 		if data.HelloPasswordTextSendOnly.ValueBool() {
-			body, _ = sjson.Set(body, "hello-password.hello-password-options.text.hello-password-options.send-only", map[string]string{})
+			body, _ = sjson.Set(body, "hello-password.hello-password-options.text.hello-password-options.send-only", []interface{}{nil})
 		}
 	}
 	if !data.HelloPasswordHmacMd5Encrypted.IsNull() && !data.HelloPasswordHmacMd5Encrypted.IsUnknown() {
@@ -247,7 +247,7 @@ func (data RouterISISInterface) toBody(ctx context.Context) string {
 	}
 	if !data.HelloPasswordHmacMd5SendOnly.IsNull() && !data.HelloPasswordHmacMd5SendOnly.IsUnknown() {
 		if data.HelloPasswordHmacMd5SendOnly.ValueBool() {
-			body, _ = sjson.Set(body, "hello-password.hello-password-options.hmac-md5.hello-password-options.send-only", map[string]string{})
+			body, _ = sjson.Set(body, "hello-password.hello-password-options.hmac-md5.hello-password-options.send-only", []interface{}{nil})
 		}
 	}
 	if !data.HelloPasswordKeychainName.IsNull() && !data.HelloPasswordKeychainName.IsUnknown() {
@@ -255,7 +255,7 @@ func (data RouterISISInterface) toBody(ctx context.Context) string {
 	}
 	if !data.HelloPasswordKeychainSendOnly.IsNull() && !data.HelloPasswordKeychainSendOnly.IsUnknown() {
 		if data.HelloPasswordKeychainSendOnly.ValueBool() {
-			body, _ = sjson.Set(body, "hello-password.hello-password-options.keychain.send-only", map[string]string{})
+			body, _ = sjson.Set(body, "hello-password.hello-password-options.keychain.send-only", []interface{}{nil})
 		}
 	}
 	if !data.RemotePsnpDelay.IsNull() && !data.RemotePsnpDelay.IsUnknown() {
@@ -266,7 +266,7 @@ func (data RouterISISInterface) toBody(ctx context.Context) string {
 	}
 	if !data.PointToPoint.IsNull() && !data.PointToPoint.IsUnknown() {
 		if data.PointToPoint.ValueBool() {
-			body, _ = sjson.Set(body, "point-to-point", map[string]string{})
+			body, _ = sjson.Set(body, "point-to-point", []interface{}{nil})
 		}
 	}
 	if !data.RetransmitInterval.IsNull() && !data.RetransmitInterval.IsUnknown() {
@@ -277,7 +277,7 @@ func (data RouterISISInterface) toBody(ctx context.Context) string {
 	}
 	if !data.LinkDownFastDetect.IsNull() && !data.LinkDownFastDetect.IsUnknown() {
 		if data.LinkDownFastDetect.ValueBool() {
-			body, _ = sjson.Set(body, "link-down.fast-detect", map[string]string{})
+			body, _ = sjson.Set(body, "link-down.fast-detect", []interface{}{nil})
 		}
 	}
 	if !data.AffinityFlexAlgos.IsNull() && !data.AffinityFlexAlgos.IsUnknown() {
@@ -309,12 +309,12 @@ func (data RouterISISInterface) toBody(ctx context.Context) string {
 	}
 	if !data.BfdFastDetectIpv4.IsNull() && !data.BfdFastDetectIpv4.IsUnknown() {
 		if data.BfdFastDetectIpv4.ValueBool() {
-			body, _ = sjson.Set(body, "bfd.fast-detect.ipv4", map[string]string{})
+			body, _ = sjson.Set(body, "bfd.fast-detect.ipv4", []interface{}{nil})
 		}
 	}
 	if !data.BfdFastDetectIpv6.IsNull() && !data.BfdFastDetectIpv6.IsUnknown() {
 		if data.BfdFastDetectIpv6.ValueBool() {
-			body, _ = sjson.Set(body, "bfd.fast-detect.ipv6", map[string]string{})
+			body, _ = sjson.Set(body, "bfd.fast-detect.ipv6", []interface{}{nil})
 		}
 	}
 	if !data.BfdMinimumInterval.IsNull() && !data.BfdMinimumInterval.IsUnknown() {
@@ -400,7 +400,7 @@ func (data RouterISISInterface) toBody(ctx context.Context) string {
 			}
 			if !item.TextSendOnly.IsNull() && !item.TextSendOnly.IsUnknown() {
 				if item.TextSendOnly.ValueBool() {
-					body, _ = sjson.Set(body, "hello-password-levels.hello-password-level"+"."+strconv.Itoa(index)+"."+"text.hello-password-options.send-only", map[string]string{})
+					body, _ = sjson.Set(body, "hello-password-levels.hello-password-level"+"."+strconv.Itoa(index)+"."+"text.hello-password-options.send-only", []interface{}{nil})
 				}
 			}
 			if !item.HmacMd5Encrypted.IsNull() && !item.HmacMd5Encrypted.IsUnknown() {
@@ -408,7 +408,7 @@ func (data RouterISISInterface) toBody(ctx context.Context) string {
 			}
 			if !item.HmacMd5SendOnly.IsNull() && !item.HmacMd5SendOnly.IsUnknown() {
 				if item.HmacMd5SendOnly.ValueBool() {
-					body, _ = sjson.Set(body, "hello-password-levels.hello-password-level"+"."+strconv.Itoa(index)+"."+"hmac-md5.hello-password-options.send-only", map[string]string{})
+					body, _ = sjson.Set(body, "hello-password-levels.hello-password-level"+"."+strconv.Itoa(index)+"."+"hmac-md5.hello-password-options.send-only", []interface{}{nil})
 				}
 			}
 			if !item.KeychainName.IsNull() && !item.KeychainName.IsUnknown() {
@@ -416,7 +416,7 @@ func (data RouterISISInterface) toBody(ctx context.Context) string {
 			}
 			if !item.KeychainSendOnly.IsNull() && !item.KeychainSendOnly.IsUnknown() {
 				if item.KeychainSendOnly.ValueBool() {
-					body, _ = sjson.Set(body, "hello-password-levels.hello-password-level"+"."+strconv.Itoa(index)+"."+"keychain.send-only", map[string]string{})
+					body, _ = sjson.Set(body, "hello-password-levels.hello-password-level"+"."+strconv.Itoa(index)+"."+"keychain.send-only", []interface{}{nil})
 				}
 			}
 		}

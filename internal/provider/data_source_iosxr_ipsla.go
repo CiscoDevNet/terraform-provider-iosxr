@@ -75,6 +75,10 @@ func (d *IPSLADataSource) Schema(ctx context.Context, req datasource.SchemaReque
 				MarkdownDescription: "Use MD5 authentication for IPSLA control message",
 				Computed:            true,
 			},
+			"hw_timestamp_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable hardware timestamp",
+				Computed:            true,
+			},
 			"operations": schema.ListNestedAttribute{
 				MarkdownDescription: "Operation number",
 				Computed:            true,
@@ -666,6 +670,18 @@ func (d *IPSLADataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						},
 					},
 				},
+			},
+			"server_twamp": schema.BoolAttribute{
+				MarkdownDescription: "IPSLA IPPM TWAMP server configuration",
+				Computed:            true,
+			},
+			"server_twamp_port": schema.Int64Attribute{
+				MarkdownDescription: "IPPM server port",
+				Computed:            true,
+			},
+			"server_twamp_timer_inactivity": schema.Int64Attribute{
+				MarkdownDescription: "IPPM server inactivity timer",
+				Computed:            true,
 			},
 		},
 	}

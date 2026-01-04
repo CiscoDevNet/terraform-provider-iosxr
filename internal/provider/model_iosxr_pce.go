@@ -77,6 +77,7 @@ type PCE struct {
 	SegmentRoutingStrictSidOnly              types.Bool                       `tfsdk:"segment_routing_strict_sid_only"`
 	SrteAffinityBitmaps                      []PCESrteAffinityBitmaps         `tfsdk:"srte_affinity_bitmaps"`
 	SrteSegmentLists                         []PCESrteSegmentLists            `tfsdk:"srte_segment_lists"`
+	SrteIpv4Peers                            []PCESrteIpv4Peers               `tfsdk:"srte_ipv4_peers"`
 	SrteCspfAnycastSidInclusion              types.Bool                       `tfsdk:"srte_cspf_anycast_sid_inclusion"`
 	SrteCspfSrNative                         types.Bool                       `tfsdk:"srte_cspf_sr_native"`
 	SrteCspfSrNativeForce                    types.Bool                       `tfsdk:"srte_cspf_sr_native_force"`
@@ -136,6 +137,7 @@ type PCEData struct {
 	SegmentRoutingStrictSidOnly              types.Bool                       `tfsdk:"segment_routing_strict_sid_only"`
 	SrteAffinityBitmaps                      []PCESrteAffinityBitmaps         `tfsdk:"srte_affinity_bitmaps"`
 	SrteSegmentLists                         []PCESrteSegmentLists            `tfsdk:"srte_segment_lists"`
+	SrteIpv4Peers                            []PCESrteIpv4Peers               `tfsdk:"srte_ipv4_peers"`
 	SrteCspfAnycastSidInclusion              types.Bool                       `tfsdk:"srte_cspf_anycast_sid_inclusion"`
 	SrteCspfSrNative                         types.Bool                       `tfsdk:"srte_cspf_sr_native"`
 	SrteCspfSrNativeForce                    types.Bool                       `tfsdk:"srte_cspf_sr_native_force"`
@@ -235,6 +237,10 @@ type PCESrteSegmentLists struct {
 	SegmentListName types.String                 `tfsdk:"segment_list_name"`
 	Indexes         []PCESrteSegmentListsIndexes `tfsdk:"indexes"`
 }
+type PCESrteIpv4Peers struct {
+	Address  types.String               `tfsdk:"address"`
+	Policies []PCESrteIpv4PeersPolicies `tfsdk:"policies"`
+}
 type PCESrteP2mpEndpointSets struct {
 	EndpointSetName types.String                   `tfsdk:"endpoint_set_name"`
 	Ipv4s           []PCESrteP2mpEndpointSetsIpv4s `tfsdk:"ipv4s"`
@@ -315,6 +321,21 @@ type PCESrteSegmentListsIndexes struct {
 	MplsLabel     types.Int64  `tfsdk:"mpls_label"`
 	MplsAdjacency types.String `tfsdk:"mpls_adjacency"`
 }
+type PCESrteIpv4PeersPolicies struct {
+	PolicyName                             types.String                                                     `tfsdk:"policy_name"`
+	CandidatePathsAppendSidMpls            types.Int64                                                      `tfsdk:"candidate_paths_append_sid_mpls"`
+	CandidatePathsPreferences              []PCESrteIpv4PeersPoliciesCandidatePathsPreferences              `tfsdk:"candidate_paths_preferences"`
+	CandidatePathsAffinityIncludeAnyColors []PCESrteIpv4PeersPoliciesCandidatePathsAffinityIncludeAnyColors `tfsdk:"candidate_paths_affinity_include_any_colors"`
+	CandidatePathsAffinityIncludeAllColors []PCESrteIpv4PeersPoliciesCandidatePathsAffinityIncludeAllColors `tfsdk:"candidate_paths_affinity_include_all_colors"`
+	CandidatePathsAffinityExcludeColors    []PCESrteIpv4PeersPoliciesCandidatePathsAffinityExcludeColors    `tfsdk:"candidate_paths_affinity_exclude_colors"`
+	Color                                  types.Int64                                                      `tfsdk:"color"`
+	EndPointIpv4                           types.String                                                     `tfsdk:"end_point_ipv4"`
+	BindingSidMpls                         types.Int64                                                      `tfsdk:"binding_sid_mpls"`
+	Shutdown                               types.Bool                                                       `tfsdk:"shutdown"`
+	ProfileId                              types.Int64                                                      `tfsdk:"profile_id"`
+	PathSelectionProtected                 types.Bool                                                       `tfsdk:"path_selection_protected"`
+	PathSelectionUnprotected               types.Bool                                                       `tfsdk:"path_selection_unprotected"`
+}
 type PCESrteP2mpEndpointSetsIpv4s struct {
 	Address types.String `tfsdk:"address"`
 }
@@ -334,6 +355,33 @@ type PCESrteP2mpPoliciesCandidatePathsPreferences struct {
 	DynamicMetricTypeIgp      types.Bool  `tfsdk:"dynamic_metric_type_igp"`
 	DynamicMetricTypeLatency  types.Bool  `tfsdk:"dynamic_metric_type_latency"`
 	DynamicMetricTypeHopcount types.Bool  `tfsdk:"dynamic_metric_type_hopcount"`
+}
+type PCESrteIpv4PeersPoliciesCandidatePathsPreferences struct {
+	PreferenceId                                      types.Int64                                                                 `tfsdk:"preference_id"`
+	DynamicMpls                                       types.Bool                                                                  `tfsdk:"dynamic_mpls"`
+	DynamicMetricTypeTe                               types.Bool                                                                  `tfsdk:"dynamic_metric_type_te"`
+	DynamicMetricTypeIgp                              types.Bool                                                                  `tfsdk:"dynamic_metric_type_igp"`
+	DynamicMetricTypeLatency                          types.Bool                                                                  `tfsdk:"dynamic_metric_type_latency"`
+	DynamicMetricTypeHopcount                         types.Bool                                                                  `tfsdk:"dynamic_metric_type_hopcount"`
+	DynamicMetricSidLimit                             types.Int64                                                                 `tfsdk:"dynamic_metric_sid_limit"`
+	ExplicitSegmentListNames                          []PCESrteIpv4PeersPoliciesCandidatePathsPreferencesExplicitSegmentListNames `tfsdk:"explicit_segment_list_names"`
+	ConstraintsSegmentsSidAlgorithm                   types.Int64                                                                 `tfsdk:"constraints_segments_sid_algorithm"`
+	ConstraintsSegmentsProtectionProtectedPreferred   types.Bool                                                                  `tfsdk:"constraints_segments_protection_protected_preferred"`
+	ConstraintsSegmentsProtectionProtectedOnly        types.Bool                                                                  `tfsdk:"constraints_segments_protection_protected_only"`
+	ConstraintsSegmentsProtectionUnprotectedOnly      types.Bool                                                                  `tfsdk:"constraints_segments_protection_unprotected_only"`
+	ConstraintsSegmentsProtectionUnprotectedPreferred types.Bool                                                                  `tfsdk:"constraints_segments_protection_unprotected_preferred"`
+}
+type PCESrteIpv4PeersPoliciesCandidatePathsAffinityIncludeAnyColors struct {
+	AffinityColorName types.String `tfsdk:"affinity_color_name"`
+}
+type PCESrteIpv4PeersPoliciesCandidatePathsAffinityIncludeAllColors struct {
+	AffinityColorName types.String `tfsdk:"affinity_color_name"`
+}
+type PCESrteIpv4PeersPoliciesCandidatePathsAffinityExcludeColors struct {
+	AffinityColorName types.String `tfsdk:"affinity_color_name"`
+}
+type PCESrteIpv4PeersPoliciesCandidatePathsPreferencesExplicitSegmentListNames struct {
+	SegmentListName types.String `tfsdk:"segment_list_name"`
 }
 
 // End of section. //template:end types
@@ -945,6 +993,143 @@ func (data PCE) toBody(ctx context.Context) string {
 					}
 					if !citem.MplsAdjacency.IsNull() && !citem.MplsAdjacency.IsUnknown() {
 						body, _ = sjson.Set(body, "segment-routing.traffic-eng.segment-lists.segment-list"+"."+strconv.Itoa(index)+"."+"indexes.index"+"."+strconv.Itoa(cindex)+"."+"mpls.adjacency", citem.MplsAdjacency.ValueString())
+					}
+				}
+			}
+		}
+	}
+	if len(data.SrteIpv4Peers) > 0 {
+		body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4", []interface{}{})
+		for index, item := range data.SrteIpv4Peers {
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"address", item.Address.ValueString())
+			}
+			if len(item.Policies) > 0 {
+				body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy", []interface{}{})
+				for cindex, citem := range item.Policies {
+					if !citem.PolicyName.IsNull() && !citem.PolicyName.IsUnknown() {
+						body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"policy-name", citem.PolicyName.ValueString())
+					}
+					if !citem.CandidatePathsAppendSidMpls.IsNull() && !citem.CandidatePathsAppendSidMpls.IsUnknown() {
+						body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.append-sid.mpls", strconv.FormatInt(citem.CandidatePathsAppendSidMpls.ValueInt64(), 10))
+					}
+					if !citem.Color.IsNull() && !citem.Color.IsUnknown() {
+						body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"color", strconv.FormatInt(citem.Color.ValueInt64(), 10))
+					}
+					if !citem.EndPointIpv4.IsNull() && !citem.EndPointIpv4.IsUnknown() {
+						body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"end-point.ipv4", citem.EndPointIpv4.ValueString())
+					}
+					if !citem.BindingSidMpls.IsNull() && !citem.BindingSidMpls.IsUnknown() {
+						body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"binding-sid.mpls", strconv.FormatInt(citem.BindingSidMpls.ValueInt64(), 10))
+					}
+					if !citem.Shutdown.IsNull() && !citem.Shutdown.IsUnknown() {
+						if citem.Shutdown.ValueBool() {
+							body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"shutdown", map[string]string{})
+						}
+					}
+					if !citem.ProfileId.IsNull() && !citem.ProfileId.IsUnknown() {
+						body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"profile-id", strconv.FormatInt(citem.ProfileId.ValueInt64(), 10))
+					}
+					if !citem.PathSelectionProtected.IsNull() && !citem.PathSelectionProtected.IsUnknown() {
+						if citem.PathSelectionProtected.ValueBool() {
+							body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"path-selection.protected", map[string]string{})
+						}
+					}
+					if !citem.PathSelectionUnprotected.IsNull() && !citem.PathSelectionUnprotected.IsUnknown() {
+						if citem.PathSelectionUnprotected.ValueBool() {
+							body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"path-selection.unprotected", map[string]string{})
+						}
+					}
+					if len(citem.CandidatePathsPreferences) > 0 {
+						body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.preferences.preference", []interface{}{})
+						for ccindex, ccitem := range citem.CandidatePathsPreferences {
+							if !ccitem.PreferenceId.IsNull() && !ccitem.PreferenceId.IsUnknown() {
+								body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.preferences.preference"+"."+strconv.Itoa(ccindex)+"."+"preference-id", strconv.FormatInt(ccitem.PreferenceId.ValueInt64(), 10))
+							}
+							if !ccitem.DynamicMpls.IsNull() && !ccitem.DynamicMpls.IsUnknown() {
+								if ccitem.DynamicMpls.ValueBool() {
+									body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.preferences.preference"+"."+strconv.Itoa(ccindex)+"."+"dynamic.mpls", map[string]string{})
+								}
+							}
+							if !ccitem.DynamicMetricTypeTe.IsNull() && !ccitem.DynamicMetricTypeTe.IsUnknown() {
+								if ccitem.DynamicMetricTypeTe.ValueBool() {
+									body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.preferences.preference"+"."+strconv.Itoa(ccindex)+"."+"dynamic.mpls.metric.type.te", map[string]string{})
+								}
+							}
+							if !ccitem.DynamicMetricTypeIgp.IsNull() && !ccitem.DynamicMetricTypeIgp.IsUnknown() {
+								if ccitem.DynamicMetricTypeIgp.ValueBool() {
+									body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.preferences.preference"+"."+strconv.Itoa(ccindex)+"."+"dynamic.mpls.metric.type.igp", map[string]string{})
+								}
+							}
+							if !ccitem.DynamicMetricTypeLatency.IsNull() && !ccitem.DynamicMetricTypeLatency.IsUnknown() {
+								if ccitem.DynamicMetricTypeLatency.ValueBool() {
+									body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.preferences.preference"+"."+strconv.Itoa(ccindex)+"."+"dynamic.mpls.metric.type.latency", map[string]string{})
+								}
+							}
+							if !ccitem.DynamicMetricTypeHopcount.IsNull() && !ccitem.DynamicMetricTypeHopcount.IsUnknown() {
+								if ccitem.DynamicMetricTypeHopcount.ValueBool() {
+									body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.preferences.preference"+"."+strconv.Itoa(ccindex)+"."+"dynamic.mpls.metric.type.hopcount", map[string]string{})
+								}
+							}
+							if !ccitem.DynamicMetricSidLimit.IsNull() && !ccitem.DynamicMetricSidLimit.IsUnknown() {
+								body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.preferences.preference"+"."+strconv.Itoa(ccindex)+"."+"dynamic.mpls.metric.sid-limit", strconv.FormatInt(ccitem.DynamicMetricSidLimit.ValueInt64(), 10))
+							}
+							if !ccitem.ConstraintsSegmentsSidAlgorithm.IsNull() && !ccitem.ConstraintsSegmentsSidAlgorithm.IsUnknown() {
+								body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.preferences.preference"+"."+strconv.Itoa(ccindex)+"."+"constraints.segments.sid-algorithm", strconv.FormatInt(ccitem.ConstraintsSegmentsSidAlgorithm.ValueInt64(), 10))
+							}
+							if !ccitem.ConstraintsSegmentsProtectionProtectedPreferred.IsNull() && !ccitem.ConstraintsSegmentsProtectionProtectedPreferred.IsUnknown() {
+								if ccitem.ConstraintsSegmentsProtectionProtectedPreferred.ValueBool() {
+									body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.preferences.preference"+"."+strconv.Itoa(ccindex)+"."+"constraints.segments.protection.protected-preferred", map[string]string{})
+								}
+							}
+							if !ccitem.ConstraintsSegmentsProtectionProtectedOnly.IsNull() && !ccitem.ConstraintsSegmentsProtectionProtectedOnly.IsUnknown() {
+								if ccitem.ConstraintsSegmentsProtectionProtectedOnly.ValueBool() {
+									body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.preferences.preference"+"."+strconv.Itoa(ccindex)+"."+"constraints.segments.protection.protected-only", map[string]string{})
+								}
+							}
+							if !ccitem.ConstraintsSegmentsProtectionUnprotectedOnly.IsNull() && !ccitem.ConstraintsSegmentsProtectionUnprotectedOnly.IsUnknown() {
+								if ccitem.ConstraintsSegmentsProtectionUnprotectedOnly.ValueBool() {
+									body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.preferences.preference"+"."+strconv.Itoa(ccindex)+"."+"constraints.segments.protection.unprotected-only", map[string]string{})
+								}
+							}
+							if !ccitem.ConstraintsSegmentsProtectionUnprotectedPreferred.IsNull() && !ccitem.ConstraintsSegmentsProtectionUnprotectedPreferred.IsUnknown() {
+								if ccitem.ConstraintsSegmentsProtectionUnprotectedPreferred.ValueBool() {
+									body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.preferences.preference"+"."+strconv.Itoa(ccindex)+"."+"constraints.segments.protection.unprotected-preferred", map[string]string{})
+								}
+							}
+							if len(ccitem.ExplicitSegmentListNames) > 0 {
+								body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.preferences.preference"+"."+strconv.Itoa(ccindex)+"."+"explicit.segment-list-names.segment-list-name", []interface{}{})
+								for cccindex, cccitem := range ccitem.ExplicitSegmentListNames {
+									if !cccitem.SegmentListName.IsNull() && !cccitem.SegmentListName.IsUnknown() {
+										body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.preferences.preference"+"."+strconv.Itoa(ccindex)+"."+"explicit.segment-list-names.segment-list-name"+"."+strconv.Itoa(cccindex)+"."+"segment-list-name", cccitem.SegmentListName.ValueString())
+									}
+								}
+							}
+						}
+					}
+					if len(citem.CandidatePathsAffinityIncludeAnyColors) > 0 {
+						body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.affinity.include-any.affinity-colors.affinity-color", []interface{}{})
+						for ccindex, ccitem := range citem.CandidatePathsAffinityIncludeAnyColors {
+							if !ccitem.AffinityColorName.IsNull() && !ccitem.AffinityColorName.IsUnknown() {
+								body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.affinity.include-any.affinity-colors.affinity-color"+"."+strconv.Itoa(ccindex)+"."+"affinity-color-name", ccitem.AffinityColorName.ValueString())
+							}
+						}
+					}
+					if len(citem.CandidatePathsAffinityIncludeAllColors) > 0 {
+						body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.affinity.include-all.affinity-colors.affinity-color", []interface{}{})
+						for ccindex, ccitem := range citem.CandidatePathsAffinityIncludeAllColors {
+							if !ccitem.AffinityColorName.IsNull() && !ccitem.AffinityColorName.IsUnknown() {
+								body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.affinity.include-all.affinity-colors.affinity-color"+"."+strconv.Itoa(ccindex)+"."+"affinity-color-name", ccitem.AffinityColorName.ValueString())
+							}
+						}
+					}
+					if len(citem.CandidatePathsAffinityExcludeColors) > 0 {
+						body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.affinity.exclude.affinity-colors.affinity-color", []interface{}{})
+						for ccindex, ccitem := range citem.CandidatePathsAffinityExcludeColors {
+							if !ccitem.AffinityColorName.IsNull() && !ccitem.AffinityColorName.IsUnknown() {
+								body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.affinity.exclude.affinity-colors.affinity-color"+"."+strconv.Itoa(ccindex)+"."+"affinity-color-name", ccitem.AffinityColorName.ValueString())
+							}
+						}
 					}
 				}
 			}
@@ -2196,6 +2381,352 @@ func (data *PCE) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 	}
+	for i := range data.SrteIpv4Peers {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.SrteIpv4Peers[i].Address.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "segment-routing.traffic-eng.peer.ipv4s.ipv4").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("address"); value.Exists() && !data.SrteIpv4Peers[i].Address.IsNull() {
+			data.SrteIpv4Peers[i].Address = types.StringValue(value.String())
+		} else {
+			data.SrteIpv4Peers[i].Address = types.StringNull()
+		}
+		for ci := range data.SrteIpv4Peers[i].Policies {
+			keys := [...]string{"policy-name"}
+			keyValues := [...]string{data.SrteIpv4Peers[i].Policies[ci].PolicyName.ValueString()}
+
+			var cr gjson.Result
+			r.Get("policies.policy").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("policy-name"); value.Exists() && !data.SrteIpv4Peers[i].Policies[ci].PolicyName.IsNull() {
+				data.SrteIpv4Peers[i].Policies[ci].PolicyName = types.StringValue(value.String())
+			} else {
+				data.SrteIpv4Peers[i].Policies[ci].PolicyName = types.StringNull()
+			}
+			if value := cr.Get("candidate-paths.append-sid.mpls"); value.Exists() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAppendSidMpls.IsNull() {
+				data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAppendSidMpls = types.Int64Value(value.Int())
+			} else {
+				data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAppendSidMpls = types.Int64Null()
+			}
+			for cci := range data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences {
+				keys := [...]string{"preference-id"}
+				keyValues := [...]string{strconv.FormatInt(data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].PreferenceId.ValueInt64(), 10)}
+
+				var ccr gjson.Result
+				cr.Get("candidate-paths.preferences.preference").ForEach(
+					func(_, v gjson.Result) bool {
+						found := false
+						for ik := range keys {
+							if v.Get(keys[ik]).String() == keyValues[ik] {
+								found = true
+								continue
+							}
+							found = false
+							break
+						}
+						if found {
+							ccr = v
+							return false
+						}
+						return true
+					},
+				)
+				if value := ccr.Get("preference-id"); value.Exists() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].PreferenceId.IsNull() {
+					data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].PreferenceId = types.Int64Value(value.Int())
+				} else {
+					data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].PreferenceId = types.Int64Null()
+				}
+				if value := ccr.Get("dynamic.mpls"); !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMpls.IsNull() {
+					if value.Exists() {
+						data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMpls = types.BoolValue(true)
+					} else {
+						data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMpls = types.BoolValue(false)
+					}
+				} else {
+					data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMpls = types.BoolNull()
+				}
+				if value := ccr.Get("dynamic.mpls.metric.type.te"); !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeTe.IsNull() {
+					if value.Exists() {
+						data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeTe = types.BoolValue(true)
+					} else {
+						data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeTe = types.BoolValue(false)
+					}
+				} else {
+					data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeTe = types.BoolNull()
+				}
+				if value := ccr.Get("dynamic.mpls.metric.type.igp"); !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeIgp.IsNull() {
+					if value.Exists() {
+						data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeIgp = types.BoolValue(true)
+					} else {
+						data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeIgp = types.BoolValue(false)
+					}
+				} else {
+					data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeIgp = types.BoolNull()
+				}
+				if value := ccr.Get("dynamic.mpls.metric.type.latency"); !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeLatency.IsNull() {
+					if value.Exists() {
+						data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeLatency = types.BoolValue(true)
+					} else {
+						data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeLatency = types.BoolValue(false)
+					}
+				} else {
+					data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeLatency = types.BoolNull()
+				}
+				if value := ccr.Get("dynamic.mpls.metric.type.hopcount"); !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeHopcount.IsNull() {
+					if value.Exists() {
+						data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeHopcount = types.BoolValue(true)
+					} else {
+						data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeHopcount = types.BoolValue(false)
+					}
+				} else {
+					data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeHopcount = types.BoolNull()
+				}
+				if value := ccr.Get("dynamic.mpls.metric.sid-limit"); value.Exists() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricSidLimit.IsNull() {
+					data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricSidLimit = types.Int64Value(value.Int())
+				} else {
+					data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricSidLimit = types.Int64Null()
+				}
+				for ccci := range data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ExplicitSegmentListNames {
+					keys := [...]string{"segment-list-name"}
+					keyValues := [...]string{data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ExplicitSegmentListNames[ccci].SegmentListName.ValueString()}
+
+					var cccr gjson.Result
+					ccr.Get("explicit.segment-list-names.segment-list-name").ForEach(
+						func(_, v gjson.Result) bool {
+							found := false
+							for ik := range keys {
+								if v.Get(keys[ik]).String() == keyValues[ik] {
+									found = true
+									continue
+								}
+								found = false
+								break
+							}
+							if found {
+								cccr = v
+								return false
+							}
+							return true
+						},
+					)
+					if value := cccr.Get("segment-list-name"); value.Exists() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ExplicitSegmentListNames[ccci].SegmentListName.IsNull() {
+						data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ExplicitSegmentListNames[ccci].SegmentListName = types.StringValue(value.String())
+					} else {
+						data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ExplicitSegmentListNames[ccci].SegmentListName = types.StringNull()
+					}
+				}
+				if value := ccr.Get("constraints.segments.sid-algorithm"); value.Exists() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsSidAlgorithm.IsNull() {
+					data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsSidAlgorithm = types.Int64Value(value.Int())
+				} else {
+					data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsSidAlgorithm = types.Int64Null()
+				}
+				if value := ccr.Get("constraints.segments.protection.protected-preferred"); !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedPreferred.IsNull() {
+					if value.Exists() {
+						data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedPreferred = types.BoolValue(true)
+					} else {
+						data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedPreferred = types.BoolValue(false)
+					}
+				} else {
+					data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedPreferred = types.BoolNull()
+				}
+				if value := ccr.Get("constraints.segments.protection.protected-only"); !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedOnly.IsNull() {
+					if value.Exists() {
+						data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedOnly = types.BoolValue(true)
+					} else {
+						data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedOnly = types.BoolValue(false)
+					}
+				} else {
+					data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedOnly = types.BoolNull()
+				}
+				if value := ccr.Get("constraints.segments.protection.unprotected-only"); !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedOnly.IsNull() {
+					if value.Exists() {
+						data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedOnly = types.BoolValue(true)
+					} else {
+						data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedOnly = types.BoolValue(false)
+					}
+				} else {
+					data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedOnly = types.BoolNull()
+				}
+				if value := ccr.Get("constraints.segments.protection.unprotected-preferred"); !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedPreferred.IsNull() {
+					if value.Exists() {
+						data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedPreferred = types.BoolValue(true)
+					} else {
+						data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedPreferred = types.BoolValue(false)
+					}
+				} else {
+					data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedPreferred = types.BoolNull()
+				}
+			}
+			for cci := range data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAnyColors {
+				keys := [...]string{"affinity-color-name"}
+				keyValues := [...]string{data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAnyColors[cci].AffinityColorName.ValueString()}
+
+				var ccr gjson.Result
+				cr.Get("candidate-paths.affinity.include-any.affinity-colors.affinity-color").ForEach(
+					func(_, v gjson.Result) bool {
+						found := false
+						for ik := range keys {
+							if v.Get(keys[ik]).String() == keyValues[ik] {
+								found = true
+								continue
+							}
+							found = false
+							break
+						}
+						if found {
+							ccr = v
+							return false
+						}
+						return true
+					},
+				)
+				if value := ccr.Get("affinity-color-name"); value.Exists() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAnyColors[cci].AffinityColorName.IsNull() {
+					data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAnyColors[cci].AffinityColorName = types.StringValue(value.String())
+				} else {
+					data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAnyColors[cci].AffinityColorName = types.StringNull()
+				}
+			}
+			for cci := range data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAllColors {
+				keys := [...]string{"affinity-color-name"}
+				keyValues := [...]string{data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAllColors[cci].AffinityColorName.ValueString()}
+
+				var ccr gjson.Result
+				cr.Get("candidate-paths.affinity.include-all.affinity-colors.affinity-color").ForEach(
+					func(_, v gjson.Result) bool {
+						found := false
+						for ik := range keys {
+							if v.Get(keys[ik]).String() == keyValues[ik] {
+								found = true
+								continue
+							}
+							found = false
+							break
+						}
+						if found {
+							ccr = v
+							return false
+						}
+						return true
+					},
+				)
+				if value := ccr.Get("affinity-color-name"); value.Exists() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAllColors[cci].AffinityColorName.IsNull() {
+					data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAllColors[cci].AffinityColorName = types.StringValue(value.String())
+				} else {
+					data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAllColors[cci].AffinityColorName = types.StringNull()
+				}
+			}
+			for cci := range data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityExcludeColors {
+				keys := [...]string{"affinity-color-name"}
+				keyValues := [...]string{data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityExcludeColors[cci].AffinityColorName.ValueString()}
+
+				var ccr gjson.Result
+				cr.Get("candidate-paths.affinity.exclude.affinity-colors.affinity-color").ForEach(
+					func(_, v gjson.Result) bool {
+						found := false
+						for ik := range keys {
+							if v.Get(keys[ik]).String() == keyValues[ik] {
+								found = true
+								continue
+							}
+							found = false
+							break
+						}
+						if found {
+							ccr = v
+							return false
+						}
+						return true
+					},
+				)
+				if value := ccr.Get("affinity-color-name"); value.Exists() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityExcludeColors[cci].AffinityColorName.IsNull() {
+					data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityExcludeColors[cci].AffinityColorName = types.StringValue(value.String())
+				} else {
+					data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityExcludeColors[cci].AffinityColorName = types.StringNull()
+				}
+			}
+			if value := cr.Get("color"); value.Exists() && !data.SrteIpv4Peers[i].Policies[ci].Color.IsNull() {
+				data.SrteIpv4Peers[i].Policies[ci].Color = types.Int64Value(value.Int())
+			} else {
+				data.SrteIpv4Peers[i].Policies[ci].Color = types.Int64Null()
+			}
+			if value := cr.Get("end-point.ipv4"); value.Exists() && !data.SrteIpv4Peers[i].Policies[ci].EndPointIpv4.IsNull() {
+				data.SrteIpv4Peers[i].Policies[ci].EndPointIpv4 = types.StringValue(value.String())
+			} else {
+				data.SrteIpv4Peers[i].Policies[ci].EndPointIpv4 = types.StringNull()
+			}
+			if value := cr.Get("binding-sid.mpls"); value.Exists() && !data.SrteIpv4Peers[i].Policies[ci].BindingSidMpls.IsNull() {
+				data.SrteIpv4Peers[i].Policies[ci].BindingSidMpls = types.Int64Value(value.Int())
+			} else {
+				data.SrteIpv4Peers[i].Policies[ci].BindingSidMpls = types.Int64Null()
+			}
+			if value := cr.Get("shutdown"); !data.SrteIpv4Peers[i].Policies[ci].Shutdown.IsNull() {
+				if value.Exists() {
+					data.SrteIpv4Peers[i].Policies[ci].Shutdown = types.BoolValue(true)
+				} else {
+					data.SrteIpv4Peers[i].Policies[ci].Shutdown = types.BoolValue(false)
+				}
+			} else {
+				data.SrteIpv4Peers[i].Policies[ci].Shutdown = types.BoolNull()
+			}
+			if value := cr.Get("profile-id"); value.Exists() && !data.SrteIpv4Peers[i].Policies[ci].ProfileId.IsNull() {
+				data.SrteIpv4Peers[i].Policies[ci].ProfileId = types.Int64Value(value.Int())
+			} else {
+				data.SrteIpv4Peers[i].Policies[ci].ProfileId = types.Int64Null()
+			}
+			if value := cr.Get("path-selection.protected"); !data.SrteIpv4Peers[i].Policies[ci].PathSelectionProtected.IsNull() {
+				if value.Exists() {
+					data.SrteIpv4Peers[i].Policies[ci].PathSelectionProtected = types.BoolValue(true)
+				} else {
+					data.SrteIpv4Peers[i].Policies[ci].PathSelectionProtected = types.BoolValue(false)
+				}
+			} else {
+				data.SrteIpv4Peers[i].Policies[ci].PathSelectionProtected = types.BoolNull()
+			}
+			if value := cr.Get("path-selection.unprotected"); !data.SrteIpv4Peers[i].Policies[ci].PathSelectionUnprotected.IsNull() {
+				if value.Exists() {
+					data.SrteIpv4Peers[i].Policies[ci].PathSelectionUnprotected = types.BoolValue(true)
+				} else {
+					data.SrteIpv4Peers[i].Policies[ci].PathSelectionUnprotected = types.BoolValue(false)
+				}
+			} else {
+				data.SrteIpv4Peers[i].Policies[ci].PathSelectionUnprotected = types.BoolNull()
+			}
+		}
+	}
 	if value := gjson.GetBytes(res, "segment-routing.traffic-eng.cspf.anycast-sid-inclusion"); !data.SrteCspfAnycastSidInclusion.IsNull() {
 		if value.Exists() {
 			data.SrteCspfAnycastSidInclusion = types.BoolValue(true)
@@ -3201,6 +3732,164 @@ func (data *PCE) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
+	if value := gjson.GetBytes(res, "segment-routing.traffic-eng.peer.ipv4s.ipv4"); value.Exists() {
+		data.SrteIpv4Peers = make([]PCESrteIpv4Peers, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCESrteIpv4Peers{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("policies.policy"); cValue.Exists() {
+				item.Policies = make([]PCESrteIpv4PeersPolicies, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := PCESrteIpv4PeersPolicies{}
+					if ccValue := cv.Get("policy-name"); ccValue.Exists() {
+						cItem.PolicyName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("candidate-paths.append-sid.mpls"); ccValue.Exists() {
+						cItem.CandidatePathsAppendSidMpls = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("candidate-paths.preferences.preference"); ccValue.Exists() {
+						cItem.CandidatePathsPreferences = make([]PCESrteIpv4PeersPoliciesCandidatePathsPreferences, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := PCESrteIpv4PeersPoliciesCandidatePathsPreferences{}
+							if cccValue := ccv.Get("preference-id"); cccValue.Exists() {
+								ccItem.PreferenceId = types.Int64Value(cccValue.Int())
+							}
+							if cccValue := ccv.Get("dynamic.mpls"); cccValue.Exists() {
+								ccItem.DynamicMpls = types.BoolValue(true)
+							} else {
+								ccItem.DynamicMpls = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("dynamic.mpls.metric.type.te"); cccValue.Exists() {
+								ccItem.DynamicMetricTypeTe = types.BoolValue(true)
+							} else {
+								ccItem.DynamicMetricTypeTe = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("dynamic.mpls.metric.type.igp"); cccValue.Exists() {
+								ccItem.DynamicMetricTypeIgp = types.BoolValue(true)
+							} else {
+								ccItem.DynamicMetricTypeIgp = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("dynamic.mpls.metric.type.latency"); cccValue.Exists() {
+								ccItem.DynamicMetricTypeLatency = types.BoolValue(true)
+							} else {
+								ccItem.DynamicMetricTypeLatency = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("dynamic.mpls.metric.type.hopcount"); cccValue.Exists() {
+								ccItem.DynamicMetricTypeHopcount = types.BoolValue(true)
+							} else {
+								ccItem.DynamicMetricTypeHopcount = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("dynamic.mpls.metric.sid-limit"); cccValue.Exists() {
+								ccItem.DynamicMetricSidLimit = types.Int64Value(cccValue.Int())
+							}
+							if cccValue := ccv.Get("explicit.segment-list-names.segment-list-name"); cccValue.Exists() {
+								ccItem.ExplicitSegmentListNames = make([]PCESrteIpv4PeersPoliciesCandidatePathsPreferencesExplicitSegmentListNames, 0)
+								cccValue.ForEach(func(ccck, cccv gjson.Result) bool {
+									cccItem := PCESrteIpv4PeersPoliciesCandidatePathsPreferencesExplicitSegmentListNames{}
+									if ccccValue := cccv.Get("segment-list-name"); ccccValue.Exists() {
+										cccItem.SegmentListName = types.StringValue(ccccValue.String())
+									}
+									ccItem.ExplicitSegmentListNames = append(ccItem.ExplicitSegmentListNames, cccItem)
+									return true
+								})
+							}
+							if cccValue := ccv.Get("constraints.segments.sid-algorithm"); cccValue.Exists() {
+								ccItem.ConstraintsSegmentsSidAlgorithm = types.Int64Value(cccValue.Int())
+							}
+							if cccValue := ccv.Get("constraints.segments.protection.protected-preferred"); cccValue.Exists() {
+								ccItem.ConstraintsSegmentsProtectionProtectedPreferred = types.BoolValue(true)
+							} else {
+								ccItem.ConstraintsSegmentsProtectionProtectedPreferred = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("constraints.segments.protection.protected-only"); cccValue.Exists() {
+								ccItem.ConstraintsSegmentsProtectionProtectedOnly = types.BoolValue(true)
+							} else {
+								ccItem.ConstraintsSegmentsProtectionProtectedOnly = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("constraints.segments.protection.unprotected-only"); cccValue.Exists() {
+								ccItem.ConstraintsSegmentsProtectionUnprotectedOnly = types.BoolValue(true)
+							} else {
+								ccItem.ConstraintsSegmentsProtectionUnprotectedOnly = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("constraints.segments.protection.unprotected-preferred"); cccValue.Exists() {
+								ccItem.ConstraintsSegmentsProtectionUnprotectedPreferred = types.BoolValue(true)
+							} else {
+								ccItem.ConstraintsSegmentsProtectionUnprotectedPreferred = types.BoolValue(false)
+							}
+							cItem.CandidatePathsPreferences = append(cItem.CandidatePathsPreferences, ccItem)
+							return true
+						})
+					}
+					if ccValue := cv.Get("candidate-paths.affinity.include-any.affinity-colors.affinity-color"); ccValue.Exists() {
+						cItem.CandidatePathsAffinityIncludeAnyColors = make([]PCESrteIpv4PeersPoliciesCandidatePathsAffinityIncludeAnyColors, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := PCESrteIpv4PeersPoliciesCandidatePathsAffinityIncludeAnyColors{}
+							if cccValue := ccv.Get("affinity-color-name"); cccValue.Exists() {
+								ccItem.AffinityColorName = types.StringValue(cccValue.String())
+							}
+							cItem.CandidatePathsAffinityIncludeAnyColors = append(cItem.CandidatePathsAffinityIncludeAnyColors, ccItem)
+							return true
+						})
+					}
+					if ccValue := cv.Get("candidate-paths.affinity.include-all.affinity-colors.affinity-color"); ccValue.Exists() {
+						cItem.CandidatePathsAffinityIncludeAllColors = make([]PCESrteIpv4PeersPoliciesCandidatePathsAffinityIncludeAllColors, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := PCESrteIpv4PeersPoliciesCandidatePathsAffinityIncludeAllColors{}
+							if cccValue := ccv.Get("affinity-color-name"); cccValue.Exists() {
+								ccItem.AffinityColorName = types.StringValue(cccValue.String())
+							}
+							cItem.CandidatePathsAffinityIncludeAllColors = append(cItem.CandidatePathsAffinityIncludeAllColors, ccItem)
+							return true
+						})
+					}
+					if ccValue := cv.Get("candidate-paths.affinity.exclude.affinity-colors.affinity-color"); ccValue.Exists() {
+						cItem.CandidatePathsAffinityExcludeColors = make([]PCESrteIpv4PeersPoliciesCandidatePathsAffinityExcludeColors, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := PCESrteIpv4PeersPoliciesCandidatePathsAffinityExcludeColors{}
+							if cccValue := ccv.Get("affinity-color-name"); cccValue.Exists() {
+								ccItem.AffinityColorName = types.StringValue(cccValue.String())
+							}
+							cItem.CandidatePathsAffinityExcludeColors = append(cItem.CandidatePathsAffinityExcludeColors, ccItem)
+							return true
+						})
+					}
+					if ccValue := cv.Get("color"); ccValue.Exists() {
+						cItem.Color = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("end-point.ipv4"); ccValue.Exists() {
+						cItem.EndPointIpv4 = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("binding-sid.mpls"); ccValue.Exists() {
+						cItem.BindingSidMpls = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("shutdown"); ccValue.Exists() {
+						cItem.Shutdown = types.BoolValue(true)
+					} else {
+						cItem.Shutdown = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("profile-id"); ccValue.Exists() {
+						cItem.ProfileId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("path-selection.protected"); ccValue.Exists() {
+						cItem.PathSelectionProtected = types.BoolValue(true)
+					} else {
+						cItem.PathSelectionProtected = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("path-selection.unprotected"); ccValue.Exists() {
+						cItem.PathSelectionUnprotected = types.BoolValue(true)
+					} else {
+						cItem.PathSelectionUnprotected = types.BoolValue(false)
+					}
+					item.Policies = append(item.Policies, cItem)
+					return true
+				})
+			}
+			data.SrteIpv4Peers = append(data.SrteIpv4Peers, item)
+			return true
+		})
+	}
 	if value := gjson.GetBytes(res, "segment-routing.traffic-eng.cspf.anycast-sid-inclusion"); value.Exists() {
 		data.SrteCspfAnycastSidInclusion = types.BoolValue(true)
 	} else {
@@ -3974,6 +4663,164 @@ func (data *PCEData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
+	if value := gjson.GetBytes(res, "segment-routing.traffic-eng.peer.ipv4s.ipv4"); value.Exists() {
+		data.SrteIpv4Peers = make([]PCESrteIpv4Peers, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCESrteIpv4Peers{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("policies.policy"); cValue.Exists() {
+				item.Policies = make([]PCESrteIpv4PeersPolicies, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := PCESrteIpv4PeersPolicies{}
+					if ccValue := cv.Get("policy-name"); ccValue.Exists() {
+						cItem.PolicyName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("candidate-paths.append-sid.mpls"); ccValue.Exists() {
+						cItem.CandidatePathsAppendSidMpls = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("candidate-paths.preferences.preference"); ccValue.Exists() {
+						cItem.CandidatePathsPreferences = make([]PCESrteIpv4PeersPoliciesCandidatePathsPreferences, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := PCESrteIpv4PeersPoliciesCandidatePathsPreferences{}
+							if cccValue := ccv.Get("preference-id"); cccValue.Exists() {
+								ccItem.PreferenceId = types.Int64Value(cccValue.Int())
+							}
+							if cccValue := ccv.Get("dynamic.mpls"); cccValue.Exists() {
+								ccItem.DynamicMpls = types.BoolValue(true)
+							} else {
+								ccItem.DynamicMpls = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("dynamic.mpls.metric.type.te"); cccValue.Exists() {
+								ccItem.DynamicMetricTypeTe = types.BoolValue(true)
+							} else {
+								ccItem.DynamicMetricTypeTe = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("dynamic.mpls.metric.type.igp"); cccValue.Exists() {
+								ccItem.DynamicMetricTypeIgp = types.BoolValue(true)
+							} else {
+								ccItem.DynamicMetricTypeIgp = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("dynamic.mpls.metric.type.latency"); cccValue.Exists() {
+								ccItem.DynamicMetricTypeLatency = types.BoolValue(true)
+							} else {
+								ccItem.DynamicMetricTypeLatency = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("dynamic.mpls.metric.type.hopcount"); cccValue.Exists() {
+								ccItem.DynamicMetricTypeHopcount = types.BoolValue(true)
+							} else {
+								ccItem.DynamicMetricTypeHopcount = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("dynamic.mpls.metric.sid-limit"); cccValue.Exists() {
+								ccItem.DynamicMetricSidLimit = types.Int64Value(cccValue.Int())
+							}
+							if cccValue := ccv.Get("explicit.segment-list-names.segment-list-name"); cccValue.Exists() {
+								ccItem.ExplicitSegmentListNames = make([]PCESrteIpv4PeersPoliciesCandidatePathsPreferencesExplicitSegmentListNames, 0)
+								cccValue.ForEach(func(ccck, cccv gjson.Result) bool {
+									cccItem := PCESrteIpv4PeersPoliciesCandidatePathsPreferencesExplicitSegmentListNames{}
+									if ccccValue := cccv.Get("segment-list-name"); ccccValue.Exists() {
+										cccItem.SegmentListName = types.StringValue(ccccValue.String())
+									}
+									ccItem.ExplicitSegmentListNames = append(ccItem.ExplicitSegmentListNames, cccItem)
+									return true
+								})
+							}
+							if cccValue := ccv.Get("constraints.segments.sid-algorithm"); cccValue.Exists() {
+								ccItem.ConstraintsSegmentsSidAlgorithm = types.Int64Value(cccValue.Int())
+							}
+							if cccValue := ccv.Get("constraints.segments.protection.protected-preferred"); cccValue.Exists() {
+								ccItem.ConstraintsSegmentsProtectionProtectedPreferred = types.BoolValue(true)
+							} else {
+								ccItem.ConstraintsSegmentsProtectionProtectedPreferred = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("constraints.segments.protection.protected-only"); cccValue.Exists() {
+								ccItem.ConstraintsSegmentsProtectionProtectedOnly = types.BoolValue(true)
+							} else {
+								ccItem.ConstraintsSegmentsProtectionProtectedOnly = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("constraints.segments.protection.unprotected-only"); cccValue.Exists() {
+								ccItem.ConstraintsSegmentsProtectionUnprotectedOnly = types.BoolValue(true)
+							} else {
+								ccItem.ConstraintsSegmentsProtectionUnprotectedOnly = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("constraints.segments.protection.unprotected-preferred"); cccValue.Exists() {
+								ccItem.ConstraintsSegmentsProtectionUnprotectedPreferred = types.BoolValue(true)
+							} else {
+								ccItem.ConstraintsSegmentsProtectionUnprotectedPreferred = types.BoolValue(false)
+							}
+							cItem.CandidatePathsPreferences = append(cItem.CandidatePathsPreferences, ccItem)
+							return true
+						})
+					}
+					if ccValue := cv.Get("candidate-paths.affinity.include-any.affinity-colors.affinity-color"); ccValue.Exists() {
+						cItem.CandidatePathsAffinityIncludeAnyColors = make([]PCESrteIpv4PeersPoliciesCandidatePathsAffinityIncludeAnyColors, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := PCESrteIpv4PeersPoliciesCandidatePathsAffinityIncludeAnyColors{}
+							if cccValue := ccv.Get("affinity-color-name"); cccValue.Exists() {
+								ccItem.AffinityColorName = types.StringValue(cccValue.String())
+							}
+							cItem.CandidatePathsAffinityIncludeAnyColors = append(cItem.CandidatePathsAffinityIncludeAnyColors, ccItem)
+							return true
+						})
+					}
+					if ccValue := cv.Get("candidate-paths.affinity.include-all.affinity-colors.affinity-color"); ccValue.Exists() {
+						cItem.CandidatePathsAffinityIncludeAllColors = make([]PCESrteIpv4PeersPoliciesCandidatePathsAffinityIncludeAllColors, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := PCESrteIpv4PeersPoliciesCandidatePathsAffinityIncludeAllColors{}
+							if cccValue := ccv.Get("affinity-color-name"); cccValue.Exists() {
+								ccItem.AffinityColorName = types.StringValue(cccValue.String())
+							}
+							cItem.CandidatePathsAffinityIncludeAllColors = append(cItem.CandidatePathsAffinityIncludeAllColors, ccItem)
+							return true
+						})
+					}
+					if ccValue := cv.Get("candidate-paths.affinity.exclude.affinity-colors.affinity-color"); ccValue.Exists() {
+						cItem.CandidatePathsAffinityExcludeColors = make([]PCESrteIpv4PeersPoliciesCandidatePathsAffinityExcludeColors, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := PCESrteIpv4PeersPoliciesCandidatePathsAffinityExcludeColors{}
+							if cccValue := ccv.Get("affinity-color-name"); cccValue.Exists() {
+								ccItem.AffinityColorName = types.StringValue(cccValue.String())
+							}
+							cItem.CandidatePathsAffinityExcludeColors = append(cItem.CandidatePathsAffinityExcludeColors, ccItem)
+							return true
+						})
+					}
+					if ccValue := cv.Get("color"); ccValue.Exists() {
+						cItem.Color = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("end-point.ipv4"); ccValue.Exists() {
+						cItem.EndPointIpv4 = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("binding-sid.mpls"); ccValue.Exists() {
+						cItem.BindingSidMpls = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("shutdown"); ccValue.Exists() {
+						cItem.Shutdown = types.BoolValue(true)
+					} else {
+						cItem.Shutdown = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("profile-id"); ccValue.Exists() {
+						cItem.ProfileId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("path-selection.protected"); ccValue.Exists() {
+						cItem.PathSelectionProtected = types.BoolValue(true)
+					} else {
+						cItem.PathSelectionProtected = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("path-selection.unprotected"); ccValue.Exists() {
+						cItem.PathSelectionUnprotected = types.BoolValue(true)
+					} else {
+						cItem.PathSelectionUnprotected = types.BoolValue(false)
+					}
+					item.Policies = append(item.Policies, cItem)
+					return true
+				})
+			}
+			data.SrteIpv4Peers = append(data.SrteIpv4Peers, item)
+			return true
+		})
+	}
 	if value := gjson.GetBytes(res, "segment-routing.traffic-eng.cspf.anycast-sid-inclusion"); value.Exists() {
 		data.SrteCspfAnycastSidInclusion = types.BoolValue(true)
 	} else {
@@ -4508,6 +5355,273 @@ func (data *PCE) getDeletedItems(ctx context.Context, state PCE) []string {
 	}
 	if !state.SrteCspfAnycastSidInclusion.IsNull() && data.SrteCspfAnycastSidInclusion.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/cspf/anycast-sid-inclusion", state.getPath()))
+	}
+	for i := range state.SrteIpv4Peers {
+		keys := [...]string{"address"}
+		stateKeyValues := [...]string{state.SrteIpv4Peers[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SrteIpv4Peers[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SrteIpv4Peers {
+			found = true
+			if state.SrteIpv4Peers[i].Address.ValueString() != data.SrteIpv4Peers[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.SrteIpv4Peers[i].Policies {
+					ckeys := [...]string{"policy-name"}
+					cstateKeyValues := [...]string{state.SrteIpv4Peers[i].Policies[ci].PolicyName.ValueString()}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.SrteIpv4Peers[i].Policies[ci].PolicyName.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.SrteIpv4Peers[j].Policies {
+						found = true
+						if state.SrteIpv4Peers[i].Policies[ci].PolicyName.ValueString() != data.SrteIpv4Peers[j].Policies[cj].PolicyName.ValueString() {
+							found = false
+						}
+						if found {
+							if !state.SrteIpv4Peers[i].Policies[ci].PathSelectionUnprotected.IsNull() && data.SrteIpv4Peers[j].Policies[cj].PathSelectionUnprotected.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/path-selection/unprotected", state.getPath(), keyString, ckeyString))
+							}
+							if !state.SrteIpv4Peers[i].Policies[ci].PathSelectionProtected.IsNull() && data.SrteIpv4Peers[j].Policies[cj].PathSelectionProtected.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/path-selection/protected", state.getPath(), keyString, ckeyString))
+							}
+							if !state.SrteIpv4Peers[i].Policies[ci].ProfileId.IsNull() && data.SrteIpv4Peers[j].Policies[cj].ProfileId.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/profile-id", state.getPath(), keyString, ckeyString))
+							}
+							if !state.SrteIpv4Peers[i].Policies[ci].Shutdown.IsNull() && data.SrteIpv4Peers[j].Policies[cj].Shutdown.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/shutdown", state.getPath(), keyString, ckeyString))
+							}
+							if !state.SrteIpv4Peers[i].Policies[ci].BindingSidMpls.IsNull() && data.SrteIpv4Peers[j].Policies[cj].BindingSidMpls.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/binding-sid/mpls", state.getPath(), keyString, ckeyString))
+							}
+							if !state.SrteIpv4Peers[i].Policies[ci].EndPointIpv4.IsNull() && data.SrteIpv4Peers[j].Policies[cj].EndPointIpv4.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/end-point/ipv4", state.getPath(), keyString, ckeyString))
+							}
+							if !state.SrteIpv4Peers[i].Policies[ci].Color.IsNull() && data.SrteIpv4Peers[j].Policies[cj].Color.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/color", state.getPath(), keyString, ckeyString))
+							}
+							for cci := range state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityExcludeColors {
+								cckeys := [...]string{"affinity-color-name"}
+								ccstateKeyValues := [...]string{state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityExcludeColors[cci].AffinityColorName.ValueString()}
+								cckeyString := ""
+								for ccki := range cckeys {
+									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
+								}
+
+								ccemptyKeys := true
+								if !reflect.ValueOf(state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityExcludeColors[cci].AffinityColorName.ValueString()).IsZero() {
+									ccemptyKeys = false
+								}
+								if ccemptyKeys {
+									continue
+								}
+
+								found := false
+								for ccj := range data.SrteIpv4Peers[j].Policies[cj].CandidatePathsAffinityExcludeColors {
+									found = true
+									if state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityExcludeColors[cci].AffinityColorName.ValueString() != data.SrteIpv4Peers[j].Policies[cj].CandidatePathsAffinityExcludeColors[ccj].AffinityColorName.ValueString() {
+										found = false
+									}
+									if found {
+										break
+									}
+								}
+								if !found {
+									deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/affinity/exclude/affinity-colors/affinity-color%v", state.getPath(), keyString, ckeyString, cckeyString))
+								}
+							}
+							for cci := range state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAllColors {
+								cckeys := [...]string{"affinity-color-name"}
+								ccstateKeyValues := [...]string{state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAllColors[cci].AffinityColorName.ValueString()}
+								cckeyString := ""
+								for ccki := range cckeys {
+									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
+								}
+
+								ccemptyKeys := true
+								if !reflect.ValueOf(state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAllColors[cci].AffinityColorName.ValueString()).IsZero() {
+									ccemptyKeys = false
+								}
+								if ccemptyKeys {
+									continue
+								}
+
+								found := false
+								for ccj := range data.SrteIpv4Peers[j].Policies[cj].CandidatePathsAffinityIncludeAllColors {
+									found = true
+									if state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAllColors[cci].AffinityColorName.ValueString() != data.SrteIpv4Peers[j].Policies[cj].CandidatePathsAffinityIncludeAllColors[ccj].AffinityColorName.ValueString() {
+										found = false
+									}
+									if found {
+										break
+									}
+								}
+								if !found {
+									deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/affinity/include-all/affinity-colors/affinity-color%v", state.getPath(), keyString, ckeyString, cckeyString))
+								}
+							}
+							for cci := range state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAnyColors {
+								cckeys := [...]string{"affinity-color-name"}
+								ccstateKeyValues := [...]string{state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAnyColors[cci].AffinityColorName.ValueString()}
+								cckeyString := ""
+								for ccki := range cckeys {
+									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
+								}
+
+								ccemptyKeys := true
+								if !reflect.ValueOf(state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAnyColors[cci].AffinityColorName.ValueString()).IsZero() {
+									ccemptyKeys = false
+								}
+								if ccemptyKeys {
+									continue
+								}
+
+								found := false
+								for ccj := range data.SrteIpv4Peers[j].Policies[cj].CandidatePathsAffinityIncludeAnyColors {
+									found = true
+									if state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAnyColors[cci].AffinityColorName.ValueString() != data.SrteIpv4Peers[j].Policies[cj].CandidatePathsAffinityIncludeAnyColors[ccj].AffinityColorName.ValueString() {
+										found = false
+									}
+									if found {
+										break
+									}
+								}
+								if !found {
+									deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/affinity/include-any/affinity-colors/affinity-color%v", state.getPath(), keyString, ckeyString, cckeyString))
+								}
+							}
+							for cci := range state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences {
+								cckeys := [...]string{"preference-id"}
+								ccstateKeyValues := [...]string{strconv.FormatInt(state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].PreferenceId.ValueInt64(), 10)}
+								cckeyString := ""
+								for ccki := range cckeys {
+									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
+								}
+
+								ccemptyKeys := true
+								if !reflect.ValueOf(state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].PreferenceId.ValueInt64()).IsZero() {
+									ccemptyKeys = false
+								}
+								if ccemptyKeys {
+									continue
+								}
+
+								found := false
+								for ccj := range data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences {
+									found = true
+									if state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].PreferenceId.ValueInt64() != data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].PreferenceId.ValueInt64() {
+										found = false
+									}
+									if found {
+										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedPreferred.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].ConstraintsSegmentsProtectionUnprotectedPreferred.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/constraints/segments/protection/unprotected-preferred", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedOnly.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].ConstraintsSegmentsProtectionUnprotectedOnly.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/constraints/segments/protection/unprotected-only", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedOnly.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].ConstraintsSegmentsProtectionProtectedOnly.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/constraints/segments/protection/protected-only", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedPreferred.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].ConstraintsSegmentsProtectionProtectedPreferred.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/constraints/segments/protection/protected-preferred", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsSidAlgorithm.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].ConstraintsSegmentsSidAlgorithm.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/constraints/segments/sid-algorithm", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										for ccci := range state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ExplicitSegmentListNames {
+											ccckeys := [...]string{"segment-list-name"}
+											cccstateKeyValues := [...]string{state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ExplicitSegmentListNames[ccci].SegmentListName.ValueString()}
+											ccckeyString := ""
+											for cccki := range ccckeys {
+												ccckeyString += "[" + ccckeys[cccki] + "=" + cccstateKeyValues[cccki] + "]"
+											}
+
+											cccemptyKeys := true
+											if !reflect.ValueOf(state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ExplicitSegmentListNames[ccci].SegmentListName.ValueString()).IsZero() {
+												cccemptyKeys = false
+											}
+											if cccemptyKeys {
+												continue
+											}
+
+											found := false
+											for cccj := range data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].ExplicitSegmentListNames {
+												found = true
+												if state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ExplicitSegmentListNames[ccci].SegmentListName.ValueString() != data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].ExplicitSegmentListNames[cccj].SegmentListName.ValueString() {
+													found = false
+												}
+												if found {
+													break
+												}
+											}
+											if !found {
+												deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/explicit/segment-list-names/segment-list-name%v", state.getPath(), keyString, ckeyString, cckeyString, ccckeyString))
+											}
+										}
+										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricSidLimit.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].DynamicMetricSidLimit.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls/metric/sid-limit", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeHopcount.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].DynamicMetricTypeHopcount.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls/metric/type/hopcount", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeLatency.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].DynamicMetricTypeLatency.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls/metric/type/latency", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeIgp.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].DynamicMetricTypeIgp.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls/metric/type/igp", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeTe.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].DynamicMetricTypeTe.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls/metric/type/te", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMpls.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].DynamicMpls.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										break
+									}
+								}
+								if !found {
+									deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v", state.getPath(), keyString, ckeyString, cckeyString))
+								}
+							}
+							if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAppendSidMpls.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsAppendSidMpls.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/append-sid/mpls", state.getPath(), keyString, ckeyString))
+							}
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v", state.getPath(), keyString))
+		}
 	}
 	for i := range state.SrteSegmentLists {
 		keys := [...]string{"segment-list-name"}
@@ -5400,6 +6514,98 @@ func (data *PCE) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.SrteCspfAnycastSidInclusion.IsNull() && !data.SrteCspfAnycastSidInclusion.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/cspf/anycast-sid-inclusion", data.getPath()))
 	}
+	for i := range data.SrteIpv4Peers {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.SrteIpv4Peers[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		for ci := range data.SrteIpv4Peers[i].Policies {
+			ckeys := [...]string{"policy-name"}
+			ckeyValues := [...]string{data.SrteIpv4Peers[i].Policies[ci].PolicyName.ValueString()}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+			if !data.SrteIpv4Peers[i].Policies[ci].PathSelectionUnprotected.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].PathSelectionUnprotected.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/path-selection/unprotected", data.getPath(), keyString, ckeyString))
+			}
+			if !data.SrteIpv4Peers[i].Policies[ci].PathSelectionProtected.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].PathSelectionProtected.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/path-selection/protected", data.getPath(), keyString, ckeyString))
+			}
+			if !data.SrteIpv4Peers[i].Policies[ci].Shutdown.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].Shutdown.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/shutdown", data.getPath(), keyString, ckeyString))
+			}
+			for cci := range data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityExcludeColors {
+				cckeys := [...]string{"affinity-color-name"}
+				cckeyValues := [...]string{data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityExcludeColors[cci].AffinityColorName.ValueString()}
+				cckeyString := ""
+				for ccki := range cckeys {
+					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
+				}
+			}
+			for cci := range data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAllColors {
+				cckeys := [...]string{"affinity-color-name"}
+				cckeyValues := [...]string{data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAllColors[cci].AffinityColorName.ValueString()}
+				cckeyString := ""
+				for ccki := range cckeys {
+					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
+				}
+			}
+			for cci := range data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAnyColors {
+				cckeys := [...]string{"affinity-color-name"}
+				cckeyValues := [...]string{data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAnyColors[cci].AffinityColorName.ValueString()}
+				cckeyString := ""
+				for ccki := range cckeys {
+					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
+				}
+			}
+			for cci := range data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences {
+				cckeys := [...]string{"preference-id"}
+				cckeyValues := [...]string{strconv.FormatInt(data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].PreferenceId.ValueInt64(), 10)}
+				cckeyString := ""
+				for ccki := range cckeys {
+					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
+				}
+				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedPreferred.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedPreferred.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/constraints/segments/protection/unprotected-preferred", data.getPath(), keyString, ckeyString, cckeyString))
+				}
+				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedOnly.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedOnly.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/constraints/segments/protection/unprotected-only", data.getPath(), keyString, ckeyString, cckeyString))
+				}
+				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedOnly.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedOnly.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/constraints/segments/protection/protected-only", data.getPath(), keyString, ckeyString, cckeyString))
+				}
+				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedPreferred.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedPreferred.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/constraints/segments/protection/protected-preferred", data.getPath(), keyString, ckeyString, cckeyString))
+				}
+				for ccci := range data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ExplicitSegmentListNames {
+					ccckeys := [...]string{"segment-list-name"}
+					ccckeyValues := [...]string{data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ExplicitSegmentListNames[ccci].SegmentListName.ValueString()}
+					ccckeyString := ""
+					for cccki := range ccckeys {
+						ccckeyString += "[" + ccckeys[cccki] + "=" + ccckeyValues[cccki] + "]"
+					}
+				}
+				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeHopcount.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeHopcount.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls/metric/type/hopcount", data.getPath(), keyString, ckeyString, cckeyString))
+				}
+				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeLatency.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeLatency.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls/metric/type/latency", data.getPath(), keyString, ckeyString, cckeyString))
+				}
+				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeIgp.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeIgp.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls/metric/type/igp", data.getPath(), keyString, ckeyString, cckeyString))
+				}
+				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeTe.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeTe.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls/metric/type/te", data.getPath(), keyString, ckeyString, cckeyString))
+				}
+				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMpls.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMpls.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls", data.getPath(), keyString, ckeyString, cckeyString))
+				}
+			}
+		}
+	}
 	for i := range data.SrteSegmentLists {
 		keys := [...]string{"segment-list-name"}
 		keyValues := [...]string{data.SrteSegmentLists[i].SegmentListName.ValueString()}
@@ -5684,6 +6890,16 @@ func (data *PCE) getDeletePaths(ctx context.Context) []string {
 	}
 	if !data.SrteCspfAnycastSidInclusion.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/cspf/anycast-sid-inclusion", data.getPath()))
+	}
+	for i := range data.SrteIpv4Peers {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.SrteIpv4Peers[i].Address.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v", data.getPath(), keyString))
 	}
 	for i := range data.SrteSegmentLists {
 		keys := [...]string{"segment-list-name"}

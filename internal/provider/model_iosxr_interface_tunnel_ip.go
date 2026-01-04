@@ -49,6 +49,8 @@ type InterfaceTunnelIP struct {
 	Ipv4Address                               types.String                     `tfsdk:"ipv4_address"`
 	Ipv4Netmask                               types.String                     `tfsdk:"ipv4_netmask"`
 	Unnumbered                                types.String                     `tfsdk:"unnumbered"`
+	Ipv4ForwardingEnable                      types.Bool                       `tfsdk:"ipv4_forwarding_enable"`
+	Ipv4TtlPropagateDisable                   types.Bool                       `tfsdk:"ipv4_ttl_propagate_disable"`
 	Ipv4AccessGroupIngressAcl1                types.String                     `tfsdk:"ipv4_access_group_ingress_acl1"`
 	Ipv4AccessGroupIngressHardwareCount       types.Bool                       `tfsdk:"ipv4_access_group_ingress_hardware_count"`
 	Ipv4AccessGroupIngressInterfaceStatistics types.Bool                       `tfsdk:"ipv4_access_group_ingress_interface_statistics"`
@@ -63,6 +65,7 @@ type InterfaceTunnelIP struct {
 	Ipv6LinkLocalZone                         types.String                     `tfsdk:"ipv6_link_local_zone"`
 	Ipv6Autoconfig                            types.Bool                       `tfsdk:"ipv6_autoconfig"`
 	Ipv6Enable                                types.Bool                       `tfsdk:"ipv6_enable"`
+	Ipv6TtlPropagateDisable                   types.Bool                       `tfsdk:"ipv6_ttl_propagate_disable"`
 	Ipv6Addresses                             []InterfaceTunnelIPIpv6Addresses `tfsdk:"ipv6_addresses"`
 	TunnelSourceInterface                     types.String                     `tfsdk:"tunnel_source_interface"`
 	TunnelSourceIpv4                          types.String                     `tfsdk:"tunnel_source_ipv4"`
@@ -104,6 +107,8 @@ type InterfaceTunnelIPData struct {
 	Ipv4Address                               types.String                     `tfsdk:"ipv4_address"`
 	Ipv4Netmask                               types.String                     `tfsdk:"ipv4_netmask"`
 	Unnumbered                                types.String                     `tfsdk:"unnumbered"`
+	Ipv4ForwardingEnable                      types.Bool                       `tfsdk:"ipv4_forwarding_enable"`
+	Ipv4TtlPropagateDisable                   types.Bool                       `tfsdk:"ipv4_ttl_propagate_disable"`
 	Ipv4AccessGroupIngressAcl1                types.String                     `tfsdk:"ipv4_access_group_ingress_acl1"`
 	Ipv4AccessGroupIngressHardwareCount       types.Bool                       `tfsdk:"ipv4_access_group_ingress_hardware_count"`
 	Ipv4AccessGroupIngressInterfaceStatistics types.Bool                       `tfsdk:"ipv4_access_group_ingress_interface_statistics"`
@@ -118,6 +123,7 @@ type InterfaceTunnelIPData struct {
 	Ipv6LinkLocalZone                         types.String                     `tfsdk:"ipv6_link_local_zone"`
 	Ipv6Autoconfig                            types.Bool                       `tfsdk:"ipv6_autoconfig"`
 	Ipv6Enable                                types.Bool                       `tfsdk:"ipv6_enable"`
+	Ipv6TtlPropagateDisable                   types.Bool                       `tfsdk:"ipv6_ttl_propagate_disable"`
 	Ipv6Addresses                             []InterfaceTunnelIPIpv6Addresses `tfsdk:"ipv6_addresses"`
 	TunnelSourceInterface                     types.String                     `tfsdk:"tunnel_source_interface"`
 	TunnelSourceIpv4                          types.String                     `tfsdk:"tunnel_source_ipv4"`
@@ -204,17 +210,27 @@ func (data InterfaceTunnelIP) toBody(ctx context.Context) string {
 	if !data.Unnumbered.IsNull() && !data.Unnumbered.IsUnknown() {
 		body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.unnumbered", data.Unnumbered.ValueString())
 	}
+	if !data.Ipv4ForwardingEnable.IsNull() && !data.Ipv4ForwardingEnable.IsUnknown() {
+		if data.Ipv4ForwardingEnable.ValueBool() {
+			body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable", map[string]string{})
+		}
+	}
+	if !data.Ipv4TtlPropagateDisable.IsNull() && !data.Ipv4TtlPropagateDisable.IsUnknown() {
+		if data.Ipv4TtlPropagateDisable.ValueBool() {
+			body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:ttl-propagate.disable", map[string]string{})
+		}
+	}
 	if !data.Ipv4AccessGroupIngressAcl1.IsNull() && !data.Ipv4AccessGroupIngressAcl1.IsUnknown() {
 		body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.access-list-name-1.name", data.Ipv4AccessGroupIngressAcl1.ValueString())
 	}
 	if !data.Ipv4AccessGroupIngressHardwareCount.IsNull() && !data.Ipv4AccessGroupIngressHardwareCount.IsUnknown() {
 		if data.Ipv4AccessGroupIngressHardwareCount.ValueBool() {
-			body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.hardware-count", map[string]string{})
+			body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.hardware-count", []interface{}{nil})
 		}
 	}
 	if !data.Ipv4AccessGroupIngressInterfaceStatistics.IsNull() && !data.Ipv4AccessGroupIngressInterfaceStatistics.IsUnknown() {
 		if data.Ipv4AccessGroupIngressInterfaceStatistics.ValueBool() {
-			body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.interface-statistics", map[string]string{})
+			body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.interface-statistics", []interface{}{nil})
 		}
 	}
 	if !data.Ipv4AccessGroupEgressAcl.IsNull() && !data.Ipv4AccessGroupEgressAcl.IsUnknown() {
@@ -222,12 +238,12 @@ func (data InterfaceTunnelIP) toBody(ctx context.Context) string {
 	}
 	if !data.Ipv4AccessGroupEgressHardwareCount.IsNull() && !data.Ipv4AccessGroupEgressHardwareCount.IsUnknown() {
 		if data.Ipv4AccessGroupEgressHardwareCount.ValueBool() {
-			body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.hardware-count", map[string]string{})
+			body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.hardware-count", []interface{}{nil})
 		}
 	}
 	if !data.Ipv4AccessGroupEgressInterfaceStatistics.IsNull() && !data.Ipv4AccessGroupEgressInterfaceStatistics.IsUnknown() {
 		if data.Ipv4AccessGroupEgressInterfaceStatistics.ValueBool() {
-			body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.interface-statistics", map[string]string{})
+			body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.interface-statistics", []interface{}{nil})
 		}
 	}
 	if !data.Ipv6AccessGroupIngressAcl1.IsNull() && !data.Ipv6AccessGroupIngressAcl1.IsUnknown() {
@@ -235,7 +251,7 @@ func (data InterfaceTunnelIP) toBody(ctx context.Context) string {
 	}
 	if !data.Ipv6AccessGroupIngressInterfaceStatistics.IsNull() && !data.Ipv6AccessGroupIngressInterfaceStatistics.IsUnknown() {
 		if data.Ipv6AccessGroupIngressInterfaceStatistics.ValueBool() {
-			body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.interface-statistics", map[string]string{})
+			body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.interface-statistics", []interface{}{nil})
 		}
 	}
 	if !data.Ipv6AccessGroupEgressAcl.IsNull() && !data.Ipv6AccessGroupEgressAcl.IsUnknown() {
@@ -243,7 +259,7 @@ func (data InterfaceTunnelIP) toBody(ctx context.Context) string {
 	}
 	if !data.Ipv6AccessGroupEgressInterfaceStatistics.IsNull() && !data.Ipv6AccessGroupEgressInterfaceStatistics.IsUnknown() {
 		if data.Ipv6AccessGroupEgressInterfaceStatistics.ValueBool() {
-			body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.interface-statistics", map[string]string{})
+			body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.interface-statistics", []interface{}{nil})
 		}
 	}
 	if !data.Ipv6LinkLocalAddress.IsNull() && !data.Ipv6LinkLocalAddress.IsUnknown() {
@@ -260,6 +276,11 @@ func (data InterfaceTunnelIP) toBody(ctx context.Context) string {
 	if !data.Ipv6Enable.IsNull() && !data.Ipv6Enable.IsUnknown() {
 		if data.Ipv6Enable.ValueBool() {
 			body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:enable", map[string]string{})
+		}
+	}
+	if !data.Ipv6TtlPropagateDisable.IsNull() && !data.Ipv6TtlPropagateDisable.IsUnknown() {
+		if data.Ipv6TtlPropagateDisable.ValueBool() {
+			body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-ipv6-cfg:ttl-propagate.disable", map[string]string{})
 		}
 	}
 	if !data.TunnelSourceInterface.IsNull() && !data.TunnelSourceInterface.IsUnknown() {
@@ -423,6 +444,24 @@ func (data *InterfaceTunnelIP) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Unnumbered = types.StringNull()
 	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable"); !data.Ipv4ForwardingEnable.IsNull() {
+		if value.Exists() {
+			data.Ipv4ForwardingEnable = types.BoolValue(true)
+		} else {
+			data.Ipv4ForwardingEnable = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv4ForwardingEnable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:ttl-propagate.disable"); !data.Ipv4TtlPropagateDisable.IsNull() {
+		if value.Exists() {
+			data.Ipv4TtlPropagateDisable = types.BoolValue(true)
+		} else {
+			data.Ipv4TtlPropagateDisable = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv4TtlPropagateDisable = types.BoolNull()
+	}
 	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.access-list-name-1.name"); value.Exists() && !data.Ipv4AccessGroupIngressAcl1.IsNull() {
 		data.Ipv4AccessGroupIngressAcl1 = types.StringValue(value.String())
 	} else {
@@ -524,6 +563,15 @@ func (data *InterfaceTunnelIP) updateFromBody(ctx context.Context, res []byte) {
 		}
 	} else {
 		data.Ipv6Enable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ipv6-cfg:ttl-propagate.disable"); !data.Ipv6TtlPropagateDisable.IsNull() {
+		if value.Exists() {
+			data.Ipv6TtlPropagateDisable = types.BoolValue(true)
+		} else {
+			data.Ipv6TtlPropagateDisable = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv6TtlPropagateDisable = types.BoolNull()
 	}
 	for i := range data.Ipv6Addresses {
 		keys := [...]string{"address"}
@@ -744,6 +792,16 @@ func (data *InterfaceTunnelIP) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.unnumbered"); value.Exists() {
 		data.Unnumbered = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable"); value.Exists() {
+		data.Ipv4ForwardingEnable = types.BoolValue(true)
+	} else {
+		data.Ipv4ForwardingEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:ttl-propagate.disable"); value.Exists() {
+		data.Ipv4TtlPropagateDisable = types.BoolValue(true)
+	} else {
+		data.Ipv4TtlPropagateDisable = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.access-list-name-1.name"); value.Exists() {
 		data.Ipv4AccessGroupIngressAcl1 = types.StringValue(value.String())
 	}
@@ -801,6 +859,11 @@ func (data *InterfaceTunnelIP) fromBody(ctx context.Context, res []byte) {
 		data.Ipv6Enable = types.BoolValue(true)
 	} else {
 		data.Ipv6Enable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ipv6-cfg:ttl-propagate.disable"); value.Exists() {
+		data.Ipv6TtlPropagateDisable = types.BoolValue(true)
+	} else {
+		data.Ipv6TtlPropagateDisable = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.ipv6-address"); value.Exists() {
 		data.Ipv6Addresses = make([]InterfaceTunnelIPIpv6Addresses, 0)
@@ -941,6 +1004,16 @@ func (data *InterfaceTunnelIPData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.unnumbered"); value.Exists() {
 		data.Unnumbered = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable"); value.Exists() {
+		data.Ipv4ForwardingEnable = types.BoolValue(true)
+	} else {
+		data.Ipv4ForwardingEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:ttl-propagate.disable"); value.Exists() {
+		data.Ipv4TtlPropagateDisable = types.BoolValue(true)
+	} else {
+		data.Ipv4TtlPropagateDisable = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.access-list-name-1.name"); value.Exists() {
 		data.Ipv4AccessGroupIngressAcl1 = types.StringValue(value.String())
 	}
@@ -998,6 +1071,11 @@ func (data *InterfaceTunnelIPData) fromBody(ctx context.Context, res []byte) {
 		data.Ipv6Enable = types.BoolValue(true)
 	} else {
 		data.Ipv6Enable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ipv6-cfg:ttl-propagate.disable"); value.Exists() {
+		data.Ipv6TtlPropagateDisable = types.BoolValue(true)
+	} else {
+		data.Ipv6TtlPropagateDisable = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.ipv6-address"); value.Exists() {
 		data.Ipv6Addresses = make([]InterfaceTunnelIPIpv6Addresses, 0)
@@ -1210,6 +1288,9 @@ func (data *InterfaceTunnelIP) getDeletedItems(ctx context.Context, state Interf
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/ipv6-address%v", state.getPath(), keyString))
 		}
 	}
+	if !state.Ipv6TtlPropagateDisable.IsNull() && data.Ipv6TtlPropagateDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:ttl-propagate/disable", state.getPath()))
+	}
 	if !state.Ipv6Enable.IsNull() && data.Ipv6Enable.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:enable", state.getPath()))
 	}
@@ -1251,6 +1332,12 @@ func (data *InterfaceTunnelIP) getDeletedItems(ctx context.Context, state Interf
 	}
 	if !state.Ipv4AccessGroupIngressAcl1.IsNull() && data.Ipv4AccessGroupIngressAcl1.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress", state.getPath()))
+	}
+	if !state.Ipv4TtlPropagateDisable.IsNull() && data.Ipv4TtlPropagateDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:ttl-propagate/disable", state.getPath()))
+	}
+	if !state.Ipv4ForwardingEnable.IsNull() && data.Ipv4ForwardingEnable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable", state.getPath()))
 	}
 	if !state.Unnumbered.IsNull() && data.Unnumbered.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered", state.getPath()))
@@ -1317,6 +1404,9 @@ func (data *InterfaceTunnelIP) getEmptyLeafsDelete(ctx context.Context) []string
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	if !data.Ipv6TtlPropagateDisable.IsNull() && !data.Ipv6TtlPropagateDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:ttl-propagate/disable", data.getPath()))
+	}
 	if !data.Ipv6Enable.IsNull() && !data.Ipv6Enable.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:enable", data.getPath()))
 	}
@@ -1340,6 +1430,12 @@ func (data *InterfaceTunnelIP) getEmptyLeafsDelete(ctx context.Context) []string
 	}
 	if !data.Ipv4AccessGroupIngressHardwareCount.IsNull() && !data.Ipv4AccessGroupIngressHardwareCount.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress", data.getPath()))
+	}
+	if !data.Ipv4TtlPropagateDisable.IsNull() && !data.Ipv4TtlPropagateDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:ttl-propagate/disable", data.getPath()))
+	}
+	if !data.Ipv4ForwardingEnable.IsNull() && !data.Ipv4ForwardingEnable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable", data.getPath()))
 	}
 	if !data.LoggingEventsLinkStatus.IsNull() && !data.LoggingEventsLinkStatus.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/logging/events/link-status", data.getPath()))
@@ -1435,6 +1531,9 @@ func (data *InterfaceTunnelIP) getDeletePaths(ctx context.Context) []string {
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/ipv6-address%v", data.getPath(), keyString))
 	}
+	if !data.Ipv6TtlPropagateDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:ttl-propagate/disable", data.getPath()))
+	}
 	if !data.Ipv6Enable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:enable", data.getPath()))
 	}
@@ -1476,6 +1575,12 @@ func (data *InterfaceTunnelIP) getDeletePaths(ctx context.Context) []string {
 	}
 	if !data.Ipv4AccessGroupIngressAcl1.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress", data.getPath()))
+	}
+	if !data.Ipv4TtlPropagateDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:ttl-propagate/disable", data.getPath()))
+	}
+	if !data.Ipv4ForwardingEnable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable", data.getPath()))
 	}
 	if !data.Unnumbered.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered", data.getPath()))

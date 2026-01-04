@@ -73,7 +73,9 @@ resource "iosxr_interface_tunnel_ip" "example" {
 - `ipv4_access_group_ingress_hardware_count` (Boolean) Count packets in hardware
 - `ipv4_access_group_ingress_interface_statistics` (Boolean) Per interface statistics in hardware
 - `ipv4_address` (String) IP address
+- `ipv4_forwarding_enable` (Boolean) enable ipv4 forwarding on a interface
 - `ipv4_netmask` (String) IP subnet mask
+- `ipv4_ttl_propagate_disable` (Boolean) Disable ipv4 ttl propagation on this interface
 - `ipv6_access_group_egress_acl` (String) Access-list name
 - `ipv6_access_group_egress_interface_statistics` (Boolean) Per interface statistics in hardware
 - `ipv6_access_group_ingress_acl1` (String) Access-list name
@@ -83,6 +85,7 @@ resource "iosxr_interface_tunnel_ip" "example" {
 - `ipv6_enable` (Boolean) Enable IPv6 on interface
 - `ipv6_link_local_address` (String) IPv6 address
 - `ipv6_link_local_zone` (String) IPv6 address zone
+- `ipv6_ttl_propagate_disable` (Boolean) Disable ipv6 ttl propagation on this interface
 - `keepalive_period` (Number) Keepalive period in seconds (default 10 seconds)
   - Range: `1`-`32767`
 - `load_interval` (Number) Specify interval for load calculation for an interface

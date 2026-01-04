@@ -32,4 +32,4 @@ data "iosxr_as_path_set" "example" {
 ### Read-Only
 
 - `id` (String) The path of the retrieved object.
-- `rpl` (String) AS path set
+- `rpl` (String) Configures an AS-PATH set

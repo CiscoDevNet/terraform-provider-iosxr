@@ -34,72 +34,200 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type RouterBGPNeighborAddressFamily struct {
-	Device                                       types.String `tfsdk:"device"`
-	Id                                           types.String `tfsdk:"id"`
-	DeleteMode                                   types.String `tfsdk:"delete_mode"`
-	AsNumber                                     types.String `tfsdk:"as_number"`
-	Address                                      types.String `tfsdk:"address"`
-	AfName                                       types.String `tfsdk:"af_name"`
-	ImportStitchingRt                            types.Bool   `tfsdk:"import_stitching_rt"`
-	ImportStitchingRtReOriginate                 types.Bool   `tfsdk:"import_stitching_rt_re_originate"`
-	ImportStitchingRtReOriginateStitchingRt      types.Bool   `tfsdk:"import_stitching_rt_re_originate_stitching_rt"`
-	ImportReOriginate                            types.Bool   `tfsdk:"import_re_originate"`
-	RouteReflectorClient                         types.Bool   `tfsdk:"route_reflector_client"`
-	RouteReflectorClientInheritanceDisable       types.Bool   `tfsdk:"route_reflector_client_inheritance_disable"`
-	AdvertiseVpnv4Unicast                        types.Bool   `tfsdk:"advertise_vpnv4_unicast"`
-	AdvertiseVpnv4UnicastReOriginated            types.Bool   `tfsdk:"advertise_vpnv4_unicast_re_originated"`
-	AdvertiseVpnv4UnicastReOriginatedStitchingRt types.Bool   `tfsdk:"advertise_vpnv4_unicast_re_originated_stitching_rt"`
-	NextHopSelf                                  types.Bool   `tfsdk:"next_hop_self"`
-	NextHopSelfInheritanceDisable                types.Bool   `tfsdk:"next_hop_self_inheritance_disable"`
-	EncapsulationType                            types.String `tfsdk:"encapsulation_type"`
-	RoutePolicyIn                                types.String `tfsdk:"route_policy_in"`
-	RoutePolicyOut                               types.String `tfsdk:"route_policy_out"`
-	SoftReconfigurationInbound                   types.Bool   `tfsdk:"soft_reconfiguration_inbound"`
-	SoftReconfigurationInboundAlways             types.Bool   `tfsdk:"soft_reconfiguration_inbound_always"`
-	SendCommunityEbgp                            types.Bool   `tfsdk:"send_community_ebgp"`
-	SendCommunityEbgpInheritanceDisable          types.Bool   `tfsdk:"send_community_ebgp_inheritance_disable"`
-	MaximumPrefixLimit                           types.Int64  `tfsdk:"maximum_prefix_limit"`
-	MaximumPrefixThreshold                       types.Int64  `tfsdk:"maximum_prefix_threshold"`
-	MaximumPrefixRestart                         types.Int64  `tfsdk:"maximum_prefix_restart"`
-	MaximumPrefixDiscardExtraPaths               types.Bool   `tfsdk:"maximum_prefix_discard_extra_paths"`
-	MaximumPrefixWarningOnly                     types.Bool   `tfsdk:"maximum_prefix_warning_only"`
-	DefaultOriginate                             types.Bool   `tfsdk:"default_originate"`
-	DefaultOriginateRoutePolicy                  types.String `tfsdk:"default_originate_route_policy"`
-	DefaultOriginateInheritanceDisable           types.Bool   `tfsdk:"default_originate_inheritance_disable"`
+	Device                                          types.String `tfsdk:"device"`
+	Id                                              types.String `tfsdk:"id"`
+	DeleteMode                                      types.String `tfsdk:"delete_mode"`
+	AsNumber                                        types.String `tfsdk:"as_number"`
+	Address                                         types.String `tfsdk:"address"`
+	AfName                                          types.String `tfsdk:"af_name"`
+	EncapsulationType                               types.String `tfsdk:"encapsulation_type"`
+	Weight                                          types.Int64  `tfsdk:"weight"`
+	Multipath                                       types.Bool   `tfsdk:"multipath"`
+	UseAfGroup                                      types.String `tfsdk:"use_af_group"`
+	CapabilityOrfPrefix                             types.String `tfsdk:"capability_orf_prefix"`
+	AdditionalPathsSend                             types.Bool   `tfsdk:"additional_paths_send"`
+	AdditionalPathsSendDisable                      types.Bool   `tfsdk:"additional_paths_send_disable"`
+	AdditionalPathsReceive                          types.Bool   `tfsdk:"additional_paths_receive"`
+	AdditionalPathsReceiveDisable                   types.Bool   `tfsdk:"additional_paths_receive_disable"`
+	DefaultOriginate                                types.Bool   `tfsdk:"default_originate"`
+	DefaultOriginateRoutePolicy                     types.String `tfsdk:"default_originate_route_policy"`
+	DefaultOriginateInheritanceDisable              types.Bool   `tfsdk:"default_originate_inheritance_disable"`
+	MaximumPrefixLimit                              types.Int64  `tfsdk:"maximum_prefix_limit"`
+	MaximumPrefixThreshold                          types.Int64  `tfsdk:"maximum_prefix_threshold"`
+	MaximumPrefixRestart                            types.Int64  `tfsdk:"maximum_prefix_restart"`
+	MaximumPrefixDiscardExtraPaths                  types.Bool   `tfsdk:"maximum_prefix_discard_extra_paths"`
+	MaximumPrefixWarningOnly                        types.Bool   `tfsdk:"maximum_prefix_warning_only"`
+	NextHopSelf                                     types.Bool   `tfsdk:"next_hop_self"`
+	NextHopSelfInheritanceDisable                   types.Bool   `tfsdk:"next_hop_self_inheritance_disable"`
+	NextHopUnchanged                                types.Bool   `tfsdk:"next_hop_unchanged"`
+	NextHopUnchangedMultipath                       types.Bool   `tfsdk:"next_hop_unchanged_multipath"`
+	NextHopUnchangedInheritanceDisable              types.Bool   `tfsdk:"next_hop_unchanged_inheritance_disable"`
+	RoutePolicyIn                                   types.String `tfsdk:"route_policy_in"`
+	RoutePolicyOut                                  types.String `tfsdk:"route_policy_out"`
+	OrfRoutePolicy                                  types.String `tfsdk:"orf_route_policy"`
+	ClusterIdAllowEqual                             types.Bool   `tfsdk:"cluster_id_allow_equal"`
+	ClusterIdAllowEqualDisable                      types.Bool   `tfsdk:"cluster_id_allow_equal_disable"`
+	ReplacePrivateAs                                types.Bool   `tfsdk:"replace_private_as"`
+	ReplacePrivateAsInternal                        types.Bool   `tfsdk:"replace_private_as_internal"`
+	RemovePrivateAsInbound                          types.Bool   `tfsdk:"remove_private_as_inbound"`
+	RemovePrivateAsInboundEntireAspath              types.Bool   `tfsdk:"remove_private_as_inbound_entire_aspath"`
+	RemovePrivateAsInboundInheritanceDisable        types.Bool   `tfsdk:"remove_private_as_inbound_inheritance_disable"`
+	RemovePrivateAs                                 types.Bool   `tfsdk:"remove_private_as"`
+	RemovePrivateAsEntireAspath                     types.Bool   `tfsdk:"remove_private_as_entire_aspath"`
+	RemovePrivateAsInternal                         types.Bool   `tfsdk:"remove_private_as_internal"`
+	RouteReflectorClient                            types.Bool   `tfsdk:"route_reflector_client"`
+	RouteReflectorClientInheritanceDisable          types.Bool   `tfsdk:"route_reflector_client_inheritance_disable"`
+	SendCommunityEbgp                               types.Bool   `tfsdk:"send_community_ebgp"`
+	SendCommunityEbgpInheritanceDisable             types.Bool   `tfsdk:"send_community_ebgp_inheritance_disable"`
+	SendCommunityGshutEbgp                          types.Bool   `tfsdk:"send_community_gshut_ebgp"`
+	SendCommunityGshutEbgpInheritanceDisable        types.Bool   `tfsdk:"send_community_gshut_ebgp_inheritance_disable"`
+	SendExtendedCommunityEbgp                       types.Bool   `tfsdk:"send_extended_community_ebgp"`
+	SendExtendedCommunityEbgpInheritanceDisable     types.Bool   `tfsdk:"send_extended_community_ebgp_inheritance_disable"`
+	SoftReconfigurationInbound                      types.Bool   `tfsdk:"soft_reconfiguration_inbound"`
+	SoftReconfigurationInboundAlways                types.Bool   `tfsdk:"soft_reconfiguration_inbound_always"`
+	UpdateOutOriginatorLoopcheck                    types.Bool   `tfsdk:"update_out_originator_loopcheck"`
+	UpdateOutOriginatorLoopcheckDisable             types.Bool   `tfsdk:"update_out_originator_loopcheck_disable"`
+	AdvertiseVpnv4Unicast                           types.Bool   `tfsdk:"advertise_vpnv4_unicast"`
+	AdvertiseVpnv4UnicastReOriginated               types.Bool   `tfsdk:"advertise_vpnv4_unicast_re_originated"`
+	AdvertiseVpnv4UnicastReOriginatedStitchingRt    types.Bool   `tfsdk:"advertise_vpnv4_unicast_re_originated_stitching_rt"`
+	AdvertiseVpnv6Unicast                           types.Bool   `tfsdk:"advertise_vpnv6_unicast"`
+	AdvertiseVpnv6UnicastReOriginated               types.Bool   `tfsdk:"advertise_vpnv6_unicast_re_originated"`
+	AdvertiseVpnv6UnicastReOriginatedStitchingRt    types.Bool   `tfsdk:"advertise_vpnv6_unicast_re_originated_stitching_rt"`
+	AdvertiseL2vpnEvpnReOriginated                  types.Bool   `tfsdk:"advertise_l2vpn_evpn_re_originated"`
+	AdvertiseL2vpnEvpnReOriginatedStitchingRt       types.Bool   `tfsdk:"advertise_l2vpn_evpn_re_originated_stitching_rt"`
+	SegmentRoutingSrv6PrefixSidType4                types.Bool   `tfsdk:"segment_routing_srv6_prefix_sid_type4"`
+	ImportStitchingRt                               types.Bool   `tfsdk:"import_stitching_rt"`
+	ImportStitchingRtReOriginate                    types.Bool   `tfsdk:"import_stitching_rt_re_originate"`
+	ImportStitchingRtReOriginateStitchingRt         types.Bool   `tfsdk:"import_stitching_rt_re_originate_stitching_rt"`
+	ImportReOriginate                               types.Bool   `tfsdk:"import_re_originate"`
+	AllowasIn                                       types.Int64  `tfsdk:"allowas_in"`
+	AllowconfedasIn                                 types.Int64  `tfsdk:"allowconfedas_in"`
+	SiteOfOriginTwoByteAsNumber                     types.String `tfsdk:"site_of_origin_two_byte_as_number"`
+	SiteOfOriginTwoByteAsIndex                      types.Int64  `tfsdk:"site_of_origin_two_byte_as_index"`
+	SiteOfOriginFourByteAsNumber                    types.String `tfsdk:"site_of_origin_four_byte_as_number"`
+	SiteOfOriginFourByteAsIndex                     types.Int64  `tfsdk:"site_of_origin_four_byte_as_index"`
+	SiteOfOriginIpv4Address                         types.String `tfsdk:"site_of_origin_ipv4_address"`
+	SiteOfOriginIpv4AddressIndex                    types.Int64  `tfsdk:"site_of_origin_ipv4_address_index"`
+	AsOverride                                      types.Bool   `tfsdk:"as_override"`
+	AsOverrideInheritanceDisable                    types.Bool   `tfsdk:"as_override_inheritance_disable"`
+	Aigp                                            types.Bool   `tfsdk:"aigp"`
+	AigpDisable                                     types.Bool   `tfsdk:"aigp_disable"`
+	AigpSendMed                                     types.Bool   `tfsdk:"aigp_send_med"`
+	AigpSendMedDisable                              types.Bool   `tfsdk:"aigp_send_med_disable"`
+	AigpSendCostCommunityDisable                    types.Bool   `tfsdk:"aigp_send_cost_community_disable"`
+	AigpSendCostCommunityId                         types.Int64  `tfsdk:"aigp_send_cost_community_id"`
+	AigpSendCostCommunityIdPoiIgpCost               types.Bool   `tfsdk:"aigp_send_cost_community_id_poi_igp_cost"`
+	AigpSendCostCommunityIdPoiIgpCostTransitive     types.Bool   `tfsdk:"aigp_send_cost_community_id_poi_igp_cost_transitive"`
+	AigpSendCostCommunityIdPoiPreBestpath           types.Bool   `tfsdk:"aigp_send_cost_community_id_poi_pre_bestpath"`
+	AigpSendCostCommunityIdPoiPreBestpathTransitive types.Bool   `tfsdk:"aigp_send_cost_community_id_poi_pre_bestpath_transitive"`
+	SendMulticastAttributes                         types.Bool   `tfsdk:"send_multicast_attributes"`
+	SendMulticastAttributesDisable                  types.Bool   `tfsdk:"send_multicast_attributes_disable"`
+	AcceptOwn                                       types.Bool   `tfsdk:"accept_own"`
+	AcceptOwnInheritanceDisable                     types.Bool   `tfsdk:"accept_own_inheritance_disable"`
+	SlowPeerDynamic                                 types.Bool   `tfsdk:"slow_peer_dynamic"`
+	SlowPeerDynamicThreshold                        types.Int64  `tfsdk:"slow_peer_dynamic_threshold"`
+	SlowPeerDynamicDisable                          types.Bool   `tfsdk:"slow_peer_dynamic_disable"`
+	SlowPeerStatic                                  types.Bool   `tfsdk:"slow_peer_static"`
+	OriginAsValidationDisable                       types.Bool   `tfsdk:"origin_as_validation_disable"`
+	BestpathOriginAsAllowInvalid                    types.Bool   `tfsdk:"bestpath_origin_as_allow_invalid"`
 }
 
 type RouterBGPNeighborAddressFamilyData struct {
-	Device                                       types.String `tfsdk:"device"`
-	Id                                           types.String `tfsdk:"id"`
-	AsNumber                                     types.String `tfsdk:"as_number"`
-	Address                                      types.String `tfsdk:"address"`
-	AfName                                       types.String `tfsdk:"af_name"`
-	ImportStitchingRt                            types.Bool   `tfsdk:"import_stitching_rt"`
-	ImportStitchingRtReOriginate                 types.Bool   `tfsdk:"import_stitching_rt_re_originate"`
-	ImportStitchingRtReOriginateStitchingRt      types.Bool   `tfsdk:"import_stitching_rt_re_originate_stitching_rt"`
-	ImportReOriginate                            types.Bool   `tfsdk:"import_re_originate"`
-	RouteReflectorClient                         types.Bool   `tfsdk:"route_reflector_client"`
-	RouteReflectorClientInheritanceDisable       types.Bool   `tfsdk:"route_reflector_client_inheritance_disable"`
-	AdvertiseVpnv4Unicast                        types.Bool   `tfsdk:"advertise_vpnv4_unicast"`
-	AdvertiseVpnv4UnicastReOriginated            types.Bool   `tfsdk:"advertise_vpnv4_unicast_re_originated"`
-	AdvertiseVpnv4UnicastReOriginatedStitchingRt types.Bool   `tfsdk:"advertise_vpnv4_unicast_re_originated_stitching_rt"`
-	NextHopSelf                                  types.Bool   `tfsdk:"next_hop_self"`
-	NextHopSelfInheritanceDisable                types.Bool   `tfsdk:"next_hop_self_inheritance_disable"`
-	EncapsulationType                            types.String `tfsdk:"encapsulation_type"`
-	RoutePolicyIn                                types.String `tfsdk:"route_policy_in"`
-	RoutePolicyOut                               types.String `tfsdk:"route_policy_out"`
-	SoftReconfigurationInbound                   types.Bool   `tfsdk:"soft_reconfiguration_inbound"`
-	SoftReconfigurationInboundAlways             types.Bool   `tfsdk:"soft_reconfiguration_inbound_always"`
-	SendCommunityEbgp                            types.Bool   `tfsdk:"send_community_ebgp"`
-	SendCommunityEbgpInheritanceDisable          types.Bool   `tfsdk:"send_community_ebgp_inheritance_disable"`
-	MaximumPrefixLimit                           types.Int64  `tfsdk:"maximum_prefix_limit"`
-	MaximumPrefixThreshold                       types.Int64  `tfsdk:"maximum_prefix_threshold"`
-	MaximumPrefixRestart                         types.Int64  `tfsdk:"maximum_prefix_restart"`
-	MaximumPrefixDiscardExtraPaths               types.Bool   `tfsdk:"maximum_prefix_discard_extra_paths"`
-	MaximumPrefixWarningOnly                     types.Bool   `tfsdk:"maximum_prefix_warning_only"`
-	DefaultOriginate                             types.Bool   `tfsdk:"default_originate"`
-	DefaultOriginateRoutePolicy                  types.String `tfsdk:"default_originate_route_policy"`
-	DefaultOriginateInheritanceDisable           types.Bool   `tfsdk:"default_originate_inheritance_disable"`
+	Device                                          types.String `tfsdk:"device"`
+	Id                                              types.String `tfsdk:"id"`
+	AsNumber                                        types.String `tfsdk:"as_number"`
+	Address                                         types.String `tfsdk:"address"`
+	AfName                                          types.String `tfsdk:"af_name"`
+	EncapsulationType                               types.String `tfsdk:"encapsulation_type"`
+	Weight                                          types.Int64  `tfsdk:"weight"`
+	Multipath                                       types.Bool   `tfsdk:"multipath"`
+	UseAfGroup                                      types.String `tfsdk:"use_af_group"`
+	CapabilityOrfPrefix                             types.String `tfsdk:"capability_orf_prefix"`
+	AdditionalPathsSend                             types.Bool   `tfsdk:"additional_paths_send"`
+	AdditionalPathsSendDisable                      types.Bool   `tfsdk:"additional_paths_send_disable"`
+	AdditionalPathsReceive                          types.Bool   `tfsdk:"additional_paths_receive"`
+	AdditionalPathsReceiveDisable                   types.Bool   `tfsdk:"additional_paths_receive_disable"`
+	DefaultOriginate                                types.Bool   `tfsdk:"default_originate"`
+	DefaultOriginateRoutePolicy                     types.String `tfsdk:"default_originate_route_policy"`
+	DefaultOriginateInheritanceDisable              types.Bool   `tfsdk:"default_originate_inheritance_disable"`
+	MaximumPrefixLimit                              types.Int64  `tfsdk:"maximum_prefix_limit"`
+	MaximumPrefixThreshold                          types.Int64  `tfsdk:"maximum_prefix_threshold"`
+	MaximumPrefixRestart                            types.Int64  `tfsdk:"maximum_prefix_restart"`
+	MaximumPrefixDiscardExtraPaths                  types.Bool   `tfsdk:"maximum_prefix_discard_extra_paths"`
+	MaximumPrefixWarningOnly                        types.Bool   `tfsdk:"maximum_prefix_warning_only"`
+	NextHopSelf                                     types.Bool   `tfsdk:"next_hop_self"`
+	NextHopSelfInheritanceDisable                   types.Bool   `tfsdk:"next_hop_self_inheritance_disable"`
+	NextHopUnchanged                                types.Bool   `tfsdk:"next_hop_unchanged"`
+	NextHopUnchangedMultipath                       types.Bool   `tfsdk:"next_hop_unchanged_multipath"`
+	NextHopUnchangedInheritanceDisable              types.Bool   `tfsdk:"next_hop_unchanged_inheritance_disable"`
+	RoutePolicyIn                                   types.String `tfsdk:"route_policy_in"`
+	RoutePolicyOut                                  types.String `tfsdk:"route_policy_out"`
+	OrfRoutePolicy                                  types.String `tfsdk:"orf_route_policy"`
+	ClusterIdAllowEqual                             types.Bool   `tfsdk:"cluster_id_allow_equal"`
+	ClusterIdAllowEqualDisable                      types.Bool   `tfsdk:"cluster_id_allow_equal_disable"`
+	ReplacePrivateAs                                types.Bool   `tfsdk:"replace_private_as"`
+	ReplacePrivateAsInternal                        types.Bool   `tfsdk:"replace_private_as_internal"`
+	RemovePrivateAsInbound                          types.Bool   `tfsdk:"remove_private_as_inbound"`
+	RemovePrivateAsInboundEntireAspath              types.Bool   `tfsdk:"remove_private_as_inbound_entire_aspath"`
+	RemovePrivateAsInboundInheritanceDisable        types.Bool   `tfsdk:"remove_private_as_inbound_inheritance_disable"`
+	RemovePrivateAs                                 types.Bool   `tfsdk:"remove_private_as"`
+	RemovePrivateAsEntireAspath                     types.Bool   `tfsdk:"remove_private_as_entire_aspath"`
+	RemovePrivateAsInternal                         types.Bool   `tfsdk:"remove_private_as_internal"`
+	RouteReflectorClient                            types.Bool   `tfsdk:"route_reflector_client"`
+	RouteReflectorClientInheritanceDisable          types.Bool   `tfsdk:"route_reflector_client_inheritance_disable"`
+	SendCommunityEbgp                               types.Bool   `tfsdk:"send_community_ebgp"`
+	SendCommunityEbgpInheritanceDisable             types.Bool   `tfsdk:"send_community_ebgp_inheritance_disable"`
+	SendCommunityGshutEbgp                          types.Bool   `tfsdk:"send_community_gshut_ebgp"`
+	SendCommunityGshutEbgpInheritanceDisable        types.Bool   `tfsdk:"send_community_gshut_ebgp_inheritance_disable"`
+	SendExtendedCommunityEbgp                       types.Bool   `tfsdk:"send_extended_community_ebgp"`
+	SendExtendedCommunityEbgpInheritanceDisable     types.Bool   `tfsdk:"send_extended_community_ebgp_inheritance_disable"`
+	SoftReconfigurationInbound                      types.Bool   `tfsdk:"soft_reconfiguration_inbound"`
+	SoftReconfigurationInboundAlways                types.Bool   `tfsdk:"soft_reconfiguration_inbound_always"`
+	UpdateOutOriginatorLoopcheck                    types.Bool   `tfsdk:"update_out_originator_loopcheck"`
+	UpdateOutOriginatorLoopcheckDisable             types.Bool   `tfsdk:"update_out_originator_loopcheck_disable"`
+	AdvertiseVpnv4Unicast                           types.Bool   `tfsdk:"advertise_vpnv4_unicast"`
+	AdvertiseVpnv4UnicastReOriginated               types.Bool   `tfsdk:"advertise_vpnv4_unicast_re_originated"`
+	AdvertiseVpnv4UnicastReOriginatedStitchingRt    types.Bool   `tfsdk:"advertise_vpnv4_unicast_re_originated_stitching_rt"`
+	AdvertiseVpnv6Unicast                           types.Bool   `tfsdk:"advertise_vpnv6_unicast"`
+	AdvertiseVpnv6UnicastReOriginated               types.Bool   `tfsdk:"advertise_vpnv6_unicast_re_originated"`
+	AdvertiseVpnv6UnicastReOriginatedStitchingRt    types.Bool   `tfsdk:"advertise_vpnv6_unicast_re_originated_stitching_rt"`
+	AdvertiseL2vpnEvpnReOriginated                  types.Bool   `tfsdk:"advertise_l2vpn_evpn_re_originated"`
+	AdvertiseL2vpnEvpnReOriginatedStitchingRt       types.Bool   `tfsdk:"advertise_l2vpn_evpn_re_originated_stitching_rt"`
+	SegmentRoutingSrv6PrefixSidType4                types.Bool   `tfsdk:"segment_routing_srv6_prefix_sid_type4"`
+	ImportStitchingRt                               types.Bool   `tfsdk:"import_stitching_rt"`
+	ImportStitchingRtReOriginate                    types.Bool   `tfsdk:"import_stitching_rt_re_originate"`
+	ImportStitchingRtReOriginateStitchingRt         types.Bool   `tfsdk:"import_stitching_rt_re_originate_stitching_rt"`
+	ImportReOriginate                               types.Bool   `tfsdk:"import_re_originate"`
+	AllowasIn                                       types.Int64  `tfsdk:"allowas_in"`
+	AllowconfedasIn                                 types.Int64  `tfsdk:"allowconfedas_in"`
+	SiteOfOriginTwoByteAsNumber                     types.String `tfsdk:"site_of_origin_two_byte_as_number"`
+	SiteOfOriginTwoByteAsIndex                      types.Int64  `tfsdk:"site_of_origin_two_byte_as_index"`
+	SiteOfOriginFourByteAsNumber                    types.String `tfsdk:"site_of_origin_four_byte_as_number"`
+	SiteOfOriginFourByteAsIndex                     types.Int64  `tfsdk:"site_of_origin_four_byte_as_index"`
+	SiteOfOriginIpv4Address                         types.String `tfsdk:"site_of_origin_ipv4_address"`
+	SiteOfOriginIpv4AddressIndex                    types.Int64  `tfsdk:"site_of_origin_ipv4_address_index"`
+	AsOverride                                      types.Bool   `tfsdk:"as_override"`
+	AsOverrideInheritanceDisable                    types.Bool   `tfsdk:"as_override_inheritance_disable"`
+	Aigp                                            types.Bool   `tfsdk:"aigp"`
+	AigpDisable                                     types.Bool   `tfsdk:"aigp_disable"`
+	AigpSendMed                                     types.Bool   `tfsdk:"aigp_send_med"`
+	AigpSendMedDisable                              types.Bool   `tfsdk:"aigp_send_med_disable"`
+	AigpSendCostCommunityDisable                    types.Bool   `tfsdk:"aigp_send_cost_community_disable"`
+	AigpSendCostCommunityId                         types.Int64  `tfsdk:"aigp_send_cost_community_id"`
+	AigpSendCostCommunityIdPoiIgpCost               types.Bool   `tfsdk:"aigp_send_cost_community_id_poi_igp_cost"`
+	AigpSendCostCommunityIdPoiIgpCostTransitive     types.Bool   `tfsdk:"aigp_send_cost_community_id_poi_igp_cost_transitive"`
+	AigpSendCostCommunityIdPoiPreBestpath           types.Bool   `tfsdk:"aigp_send_cost_community_id_poi_pre_bestpath"`
+	AigpSendCostCommunityIdPoiPreBestpathTransitive types.Bool   `tfsdk:"aigp_send_cost_community_id_poi_pre_bestpath_transitive"`
+	SendMulticastAttributes                         types.Bool   `tfsdk:"send_multicast_attributes"`
+	SendMulticastAttributesDisable                  types.Bool   `tfsdk:"send_multicast_attributes_disable"`
+	AcceptOwn                                       types.Bool   `tfsdk:"accept_own"`
+	AcceptOwnInheritanceDisable                     types.Bool   `tfsdk:"accept_own_inheritance_disable"`
+	SlowPeerDynamic                                 types.Bool   `tfsdk:"slow_peer_dynamic"`
+	SlowPeerDynamicThreshold                        types.Int64  `tfsdk:"slow_peer_dynamic_threshold"`
+	SlowPeerDynamicDisable                          types.Bool   `tfsdk:"slow_peer_dynamic_disable"`
+	SlowPeerStatic                                  types.Bool   `tfsdk:"slow_peer_static"`
+	OriginAsValidationDisable                       types.Bool   `tfsdk:"origin_as_validation_disable"`
+	BestpathOriginAsAllowInvalid                    types.Bool   `tfsdk:"bestpath_origin_as_allow_invalid"`
 }
 
 // End of section. //template:end types
@@ -123,24 +251,157 @@ func (data RouterBGPNeighborAddressFamily) toBody(ctx context.Context) string {
 	if !data.AfName.IsNull() && !data.AfName.IsUnknown() {
 		body, _ = sjson.Set(body, "af-name", data.AfName.ValueString())
 	}
-	if !data.ImportStitchingRt.IsNull() && !data.ImportStitchingRt.IsUnknown() {
-		if data.ImportStitchingRt.ValueBool() {
-			body, _ = sjson.Set(body, "import.stitching-rt", map[string]string{})
+	if !data.EncapsulationType.IsNull() && !data.EncapsulationType.IsUnknown() {
+		body, _ = sjson.Set(body, "encapsulation-type", data.EncapsulationType.ValueString())
+	}
+	if !data.Weight.IsNull() && !data.Weight.IsUnknown() {
+		body, _ = sjson.Set(body, "weight", strconv.FormatInt(data.Weight.ValueInt64(), 10))
+	}
+	if !data.Multipath.IsNull() && !data.Multipath.IsUnknown() {
+		if data.Multipath.ValueBool() {
+			body, _ = sjson.Set(body, "multipath", []interface{}{nil})
 		}
 	}
-	if !data.ImportStitchingRtReOriginate.IsNull() && !data.ImportStitchingRtReOriginate.IsUnknown() {
-		if data.ImportStitchingRtReOriginate.ValueBool() {
-			body, _ = sjson.Set(body, "import.stitching-rt.re-originate", map[string]string{})
+	if !data.UseAfGroup.IsNull() && !data.UseAfGroup.IsUnknown() {
+		body, _ = sjson.Set(body, "use.af-group", data.UseAfGroup.ValueString())
+	}
+	if !data.CapabilityOrfPrefix.IsNull() && !data.CapabilityOrfPrefix.IsUnknown() {
+		body, _ = sjson.Set(body, "capability.orf.prefix.capability-receive-orf-neighbor", data.CapabilityOrfPrefix.ValueString())
+	}
+	if !data.AdditionalPathsSend.IsNull() && !data.AdditionalPathsSend.IsUnknown() {
+		if data.AdditionalPathsSend.ValueBool() {
+			body, _ = sjson.Set(body, "additional-paths.send", map[string]string{})
 		}
 	}
-	if !data.ImportStitchingRtReOriginateStitchingRt.IsNull() && !data.ImportStitchingRtReOriginateStitchingRt.IsUnknown() {
-		if data.ImportStitchingRtReOriginateStitchingRt.ValueBool() {
-			body, _ = sjson.Set(body, "import.stitching-rt.re-originate.stitching-rt", map[string]string{})
+	if !data.AdditionalPathsSendDisable.IsNull() && !data.AdditionalPathsSendDisable.IsUnknown() {
+		if data.AdditionalPathsSendDisable.ValueBool() {
+			body, _ = sjson.Set(body, "additional-paths.send.disable", []interface{}{nil})
 		}
 	}
-	if !data.ImportReOriginate.IsNull() && !data.ImportReOriginate.IsUnknown() {
-		if data.ImportReOriginate.ValueBool() {
-			body, _ = sjson.Set(body, "import.re-originate", map[string]string{})
+	if !data.AdditionalPathsReceive.IsNull() && !data.AdditionalPathsReceive.IsUnknown() {
+		if data.AdditionalPathsReceive.ValueBool() {
+			body, _ = sjson.Set(body, "additional-paths.receive", map[string]string{})
+		}
+	}
+	if !data.AdditionalPathsReceiveDisable.IsNull() && !data.AdditionalPathsReceiveDisable.IsUnknown() {
+		if data.AdditionalPathsReceiveDisable.ValueBool() {
+			body, _ = sjson.Set(body, "additional-paths.receive.disable", []interface{}{nil})
+		}
+	}
+	if !data.DefaultOriginate.IsNull() && !data.DefaultOriginate.IsUnknown() {
+		if data.DefaultOriginate.ValueBool() {
+			body, _ = sjson.Set(body, "default-originate", map[string]string{})
+		}
+	}
+	if !data.DefaultOriginateRoutePolicy.IsNull() && !data.DefaultOriginateRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "default-originate.route-policy", data.DefaultOriginateRoutePolicy.ValueString())
+	}
+	if !data.DefaultOriginateInheritanceDisable.IsNull() && !data.DefaultOriginateInheritanceDisable.IsUnknown() {
+		if data.DefaultOriginateInheritanceDisable.ValueBool() {
+			body, _ = sjson.Set(body, "default-originate.inheritance-disable", []interface{}{nil})
+		}
+	}
+	if !data.MaximumPrefixLimit.IsNull() && !data.MaximumPrefixLimit.IsUnknown() {
+		body, _ = sjson.Set(body, "maximum-prefix.maximum-prefix-number", strconv.FormatInt(data.MaximumPrefixLimit.ValueInt64(), 10))
+	}
+	if !data.MaximumPrefixThreshold.IsNull() && !data.MaximumPrefixThreshold.IsUnknown() {
+		body, _ = sjson.Set(body, "maximum-prefix.threshold-value", strconv.FormatInt(data.MaximumPrefixThreshold.ValueInt64(), 10))
+	}
+	if !data.MaximumPrefixRestart.IsNull() && !data.MaximumPrefixRestart.IsUnknown() {
+		body, _ = sjson.Set(body, "maximum-prefix.restart", strconv.FormatInt(data.MaximumPrefixRestart.ValueInt64(), 10))
+	}
+	if !data.MaximumPrefixDiscardExtraPaths.IsNull() && !data.MaximumPrefixDiscardExtraPaths.IsUnknown() {
+		if data.MaximumPrefixDiscardExtraPaths.ValueBool() {
+			body, _ = sjson.Set(body, "maximum-prefix.discard-extra-paths", []interface{}{nil})
+		}
+	}
+	if !data.MaximumPrefixWarningOnly.IsNull() && !data.MaximumPrefixWarningOnly.IsUnknown() {
+		if data.MaximumPrefixWarningOnly.ValueBool() {
+			body, _ = sjson.Set(body, "maximum-prefix.warning-only", []interface{}{nil})
+		}
+	}
+	if !data.NextHopSelf.IsNull() && !data.NextHopSelf.IsUnknown() {
+		if data.NextHopSelf.ValueBool() {
+			body, _ = sjson.Set(body, "next-hop-self", map[string]string{})
+		}
+	}
+	if !data.NextHopSelfInheritanceDisable.IsNull() && !data.NextHopSelfInheritanceDisable.IsUnknown() {
+		if data.NextHopSelfInheritanceDisable.ValueBool() {
+			body, _ = sjson.Set(body, "next-hop-self.inheritance-disable", []interface{}{nil})
+		}
+	}
+	if !data.NextHopUnchanged.IsNull() && !data.NextHopUnchanged.IsUnknown() {
+		if data.NextHopUnchanged.ValueBool() {
+			body, _ = sjson.Set(body, "next-hop-unchanged.next-hop-unchanged-enable", map[string]string{})
+		}
+	}
+	if !data.NextHopUnchangedMultipath.IsNull() && !data.NextHopUnchangedMultipath.IsUnknown() {
+		if data.NextHopUnchangedMultipath.ValueBool() {
+			body, _ = sjson.Set(body, "next-hop-unchanged.multipath", []interface{}{nil})
+		}
+	}
+	if !data.NextHopUnchangedInheritanceDisable.IsNull() && !data.NextHopUnchangedInheritanceDisable.IsUnknown() {
+		if data.NextHopUnchangedInheritanceDisable.ValueBool() {
+			body, _ = sjson.Set(body, "next-hop-unchanged.next-hop-unchanged-enable.inheritance-disable", []interface{}{nil})
+		}
+	}
+	if !data.RoutePolicyIn.IsNull() && !data.RoutePolicyIn.IsUnknown() {
+		body, _ = sjson.Set(body, "route-policy.in", data.RoutePolicyIn.ValueString())
+	}
+	if !data.RoutePolicyOut.IsNull() && !data.RoutePolicyOut.IsUnknown() {
+		body, _ = sjson.Set(body, "route-policy.out", data.RoutePolicyOut.ValueString())
+	}
+	if !data.OrfRoutePolicy.IsNull() && !data.OrfRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "orf.route-policy", data.OrfRoutePolicy.ValueString())
+	}
+	if !data.ClusterIdAllowEqual.IsNull() && !data.ClusterIdAllowEqual.IsUnknown() {
+		if data.ClusterIdAllowEqual.ValueBool() {
+			body, _ = sjson.Set(body, "cluster-id.allow-equal", map[string]string{})
+		}
+	}
+	if !data.ClusterIdAllowEqualDisable.IsNull() && !data.ClusterIdAllowEqualDisable.IsUnknown() {
+		if data.ClusterIdAllowEqualDisable.ValueBool() {
+			body, _ = sjson.Set(body, "cluster-id.allow-equal.disable", []interface{}{nil})
+		}
+	}
+	if !data.ReplacePrivateAs.IsNull() && !data.ReplacePrivateAs.IsUnknown() {
+		if data.ReplacePrivateAs.ValueBool() {
+			body, _ = sjson.Set(body, "replace-private-as", map[string]string{})
+		}
+	}
+	if !data.ReplacePrivateAsInternal.IsNull() && !data.ReplacePrivateAsInternal.IsUnknown() {
+		if data.ReplacePrivateAsInternal.ValueBool() {
+			body, _ = sjson.Set(body, "replace-private-as.internal", []interface{}{nil})
+		}
+	}
+	if !data.RemovePrivateAsInbound.IsNull() && !data.RemovePrivateAsInbound.IsUnknown() {
+		if data.RemovePrivateAsInbound.ValueBool() {
+			body, _ = sjson.Set(body, "remove-private-as.inbound", map[string]string{})
+		}
+	}
+	if !data.RemovePrivateAsInboundEntireAspath.IsNull() && !data.RemovePrivateAsInboundEntireAspath.IsUnknown() {
+		if data.RemovePrivateAsInboundEntireAspath.ValueBool() {
+			body, _ = sjson.Set(body, "remove-private-as.inbound.entire-aspath", []interface{}{nil})
+		}
+	}
+	if !data.RemovePrivateAsInboundInheritanceDisable.IsNull() && !data.RemovePrivateAsInboundInheritanceDisable.IsUnknown() {
+		if data.RemovePrivateAsInboundInheritanceDisable.ValueBool() {
+			body, _ = sjson.Set(body, "remove-private-as.inbound.inheritance-disable", []interface{}{nil})
+		}
+	}
+	if !data.RemovePrivateAs.IsNull() && !data.RemovePrivateAs.IsUnknown() {
+		if data.RemovePrivateAs.ValueBool() {
+			body, _ = sjson.Set(body, "remove-private-as.remove-private-as-outbound", map[string]string{})
+		}
+	}
+	if !data.RemovePrivateAsEntireAspath.IsNull() && !data.RemovePrivateAsEntireAspath.IsUnknown() {
+		if data.RemovePrivateAsEntireAspath.ValueBool() {
+			body, _ = sjson.Set(body, "remove-private-as.remove-private-as-outbound.entire-aspath", []interface{}{nil})
+		}
+	}
+	if !data.RemovePrivateAsInternal.IsNull() && !data.RemovePrivateAsInternal.IsUnknown() {
+		if data.RemovePrivateAsInternal.ValueBool() {
+			body, _ = sjson.Set(body, "remove-private-as.remove-private-as-outbound.internal", []interface{}{nil})
 		}
 	}
 	if !data.RouteReflectorClient.IsNull() && !data.RouteReflectorClient.IsUnknown() {
@@ -150,7 +411,57 @@ func (data RouterBGPNeighborAddressFamily) toBody(ctx context.Context) string {
 	}
 	if !data.RouteReflectorClientInheritanceDisable.IsNull() && !data.RouteReflectorClientInheritanceDisable.IsUnknown() {
 		if data.RouteReflectorClientInheritanceDisable.ValueBool() {
-			body, _ = sjson.Set(body, "route-reflector-client.inheritance-disable", map[string]string{})
+			body, _ = sjson.Set(body, "route-reflector-client.inheritance-disable", []interface{}{nil})
+		}
+	}
+	if !data.SendCommunityEbgp.IsNull() && !data.SendCommunityEbgp.IsUnknown() {
+		if data.SendCommunityEbgp.ValueBool() {
+			body, _ = sjson.Set(body, "send-community-ebgp", map[string]string{})
+		}
+	}
+	if !data.SendCommunityEbgpInheritanceDisable.IsNull() && !data.SendCommunityEbgpInheritanceDisable.IsUnknown() {
+		if data.SendCommunityEbgpInheritanceDisable.ValueBool() {
+			body, _ = sjson.Set(body, "send-community-ebgp.inheritance-disable", []interface{}{nil})
+		}
+	}
+	if !data.SendCommunityGshutEbgp.IsNull() && !data.SendCommunityGshutEbgp.IsUnknown() {
+		if data.SendCommunityGshutEbgp.ValueBool() {
+			body, _ = sjson.Set(body, "send-community-gshut-ebgp", map[string]string{})
+		}
+	}
+	if !data.SendCommunityGshutEbgpInheritanceDisable.IsNull() && !data.SendCommunityGshutEbgpInheritanceDisable.IsUnknown() {
+		if data.SendCommunityGshutEbgpInheritanceDisable.ValueBool() {
+			body, _ = sjson.Set(body, "send-community-gshut-ebgp.inheritance-disable", []interface{}{nil})
+		}
+	}
+	if !data.SendExtendedCommunityEbgp.IsNull() && !data.SendExtendedCommunityEbgp.IsUnknown() {
+		if data.SendExtendedCommunityEbgp.ValueBool() {
+			body, _ = sjson.Set(body, "send-extended-community-ebgp", map[string]string{})
+		}
+	}
+	if !data.SendExtendedCommunityEbgpInheritanceDisable.IsNull() && !data.SendExtendedCommunityEbgpInheritanceDisable.IsUnknown() {
+		if data.SendExtendedCommunityEbgpInheritanceDisable.ValueBool() {
+			body, _ = sjson.Set(body, "send-extended-community-ebgp.inheritance-disable", []interface{}{nil})
+		}
+	}
+	if !data.SoftReconfigurationInbound.IsNull() && !data.SoftReconfigurationInbound.IsUnknown() {
+		if data.SoftReconfigurationInbound.ValueBool() {
+			body, _ = sjson.Set(body, "soft-reconfiguration.inbound", map[string]string{})
+		}
+	}
+	if !data.SoftReconfigurationInboundAlways.IsNull() && !data.SoftReconfigurationInboundAlways.IsUnknown() {
+		if data.SoftReconfigurationInboundAlways.ValueBool() {
+			body, _ = sjson.Set(body, "soft-reconfiguration.inbound.always", []interface{}{nil})
+		}
+	}
+	if !data.UpdateOutOriginatorLoopcheck.IsNull() && !data.UpdateOutOriginatorLoopcheck.IsUnknown() {
+		if data.UpdateOutOriginatorLoopcheck.ValueBool() {
+			body, _ = sjson.Set(body, "update.out.originator-loopcheck", map[string]string{})
+		}
+	}
+	if !data.UpdateOutOriginatorLoopcheckDisable.IsNull() && !data.UpdateOutOriginatorLoopcheckDisable.IsUnknown() {
+		if data.UpdateOutOriginatorLoopcheckDisable.ValueBool() {
+			body, _ = sjson.Set(body, "update.out.originator-loopcheck.disable", []interface{}{nil})
 		}
 	}
 	if !data.AdvertiseVpnv4Unicast.IsNull() && !data.AdvertiseVpnv4Unicast.IsUnknown() {
@@ -165,78 +476,187 @@ func (data RouterBGPNeighborAddressFamily) toBody(ctx context.Context) string {
 	}
 	if !data.AdvertiseVpnv4UnicastReOriginatedStitchingRt.IsNull() && !data.AdvertiseVpnv4UnicastReOriginatedStitchingRt.IsUnknown() {
 		if data.AdvertiseVpnv4UnicastReOriginatedStitchingRt.ValueBool() {
-			body, _ = sjson.Set(body, "advertise.vpnv4.unicast.enable.re-originated.stitching-rt", map[string]string{})
+			body, _ = sjson.Set(body, "advertise.vpnv4.unicast.enable.re-originated.stitching-rt", []interface{}{nil})
 		}
 	}
-	if !data.NextHopSelf.IsNull() && !data.NextHopSelf.IsUnknown() {
-		if data.NextHopSelf.ValueBool() {
-			body, _ = sjson.Set(body, "next-hop-self", map[string]string{})
+	if !data.AdvertiseVpnv6Unicast.IsNull() && !data.AdvertiseVpnv6Unicast.IsUnknown() {
+		if data.AdvertiseVpnv6Unicast.ValueBool() {
+			body, _ = sjson.Set(body, "advertise.vpnv6.unicast.enable", map[string]string{})
 		}
 	}
-	if !data.NextHopSelfInheritanceDisable.IsNull() && !data.NextHopSelfInheritanceDisable.IsUnknown() {
-		if data.NextHopSelfInheritanceDisable.ValueBool() {
-			body, _ = sjson.Set(body, "next-hop-self.inheritance-disable", map[string]string{})
+	if !data.AdvertiseVpnv6UnicastReOriginated.IsNull() && !data.AdvertiseVpnv6UnicastReOriginated.IsUnknown() {
+		if data.AdvertiseVpnv6UnicastReOriginated.ValueBool() {
+			body, _ = sjson.Set(body, "advertise.vpnv6.unicast.enable.re-originated", map[string]string{})
 		}
 	}
-	if !data.EncapsulationType.IsNull() && !data.EncapsulationType.IsUnknown() {
-		body, _ = sjson.Set(body, "encapsulation-type", data.EncapsulationType.ValueString())
-	}
-	if !data.RoutePolicyIn.IsNull() && !data.RoutePolicyIn.IsUnknown() {
-		body, _ = sjson.Set(body, "route-policy.in", data.RoutePolicyIn.ValueString())
-	}
-	if !data.RoutePolicyOut.IsNull() && !data.RoutePolicyOut.IsUnknown() {
-		body, _ = sjson.Set(body, "route-policy.out", data.RoutePolicyOut.ValueString())
-	}
-	if !data.SoftReconfigurationInbound.IsNull() && !data.SoftReconfigurationInbound.IsUnknown() {
-		if data.SoftReconfigurationInbound.ValueBool() {
-			body, _ = sjson.Set(body, "soft-reconfiguration.inbound", map[string]string{})
+	if !data.AdvertiseVpnv6UnicastReOriginatedStitchingRt.IsNull() && !data.AdvertiseVpnv6UnicastReOriginatedStitchingRt.IsUnknown() {
+		if data.AdvertiseVpnv6UnicastReOriginatedStitchingRt.ValueBool() {
+			body, _ = sjson.Set(body, "advertise.vpnv6.unicast.enable.re-originated.stitching-rt", []interface{}{nil})
 		}
 	}
-	if !data.SoftReconfigurationInboundAlways.IsNull() && !data.SoftReconfigurationInboundAlways.IsUnknown() {
-		if data.SoftReconfigurationInboundAlways.ValueBool() {
-			body, _ = sjson.Set(body, "soft-reconfiguration.inbound.always", map[string]string{})
+	if !data.AdvertiseL2vpnEvpnReOriginated.IsNull() && !data.AdvertiseL2vpnEvpnReOriginated.IsUnknown() {
+		if data.AdvertiseL2vpnEvpnReOriginated.ValueBool() {
+			body, _ = sjson.Set(body, "advertise.l2vpn.evpn.re-originated", map[string]string{})
 		}
 	}
-	if !data.SendCommunityEbgp.IsNull() && !data.SendCommunityEbgp.IsUnknown() {
-		if data.SendCommunityEbgp.ValueBool() {
-			body, _ = sjson.Set(body, "send-community-ebgp", map[string]string{})
+	if !data.AdvertiseL2vpnEvpnReOriginatedStitchingRt.IsNull() && !data.AdvertiseL2vpnEvpnReOriginatedStitchingRt.IsUnknown() {
+		if data.AdvertiseL2vpnEvpnReOriginatedStitchingRt.ValueBool() {
+			body, _ = sjson.Set(body, "advertise.l2vpn.evpn.re-originated.stitching-rt", []interface{}{nil})
 		}
 	}
-	if !data.SendCommunityEbgpInheritanceDisable.IsNull() && !data.SendCommunityEbgpInheritanceDisable.IsUnknown() {
-		if data.SendCommunityEbgpInheritanceDisable.ValueBool() {
-			body, _ = sjson.Set(body, "send-community-ebgp.inheritance-disable", map[string]string{})
+	if !data.SegmentRoutingSrv6PrefixSidType4.IsNull() && !data.SegmentRoutingSrv6PrefixSidType4.IsUnknown() {
+		if data.SegmentRoutingSrv6PrefixSidType4.ValueBool() {
+			body, _ = sjson.Set(body, "segment-routing.srv6.prefix-sid-type4", []interface{}{nil})
 		}
 	}
-	if !data.MaximumPrefixLimit.IsNull() && !data.MaximumPrefixLimit.IsUnknown() {
-		body, _ = sjson.Set(body, "maximum-prefix.maximum-prefix-number", strconv.FormatInt(data.MaximumPrefixLimit.ValueInt64(), 10))
-	}
-	if !data.MaximumPrefixThreshold.IsNull() && !data.MaximumPrefixThreshold.IsUnknown() {
-		body, _ = sjson.Set(body, "maximum-prefix.threshold-value", strconv.FormatInt(data.MaximumPrefixThreshold.ValueInt64(), 10))
-	}
-	if !data.MaximumPrefixRestart.IsNull() && !data.MaximumPrefixRestart.IsUnknown() {
-		body, _ = sjson.Set(body, "maximum-prefix.restart", strconv.FormatInt(data.MaximumPrefixRestart.ValueInt64(), 10))
-	}
-	if !data.MaximumPrefixDiscardExtraPaths.IsNull() && !data.MaximumPrefixDiscardExtraPaths.IsUnknown() {
-		if data.MaximumPrefixDiscardExtraPaths.ValueBool() {
-			body, _ = sjson.Set(body, "maximum-prefix.discard-extra-paths", map[string]string{})
+	if !data.ImportStitchingRt.IsNull() && !data.ImportStitchingRt.IsUnknown() {
+		if data.ImportStitchingRt.ValueBool() {
+			body, _ = sjson.Set(body, "import.stitching-rt", map[string]string{})
 		}
 	}
-	if !data.MaximumPrefixWarningOnly.IsNull() && !data.MaximumPrefixWarningOnly.IsUnknown() {
-		if data.MaximumPrefixWarningOnly.ValueBool() {
-			body, _ = sjson.Set(body, "maximum-prefix.warning-only", map[string]string{})
+	if !data.ImportStitchingRtReOriginate.IsNull() && !data.ImportStitchingRtReOriginate.IsUnknown() {
+		if data.ImportStitchingRtReOriginate.ValueBool() {
+			body, _ = sjson.Set(body, "import.stitching-rt.re-originate", map[string]string{})
 		}
 	}
-	if !data.DefaultOriginate.IsNull() && !data.DefaultOriginate.IsUnknown() {
-		if data.DefaultOriginate.ValueBool() {
-			body, _ = sjson.Set(body, "default-originate", map[string]string{})
+	if !data.ImportStitchingRtReOriginateStitchingRt.IsNull() && !data.ImportStitchingRtReOriginateStitchingRt.IsUnknown() {
+		if data.ImportStitchingRtReOriginateStitchingRt.ValueBool() {
+			body, _ = sjson.Set(body, "import.stitching-rt.re-originate.stitching-rt", []interface{}{nil})
 		}
 	}
-	if !data.DefaultOriginateRoutePolicy.IsNull() && !data.DefaultOriginateRoutePolicy.IsUnknown() {
-		body, _ = sjson.Set(body, "default-originate.route-policy", data.DefaultOriginateRoutePolicy.ValueString())
+	if !data.ImportReOriginate.IsNull() && !data.ImportReOriginate.IsUnknown() {
+		if data.ImportReOriginate.ValueBool() {
+			body, _ = sjson.Set(body, "import.re-originate", []interface{}{nil})
+		}
 	}
-	if !data.DefaultOriginateInheritanceDisable.IsNull() && !data.DefaultOriginateInheritanceDisable.IsUnknown() {
-		if data.DefaultOriginateInheritanceDisable.ValueBool() {
-			body, _ = sjson.Set(body, "default-originate.inheritance-disable", map[string]string{})
+	if !data.AllowasIn.IsNull() && !data.AllowasIn.IsUnknown() {
+		body, _ = sjson.Set(body, "allowas-in.number-of-occurrences-of-as-number", strconv.FormatInt(data.AllowasIn.ValueInt64(), 10))
+	}
+	if !data.AllowconfedasIn.IsNull() && !data.AllowconfedasIn.IsUnknown() {
+		body, _ = sjson.Set(body, "allowconfedas-in.number-of-occurrences-of-confederation-number", strconv.FormatInt(data.AllowconfedasIn.ValueInt64(), 10))
+	}
+	if !data.SiteOfOriginTwoByteAsNumber.IsNull() && !data.SiteOfOriginTwoByteAsNumber.IsUnknown() {
+		body, _ = sjson.Set(body, "site-of-origin.two-byte-as.two-byte-as-number", data.SiteOfOriginTwoByteAsNumber.ValueString())
+	}
+	if !data.SiteOfOriginTwoByteAsIndex.IsNull() && !data.SiteOfOriginTwoByteAsIndex.IsUnknown() {
+		body, _ = sjson.Set(body, "site-of-origin.two-byte-as.asn2-index", strconv.FormatInt(data.SiteOfOriginTwoByteAsIndex.ValueInt64(), 10))
+	}
+	if !data.SiteOfOriginFourByteAsNumber.IsNull() && !data.SiteOfOriginFourByteAsNumber.IsUnknown() {
+		body, _ = sjson.Set(body, "site-of-origin.four-byte-as.four-byte-as-number", data.SiteOfOriginFourByteAsNumber.ValueString())
+	}
+	if !data.SiteOfOriginFourByteAsIndex.IsNull() && !data.SiteOfOriginFourByteAsIndex.IsUnknown() {
+		body, _ = sjson.Set(body, "site-of-origin.four-byte-as.asn4-index", strconv.FormatInt(data.SiteOfOriginFourByteAsIndex.ValueInt64(), 10))
+	}
+	if !data.SiteOfOriginIpv4Address.IsNull() && !data.SiteOfOriginIpv4Address.IsUnknown() {
+		body, _ = sjson.Set(body, "site-of-origin.ipv4-address.address", data.SiteOfOriginIpv4Address.ValueString())
+	}
+	if !data.SiteOfOriginIpv4AddressIndex.IsNull() && !data.SiteOfOriginIpv4AddressIndex.IsUnknown() {
+		body, _ = sjson.Set(body, "site-of-origin.ipv4-address.ipv4address-index", strconv.FormatInt(data.SiteOfOriginIpv4AddressIndex.ValueInt64(), 10))
+	}
+	if !data.AsOverride.IsNull() && !data.AsOverride.IsUnknown() {
+		if data.AsOverride.ValueBool() {
+			body, _ = sjson.Set(body, "as-override", map[string]string{})
+		}
+	}
+	if !data.AsOverrideInheritanceDisable.IsNull() && !data.AsOverrideInheritanceDisable.IsUnknown() {
+		if data.AsOverrideInheritanceDisable.ValueBool() {
+			body, _ = sjson.Set(body, "as-override.inheritance-disable", []interface{}{nil})
+		}
+	}
+	if !data.Aigp.IsNull() && !data.Aigp.IsUnknown() {
+		if data.Aigp.ValueBool() {
+			body, _ = sjson.Set(body, "aigp.enable", map[string]string{})
+		}
+	}
+	if !data.AigpDisable.IsNull() && !data.AigpDisable.IsUnknown() {
+		if data.AigpDisable.ValueBool() {
+			body, _ = sjson.Set(body, "aigp.enable.disable", []interface{}{nil})
+		}
+	}
+	if !data.AigpSendMed.IsNull() && !data.AigpSendMed.IsUnknown() {
+		if data.AigpSendMed.ValueBool() {
+			body, _ = sjson.Set(body, "aigp.send.med", map[string]string{})
+		}
+	}
+	if !data.AigpSendMedDisable.IsNull() && !data.AigpSendMedDisable.IsUnknown() {
+		if data.AigpSendMedDisable.ValueBool() {
+			body, _ = sjson.Set(body, "aigp.send.med.disable", []interface{}{nil})
+		}
+	}
+	if !data.AigpSendCostCommunityDisable.IsNull() && !data.AigpSendCostCommunityDisable.IsUnknown() {
+		if data.AigpSendCostCommunityDisable.ValueBool() {
+			body, _ = sjson.Set(body, "aigp.send.cost-community.disable", []interface{}{nil})
+		}
+	}
+	if !data.AigpSendCostCommunityId.IsNull() && !data.AigpSendCostCommunityId.IsUnknown() {
+		body, _ = sjson.Set(body, "aigp.send.cost-community.cost-community-id.cost-community-id-number", strconv.FormatInt(data.AigpSendCostCommunityId.ValueInt64(), 10))
+	}
+	if !data.AigpSendCostCommunityIdPoiIgpCost.IsNull() && !data.AigpSendCostCommunityIdPoiIgpCost.IsUnknown() {
+		if data.AigpSendCostCommunityIdPoiIgpCost.ValueBool() {
+			body, _ = sjson.Set(body, "aigp.send.cost-community.cost-community-id.poi.igp-cost", map[string]string{})
+		}
+	}
+	if !data.AigpSendCostCommunityIdPoiIgpCostTransitive.IsNull() && !data.AigpSendCostCommunityIdPoiIgpCostTransitive.IsUnknown() {
+		if data.AigpSendCostCommunityIdPoiIgpCostTransitive.ValueBool() {
+			body, _ = sjson.Set(body, "aigp.send.cost-community.cost-community-id.poi.igp-cost.transitive", []interface{}{nil})
+		}
+	}
+	if !data.AigpSendCostCommunityIdPoiPreBestpath.IsNull() && !data.AigpSendCostCommunityIdPoiPreBestpath.IsUnknown() {
+		if data.AigpSendCostCommunityIdPoiPreBestpath.ValueBool() {
+			body, _ = sjson.Set(body, "aigp.send.cost-community.cost-community-id.poi.pre-bestpath", map[string]string{})
+		}
+	}
+	if !data.AigpSendCostCommunityIdPoiPreBestpathTransitive.IsNull() && !data.AigpSendCostCommunityIdPoiPreBestpathTransitive.IsUnknown() {
+		if data.AigpSendCostCommunityIdPoiPreBestpathTransitive.ValueBool() {
+			body, _ = sjson.Set(body, "aigp.send.cost-community.cost-community-id.poi.pre-bestpath.transitive", []interface{}{nil})
+		}
+	}
+	if !data.SendMulticastAttributes.IsNull() && !data.SendMulticastAttributes.IsUnknown() {
+		if data.SendMulticastAttributes.ValueBool() {
+			body, _ = sjson.Set(body, "send-multicast-attributes", map[string]string{})
+		}
+	}
+	if !data.SendMulticastAttributesDisable.IsNull() && !data.SendMulticastAttributesDisable.IsUnknown() {
+		if data.SendMulticastAttributesDisable.ValueBool() {
+			body, _ = sjson.Set(body, "send-multicast-attributes.disable", []interface{}{nil})
+		}
+	}
+	if !data.AcceptOwn.IsNull() && !data.AcceptOwn.IsUnknown() {
+		if data.AcceptOwn.ValueBool() {
+			body, _ = sjson.Set(body, "accept-own", map[string]string{})
+		}
+	}
+	if !data.AcceptOwnInheritanceDisable.IsNull() && !data.AcceptOwnInheritanceDisable.IsUnknown() {
+		if data.AcceptOwnInheritanceDisable.ValueBool() {
+			body, _ = sjson.Set(body, "accept-own.inheritance-disable", []interface{}{nil})
+		}
+	}
+	if !data.SlowPeerDynamic.IsNull() && !data.SlowPeerDynamic.IsUnknown() {
+		if data.SlowPeerDynamic.ValueBool() {
+			body, _ = sjson.Set(body, "slow-peer.dynamic", map[string]string{})
+		}
+	}
+	if !data.SlowPeerDynamicThreshold.IsNull() && !data.SlowPeerDynamicThreshold.IsUnknown() {
+		body, _ = sjson.Set(body, "slow-peer.dynamic.threshold", strconv.FormatInt(data.SlowPeerDynamicThreshold.ValueInt64(), 10))
+	}
+	if !data.SlowPeerDynamicDisable.IsNull() && !data.SlowPeerDynamicDisable.IsUnknown() {
+		if data.SlowPeerDynamicDisable.ValueBool() {
+			body, _ = sjson.Set(body, "slow-peer.dynamic.disable", []interface{}{nil})
+		}
+	}
+	if !data.SlowPeerStatic.IsNull() && !data.SlowPeerStatic.IsUnknown() {
+		if data.SlowPeerStatic.ValueBool() {
+			body, _ = sjson.Set(body, "slow-peer.static", []interface{}{nil})
+		}
+	}
+	if !data.OriginAsValidationDisable.IsNull() && !data.OriginAsValidationDisable.IsUnknown() {
+		if data.OriginAsValidationDisable.ValueBool() {
+			body, _ = sjson.Set(body, "origin-as.validation.disable", []interface{}{nil})
+		}
+	}
+	if !data.BestpathOriginAsAllowInvalid.IsNull() && !data.BestpathOriginAsAllowInvalid.IsUnknown() {
+		if data.BestpathOriginAsAllowInvalid.ValueBool() {
+			body, _ = sjson.Set(body, "bestpath.origin-as.allow.invalid", []interface{}{nil})
 		}
 	}
 	return body
@@ -247,6 +667,466 @@ func (data RouterBGPNeighborAddressFamily) toBody(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *RouterBGPNeighborAddressFamily) updateFromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "encapsulation-type"); value.Exists() && !data.EncapsulationType.IsNull() {
+		data.EncapsulationType = types.StringValue(value.String())
+	} else {
+		data.EncapsulationType = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "weight"); value.Exists() && !data.Weight.IsNull() {
+		data.Weight = types.Int64Value(value.Int())
+	} else {
+		data.Weight = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "multipath"); !data.Multipath.IsNull() {
+		if value.Exists() {
+			data.Multipath = types.BoolValue(true)
+		} else {
+			data.Multipath = types.BoolValue(false)
+		}
+	} else {
+		data.Multipath = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "use.af-group"); value.Exists() && !data.UseAfGroup.IsNull() {
+		data.UseAfGroup = types.StringValue(value.String())
+	} else {
+		data.UseAfGroup = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "capability.orf.prefix.capability-receive-orf-neighbor"); value.Exists() && !data.CapabilityOrfPrefix.IsNull() {
+		data.CapabilityOrfPrefix = types.StringValue(value.String())
+	} else {
+		data.CapabilityOrfPrefix = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "additional-paths.send"); !data.AdditionalPathsSend.IsNull() {
+		if value.Exists() {
+			data.AdditionalPathsSend = types.BoolValue(true)
+		} else {
+			data.AdditionalPathsSend = types.BoolValue(false)
+		}
+	} else {
+		data.AdditionalPathsSend = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "additional-paths.send.disable"); !data.AdditionalPathsSendDisable.IsNull() {
+		if value.Exists() {
+			data.AdditionalPathsSendDisable = types.BoolValue(true)
+		} else {
+			data.AdditionalPathsSendDisable = types.BoolValue(false)
+		}
+	} else {
+		data.AdditionalPathsSendDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "additional-paths.receive"); !data.AdditionalPathsReceive.IsNull() {
+		if value.Exists() {
+			data.AdditionalPathsReceive = types.BoolValue(true)
+		} else {
+			data.AdditionalPathsReceive = types.BoolValue(false)
+		}
+	} else {
+		data.AdditionalPathsReceive = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "additional-paths.receive.disable"); !data.AdditionalPathsReceiveDisable.IsNull() {
+		if value.Exists() {
+			data.AdditionalPathsReceiveDisable = types.BoolValue(true)
+		} else {
+			data.AdditionalPathsReceiveDisable = types.BoolValue(false)
+		}
+	} else {
+		data.AdditionalPathsReceiveDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "default-originate"); !data.DefaultOriginate.IsNull() {
+		if value.Exists() {
+			data.DefaultOriginate = types.BoolValue(true)
+		} else {
+			data.DefaultOriginate = types.BoolValue(false)
+		}
+	} else {
+		data.DefaultOriginate = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "default-originate.route-policy"); value.Exists() && !data.DefaultOriginateRoutePolicy.IsNull() {
+		data.DefaultOriginateRoutePolicy = types.StringValue(value.String())
+	} else {
+		data.DefaultOriginateRoutePolicy = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "default-originate.inheritance-disable"); !data.DefaultOriginateInheritanceDisable.IsNull() {
+		if value.Exists() {
+			data.DefaultOriginateInheritanceDisable = types.BoolValue(true)
+		} else {
+			data.DefaultOriginateInheritanceDisable = types.BoolValue(false)
+		}
+	} else {
+		data.DefaultOriginateInheritanceDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "maximum-prefix.maximum-prefix-number"); value.Exists() && !data.MaximumPrefixLimit.IsNull() {
+		data.MaximumPrefixLimit = types.Int64Value(value.Int())
+	} else {
+		data.MaximumPrefixLimit = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "maximum-prefix.threshold-value"); value.Exists() && !data.MaximumPrefixThreshold.IsNull() {
+		data.MaximumPrefixThreshold = types.Int64Value(value.Int())
+	} else {
+		data.MaximumPrefixThreshold = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "maximum-prefix.restart"); value.Exists() && !data.MaximumPrefixRestart.IsNull() {
+		data.MaximumPrefixRestart = types.Int64Value(value.Int())
+	} else {
+		data.MaximumPrefixRestart = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "maximum-prefix.discard-extra-paths"); !data.MaximumPrefixDiscardExtraPaths.IsNull() {
+		if value.Exists() {
+			data.MaximumPrefixDiscardExtraPaths = types.BoolValue(true)
+		} else {
+			data.MaximumPrefixDiscardExtraPaths = types.BoolValue(false)
+		}
+	} else {
+		data.MaximumPrefixDiscardExtraPaths = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "maximum-prefix.warning-only"); !data.MaximumPrefixWarningOnly.IsNull() {
+		if value.Exists() {
+			data.MaximumPrefixWarningOnly = types.BoolValue(true)
+		} else {
+			data.MaximumPrefixWarningOnly = types.BoolValue(false)
+		}
+	} else {
+		data.MaximumPrefixWarningOnly = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "next-hop-self"); !data.NextHopSelf.IsNull() {
+		if value.Exists() {
+			data.NextHopSelf = types.BoolValue(true)
+		} else {
+			data.NextHopSelf = types.BoolValue(false)
+		}
+	} else {
+		data.NextHopSelf = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "next-hop-self.inheritance-disable"); !data.NextHopSelfInheritanceDisable.IsNull() {
+		if value.Exists() {
+			data.NextHopSelfInheritanceDisable = types.BoolValue(true)
+		} else {
+			data.NextHopSelfInheritanceDisable = types.BoolValue(false)
+		}
+	} else {
+		data.NextHopSelfInheritanceDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "next-hop-unchanged.next-hop-unchanged-enable"); !data.NextHopUnchanged.IsNull() {
+		if value.Exists() {
+			data.NextHopUnchanged = types.BoolValue(true)
+		} else {
+			data.NextHopUnchanged = types.BoolValue(false)
+		}
+	} else {
+		data.NextHopUnchanged = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "next-hop-unchanged.multipath"); !data.NextHopUnchangedMultipath.IsNull() {
+		if value.Exists() {
+			data.NextHopUnchangedMultipath = types.BoolValue(true)
+		} else {
+			data.NextHopUnchangedMultipath = types.BoolValue(false)
+		}
+	} else {
+		data.NextHopUnchangedMultipath = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "next-hop-unchanged.next-hop-unchanged-enable.inheritance-disable"); !data.NextHopUnchangedInheritanceDisable.IsNull() {
+		if value.Exists() {
+			data.NextHopUnchangedInheritanceDisable = types.BoolValue(true)
+		} else {
+			data.NextHopUnchangedInheritanceDisable = types.BoolValue(false)
+		}
+	} else {
+		data.NextHopUnchangedInheritanceDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "route-policy.in"); value.Exists() && !data.RoutePolicyIn.IsNull() {
+		data.RoutePolicyIn = types.StringValue(value.String())
+	} else {
+		data.RoutePolicyIn = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "route-policy.out"); value.Exists() && !data.RoutePolicyOut.IsNull() {
+		data.RoutePolicyOut = types.StringValue(value.String())
+	} else {
+		data.RoutePolicyOut = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "orf.route-policy"); value.Exists() && !data.OrfRoutePolicy.IsNull() {
+		data.OrfRoutePolicy = types.StringValue(value.String())
+	} else {
+		data.OrfRoutePolicy = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "cluster-id.allow-equal"); !data.ClusterIdAllowEqual.IsNull() {
+		if value.Exists() {
+			data.ClusterIdAllowEqual = types.BoolValue(true)
+		} else {
+			data.ClusterIdAllowEqual = types.BoolValue(false)
+		}
+	} else {
+		data.ClusterIdAllowEqual = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "cluster-id.allow-equal.disable"); !data.ClusterIdAllowEqualDisable.IsNull() {
+		if value.Exists() {
+			data.ClusterIdAllowEqualDisable = types.BoolValue(true)
+		} else {
+			data.ClusterIdAllowEqualDisable = types.BoolValue(false)
+		}
+	} else {
+		data.ClusterIdAllowEqualDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "replace-private-as"); !data.ReplacePrivateAs.IsNull() {
+		if value.Exists() {
+			data.ReplacePrivateAs = types.BoolValue(true)
+		} else {
+			data.ReplacePrivateAs = types.BoolValue(false)
+		}
+	} else {
+		data.ReplacePrivateAs = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "replace-private-as.internal"); !data.ReplacePrivateAsInternal.IsNull() {
+		if value.Exists() {
+			data.ReplacePrivateAsInternal = types.BoolValue(true)
+		} else {
+			data.ReplacePrivateAsInternal = types.BoolValue(false)
+		}
+	} else {
+		data.ReplacePrivateAsInternal = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "remove-private-as.inbound"); !data.RemovePrivateAsInbound.IsNull() {
+		if value.Exists() {
+			data.RemovePrivateAsInbound = types.BoolValue(true)
+		} else {
+			data.RemovePrivateAsInbound = types.BoolValue(false)
+		}
+	} else {
+		data.RemovePrivateAsInbound = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "remove-private-as.inbound.entire-aspath"); !data.RemovePrivateAsInboundEntireAspath.IsNull() {
+		if value.Exists() {
+			data.RemovePrivateAsInboundEntireAspath = types.BoolValue(true)
+		} else {
+			data.RemovePrivateAsInboundEntireAspath = types.BoolValue(false)
+		}
+	} else {
+		data.RemovePrivateAsInboundEntireAspath = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "remove-private-as.inbound.inheritance-disable"); !data.RemovePrivateAsInboundInheritanceDisable.IsNull() {
+		if value.Exists() {
+			data.RemovePrivateAsInboundInheritanceDisable = types.BoolValue(true)
+		} else {
+			data.RemovePrivateAsInboundInheritanceDisable = types.BoolValue(false)
+		}
+	} else {
+		data.RemovePrivateAsInboundInheritanceDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound"); !data.RemovePrivateAs.IsNull() {
+		if value.Exists() {
+			data.RemovePrivateAs = types.BoolValue(true)
+		} else {
+			data.RemovePrivateAs = types.BoolValue(false)
+		}
+	} else {
+		data.RemovePrivateAs = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.entire-aspath"); !data.RemovePrivateAsEntireAspath.IsNull() {
+		if value.Exists() {
+			data.RemovePrivateAsEntireAspath = types.BoolValue(true)
+		} else {
+			data.RemovePrivateAsEntireAspath = types.BoolValue(false)
+		}
+	} else {
+		data.RemovePrivateAsEntireAspath = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.internal"); !data.RemovePrivateAsInternal.IsNull() {
+		if value.Exists() {
+			data.RemovePrivateAsInternal = types.BoolValue(true)
+		} else {
+			data.RemovePrivateAsInternal = types.BoolValue(false)
+		}
+	} else {
+		data.RemovePrivateAsInternal = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "route-reflector-client"); !data.RouteReflectorClient.IsNull() {
+		if value.Exists() {
+			data.RouteReflectorClient = types.BoolValue(true)
+		} else {
+			data.RouteReflectorClient = types.BoolValue(false)
+		}
+	} else {
+		data.RouteReflectorClient = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "route-reflector-client.inheritance-disable"); !data.RouteReflectorClientInheritanceDisable.IsNull() {
+		if value.Exists() {
+			data.RouteReflectorClientInheritanceDisable = types.BoolValue(true)
+		} else {
+			data.RouteReflectorClientInheritanceDisable = types.BoolValue(false)
+		}
+	} else {
+		data.RouteReflectorClientInheritanceDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "send-community-ebgp"); !data.SendCommunityEbgp.IsNull() {
+		if value.Exists() {
+			data.SendCommunityEbgp = types.BoolValue(true)
+		} else {
+			data.SendCommunityEbgp = types.BoolValue(false)
+		}
+	} else {
+		data.SendCommunityEbgp = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "send-community-ebgp.inheritance-disable"); !data.SendCommunityEbgpInheritanceDisable.IsNull() {
+		if value.Exists() {
+			data.SendCommunityEbgpInheritanceDisable = types.BoolValue(true)
+		} else {
+			data.SendCommunityEbgpInheritanceDisable = types.BoolValue(false)
+		}
+	} else {
+		data.SendCommunityEbgpInheritanceDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "send-community-gshut-ebgp"); !data.SendCommunityGshutEbgp.IsNull() {
+		if value.Exists() {
+			data.SendCommunityGshutEbgp = types.BoolValue(true)
+		} else {
+			data.SendCommunityGshutEbgp = types.BoolValue(false)
+		}
+	} else {
+		data.SendCommunityGshutEbgp = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "send-community-gshut-ebgp.inheritance-disable"); !data.SendCommunityGshutEbgpInheritanceDisable.IsNull() {
+		if value.Exists() {
+			data.SendCommunityGshutEbgpInheritanceDisable = types.BoolValue(true)
+		} else {
+			data.SendCommunityGshutEbgpInheritanceDisable = types.BoolValue(false)
+		}
+	} else {
+		data.SendCommunityGshutEbgpInheritanceDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "send-extended-community-ebgp"); !data.SendExtendedCommunityEbgp.IsNull() {
+		if value.Exists() {
+			data.SendExtendedCommunityEbgp = types.BoolValue(true)
+		} else {
+			data.SendExtendedCommunityEbgp = types.BoolValue(false)
+		}
+	} else {
+		data.SendExtendedCommunityEbgp = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "send-extended-community-ebgp.inheritance-disable"); !data.SendExtendedCommunityEbgpInheritanceDisable.IsNull() {
+		if value.Exists() {
+			data.SendExtendedCommunityEbgpInheritanceDisable = types.BoolValue(true)
+		} else {
+			data.SendExtendedCommunityEbgpInheritanceDisable = types.BoolValue(false)
+		}
+	} else {
+		data.SendExtendedCommunityEbgpInheritanceDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound"); !data.SoftReconfigurationInbound.IsNull() {
+		if value.Exists() {
+			data.SoftReconfigurationInbound = types.BoolValue(true)
+		} else {
+			data.SoftReconfigurationInbound = types.BoolValue(false)
+		}
+	} else {
+		data.SoftReconfigurationInbound = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound.always"); !data.SoftReconfigurationInboundAlways.IsNull() {
+		if value.Exists() {
+			data.SoftReconfigurationInboundAlways = types.BoolValue(true)
+		} else {
+			data.SoftReconfigurationInboundAlways = types.BoolValue(false)
+		}
+	} else {
+		data.SoftReconfigurationInboundAlways = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "update.out.originator-loopcheck"); !data.UpdateOutOriginatorLoopcheck.IsNull() {
+		if value.Exists() {
+			data.UpdateOutOriginatorLoopcheck = types.BoolValue(true)
+		} else {
+			data.UpdateOutOriginatorLoopcheck = types.BoolValue(false)
+		}
+	} else {
+		data.UpdateOutOriginatorLoopcheck = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "update.out.originator-loopcheck.disable"); !data.UpdateOutOriginatorLoopcheckDisable.IsNull() {
+		if value.Exists() {
+			data.UpdateOutOriginatorLoopcheckDisable = types.BoolValue(true)
+		} else {
+			data.UpdateOutOriginatorLoopcheckDisable = types.BoolValue(false)
+		}
+	} else {
+		data.UpdateOutOriginatorLoopcheckDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable"); !data.AdvertiseVpnv4Unicast.IsNull() {
+		if value.Exists() {
+			data.AdvertiseVpnv4Unicast = types.BoolValue(true)
+		} else {
+			data.AdvertiseVpnv4Unicast = types.BoolValue(false)
+		}
+	} else {
+		data.AdvertiseVpnv4Unicast = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable.re-originated"); !data.AdvertiseVpnv4UnicastReOriginated.IsNull() {
+		if value.Exists() {
+			data.AdvertiseVpnv4UnicastReOriginated = types.BoolValue(true)
+		} else {
+			data.AdvertiseVpnv4UnicastReOriginated = types.BoolValue(false)
+		}
+	} else {
+		data.AdvertiseVpnv4UnicastReOriginated = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable.re-originated.stitching-rt"); !data.AdvertiseVpnv4UnicastReOriginatedStitchingRt.IsNull() {
+		if value.Exists() {
+			data.AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolValue(true)
+		} else {
+			data.AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolValue(false)
+		}
+	} else {
+		data.AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "advertise.vpnv6.unicast.enable"); !data.AdvertiseVpnv6Unicast.IsNull() {
+		if value.Exists() {
+			data.AdvertiseVpnv6Unicast = types.BoolValue(true)
+		} else {
+			data.AdvertiseVpnv6Unicast = types.BoolValue(false)
+		}
+	} else {
+		data.AdvertiseVpnv6Unicast = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "advertise.vpnv6.unicast.enable.re-originated"); !data.AdvertiseVpnv6UnicastReOriginated.IsNull() {
+		if value.Exists() {
+			data.AdvertiseVpnv6UnicastReOriginated = types.BoolValue(true)
+		} else {
+			data.AdvertiseVpnv6UnicastReOriginated = types.BoolValue(false)
+		}
+	} else {
+		data.AdvertiseVpnv6UnicastReOriginated = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "advertise.vpnv6.unicast.enable.re-originated.stitching-rt"); !data.AdvertiseVpnv6UnicastReOriginatedStitchingRt.IsNull() {
+		if value.Exists() {
+			data.AdvertiseVpnv6UnicastReOriginatedStitchingRt = types.BoolValue(true)
+		} else {
+			data.AdvertiseVpnv6UnicastReOriginatedStitchingRt = types.BoolValue(false)
+		}
+	} else {
+		data.AdvertiseVpnv6UnicastReOriginatedStitchingRt = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "advertise.l2vpn.evpn.re-originated"); !data.AdvertiseL2vpnEvpnReOriginated.IsNull() {
+		if value.Exists() {
+			data.AdvertiseL2vpnEvpnReOriginated = types.BoolValue(true)
+		} else {
+			data.AdvertiseL2vpnEvpnReOriginated = types.BoolValue(false)
+		}
+	} else {
+		data.AdvertiseL2vpnEvpnReOriginated = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "advertise.l2vpn.evpn.re-originated.stitching-rt"); !data.AdvertiseL2vpnEvpnReOriginatedStitchingRt.IsNull() {
+		if value.Exists() {
+			data.AdvertiseL2vpnEvpnReOriginatedStitchingRt = types.BoolValue(true)
+		} else {
+			data.AdvertiseL2vpnEvpnReOriginatedStitchingRt = types.BoolValue(false)
+		}
+	} else {
+		data.AdvertiseL2vpnEvpnReOriginatedStitchingRt = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "segment-routing.srv6.prefix-sid-type4"); !data.SegmentRoutingSrv6PrefixSidType4.IsNull() {
+		if value.Exists() {
+			data.SegmentRoutingSrv6PrefixSidType4 = types.BoolValue(true)
+		} else {
+			data.SegmentRoutingSrv6PrefixSidType4 = types.BoolValue(false)
+		}
+	} else {
+		data.SegmentRoutingSrv6PrefixSidType4 = types.BoolNull()
+	}
 	if value := gjson.GetBytes(res, "import.stitching-rt"); !data.ImportStitchingRt.IsNull() {
 		if value.Exists() {
 			data.ImportStitchingRt = types.BoolValue(true)
@@ -283,175 +1163,235 @@ func (data *RouterBGPNeighborAddressFamily) updateFromBody(ctx context.Context, 
 	} else {
 		data.ImportReOriginate = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "route-reflector-client"); !data.RouteReflectorClient.IsNull() {
+	if value := gjson.GetBytes(res, "allowas-in.number-of-occurrences-of-as-number"); value.Exists() && !data.AllowasIn.IsNull() {
+		data.AllowasIn = types.Int64Value(value.Int())
+	} else {
+		data.AllowasIn = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "allowconfedas-in.number-of-occurrences-of-confederation-number"); value.Exists() && !data.AllowconfedasIn.IsNull() {
+		data.AllowconfedasIn = types.Int64Value(value.Int())
+	} else {
+		data.AllowconfedasIn = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "site-of-origin.two-byte-as.two-byte-as-number"); value.Exists() && !data.SiteOfOriginTwoByteAsNumber.IsNull() {
+		data.SiteOfOriginTwoByteAsNumber = types.StringValue(value.String())
+	} else {
+		data.SiteOfOriginTwoByteAsNumber = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "site-of-origin.two-byte-as.asn2-index"); value.Exists() && !data.SiteOfOriginTwoByteAsIndex.IsNull() {
+		data.SiteOfOriginTwoByteAsIndex = types.Int64Value(value.Int())
+	} else {
+		data.SiteOfOriginTwoByteAsIndex = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "site-of-origin.four-byte-as.four-byte-as-number"); value.Exists() && !data.SiteOfOriginFourByteAsNumber.IsNull() {
+		data.SiteOfOriginFourByteAsNumber = types.StringValue(value.String())
+	} else {
+		data.SiteOfOriginFourByteAsNumber = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "site-of-origin.four-byte-as.asn4-index"); value.Exists() && !data.SiteOfOriginFourByteAsIndex.IsNull() {
+		data.SiteOfOriginFourByteAsIndex = types.Int64Value(value.Int())
+	} else {
+		data.SiteOfOriginFourByteAsIndex = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "site-of-origin.ipv4-address.address"); value.Exists() && !data.SiteOfOriginIpv4Address.IsNull() {
+		data.SiteOfOriginIpv4Address = types.StringValue(value.String())
+	} else {
+		data.SiteOfOriginIpv4Address = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "site-of-origin.ipv4-address.ipv4address-index"); value.Exists() && !data.SiteOfOriginIpv4AddressIndex.IsNull() {
+		data.SiteOfOriginIpv4AddressIndex = types.Int64Value(value.Int())
+	} else {
+		data.SiteOfOriginIpv4AddressIndex = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "as-override"); !data.AsOverride.IsNull() {
 		if value.Exists() {
-			data.RouteReflectorClient = types.BoolValue(true)
+			data.AsOverride = types.BoolValue(true)
 		} else {
-			data.RouteReflectorClient = types.BoolValue(false)
+			data.AsOverride = types.BoolValue(false)
 		}
 	} else {
-		data.RouteReflectorClient = types.BoolNull()
+		data.AsOverride = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "route-reflector-client.inheritance-disable"); !data.RouteReflectorClientInheritanceDisable.IsNull() {
+	if value := gjson.GetBytes(res, "as-override.inheritance-disable"); !data.AsOverrideInheritanceDisable.IsNull() {
 		if value.Exists() {
-			data.RouteReflectorClientInheritanceDisable = types.BoolValue(true)
+			data.AsOverrideInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.RouteReflectorClientInheritanceDisable = types.BoolValue(false)
+			data.AsOverrideInheritanceDisable = types.BoolValue(false)
 		}
 	} else {
-		data.RouteReflectorClientInheritanceDisable = types.BoolNull()
+		data.AsOverrideInheritanceDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable"); !data.AdvertiseVpnv4Unicast.IsNull() {
+	if value := gjson.GetBytes(res, "aigp.enable"); !data.Aigp.IsNull() {
 		if value.Exists() {
-			data.AdvertiseVpnv4Unicast = types.BoolValue(true)
+			data.Aigp = types.BoolValue(true)
 		} else {
-			data.AdvertiseVpnv4Unicast = types.BoolValue(false)
+			data.Aigp = types.BoolValue(false)
 		}
 	} else {
-		data.AdvertiseVpnv4Unicast = types.BoolNull()
+		data.Aigp = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable.re-originated"); !data.AdvertiseVpnv4UnicastReOriginated.IsNull() {
+	if value := gjson.GetBytes(res, "aigp.enable.disable"); !data.AigpDisable.IsNull() {
 		if value.Exists() {
-			data.AdvertiseVpnv4UnicastReOriginated = types.BoolValue(true)
+			data.AigpDisable = types.BoolValue(true)
 		} else {
-			data.AdvertiseVpnv4UnicastReOriginated = types.BoolValue(false)
+			data.AigpDisable = types.BoolValue(false)
 		}
 	} else {
-		data.AdvertiseVpnv4UnicastReOriginated = types.BoolNull()
+		data.AigpDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable.re-originated.stitching-rt"); !data.AdvertiseVpnv4UnicastReOriginatedStitchingRt.IsNull() {
+	if value := gjson.GetBytes(res, "aigp.send.med"); !data.AigpSendMed.IsNull() {
 		if value.Exists() {
-			data.AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolValue(true)
+			data.AigpSendMed = types.BoolValue(true)
 		} else {
-			data.AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolValue(false)
+			data.AigpSendMed = types.BoolValue(false)
 		}
 	} else {
-		data.AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolNull()
+		data.AigpSendMed = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "next-hop-self"); !data.NextHopSelf.IsNull() {
+	if value := gjson.GetBytes(res, "aigp.send.med.disable"); !data.AigpSendMedDisable.IsNull() {
 		if value.Exists() {
-			data.NextHopSelf = types.BoolValue(true)
+			data.AigpSendMedDisable = types.BoolValue(true)
 		} else {
-			data.NextHopSelf = types.BoolValue(false)
+			data.AigpSendMedDisable = types.BoolValue(false)
 		}
 	} else {
-		data.NextHopSelf = types.BoolNull()
+		data.AigpSendMedDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "next-hop-self.inheritance-disable"); !data.NextHopSelfInheritanceDisable.IsNull() {
+	if value := gjson.GetBytes(res, "aigp.send.cost-community.disable"); !data.AigpSendCostCommunityDisable.IsNull() {
 		if value.Exists() {
-			data.NextHopSelfInheritanceDisable = types.BoolValue(true)
+			data.AigpSendCostCommunityDisable = types.BoolValue(true)
 		} else {
-			data.NextHopSelfInheritanceDisable = types.BoolValue(false)
+			data.AigpSendCostCommunityDisable = types.BoolValue(false)
 		}
 	} else {
-		data.NextHopSelfInheritanceDisable = types.BoolNull()
+		data.AigpSendCostCommunityDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "encapsulation-type"); value.Exists() && !data.EncapsulationType.IsNull() {
-		data.EncapsulationType = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "aigp.send.cost-community.cost-community-id.cost-community-id-number"); value.Exists() && !data.AigpSendCostCommunityId.IsNull() {
+		data.AigpSendCostCommunityId = types.Int64Value(value.Int())
 	} else {
-		data.EncapsulationType = types.StringNull()
+		data.AigpSendCostCommunityId = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "route-policy.in"); value.Exists() && !data.RoutePolicyIn.IsNull() {
-		data.RoutePolicyIn = types.StringValue(value.String())
-	} else {
-		data.RoutePolicyIn = types.StringNull()
-	}
-	if value := gjson.GetBytes(res, "route-policy.out"); value.Exists() && !data.RoutePolicyOut.IsNull() {
-		data.RoutePolicyOut = types.StringValue(value.String())
-	} else {
-		data.RoutePolicyOut = types.StringNull()
-	}
-	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound"); !data.SoftReconfigurationInbound.IsNull() {
+	if value := gjson.GetBytes(res, "aigp.send.cost-community.cost-community-id.poi.igp-cost"); !data.AigpSendCostCommunityIdPoiIgpCost.IsNull() {
 		if value.Exists() {
-			data.SoftReconfigurationInbound = types.BoolValue(true)
+			data.AigpSendCostCommunityIdPoiIgpCost = types.BoolValue(true)
 		} else {
-			data.SoftReconfigurationInbound = types.BoolValue(false)
+			data.AigpSendCostCommunityIdPoiIgpCost = types.BoolValue(false)
 		}
 	} else {
-		data.SoftReconfigurationInbound = types.BoolNull()
+		data.AigpSendCostCommunityIdPoiIgpCost = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound.always"); !data.SoftReconfigurationInboundAlways.IsNull() {
+	if value := gjson.GetBytes(res, "aigp.send.cost-community.cost-community-id.poi.igp-cost.transitive"); !data.AigpSendCostCommunityIdPoiIgpCostTransitive.IsNull() {
 		if value.Exists() {
-			data.SoftReconfigurationInboundAlways = types.BoolValue(true)
+			data.AigpSendCostCommunityIdPoiIgpCostTransitive = types.BoolValue(true)
 		} else {
-			data.SoftReconfigurationInboundAlways = types.BoolValue(false)
+			data.AigpSendCostCommunityIdPoiIgpCostTransitive = types.BoolValue(false)
 		}
 	} else {
-		data.SoftReconfigurationInboundAlways = types.BoolNull()
+		data.AigpSendCostCommunityIdPoiIgpCostTransitive = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "send-community-ebgp"); !data.SendCommunityEbgp.IsNull() {
+	if value := gjson.GetBytes(res, "aigp.send.cost-community.cost-community-id.poi.pre-bestpath"); !data.AigpSendCostCommunityIdPoiPreBestpath.IsNull() {
 		if value.Exists() {
-			data.SendCommunityEbgp = types.BoolValue(true)
+			data.AigpSendCostCommunityIdPoiPreBestpath = types.BoolValue(true)
 		} else {
-			data.SendCommunityEbgp = types.BoolValue(false)
+			data.AigpSendCostCommunityIdPoiPreBestpath = types.BoolValue(false)
 		}
 	} else {
-		data.SendCommunityEbgp = types.BoolNull()
+		data.AigpSendCostCommunityIdPoiPreBestpath = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "send-community-ebgp.inheritance-disable"); !data.SendCommunityEbgpInheritanceDisable.IsNull() {
+	if value := gjson.GetBytes(res, "aigp.send.cost-community.cost-community-id.poi.pre-bestpath.transitive"); !data.AigpSendCostCommunityIdPoiPreBestpathTransitive.IsNull() {
 		if value.Exists() {
-			data.SendCommunityEbgpInheritanceDisable = types.BoolValue(true)
+			data.AigpSendCostCommunityIdPoiPreBestpathTransitive = types.BoolValue(true)
 		} else {
-			data.SendCommunityEbgpInheritanceDisable = types.BoolValue(false)
+			data.AigpSendCostCommunityIdPoiPreBestpathTransitive = types.BoolValue(false)
 		}
 	} else {
-		data.SendCommunityEbgpInheritanceDisable = types.BoolNull()
+		data.AigpSendCostCommunityIdPoiPreBestpathTransitive = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "maximum-prefix.maximum-prefix-number"); value.Exists() && !data.MaximumPrefixLimit.IsNull() {
-		data.MaximumPrefixLimit = types.Int64Value(value.Int())
-	} else {
-		data.MaximumPrefixLimit = types.Int64Null()
-	}
-	if value := gjson.GetBytes(res, "maximum-prefix.threshold-value"); value.Exists() && !data.MaximumPrefixThreshold.IsNull() {
-		data.MaximumPrefixThreshold = types.Int64Value(value.Int())
-	} else {
-		data.MaximumPrefixThreshold = types.Int64Null()
-	}
-	if value := gjson.GetBytes(res, "maximum-prefix.restart"); value.Exists() && !data.MaximumPrefixRestart.IsNull() {
-		data.MaximumPrefixRestart = types.Int64Value(value.Int())
-	} else {
-		data.MaximumPrefixRestart = types.Int64Null()
-	}
-	if value := gjson.GetBytes(res, "maximum-prefix.discard-extra-paths"); !data.MaximumPrefixDiscardExtraPaths.IsNull() {
+	if value := gjson.GetBytes(res, "send-multicast-attributes"); !data.SendMulticastAttributes.IsNull() {
 		if value.Exists() {
-			data.MaximumPrefixDiscardExtraPaths = types.BoolValue(true)
+			data.SendMulticastAttributes = types.BoolValue(true)
 		} else {
-			data.MaximumPrefixDiscardExtraPaths = types.BoolValue(false)
+			data.SendMulticastAttributes = types.BoolValue(false)
 		}
 	} else {
-		data.MaximumPrefixDiscardExtraPaths = types.BoolNull()
+		data.SendMulticastAttributes = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "maximum-prefix.warning-only"); !data.MaximumPrefixWarningOnly.IsNull() {
+	if value := gjson.GetBytes(res, "send-multicast-attributes.disable"); !data.SendMulticastAttributesDisable.IsNull() {
 		if value.Exists() {
-			data.MaximumPrefixWarningOnly = types.BoolValue(true)
+			data.SendMulticastAttributesDisable = types.BoolValue(true)
 		} else {
-			data.MaximumPrefixWarningOnly = types.BoolValue(false)
+			data.SendMulticastAttributesDisable = types.BoolValue(false)
 		}
 	} else {
-		data.MaximumPrefixWarningOnly = types.BoolNull()
+		data.SendMulticastAttributesDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "default-originate"); !data.DefaultOriginate.IsNull() {
+	if value := gjson.GetBytes(res, "accept-own"); !data.AcceptOwn.IsNull() {
 		if value.Exists() {
-			data.DefaultOriginate = types.BoolValue(true)
+			data.AcceptOwn = types.BoolValue(true)
 		} else {
-			data.DefaultOriginate = types.BoolValue(false)
+			data.AcceptOwn = types.BoolValue(false)
 		}
 	} else {
-		data.DefaultOriginate = types.BoolNull()
+		data.AcceptOwn = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "default-originate.route-policy"); value.Exists() && !data.DefaultOriginateRoutePolicy.IsNull() {
-		data.DefaultOriginateRoutePolicy = types.StringValue(value.String())
-	} else {
-		data.DefaultOriginateRoutePolicy = types.StringNull()
-	}
-	if value := gjson.GetBytes(res, "default-originate.inheritance-disable"); !data.DefaultOriginateInheritanceDisable.IsNull() {
+	if value := gjson.GetBytes(res, "accept-own.inheritance-disable"); !data.AcceptOwnInheritanceDisable.IsNull() {
 		if value.Exists() {
-			data.DefaultOriginateInheritanceDisable = types.BoolValue(true)
+			data.AcceptOwnInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.DefaultOriginateInheritanceDisable = types.BoolValue(false)
+			data.AcceptOwnInheritanceDisable = types.BoolValue(false)
 		}
 	} else {
-		data.DefaultOriginateInheritanceDisable = types.BoolNull()
+		data.AcceptOwnInheritanceDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "slow-peer.dynamic"); !data.SlowPeerDynamic.IsNull() {
+		if value.Exists() {
+			data.SlowPeerDynamic = types.BoolValue(true)
+		} else {
+			data.SlowPeerDynamic = types.BoolValue(false)
+		}
+	} else {
+		data.SlowPeerDynamic = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "slow-peer.dynamic.threshold"); value.Exists() && !data.SlowPeerDynamicThreshold.IsNull() {
+		data.SlowPeerDynamicThreshold = types.Int64Value(value.Int())
+	} else {
+		data.SlowPeerDynamicThreshold = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "slow-peer.dynamic.disable"); !data.SlowPeerDynamicDisable.IsNull() {
+		if value.Exists() {
+			data.SlowPeerDynamicDisable = types.BoolValue(true)
+		} else {
+			data.SlowPeerDynamicDisable = types.BoolValue(false)
+		}
+	} else {
+		data.SlowPeerDynamicDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "slow-peer.static"); !data.SlowPeerStatic.IsNull() {
+		if value.Exists() {
+			data.SlowPeerStatic = types.BoolValue(true)
+		} else {
+			data.SlowPeerStatic = types.BoolValue(false)
+		}
+	} else {
+		data.SlowPeerStatic = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "origin-as.validation.disable"); !data.OriginAsValidationDisable.IsNull() {
+		if value.Exists() {
+			data.OriginAsValidationDisable = types.BoolValue(true)
+		} else {
+			data.OriginAsValidationDisable = types.BoolValue(false)
+		}
+	} else {
+		data.OriginAsValidationDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "bestpath.origin-as.allow.invalid"); !data.BestpathOriginAsAllowInvalid.IsNull() {
+		if value.Exists() {
+			data.BestpathOriginAsAllowInvalid = types.BoolValue(true)
+		} else {
+			data.BestpathOriginAsAllowInvalid = types.BoolValue(false)
+		}
+	} else {
+		data.BestpathOriginAsAllowInvalid = types.BoolNull()
 	}
 }
 
@@ -460,89 +1400,55 @@ func (data *RouterBGPNeighborAddressFamily) updateFromBody(ctx context.Context, 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *RouterBGPNeighborAddressFamily) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "import.stitching-rt"); value.Exists() {
-		data.ImportStitchingRt = types.BoolValue(true)
-	} else {
-		data.ImportStitchingRt = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "import.stitching-rt.re-originate"); value.Exists() {
-		data.ImportStitchingRtReOriginate = types.BoolValue(true)
-	} else {
-		data.ImportStitchingRtReOriginate = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "import.stitching-rt.re-originate.stitching-rt"); value.Exists() {
-		data.ImportStitchingRtReOriginateStitchingRt = types.BoolValue(true)
-	} else {
-		data.ImportStitchingRtReOriginateStitchingRt = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "import.re-originate"); value.Exists() {
-		data.ImportReOriginate = types.BoolValue(true)
-	} else {
-		data.ImportReOriginate = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "route-reflector-client"); value.Exists() {
-		data.RouteReflectorClient = types.BoolValue(true)
-	} else {
-		data.RouteReflectorClient = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "route-reflector-client.inheritance-disable"); value.Exists() {
-		data.RouteReflectorClientInheritanceDisable = types.BoolValue(true)
-	} else {
-		data.RouteReflectorClientInheritanceDisable = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable"); value.Exists() {
-		data.AdvertiseVpnv4Unicast = types.BoolValue(true)
-	} else {
-		data.AdvertiseVpnv4Unicast = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable.re-originated"); value.Exists() {
-		data.AdvertiseVpnv4UnicastReOriginated = types.BoolValue(true)
-	} else {
-		data.AdvertiseVpnv4UnicastReOriginated = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable.re-originated.stitching-rt"); value.Exists() {
-		data.AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolValue(true)
-	} else {
-		data.AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "next-hop-self"); value.Exists() {
-		data.NextHopSelf = types.BoolValue(true)
-	} else {
-		data.NextHopSelf = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "next-hop-self.inheritance-disable"); value.Exists() {
-		data.NextHopSelfInheritanceDisable = types.BoolValue(true)
-	} else {
-		data.NextHopSelfInheritanceDisable = types.BoolValue(false)
-	}
 	if value := gjson.GetBytes(res, "encapsulation-type"); value.Exists() {
 		data.EncapsulationType = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "route-policy.in"); value.Exists() {
-		data.RoutePolicyIn = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "weight"); value.Exists() {
+		data.Weight = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "route-policy.out"); value.Exists() {
-		data.RoutePolicyOut = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound"); value.Exists() {
-		data.SoftReconfigurationInbound = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "multipath"); value.Exists() {
+		data.Multipath = types.BoolValue(true)
 	} else {
-		data.SoftReconfigurationInbound = types.BoolValue(false)
+		data.Multipath = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound.always"); value.Exists() {
-		data.SoftReconfigurationInboundAlways = types.BoolValue(true)
-	} else {
-		data.SoftReconfigurationInboundAlways = types.BoolValue(false)
+	if value := gjson.GetBytes(res, "use.af-group"); value.Exists() {
+		data.UseAfGroup = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "send-community-ebgp"); value.Exists() {
-		data.SendCommunityEbgp = types.BoolValue(true)
-	} else {
-		data.SendCommunityEbgp = types.BoolValue(false)
+	if value := gjson.GetBytes(res, "capability.orf.prefix.capability-receive-orf-neighbor"); value.Exists() {
+		data.CapabilityOrfPrefix = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "send-community-ebgp.inheritance-disable"); value.Exists() {
-		data.SendCommunityEbgpInheritanceDisable = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "additional-paths.send"); value.Exists() {
+		data.AdditionalPathsSend = types.BoolValue(true)
 	} else {
-		data.SendCommunityEbgpInheritanceDisable = types.BoolValue(false)
+		data.AdditionalPathsSend = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "additional-paths.send.disable"); value.Exists() {
+		data.AdditionalPathsSendDisable = types.BoolValue(true)
+	} else {
+		data.AdditionalPathsSendDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "additional-paths.receive"); value.Exists() {
+		data.AdditionalPathsReceive = types.BoolValue(true)
+	} else {
+		data.AdditionalPathsReceive = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "additional-paths.receive.disable"); value.Exists() {
+		data.AdditionalPathsReceiveDisable = types.BoolValue(true)
+	} else {
+		data.AdditionalPathsReceiveDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "default-originate"); value.Exists() {
+		data.DefaultOriginate = types.BoolValue(true)
+	} else {
+		data.DefaultOriginate = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "default-originate.route-policy"); value.Exists() {
+		data.DefaultOriginateRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "default-originate.inheritance-disable"); value.Exists() {
+		data.DefaultOriginateInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.DefaultOriginateInheritanceDisable = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "maximum-prefix.maximum-prefix-number"); value.Exists() {
 		data.MaximumPrefixLimit = types.Int64Value(value.Int())
@@ -563,18 +1469,344 @@ func (data *RouterBGPNeighborAddressFamily) fromBody(ctx context.Context, res []
 	} else {
 		data.MaximumPrefixWarningOnly = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "default-originate"); value.Exists() {
-		data.DefaultOriginate = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "next-hop-self"); value.Exists() {
+		data.NextHopSelf = types.BoolValue(true)
 	} else {
-		data.DefaultOriginate = types.BoolValue(false)
+		data.NextHopSelf = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "default-originate.route-policy"); value.Exists() {
-		data.DefaultOriginateRoutePolicy = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "default-originate.inheritance-disable"); value.Exists() {
-		data.DefaultOriginateInheritanceDisable = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "next-hop-self.inheritance-disable"); value.Exists() {
+		data.NextHopSelfInheritanceDisable = types.BoolValue(true)
 	} else {
-		data.DefaultOriginateInheritanceDisable = types.BoolValue(false)
+		data.NextHopSelfInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "next-hop-unchanged.next-hop-unchanged-enable"); value.Exists() {
+		data.NextHopUnchanged = types.BoolValue(true)
+	} else {
+		data.NextHopUnchanged = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "next-hop-unchanged.multipath"); value.Exists() {
+		data.NextHopUnchangedMultipath = types.BoolValue(true)
+	} else {
+		data.NextHopUnchangedMultipath = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "next-hop-unchanged.next-hop-unchanged-enable.inheritance-disable"); value.Exists() {
+		data.NextHopUnchangedInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.NextHopUnchangedInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "route-policy.in"); value.Exists() {
+		data.RoutePolicyIn = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "route-policy.out"); value.Exists() {
+		data.RoutePolicyOut = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "orf.route-policy"); value.Exists() {
+		data.OrfRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "cluster-id.allow-equal"); value.Exists() {
+		data.ClusterIdAllowEqual = types.BoolValue(true)
+	} else {
+		data.ClusterIdAllowEqual = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "cluster-id.allow-equal.disable"); value.Exists() {
+		data.ClusterIdAllowEqualDisable = types.BoolValue(true)
+	} else {
+		data.ClusterIdAllowEqualDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "replace-private-as"); value.Exists() {
+		data.ReplacePrivateAs = types.BoolValue(true)
+	} else {
+		data.ReplacePrivateAs = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "replace-private-as.internal"); value.Exists() {
+		data.ReplacePrivateAsInternal = types.BoolValue(true)
+	} else {
+		data.ReplacePrivateAsInternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "remove-private-as.inbound"); value.Exists() {
+		data.RemovePrivateAsInbound = types.BoolValue(true)
+	} else {
+		data.RemovePrivateAsInbound = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "remove-private-as.inbound.entire-aspath"); value.Exists() {
+		data.RemovePrivateAsInboundEntireAspath = types.BoolValue(true)
+	} else {
+		data.RemovePrivateAsInboundEntireAspath = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "remove-private-as.inbound.inheritance-disable"); value.Exists() {
+		data.RemovePrivateAsInboundInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.RemovePrivateAsInboundInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound"); value.Exists() {
+		data.RemovePrivateAs = types.BoolValue(true)
+	} else {
+		data.RemovePrivateAs = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.entire-aspath"); value.Exists() {
+		data.RemovePrivateAsEntireAspath = types.BoolValue(true)
+	} else {
+		data.RemovePrivateAsEntireAspath = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.internal"); value.Exists() {
+		data.RemovePrivateAsInternal = types.BoolValue(true)
+	} else {
+		data.RemovePrivateAsInternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "route-reflector-client"); value.Exists() {
+		data.RouteReflectorClient = types.BoolValue(true)
+	} else {
+		data.RouteReflectorClient = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "route-reflector-client.inheritance-disable"); value.Exists() {
+		data.RouteReflectorClientInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.RouteReflectorClientInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "send-community-ebgp"); value.Exists() {
+		data.SendCommunityEbgp = types.BoolValue(true)
+	} else {
+		data.SendCommunityEbgp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "send-community-ebgp.inheritance-disable"); value.Exists() {
+		data.SendCommunityEbgpInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.SendCommunityEbgpInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "send-community-gshut-ebgp"); value.Exists() {
+		data.SendCommunityGshutEbgp = types.BoolValue(true)
+	} else {
+		data.SendCommunityGshutEbgp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "send-community-gshut-ebgp.inheritance-disable"); value.Exists() {
+		data.SendCommunityGshutEbgpInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.SendCommunityGshutEbgpInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "send-extended-community-ebgp"); value.Exists() {
+		data.SendExtendedCommunityEbgp = types.BoolValue(true)
+	} else {
+		data.SendExtendedCommunityEbgp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "send-extended-community-ebgp.inheritance-disable"); value.Exists() {
+		data.SendExtendedCommunityEbgpInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.SendExtendedCommunityEbgpInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound"); value.Exists() {
+		data.SoftReconfigurationInbound = types.BoolValue(true)
+	} else {
+		data.SoftReconfigurationInbound = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound.always"); value.Exists() {
+		data.SoftReconfigurationInboundAlways = types.BoolValue(true)
+	} else {
+		data.SoftReconfigurationInboundAlways = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "update.out.originator-loopcheck"); value.Exists() {
+		data.UpdateOutOriginatorLoopcheck = types.BoolValue(true)
+	} else {
+		data.UpdateOutOriginatorLoopcheck = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "update.out.originator-loopcheck.disable"); value.Exists() {
+		data.UpdateOutOriginatorLoopcheckDisable = types.BoolValue(true)
+	} else {
+		data.UpdateOutOriginatorLoopcheckDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable"); value.Exists() {
+		data.AdvertiseVpnv4Unicast = types.BoolValue(true)
+	} else {
+		data.AdvertiseVpnv4Unicast = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable.re-originated"); value.Exists() {
+		data.AdvertiseVpnv4UnicastReOriginated = types.BoolValue(true)
+	} else {
+		data.AdvertiseVpnv4UnicastReOriginated = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable.re-originated.stitching-rt"); value.Exists() {
+		data.AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolValue(true)
+	} else {
+		data.AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "advertise.vpnv6.unicast.enable"); value.Exists() {
+		data.AdvertiseVpnv6Unicast = types.BoolValue(true)
+	} else {
+		data.AdvertiseVpnv6Unicast = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "advertise.vpnv6.unicast.enable.re-originated"); value.Exists() {
+		data.AdvertiseVpnv6UnicastReOriginated = types.BoolValue(true)
+	} else {
+		data.AdvertiseVpnv6UnicastReOriginated = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "advertise.vpnv6.unicast.enable.re-originated.stitching-rt"); value.Exists() {
+		data.AdvertiseVpnv6UnicastReOriginatedStitchingRt = types.BoolValue(true)
+	} else {
+		data.AdvertiseVpnv6UnicastReOriginatedStitchingRt = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "advertise.l2vpn.evpn.re-originated"); value.Exists() {
+		data.AdvertiseL2vpnEvpnReOriginated = types.BoolValue(true)
+	} else {
+		data.AdvertiseL2vpnEvpnReOriginated = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "advertise.l2vpn.evpn.re-originated.stitching-rt"); value.Exists() {
+		data.AdvertiseL2vpnEvpnReOriginatedStitchingRt = types.BoolValue(true)
+	} else {
+		data.AdvertiseL2vpnEvpnReOriginatedStitchingRt = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.srv6.prefix-sid-type4"); value.Exists() {
+		data.SegmentRoutingSrv6PrefixSidType4 = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingSrv6PrefixSidType4 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "import.stitching-rt"); value.Exists() {
+		data.ImportStitchingRt = types.BoolValue(true)
+	} else {
+		data.ImportStitchingRt = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "import.stitching-rt.re-originate"); value.Exists() {
+		data.ImportStitchingRtReOriginate = types.BoolValue(true)
+	} else {
+		data.ImportStitchingRtReOriginate = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "import.stitching-rt.re-originate.stitching-rt"); value.Exists() {
+		data.ImportStitchingRtReOriginateStitchingRt = types.BoolValue(true)
+	} else {
+		data.ImportStitchingRtReOriginateStitchingRt = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "import.re-originate"); value.Exists() {
+		data.ImportReOriginate = types.BoolValue(true)
+	} else {
+		data.ImportReOriginate = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "allowas-in.number-of-occurrences-of-as-number"); value.Exists() {
+		data.AllowasIn = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "allowconfedas-in.number-of-occurrences-of-confederation-number"); value.Exists() {
+		data.AllowconfedasIn = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "site-of-origin.two-byte-as.two-byte-as-number"); value.Exists() {
+		data.SiteOfOriginTwoByteAsNumber = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "site-of-origin.two-byte-as.asn2-index"); value.Exists() {
+		data.SiteOfOriginTwoByteAsIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "site-of-origin.four-byte-as.four-byte-as-number"); value.Exists() {
+		data.SiteOfOriginFourByteAsNumber = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "site-of-origin.four-byte-as.asn4-index"); value.Exists() {
+		data.SiteOfOriginFourByteAsIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "site-of-origin.ipv4-address.address"); value.Exists() {
+		data.SiteOfOriginIpv4Address = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "site-of-origin.ipv4-address.ipv4address-index"); value.Exists() {
+		data.SiteOfOriginIpv4AddressIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "as-override"); value.Exists() {
+		data.AsOverride = types.BoolValue(true)
+	} else {
+		data.AsOverride = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "as-override.inheritance-disable"); value.Exists() {
+		data.AsOverrideInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.AsOverrideInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "aigp.enable"); value.Exists() {
+		data.Aigp = types.BoolValue(true)
+	} else {
+		data.Aigp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "aigp.enable.disable"); value.Exists() {
+		data.AigpDisable = types.BoolValue(true)
+	} else {
+		data.AigpDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "aigp.send.med"); value.Exists() {
+		data.AigpSendMed = types.BoolValue(true)
+	} else {
+		data.AigpSendMed = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "aigp.send.med.disable"); value.Exists() {
+		data.AigpSendMedDisable = types.BoolValue(true)
+	} else {
+		data.AigpSendMedDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "aigp.send.cost-community.disable"); value.Exists() {
+		data.AigpSendCostCommunityDisable = types.BoolValue(true)
+	} else {
+		data.AigpSendCostCommunityDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "aigp.send.cost-community.cost-community-id.cost-community-id-number"); value.Exists() {
+		data.AigpSendCostCommunityId = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "aigp.send.cost-community.cost-community-id.poi.igp-cost"); value.Exists() {
+		data.AigpSendCostCommunityIdPoiIgpCost = types.BoolValue(true)
+	} else {
+		data.AigpSendCostCommunityIdPoiIgpCost = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "aigp.send.cost-community.cost-community-id.poi.igp-cost.transitive"); value.Exists() {
+		data.AigpSendCostCommunityIdPoiIgpCostTransitive = types.BoolValue(true)
+	} else {
+		data.AigpSendCostCommunityIdPoiIgpCostTransitive = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "aigp.send.cost-community.cost-community-id.poi.pre-bestpath"); value.Exists() {
+		data.AigpSendCostCommunityIdPoiPreBestpath = types.BoolValue(true)
+	} else {
+		data.AigpSendCostCommunityIdPoiPreBestpath = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "aigp.send.cost-community.cost-community-id.poi.pre-bestpath.transitive"); value.Exists() {
+		data.AigpSendCostCommunityIdPoiPreBestpathTransitive = types.BoolValue(true)
+	} else {
+		data.AigpSendCostCommunityIdPoiPreBestpathTransitive = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "send-multicast-attributes"); value.Exists() {
+		data.SendMulticastAttributes = types.BoolValue(true)
+	} else {
+		data.SendMulticastAttributes = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "send-multicast-attributes.disable"); value.Exists() {
+		data.SendMulticastAttributesDisable = types.BoolValue(true)
+	} else {
+		data.SendMulticastAttributesDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "accept-own"); value.Exists() {
+		data.AcceptOwn = types.BoolValue(true)
+	} else {
+		data.AcceptOwn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "accept-own.inheritance-disable"); value.Exists() {
+		data.AcceptOwnInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.AcceptOwnInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "slow-peer.dynamic"); value.Exists() {
+		data.SlowPeerDynamic = types.BoolValue(true)
+	} else {
+		data.SlowPeerDynamic = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "slow-peer.dynamic.threshold"); value.Exists() {
+		data.SlowPeerDynamicThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "slow-peer.dynamic.disable"); value.Exists() {
+		data.SlowPeerDynamicDisable = types.BoolValue(true)
+	} else {
+		data.SlowPeerDynamicDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "slow-peer.static"); value.Exists() {
+		data.SlowPeerStatic = types.BoolValue(true)
+	} else {
+		data.SlowPeerStatic = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "origin-as.validation.disable"); value.Exists() {
+		data.OriginAsValidationDisable = types.BoolValue(true)
+	} else {
+		data.OriginAsValidationDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bestpath.origin-as.allow.invalid"); value.Exists() {
+		data.BestpathOriginAsAllowInvalid = types.BoolValue(true)
+	} else {
+		data.BestpathOriginAsAllowInvalid = types.BoolValue(false)
 	}
 }
 
@@ -583,89 +1815,55 @@ func (data *RouterBGPNeighborAddressFamily) fromBody(ctx context.Context, res []
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *RouterBGPNeighborAddressFamilyData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "import.stitching-rt"); value.Exists() {
-		data.ImportStitchingRt = types.BoolValue(true)
-	} else {
-		data.ImportStitchingRt = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "import.stitching-rt.re-originate"); value.Exists() {
-		data.ImportStitchingRtReOriginate = types.BoolValue(true)
-	} else {
-		data.ImportStitchingRtReOriginate = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "import.stitching-rt.re-originate.stitching-rt"); value.Exists() {
-		data.ImportStitchingRtReOriginateStitchingRt = types.BoolValue(true)
-	} else {
-		data.ImportStitchingRtReOriginateStitchingRt = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "import.re-originate"); value.Exists() {
-		data.ImportReOriginate = types.BoolValue(true)
-	} else {
-		data.ImportReOriginate = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "route-reflector-client"); value.Exists() {
-		data.RouteReflectorClient = types.BoolValue(true)
-	} else {
-		data.RouteReflectorClient = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "route-reflector-client.inheritance-disable"); value.Exists() {
-		data.RouteReflectorClientInheritanceDisable = types.BoolValue(true)
-	} else {
-		data.RouteReflectorClientInheritanceDisable = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable"); value.Exists() {
-		data.AdvertiseVpnv4Unicast = types.BoolValue(true)
-	} else {
-		data.AdvertiseVpnv4Unicast = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable.re-originated"); value.Exists() {
-		data.AdvertiseVpnv4UnicastReOriginated = types.BoolValue(true)
-	} else {
-		data.AdvertiseVpnv4UnicastReOriginated = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable.re-originated.stitching-rt"); value.Exists() {
-		data.AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolValue(true)
-	} else {
-		data.AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "next-hop-self"); value.Exists() {
-		data.NextHopSelf = types.BoolValue(true)
-	} else {
-		data.NextHopSelf = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "next-hop-self.inheritance-disable"); value.Exists() {
-		data.NextHopSelfInheritanceDisable = types.BoolValue(true)
-	} else {
-		data.NextHopSelfInheritanceDisable = types.BoolValue(false)
-	}
 	if value := gjson.GetBytes(res, "encapsulation-type"); value.Exists() {
 		data.EncapsulationType = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "route-policy.in"); value.Exists() {
-		data.RoutePolicyIn = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "weight"); value.Exists() {
+		data.Weight = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "route-policy.out"); value.Exists() {
-		data.RoutePolicyOut = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound"); value.Exists() {
-		data.SoftReconfigurationInbound = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "multipath"); value.Exists() {
+		data.Multipath = types.BoolValue(true)
 	} else {
-		data.SoftReconfigurationInbound = types.BoolValue(false)
+		data.Multipath = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound.always"); value.Exists() {
-		data.SoftReconfigurationInboundAlways = types.BoolValue(true)
-	} else {
-		data.SoftReconfigurationInboundAlways = types.BoolValue(false)
+	if value := gjson.GetBytes(res, "use.af-group"); value.Exists() {
+		data.UseAfGroup = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "send-community-ebgp"); value.Exists() {
-		data.SendCommunityEbgp = types.BoolValue(true)
-	} else {
-		data.SendCommunityEbgp = types.BoolValue(false)
+	if value := gjson.GetBytes(res, "capability.orf.prefix.capability-receive-orf-neighbor"); value.Exists() {
+		data.CapabilityOrfPrefix = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "send-community-ebgp.inheritance-disable"); value.Exists() {
-		data.SendCommunityEbgpInheritanceDisable = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "additional-paths.send"); value.Exists() {
+		data.AdditionalPathsSend = types.BoolValue(true)
 	} else {
-		data.SendCommunityEbgpInheritanceDisable = types.BoolValue(false)
+		data.AdditionalPathsSend = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "additional-paths.send.disable"); value.Exists() {
+		data.AdditionalPathsSendDisable = types.BoolValue(true)
+	} else {
+		data.AdditionalPathsSendDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "additional-paths.receive"); value.Exists() {
+		data.AdditionalPathsReceive = types.BoolValue(true)
+	} else {
+		data.AdditionalPathsReceive = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "additional-paths.receive.disable"); value.Exists() {
+		data.AdditionalPathsReceiveDisable = types.BoolValue(true)
+	} else {
+		data.AdditionalPathsReceiveDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "default-originate"); value.Exists() {
+		data.DefaultOriginate = types.BoolValue(true)
+	} else {
+		data.DefaultOriginate = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "default-originate.route-policy"); value.Exists() {
+		data.DefaultOriginateRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "default-originate.inheritance-disable"); value.Exists() {
+		data.DefaultOriginateInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.DefaultOriginateInheritanceDisable = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "maximum-prefix.maximum-prefix-number"); value.Exists() {
 		data.MaximumPrefixLimit = types.Int64Value(value.Int())
@@ -686,18 +1884,344 @@ func (data *RouterBGPNeighborAddressFamilyData) fromBody(ctx context.Context, re
 	} else {
 		data.MaximumPrefixWarningOnly = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "default-originate"); value.Exists() {
-		data.DefaultOriginate = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "next-hop-self"); value.Exists() {
+		data.NextHopSelf = types.BoolValue(true)
 	} else {
-		data.DefaultOriginate = types.BoolValue(false)
+		data.NextHopSelf = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "default-originate.route-policy"); value.Exists() {
-		data.DefaultOriginateRoutePolicy = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "default-originate.inheritance-disable"); value.Exists() {
-		data.DefaultOriginateInheritanceDisable = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "next-hop-self.inheritance-disable"); value.Exists() {
+		data.NextHopSelfInheritanceDisable = types.BoolValue(true)
 	} else {
-		data.DefaultOriginateInheritanceDisable = types.BoolValue(false)
+		data.NextHopSelfInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "next-hop-unchanged.next-hop-unchanged-enable"); value.Exists() {
+		data.NextHopUnchanged = types.BoolValue(true)
+	} else {
+		data.NextHopUnchanged = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "next-hop-unchanged.multipath"); value.Exists() {
+		data.NextHopUnchangedMultipath = types.BoolValue(true)
+	} else {
+		data.NextHopUnchangedMultipath = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "next-hop-unchanged.next-hop-unchanged-enable.inheritance-disable"); value.Exists() {
+		data.NextHopUnchangedInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.NextHopUnchangedInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "route-policy.in"); value.Exists() {
+		data.RoutePolicyIn = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "route-policy.out"); value.Exists() {
+		data.RoutePolicyOut = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "orf.route-policy"); value.Exists() {
+		data.OrfRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "cluster-id.allow-equal"); value.Exists() {
+		data.ClusterIdAllowEqual = types.BoolValue(true)
+	} else {
+		data.ClusterIdAllowEqual = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "cluster-id.allow-equal.disable"); value.Exists() {
+		data.ClusterIdAllowEqualDisable = types.BoolValue(true)
+	} else {
+		data.ClusterIdAllowEqualDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "replace-private-as"); value.Exists() {
+		data.ReplacePrivateAs = types.BoolValue(true)
+	} else {
+		data.ReplacePrivateAs = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "replace-private-as.internal"); value.Exists() {
+		data.ReplacePrivateAsInternal = types.BoolValue(true)
+	} else {
+		data.ReplacePrivateAsInternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "remove-private-as.inbound"); value.Exists() {
+		data.RemovePrivateAsInbound = types.BoolValue(true)
+	} else {
+		data.RemovePrivateAsInbound = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "remove-private-as.inbound.entire-aspath"); value.Exists() {
+		data.RemovePrivateAsInboundEntireAspath = types.BoolValue(true)
+	} else {
+		data.RemovePrivateAsInboundEntireAspath = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "remove-private-as.inbound.inheritance-disable"); value.Exists() {
+		data.RemovePrivateAsInboundInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.RemovePrivateAsInboundInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound"); value.Exists() {
+		data.RemovePrivateAs = types.BoolValue(true)
+	} else {
+		data.RemovePrivateAs = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.entire-aspath"); value.Exists() {
+		data.RemovePrivateAsEntireAspath = types.BoolValue(true)
+	} else {
+		data.RemovePrivateAsEntireAspath = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.internal"); value.Exists() {
+		data.RemovePrivateAsInternal = types.BoolValue(true)
+	} else {
+		data.RemovePrivateAsInternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "route-reflector-client"); value.Exists() {
+		data.RouteReflectorClient = types.BoolValue(true)
+	} else {
+		data.RouteReflectorClient = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "route-reflector-client.inheritance-disable"); value.Exists() {
+		data.RouteReflectorClientInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.RouteReflectorClientInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "send-community-ebgp"); value.Exists() {
+		data.SendCommunityEbgp = types.BoolValue(true)
+	} else {
+		data.SendCommunityEbgp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "send-community-ebgp.inheritance-disable"); value.Exists() {
+		data.SendCommunityEbgpInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.SendCommunityEbgpInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "send-community-gshut-ebgp"); value.Exists() {
+		data.SendCommunityGshutEbgp = types.BoolValue(true)
+	} else {
+		data.SendCommunityGshutEbgp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "send-community-gshut-ebgp.inheritance-disable"); value.Exists() {
+		data.SendCommunityGshutEbgpInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.SendCommunityGshutEbgpInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "send-extended-community-ebgp"); value.Exists() {
+		data.SendExtendedCommunityEbgp = types.BoolValue(true)
+	} else {
+		data.SendExtendedCommunityEbgp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "send-extended-community-ebgp.inheritance-disable"); value.Exists() {
+		data.SendExtendedCommunityEbgpInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.SendExtendedCommunityEbgpInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound"); value.Exists() {
+		data.SoftReconfigurationInbound = types.BoolValue(true)
+	} else {
+		data.SoftReconfigurationInbound = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound.always"); value.Exists() {
+		data.SoftReconfigurationInboundAlways = types.BoolValue(true)
+	} else {
+		data.SoftReconfigurationInboundAlways = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "update.out.originator-loopcheck"); value.Exists() {
+		data.UpdateOutOriginatorLoopcheck = types.BoolValue(true)
+	} else {
+		data.UpdateOutOriginatorLoopcheck = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "update.out.originator-loopcheck.disable"); value.Exists() {
+		data.UpdateOutOriginatorLoopcheckDisable = types.BoolValue(true)
+	} else {
+		data.UpdateOutOriginatorLoopcheckDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable"); value.Exists() {
+		data.AdvertiseVpnv4Unicast = types.BoolValue(true)
+	} else {
+		data.AdvertiseVpnv4Unicast = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable.re-originated"); value.Exists() {
+		data.AdvertiseVpnv4UnicastReOriginated = types.BoolValue(true)
+	} else {
+		data.AdvertiseVpnv4UnicastReOriginated = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable.re-originated.stitching-rt"); value.Exists() {
+		data.AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolValue(true)
+	} else {
+		data.AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "advertise.vpnv6.unicast.enable"); value.Exists() {
+		data.AdvertiseVpnv6Unicast = types.BoolValue(true)
+	} else {
+		data.AdvertiseVpnv6Unicast = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "advertise.vpnv6.unicast.enable.re-originated"); value.Exists() {
+		data.AdvertiseVpnv6UnicastReOriginated = types.BoolValue(true)
+	} else {
+		data.AdvertiseVpnv6UnicastReOriginated = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "advertise.vpnv6.unicast.enable.re-originated.stitching-rt"); value.Exists() {
+		data.AdvertiseVpnv6UnicastReOriginatedStitchingRt = types.BoolValue(true)
+	} else {
+		data.AdvertiseVpnv6UnicastReOriginatedStitchingRt = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "advertise.l2vpn.evpn.re-originated"); value.Exists() {
+		data.AdvertiseL2vpnEvpnReOriginated = types.BoolValue(true)
+	} else {
+		data.AdvertiseL2vpnEvpnReOriginated = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "advertise.l2vpn.evpn.re-originated.stitching-rt"); value.Exists() {
+		data.AdvertiseL2vpnEvpnReOriginatedStitchingRt = types.BoolValue(true)
+	} else {
+		data.AdvertiseL2vpnEvpnReOriginatedStitchingRt = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.srv6.prefix-sid-type4"); value.Exists() {
+		data.SegmentRoutingSrv6PrefixSidType4 = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingSrv6PrefixSidType4 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "import.stitching-rt"); value.Exists() {
+		data.ImportStitchingRt = types.BoolValue(true)
+	} else {
+		data.ImportStitchingRt = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "import.stitching-rt.re-originate"); value.Exists() {
+		data.ImportStitchingRtReOriginate = types.BoolValue(true)
+	} else {
+		data.ImportStitchingRtReOriginate = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "import.stitching-rt.re-originate.stitching-rt"); value.Exists() {
+		data.ImportStitchingRtReOriginateStitchingRt = types.BoolValue(true)
+	} else {
+		data.ImportStitchingRtReOriginateStitchingRt = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "import.re-originate"); value.Exists() {
+		data.ImportReOriginate = types.BoolValue(true)
+	} else {
+		data.ImportReOriginate = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "allowas-in.number-of-occurrences-of-as-number"); value.Exists() {
+		data.AllowasIn = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "allowconfedas-in.number-of-occurrences-of-confederation-number"); value.Exists() {
+		data.AllowconfedasIn = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "site-of-origin.two-byte-as.two-byte-as-number"); value.Exists() {
+		data.SiteOfOriginTwoByteAsNumber = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "site-of-origin.two-byte-as.asn2-index"); value.Exists() {
+		data.SiteOfOriginTwoByteAsIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "site-of-origin.four-byte-as.four-byte-as-number"); value.Exists() {
+		data.SiteOfOriginFourByteAsNumber = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "site-of-origin.four-byte-as.asn4-index"); value.Exists() {
+		data.SiteOfOriginFourByteAsIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "site-of-origin.ipv4-address.address"); value.Exists() {
+		data.SiteOfOriginIpv4Address = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "site-of-origin.ipv4-address.ipv4address-index"); value.Exists() {
+		data.SiteOfOriginIpv4AddressIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "as-override"); value.Exists() {
+		data.AsOverride = types.BoolValue(true)
+	} else {
+		data.AsOverride = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "as-override.inheritance-disable"); value.Exists() {
+		data.AsOverrideInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.AsOverrideInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "aigp.enable"); value.Exists() {
+		data.Aigp = types.BoolValue(true)
+	} else {
+		data.Aigp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "aigp.enable.disable"); value.Exists() {
+		data.AigpDisable = types.BoolValue(true)
+	} else {
+		data.AigpDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "aigp.send.med"); value.Exists() {
+		data.AigpSendMed = types.BoolValue(true)
+	} else {
+		data.AigpSendMed = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "aigp.send.med.disable"); value.Exists() {
+		data.AigpSendMedDisable = types.BoolValue(true)
+	} else {
+		data.AigpSendMedDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "aigp.send.cost-community.disable"); value.Exists() {
+		data.AigpSendCostCommunityDisable = types.BoolValue(true)
+	} else {
+		data.AigpSendCostCommunityDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "aigp.send.cost-community.cost-community-id.cost-community-id-number"); value.Exists() {
+		data.AigpSendCostCommunityId = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "aigp.send.cost-community.cost-community-id.poi.igp-cost"); value.Exists() {
+		data.AigpSendCostCommunityIdPoiIgpCost = types.BoolValue(true)
+	} else {
+		data.AigpSendCostCommunityIdPoiIgpCost = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "aigp.send.cost-community.cost-community-id.poi.igp-cost.transitive"); value.Exists() {
+		data.AigpSendCostCommunityIdPoiIgpCostTransitive = types.BoolValue(true)
+	} else {
+		data.AigpSendCostCommunityIdPoiIgpCostTransitive = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "aigp.send.cost-community.cost-community-id.poi.pre-bestpath"); value.Exists() {
+		data.AigpSendCostCommunityIdPoiPreBestpath = types.BoolValue(true)
+	} else {
+		data.AigpSendCostCommunityIdPoiPreBestpath = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "aigp.send.cost-community.cost-community-id.poi.pre-bestpath.transitive"); value.Exists() {
+		data.AigpSendCostCommunityIdPoiPreBestpathTransitive = types.BoolValue(true)
+	} else {
+		data.AigpSendCostCommunityIdPoiPreBestpathTransitive = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "send-multicast-attributes"); value.Exists() {
+		data.SendMulticastAttributes = types.BoolValue(true)
+	} else {
+		data.SendMulticastAttributes = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "send-multicast-attributes.disable"); value.Exists() {
+		data.SendMulticastAttributesDisable = types.BoolValue(true)
+	} else {
+		data.SendMulticastAttributesDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "accept-own"); value.Exists() {
+		data.AcceptOwn = types.BoolValue(true)
+	} else {
+		data.AcceptOwn = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "accept-own.inheritance-disable"); value.Exists() {
+		data.AcceptOwnInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.AcceptOwnInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "slow-peer.dynamic"); value.Exists() {
+		data.SlowPeerDynamic = types.BoolValue(true)
+	} else {
+		data.SlowPeerDynamic = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "slow-peer.dynamic.threshold"); value.Exists() {
+		data.SlowPeerDynamicThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "slow-peer.dynamic.disable"); value.Exists() {
+		data.SlowPeerDynamicDisable = types.BoolValue(true)
+	} else {
+		data.SlowPeerDynamicDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "slow-peer.static"); value.Exists() {
+		data.SlowPeerStatic = types.BoolValue(true)
+	} else {
+		data.SlowPeerStatic = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "origin-as.validation.disable"); value.Exists() {
+		data.OriginAsValidationDisable = types.BoolValue(true)
+	} else {
+		data.OriginAsValidationDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bestpath.origin-as.allow.invalid"); value.Exists() {
+		data.BestpathOriginAsAllowInvalid = types.BoolValue(true)
+	} else {
+		data.BestpathOriginAsAllowInvalid = types.BoolValue(false)
 	}
 }
 
@@ -707,14 +2231,224 @@ func (data *RouterBGPNeighborAddressFamilyData) fromBody(ctx context.Context, re
 
 func (data *RouterBGPNeighborAddressFamily) getDeletedItems(ctx context.Context, state RouterBGPNeighborAddressFamily) []string {
 	deletedItems := make([]string, 0)
-	if !state.DefaultOriginateInheritanceDisable.IsNull() && data.DefaultOriginateInheritanceDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate", state.getPath()))
+	if !state.BestpathOriginAsAllowInvalid.IsNull() && data.BestpathOriginAsAllowInvalid.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bestpath/origin-as/allow/invalid", state.getPath()))
 	}
-	if !state.DefaultOriginateRoutePolicy.IsNull() && data.DefaultOriginateRoutePolicy.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate", state.getPath()))
+	if !state.OriginAsValidationDisable.IsNull() && data.OriginAsValidationDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/origin-as/validation/disable", state.getPath()))
 	}
-	if !state.DefaultOriginate.IsNull() && data.DefaultOriginate.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate", state.getPath()))
+	if !state.SlowPeerStatic.IsNull() && data.SlowPeerStatic.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/slow-peer/static", state.getPath()))
+	}
+	if !state.SlowPeerDynamicDisable.IsNull() && data.SlowPeerDynamicDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/slow-peer/dynamic/disable", state.getPath()))
+	}
+	if !state.SlowPeerDynamicThreshold.IsNull() && data.SlowPeerDynamicThreshold.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/slow-peer/dynamic/threshold", state.getPath()))
+	}
+	if !state.SlowPeerDynamic.IsNull() && data.SlowPeerDynamic.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/slow-peer/dynamic", state.getPath()))
+	}
+	if !state.AcceptOwnInheritanceDisable.IsNull() && data.AcceptOwnInheritanceDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/accept-own", state.getPath()))
+	}
+	if !state.AcceptOwn.IsNull() && data.AcceptOwn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/accept-own", state.getPath()))
+	}
+	if !state.SendMulticastAttributesDisable.IsNull() && data.SendMulticastAttributesDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/send-multicast-attributes", state.getPath()))
+	}
+	if !state.SendMulticastAttributes.IsNull() && data.SendMulticastAttributes.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/send-multicast-attributes", state.getPath()))
+	}
+	if !state.AigpSendCostCommunityIdPoiPreBestpathTransitive.IsNull() && data.AigpSendCostCommunityIdPoiPreBestpathTransitive.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/aigp/send/cost-community/cost-community-id/poi/pre-bestpath/transitive", state.getPath()))
+	}
+	if !state.AigpSendCostCommunityIdPoiPreBestpath.IsNull() && data.AigpSendCostCommunityIdPoiPreBestpath.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/aigp/send/cost-community/cost-community-id/poi", state.getPath()))
+	}
+	if !state.AigpSendCostCommunityIdPoiIgpCostTransitive.IsNull() && data.AigpSendCostCommunityIdPoiIgpCostTransitive.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/aigp/send/cost-community/cost-community-id/poi/igp-cost/transitive", state.getPath()))
+	}
+	if !state.AigpSendCostCommunityIdPoiIgpCost.IsNull() && data.AigpSendCostCommunityIdPoiIgpCost.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/aigp/send/cost-community/cost-community-id/poi", state.getPath()))
+	}
+	if !state.AigpSendCostCommunityId.IsNull() && data.AigpSendCostCommunityId.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/aigp/send/cost-community/cost-community-id", state.getPath()))
+	}
+	if !state.AigpSendCostCommunityDisable.IsNull() && data.AigpSendCostCommunityDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/aigp/send/cost-community", state.getPath()))
+	}
+	if !state.AigpSendMedDisable.IsNull() && data.AigpSendMedDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/aigp/send/med", state.getPath()))
+	}
+	if !state.AigpSendMed.IsNull() && data.AigpSendMed.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/aigp/send/med", state.getPath()))
+	}
+	if !state.AigpDisable.IsNull() && data.AigpDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/aigp/enable", state.getPath()))
+	}
+	if !state.Aigp.IsNull() && data.Aigp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/aigp/enable", state.getPath()))
+	}
+	if !state.AsOverrideInheritanceDisable.IsNull() && data.AsOverrideInheritanceDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/as-override/inheritance-disable", state.getPath()))
+	}
+	if !state.AsOverride.IsNull() && data.AsOverride.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/as-override", state.getPath()))
+	}
+	if !state.SiteOfOriginIpv4AddressIndex.IsNull() && data.SiteOfOriginIpv4AddressIndex.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/site-of-origin/ipv4-address", state.getPath()))
+	}
+	if !state.SiteOfOriginIpv4Address.IsNull() && data.SiteOfOriginIpv4Address.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/site-of-origin/ipv4-address", state.getPath()))
+	}
+	if !state.SiteOfOriginFourByteAsIndex.IsNull() && data.SiteOfOriginFourByteAsIndex.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/site-of-origin/four-byte-as", state.getPath()))
+	}
+	if !state.SiteOfOriginFourByteAsNumber.IsNull() && data.SiteOfOriginFourByteAsNumber.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/site-of-origin/four-byte-as", state.getPath()))
+	}
+	if !state.SiteOfOriginTwoByteAsIndex.IsNull() && data.SiteOfOriginTwoByteAsIndex.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/site-of-origin/two-byte-as", state.getPath()))
+	}
+	if !state.SiteOfOriginTwoByteAsNumber.IsNull() && data.SiteOfOriginTwoByteAsNumber.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/site-of-origin/two-byte-as", state.getPath()))
+	}
+	if !state.AllowconfedasIn.IsNull() && data.AllowconfedasIn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/allowconfedas-in/number-of-occurrences-of-confederation-number", state.getPath()))
+	}
+	if !state.AllowasIn.IsNull() && data.AllowasIn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/allowas-in/number-of-occurrences-of-as-number", state.getPath()))
+	}
+	if !state.ImportReOriginate.IsNull() && data.ImportReOriginate.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/import", state.getPath()))
+	}
+	if !state.ImportStitchingRtReOriginateStitchingRt.IsNull() && data.ImportStitchingRtReOriginateStitchingRt.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/import/stitching-rt/re-originate", state.getPath()))
+	}
+	if !state.ImportStitchingRtReOriginate.IsNull() && data.ImportStitchingRtReOriginate.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/import/stitching-rt/re-originate", state.getPath()))
+	}
+	if !state.ImportStitchingRt.IsNull() && data.ImportStitchingRt.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/import", state.getPath()))
+	}
+	if !state.SegmentRoutingSrv6PrefixSidType4.IsNull() && data.SegmentRoutingSrv6PrefixSidType4.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/srv6", state.getPath()))
+	}
+	if !state.AdvertiseL2vpnEvpnReOriginatedStitchingRt.IsNull() && data.AdvertiseL2vpnEvpnReOriginatedStitchingRt.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise/l2vpn/evpn/re-originated", state.getPath()))
+	}
+	if !state.AdvertiseL2vpnEvpnReOriginated.IsNull() && data.AdvertiseL2vpnEvpnReOriginated.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise/l2vpn/evpn", state.getPath()))
+	}
+	if !state.AdvertiseVpnv6UnicastReOriginatedStitchingRt.IsNull() && data.AdvertiseVpnv6UnicastReOriginatedStitchingRt.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise/vpnv6/unicast/enable/re-originated", state.getPath()))
+	}
+	if !state.AdvertiseVpnv6UnicastReOriginated.IsNull() && data.AdvertiseVpnv6UnicastReOriginated.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise/vpnv6/unicast/enable", state.getPath()))
+	}
+	if !state.AdvertiseVpnv6Unicast.IsNull() && data.AdvertiseVpnv6Unicast.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise/vpnv6/unicast/enable", state.getPath()))
+	}
+	if !state.AdvertiseVpnv4UnicastReOriginatedStitchingRt.IsNull() && data.AdvertiseVpnv4UnicastReOriginatedStitchingRt.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable/re-originated", state.getPath()))
+	}
+	if !state.AdvertiseVpnv4UnicastReOriginated.IsNull() && data.AdvertiseVpnv4UnicastReOriginated.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable", state.getPath()))
+	}
+	if !state.AdvertiseVpnv4Unicast.IsNull() && data.AdvertiseVpnv4Unicast.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable", state.getPath()))
+	}
+	if !state.UpdateOutOriginatorLoopcheckDisable.IsNull() && data.UpdateOutOriginatorLoopcheckDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/update/out/originator-loopcheck/disable", state.getPath()))
+	}
+	if !state.UpdateOutOriginatorLoopcheck.IsNull() && data.UpdateOutOriginatorLoopcheck.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/update/out/originator-loopcheck", state.getPath()))
+	}
+	if !state.SoftReconfigurationInboundAlways.IsNull() && data.SoftReconfigurationInboundAlways.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/soft-reconfiguration/inbound", state.getPath()))
+	}
+	if !state.SoftReconfigurationInbound.IsNull() && data.SoftReconfigurationInbound.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/soft-reconfiguration/inbound", state.getPath()))
+	}
+	if !state.SendExtendedCommunityEbgpInheritanceDisable.IsNull() && data.SendExtendedCommunityEbgpInheritanceDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/send-extended-community-ebgp/inheritance-disable", state.getPath()))
+	}
+	if !state.SendExtendedCommunityEbgp.IsNull() && data.SendExtendedCommunityEbgp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/send-extended-community-ebgp", state.getPath()))
+	}
+	if !state.SendCommunityGshutEbgpInheritanceDisable.IsNull() && data.SendCommunityGshutEbgpInheritanceDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/send-community-gshut-ebgp/inheritance-disable", state.getPath()))
+	}
+	if !state.SendCommunityGshutEbgp.IsNull() && data.SendCommunityGshutEbgp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/send-community-gshut-ebgp", state.getPath()))
+	}
+	if !state.SendCommunityEbgpInheritanceDisable.IsNull() && data.SendCommunityEbgpInheritanceDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/send-community-ebgp/inheritance-disable", state.getPath()))
+	}
+	if !state.SendCommunityEbgp.IsNull() && data.SendCommunityEbgp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/send-community-ebgp", state.getPath()))
+	}
+	if !state.RouteReflectorClientInheritanceDisable.IsNull() && data.RouteReflectorClientInheritanceDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/route-reflector-client/inheritance-disable", state.getPath()))
+	}
+	if !state.RouteReflectorClient.IsNull() && data.RouteReflectorClient.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/route-reflector-client", state.getPath()))
+	}
+	if !state.RemovePrivateAsInternal.IsNull() && data.RemovePrivateAsInternal.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound/internal", state.getPath()))
+	}
+	if !state.RemovePrivateAsEntireAspath.IsNull() && data.RemovePrivateAsEntireAspath.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound/entire-aspath", state.getPath()))
+	}
+	if !state.RemovePrivateAs.IsNull() && data.RemovePrivateAs.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound", state.getPath()))
+	}
+	if !state.RemovePrivateAsInboundInheritanceDisable.IsNull() && data.RemovePrivateAsInboundInheritanceDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/remove-private-as/inbound/inheritance-disable", state.getPath()))
+	}
+	if !state.RemovePrivateAsInboundEntireAspath.IsNull() && data.RemovePrivateAsInboundEntireAspath.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/remove-private-as/inbound/entire-aspath", state.getPath()))
+	}
+	if !state.RemovePrivateAsInbound.IsNull() && data.RemovePrivateAsInbound.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/remove-private-as/inbound", state.getPath()))
+	}
+	if !state.ReplacePrivateAsInternal.IsNull() && data.ReplacePrivateAsInternal.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/replace-private-as/internal", state.getPath()))
+	}
+	if !state.ReplacePrivateAs.IsNull() && data.ReplacePrivateAs.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/replace-private-as", state.getPath()))
+	}
+	if !state.ClusterIdAllowEqualDisable.IsNull() && data.ClusterIdAllowEqualDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/cluster-id/allow-equal/disable", state.getPath()))
+	}
+	if !state.ClusterIdAllowEqual.IsNull() && data.ClusterIdAllowEqual.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/cluster-id/allow-equal", state.getPath()))
+	}
+	if !state.OrfRoutePolicy.IsNull() && data.OrfRoutePolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/orf/route-policy", state.getPath()))
+	}
+	if !state.RoutePolicyOut.IsNull() && data.RoutePolicyOut.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/route-policy/out", state.getPath()))
+	}
+	if !state.RoutePolicyIn.IsNull() && data.RoutePolicyIn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/route-policy/in", state.getPath()))
+	}
+	if !state.NextHopUnchangedInheritanceDisable.IsNull() && data.NextHopUnchangedInheritanceDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/next-hop-unchanged/next-hop-unchanged-enable/inheritance-disable", state.getPath()))
+	}
+	if !state.NextHopUnchangedMultipath.IsNull() && data.NextHopUnchangedMultipath.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/next-hop-unchanged/multipath", state.getPath()))
+	}
+	if !state.NextHopUnchanged.IsNull() && data.NextHopUnchanged.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/next-hop-unchanged/next-hop-unchanged-enable", state.getPath()))
+	}
+	if !state.NextHopSelfInheritanceDisable.IsNull() && data.NextHopSelfInheritanceDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/next-hop-self/inheritance-disable", state.getPath()))
+	}
+	if !state.NextHopSelf.IsNull() && data.NextHopSelf.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/next-hop-self", state.getPath()))
 	}
 	if !state.MaximumPrefixWarningOnly.IsNull() && data.MaximumPrefixWarningOnly.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-prefix", state.getPath()))
@@ -731,59 +2465,41 @@ func (data *RouterBGPNeighborAddressFamily) getDeletedItems(ctx context.Context,
 	if !state.MaximumPrefixLimit.IsNull() && data.MaximumPrefixLimit.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-prefix", state.getPath()))
 	}
-	if !state.SendCommunityEbgpInheritanceDisable.IsNull() && data.SendCommunityEbgpInheritanceDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/send-community-ebgp/inheritance-disable", state.getPath()))
+	if !state.DefaultOriginateInheritanceDisable.IsNull() && data.DefaultOriginateInheritanceDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate", state.getPath()))
 	}
-	if !state.SendCommunityEbgp.IsNull() && data.SendCommunityEbgp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/send-community-ebgp", state.getPath()))
+	if !state.DefaultOriginateRoutePolicy.IsNull() && data.DefaultOriginateRoutePolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate", state.getPath()))
 	}
-	if !state.SoftReconfigurationInboundAlways.IsNull() && data.SoftReconfigurationInboundAlways.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/soft-reconfiguration/inbound", state.getPath()))
+	if !state.DefaultOriginate.IsNull() && data.DefaultOriginate.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate", state.getPath()))
 	}
-	if !state.SoftReconfigurationInbound.IsNull() && data.SoftReconfigurationInbound.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/soft-reconfiguration/inbound", state.getPath()))
+	if !state.AdditionalPathsReceiveDisable.IsNull() && data.AdditionalPathsReceiveDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/additional-paths/receive/disable", state.getPath()))
 	}
-	if !state.RoutePolicyOut.IsNull() && data.RoutePolicyOut.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/route-policy/out", state.getPath()))
+	if !state.AdditionalPathsReceive.IsNull() && data.AdditionalPathsReceive.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/additional-paths/receive", state.getPath()))
 	}
-	if !state.RoutePolicyIn.IsNull() && data.RoutePolicyIn.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/route-policy/in", state.getPath()))
+	if !state.AdditionalPathsSendDisable.IsNull() && data.AdditionalPathsSendDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/additional-paths/send/disable", state.getPath()))
+	}
+	if !state.AdditionalPathsSend.IsNull() && data.AdditionalPathsSend.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/additional-paths/send", state.getPath()))
+	}
+	if !state.CapabilityOrfPrefix.IsNull() && data.CapabilityOrfPrefix.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/capability/orf/prefix/capability-receive-orf-neighbor", state.getPath()))
+	}
+	if !state.UseAfGroup.IsNull() && data.UseAfGroup.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/use/af-group", state.getPath()))
+	}
+	if !state.Multipath.IsNull() && data.Multipath.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/multipath", state.getPath()))
+	}
+	if !state.Weight.IsNull() && data.Weight.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/weight", state.getPath()))
 	}
 	if !state.EncapsulationType.IsNull() && data.EncapsulationType.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation-type", state.getPath()))
-	}
-	if !state.NextHopSelfInheritanceDisable.IsNull() && data.NextHopSelfInheritanceDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/next-hop-self/inheritance-disable", state.getPath()))
-	}
-	if !state.NextHopSelf.IsNull() && data.NextHopSelf.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/next-hop-self", state.getPath()))
-	}
-	if !state.AdvertiseVpnv4UnicastReOriginatedStitchingRt.IsNull() && data.AdvertiseVpnv4UnicastReOriginatedStitchingRt.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable/re-originated", state.getPath()))
-	}
-	if !state.AdvertiseVpnv4UnicastReOriginated.IsNull() && data.AdvertiseVpnv4UnicastReOriginated.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable", state.getPath()))
-	}
-	if !state.AdvertiseVpnv4Unicast.IsNull() && data.AdvertiseVpnv4Unicast.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable", state.getPath()))
-	}
-	if !state.RouteReflectorClientInheritanceDisable.IsNull() && data.RouteReflectorClientInheritanceDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/route-reflector-client/inheritance-disable", state.getPath()))
-	}
-	if !state.RouteReflectorClient.IsNull() && data.RouteReflectorClient.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/route-reflector-client", state.getPath()))
-	}
-	if !state.ImportReOriginate.IsNull() && data.ImportReOriginate.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/import", state.getPath()))
-	}
-	if !state.ImportStitchingRtReOriginateStitchingRt.IsNull() && data.ImportStitchingRtReOriginateStitchingRt.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/import/stitching-rt/re-originate", state.getPath()))
-	}
-	if !state.ImportStitchingRtReOriginate.IsNull() && data.ImportStitchingRtReOriginate.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/import/stitching-rt/re-originate", state.getPath()))
-	}
-	if !state.ImportStitchingRt.IsNull() && data.ImportStitchingRt.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/import", state.getPath()))
 	}
 	return deletedItems
 }
@@ -794,50 +2510,65 @@ func (data *RouterBGPNeighborAddressFamily) getDeletedItems(ctx context.Context,
 
 func (data *RouterBGPNeighborAddressFamily) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	if !data.DefaultOriginateInheritanceDisable.IsNull() && !data.DefaultOriginateInheritanceDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-originate", data.getPath()))
+	if !data.BestpathOriginAsAllowInvalid.IsNull() && !data.BestpathOriginAsAllowInvalid.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bestpath/origin-as/allow/invalid", data.getPath()))
 	}
-	if !data.DefaultOriginate.IsNull() && !data.DefaultOriginate.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-originate", data.getPath()))
+	if !data.OriginAsValidationDisable.IsNull() && !data.OriginAsValidationDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/origin-as/validation/disable", data.getPath()))
 	}
-	if !data.MaximumPrefixWarningOnly.IsNull() && !data.MaximumPrefixWarningOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/maximum-prefix", data.getPath()))
+	if !data.SlowPeerStatic.IsNull() && !data.SlowPeerStatic.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/slow-peer/static", data.getPath()))
 	}
-	if !data.MaximumPrefixDiscardExtraPaths.IsNull() && !data.MaximumPrefixDiscardExtraPaths.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/maximum-prefix", data.getPath()))
+	if !data.SlowPeerDynamicDisable.IsNull() && !data.SlowPeerDynamicDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/slow-peer/dynamic/disable", data.getPath()))
 	}
-	if !data.SendCommunityEbgpInheritanceDisable.IsNull() && !data.SendCommunityEbgpInheritanceDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/send-community-ebgp/inheritance-disable", data.getPath()))
+	if !data.SlowPeerDynamic.IsNull() && !data.SlowPeerDynamic.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/slow-peer/dynamic", data.getPath()))
 	}
-	if !data.SendCommunityEbgp.IsNull() && !data.SendCommunityEbgp.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/send-community-ebgp", data.getPath()))
+	if !data.AcceptOwnInheritanceDisable.IsNull() && !data.AcceptOwnInheritanceDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/accept-own", data.getPath()))
 	}
-	if !data.SoftReconfigurationInboundAlways.IsNull() && !data.SoftReconfigurationInboundAlways.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/soft-reconfiguration/inbound", data.getPath()))
+	if !data.AcceptOwn.IsNull() && !data.AcceptOwn.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/accept-own", data.getPath()))
 	}
-	if !data.SoftReconfigurationInbound.IsNull() && !data.SoftReconfigurationInbound.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/soft-reconfiguration/inbound", data.getPath()))
+	if !data.SendMulticastAttributesDisable.IsNull() && !data.SendMulticastAttributesDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/send-multicast-attributes", data.getPath()))
 	}
-	if !data.NextHopSelfInheritanceDisable.IsNull() && !data.NextHopSelfInheritanceDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/next-hop-self/inheritance-disable", data.getPath()))
+	if !data.SendMulticastAttributes.IsNull() && !data.SendMulticastAttributes.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/send-multicast-attributes", data.getPath()))
 	}
-	if !data.NextHopSelf.IsNull() && !data.NextHopSelf.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/next-hop-self", data.getPath()))
+	if !data.AigpSendCostCommunityIdPoiPreBestpathTransitive.IsNull() && !data.AigpSendCostCommunityIdPoiPreBestpathTransitive.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/aigp/send/cost-community/cost-community-id/poi/pre-bestpath/transitive", data.getPath()))
 	}
-	if !data.AdvertiseVpnv4UnicastReOriginatedStitchingRt.IsNull() && !data.AdvertiseVpnv4UnicastReOriginatedStitchingRt.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable/re-originated", data.getPath()))
+	if !data.AigpSendCostCommunityIdPoiPreBestpath.IsNull() && !data.AigpSendCostCommunityIdPoiPreBestpath.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/aigp/send/cost-community/cost-community-id/poi", data.getPath()))
 	}
-	if !data.AdvertiseVpnv4UnicastReOriginated.IsNull() && !data.AdvertiseVpnv4UnicastReOriginated.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable", data.getPath()))
+	if !data.AigpSendCostCommunityIdPoiIgpCostTransitive.IsNull() && !data.AigpSendCostCommunityIdPoiIgpCostTransitive.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/aigp/send/cost-community/cost-community-id/poi/igp-cost/transitive", data.getPath()))
 	}
-	if !data.AdvertiseVpnv4Unicast.IsNull() && !data.AdvertiseVpnv4Unicast.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable", data.getPath()))
+	if !data.AigpSendCostCommunityIdPoiIgpCost.IsNull() && !data.AigpSendCostCommunityIdPoiIgpCost.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/aigp/send/cost-community/cost-community-id/poi", data.getPath()))
 	}
-	if !data.RouteReflectorClientInheritanceDisable.IsNull() && !data.RouteReflectorClientInheritanceDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/route-reflector-client/inheritance-disable", data.getPath()))
+	if !data.AigpSendCostCommunityDisable.IsNull() && !data.AigpSendCostCommunityDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/aigp/send/cost-community", data.getPath()))
 	}
-	if !data.RouteReflectorClient.IsNull() && !data.RouteReflectorClient.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/route-reflector-client", data.getPath()))
+	if !data.AigpSendMedDisable.IsNull() && !data.AigpSendMedDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/aigp/send/med", data.getPath()))
+	}
+	if !data.AigpSendMed.IsNull() && !data.AigpSendMed.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/aigp/send/med", data.getPath()))
+	}
+	if !data.AigpDisable.IsNull() && !data.AigpDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/aigp/enable", data.getPath()))
+	}
+	if !data.Aigp.IsNull() && !data.Aigp.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/aigp/enable", data.getPath()))
+	}
+	if !data.AsOverrideInheritanceDisable.IsNull() && !data.AsOverrideInheritanceDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/as-override/inheritance-disable", data.getPath()))
+	}
+	if !data.AsOverride.IsNull() && !data.AsOverride.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/as-override", data.getPath()))
 	}
 	if !data.ImportReOriginate.IsNull() && !data.ImportReOriginate.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/import", data.getPath()))
@@ -851,6 +2582,141 @@ func (data *RouterBGPNeighborAddressFamily) getEmptyLeafsDelete(ctx context.Cont
 	if !data.ImportStitchingRt.IsNull() && !data.ImportStitchingRt.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/import", data.getPath()))
 	}
+	if !data.SegmentRoutingSrv6PrefixSidType4.IsNull() && !data.SegmentRoutingSrv6PrefixSidType4.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/srv6", data.getPath()))
+	}
+	if !data.AdvertiseL2vpnEvpnReOriginatedStitchingRt.IsNull() && !data.AdvertiseL2vpnEvpnReOriginatedStitchingRt.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise/l2vpn/evpn/re-originated", data.getPath()))
+	}
+	if !data.AdvertiseL2vpnEvpnReOriginated.IsNull() && !data.AdvertiseL2vpnEvpnReOriginated.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise/l2vpn/evpn", data.getPath()))
+	}
+	if !data.AdvertiseVpnv6UnicastReOriginatedStitchingRt.IsNull() && !data.AdvertiseVpnv6UnicastReOriginatedStitchingRt.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise/vpnv6/unicast/enable/re-originated", data.getPath()))
+	}
+	if !data.AdvertiseVpnv6UnicastReOriginated.IsNull() && !data.AdvertiseVpnv6UnicastReOriginated.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise/vpnv6/unicast/enable", data.getPath()))
+	}
+	if !data.AdvertiseVpnv6Unicast.IsNull() && !data.AdvertiseVpnv6Unicast.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise/vpnv6/unicast/enable", data.getPath()))
+	}
+	if !data.AdvertiseVpnv4UnicastReOriginatedStitchingRt.IsNull() && !data.AdvertiseVpnv4UnicastReOriginatedStitchingRt.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable/re-originated", data.getPath()))
+	}
+	if !data.AdvertiseVpnv4UnicastReOriginated.IsNull() && !data.AdvertiseVpnv4UnicastReOriginated.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable", data.getPath()))
+	}
+	if !data.AdvertiseVpnv4Unicast.IsNull() && !data.AdvertiseVpnv4Unicast.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable", data.getPath()))
+	}
+	if !data.UpdateOutOriginatorLoopcheckDisable.IsNull() && !data.UpdateOutOriginatorLoopcheckDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/update/out/originator-loopcheck/disable", data.getPath()))
+	}
+	if !data.UpdateOutOriginatorLoopcheck.IsNull() && !data.UpdateOutOriginatorLoopcheck.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/update/out/originator-loopcheck", data.getPath()))
+	}
+	if !data.SoftReconfigurationInboundAlways.IsNull() && !data.SoftReconfigurationInboundAlways.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/soft-reconfiguration/inbound", data.getPath()))
+	}
+	if !data.SoftReconfigurationInbound.IsNull() && !data.SoftReconfigurationInbound.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/soft-reconfiguration/inbound", data.getPath()))
+	}
+	if !data.SendExtendedCommunityEbgpInheritanceDisable.IsNull() && !data.SendExtendedCommunityEbgpInheritanceDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/send-extended-community-ebgp/inheritance-disable", data.getPath()))
+	}
+	if !data.SendExtendedCommunityEbgp.IsNull() && !data.SendExtendedCommunityEbgp.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/send-extended-community-ebgp", data.getPath()))
+	}
+	if !data.SendCommunityGshutEbgpInheritanceDisable.IsNull() && !data.SendCommunityGshutEbgpInheritanceDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/send-community-gshut-ebgp/inheritance-disable", data.getPath()))
+	}
+	if !data.SendCommunityGshutEbgp.IsNull() && !data.SendCommunityGshutEbgp.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/send-community-gshut-ebgp", data.getPath()))
+	}
+	if !data.SendCommunityEbgpInheritanceDisable.IsNull() && !data.SendCommunityEbgpInheritanceDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/send-community-ebgp/inheritance-disable", data.getPath()))
+	}
+	if !data.SendCommunityEbgp.IsNull() && !data.SendCommunityEbgp.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/send-community-ebgp", data.getPath()))
+	}
+	if !data.RouteReflectorClientInheritanceDisable.IsNull() && !data.RouteReflectorClientInheritanceDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/route-reflector-client/inheritance-disable", data.getPath()))
+	}
+	if !data.RouteReflectorClient.IsNull() && !data.RouteReflectorClient.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/route-reflector-client", data.getPath()))
+	}
+	if !data.RemovePrivateAsInternal.IsNull() && !data.RemovePrivateAsInternal.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound/internal", data.getPath()))
+	}
+	if !data.RemovePrivateAsEntireAspath.IsNull() && !data.RemovePrivateAsEntireAspath.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound/entire-aspath", data.getPath()))
+	}
+	if !data.RemovePrivateAs.IsNull() && !data.RemovePrivateAs.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound", data.getPath()))
+	}
+	if !data.RemovePrivateAsInboundInheritanceDisable.IsNull() && !data.RemovePrivateAsInboundInheritanceDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as/inbound/inheritance-disable", data.getPath()))
+	}
+	if !data.RemovePrivateAsInboundEntireAspath.IsNull() && !data.RemovePrivateAsInboundEntireAspath.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as/inbound/entire-aspath", data.getPath()))
+	}
+	if !data.RemovePrivateAsInbound.IsNull() && !data.RemovePrivateAsInbound.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as/inbound", data.getPath()))
+	}
+	if !data.ReplacePrivateAsInternal.IsNull() && !data.ReplacePrivateAsInternal.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/replace-private-as/internal", data.getPath()))
+	}
+	if !data.ReplacePrivateAs.IsNull() && !data.ReplacePrivateAs.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/replace-private-as", data.getPath()))
+	}
+	if !data.ClusterIdAllowEqualDisable.IsNull() && !data.ClusterIdAllowEqualDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/cluster-id/allow-equal/disable", data.getPath()))
+	}
+	if !data.ClusterIdAllowEqual.IsNull() && !data.ClusterIdAllowEqual.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/cluster-id/allow-equal", data.getPath()))
+	}
+	if !data.NextHopUnchangedInheritanceDisable.IsNull() && !data.NextHopUnchangedInheritanceDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/next-hop-unchanged/next-hop-unchanged-enable/inheritance-disable", data.getPath()))
+	}
+	if !data.NextHopUnchangedMultipath.IsNull() && !data.NextHopUnchangedMultipath.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/next-hop-unchanged/multipath", data.getPath()))
+	}
+	if !data.NextHopUnchanged.IsNull() && !data.NextHopUnchanged.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/next-hop-unchanged/next-hop-unchanged-enable", data.getPath()))
+	}
+	if !data.NextHopSelfInheritanceDisable.IsNull() && !data.NextHopSelfInheritanceDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/next-hop-self/inheritance-disable", data.getPath()))
+	}
+	if !data.NextHopSelf.IsNull() && !data.NextHopSelf.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/next-hop-self", data.getPath()))
+	}
+	if !data.MaximumPrefixWarningOnly.IsNull() && !data.MaximumPrefixWarningOnly.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/maximum-prefix", data.getPath()))
+	}
+	if !data.MaximumPrefixDiscardExtraPaths.IsNull() && !data.MaximumPrefixDiscardExtraPaths.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/maximum-prefix", data.getPath()))
+	}
+	if !data.DefaultOriginateInheritanceDisable.IsNull() && !data.DefaultOriginateInheritanceDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-originate", data.getPath()))
+	}
+	if !data.DefaultOriginate.IsNull() && !data.DefaultOriginate.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-originate", data.getPath()))
+	}
+	if !data.AdditionalPathsReceiveDisable.IsNull() && !data.AdditionalPathsReceiveDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/additional-paths/receive/disable", data.getPath()))
+	}
+	if !data.AdditionalPathsReceive.IsNull() && !data.AdditionalPathsReceive.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/additional-paths/receive", data.getPath()))
+	}
+	if !data.AdditionalPathsSendDisable.IsNull() && !data.AdditionalPathsSendDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/additional-paths/send/disable", data.getPath()))
+	}
+	if !data.AdditionalPathsSend.IsNull() && !data.AdditionalPathsSend.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/additional-paths/send", data.getPath()))
+	}
+	if !data.Multipath.IsNull() && !data.Multipath.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/multipath", data.getPath()))
+	}
 	return emptyLeafsDelete
 }
 
@@ -860,14 +2726,224 @@ func (data *RouterBGPNeighborAddressFamily) getEmptyLeafsDelete(ctx context.Cont
 
 func (data *RouterBGPNeighborAddressFamily) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.DefaultOriginateInheritanceDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-originate", data.getPath()))
+	if !data.BestpathOriginAsAllowInvalid.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bestpath/origin-as/allow/invalid", data.getPath()))
 	}
-	if !data.DefaultOriginateRoutePolicy.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-originate", data.getPath()))
+	if !data.OriginAsValidationDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/origin-as/validation/disable", data.getPath()))
 	}
-	if !data.DefaultOriginate.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-originate", data.getPath()))
+	if !data.SlowPeerStatic.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/slow-peer/static", data.getPath()))
+	}
+	if !data.SlowPeerDynamicDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/slow-peer/dynamic/disable", data.getPath()))
+	}
+	if !data.SlowPeerDynamicThreshold.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/slow-peer/dynamic/threshold", data.getPath()))
+	}
+	if !data.SlowPeerDynamic.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/slow-peer/dynamic", data.getPath()))
+	}
+	if !data.AcceptOwnInheritanceDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/accept-own", data.getPath()))
+	}
+	if !data.AcceptOwn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/accept-own", data.getPath()))
+	}
+	if !data.SendMulticastAttributesDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/send-multicast-attributes", data.getPath()))
+	}
+	if !data.SendMulticastAttributes.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/send-multicast-attributes", data.getPath()))
+	}
+	if !data.AigpSendCostCommunityIdPoiPreBestpathTransitive.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/aigp/send/cost-community/cost-community-id/poi/pre-bestpath/transitive", data.getPath()))
+	}
+	if !data.AigpSendCostCommunityIdPoiPreBestpath.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/aigp/send/cost-community/cost-community-id/poi", data.getPath()))
+	}
+	if !data.AigpSendCostCommunityIdPoiIgpCostTransitive.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/aigp/send/cost-community/cost-community-id/poi/igp-cost/transitive", data.getPath()))
+	}
+	if !data.AigpSendCostCommunityIdPoiIgpCost.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/aigp/send/cost-community/cost-community-id/poi", data.getPath()))
+	}
+	if !data.AigpSendCostCommunityId.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/aigp/send/cost-community/cost-community-id", data.getPath()))
+	}
+	if !data.AigpSendCostCommunityDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/aigp/send/cost-community", data.getPath()))
+	}
+	if !data.AigpSendMedDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/aigp/send/med", data.getPath()))
+	}
+	if !data.AigpSendMed.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/aigp/send/med", data.getPath()))
+	}
+	if !data.AigpDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/aigp/enable", data.getPath()))
+	}
+	if !data.Aigp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/aigp/enable", data.getPath()))
+	}
+	if !data.AsOverrideInheritanceDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/as-override/inheritance-disable", data.getPath()))
+	}
+	if !data.AsOverride.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/as-override", data.getPath()))
+	}
+	if !data.SiteOfOriginIpv4AddressIndex.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/site-of-origin/ipv4-address", data.getPath()))
+	}
+	if !data.SiteOfOriginIpv4Address.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/site-of-origin/ipv4-address", data.getPath()))
+	}
+	if !data.SiteOfOriginFourByteAsIndex.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/site-of-origin/four-byte-as", data.getPath()))
+	}
+	if !data.SiteOfOriginFourByteAsNumber.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/site-of-origin/four-byte-as", data.getPath()))
+	}
+	if !data.SiteOfOriginTwoByteAsIndex.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/site-of-origin/two-byte-as", data.getPath()))
+	}
+	if !data.SiteOfOriginTwoByteAsNumber.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/site-of-origin/two-byte-as", data.getPath()))
+	}
+	if !data.AllowconfedasIn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/allowconfedas-in/number-of-occurrences-of-confederation-number", data.getPath()))
+	}
+	if !data.AllowasIn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/allowas-in/number-of-occurrences-of-as-number", data.getPath()))
+	}
+	if !data.ImportReOriginate.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/import", data.getPath()))
+	}
+	if !data.ImportStitchingRtReOriginateStitchingRt.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/import/stitching-rt/re-originate", data.getPath()))
+	}
+	if !data.ImportStitchingRtReOriginate.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/import/stitching-rt/re-originate", data.getPath()))
+	}
+	if !data.ImportStitchingRt.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/import", data.getPath()))
+	}
+	if !data.SegmentRoutingSrv6PrefixSidType4.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/srv6", data.getPath()))
+	}
+	if !data.AdvertiseL2vpnEvpnReOriginatedStitchingRt.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/l2vpn/evpn/re-originated", data.getPath()))
+	}
+	if !data.AdvertiseL2vpnEvpnReOriginated.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/l2vpn/evpn", data.getPath()))
+	}
+	if !data.AdvertiseVpnv6UnicastReOriginatedStitchingRt.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/vpnv6/unicast/enable/re-originated", data.getPath()))
+	}
+	if !data.AdvertiseVpnv6UnicastReOriginated.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/vpnv6/unicast/enable", data.getPath()))
+	}
+	if !data.AdvertiseVpnv6Unicast.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/vpnv6/unicast/enable", data.getPath()))
+	}
+	if !data.AdvertiseVpnv4UnicastReOriginatedStitchingRt.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable/re-originated", data.getPath()))
+	}
+	if !data.AdvertiseVpnv4UnicastReOriginated.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable", data.getPath()))
+	}
+	if !data.AdvertiseVpnv4Unicast.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable", data.getPath()))
+	}
+	if !data.UpdateOutOriginatorLoopcheckDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/update/out/originator-loopcheck/disable", data.getPath()))
+	}
+	if !data.UpdateOutOriginatorLoopcheck.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/update/out/originator-loopcheck", data.getPath()))
+	}
+	if !data.SoftReconfigurationInboundAlways.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/soft-reconfiguration/inbound", data.getPath()))
+	}
+	if !data.SoftReconfigurationInbound.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/soft-reconfiguration/inbound", data.getPath()))
+	}
+	if !data.SendExtendedCommunityEbgpInheritanceDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/send-extended-community-ebgp/inheritance-disable", data.getPath()))
+	}
+	if !data.SendExtendedCommunityEbgp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/send-extended-community-ebgp", data.getPath()))
+	}
+	if !data.SendCommunityGshutEbgpInheritanceDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/send-community-gshut-ebgp/inheritance-disable", data.getPath()))
+	}
+	if !data.SendCommunityGshutEbgp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/send-community-gshut-ebgp", data.getPath()))
+	}
+	if !data.SendCommunityEbgpInheritanceDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/send-community-ebgp/inheritance-disable", data.getPath()))
+	}
+	if !data.SendCommunityEbgp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/send-community-ebgp", data.getPath()))
+	}
+	if !data.RouteReflectorClientInheritanceDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/route-reflector-client/inheritance-disable", data.getPath()))
+	}
+	if !data.RouteReflectorClient.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/route-reflector-client", data.getPath()))
+	}
+	if !data.RemovePrivateAsInternal.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound/internal", data.getPath()))
+	}
+	if !data.RemovePrivateAsEntireAspath.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound/entire-aspath", data.getPath()))
+	}
+	if !data.RemovePrivateAs.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound", data.getPath()))
+	}
+	if !data.RemovePrivateAsInboundInheritanceDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/remove-private-as/inbound/inheritance-disable", data.getPath()))
+	}
+	if !data.RemovePrivateAsInboundEntireAspath.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/remove-private-as/inbound/entire-aspath", data.getPath()))
+	}
+	if !data.RemovePrivateAsInbound.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/remove-private-as/inbound", data.getPath()))
+	}
+	if !data.ReplacePrivateAsInternal.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/replace-private-as/internal", data.getPath()))
+	}
+	if !data.ReplacePrivateAs.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/replace-private-as", data.getPath()))
+	}
+	if !data.ClusterIdAllowEqualDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/cluster-id/allow-equal/disable", data.getPath()))
+	}
+	if !data.ClusterIdAllowEqual.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/cluster-id/allow-equal", data.getPath()))
+	}
+	if !data.OrfRoutePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/orf/route-policy", data.getPath()))
+	}
+	if !data.RoutePolicyOut.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/route-policy/out", data.getPath()))
+	}
+	if !data.RoutePolicyIn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/route-policy/in", data.getPath()))
+	}
+	if !data.NextHopUnchangedInheritanceDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/next-hop-unchanged/next-hop-unchanged-enable/inheritance-disable", data.getPath()))
+	}
+	if !data.NextHopUnchangedMultipath.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/next-hop-unchanged/multipath", data.getPath()))
+	}
+	if !data.NextHopUnchanged.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/next-hop-unchanged/next-hop-unchanged-enable", data.getPath()))
+	}
+	if !data.NextHopSelfInheritanceDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/next-hop-self/inheritance-disable", data.getPath()))
+	}
+	if !data.NextHopSelf.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/next-hop-self", data.getPath()))
 	}
 	if !data.MaximumPrefixWarningOnly.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-prefix", data.getPath()))
@@ -884,59 +2960,41 @@ func (data *RouterBGPNeighborAddressFamily) getDeletePaths(ctx context.Context) 
 	if !data.MaximumPrefixLimit.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-prefix", data.getPath()))
 	}
-	if !data.SendCommunityEbgpInheritanceDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/send-community-ebgp/inheritance-disable", data.getPath()))
+	if !data.DefaultOriginateInheritanceDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-originate", data.getPath()))
 	}
-	if !data.SendCommunityEbgp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/send-community-ebgp", data.getPath()))
+	if !data.DefaultOriginateRoutePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-originate", data.getPath()))
 	}
-	if !data.SoftReconfigurationInboundAlways.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/soft-reconfiguration/inbound", data.getPath()))
+	if !data.DefaultOriginate.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-originate", data.getPath()))
 	}
-	if !data.SoftReconfigurationInbound.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/soft-reconfiguration/inbound", data.getPath()))
+	if !data.AdditionalPathsReceiveDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/additional-paths/receive/disable", data.getPath()))
 	}
-	if !data.RoutePolicyOut.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/route-policy/out", data.getPath()))
+	if !data.AdditionalPathsReceive.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/additional-paths/receive", data.getPath()))
 	}
-	if !data.RoutePolicyIn.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/route-policy/in", data.getPath()))
+	if !data.AdditionalPathsSendDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/additional-paths/send/disable", data.getPath()))
+	}
+	if !data.AdditionalPathsSend.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/additional-paths/send", data.getPath()))
+	}
+	if !data.CapabilityOrfPrefix.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/capability/orf/prefix/capability-receive-orf-neighbor", data.getPath()))
+	}
+	if !data.UseAfGroup.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/use/af-group", data.getPath()))
+	}
+	if !data.Multipath.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/multipath", data.getPath()))
+	}
+	if !data.Weight.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/weight", data.getPath()))
 	}
 	if !data.EncapsulationType.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation-type", data.getPath()))
-	}
-	if !data.NextHopSelfInheritanceDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/next-hop-self/inheritance-disable", data.getPath()))
-	}
-	if !data.NextHopSelf.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/next-hop-self", data.getPath()))
-	}
-	if !data.AdvertiseVpnv4UnicastReOriginatedStitchingRt.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable/re-originated", data.getPath()))
-	}
-	if !data.AdvertiseVpnv4UnicastReOriginated.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable", data.getPath()))
-	}
-	if !data.AdvertiseVpnv4Unicast.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable", data.getPath()))
-	}
-	if !data.RouteReflectorClientInheritanceDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/route-reflector-client/inheritance-disable", data.getPath()))
-	}
-	if !data.RouteReflectorClient.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/route-reflector-client", data.getPath()))
-	}
-	if !data.ImportReOriginate.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/import", data.getPath()))
-	}
-	if !data.ImportStitchingRtReOriginateStitchingRt.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/import/stitching-rt/re-originate", data.getPath()))
-	}
-	if !data.ImportStitchingRtReOriginate.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/import/stitching-rt/re-originate", data.getPath()))
-	}
-	if !data.ImportStitchingRt.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/import", data.getPath()))
 	}
 	return deletePaths
 }

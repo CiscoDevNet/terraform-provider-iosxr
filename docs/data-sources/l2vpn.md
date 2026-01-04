@@ -59,7 +59,6 @@ data "iosxr_l2vpn" "example" {
 - `snmp_mib_interface_format_external` (Boolean) Set MIB interface name output format to external using slash
 - `snmp_mib_pseudowire_statistics` (Boolean) Enable MIB pseudowire statistics (for low scale, <16K PWs)
 - `tcn_propagation` (Boolean) Enable topology change notification propagation
-- `xconnect_groups` (Attributes List) Specify the group the cross connects belong to (see [below for nested schema](#nestedatt--xconnect_groups))
 
 <a id="nestedatt--flexible_xconnect_service_vlan_aware_evis"></a>
 ### Nested Schema for `flexible_xconnect_service_vlan_aware_evis`
@@ -124,12 +123,3 @@ Read-Only:
 - `primary_vlan` (String) Assign primary VLANs
 - `recovery_delay` (Number) Specify delay before recovery reversion after failure clears
 - `secondary_vlan` (String) Assign secondary VLANs
-
-
-
-<a id="nestedatt--xconnect_groups"></a>
-### Nested Schema for `xconnect_groups`
-
-Read-Only:
-
-- `group_name` (String) Specify the group the cross connects belong to

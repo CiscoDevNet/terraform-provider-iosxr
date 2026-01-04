@@ -27,6 +27,7 @@ import (
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -79,6 +80,95 @@ func (r *EVPNResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringvalidator.OneOf("all", "attributes"),
 				},
 			},
+			"bgp_rd_two_byte_as_number": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number").AddIntegerRangeDescription(1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
+				},
+			},
+			"bgp_rd_two_byte_as_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("AS:nn (hex or decimal format)").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"bgp_rd_four_byte_as_number": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number").AddIntegerRangeDescription(65536, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(65536, 4294967295),
+				},
+			},
+			"bgp_rd_four_byte_as_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("AS:nn (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 65535),
+				},
+			},
+			"bgp_rd_ipv4_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+				},
+			},
+			"bgp_rd_ipv4_address_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IP-address:nn (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 65535),
+				},
+			},
+			"timers_recovery": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Global recovery timer").AddIntegerRangeDescription(0, 3600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 3600),
+				},
+			},
+			"timers_peering": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Global peering timer").AddIntegerRangeDescription(0, 300).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 300),
+				},
+			},
+			"timers_carving": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Global carving timer").AddIntegerRangeDescription(0, 300).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 300),
+				},
+			},
+			"timers_ac_debounce": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Global AC Debounce timer").AddIntegerRangeDescription(0, 300000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 300000),
+				},
+			},
+			"timers_backup_replacement_delay": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("When receiving a new backup route, delay installation for this amount of time timer").AddIntegerRangeDescription(0, 300000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 300000),
+				},
+			},
+			"timers_mac_postpone": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Global MAC withdraw postpone timer").AddIntegerRangeDescription(0, 300).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 300),
+				},
+			},
+			"load_balancing_flow_label_static": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Static configuration of Flow Label").String,
+				Optional:            true,
+			},
 			"source_interface": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Configure EVPN router-id implicitly through Loopback Interface").String,
 				Optional:            true,
@@ -86,27 +176,57 @@ func (r *EVPNResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
 				},
 			},
-			"interfaces": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify interface name").String,
+			"cost_out": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure global EVPN cost-out").String,
+				Optional:            true,
+			},
+			"startup_cost_in": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Cost-in after reload timer").AddIntegerRangeDescription(30, 86400).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(30, 86400),
+				},
+			},
+			"staggered_bringup_timer": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Staggered bringup timer delay timer").AddIntegerRangeDescription(0, 300000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 300000),
+				},
+			},
+			"logging_df_election": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable Designated Forwarder election logging").String,
+				Optional:            true,
+			},
+			"ethernet_segment_type_one_auto_generation_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable ESI auto-generation").String,
+				Optional:            true,
+			},
+			"groups": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure EVPN group").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"interface_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specify interface name").String,
+						"group_name": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure EVPN group").AddIntegerRangeDescription(1, 4294967295).String,
 							Required:            true,
-							Validators: []validator.String{
-								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
 							},
 						},
-						"ethernet_segment_enable": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Ethernet Segment configuration commands").String,
+						"core_interfaces": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("configure EVPN group core interface").String,
 							Optional:            true,
-						},
-						"ethernet_segment_esi_zero": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("ESI value").String,
-							Required:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 254),
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"interface_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("configure EVPN group core interface").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+										},
+									},
+								},
 							},
 						},
 					},
@@ -140,6 +260,297 @@ func (r *EVPNResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 			"srv6_usid_allocation_wide_local_id_block": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable uSID wide function global knob").String,
 				Optional:            true,
+			},
+			"ignore_mtu_mismatch": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Ignore mismatch of local and remote MTUs").String,
+				Optional:            true,
+			},
+			"enforce_mtu_match": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enforce matching of local and remote MTUs").String,
+				Optional:            true,
+			},
+			"transmit_mtu_zero": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Transmit MTU zero to remote instead of actual local MTU").String,
+				Optional:            true,
+			},
+			"transmit_l2_mtu": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Transmit L2 MTU of attachment circuit").String,
+				Optional:            true,
+			},
+			"host_ipv4_duplicate_detection_move_count": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Number of moves to occur in move-interval seconds before freezing the IP. Default is 5.").AddIntegerRangeDescription(1, 1000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 1000),
+				},
+			},
+			"host_ipv4_duplicate_detection_move_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Interval to watch for subsequent mac moves before freezing the IP. Default is 180s.").AddIntegerRangeDescription(5, 3600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(5, 3600),
+				},
+			},
+			"host_ipv4_duplicate_detection_freeze_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Length of time to lock the IP address after it has been detected as duplicate. Default is 30s.").AddIntegerRangeDescription(5, 3600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(5, 3600),
+				},
+			},
+			"host_ipv4_duplicate_detection_retry_count": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Number of times to unfreeze an IP address before permanently freezing it. Default is 3 times.").String,
+				Optional:            true,
+			},
+			"host_ipv4_duplicate_detection_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable duplicate detection for MAC, IPv4 or IPv6 addresses.").String,
+				Optional:            true,
+			},
+			"host_ipv4_duplicate_detection_reset_freeze_count_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Interval after which the count of duplicate detection events used to determine whether IPv4 needs to be permanently frozen, is reset. Default is 24 hours.").AddIntegerRangeDescription(1, 48).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 48),
+				},
+			},
+			"host_ipv6_duplicate_detection_move_count": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Number of moves to occur in move-interval seconds before freezing the IP. Default is 5.").AddIntegerRangeDescription(1, 1000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 1000),
+				},
+			},
+			"host_ipv6_duplicate_detection_move_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Interval to watch for subsequent mac moves before freezing the IP. Default is 180s.").AddIntegerRangeDescription(5, 3600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(5, 3600),
+				},
+			},
+			"host_ipv6_duplicate_detection_freeze_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Length of time to lock the IP address after it has been detected as duplicate. Default is 30s.").AddIntegerRangeDescription(5, 3600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(5, 3600),
+				},
+			},
+			"host_ipv6_duplicate_detection_retry_count": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Number of times to unfreeze an IP address before permanently freezing it. Default is 3 times.").String,
+				Optional:            true,
+			},
+			"host_ipv6_duplicate_detection_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable duplicate detection for MAC, IPv4 or IPv6 addresses.").String,
+				Optional:            true,
+			},
+			"host_ipv6_duplicate_detection_reset_freeze_count_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Interval after which the count of duplicate detection events used to determine whether IPv6 needs to be permanently frozen, is reset. Default is 24 hours.").AddIntegerRangeDescription(1, 48).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 48),
+				},
+			},
+			"virtual_neighbors": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify the peer to cross connect").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4 address of the peer").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+						"pw_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify the pseudowire id").AddIntegerRangeDescription(1, 4294967295).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
+							},
+						},
+						"timers_peering": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Access PW-specific peering timer").AddIntegerRangeDescription(0, 300).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 300),
+							},
+						},
+						"timers_recovery": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Access PW-specific recovery timer").AddIntegerRangeDescription(0, 3600).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 3600),
+							},
+						},
+						"timers_carving": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Access PW-specific carving timer").AddIntegerRangeDescription(0, 300).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 300),
+							},
+						},
+						"timers_ac_debounce": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Access PW-specific AC Debounce timer").AddIntegerRangeDescription(0, 300000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 300000),
+							},
+						},
+						"ethernet_segment_esi_zero": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ESI value").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 254),
+							},
+						},
+						"ethernet_segment_service_carving_manual_primary": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Primary services list").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 150),
+							},
+						},
+						"ethernet_segment_service_carving_manual_secondary": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Secondary services list").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 150),
+							},
+						},
+						"ethernet_segment_service_carving_hrw": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("HRW mode of carving services").String,
+							Optional:            true,
+						},
+						"ethernet_segment_service_carving_preference_based_weight": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Preference value").AddIntegerRangeDescription(0, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+						"ethernet_segment_service_carving_preference_based_access_driven": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Access-Driven DF Election").String,
+							Optional:            true,
+						},
+						"ethernet_segment_service_carving_multicast_hrw_s_g": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("HRW s,g mode").String,
+							Optional:            true,
+						},
+						"ethernet_segment_service_carving_multicast_hrw_g": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("HRW *,g mode").String,
+							Optional:            true,
+						},
+						"ethernet_segment_bgp_rt": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set ES-Import Route Target").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
+							},
+						},
+					},
+				},
+			},
+			"virtual_vfis": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify the virtual forwarding interface name").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vfi_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify the virtual forwarding interface name").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"timers_peering": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Access VFI-specific peering timer").AddIntegerRangeDescription(0, 300).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 300),
+							},
+						},
+						"timers_recovery": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Access VFI-specific recovery timer").AddIntegerRangeDescription(0, 3600).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 3600),
+							},
+						},
+						"timers_carving": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Access VFI-specific carving timer").AddIntegerRangeDescription(0, 300).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 300),
+							},
+						},
+						"timers_ac_debounce": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Access VFI-specific AC Debounce timer").AddIntegerRangeDescription(0, 300000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 300000),
+							},
+						},
+						"ethernet_segment_esi_zero": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ESI value").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 254),
+							},
+						},
+						"ethernet_segment_service_carving_manual_primary": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Primary services list").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 150),
+							},
+						},
+						"ethernet_segment_service_carving_manual_secondary": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Secondary services list").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 150),
+							},
+						},
+						"ethernet_segment_service_carving_hrw": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("HRW mode of carving services").String,
+							Optional:            true,
+						},
+						"ethernet_segment_service_carving_preference_based_weight": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Preference value").AddIntegerRangeDescription(0, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+						"ethernet_segment_service_carving_preference_based_access_driven": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Access-Driven DF Election").String,
+							Optional:            true,
+						},
+						"ethernet_segment_bgp_rt": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set ES-Import Route Target").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
+							},
+						},
+					},
+				},
+			},
+			"virtual_access_evi_ethernet_segment_esi_zero": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ESI value").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 254),
+				},
+			},
+			"virtual_access_evi_ethernet_segment_bgp_rt": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set ES-Import Route Target").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
+				},
 			},
 		},
 	}

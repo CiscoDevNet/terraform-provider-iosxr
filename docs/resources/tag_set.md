@@ -24,7 +24,7 @@ resource "iosxr_tag_set" "example" {
 
 ### Required
 
-- `rpl` (String) Configures a tag-set
+- `rpl` (String) Configures a tag set
 - `set_name` (String) Set name
 
 ### Optional

@@ -53,16 +53,6 @@ func TestAccDataSourceIosxrMPLSLDPMLDP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_families.0.forwarding_recursive", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_families.0.forwarding_recursive_route_policy", "LDP_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_families.0.rib_unicast_always", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "vrfs.0.vrf_name", "VRF1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "vrfs.0.address_families.0.name", "ipv4"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "vrfs.0.address_families.0.make_before_break_delay", "60"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "vrfs.0.address_families.0.make_before_break_delete_delay", "40"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "vrfs.0.address_families.0.make_before_break_route_policy", "LDP_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "vrfs.0.address_families.0.mofrr_enable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "vrfs.0.address_families.0.mofrr_route_policy", "LDP_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "vrfs.0.address_families.0.forwarding_recursive", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "vrfs.0.address_families.0.forwarding_recursive_route_policy", "LDP_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "vrfs.0.address_families.0.rib_unicast_always", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -128,20 +118,6 @@ func testAccDataSourceIosxrMPLSLDPMLDPConfig() string {
 	config += `		forwarding_recursive = true` + "\n"
 	config += `		forwarding_recursive_route_policy = "LDP_POLICY_1"` + "\n"
 	config += `		rib_unicast_always = true` + "\n"
-	config += `	}]` + "\n"
-	config += `	vrfs = [{` + "\n"
-	config += `		vrf_name = "VRF1"` + "\n"
-	config += `		address_families = [{` + "\n"
-	config += `			name = "ipv4"` + "\n"
-	config += `			make_before_break_delay = 60` + "\n"
-	config += `			make_before_break_delete_delay = 40` + "\n"
-	config += `			make_before_break_route_policy = "LDP_POLICY_1"` + "\n"
-	config += `			mofrr_enable = true` + "\n"
-	config += `			mofrr_route_policy = "LDP_POLICY_1"` + "\n"
-	config += `			forwarding_recursive = true` + "\n"
-	config += `			forwarding_recursive_route_policy = "LDP_POLICY_1"` + "\n"
-	config += `			rib_unicast_always = true` + "\n"
-	config += `		}]` + "\n"
 	config += `	}]` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"

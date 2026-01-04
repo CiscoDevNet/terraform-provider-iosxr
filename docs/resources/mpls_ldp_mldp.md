@@ -47,24 +47,6 @@ resource "iosxr_mpls_ldp_mldp" "example" {
       rib_unicast_always                = true
     }
   ]
-  vrfs = [
-    {
-      vrf_name = "VRF1"
-      address_families = [
-        {
-          name                              = "ipv4"
-          make_before_break_delay           = 60
-          make_before_break_delete_delay    = 40
-          make_before_break_route_policy    = "LDP_POLICY_1"
-          mofrr_enable                      = true
-          mofrr_route_policy                = "LDP_POLICY_1"
-          forwarding_recursive              = true
-          forwarding_recursive_route_policy = "LDP_POLICY_1"
-          rib_unicast_always                = true
-        }
-      ]
-    }
-  ]
 }
 ```
 
@@ -79,7 +61,6 @@ resource "iosxr_mpls_ldp_mldp" "example" {
 - `device` (String) A device name from the provider configuration.
 - `logging_internal` (Boolean) MLDP logging internal
 - `logging_notifications` (Boolean) MLDP logging notifications
-- `vrfs` (Attributes List) Configure VRF parameters (see [below for nested schema](#nestedatt--vrfs))
 
 ### Read-Only
 
@@ -139,40 +120,6 @@ Optional:
   - Range: `1`-`1000`
 - `p2mp` (Number) P2MP LSP
   - Range: `1`-`1000`
-
-
-
-<a id="nestedatt--vrfs"></a>
-### Nested Schema for `vrfs`
-
-Required:
-
-- `vrf_name` (String) Configure VRF parameters
-
-Optional:
-
-- `address_families` (Attributes List) Configure Address Family and its parameters (see [below for nested schema](#nestedatt--vrfs--address_families))
-
-<a id="nestedatt--vrfs--address_families"></a>
-### Nested Schema for `vrfs.address_families`
-
-Required:
-
-- `name` (String) Configure Address Family and its parameters
-  - Choices: `ipv4`
-
-Optional:
-
-- `forwarding_recursive` (Boolean) Enable recursive forwarding
-- `forwarding_recursive_route_policy` (String) Route policy
-- `make_before_break_delay` (Number) MBB delay
-  - Range: `0`-`600`
-- `make_before_break_delete_delay` (Number) Delete delay in seconds
-  - Range: `0`-`60`
-- `make_before_break_route_policy` (String) Route policy
-- `mofrr_enable` (Boolean) MLDP MoFRR support
-- `mofrr_route_policy` (String) Route policy
-- `rib_unicast_always` (Boolean) Always use unicast table for root lookup
 
 ## Import
 

@@ -32,7 +32,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -89,17 +88,30 @@ func (r *ClassMapQoSResource) Schema(ctx context.Context, req resource.SchemaReq
 				Optional:            true,
 			},
 			"match_any": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Match any match criteria (default)").AddDefaultValueDescription("true").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Match any match criteria (default)").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             booldefault.StaticBool(true),
 			},
 			"description": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set description for this class-map").String,
 				Optional:            true,
 			},
+			"match_access_group_ipv4": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 access list").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
+			"match_access_group_ipv6": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv6 access list").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
 			"match_cos": schema.ListAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("COS value").String,
+				ElementType:         types.Int64Type,
+				Optional:            true,
+			},
+			"match_cos_inner": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("inner cos value (Upto 8 values)").String,
 				ElementType:         types.Int64Type,
 				Optional:            true,
 			},
@@ -163,6 +175,11 @@ func (r *ClassMapQoSResource) Schema(ctx context.Context, req resource.SchemaReq
 				ElementType:         types.StringType,
 				Optional:            true,
 			},
+			"match_discard_class": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Discard CLass Id").String,
+				ElementType:         types.Int64Type,
+				Optional:            true,
+			},
 			"match_dscp": schema.ListAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("DSCP value").String,
 				ElementType:         types.StringType,
@@ -178,9 +195,55 @@ func (r *ClassMapQoSResource) Schema(ctx context.Context, req resource.SchemaReq
 				ElementType:         types.StringType,
 				Optional:            true,
 			},
+			"match_ethertype": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Ethertype Value").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
+			"match_fragment_type_dont_fragment": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Match don't-Fragment bit").String,
+				Optional:            true,
+			},
+			"match_fragment_type_first_fragment": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Match first fragment bit").String,
+				Optional:            true,
+			},
+			"match_fragment_type_is_fragment": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Match is-fragment bit").String,
+				Optional:            true,
+			},
+			"match_fragment_type_last_fragment": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Match last fragment bit").String,
+				Optional:            true,
+			},
+			"match_ipv4_icmp_code": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 ICMP code").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
+			"match_ipv4_icmp_type": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 ICMP type").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
+			"match_ipv6_icmp_code": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ICMP code").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
+			"match_ipv6_icmp_type": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ICMP type").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
 			"match_mpls_experimental_topmost": schema.ListAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("MPLS experimental label").String,
 				ElementType:         types.Int64Type,
+				Optional:            true,
+			},
+			"match_packet_length": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IP Packet Length").String,
+				ElementType:         types.StringType,
 				Optional:            true,
 			},
 			"match_precedence": schema.ListAttribute{
@@ -268,6 +331,17 @@ func (r *ClassMapQoSResource) Schema(ctx context.Context, req resource.SchemaReq
 				ElementType:         types.StringType,
 				Optional:            true,
 			},
+			"match_tcp_flag": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("TCP flags value").AddIntegerRangeDescription(0, 4095).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4095),
+				},
+			},
+			"match_tcp_flag_any": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Match based on any bit set").String,
+				Optional:            true,
+			},
 			"match_traffic_class": schema.ListAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Traffic Class Id").String,
 				ElementType:         types.StringType,
@@ -275,6 +349,11 @@ func (r *ClassMapQoSResource) Schema(ctx context.Context, req resource.SchemaReq
 			},
 			"match_vlan": schema.ListAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Vlan Id").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
+			"match_vlan_inner": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("inner Vlan Id").String,
 				ElementType:         types.StringType,
 				Optional:            true,
 			},

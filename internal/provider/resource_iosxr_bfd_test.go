@@ -43,7 +43,7 @@ func TestAccIosxrBFD(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "echo_ipv4_source", "10.1.1.1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "echo_ipv4_bundle_per_member_minimum_interval", "200"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "trap_singlehop_pre_mapped", "true"))
-	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" || os.Getenv("XRV9K") != "" {
+	if os.Getenv("XRV9K") != "" || os.Getenv("NCS") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "multipath_locations.0.location_id", "0/0/CPU0"))
 	}
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "multihop_ttl_drop_threshold", "200"))
@@ -132,7 +132,7 @@ func testAccIosxrBFDConfig_all() string {
 	config += `	echo_ipv4_source = "10.1.1.1"` + "\n"
 	config += `	echo_ipv4_bundle_per_member_minimum_interval = 200` + "\n"
 	config += `	trap_singlehop_pre_mapped = true` + "\n"
-	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" || os.Getenv("XRV9K") != "" {
+	if os.Getenv("XRV9K") != "" || os.Getenv("NCS") != "" {
 		config += `	multipath_locations = [{` + "\n"
 		config += `		location_id = "0/0/CPU0"` + "\n"
 		config += `		}]` + "\n"

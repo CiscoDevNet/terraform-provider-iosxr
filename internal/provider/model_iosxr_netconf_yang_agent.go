@@ -105,7 +105,7 @@ func (data NetconfYangAgent) toBody(ctx context.Context) string {
 	}
 	if !data.NetconfV1StreamingDisabled.IsNull() && !data.NetconfV1StreamingDisabled.IsUnknown() {
 		if data.NetconfV1StreamingDisabled.ValueBool() {
-			body, _ = sjson.Set(body, "netconf1\\.0.streaming-disabled", map[string]string{})
+			body, _ = sjson.Set(body, "netconf1\\.0.streaming-disabled", []interface{}{nil})
 		}
 	}
 	return body

@@ -88,6 +88,10 @@ func (d *SegmentRoutingV6DataSource) Schema(ctx context.Context, req datasource.
 							MarkdownDescription: "Format name",
 							Computed:            true,
 						},
+						"format_enable": schema.BoolAttribute{
+							MarkdownDescription: "Enable a SRv6 format",
+							Computed:            true,
+						},
 						"usid_local_id_block_ranges_lib_start": schema.Int64Attribute{
 							MarkdownDescription: "Start of LIB",
 							Computed:            true,

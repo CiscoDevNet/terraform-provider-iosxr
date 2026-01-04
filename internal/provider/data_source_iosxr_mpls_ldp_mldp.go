@@ -179,62 +179,6 @@ func (d *MPLSLDPMLDPDataSource) Schema(ctx context.Context, req datasource.Schem
 					},
 				},
 			},
-			"vrfs": schema.ListNestedAttribute{
-				MarkdownDescription: "Configure VRF parameters",
-				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"vrf_name": schema.StringAttribute{
-							MarkdownDescription: "Configure VRF parameters",
-							Computed:            true,
-						},
-						"address_families": schema.ListNestedAttribute{
-							MarkdownDescription: "Configure Address Family and its parameters",
-							Computed:            true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"name": schema.StringAttribute{
-										MarkdownDescription: "Configure Address Family and its parameters",
-										Computed:            true,
-									},
-									"make_before_break_delay": schema.Int64Attribute{
-										MarkdownDescription: "MBB delay",
-										Computed:            true,
-									},
-									"make_before_break_delete_delay": schema.Int64Attribute{
-										MarkdownDescription: "Delete delay in seconds",
-										Computed:            true,
-									},
-									"make_before_break_route_policy": schema.StringAttribute{
-										MarkdownDescription: "Route policy",
-										Computed:            true,
-									},
-									"mofrr_enable": schema.BoolAttribute{
-										MarkdownDescription: "MLDP MoFRR support",
-										Computed:            true,
-									},
-									"mofrr_route_policy": schema.StringAttribute{
-										MarkdownDescription: "Route policy",
-										Computed:            true,
-									},
-									"forwarding_recursive": schema.BoolAttribute{
-										MarkdownDescription: "Enable recursive forwarding",
-										Computed:            true,
-									},
-									"forwarding_recursive_route_policy": schema.StringAttribute{
-										MarkdownDescription: "Route policy",
-										Computed:            true,
-									},
-									"rib_unicast_always": schema.BoolAttribute{
-										MarkdownDescription: "Always use unicast table for root lookup",
-										Computed:            true,
-									},
-								},
-							},
-						},
-					},
-				},
-			},
 		},
 	}
 }

@@ -307,7 +307,7 @@ func (data RouterISISInterfaceAddressFamily) toBody(ctx context.Context) string 
 	}
 	if !data.MetricMaximum.IsNull() && !data.MetricMaximum.IsUnknown() {
 		if data.MetricMaximum.ValueBool() {
-			body, _ = sjson.Set(body, "metric.maximum", map[string]string{})
+			body, _ = sjson.Set(body, "metric.maximum", []interface{}{nil})
 		}
 	}
 	if !data.MetricDefault.IsNull() && !data.MetricDefault.IsUnknown() {
@@ -335,17 +335,17 @@ func (data RouterISISInterfaceAddressFamily) toBody(ctx context.Context) string 
 	}
 	if !data.PrefixSidStrictSpfIndexPhpDisable.IsNull() && !data.PrefixSidStrictSpfIndexPhpDisable.IsUnknown() {
 		if data.PrefixSidStrictSpfIndexPhpDisable.ValueBool() {
-			body, _ = sjson.Set(body, "prefix-sid.strict-spf.index.php-disable", map[string]string{})
+			body, _ = sjson.Set(body, "prefix-sid.strict-spf.index.php-disable", []interface{}{nil})
 		}
 	}
 	if !data.PrefixSidStrictSpfIndexExplicitNull.IsNull() && !data.PrefixSidStrictSpfIndexExplicitNull.IsUnknown() {
 		if data.PrefixSidStrictSpfIndexExplicitNull.ValueBool() {
-			body, _ = sjson.Set(body, "prefix-sid.strict-spf.index.explicit-null", map[string]string{})
+			body, _ = sjson.Set(body, "prefix-sid.strict-spf.index.explicit-null", []interface{}{nil})
 		}
 	}
 	if !data.PrefixSidStrictSpfIndexNFlagClear.IsNull() && !data.PrefixSidStrictSpfIndexNFlagClear.IsUnknown() {
 		if data.PrefixSidStrictSpfIndexNFlagClear.ValueBool() {
-			body, _ = sjson.Set(body, "prefix-sid.strict-spf.index.n-flag-clear", map[string]string{})
+			body, _ = sjson.Set(body, "prefix-sid.strict-spf.index.n-flag-clear", []interface{}{nil})
 		}
 	}
 	if !data.PrefixSidStrictSpfAbsoluteId.IsNull() && !data.PrefixSidStrictSpfAbsoluteId.IsUnknown() {
@@ -353,17 +353,17 @@ func (data RouterISISInterfaceAddressFamily) toBody(ctx context.Context) string 
 	}
 	if !data.PrefixSidStrictSpfAbsolutePhpDisable.IsNull() && !data.PrefixSidStrictSpfAbsolutePhpDisable.IsUnknown() {
 		if data.PrefixSidStrictSpfAbsolutePhpDisable.ValueBool() {
-			body, _ = sjson.Set(body, "prefix-sid.strict-spf.absolute.php-disable", map[string]string{})
+			body, _ = sjson.Set(body, "prefix-sid.strict-spf.absolute.php-disable", []interface{}{nil})
 		}
 	}
 	if !data.PrefixSidStrictSpfAbsoluteExplicitNull.IsNull() && !data.PrefixSidStrictSpfAbsoluteExplicitNull.IsUnknown() {
 		if data.PrefixSidStrictSpfAbsoluteExplicitNull.ValueBool() {
-			body, _ = sjson.Set(body, "prefix-sid.strict-spf.absolute.explicit-null", map[string]string{})
+			body, _ = sjson.Set(body, "prefix-sid.strict-spf.absolute.explicit-null", []interface{}{nil})
 		}
 	}
 	if !data.PrefixSidStrictSpfAbsoluteNFlagClear.IsNull() && !data.PrefixSidStrictSpfAbsoluteNFlagClear.IsUnknown() {
 		if data.PrefixSidStrictSpfAbsoluteNFlagClear.ValueBool() {
-			body, _ = sjson.Set(body, "prefix-sid.strict-spf.absolute.n-flag-clear", map[string]string{})
+			body, _ = sjson.Set(body, "prefix-sid.strict-spf.absolute.n-flag-clear", []interface{}{nil})
 		}
 	}
 	if !data.PrefixSidIndexId.IsNull() && !data.PrefixSidIndexId.IsUnknown() {
@@ -371,17 +371,17 @@ func (data RouterISISInterfaceAddressFamily) toBody(ctx context.Context) string 
 	}
 	if !data.PrefixSidIndexPhpDisable.IsNull() && !data.PrefixSidIndexPhpDisable.IsUnknown() {
 		if data.PrefixSidIndexPhpDisable.ValueBool() {
-			body, _ = sjson.Set(body, "prefix-sid.index.php-disable", map[string]string{})
+			body, _ = sjson.Set(body, "prefix-sid.index.php-disable", []interface{}{nil})
 		}
 	}
 	if !data.PrefixSidIndexExplicitNull.IsNull() && !data.PrefixSidIndexExplicitNull.IsUnknown() {
 		if data.PrefixSidIndexExplicitNull.ValueBool() {
-			body, _ = sjson.Set(body, "prefix-sid.index.explicit-null", map[string]string{})
+			body, _ = sjson.Set(body, "prefix-sid.index.explicit-null", []interface{}{nil})
 		}
 	}
 	if !data.PrefixSidIndexNFlagClear.IsNull() && !data.PrefixSidIndexNFlagClear.IsUnknown() {
 		if data.PrefixSidIndexNFlagClear.ValueBool() {
-			body, _ = sjson.Set(body, "prefix-sid.index.n-flag-clear", map[string]string{})
+			body, _ = sjson.Set(body, "prefix-sid.index.n-flag-clear", []interface{}{nil})
 		}
 	}
 	if !data.PrefixSidAbsoluteId.IsNull() && !data.PrefixSidAbsoluteId.IsUnknown() {
@@ -389,32 +389,32 @@ func (data RouterISISInterfaceAddressFamily) toBody(ctx context.Context) string 
 	}
 	if !data.PrefixSidAbsolutePhpDisable.IsNull() && !data.PrefixSidAbsolutePhpDisable.IsUnknown() {
 		if data.PrefixSidAbsolutePhpDisable.ValueBool() {
-			body, _ = sjson.Set(body, "prefix-sid.absolute.php-disable", map[string]string{})
+			body, _ = sjson.Set(body, "prefix-sid.absolute.php-disable", []interface{}{nil})
 		}
 	}
 	if !data.PrefixSidAbsoluteExplicitNull.IsNull() && !data.PrefixSidAbsoluteExplicitNull.IsUnknown() {
 		if data.PrefixSidAbsoluteExplicitNull.ValueBool() {
-			body, _ = sjson.Set(body, "prefix-sid.absolute.explicit-null", map[string]string{})
+			body, _ = sjson.Set(body, "prefix-sid.absolute.explicit-null", []interface{}{nil})
 		}
 	}
 	if !data.PrefixSidAbsoluteNFlagClear.IsNull() && !data.PrefixSidAbsoluteNFlagClear.IsUnknown() {
 		if data.PrefixSidAbsoluteNFlagClear.ValueBool() {
-			body, _ = sjson.Set(body, "prefix-sid.absolute.n-flag-clear", map[string]string{})
+			body, _ = sjson.Set(body, "prefix-sid.absolute.n-flag-clear", []interface{}{nil})
 		}
 	}
 	if !data.FastReroutePerPrefix.IsNull() && !data.FastReroutePerPrefix.IsUnknown() {
 		if data.FastReroutePerPrefix.ValueBool() {
-			body, _ = sjson.Set(body, "fast-reroute.enable.per-prefix", map[string]string{})
+			body, _ = sjson.Set(body, "fast-reroute.enable.per-prefix", []interface{}{nil})
 		}
 	}
 	if !data.FastReroutePerLink.IsNull() && !data.FastReroutePerLink.IsUnknown() {
 		if data.FastReroutePerLink.ValueBool() {
-			body, _ = sjson.Set(body, "fast-reroute.enable.per-link", map[string]string{})
+			body, _ = sjson.Set(body, "fast-reroute.enable.per-link", []interface{}{nil})
 		}
 	}
 	if !data.FastReroutePerPrefixTiebreakerDefault.IsNull() && !data.FastReroutePerPrefixTiebreakerDefault.IsUnknown() {
 		if data.FastReroutePerPrefixTiebreakerDefault.ValueBool() {
-			body, _ = sjson.Set(body, "fast-reroute.per-prefix.tiebreaker.default-backup-path", map[string]string{})
+			body, _ = sjson.Set(body, "fast-reroute.per-prefix.tiebreaker.default-backup-path", []interface{}{nil})
 		}
 	}
 	if !data.FastReroutePerPrefixTiebreakerNodeProtectingIndex.IsNull() && !data.FastReroutePerPrefixTiebreakerNodeProtectingIndex.IsUnknown() {
@@ -431,12 +431,12 @@ func (data RouterISISInterfaceAddressFamily) toBody(ctx context.Context) string 
 	}
 	if !data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp.IsNull() && !data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp.IsUnknown() {
 		if data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp.ValueBool() {
-			body, _ = sjson.Set(body, "fast-reroute.per-prefix.remote-lfa.tunnel.mpls-ldp", map[string]string{})
+			body, _ = sjson.Set(body, "fast-reroute.per-prefix.remote-lfa.tunnel.mpls-ldp", []interface{}{nil})
 		}
 	}
 	if !data.FastReroutePerPrefixTiLfa.IsNull() && !data.FastReroutePerPrefixTiLfa.IsUnknown() {
 		if data.FastReroutePerPrefixTiLfa.ValueBool() {
-			body, _ = sjson.Set(body, "fast-reroute.per-prefix.ti-lfa", map[string]string{})
+			body, _ = sjson.Set(body, "fast-reroute.per-prefix.ti-lfa", []interface{}{nil})
 		}
 	}
 	if !data.LinkGroupName.IsNull() && !data.LinkGroupName.IsUnknown() {
@@ -465,7 +465,7 @@ func (data RouterISISInterfaceAddressFamily) toBody(ctx context.Context) string 
 			}
 			if !item.MetricMaximum.IsNull() && !item.MetricMaximum.IsUnknown() {
 				if item.MetricMaximum.ValueBool() {
-					body, _ = sjson.Set(body, "metric-levels.metric-level"+"."+strconv.Itoa(index)+"."+"maximum", map[string]string{})
+					body, _ = sjson.Set(body, "metric-levels.metric-level"+"."+strconv.Itoa(index)+"."+"maximum", []interface{}{nil})
 				}
 			}
 		}
@@ -544,17 +544,17 @@ func (data RouterISISInterfaceAddressFamily) toBody(ctx context.Context) string 
 			}
 			if !item.IndexPhpDisable.IsNull() && !item.IndexPhpDisable.IsUnknown() {
 				if item.IndexPhpDisable.ValueBool() {
-					body, _ = sjson.Set(body, "prefix-sid.algorithms.algorithm"+"."+strconv.Itoa(index)+"."+"index.php-disable", map[string]string{})
+					body, _ = sjson.Set(body, "prefix-sid.algorithms.algorithm"+"."+strconv.Itoa(index)+"."+"index.php-disable", []interface{}{nil})
 				}
 			}
 			if !item.IndexExplicitNull.IsNull() && !item.IndexExplicitNull.IsUnknown() {
 				if item.IndexExplicitNull.ValueBool() {
-					body, _ = sjson.Set(body, "prefix-sid.algorithms.algorithm"+"."+strconv.Itoa(index)+"."+"index.explicit-null", map[string]string{})
+					body, _ = sjson.Set(body, "prefix-sid.algorithms.algorithm"+"."+strconv.Itoa(index)+"."+"index.explicit-null", []interface{}{nil})
 				}
 			}
 			if !item.IndexNFlagClear.IsNull() && !item.IndexNFlagClear.IsUnknown() {
 				if item.IndexNFlagClear.ValueBool() {
-					body, _ = sjson.Set(body, "prefix-sid.algorithms.algorithm"+"."+strconv.Itoa(index)+"."+"index.n-flag-clear", map[string]string{})
+					body, _ = sjson.Set(body, "prefix-sid.algorithms.algorithm"+"."+strconv.Itoa(index)+"."+"index.n-flag-clear", []interface{}{nil})
 				}
 			}
 			if !item.AbsoluteId.IsNull() && !item.AbsoluteId.IsUnknown() {
@@ -562,17 +562,17 @@ func (data RouterISISInterfaceAddressFamily) toBody(ctx context.Context) string 
 			}
 			if !item.AbsolutePhpDisable.IsNull() && !item.AbsolutePhpDisable.IsUnknown() {
 				if item.AbsolutePhpDisable.ValueBool() {
-					body, _ = sjson.Set(body, "prefix-sid.algorithms.algorithm"+"."+strconv.Itoa(index)+"."+"absolute.php-disable", map[string]string{})
+					body, _ = sjson.Set(body, "prefix-sid.algorithms.algorithm"+"."+strconv.Itoa(index)+"."+"absolute.php-disable", []interface{}{nil})
 				}
 			}
 			if !item.AbsoluteExplicitNull.IsNull() && !item.AbsoluteExplicitNull.IsUnknown() {
 				if item.AbsoluteExplicitNull.ValueBool() {
-					body, _ = sjson.Set(body, "prefix-sid.algorithms.algorithm"+"."+strconv.Itoa(index)+"."+"absolute.explicit-null", map[string]string{})
+					body, _ = sjson.Set(body, "prefix-sid.algorithms.algorithm"+"."+strconv.Itoa(index)+"."+"absolute.explicit-null", []interface{}{nil})
 				}
 			}
 			if !item.AbsoluteNFlagClear.IsNull() && !item.AbsoluteNFlagClear.IsUnknown() {
 				if item.AbsoluteNFlagClear.ValueBool() {
-					body, _ = sjson.Set(body, "prefix-sid.algorithms.algorithm"+"."+strconv.Itoa(index)+"."+"absolute.n-flag-clear", map[string]string{})
+					body, _ = sjson.Set(body, "prefix-sid.algorithms.algorithm"+"."+strconv.Itoa(index)+"."+"absolute.n-flag-clear", []interface{}{nil})
 				}
 			}
 		}
@@ -585,7 +585,7 @@ func (data RouterISISInterfaceAddressFamily) toBody(ctx context.Context) string 
 			}
 			if !item.Protected.IsNull() && !item.Protected.IsUnknown() {
 				if item.Protected.ValueBool() {
-					body, _ = sjson.Set(body, "adjacency-sid.indices.index"+"."+strconv.Itoa(index)+"."+"protected", map[string]string{})
+					body, _ = sjson.Set(body, "adjacency-sid.indices.index"+"."+strconv.Itoa(index)+"."+"protected", []interface{}{nil})
 				}
 			}
 		}
@@ -598,7 +598,7 @@ func (data RouterISISInterfaceAddressFamily) toBody(ctx context.Context) string 
 			}
 			if !item.Protected.IsNull() && !item.Protected.IsUnknown() {
 				if item.Protected.ValueBool() {
-					body, _ = sjson.Set(body, "adjacency-sid.absolutes.absolute"+"."+strconv.Itoa(index)+"."+"protected", map[string]string{})
+					body, _ = sjson.Set(body, "adjacency-sid.absolutes.absolute"+"."+strconv.Itoa(index)+"."+"protected", []interface{}{nil})
 				}
 			}
 		}
@@ -611,12 +611,12 @@ func (data RouterISISInterfaceAddressFamily) toBody(ctx context.Context) string 
 			}
 			if !item.PerPrefix.IsNull() && !item.PerPrefix.IsUnknown() {
 				if item.PerPrefix.ValueBool() {
-					body, _ = sjson.Set(body, "fast-reroute.enable-levels.enable-level"+"."+strconv.Itoa(index)+"."+"per-prefix", map[string]string{})
+					body, _ = sjson.Set(body, "fast-reroute.enable-levels.enable-level"+"."+strconv.Itoa(index)+"."+"per-prefix", []interface{}{nil})
 				}
 			}
 			if !item.PerLink.IsNull() && !item.PerLink.IsUnknown() {
 				if item.PerLink.ValueBool() {
-					body, _ = sjson.Set(body, "fast-reroute.enable-levels.enable-level"+"."+strconv.Itoa(index)+"."+"per-link", map[string]string{})
+					body, _ = sjson.Set(body, "fast-reroute.enable-levels.enable-level"+"."+strconv.Itoa(index)+"."+"per-link", []interface{}{nil})
 				}
 			}
 		}

@@ -28,6 +28,7 @@ resource "iosxr_ipv6_access_list_options" "example" {
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 - `icmp_off` (Boolean) Do not generate the ICMP message
+- `log_update_disable` (Boolean) Adding leaf to disable log-update in logging buffer
 - `log_update_rate` (Number) Set access-list logging rate (num. logs per second)
   - Range: `1`-`1000`
 - `log_update_threshold` (Number) Set access-list logging threshold

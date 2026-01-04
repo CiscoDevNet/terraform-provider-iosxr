@@ -83,7 +83,7 @@ func (r *ESISetResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"rpl": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Esi Set").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configures an ESI set").String,
 				Required:            true,
 			},
 		},

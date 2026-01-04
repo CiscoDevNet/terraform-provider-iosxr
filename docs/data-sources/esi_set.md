@@ -32,4 +32,4 @@ data "iosxr_esi_set" "example" {
 ### Read-Only
 
 - `id` (String) The path of the retrieved object.
-- `rpl` (String) Esi Set
+- `rpl` (String) Configures an ESI set

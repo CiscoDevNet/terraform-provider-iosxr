@@ -102,7 +102,7 @@ func TestAccDataSourceIosxrPolicyMapQoS(t *testing.T) {
 
 func testAccDataSourceIosxrPolicyMapQoSConfig() string {
 	config := `resource "iosxr_policy_map_qos" "test" {` + "\n"
-	config += `	policy_map_name = "PM1"` + "\n"
+	config += `	policy_map_name = "PM-QOS"` + "\n"
 	config += `	description = "My description"` + "\n"
 	config += `	classes = [{` + "\n"
 	config += `		name = "class-default"` + "\n"
@@ -160,7 +160,7 @@ func testAccDataSourceIosxrPolicyMapQoSConfig() string {
 
 	config += `
 		data "iosxr_policy_map_qos" "test" {
-			policy_map_name = "PM1"
+			policy_map_name = "PM-QOS"
 			depends_on = [iosxr_policy_map_qos.test]
 		}
 	`

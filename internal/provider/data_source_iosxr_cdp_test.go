@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -31,6 +32,9 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 
 func TestAccDataSourceIosxrCDP(t *testing.T) {
+	if os.Getenv("XRV9K") == "" && os.Getenv("XRD") == "" && os.Getenv("NCS") == "" {
+		t.Skip("skipping test, set environment variable XRV9K or XRD or NCS")
+	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_cdp.test", "enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_cdp.test", "holdtime", "12"))

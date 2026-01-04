@@ -162,10 +162,17 @@ resource "iosxr_gnmi" "PreReq0" {
 }
 
 resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-router-pim-cfg:/router/pim"
+	attributes = {
+	}
+}
+
+resource "iosxr_gnmi" "PreReq2" {
 	path = "Cisco-IOS-XR-um-router-pim-cfg:/router/pim/vrfs/vrf[vrf-name=VRF1]"
 	attributes = {
 		"vrf-name" = "VRF1"
 	}
+	depends_on = [iosxr_gnmi.PreReq1, ]
 }
 
 `
@@ -282,7 +289,7 @@ func testAccDataSourceIosxrRouterPIMVRFIPv6Config() string {
 	config += `		bfd_fast_detect = true` + "\n"
 	config += `		bsr_border = true` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

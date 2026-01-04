@@ -43,6 +43,7 @@ data "iosxr_segment_routing_v6" "example" {
 
 Read-Only:
 
+- `format_enable` (Boolean) Enable a SRv6 format
 - `name` (String) Format name
 - `usid_local_id_block_ranges_explict_lib_start` (Number) Start of Explicit LIB
 - `usid_local_id_block_ranges_lib_start` (Number) Start of LIB

@@ -67,26 +67,102 @@ func (d *EVPNDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				MarkdownDescription: "The path of the retrieved object.",
 				Computed:            true,
 			},
+			"bgp_rd_two_byte_as_number": schema.Int64Attribute{
+				MarkdownDescription: "Two Byte AS Number",
+				Computed:            true,
+			},
+			"bgp_rd_two_byte_as_index": schema.Int64Attribute{
+				MarkdownDescription: "AS:nn (hex or decimal format)",
+				Computed:            true,
+			},
+			"bgp_rd_four_byte_as_number": schema.Int64Attribute{
+				MarkdownDescription: "Four Byte AS number",
+				Computed:            true,
+			},
+			"bgp_rd_four_byte_as_index": schema.Int64Attribute{
+				MarkdownDescription: "AS:nn (hex or decimal format)",
+				Computed:            true,
+			},
+			"bgp_rd_ipv4_address": schema.StringAttribute{
+				MarkdownDescription: "IP address",
+				Computed:            true,
+			},
+			"bgp_rd_ipv4_address_index": schema.Int64Attribute{
+				MarkdownDescription: "IP-address:nn (hex or decimal format)",
+				Computed:            true,
+			},
+			"timers_recovery": schema.Int64Attribute{
+				MarkdownDescription: "Global recovery timer",
+				Computed:            true,
+			},
+			"timers_peering": schema.Int64Attribute{
+				MarkdownDescription: "Global peering timer",
+				Computed:            true,
+			},
+			"timers_carving": schema.Int64Attribute{
+				MarkdownDescription: "Global carving timer",
+				Computed:            true,
+			},
+			"timers_ac_debounce": schema.Int64Attribute{
+				MarkdownDescription: "Global AC Debounce timer",
+				Computed:            true,
+			},
+			"timers_backup_replacement_delay": schema.Int64Attribute{
+				MarkdownDescription: "When receiving a new backup route, delay installation for this amount of time timer",
+				Computed:            true,
+			},
+			"timers_mac_postpone": schema.Int64Attribute{
+				MarkdownDescription: "Global MAC withdraw postpone timer",
+				Computed:            true,
+			},
+			"load_balancing_flow_label_static": schema.BoolAttribute{
+				MarkdownDescription: "Static configuration of Flow Label",
+				Computed:            true,
+			},
 			"source_interface": schema.StringAttribute{
 				MarkdownDescription: "Configure EVPN router-id implicitly through Loopback Interface",
 				Computed:            true,
 			},
-			"interfaces": schema.ListNestedAttribute{
-				MarkdownDescription: "Specify interface name",
+			"cost_out": schema.BoolAttribute{
+				MarkdownDescription: "Configure global EVPN cost-out",
+				Computed:            true,
+			},
+			"startup_cost_in": schema.Int64Attribute{
+				MarkdownDescription: "Cost-in after reload timer",
+				Computed:            true,
+			},
+			"staggered_bringup_timer": schema.Int64Attribute{
+				MarkdownDescription: "Staggered bringup timer delay timer",
+				Computed:            true,
+			},
+			"logging_df_election": schema.BoolAttribute{
+				MarkdownDescription: "Enable Designated Forwarder election logging",
+				Computed:            true,
+			},
+			"ethernet_segment_type_one_auto_generation_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable ESI auto-generation",
+				Computed:            true,
+			},
+			"groups": schema.ListNestedAttribute{
+				MarkdownDescription: "Configure EVPN group",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"interface_name": schema.StringAttribute{
-							MarkdownDescription: "Specify interface name",
+						"group_name": schema.Int64Attribute{
+							MarkdownDescription: "Configure EVPN group",
 							Computed:            true,
 						},
-						"ethernet_segment_enable": schema.BoolAttribute{
-							MarkdownDescription: "Ethernet Segment configuration commands",
+						"core_interfaces": schema.ListNestedAttribute{
+							MarkdownDescription: "configure EVPN group core interface",
 							Computed:            true,
-						},
-						"ethernet_segment_esi_zero": schema.StringAttribute{
-							MarkdownDescription: "ESI value",
-							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"interface_name": schema.StringAttribute{
+										MarkdownDescription: "configure EVPN group core interface",
+										Computed:            true,
+									},
+								},
+							},
 						},
 					},
 				},
@@ -113,6 +189,202 @@ func (d *EVPNDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 			},
 			"srv6_usid_allocation_wide_local_id_block": schema.BoolAttribute{
 				MarkdownDescription: "Enable uSID wide function global knob",
+				Computed:            true,
+			},
+			"ignore_mtu_mismatch": schema.BoolAttribute{
+				MarkdownDescription: "Ignore mismatch of local and remote MTUs",
+				Computed:            true,
+			},
+			"enforce_mtu_match": schema.BoolAttribute{
+				MarkdownDescription: "Enforce matching of local and remote MTUs",
+				Computed:            true,
+			},
+			"transmit_mtu_zero": schema.BoolAttribute{
+				MarkdownDescription: "Transmit MTU zero to remote instead of actual local MTU",
+				Computed:            true,
+			},
+			"transmit_l2_mtu": schema.BoolAttribute{
+				MarkdownDescription: "Transmit L2 MTU of attachment circuit",
+				Computed:            true,
+			},
+			"host_ipv4_duplicate_detection_move_count": schema.Int64Attribute{
+				MarkdownDescription: "Number of moves to occur in move-interval seconds before freezing the IP. Default is 5.",
+				Computed:            true,
+			},
+			"host_ipv4_duplicate_detection_move_interval": schema.Int64Attribute{
+				MarkdownDescription: "Interval to watch for subsequent mac moves before freezing the IP. Default is 180s.",
+				Computed:            true,
+			},
+			"host_ipv4_duplicate_detection_freeze_time": schema.Int64Attribute{
+				MarkdownDescription: "Length of time to lock the IP address after it has been detected as duplicate. Default is 30s.",
+				Computed:            true,
+			},
+			"host_ipv4_duplicate_detection_retry_count": schema.StringAttribute{
+				MarkdownDescription: "Number of times to unfreeze an IP address before permanently freezing it. Default is 3 times.",
+				Computed:            true,
+			},
+			"host_ipv4_duplicate_detection_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable duplicate detection for MAC, IPv4 or IPv6 addresses.",
+				Computed:            true,
+			},
+			"host_ipv4_duplicate_detection_reset_freeze_count_interval": schema.Int64Attribute{
+				MarkdownDescription: "Interval after which the count of duplicate detection events used to determine whether IPv4 needs to be permanently frozen, is reset. Default is 24 hours.",
+				Computed:            true,
+			},
+			"host_ipv6_duplicate_detection_move_count": schema.Int64Attribute{
+				MarkdownDescription: "Number of moves to occur in move-interval seconds before freezing the IP. Default is 5.",
+				Computed:            true,
+			},
+			"host_ipv6_duplicate_detection_move_interval": schema.Int64Attribute{
+				MarkdownDescription: "Interval to watch for subsequent mac moves before freezing the IP. Default is 180s.",
+				Computed:            true,
+			},
+			"host_ipv6_duplicate_detection_freeze_time": schema.Int64Attribute{
+				MarkdownDescription: "Length of time to lock the IP address after it has been detected as duplicate. Default is 30s.",
+				Computed:            true,
+			},
+			"host_ipv6_duplicate_detection_retry_count": schema.StringAttribute{
+				MarkdownDescription: "Number of times to unfreeze an IP address before permanently freezing it. Default is 3 times.",
+				Computed:            true,
+			},
+			"host_ipv6_duplicate_detection_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable duplicate detection for MAC, IPv4 or IPv6 addresses.",
+				Computed:            true,
+			},
+			"host_ipv6_duplicate_detection_reset_freeze_count_interval": schema.Int64Attribute{
+				MarkdownDescription: "Interval after which the count of duplicate detection events used to determine whether IPv6 needs to be permanently frozen, is reset. Default is 24 hours.",
+				Computed:            true,
+			},
+			"virtual_neighbors": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify the peer to cross connect",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "IPv4 address of the peer",
+							Computed:            true,
+						},
+						"pw_id": schema.Int64Attribute{
+							MarkdownDescription: "Specify the pseudowire id",
+							Computed:            true,
+						},
+						"timers_peering": schema.Int64Attribute{
+							MarkdownDescription: "Access PW-specific peering timer",
+							Computed:            true,
+						},
+						"timers_recovery": schema.Int64Attribute{
+							MarkdownDescription: "Access PW-specific recovery timer",
+							Computed:            true,
+						},
+						"timers_carving": schema.Int64Attribute{
+							MarkdownDescription: "Access PW-specific carving timer",
+							Computed:            true,
+						},
+						"timers_ac_debounce": schema.Int64Attribute{
+							MarkdownDescription: "Access PW-specific AC Debounce timer",
+							Computed:            true,
+						},
+						"ethernet_segment_esi_zero": schema.StringAttribute{
+							MarkdownDescription: "ESI value",
+							Computed:            true,
+						},
+						"ethernet_segment_service_carving_manual_primary": schema.StringAttribute{
+							MarkdownDescription: "Primary services list",
+							Computed:            true,
+						},
+						"ethernet_segment_service_carving_manual_secondary": schema.StringAttribute{
+							MarkdownDescription: "Secondary services list",
+							Computed:            true,
+						},
+						"ethernet_segment_service_carving_hrw": schema.BoolAttribute{
+							MarkdownDescription: "HRW mode of carving services",
+							Computed:            true,
+						},
+						"ethernet_segment_service_carving_preference_based_weight": schema.Int64Attribute{
+							MarkdownDescription: "Preference value",
+							Computed:            true,
+						},
+						"ethernet_segment_service_carving_preference_based_access_driven": schema.BoolAttribute{
+							MarkdownDescription: "Access-Driven DF Election",
+							Computed:            true,
+						},
+						"ethernet_segment_service_carving_multicast_hrw_s_g": schema.BoolAttribute{
+							MarkdownDescription: "HRW s,g mode",
+							Computed:            true,
+						},
+						"ethernet_segment_service_carving_multicast_hrw_g": schema.BoolAttribute{
+							MarkdownDescription: "HRW *,g mode",
+							Computed:            true,
+						},
+						"ethernet_segment_bgp_rt": schema.StringAttribute{
+							MarkdownDescription: "Set ES-Import Route Target",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"virtual_vfis": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify the virtual forwarding interface name",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vfi_name": schema.StringAttribute{
+							MarkdownDescription: "Specify the virtual forwarding interface name",
+							Computed:            true,
+						},
+						"timers_peering": schema.Int64Attribute{
+							MarkdownDescription: "Access VFI-specific peering timer",
+							Computed:            true,
+						},
+						"timers_recovery": schema.Int64Attribute{
+							MarkdownDescription: "Access VFI-specific recovery timer",
+							Computed:            true,
+						},
+						"timers_carving": schema.Int64Attribute{
+							MarkdownDescription: "Access VFI-specific carving timer",
+							Computed:            true,
+						},
+						"timers_ac_debounce": schema.Int64Attribute{
+							MarkdownDescription: "Access VFI-specific AC Debounce timer",
+							Computed:            true,
+						},
+						"ethernet_segment_esi_zero": schema.StringAttribute{
+							MarkdownDescription: "ESI value",
+							Computed:            true,
+						},
+						"ethernet_segment_service_carving_manual_primary": schema.StringAttribute{
+							MarkdownDescription: "Primary services list",
+							Computed:            true,
+						},
+						"ethernet_segment_service_carving_manual_secondary": schema.StringAttribute{
+							MarkdownDescription: "Secondary services list",
+							Computed:            true,
+						},
+						"ethernet_segment_service_carving_hrw": schema.BoolAttribute{
+							MarkdownDescription: "HRW mode of carving services",
+							Computed:            true,
+						},
+						"ethernet_segment_service_carving_preference_based_weight": schema.Int64Attribute{
+							MarkdownDescription: "Preference value",
+							Computed:            true,
+						},
+						"ethernet_segment_service_carving_preference_based_access_driven": schema.BoolAttribute{
+							MarkdownDescription: "Access-Driven DF Election",
+							Computed:            true,
+						},
+						"ethernet_segment_bgp_rt": schema.StringAttribute{
+							MarkdownDescription: "Set ES-Import Route Target",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"virtual_access_evi_ethernet_segment_esi_zero": schema.StringAttribute{
+				MarkdownDescription: "ESI value",
+				Computed:            true,
+			},
+			"virtual_access_evi_ethernet_segment_bgp_rt": schema.StringAttribute{
+				MarkdownDescription: "Set ES-Import Route Target",
 				Computed:            true,
 			},
 		},

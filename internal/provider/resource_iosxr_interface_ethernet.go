@@ -363,6 +363,14 @@ func (r *InterfaceEthernetResource) Schema(ctx context.Context, req resource.Sch
 				MarkdownDescription: helpers.NewAttributeDescription("Enable tcp mss adjust on this interface").String,
 				Optional:            true,
 			},
+			"ipv4_forwarding_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("enable ipv4 forwarding on a interface").String,
+				Optional:            true,
+			},
+			"ipv4_ttl_propagate_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable ipv4 ttl propagation on this interface").String,
+				Optional:            true,
+			},
 			"ipv4_verify_unicast_source_reachable_via_type": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Source reachable type").AddStringEnumDescription("any", "rx").String,
 				Optional:            true,
@@ -479,6 +487,10 @@ func (r *InterfaceEthernetResource) Schema(ctx context.Context, req resource.Sch
 			},
 			"ipv6_enable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable IPv6 on interface").String,
+				Optional:            true,
+			},
+			"ipv6_ttl_propagate_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable ipv6 ttl propagation on this interface").String,
 				Optional:            true,
 			},
 			"ipv6_addresses": schema.ListNestedAttribute{
@@ -834,6 +846,165 @@ func (r *InterfaceEthernetResource) Schema(ctx context.Context, req resource.Sch
 					},
 				},
 			},
+			"frequency_synchronization": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Frequency Synchronization configuration").String,
+				Optional:            true,
+			},
+			"frequency_synchronization_ssm_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable sending of SSMs").String,
+				Optional:            true,
+			},
+			"frequency_synchronization_priority": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Source priority").AddIntegerRangeDescription(1, 254).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 254),
+				},
+			},
+			"frequency_synchronization_time_of_day_priority": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Source time-of-day priority").AddIntegerRangeDescription(1, 254).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 254),
+				},
+			},
+			"frequency_synchronization_quality_transmit_lowest_itu_t_option_one": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ITU-T QL option 1").AddStringEnumDescription("dnu", "e-eec", "e-prtc", "eec1", "prc", "prtc", "sec", "ssu-a", "ssu-b").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("dnu", "e-eec", "e-prtc", "eec1", "prc", "prtc", "sec", "ssu-a", "ssu-b"),
+				},
+			},
+			"frequency_synchronization_quality_transmit_lowest_itu_t_option_two_generation_one": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ITU-T QL option 2, generation 1").AddStringEnumDescription("dus", "e-eec", "e-prtc", "eec2", "prs", "prtc", "smc", "st2", "st3", "st4", "stu").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("dus", "e-eec", "e-prtc", "eec2", "prs", "prtc", "smc", "st2", "st3", "st4", "stu"),
+				},
+			},
+			"frequency_synchronization_quality_transmit_lowest_itu_t_option_two_generation_two": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ITU-T QL option 2, generation 2").AddStringEnumDescription("dus", "e-eec", "e-prtc", "eec2", "prs", "prtc", "smc", "st2", "st3", "st3e", "st4", "stu", "tnc").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("dus", "e-eec", "e-prtc", "eec2", "prs", "prtc", "smc", "st2", "st3", "st3e", "st4", "stu", "tnc"),
+				},
+			},
+			"frequency_synchronization_quality_transmit_highest_itu_t_option_one": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ITU-T QL option 1").AddStringEnumDescription("dnu", "e-eec", "e-prtc", "eec1", "prc", "prtc", "sec", "ssu-a", "ssu-b").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("dnu", "e-eec", "e-prtc", "eec1", "prc", "prtc", "sec", "ssu-a", "ssu-b"),
+				},
+			},
+			"frequency_synchronization_quality_transmit_highest_itu_t_option_two_generation_one": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ITU-T QL option 2, generation 1").AddStringEnumDescription("dus", "e-eec", "e-prtc", "eec2", "prs", "prtc", "smc", "st2", "st3", "st4", "stu").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("dus", "e-eec", "e-prtc", "eec2", "prs", "prtc", "smc", "st2", "st3", "st4", "stu"),
+				},
+			},
+			"frequency_synchronization_quality_transmit_highest_itu_t_option_two_generation_two": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ITU-T QL option 2, generation 2").AddStringEnumDescription("dus", "e-eec", "e-prtc", "eec2", "prs", "prtc", "smc", "st2", "st3", "st3e", "st4", "stu", "tnc").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("dus", "e-eec", "e-prtc", "eec2", "prs", "prtc", "smc", "st2", "st3", "st3e", "st4", "stu", "tnc"),
+				},
+			},
+			"frequency_synchronization_quality_transmit_exact_itu_t_option_one": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ITU-T QL option 1").AddStringEnumDescription("dnu", "e-eec", "e-prtc", "eec1", "prc", "prtc", "sec", "ssu-a", "ssu-b").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("dnu", "e-eec", "e-prtc", "eec1", "prc", "prtc", "sec", "ssu-a", "ssu-b"),
+				},
+			},
+			"frequency_synchronization_quality_transmit_exact_itu_t_option_two_generation_one": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ITU-T QL option 2, generation 1").AddStringEnumDescription("dus", "e-eec", "e-prtc", "eec2", "prs", "prtc", "smc", "st2", "st3", "st4", "stu").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("dus", "e-eec", "e-prtc", "eec2", "prs", "prtc", "smc", "st2", "st3", "st4", "stu"),
+				},
+			},
+			"frequency_synchronization_quality_transmit_exact_itu_t_option_two_generation_two": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ITU-T QL option 2, generation 2").AddStringEnumDescription("dus", "e-eec", "e-prtc", "eec2", "prs", "prtc", "smc", "st2", "st3", "st3e", "st4", "stu", "tnc").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("dus", "e-eec", "e-prtc", "eec2", "prs", "prtc", "smc", "st2", "st3", "st3e", "st4", "stu", "tnc"),
+				},
+			},
+			"frequency_synchronization_quality_receive_lowest_itu_t_option_one": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ITU-T QL option 1").AddStringEnumDescription("dnu", "e-eec", "e-prtc", "eec1", "prc", "prtc", "sec", "ssu-a", "ssu-b").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("dnu", "e-eec", "e-prtc", "eec1", "prc", "prtc", "sec", "ssu-a", "ssu-b"),
+				},
+			},
+			"frequency_synchronization_quality_receive_lowest_itu_t_option_two_generation_one": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ITU-T QL option 2, generation 1").AddStringEnumDescription("dus", "e-eec", "e-prtc", "eec2", "prs", "prtc", "smc", "st2", "st3", "st4", "stu").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("dus", "e-eec", "e-prtc", "eec2", "prs", "prtc", "smc", "st2", "st3", "st4", "stu"),
+				},
+			},
+			"frequency_synchronization_quality_receive_lowest_itu_t_option_two_generation_two": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ITU-T QL option 2, generation 2").AddStringEnumDescription("dus", "e-eec", "e-prtc", "eec2", "prs", "prtc", "smc", "st2", "st3", "st3e", "st4", "stu", "tnc").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("dus", "e-eec", "e-prtc", "eec2", "prs", "prtc", "smc", "st2", "st3", "st3e", "st4", "stu", "tnc"),
+				},
+			},
+			"frequency_synchronization_quality_receive_highest_itu_t_option_one": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ITU-T QL option 1").AddStringEnumDescription("dnu", "e-eec", "e-prtc", "eec1", "prc", "prtc", "sec", "ssu-a", "ssu-b").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("dnu", "e-eec", "e-prtc", "eec1", "prc", "prtc", "sec", "ssu-a", "ssu-b"),
+				},
+			},
+			"frequency_synchronization_quality_receive_highest_itu_t_option_two_generation_one": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ITU-T QL option 2, generation 1").AddStringEnumDescription("dus", "e-eec", "e-prtc", "eec2", "prs", "prtc", "smc", "st2", "st3", "st4", "stu").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("dus", "e-eec", "e-prtc", "eec2", "prs", "prtc", "smc", "st2", "st3", "st4", "stu"),
+				},
+			},
+			"frequency_synchronization_quality_receive_highest_itu_t_option_two_generation_two": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ITU-T QL option 2, generation 2").AddStringEnumDescription("dus", "e-eec", "e-prtc", "eec2", "prs", "prtc", "smc", "st2", "st3", "st3e", "st4", "stu", "tnc").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("dus", "e-eec", "e-prtc", "eec2", "prs", "prtc", "smc", "st2", "st3", "st3e", "st4", "stu", "tnc"),
+				},
+			},
+			"frequency_synchronization_quality_receive_exact_itu_t_option_one": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ITU-T QL option 1").AddStringEnumDescription("dnu", "e-eec", "e-prtc", "eec1", "prc", "prtc", "sec", "ssu-a", "ssu-b").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("dnu", "e-eec", "e-prtc", "eec1", "prc", "prtc", "sec", "ssu-a", "ssu-b"),
+				},
+			},
+			"frequency_synchronization_quality_receive_exact_itu_t_option_two_generation_one": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ITU-T QL option 2, generation 1").AddStringEnumDescription("dus", "e-eec", "e-prtc", "eec2", "prs", "prtc", "smc", "st2", "st3", "st4", "stu").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("dus", "e-eec", "e-prtc", "eec2", "prs", "prtc", "smc", "st2", "st3", "st4", "stu"),
+				},
+			},
+			"frequency_synchronization_quality_receive_exact_itu_t_option_two_generation_two": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ITU-T QL option 2, generation 2").AddStringEnumDescription("dus", "e-eec", "e-prtc", "eec2", "prs", "prtc", "smc", "st2", "st3", "st3e", "st4", "stu", "tnc").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("dus", "e-eec", "e-prtc", "eec2", "prs", "prtc", "smc", "st2", "st3", "st3e", "st4", "stu", "tnc"),
+				},
+			},
+			"frequency_synchronization_wait_to_restore": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set the wait-to-restore time").AddIntegerRangeDescription(0, 12).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 12),
+				},
+			},
+			"frequency_synchronization_selection_input": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable this source for selection").String,
+				Optional:            true,
+			},
 			"arp_timeout": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set ARP cache timeout").AddIntegerRangeDescription(30, 2144448000).String,
 				Optional:            true,
@@ -980,6 +1151,38 @@ func (r *InterfaceEthernetResource) Schema(ctx context.Context, req resource.Sch
 				MarkdownDescription: helpers.NewAttributeDescription("Enable VLAN tagging on LLDP PDU on an interface").String,
 				Optional:            true,
 			},
+			"macsec_psk_keychain_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Name of keychain to be used to get keys, maximum length 32").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"macsec_fallback_psk_keychain": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure MKA fallback PSK Keychain").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"macsec_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enter the policy name, maximum length 16").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 16),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"macsec_eap_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enter the policy name").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 16),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
 			"monitor_sessions": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Monitor-session configuration commands").String,
 				Optional:            true,
@@ -1026,6 +1229,663 @@ func (r *InterfaceEthernetResource) Schema(ctx context.Context, req resource.Sch
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 128),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"mirror_first": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable mirroring on the first portion of a packet").AddIntegerRangeDescription(1, 10000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 10000),
+							},
+						},
+						"mirror_interval": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable mirroring of every Nth packet").AddStringEnumDescription("128", "16", "16K", "1K", "2", "256", "2K", "32", "4", "4K", "512", "64", "8", "8K").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("128", "16", "16K", "1K", "2", "256", "2K", "32", "4", "4K", "512", "64", "8", "8K"),
+							},
+						},
+					},
+				},
+			},
+			"ptp": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Precision Time Protocol config").String,
+				Optional:            true,
+			},
+			"ptp_profile": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("PTP Profile to use on this interface").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 800),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"ptp_transport_ipv4": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 transport").String,
+				Optional:            true,
+			},
+			"ptp_transport_ethernet": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Ethernet transport").String,
+				Optional:            true,
+			},
+			"ptp_transport_ipv6": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv6 transport").String,
+				Optional:            true,
+			},
+			"ptp_clock_operation_one_step": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("One-step clock-operation").String,
+				Optional:            true,
+			},
+			"ptp_clock_operation_two_step": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Two-step clock-operation").String,
+				Optional:            true,
+			},
+			"ptp_announce_interval": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Send Announce messages once every one or more seconds").AddStringEnumDescription("1", "128", "16", "2", "32", "4", "64", "8").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("1", "128", "16", "2", "32", "4", "64", "8"),
+				},
+			},
+			"ptp_announce_frequency": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Send Announce messages one or more times a second").AddStringEnumDescription("1", "128", "16", "2", "32", "4", "64", "8").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("1", "128", "16", "2", "32", "4", "64", "8"),
+				},
+			},
+			"ptp_announce_timeout": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure the announce timeout value").AddIntegerRangeDescription(2, 10).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(2, 10),
+				},
+			},
+			"ptp_announce_grant_duration": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure the announce unicast grant duration value").AddIntegerRangeDescription(60, 1000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(60, 1000),
+				},
+			},
+			"ptp_sync_interval": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Send Announce messages once every one or more seconds").AddStringEnumDescription("1", "128", "16", "2", "32", "4", "64", "8").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("1", "128", "16", "2", "32", "4", "64", "8"),
+				},
+			},
+			"ptp_sync_frequency": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Send Announce messages one or more times a second").AddStringEnumDescription("1", "128", "16", "2", "32", "4", "64", "8").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("1", "128", "16", "2", "32", "4", "64", "8"),
+				},
+			},
+			"ptp_sync_grant_duration": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure the sync unicast grant duration value").AddIntegerRangeDescription(60, 1000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(60, 1000),
+				},
+			},
+			"ptp_sync_timeout": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure the sync timeout value").AddIntegerRangeDescription(100, 100000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(100, 100000),
+				},
+			},
+			"ptp_delay_request_interval": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Send Announce messages once every one or more seconds").AddStringEnumDescription("1", "128", "16", "2", "32", "4", "64", "8").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("1", "128", "16", "2", "32", "4", "64", "8"),
+				},
+			},
+			"ptp_delay_request_frequency": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Send Announce messages one or more times a second").AddStringEnumDescription("1", "128", "16", "2", "32", "4", "64", "8").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("1", "128", "16", "2", "32", "4", "64", "8"),
+				},
+			},
+			"ptp_cos": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify the COS value to use").AddIntegerRangeDescription(0, 7).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 7),
+				},
+			},
+			"ptp_cos_event": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify the COS value to use").AddIntegerRangeDescription(0, 7).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 7),
+				},
+			},
+			"ptp_cos_general": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify the COS value to use").AddIntegerRangeDescription(0, 7).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 7),
+				},
+			},
+			"ptp_dscp": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify the DSCP value to use").AddIntegerRangeDescription(0, 63).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 63),
+				},
+			},
+			"ptp_dscp_event": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify the DSCP value to use").AddIntegerRangeDescription(0, 63).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 63),
+				},
+			},
+			"ptp_dscp_general": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify the DSCP value to use").AddIntegerRangeDescription(0, 63).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 63),
+				},
+			},
+			"ptp_ipv4_ttl": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify the IPv4 TTL value to use").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"ptp_ipv6_hop_limit": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify the IPv6 hop limit value to use").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"ptp_delay_asymmetry_value": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Delay asymmetry to apply to all primarys on the interface").AddIntegerRangeDescription(-500000000, 500000000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(-500000000, 500000000),
+				},
+			},
+			"ptp_delay_asymmetry_unit_nanoseconds": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use nanoseconds as the delay asymmetry units").String,
+				Optional:            true,
+			},
+			"ptp_delay_asymmetry_unit_microseconds": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use microseconds as the delay asymmetry units").String,
+				Optional:            true,
+			},
+			"ptp_delay_asymmetry_unit_milliseconds": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use milliseconds as the delay asymmetry units").String,
+				Optional:            true,
+			},
+			"ptp_delay_response_grant_duration": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure the delay-response unicast grant duration value").AddIntegerRangeDescription(60, 1000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(60, 1000),
+				},
+			},
+			"ptp_delay_response_timeout": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure the delay-response timeout value").AddIntegerRangeDescription(100, 100000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(100, 100000),
+				},
+			},
+			"ptp_unicast_grant_invalid_request_reduce": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Reduce grant parameters").String,
+				Optional:            true,
+			},
+			"ptp_unicast_grant_invalid_request_deny": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Deny grant").String,
+				Optional:            true,
+			},
+			"ptp_multicast": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow multicast messages to be sent").String,
+				Optional:            true,
+			},
+			"ptp_multicast_mixed": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Mixed-mode multicast").String,
+				Optional:            true,
+			},
+			"ptp_multicast_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable multicast transport").String,
+				Optional:            true,
+			},
+			"ptp_multicast_target_address_mac_forwardable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Forwardable mac-address").String,
+				Optional:            true,
+			},
+			"ptp_multicast_target_address_mac_non_forwardable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Non-forwardable mac-address").String,
+				Optional:            true,
+			},
+			"ptp_port_state_slave_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Restrict the port state to subordinate").String,
+				Optional:            true,
+			},
+			"ptp_port_state_master_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Restrict the port state to primary").String,
+				Optional:            true,
+			},
+			"ptp_port_state_any": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Unrestrict the port state on this interface").String,
+				Optional:            true,
+			},
+			"ptp_source_ipv4_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify the IPv4 address to use").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+				},
+			},
+			"ptp_source_ipv4_address_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use the interface IPv4 address").String,
+				Optional:            true,
+			},
+			"ptp_source_ipv6_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set the IPv6 address to use when sending IPv6 packets").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+				},
+			},
+			"ptp_source_ipv6_address_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use the interface IPv6 address").String,
+				Optional:            true,
+			},
+			"ptp_local_priority": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure a local priority").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"ptp_slave_ipv4s": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 address").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4 address").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+						"non_negotiated": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use non-negotiated unicast").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"ptp_slave_ipv6s": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv6 address").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv6 address").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+							},
+						},
+						"non_negotiated": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use non-negotiated unicast").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"ptp_slave_ethernets": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Ethernet address").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Ethernet address").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
+							},
+						},
+						"non_negotiated": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use non-negotiated unicast").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"ptp_master_ipv4s": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 address").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4 address").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+						"priority": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify the priority of this primary").AddIntegerRangeDescription(0, 255).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 255),
+							},
+						},
+						"clock_class": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Override the clock-class of this primary").AddIntegerRangeDescription(0, 255).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 255),
+							},
+						},
+						"multicast": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Whether this primary sends messages multicast").String,
+							Optional:            true,
+						},
+						"multicast_mixed": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Mixed-mode multicast").String,
+							Optional:            true,
+						},
+						"non_negotiated": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use non-negotiated unicast").String,
+							Optional:            true,
+						},
+						"delay_asymmetry": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The expected delay asymmetry for this primary").AddIntegerRangeDescription(-500000000, 500000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(-500000000, 500000000),
+							},
+						},
+						"nanoseconds": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use nanoseconds as the delay asymmetry units").String,
+							Optional:            true,
+						},
+						"microseconds": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use microseconds as the delay asymmetry units").String,
+							Optional:            true,
+						},
+						"milliseconds": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use milliseconds as the delay asymmetry units").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"ptp_master_ipv6s": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv6 address").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv6 address").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+							},
+						},
+						"priority": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify the priority of this primary").AddIntegerRangeDescription(0, 255).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 255),
+							},
+						},
+						"clock_class": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Override the clock-class of this primary").AddIntegerRangeDescription(0, 255).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 255),
+							},
+						},
+						"multicast": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Whether this primary sends messages multicast").String,
+							Optional:            true,
+						},
+						"multicast_mixed": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Mixed-mode multicast").String,
+							Optional:            true,
+						},
+						"non_negotiated": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use non-negotiated unicast").String,
+							Optional:            true,
+						},
+						"delay_asymmetry": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The expected delay asymmetry for this primary").AddIntegerRangeDescription(-500000000, 500000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(-500000000, 500000000),
+							},
+						},
+						"nanoseconds": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use nanoseconds as the delay asymmetry units").String,
+							Optional:            true,
+						},
+						"microseconds": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use microseconds as the delay asymmetry units").String,
+							Optional:            true,
+						},
+						"milliseconds": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use milliseconds as the delay asymmetry units").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"ptp_master_ethernets": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Ethernet address").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Ethernet address").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
+							},
+						},
+						"priority": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify the priority of this primary").AddIntegerRangeDescription(0, 255).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 255),
+							},
+						},
+						"clock_class": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Override the clock-class of this primary").AddIntegerRangeDescription(0, 255).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 255),
+							},
+						},
+						"multicast": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Whether this primary sends messages multicast").String,
+							Optional:            true,
+						},
+						"multicast_mixed": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Mixed-mode multicast").String,
+							Optional:            true,
+						},
+						"non_negotiated": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use non-negotiated unicast").String,
+							Optional:            true,
+						},
+						"delay_asymmetry": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The expected delay asymmetry for this primary").AddIntegerRangeDescription(-500000000, 500000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(-500000000, 500000000),
+							},
+						},
+						"nanoseconds": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use nanoseconds as the delay asymmetry units").String,
+							Optional:            true,
+						},
+						"microseconds": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use microseconds as the delay asymmetry units").String,
+							Optional:            true,
+						},
+						"milliseconds": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use milliseconds as the delay asymmetry units").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"ptp_interop_profile_default": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Default profile").String,
+				Optional:            true,
+			},
+			"ptp_interop_profile_g_8265_1": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("G.8265.1 telecom profile").String,
+				Optional:            true,
+			},
+			"ptp_interop_profile_g_8275_1": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("G.8275.1 telecom profile").String,
+				Optional:            true,
+			},
+			"ptp_interop_profile_g_8275_2": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("G.8275.2 telecom profile").String,
+				Optional:            true,
+			},
+			"ptp_interop_domain": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Domain of the peer clock").AddIntegerRangeDescription(0, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 255),
+				},
+			},
+			"ptp_interop_egress_conversion_priority1": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The priority1 value to use for the peer clock").AddIntegerRangeDescription(0, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 255),
+				},
+			},
+			"ptp_interop_egress_conversion_priority2": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The priority2 value to use for the peer clock").AddIntegerRangeDescription(0, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 255),
+				},
+			},
+			"ptp_interop_egress_conversion_clock_accuracy": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The clock-accuracy value to use for the peer clock").AddIntegerRangeDescription(0, 254).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 254),
+				},
+			},
+			"ptp_interop_egress_conversion_offset_scaled_log_variance": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The OSLV value to use for the peer clock").AddIntegerRangeDescription(0, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 65535),
+				},
+			},
+			"ptp_interop_egress_conversion_clock_class_default": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Default clock class to use when a more specific mapping is not available").AddIntegerRangeDescription(0, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 255),
+				},
+			},
+			"ptp_interop_egress_conversion_clock_class_mappings": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specific mapping for a given clock class value").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"clock_class_to_map_from": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specific mapping for a given clock class value").AddIntegerRangeDescription(0, 255).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 255),
+							},
+						},
+						"clock_class_to_map_to": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Clock class to map to").AddIntegerRangeDescription(0, 255).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 255),
+							},
+						},
+					},
+				},
+			},
+			"ptp_interop_ingress_conversion_priority1": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The priority1 value to use for the peer clock").AddIntegerRangeDescription(0, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 255),
+				},
+			},
+			"ptp_interop_ingress_conversion_priority2": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The priority2 value to use for the peer clock").AddIntegerRangeDescription(0, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 255),
+				},
+			},
+			"ptp_interop_ingress_conversion_clock_accuracy": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The clock-accuracy value to use for the peer clock").AddIntegerRangeDescription(0, 254).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 254),
+				},
+			},
+			"ptp_interop_ingress_conversion_offset_scaled_log_variance": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The OSLV value to use for the peer clock").AddIntegerRangeDescription(0, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 65535),
+				},
+			},
+			"ptp_interop_ingress_conversion_clock_class_default": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Default clock class to use when a more specific mapping is not available").AddIntegerRangeDescription(0, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 255),
+				},
+			},
+			"ptp_interop_ingress_conversion_clock_class_mappings": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specific mapping for a given clock class value").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"clock_class_to_map_from": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specific mapping for a given clock class value").AddIntegerRangeDescription(0, 255).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 255),
+							},
+						},
+						"clock_class_to_map_to": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Clock class to map to").AddIntegerRangeDescription(0, 255).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 255),
 							},
 						},
 					},

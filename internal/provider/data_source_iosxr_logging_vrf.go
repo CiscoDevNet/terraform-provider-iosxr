@@ -71,6 +71,38 @@ func (d *LoggingVRFDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Set VRF option",
 				Required:            true,
 			},
+			"hostnames": schema.ListNestedAttribute{
+				MarkdownDescription: "Name of the logging host",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: "Name of the logging host",
+							Computed:            true,
+						},
+						"severity": schema.StringAttribute{
+							MarkdownDescription: "Set severity of  messages for particular remote host/vrf",
+							Computed:            true,
+						},
+						"port": schema.Int64Attribute{
+							MarkdownDescription: "Set UDP port for this remote host/vrf",
+							Computed:            true,
+						},
+						"operator": schema.StringAttribute{
+							MarkdownDescription: "Set severity operator of  messages for particular remote host/vrf",
+							Computed:            true,
+						},
+						"facility": schema.StringAttribute{
+							MarkdownDescription: "Modify message logging facilities",
+							Computed:            true,
+						},
+						"hostname_source_address": schema.StringAttribute{
+							MarkdownDescription: "hostname source address",
+							Computed:            true,
+						},
+					},
+				},
+			},
 			"host_ipv4_addresses": schema.ListNestedAttribute{
 				MarkdownDescription: "IPV4 address of the logging host",
 				Computed:            true,

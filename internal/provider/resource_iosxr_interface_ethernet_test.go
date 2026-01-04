@@ -50,7 +50,7 @@ func TestAccIosxrInterfaceEthernet(t *testing.T) {
 	if os.Getenv("XRV9K") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "service_policy_output.0.name", "PMAP-OUT"))
 	}
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "shutdown", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "shutdown", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "mtu", "9000"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "bandwidth", "100000"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "description", "My Interface Description"))
@@ -161,6 +161,36 @@ func TestAccIosxrInterfaceEthernet(t *testing.T) {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "flow_ipv6_ingress_monitor_samplers.0.monitor_map_name", "MMAP2"))
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "flow_ipv6_ingress_monitor_samplers.0.sampler_map_name", "SMAP1"))
 	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "frequency_synchronization", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "frequency_synchronization_ssm_disable", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "frequency_synchronization_priority", "10"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "frequency_synchronization_time_of_day_priority", "10"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "frequency_synchronization_quality_transmit_lowest_itu_t_option_two_generation_two", "e-prtc"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "frequency_synchronization_quality_transmit_highest_itu_t_option_two_generation_two", "e-prtc"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "frequency_synchronization_quality_receive_lowest_itu_t_option_two_generation_two", "e-prtc"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "frequency_synchronization_quality_receive_highest_itu_t_option_two_generation_two", "e-prtc"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "frequency_synchronization_wait_to_restore", "5"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "frequency_synchronization_selection_input", "true"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "arp_timeout", "30"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "arp_learning_local", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "arp_gratuitous_ignore", "true"))
@@ -183,6 +213,179 @@ func TestAccIosxrInterfaceEthernet(t *testing.T) {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "monitor_sessions.0.acl", "true"))
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "monitor_sessions.0.acl_ipv4_name", "ACL1"))
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "monitor_sessions.0.acl_ipv6_name", "ACL2"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_profile", "Profile-1"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_transport_ethernet", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_clock_operation_one_step", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_announce_interval", "2"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_announce_timeout", "5"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_announce_grant_duration", "300"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_sync_interval", "2"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_sync_grant_duration", "300"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_sync_timeout", "3000"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_delay_request_interval", "2"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_cos", "6"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_cos_event", "6"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_cos_general", "6"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_dscp", "46"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_dscp_event", "46"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_dscp_general", "46"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_ipv4_ttl", "10"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_ipv6_hop_limit", "10"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_delay_asymmetry_value", "1000"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_delay_asymmetry_unit_microseconds", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_delay_response_grant_duration", "300"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_delay_response_timeout", "3000"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_unicast_grant_invalid_request_reduce", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_multicast", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_multicast_mixed", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_multicast_target_address_mac_forwardable", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_port_state_master_only", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_local_priority", "128"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_slave_ipv4s.0.address", "10.2.2.2"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_slave_ipv4s.0.non_negotiated", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_slave_ipv6s.0.address", "2001:db8::2"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_slave_ipv6s.0.non_negotiated", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_slave_ethernets.0.address", "00:11:22:33:44:55"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_slave_ethernets.0.non_negotiated", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_master_ipv4s.0.address", "10.3.3.3"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_master_ipv4s.0.priority", "100"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_master_ipv4s.0.clock_class", "6"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_master_ipv4s.0.multicast", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_master_ipv4s.0.multicast_mixed", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_master_ipv4s.0.non_negotiated", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_master_ipv4s.0.delay_asymmetry", "50"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_master_ipv4s.0.microseconds", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_master_ipv6s.0.address", "2001:db8::3"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_master_ipv6s.0.priority", "100"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_master_ipv6s.0.clock_class", "6"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_master_ipv6s.0.multicast", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_master_ipv6s.0.multicast_mixed", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_master_ipv6s.0.non_negotiated", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_master_ipv6s.0.delay_asymmetry", "50"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_master_ipv6s.0.microseconds", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_master_ethernets.0.address", "aa:bb:cc:dd:ee:f4"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_master_ethernets.0.priority", "100"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_master_ethernets.0.clock_class", "6"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_master_ethernets.0.multicast", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_master_ethernets.0.multicast_mixed", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_master_ethernets.0.non_negotiated", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_master_ethernets.0.delay_asymmetry", "50"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_master_ethernets.0.microseconds", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_interop_profile_g_8275_2", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_interop_domain", "24"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_interop_egress_conversion_priority1", "128"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_interop_egress_conversion_priority2", "128"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_interop_egress_conversion_clock_accuracy", "33"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_interop_egress_conversion_offset_scaled_log_variance", "5"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_interop_egress_conversion_clock_class_default", "6"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_interop_egress_conversion_clock_class_mappings.0.clock_class_to_map_from", "6"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_interop_egress_conversion_clock_class_mappings.0.clock_class_to_map_to", "13"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_interop_ingress_conversion_priority1", "128"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_interop_ingress_conversion_priority2", "128"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_interop_ingress_conversion_clock_accuracy", "33"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_interop_ingress_conversion_offset_scaled_log_variance", "5"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_interop_ingress_conversion_clock_class_default", "6"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_interop_ingress_conversion_clock_class_mappings.0.clock_class_to_map_from", "13"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp_interop_ingress_conversion_clock_class_mappings.0.clock_class_to_map_to", "6"))
 	}
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
@@ -315,7 +518,7 @@ resource "iosxr_gnmi" "PreReq3" {
 func testAccIosxrInterfaceEthernetConfig_minimum() string {
 	config := `resource "iosxr_interface_ethernet" "test" {` + "\n"
 	config += `	name = "GigabitEthernet0/0/0/1"` + "\n"
-	config += `	shutdown = false` + "\n"
+	config += `	shutdown = true` + "\n"
 	config += `	load_interval = 30` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
 	config += `}` + "\n"
@@ -348,7 +551,7 @@ func testAccIosxrInterfaceEthernetConfig_all() string {
 		config += `		name = "PMAP-OUT"` + "\n"
 		config += `		}]` + "\n"
 	}
-	config += `	shutdown = false` + "\n"
+	config += `	shutdown = true` + "\n"
 	config += `	mtu = 9000` + "\n"
 	config += `	bandwidth = 100000` + "\n"
 	config += `	description = "My Interface Description"` + "\n"
@@ -471,6 +674,36 @@ func testAccIosxrInterfaceEthernetConfig_all() string {
 		config += `		sampler_map_name = "SMAP1"` + "\n"
 		config += `		}]` + "\n"
 	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	frequency_synchronization = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	frequency_synchronization_ssm_disable = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	frequency_synchronization_priority = 10` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	frequency_synchronization_time_of_day_priority = 10` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	frequency_synchronization_quality_transmit_lowest_itu_t_option_two_generation_two = "e-prtc"` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	frequency_synchronization_quality_transmit_highest_itu_t_option_two_generation_two = "e-prtc"` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	frequency_synchronization_quality_receive_lowest_itu_t_option_two_generation_two = "e-prtc"` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	frequency_synchronization_quality_receive_highest_itu_t_option_two_generation_two = "e-prtc"` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	frequency_synchronization_wait_to_restore = 5` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	frequency_synchronization_selection_input = true` + "\n"
+	}
 	config += `	arp_timeout = 30` + "\n"
 	config += `	arp_learning_local = true` + "\n"
 	config += `	arp_gratuitous_ignore = true` + "\n"
@@ -494,6 +727,195 @@ func testAccIosxrInterfaceEthernetConfig_all() string {
 		config += `		acl = true` + "\n"
 		config += `		acl_ipv4_name = "ACL1"` + "\n"
 		config += `		acl_ipv6_name = "ACL2"` + "\n"
+		config += `		}]` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_profile = "Profile-1"` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_transport_ethernet = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_clock_operation_one_step = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_announce_interval = "2"` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_announce_timeout = 5` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_announce_grant_duration = 300` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_sync_interval = "2"` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_sync_grant_duration = 300` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_sync_timeout = 3000` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_delay_request_interval = "2"` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_cos = 6` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_cos_event = 6` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_cos_general = 6` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_dscp = 46` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_dscp_event = 46` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_dscp_general = 46` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_ipv4_ttl = 10` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_ipv6_hop_limit = 10` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_delay_asymmetry_value = 1000` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_delay_asymmetry_unit_microseconds = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_delay_response_grant_duration = 300` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_delay_response_timeout = 3000` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_unicast_grant_invalid_request_reduce = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_multicast = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_multicast_mixed = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_multicast_target_address_mac_forwardable = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_port_state_master_only = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_local_priority = 128` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_slave_ipv4s = [{` + "\n"
+		config += `		address = "10.2.2.2"` + "\n"
+		config += `		non_negotiated = true` + "\n"
+		config += `		}]` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_slave_ipv6s = [{` + "\n"
+		config += `		address = "2001:db8::2"` + "\n"
+		config += `		non_negotiated = true` + "\n"
+		config += `		}]` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_slave_ethernets = [{` + "\n"
+		config += `		address = "00:11:22:33:44:55"` + "\n"
+		config += `		non_negotiated = true` + "\n"
+		config += `		}]` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_master_ipv4s = [{` + "\n"
+		config += `		address = "10.3.3.3"` + "\n"
+		config += `		priority = 100` + "\n"
+		config += `		clock_class = 6` + "\n"
+		config += `		multicast = true` + "\n"
+		config += `		multicast_mixed = true` + "\n"
+		config += `		non_negotiated = true` + "\n"
+		config += `		delay_asymmetry = 50` + "\n"
+		config += `		microseconds = true` + "\n"
+		config += `		}]` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_master_ipv6s = [{` + "\n"
+		config += `		address = "2001:db8::3"` + "\n"
+		config += `		priority = 100` + "\n"
+		config += `		clock_class = 6` + "\n"
+		config += `		multicast = true` + "\n"
+		config += `		multicast_mixed = true` + "\n"
+		config += `		non_negotiated = true` + "\n"
+		config += `		delay_asymmetry = 50` + "\n"
+		config += `		microseconds = true` + "\n"
+		config += `		}]` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_master_ethernets = [{` + "\n"
+		config += `		address = "aa:bb:cc:dd:ee:f4"` + "\n"
+		config += `		priority = 100` + "\n"
+		config += `		clock_class = 6` + "\n"
+		config += `		multicast = true` + "\n"
+		config += `		multicast_mixed = true` + "\n"
+		config += `		non_negotiated = true` + "\n"
+		config += `		delay_asymmetry = 50` + "\n"
+		config += `		microseconds = true` + "\n"
+		config += `		}]` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_interop_profile_g_8275_2 = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_interop_domain = 24` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_interop_egress_conversion_priority1 = 128` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_interop_egress_conversion_priority2 = 128` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_interop_egress_conversion_clock_accuracy = 33` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_interop_egress_conversion_offset_scaled_log_variance = 5` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_interop_egress_conversion_clock_class_default = 6` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_interop_egress_conversion_clock_class_mappings = [{` + "\n"
+		config += `		clock_class_to_map_from = 6` + "\n"
+		config += `		clock_class_to_map_to = 13` + "\n"
+		config += `		}]` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_interop_ingress_conversion_priority1 = 128` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_interop_ingress_conversion_priority2 = 128` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_interop_ingress_conversion_clock_accuracy = 33` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_interop_ingress_conversion_offset_scaled_log_variance = 5` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_interop_ingress_conversion_clock_class_default = 6` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ptp_interop_ingress_conversion_clock_class_mappings = [{` + "\n"
+		config += `		clock_class_to_map_from = 13` + "\n"
+		config += `		clock_class_to_map_to = 6` + "\n"
 		config += `		}]` + "\n"
 	}
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"

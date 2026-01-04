@@ -30,7 +30,6 @@ data "iosxr_mpls_ldp_mldp" "example" {
 - `id` (String) The path of the retrieved object.
 - `logging_internal` (Boolean) MLDP logging internal
 - `logging_notifications` (Boolean) MLDP logging notifications
-- `vrfs` (Attributes List) Configure VRF parameters (see [below for nested schema](#nestedatt--vrfs))
 
 <a id="nestedatt--address_families"></a>
 ### Nested Schema for `address_families`
@@ -72,28 +71,3 @@ Read-Only:
 - `lsp_address` (String) LSP address
 - `mp2mp` (Number) MP2MP LSP
 - `p2mp` (Number) P2MP LSP
-
-
-
-<a id="nestedatt--vrfs"></a>
-### Nested Schema for `vrfs`
-
-Read-Only:
-
-- `address_families` (Attributes List) Configure Address Family and its parameters (see [below for nested schema](#nestedatt--vrfs--address_families))
-- `vrf_name` (String) Configure VRF parameters
-
-<a id="nestedatt--vrfs--address_families"></a>
-### Nested Schema for `vrfs.address_families`
-
-Read-Only:
-
-- `forwarding_recursive` (Boolean) Enable recursive forwarding
-- `forwarding_recursive_route_policy` (String) Route policy
-- `make_before_break_delay` (Number) MBB delay
-- `make_before_break_delete_delay` (Number) Delete delay in seconds
-- `make_before_break_route_policy` (String) Route policy
-- `mofrr_enable` (Boolean) MLDP MoFRR support
-- `mofrr_route_policy` (String) Route policy
-- `name` (String) Configure Address Family and its parameters
-- `rib_unicast_always` (Boolean) Always use unicast table for root lookup

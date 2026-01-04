@@ -86,7 +86,7 @@ func (data SegmentRouting) toBody(ctx context.Context) string {
 	}
 	if !data.Enable.IsNull() && !data.Enable.IsUnknown() {
 		if data.Enable.ValueBool() {
-			body, _ = sjson.Set(body, "enable", map[string]string{})
+			body, _ = sjson.Set(body, "enable", []interface{}{nil})
 		}
 	}
 	return body

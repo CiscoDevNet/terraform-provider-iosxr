@@ -52,6 +52,7 @@ type IPv6PrefixListSequences struct {
 	Remark              types.String `tfsdk:"remark"`
 	Permission          types.String `tfsdk:"permission"`
 	Prefix              types.String `tfsdk:"prefix"`
+	Zone                types.String `tfsdk:"zone"`
 	Mask                types.Int64  `tfsdk:"mask"`
 	MatchPrefixLengthEq types.Int64  `tfsdk:"match_prefix_length_eq"`
 	MatchPrefixLengthGe types.Int64  `tfsdk:"match_prefix_length_ge"`
@@ -93,6 +94,9 @@ func (data IPv6PrefixList) toBody(ctx context.Context) string {
 			}
 			if !item.Prefix.IsNull() && !item.Prefix.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"prefix", item.Prefix.ValueString())
+			}
+			if !item.Zone.IsNull() && !item.Zone.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"zone", item.Zone.ValueString())
 			}
 			if !item.Mask.IsNull() && !item.Mask.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"mask", strconv.FormatInt(item.Mask.ValueInt64(), 10))
@@ -159,6 +163,11 @@ func (data *IPv6PrefixList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].Prefix = types.StringNull()
 		}
+		if value := r.Get("zone"); value.Exists() && !data.Sequences[i].Zone.IsNull() {
+			data.Sequences[i].Zone = types.StringValue(value.String())
+		} else {
+			data.Sequences[i].Zone = types.StringNull()
+		}
 		if value := r.Get("mask"); value.Exists() && !data.Sequences[i].Mask.IsNull() {
 			data.Sequences[i].Mask = types.Int64Value(value.Int())
 		} else {
@@ -203,6 +212,9 @@ func (data *IPv6PrefixList) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("prefix"); cValue.Exists() {
 				item.Prefix = types.StringValue(cValue.String())
 			}
+			if cValue := v.Get("zone"); cValue.Exists() {
+				item.Zone = types.StringValue(cValue.String())
+			}
 			if cValue := v.Get("mask"); cValue.Exists() {
 				item.Mask = types.Int64Value(cValue.Int())
 			}
@@ -241,6 +253,9 @@ func (data *IPv6PrefixListData) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("prefix"); cValue.Exists() {
 				item.Prefix = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("zone"); cValue.Exists() {
+				item.Zone = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("mask"); cValue.Exists() {
 				item.Mask = types.Int64Value(cValue.Int())
@@ -300,6 +315,9 @@ func (data *IPv6PrefixList) getDeletedItems(ctx context.Context, state IPv6Prefi
 				}
 				if !state.Sequences[i].Mask.IsNull() && data.Sequences[j].Mask.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/mask", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].Zone.IsNull() && data.Sequences[j].Zone.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/zone", state.getPath(), keyString))
 				}
 				if !state.Sequences[i].Prefix.IsNull() && data.Sequences[j].Prefix.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/prefix", state.getPath(), keyString))

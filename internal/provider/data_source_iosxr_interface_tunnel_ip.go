@@ -115,6 +115,14 @@ func (d *InterfaceTunnelIPDataSource) Schema(ctx context.Context, req datasource
 				MarkdownDescription: "Enable IP processing without an explicit address",
 				Computed:            true,
 			},
+			"ipv4_forwarding_enable": schema.BoolAttribute{
+				MarkdownDescription: "enable ipv4 forwarding on a interface",
+				Computed:            true,
+			},
+			"ipv4_ttl_propagate_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable ipv4 ttl propagation on this interface",
+				Computed:            true,
+			},
 			"ipv4_access_group_ingress_acl1": schema.StringAttribute{
 				MarkdownDescription: "Access-list name",
 				Computed:            true,
@@ -169,6 +177,10 @@ func (d *InterfaceTunnelIPDataSource) Schema(ctx context.Context, req datasource
 			},
 			"ipv6_enable": schema.BoolAttribute{
 				MarkdownDescription: "Enable IPv6 on interface",
+				Computed:            true,
+			},
+			"ipv6_ttl_propagate_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable ipv6 ttl propagation on this interface",
 				Computed:            true,
 			},
 			"ipv6_addresses": schema.ListNestedAttribute{

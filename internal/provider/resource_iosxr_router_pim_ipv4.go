@@ -880,6 +880,327 @@ func (r *RouterPIMIPv4Resource) Schema(ctx context.Context, req resource.SchemaR
 					},
 				},
 			},
+			"mofrr": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("PIM Mofrr").String,
+				Optional:            true,
+			},
+			"mofrr_flow": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Multicast Only FRR").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+				},
+			},
+			"mofrr_rib": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use the rib keyword to restrict switchover triggers to RIB events").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+				},
+			},
+			"mofrr_protect": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Immediate Switchover to secondary based on infra events").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"mofrr_protect_local_fault_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Protect multicast flows against local faults alone").String,
+				Optional:            true,
+			},
+			"mofrr_non_revertive": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Non-revertive MoFRR").String,
+				Optional:            true,
+			},
+			"mofrr_clone_joins": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use the join keyword to clone S,G as S1,G joins as S2,G joins").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"source_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Source S").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+						"to": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("to").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"primary_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Source S1").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+										},
+									},
+									"and": schema.ListNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("and").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"backup_address": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Source S2").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+													},
+												},
+												"masklen": schema.ListNestedAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("").String,
+													Optional:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"mask_length": schema.Int64Attribute{
+																MarkdownDescription: helpers.NewAttributeDescription("").String,
+																Required:            true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"mofrr_clone_sources": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use the source keyword to clone S,G as S1,G traffic and S2,G traffic").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"source_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Source S").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+						"to": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("to").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"primary_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Source S1").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+										},
+									},
+									"and": schema.ListNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("and").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"backup_address": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Source S2").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+													},
+												},
+												"masklen": schema.ListNestedAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("").String,
+													Optional:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"mask_length": schema.Int64Attribute{
+																MarkdownDescription: helpers.NewAttributeDescription("").String,
+																Required:            true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"sr_p2mp_policies": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Segment-routing P2MP policy").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"policy_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Segment-routing P2MP policy").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"static_groups": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ipv4 static multicast group").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"group_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("ipv4 static multicast group").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+										},
+									},
+									"group_address_only": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Group-address without increment mask/source-address").String,
+										Optional:            true,
+									},
+									"group_masks": schema.ListNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Increment mask for group address").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"group_inc_mask": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Increment mask for group address").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+													},
+												},
+												"group_count": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("No. of group addresses to join").AddIntegerRangeDescription(1, 512).String,
+													Required:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(1, 512),
+													},
+												},
+											},
+										},
+									},
+									"group_masks_source_addresses": schema.ListNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Increment mask for group address").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"group_inc_mask": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Increment mask for group address").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+													},
+												},
+												"source_ip": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Source address to join").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+													},
+												},
+												"group_count": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("No. of group addresses to join").AddIntegerRangeDescription(1, 512).String,
+													Required:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(1, 512),
+													},
+												},
+											},
+										},
+									},
+									"source_masks": schema.ListNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Increment mask for group address").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"source_ip": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Source address to join").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+													},
+												},
+												"source_inc_mask": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Increment mask for source address").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+													},
+												},
+												"source_count": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("No. of source addresses to join").AddIntegerRangeDescription(1, 512).String,
+													Required:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(1, 512),
+													},
+												},
+											},
+										},
+									},
+									"group_masks_source_masks": schema.ListNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Increment mask for group address").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"group_inc_mask": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Increment mask for group address").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+													},
+												},
+												"source_ip": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Source address to join").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+													},
+												},
+												"source_inc_mask": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Increment mask for source address").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+													},
+												},
+												"group_count": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("No. of group addresses to join").AddIntegerRangeDescription(1, 512).String,
+													Required:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(1, 512),
+													},
+												},
+												"source_count": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("No. of source addresses to join").AddIntegerRangeDescription(1, 512).String,
+													Required:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(1, 512),
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 			"interfaces": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Select an interface to configure").String,
 				Optional:            true,

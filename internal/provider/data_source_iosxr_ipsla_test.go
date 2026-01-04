@@ -38,6 +38,7 @@ func TestAccDataSourceIosxrIPSLA(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla.test", "low_memory", "100000"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla.test", "key_chain", "KEY_CHAIN"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla.test", "hw_timestamp_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla.test", "operations.0.operation_number", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla.test", "operations.0.udp_echo", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla.test", "operations.0.udp_echo_tag", "UDP_ECHO_TAG"))
@@ -71,6 +72,9 @@ func TestAccDataSourceIosxrIPSLA(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla.test", "schedules.0.start_pending", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla.test", "schedules.0.recurring", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla.test", "schedules.0.ageout", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla.test", "server_twamp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla.test", "server_twamp_port", "862"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipsla.test", "server_twamp_timer_inactivity", "600"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -93,8 +97,10 @@ func TestAccDataSourceIosxrIPSLA(t *testing.T) {
 
 func testAccDataSourceIosxrIPSLAConfig() string {
 	config := `resource "iosxr_ipsla" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
 	config += `	low_memory = 100000` + "\n"
 	config += `	key_chain = "KEY_CHAIN"` + "\n"
+	config += `	hw_timestamp_disable = true` + "\n"
 	config += `	operations = [{` + "\n"
 	config += `		operation_number = 1` + "\n"
 	config += `		udp_echo = true` + "\n"
@@ -134,6 +140,9 @@ func testAccDataSourceIosxrIPSLAConfig() string {
 	config += `		recurring = true` + "\n"
 	config += `		ageout = 300` + "\n"
 	config += `	}]` + "\n"
+	config += `	server_twamp = true` + "\n"
+	config += `	server_twamp_port = 862` + "\n"
+	config += `	server_twamp_timer_inactivity = 600` + "\n"
 	config += `}` + "\n"
 
 	config += `

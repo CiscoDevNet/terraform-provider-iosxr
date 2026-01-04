@@ -79,48 +79,56 @@ func (d *RouterBGPVRFAddressFamilyDataSource) Schema(ctx context.Context, req da
 				MarkdownDescription: "Enter Address Family command mode",
 				Required:            true,
 			},
-			"additional_paths_send": schema.BoolAttribute{
-				MarkdownDescription: "Additional paths Send capability",
+			"segment_routing_srv6_locator": schema.StringAttribute{
+				MarkdownDescription: "Specify locator",
 				Computed:            true,
 			},
-			"additional_paths_send_disable": schema.BoolAttribute{
-				MarkdownDescription: "Do not advertise additional paths Send capability",
+			"segment_routing_srv6_usid_allocation_wide_local_id_block": schema.BoolAttribute{
+				MarkdownDescription: "Wide LIB allocation",
 				Computed:            true,
 			},
-			"additional_paths_receive": schema.BoolAttribute{
-				MarkdownDescription: "Additional paths Receive capability",
+			"segment_routing_srv6_alloc_mode_per_ce": schema.BoolAttribute{
+				MarkdownDescription: "Set SRv6 per CE SID mode",
 				Computed:            true,
 			},
-			"additional_paths_receive_disable": schema.BoolAttribute{
-				MarkdownDescription: "Do not advertise additional paths Receive capability",
+			"segment_routing_srv6_alloc_mode_per_vrf": schema.BoolAttribute{
+				MarkdownDescription: "Set SRv6 per VRF SID mode",
 				Computed:            true,
 			},
-			"additional_paths_selection_route_policy": schema.StringAttribute{
-				MarkdownDescription: "Route-policy for additional paths selection",
+			"segment_routing_srv6_alloc_mode_per_vrf_46": schema.BoolAttribute{
+				MarkdownDescription: "Set SRv6 per VRF 46 SID mode",
 				Computed:            true,
 			},
-			"additional_paths_selection_disable": schema.BoolAttribute{
-				MarkdownDescription: "Disable additional paths selection",
+			"segment_routing_srv6_alloc_mode_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Use a route policy to determine the SID allocation mode and locator (if provided) for given prefix",
 				Computed:            true,
 			},
-			"allocate_label_all": schema.BoolAttribute{
-				MarkdownDescription: "Allocate labels for all prefixes",
+			"domain_distinguisher_as": schema.Int64Attribute{
+				MarkdownDescription: "4 octet ASN",
 				Computed:            true,
 			},
-			"allocate_label_all_unlabeled_path": schema.BoolAttribute{
-				MarkdownDescription: "Allocate label for unlabeled paths too",
+			"domain_distinguisher_router_id": schema.StringAttribute{
+				MarkdownDescription: "4 octet router-id",
 				Computed:            true,
 			},
-			"allocate_label_route_policy_name": schema.StringAttribute{
-				MarkdownDescription: "Allocate label route policy",
+			"distance_bgp_external_route": schema.Int64Attribute{
+				MarkdownDescription: "Distance for routes external to the AS",
 				Computed:            true,
 			},
-			"allocate_label_route_policy_unlabeled_path": schema.BoolAttribute{
-				MarkdownDescription: "Allocate label for unlabeled paths too",
+			"distance_bgp_internal_route": schema.Int64Attribute{
+				MarkdownDescription: "Distance for routes internal to the AS",
 				Computed:            true,
 			},
-			"advertise_best_external": schema.BoolAttribute{
-				MarkdownDescription: "Advertise best-external path",
+			"distance_bgp_local_route": schema.Int64Attribute{
+				MarkdownDescription: "Distance for local routes",
+				Computed:            true,
+			},
+			"bgp_attribute_download": schema.BoolAttribute{
+				MarkdownDescription: "Configure attribute download for this address-family",
+				Computed:            true,
+			},
+			"allow_vpn_default_originate": schema.BoolAttribute{
+				MarkdownDescription: "Originate default route to VPN neighbor",
 				Computed:            true,
 			},
 			"maximum_paths_ebgp_multipath": schema.Int64Attribute{
@@ -175,53 +183,89 @@ func (d *RouterBGPVRFAddressFamilyDataSource) Schema(ctx context.Context, req da
 				MarkdownDescription: "Disable multipath unique nexthop check",
 				Computed:            true,
 			},
-			"label_mode_per_prefix": schema.BoolAttribute{
-				MarkdownDescription: "Set per perfix label mode",
+			"import_from_bridge_domain": schema.BoolAttribute{
+				MarkdownDescription: "Import IP hosts from EVPN bridge-domain",
 				Computed:            true,
 			},
-			"label_mode_per_ce": schema.BoolAttribute{
-				MarkdownDescription: "Set per CE label mode",
+			"additional_paths_send": schema.BoolAttribute{
+				MarkdownDescription: "Additional paths Send capability",
 				Computed:            true,
 			},
-			"label_mode_per_vrf": schema.BoolAttribute{
-				MarkdownDescription: "Set per VRF label mode",
+			"additional_paths_send_disable": schema.BoolAttribute{
+				MarkdownDescription: "Do not advertise additional paths Send capability",
 				Computed:            true,
 			},
-			"label_mode_per_vrf_46": schema.BoolAttribute{
-				MarkdownDescription: "Set per VRF 46 label mode",
+			"additional_paths_receive": schema.BoolAttribute{
+				MarkdownDescription: "Additional paths Receive capability",
 				Computed:            true,
 			},
-			"label_mode_route_policy": schema.StringAttribute{
-				MarkdownDescription: "Use a route policy to select prefixes for label allocation mode",
+			"additional_paths_receive_disable": schema.BoolAttribute{
+				MarkdownDescription: "Do not advertise additional paths Receive capability",
 				Computed:            true,
 			},
-			"label_mode_per_nexthop_received_label": schema.BoolAttribute{
-				MarkdownDescription: "Set label mode per nexthop and received label",
+			"additional_paths_advertise_limit": schema.Int64Attribute{
+				MarkdownDescription: "Limit the number of paths to be advertised (default 32)",
 				Computed:            true,
 			},
-			"label_mode_per_nexthop_received_label_allocate_secondary_label": schema.BoolAttribute{
-				MarkdownDescription: "Allocate secondary label to avoid label oscillation insymmetric PIC deployments",
+			"additional_paths_selection_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Route-policy for additional paths selection",
 				Computed:            true,
 			},
-			"segment_routing_srv6_locator": schema.StringAttribute{
-				MarkdownDescription: "Specify locator",
+			"additional_paths_selection_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable additional paths selection",
 				Computed:            true,
 			},
-			"segment_routing_srv6_alloc_mode_per_ce": schema.BoolAttribute{
-				MarkdownDescription: "Set SRv6 per CE SID mode",
+			"permanent_network_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Route policy to read the prefixes from",
 				Computed:            true,
 			},
-			"segment_routing_srv6_alloc_mode_per_vrf": schema.BoolAttribute{
-				MarkdownDescription: "Set SRv6 per VRF SID mode",
+			"advertise_best_external": schema.BoolAttribute{
+				MarkdownDescription: "Advertise best-external path",
 				Computed:            true,
 			},
-			"segment_routing_srv6_alloc_mode_per_vrf_46": schema.BoolAttribute{
-				MarkdownDescription: "Set SRv6 per VRF 46 SID mode",
+			"advertise_best_external_labeled_unicast": schema.BoolAttribute{
+				MarkdownDescription: "Limit best-external to Labeled-Unicast address family",
 				Computed:            true,
 			},
-			"segment_routing_srv6_alloc_mode_route_policy": schema.StringAttribute{
-				MarkdownDescription: "Use a route policy to determine the SID allocation mode and locator (if provided) for given prefix",
+			"advertise_best_external_disable": schema.BoolAttribute{
+				MarkdownDescription: "Do not advertise best-external path",
 				Computed:            true,
+			},
+			"advertise_local_labeled_route_safi_unicast": schema.StringAttribute{
+				MarkdownDescription: "Advertisement of routes with local-label via Unicast SAFI",
+				Computed:            true,
+			},
+			"advertise_epe_bgp_labeled_unicast": schema.BoolAttribute{
+				MarkdownDescription: "Limit epe-bgplu to Labeled-Unicast address family",
+				Computed:            true,
+			},
+			"networks": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify a network to announce via BGP",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "IPaddress",
+							Computed:            true,
+						},
+						"prefix": schema.Int64Attribute{
+							MarkdownDescription: "IP address prefix",
+							Computed:            true,
+						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: "Route-policy to modify the attributes",
+							Computed:            true,
+						},
+						"backdoor": schema.BoolAttribute{
+							MarkdownDescription: "Specify a BGP backdoor route",
+							Computed:            true,
+						},
+						"multipath": schema.BoolAttribute{
+							MarkdownDescription: "Enable installation of multiple paths from RIB",
+							Computed:            true,
+						},
+					},
+				},
 			},
 			"aggregate_addresses": schema.ListNestedAttribute{
 				MarkdownDescription: "Configure BGP aggregate entries",
@@ -258,34 +302,6 @@ func (d *RouterBGPVRFAddressFamilyDataSource) Schema(ctx context.Context, req da
 						},
 						"set_tag": schema.Int64Attribute{
 							MarkdownDescription: "Set a IGP tag value on the route",
-							Computed:            true,
-						},
-					},
-				},
-			},
-			"networks": schema.ListNestedAttribute{
-				MarkdownDescription: "Specify a network to announce via BGP",
-				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"address": schema.StringAttribute{
-							MarkdownDescription: "IPaddress",
-							Computed:            true,
-						},
-						"prefix": schema.Int64Attribute{
-							MarkdownDescription: "IP address prefix",
-							Computed:            true,
-						},
-						"route_policy": schema.StringAttribute{
-							MarkdownDescription: "Route-policy to modify the attributes",
-							Computed:            true,
-						},
-						"backdoor": schema.BoolAttribute{
-							MarkdownDescription: "Specify a BGP backdoor route",
-							Computed:            true,
-						},
-						"multipath": schema.BoolAttribute{
-							MarkdownDescription: "Enable installation of multiple paths from RIB",
 							Computed:            true,
 						},
 					},
@@ -721,6 +737,138 @@ func (d *RouterBGPVRFAddressFamilyDataSource) Schema(ctx context.Context, req da
 			},
 			"redistribute_rip_route_policy": schema.StringAttribute{
 				MarkdownDescription: "Route policy reference",
+				Computed:            true,
+			},
+			"table_policy": schema.StringAttribute{
+				MarkdownDescription: "Configure policy for installation of routes to RIB",
+				Computed:            true,
+			},
+			"allocate_label_all": schema.BoolAttribute{
+				MarkdownDescription: "Allocate labels for all prefixes",
+				Computed:            true,
+			},
+			"allocate_label_all_unlabeled_path": schema.BoolAttribute{
+				MarkdownDescription: "Allocate label for unlabeled paths too",
+				Computed:            true,
+			},
+			"allocate_label_route_policy_name": schema.StringAttribute{
+				MarkdownDescription: "Allocate label route policy",
+				Computed:            true,
+			},
+			"allocate_label_route_policy_unlabeled_path": schema.BoolAttribute{
+				MarkdownDescription: "Allocate label for unlabeled paths too",
+				Computed:            true,
+			},
+			"label_mode_per_prefix": schema.BoolAttribute{
+				MarkdownDescription: "Set per perfix label mode",
+				Computed:            true,
+			},
+			"label_mode_per_ce": schema.BoolAttribute{
+				MarkdownDescription: "Set per CE label mode",
+				Computed:            true,
+			},
+			"label_mode_per_vrf": schema.BoolAttribute{
+				MarkdownDescription: "Set per VRF label mode",
+				Computed:            true,
+			},
+			"label_mode_per_vrf_46": schema.BoolAttribute{
+				MarkdownDescription: "Set per VRF 46 label mode",
+				Computed:            true,
+			},
+			"label_mode_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Use a route policy to select prefixes for label allocation mode",
+				Computed:            true,
+			},
+			"label_mode_per_nexthop_received_label": schema.BoolAttribute{
+				MarkdownDescription: "Set label mode per nexthop and received label",
+				Computed:            true,
+			},
+			"label_mode_per_nexthop_received_label_allocate_secondary_label": schema.BoolAttribute{
+				MarkdownDescription: "Allocate secondary label to avoid label oscillation insymmetric PIC deployments",
+				Computed:            true,
+			},
+			"bgp_origin_as_validation_enable": schema.BoolAttribute{
+				MarkdownDescription: "Enable RPKI origin-AS validation",
+				Computed:            true,
+			},
+			"bgp_origin_as_validation_signal_ibgp": schema.BoolAttribute{
+				MarkdownDescription: "Signal origin-AS validity towards iBGP peers",
+				Computed:            true,
+			},
+			"bgp_bestpath_origin_as_use_validity": schema.BoolAttribute{
+				MarkdownDescription: "BGP bestpath selection will use origin-AS validity",
+				Computed:            true,
+			},
+			"bgp_bestpath_origin_as_allow_invalid": schema.BoolAttribute{
+				MarkdownDescription: "BGP bestpath selection will allow 'invalid' origin-AS",
+				Computed:            true,
+			},
+			"bgp_dampening_decay_half_life": schema.Int64Attribute{
+				MarkdownDescription: "Half-life time for the penalty",
+				Computed:            true,
+			},
+			"bgp_dampening_reuse_threshold": schema.Int64Attribute{
+				MarkdownDescription: "Value to start reusing a route",
+				Computed:            true,
+			},
+			"bgp_dampening_suppress_threshold": schema.Int64Attribute{
+				MarkdownDescription: "Value to start suppressing a route",
+				Computed:            true,
+			},
+			"bgp_dampening_max_suppress_time": schema.Int64Attribute{
+				MarkdownDescription: "Maximum duration to suppress a stable route",
+				Computed:            true,
+			},
+			"bgp_dampening_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Route policy to specify criteria for dampening",
+				Computed:            true,
+			},
+			"dynamic_med_interval": schema.Int64Attribute{
+				MarkdownDescription: "Update generation delay (in minutes) after a MED change",
+				Computed:            true,
+			},
+			"weight_reset_on_import": schema.BoolAttribute{
+				MarkdownDescription: "Reset weight of paths on import",
+				Computed:            true,
+			},
+			"nexthop_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Policy to filter out nexthop notification",
+				Computed:            true,
+			},
+			"as_path_loopcheck_out_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable",
+				Computed:            true,
+			},
+			"inter_as_install": schema.BoolAttribute{
+				MarkdownDescription: "Install remote mvpn routes in default vrf",
+				Computed:            true,
+			},
+			"global_table_multicast": schema.BoolAttribute{
+				MarkdownDescription: "Enable global table multicast",
+				Computed:            true,
+			},
+			"segmented_multicast": schema.BoolAttribute{
+				MarkdownDescription: "Enable segmented multicast",
+				Computed:            true,
+			},
+			"label_security_asbr_rpf": schema.BoolAttribute{
+				MarkdownDescription: "RPF Label Security for Option-B",
+				Computed:            true,
+			},
+			"mvpn_single_forwarder_selection": schema.StringAttribute{
+				MarkdownDescription: "Enable single forwarder selection",
+				Computed:            true,
+			},
+			"originator_pe_id": schema.StringAttribute{
+				MarkdownDescription: "Set and send originator PE ID.",
+				Computed:            true,
+			},
+			"option_b_asbr_only": schema.BoolAttribute{
+				MarkdownDescription: "Enable the ASBR router for option-B label exchange.This option makes the router an Option B ASBR for EVPN.Its assumed no DCI configs are present",
+				Computed:            true,
+			},
+			"default_martian_check_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable",
 				Computed:            true,
 			},
 		},

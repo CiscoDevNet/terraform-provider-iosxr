@@ -14,7 +14,27 @@ This resource can manage the Key Chain configuration.
 
 ```terraform
 resource "iosxr_key_chain" "example" {
-  name = "KEY11"
+  name                   = "KEY11"
+  accept_tolerance_value = 1000
+  macsec_keys = [
+    {
+      ckn                                = "01"
+      key_string_password                = "115949554642595C577A7F747D63637244574E535806580851040D531C465C0851020204055A0957540903554657520A5C575770151F08480746115A08552F7A22"
+      key_string_cryptographic_algorithm = "aes-256-cmac"
+      lifetime_start_time_hour           = 11
+      lifetime_start_time_minute         = 52
+      lifetime_start_time_second         = 55
+      lifetime_start_time_month          = "january"
+      lifetime_start_time_day_of_month   = 21
+      lifetime_start_time_year           = 2023
+      lifetime_end_time_hour             = 11
+      lifetime_end_time_minute           = 52
+      lifetime_end_time_second           = 55
+      lifetime_end_time_month            = "january"
+      lifetime_end_time_day_of_month     = 21
+      lifetime_end_time_year             = 2026
+    }
+  ]
   keys = [
     {
       key_name                                = "1"
@@ -23,19 +43,30 @@ resource "iosxr_key_chain" "example" {
       accept_lifetime_start_time_hour         = 11
       accept_lifetime_start_time_minute       = 52
       accept_lifetime_start_time_second       = 55
-      accept_lifetime_start_time_day_of_month = 21
       accept_lifetime_start_time_month        = "january"
+      accept_lifetime_start_time_day_of_month = 21
       accept_lifetime_start_time_year         = 2023
-      accept_lifetime_infinite                = true
+      accept_lifetime_end_time_hour           = 11
+      accept_lifetime_end_time_minute         = 52
+      accept_lifetime_end_time_second         = 55
+      accept_lifetime_end_time_month          = "january"
+      accept_lifetime_end_time_day_of_month   = 21
+      accept_lifetime_end_time_year           = 2026
       send_lifetime_start_time_hour           = 8
       send_lifetime_start_time_minute         = 36
       send_lifetime_start_time_second         = 22
-      send_lifetime_start_time_day_of_month   = 15
       send_lifetime_start_time_month          = "january"
+      send_lifetime_start_time_day_of_month   = 15
       send_lifetime_start_time_year           = 2023
-      send_lifetime_infinite                  = true
+      send_lifetime_end_time_hour             = 8
+      send_lifetime_end_time_minute           = 36
+      send_lifetime_end_time_second           = 22
+      send_lifetime_end_time_month            = "january"
+      send_lifetime_end_time_day_of_month     = 15
+      send_lifetime_end_time_year             = 2026
     }
   ]
+  timezone_local = true
 }
 ```
 
@@ -48,8 +79,14 @@ resource "iosxr_key_chain" "example" {
 
 ### Optional
 
+- `accept_tolerance_infinite` (Boolean) Never expires
+- `accept_tolerance_value` (Number) Configure a tolerance-value
+  - Range: `1`-`8640000`
 - `device` (String) A device name from the provider configuration.
 - `keys` (Attributes List) Configure a Key (see [below for nested schema](#nestedatt--keys))
+- `macsec_keys` (Attributes List) Configure CKN for macsec PSK (see [below for nested schema](#nestedatt--macsec_keys))
+- `timezone_gmt` (Boolean) GMT (UTC) Timezone
+- `timezone_local` (Boolean) Router Local Timezone
 
 ### Read-Only
 
@@ -64,6 +101,20 @@ Required:
 
 Optional:
 
+- `accept_lifetime_duration` (Number) Lifetime duration
+  - Range: `1`-`2147483646`
+- `accept_lifetime_end_time_day_of_month` (Number) Day of the month
+  - Range: `1`-`31`
+- `accept_lifetime_end_time_hour` (Number) End time hour
+  - Range: `0`-`23`
+- `accept_lifetime_end_time_minute` (Number) End time minute
+  - Range: `0`-`59`
+- `accept_lifetime_end_time_month` (String) Month of the year
+  - Choices: `april`, `august`, `december`, `february`, `january`, `july`, `june`, `march`, `may`, `november`, `october`, `september`
+- `accept_lifetime_end_time_second` (Number) End time second
+  - Range: `0`-`59`
+- `accept_lifetime_end_time_year` (Number) Year
+  - Range: `1993`-`2035`
 - `accept_lifetime_infinite` (Boolean) Never expires
 - `accept_lifetime_start_time_day_of_month` (Number) Day of the month
   - Range: `1`-`31`
@@ -81,6 +132,20 @@ Optional:
   - Choices: `aes-128-cmac-96`, `hmac-md5`, `hmac-sha-256`, `hmac-sha1-12`, `hmac-sha1-20`, `hmac-sha1-96`, `md5`, `sha-1`
 - `key_string_password` (String, Sensitive) Encrypted key string (even number of characters with first two as digits and sum less than 53, and rest of the characters should be hex digits)
 - `key_string_password6` (String, Sensitive) Enter encrypted type6 password
+- `send_lifetime_duration` (Number) Lifetime duration
+  - Range: `1`-`2147483646`
+- `send_lifetime_end_time_day_of_month` (Number) Day of the month
+  - Range: `1`-`31`
+- `send_lifetime_end_time_hour` (Number) End time hour
+  - Range: `0`-`23`
+- `send_lifetime_end_time_minute` (Number) End time minute
+  - Range: `0`-`59`
+- `send_lifetime_end_time_month` (String) Month of the year
+  - Choices: `april`, `august`, `december`, `february`, `january`, `july`, `june`, `march`, `may`, `november`, `october`, `september`
+- `send_lifetime_end_time_second` (Number) End time second
+  - Range: `0`-`59`
+- `send_lifetime_end_time_year` (Number) Year
+  - Range: `1993`-`2035`
 - `send_lifetime_infinite` (Boolean) Never expires
 - `send_lifetime_start_time_day_of_month` (Number) Day of the month
   - Range: `1`-`31`
@@ -93,6 +158,48 @@ Optional:
 - `send_lifetime_start_time_second` (Number) Start time second
   - Range: `0`-`59`
 - `send_lifetime_start_time_year` (Number) Year
+  - Range: `1993`-`2035`
+
+
+<a id="nestedatt--macsec_keys"></a>
+### Nested Schema for `macsec_keys`
+
+Required:
+
+- `ckn` (String) Configure CKN for macsec PSK
+- `key_string_cryptographic_algorithm` (String) Cryptographic Algorithm
+  - Choices: `aes-128-cmac`, `aes-256-cmac`
+
+Optional:
+
+- `key_string_password` (String, Sensitive) Enter encrypted CAK as hex string
+- `key_string_password6` (String, Sensitive) Enter encrypted type6 password
+- `lifetime_duration` (Number) Lifetime duration
+  - Range: `1`-`2147483646`
+- `lifetime_end_time_day_of_month` (Number) Day of the month
+  - Range: `1`-`31`
+- `lifetime_end_time_hour` (Number) End time hour
+  - Range: `0`-`23`
+- `lifetime_end_time_minute` (Number) End time minute
+  - Range: `0`-`59`
+- `lifetime_end_time_month` (String) Month of the year
+  - Choices: `april`, `august`, `december`, `february`, `january`, `july`, `june`, `march`, `may`, `november`, `october`, `september`
+- `lifetime_end_time_second` (Number) End time second
+  - Range: `0`-`59`
+- `lifetime_end_time_year` (Number) Year
+  - Range: `1993`-`2035`
+- `lifetime_infinite` (Boolean) Never expires
+- `lifetime_start_time_day_of_month` (Number) Day of the month
+  - Range: `1`-`31`
+- `lifetime_start_time_hour` (Number) Start time hour
+  - Range: `0`-`23`
+- `lifetime_start_time_minute` (Number) Start time minute
+  - Range: `0`-`59`
+- `lifetime_start_time_month` (String) Month of the year
+  - Choices: `april`, `august`, `december`, `february`, `january`, `july`, `june`, `march`, `may`, `november`, `october`, `september`
+- `lifetime_start_time_second` (Number) Start time second
+  - Range: `0`-`59`
+- `lifetime_start_time_year` (Number) Year
   - Range: `1993`-`2035`
 
 ## Import

@@ -513,7 +513,7 @@ func (data SNMPServer) toBody(ctx context.Context) string {
 	}
 	if !data.TrapsBfd.IsNull() && !data.TrapsBfd.IsUnknown() {
 		if data.TrapsBfd.ValueBool() {
-			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-bfd-sbfd-cfg:bfd", map[string]string{})
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-bfd-sbfd-cfg:bfd", []interface{}{nil})
 		}
 	}
 	if !data.TrapsConfig.IsNull() && !data.TrapsConfig.IsUnknown() {
@@ -641,22 +641,22 @@ func (data SNMPServer) toBody(ctx context.Context) string {
 	}
 	if !data.TrapsBgpCbgpTwoEnable.IsNull() && !data.TrapsBgpCbgpTwoEnable.IsUnknown() {
 		if data.TrapsBgpCbgpTwoEnable.ValueBool() {
-			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.cbgp-two.enable", map[string]string{})
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.cbgp-two.enable", []interface{}{nil})
 		}
 	}
 	if !data.TrapsBgpCbgpTwoUpdown.IsNull() && !data.TrapsBgpCbgpTwoUpdown.IsUnknown() {
 		if data.TrapsBgpCbgpTwoUpdown.ValueBool() {
-			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.cbgp-two.updown", map[string]string{})
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.cbgp-two.updown", []interface{}{nil})
 		}
 	}
 	if !data.TrapsBgpEnableUpdown.IsNull() && !data.TrapsBgpEnableUpdown.IsUnknown() {
 		if data.TrapsBgpEnableUpdown.ValueBool() {
-			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.cisco-bgp4-mib", map[string]string{})
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.cisco-bgp4-mib", []interface{}{nil})
 		}
 	}
 	if !data.TrapsBgpEnableCiscoBgp4Mib.IsNull() && !data.TrapsBgpEnableCiscoBgp4Mib.IsUnknown() {
 		if data.TrapsBgpEnableCiscoBgp4Mib.ValueBool() {
-			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.updown", map[string]string{})
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.updown", []interface{}{nil})
 		}
 	}
 	if !data.TrapsHsrp.IsNull() && !data.TrapsHsrp.IsUnknown() {
@@ -666,97 +666,97 @@ func (data SNMPServer) toBody(ctx context.Context) string {
 	}
 	if !data.TrapsIsisAll.IsNull() && !data.TrapsIsisAll.IsUnknown() {
 		if data.TrapsIsisAll.ValueBool() {
-			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.all", map[string]string{})
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.all", []interface{}{nil})
 		}
 	}
 	if !data.TrapsIsisDatabaseOverload.IsNull() && !data.TrapsIsisDatabaseOverload.IsUnknown() {
 		if data.TrapsIsisDatabaseOverload.ValueBool() {
-			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.database-overload", map[string]string{})
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.database-overload", []interface{}{nil})
 		}
 	}
 	if !data.TrapsIsisManualAddressDrops.IsNull() && !data.TrapsIsisManualAddressDrops.IsUnknown() {
 		if data.TrapsIsisManualAddressDrops.ValueBool() {
-			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.manual-address-drops", map[string]string{})
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.manual-address-drops", []interface{}{nil})
 		}
 	}
 	if !data.TrapsIsisCorruptedLspDetected.IsNull() && !data.TrapsIsisCorruptedLspDetected.IsUnknown() {
 		if data.TrapsIsisCorruptedLspDetected.ValueBool() {
-			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.corrupted-lsp-detected", map[string]string{})
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.corrupted-lsp-detected", []interface{}{nil})
 		}
 	}
 	if !data.TrapsIsisAttemptToExceedMaxSequence.IsNull() && !data.TrapsIsisAttemptToExceedMaxSequence.IsUnknown() {
 		if data.TrapsIsisAttemptToExceedMaxSequence.ValueBool() {
-			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.attempt-to-exceed-max-sequence", map[string]string{})
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.attempt-to-exceed-max-sequence", []interface{}{nil})
 		}
 	}
 	if !data.TrapsIsisIdLenMismatch.IsNull() && !data.TrapsIsisIdLenMismatch.IsUnknown() {
 		if data.TrapsIsisIdLenMismatch.ValueBool() {
-			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.id-len-mismatch", map[string]string{})
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.id-len-mismatch", []interface{}{nil})
 		}
 	}
 	if !data.TrapsIsisMaxAreaAddressesMismatch.IsNull() && !data.TrapsIsisMaxAreaAddressesMismatch.IsUnknown() {
 		if data.TrapsIsisMaxAreaAddressesMismatch.ValueBool() {
-			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.max-area-addresses-mismatch", map[string]string{})
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.max-area-addresses-mismatch", []interface{}{nil})
 		}
 	}
 	if !data.TrapsIsisOwnLspPurge.IsNull() && !data.TrapsIsisOwnLspPurge.IsUnknown() {
 		if data.TrapsIsisOwnLspPurge.ValueBool() {
-			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.own-lsp-purge", map[string]string{})
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.own-lsp-purge", []interface{}{nil})
 		}
 	}
 	if !data.TrapsIsisSequenceNumberSkip.IsNull() && !data.TrapsIsisSequenceNumberSkip.IsUnknown() {
 		if data.TrapsIsisSequenceNumberSkip.ValueBool() {
-			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.sequence-number-skip", map[string]string{})
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.sequence-number-skip", []interface{}{nil})
 		}
 	}
 	if !data.TrapsIsisAuthenticationTypeFailure.IsNull() && !data.TrapsIsisAuthenticationTypeFailure.IsUnknown() {
 		if data.TrapsIsisAuthenticationTypeFailure.ValueBool() {
-			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.authentication-type-failure", map[string]string{})
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.authentication-type-failure", []interface{}{nil})
 		}
 	}
 	if !data.TrapsIsisAuthenticationFailure.IsNull() && !data.TrapsIsisAuthenticationFailure.IsUnknown() {
 		if data.TrapsIsisAuthenticationFailure.ValueBool() {
-			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.authentication-failure", map[string]string{})
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.authentication-failure", []interface{}{nil})
 		}
 	}
 	if !data.TrapsIsisVersionSkew.IsNull() && !data.TrapsIsisVersionSkew.IsUnknown() {
 		if data.TrapsIsisVersionSkew.ValueBool() {
-			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.version-skew", map[string]string{})
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.version-skew", []interface{}{nil})
 		}
 	}
 	if !data.TrapsIsisAreaMismatch.IsNull() && !data.TrapsIsisAreaMismatch.IsUnknown() {
 		if data.TrapsIsisAreaMismatch.ValueBool() {
-			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.area-mismatch", map[string]string{})
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.area-mismatch", []interface{}{nil})
 		}
 	}
 	if !data.TrapsIsisRejectedAdjacency.IsNull() && !data.TrapsIsisRejectedAdjacency.IsUnknown() {
 		if data.TrapsIsisRejectedAdjacency.ValueBool() {
-			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.rejected-adjacency", map[string]string{})
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.rejected-adjacency", []interface{}{nil})
 		}
 	}
 	if !data.TrapsIsisLspTooLargeToPropagate.IsNull() && !data.TrapsIsisLspTooLargeToPropagate.IsUnknown() {
 		if data.TrapsIsisLspTooLargeToPropagate.ValueBool() {
-			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.lsp-too-large-to-propagate", map[string]string{})
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.lsp-too-large-to-propagate", []interface{}{nil})
 		}
 	}
 	if !data.TrapsIsisOrigLspBuffSizeMismatch.IsNull() && !data.TrapsIsisOrigLspBuffSizeMismatch.IsUnknown() {
 		if data.TrapsIsisOrigLspBuffSizeMismatch.ValueBool() {
-			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.orig-lsp-buff-size-mismatch", map[string]string{})
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.orig-lsp-buff-size-mismatch", []interface{}{nil})
 		}
 	}
 	if !data.TrapsIsisProtocolsSupportedMismatch.IsNull() && !data.TrapsIsisProtocolsSupportedMismatch.IsUnknown() {
 		if data.TrapsIsisProtocolsSupportedMismatch.ValueBool() {
-			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.protocols-supported-mismatch", map[string]string{})
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.protocols-supported-mismatch", []interface{}{nil})
 		}
 	}
 	if !data.TrapsIsisAdjacencyChange.IsNull() && !data.TrapsIsisAdjacencyChange.IsUnknown() {
 		if data.TrapsIsisAdjacencyChange.ValueBool() {
-			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.adjacency-change", map[string]string{})
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.adjacency-change", []interface{}{nil})
 		}
 	}
 	if !data.TrapsIsisLspErrorDetected.IsNull() && !data.TrapsIsisLspErrorDetected.IsUnknown() {
 		if data.TrapsIsisLspErrorDetected.ValueBool() {
-			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.lsp-error-detected", map[string]string{})
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.lsp-error-detected", []interface{}{nil})
 		}
 	}
 	if !data.TrapsVrrpEvents.IsNull() && !data.TrapsVrrpEvents.IsUnknown() {

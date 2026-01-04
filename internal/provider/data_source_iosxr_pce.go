@@ -736,6 +736,166 @@ func (d *PCEDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 					},
 				},
 			},
+			"srte_ipv4_peers": schema.ListNestedAttribute{
+				MarkdownDescription: "IPv4 address of the PCEP peer",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "IPv4 address of the PCEP peer",
+							Computed:            true,
+						},
+						"policies": schema.ListNestedAttribute{
+							MarkdownDescription: "Name of SR-TE Policy",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"policy_name": schema.StringAttribute{
+										MarkdownDescription: "Name of SR-TE Policy",
+										Computed:            true,
+									},
+									"candidate_paths_append_sid_mpls": schema.Int64Attribute{
+										MarkdownDescription: "MPLS label",
+										Computed:            true,
+									},
+									"candidate_paths_preferences": schema.ListNestedAttribute{
+										MarkdownDescription: "Policy path-option preference entry",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"preference_id": schema.Int64Attribute{
+													MarkdownDescription: "Policy path-option preference entry",
+													Computed:            true,
+												},
+												"dynamic_mpls": schema.BoolAttribute{
+													MarkdownDescription: "MPLS path type",
+													Computed:            true,
+												},
+												"dynamic_metric_type_te": schema.BoolAttribute{
+													MarkdownDescription: "TE metric type",
+													Computed:            true,
+												},
+												"dynamic_metric_type_igp": schema.BoolAttribute{
+													MarkdownDescription: "IGP metric type",
+													Computed:            true,
+												},
+												"dynamic_metric_type_latency": schema.BoolAttribute{
+													MarkdownDescription: "Latency metric type",
+													Computed:            true,
+												},
+												"dynamic_metric_type_hopcount": schema.BoolAttribute{
+													MarkdownDescription: "Hopcount metric type",
+													Computed:            true,
+												},
+												"dynamic_metric_sid_limit": schema.Int64Attribute{
+													MarkdownDescription: "SID limit",
+													Computed:            true,
+												},
+												"explicit_segment_list_names": schema.ListNestedAttribute{
+													MarkdownDescription: "Identifying name for Segment-list",
+													Computed:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"segment_list_name": schema.StringAttribute{
+																MarkdownDescription: "Identifying name for Segment-list",
+																Computed:            true,
+															},
+														},
+													},
+												},
+												"constraints_segments_sid_algorithm": schema.Int64Attribute{
+													MarkdownDescription: "Prefix-SID algorithm",
+													Computed:            true,
+												},
+												"constraints_segments_protection_protected_preferred": schema.BoolAttribute{
+													MarkdownDescription: "Protected adj-SID preferred (default)",
+													Computed:            true,
+												},
+												"constraints_segments_protection_protected_only": schema.BoolAttribute{
+													MarkdownDescription: "Protected adj-SID only",
+													Computed:            true,
+												},
+												"constraints_segments_protection_unprotected_only": schema.BoolAttribute{
+													MarkdownDescription: "Unprotected adj-SID only",
+													Computed:            true,
+												},
+												"constraints_segments_protection_unprotected_preferred": schema.BoolAttribute{
+													MarkdownDescription: "Unprotected adj-SID preferred",
+													Computed:            true,
+												},
+											},
+										},
+									},
+									"candidate_paths_affinity_include_any_colors": schema.ListNestedAttribute{
+										MarkdownDescription: "Affinity color name",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"affinity_color_name": schema.StringAttribute{
+													MarkdownDescription: "Affinity color name",
+													Computed:            true,
+												},
+											},
+										},
+									},
+									"candidate_paths_affinity_include_all_colors": schema.ListNestedAttribute{
+										MarkdownDescription: "Affinity color name",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"affinity_color_name": schema.StringAttribute{
+													MarkdownDescription: "Affinity color name",
+													Computed:            true,
+												},
+											},
+										},
+									},
+									"candidate_paths_affinity_exclude_colors": schema.ListNestedAttribute{
+										MarkdownDescription: "Affinity color name",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"affinity_color_name": schema.StringAttribute{
+													MarkdownDescription: "Affinity color name",
+													Computed:            true,
+												},
+											},
+										},
+									},
+									"color": schema.Int64Attribute{
+										MarkdownDescription: "Specify color for policy",
+										Computed:            true,
+									},
+									"end_point_ipv4": schema.StringAttribute{
+										MarkdownDescription: "IPv4 address",
+										Computed:            true,
+									},
+									"binding_sid_mpls": schema.Int64Attribute{
+										MarkdownDescription: "MPLS label",
+										Computed:            true,
+									},
+									"shutdown": schema.BoolAttribute{
+										MarkdownDescription: "Policy admin-shutdown",
+										Computed:            true,
+									},
+									"profile_id": schema.Int64Attribute{
+										MarkdownDescription: "Policy configuration profile that the PCC should apply to this policy",
+										Computed:            true,
+									},
+									"path_selection_protected": schema.BoolAttribute{
+										MarkdownDescription: "Use local protected if possible",
+										Computed:            true,
+									},
+									"path_selection_unprotected": schema.BoolAttribute{
+										MarkdownDescription: "Force use of unprotected adjacency SIDs",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 			"srte_cspf_anycast_sid_inclusion": schema.BoolAttribute{
 				MarkdownDescription: "Enable Anycast SID Inclusion for all policies",
 				Computed:            true,

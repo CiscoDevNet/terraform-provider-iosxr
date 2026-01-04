@@ -7,17 +7,27 @@ resource "iosxr_interface_bundle_ether" "example" {
   dampening_reuse_threshold    = 10
   dampening_suppress_threshold = 20
   dampening_max_suppress_time  = 30
-  shutdown                     = false
-  mtu                          = 9000
-  logging_events_link_status   = true
-  bandwidth                    = 100000
-  description                  = "My Interface Description"
-  load_interval                = 30
-  vrf                          = "VRF1"
-  ipv4_address                 = "192.168.1.1"
-  ipv4_netmask                 = "255.255.255.0"
-  ipv4_route_tag               = 100
-  ipv4_algorithm               = 128
+  service_policy_input = [
+    {
+      name = "PMAP-IN"
+    }
+  ]
+  service_policy_output = [
+    {
+      name = "PMAP-OUT"
+    }
+  ]
+  shutdown                   = false
+  mtu                        = 9000
+  logging_events_link_status = true
+  bandwidth                  = 100000
+  description                = "My Interface Description"
+  load_interval              = 30
+  vrf                        = "VRF1"
+  ipv4_address               = "192.168.1.1"
+  ipv4_netmask               = "255.255.255.0"
+  ipv4_route_tag             = 100
+  ipv4_algorithm             = 128
   ipv4_secondaries = [
     {
       address   = "192.168.2.1"
@@ -86,6 +96,7 @@ resource "iosxr_interface_bundle_ether" "example" {
   bundle_minimum_active_links                   = 1
   bundle_maximum_active_links                   = 8
   bundle_shutdown                               = false
+  bundle_load_balancing_hash_src_ip             = true
   bundle_lacp_delay                             = 1000
   bundle_lacp_fallback_timeout                  = 60
   lacp_switchover_suppress_flaps                = 150
@@ -116,4 +127,111 @@ resource "iosxr_interface_bundle_ether" "example" {
   lldp                                          = true
   lldp_transmit_disable                         = true
   lldp_receive_disable                          = true
+  ptp                                           = true
+  ptp_profile                                   = "Profile-1"
+  ptp_transport_ethernet                        = true
+  ptp_clock_operation_one_step                  = true
+  ptp_announce_interval                         = "2"
+  ptp_announce_timeout                          = 5
+  ptp_announce_grant_duration                   = 300
+  ptp_sync_interval                             = "2"
+  ptp_sync_grant_duration                       = 300
+  ptp_sync_timeout                              = 3000
+  ptp_delay_request_interval                    = "2"
+  ptp_cos                                       = 6
+  ptp_cos_event                                 = 6
+  ptp_cos_general                               = 6
+  ptp_dscp                                      = 46
+  ptp_dscp_event                                = 46
+  ptp_dscp_general                              = 46
+  ptp_ipv4_ttl                                  = 10
+  ptp_ipv6_hop_limit                            = 10
+  ptp_delay_asymmetry_value                     = 1000
+  ptp_delay_asymmetry_unit_microseconds         = true
+  ptp_delay_response_grant_duration             = 300
+  ptp_delay_response_timeout                    = 3000
+  ptp_unicast_grant_invalid_request_reduce      = true
+  ptp_multicast                                 = true
+  ptp_multicast_mixed                           = true
+  ptp_multicast_target_address_mac_forwardable  = true
+  ptp_port_state_master_only                    = true
+  ptp_local_priority                            = 128
+  ptp_slave_ipv4s = [
+    {
+      address        = "10.2.2.2"
+      non_negotiated = true
+    }
+  ]
+  ptp_slave_ipv6s = [
+    {
+      address        = "2001:db8::2"
+      non_negotiated = true
+    }
+  ]
+  ptp_slave_ethernets = [
+    {
+      address        = "00:11:22:33:44:55"
+      non_negotiated = true
+    }
+  ]
+  ptp_master_ipv4s = [
+    {
+      address         = "10.3.3.3"
+      priority        = 100
+      clock_class     = 6
+      multicast       = true
+      multicast_mixed = true
+      non_negotiated  = true
+      delay_asymmetry = 50
+      microseconds    = true
+    }
+  ]
+  ptp_master_ipv6s = [
+    {
+      address         = "2001:db8::3"
+      priority        = 100
+      clock_class     = 6
+      multicast       = true
+      multicast_mixed = true
+      non_negotiated  = true
+      delay_asymmetry = 50
+      microseconds    = true
+    }
+  ]
+  ptp_master_ethernets = [
+    {
+      address         = "aa:bb:cc:dd:ee:f4"
+      priority        = 100
+      clock_class     = 6
+      multicast       = true
+      multicast_mixed = true
+      non_negotiated  = true
+      delay_asymmetry = 50
+      microseconds    = true
+    }
+  ]
+  ptp_interop_profile_g_8275_2                             = true
+  ptp_interop_domain                                       = 24
+  ptp_interop_egress_conversion_priority1                  = 128
+  ptp_interop_egress_conversion_priority2                  = 128
+  ptp_interop_egress_conversion_clock_accuracy             = 33
+  ptp_interop_egress_conversion_offset_scaled_log_variance = 5
+  ptp_interop_egress_conversion_clock_class_default        = 6
+  ptp_interop_egress_conversion_clock_class_mappings = [
+    {
+      clock_class_to_map_from = 6
+      clock_class_to_map_to   = 13
+    }
+  ]
+  ptp_interop_ingress_conversion_priority1                  = 128
+  ptp_interop_ingress_conversion_priority2                  = 128
+  ptp_interop_ingress_conversion_clock_accuracy             = 33
+  ptp_interop_ingress_conversion_offset_scaled_log_variance = 5
+  ptp_interop_ingress_conversion_clock_class_default        = 6
+  ptp_interop_ingress_conversion_clock_class_mappings = [
+    {
+      clock_class_to_map_from = 13
+      clock_class_to_map_to   = 6
+    }
+  ]
 }

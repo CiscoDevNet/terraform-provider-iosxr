@@ -131,6 +131,15 @@ type RouterPIMIPv4 struct {
 	BsrCandidateBsrPriority                   types.Int64                             `tfsdk:"bsr_candidate_bsr_priority"`
 	BsrCandidateRps                           []RouterPIMIPv4BsrCandidateRps          `tfsdk:"bsr_candidate_rps"`
 	BsrRelayVrfs                              []RouterPIMIPv4BsrRelayVrfs             `tfsdk:"bsr_relay_vrfs"`
+	Mofrr                                     types.Bool                              `tfsdk:"mofrr"`
+	MofrrFlow                                 types.String                            `tfsdk:"mofrr_flow"`
+	MofrrRib                                  types.String                            `tfsdk:"mofrr_rib"`
+	MofrrProtect                              types.String                            `tfsdk:"mofrr_protect"`
+	MofrrProtectLocalFaultOnly                types.Bool                              `tfsdk:"mofrr_protect_local_fault_only"`
+	MofrrNonRevertive                         types.Bool                              `tfsdk:"mofrr_non_revertive"`
+	MofrrCloneJoins                           []RouterPIMIPv4MofrrCloneJoins          `tfsdk:"mofrr_clone_joins"`
+	MofrrCloneSources                         []RouterPIMIPv4MofrrCloneSources        `tfsdk:"mofrr_clone_sources"`
+	SrP2mpPolicies                            []RouterPIMIPv4SrP2mpPolicies           `tfsdk:"sr_p2mp_policies"`
 	Interfaces                                []RouterPIMIPv4Interfaces               `tfsdk:"interfaces"`
 }
 
@@ -229,6 +238,15 @@ type RouterPIMIPv4Data struct {
 	BsrCandidateBsrPriority                   types.Int64                             `tfsdk:"bsr_candidate_bsr_priority"`
 	BsrCandidateRps                           []RouterPIMIPv4BsrCandidateRps          `tfsdk:"bsr_candidate_rps"`
 	BsrRelayVrfs                              []RouterPIMIPv4BsrRelayVrfs             `tfsdk:"bsr_relay_vrfs"`
+	Mofrr                                     types.Bool                              `tfsdk:"mofrr"`
+	MofrrFlow                                 types.String                            `tfsdk:"mofrr_flow"`
+	MofrrRib                                  types.String                            `tfsdk:"mofrr_rib"`
+	MofrrProtect                              types.String                            `tfsdk:"mofrr_protect"`
+	MofrrProtectLocalFaultOnly                types.Bool                              `tfsdk:"mofrr_protect_local_fault_only"`
+	MofrrNonRevertive                         types.Bool                              `tfsdk:"mofrr_non_revertive"`
+	MofrrCloneJoins                           []RouterPIMIPv4MofrrCloneJoins          `tfsdk:"mofrr_clone_joins"`
+	MofrrCloneSources                         []RouterPIMIPv4MofrrCloneSources        `tfsdk:"mofrr_clone_sources"`
+	SrP2mpPolicies                            []RouterPIMIPv4SrP2mpPolicies           `tfsdk:"sr_p2mp_policies"`
 	Interfaces                                []RouterPIMIPv4Interfaces               `tfsdk:"interfaces"`
 }
 type RouterPIMIPv4RpAddresses struct {
@@ -277,6 +295,18 @@ type RouterPIMIPv4BsrRelayVrfs struct {
 	VrfName types.String `tfsdk:"vrf_name"`
 	Listen  types.Bool   `tfsdk:"listen"`
 }
+type RouterPIMIPv4MofrrCloneJoins struct {
+	SourceAddress types.String                     `tfsdk:"source_address"`
+	To            []RouterPIMIPv4MofrrCloneJoinsTo `tfsdk:"to"`
+}
+type RouterPIMIPv4MofrrCloneSources struct {
+	SourceAddress types.String                       `tfsdk:"source_address"`
+	To            []RouterPIMIPv4MofrrCloneSourcesTo `tfsdk:"to"`
+}
+type RouterPIMIPv4SrP2mpPolicies struct {
+	PolicyName   types.String                              `tfsdk:"policy_name"`
+	StaticGroups []RouterPIMIPv4SrP2mpPoliciesStaticGroups `tfsdk:"static_groups"`
+}
 type RouterPIMIPv4Interfaces struct {
 	InterfaceName                    types.String `tfsdk:"interface_name"`
 	Enable                           types.Bool   `tfsdk:"enable"`
@@ -295,6 +325,57 @@ type RouterPIMIPv4Interfaces struct {
 	BfdMinimumInterval               types.Int64  `tfsdk:"bfd_minimum_interval"`
 	BfdFastDetect                    types.Bool   `tfsdk:"bfd_fast_detect"`
 	BsrBorder                        types.Bool   `tfsdk:"bsr_border"`
+}
+type RouterPIMIPv4MofrrCloneJoinsTo struct {
+	PrimaryAddress types.String                        `tfsdk:"primary_address"`
+	And            []RouterPIMIPv4MofrrCloneJoinsToAnd `tfsdk:"and"`
+}
+type RouterPIMIPv4MofrrCloneSourcesTo struct {
+	PrimaryAddress types.String                          `tfsdk:"primary_address"`
+	And            []RouterPIMIPv4MofrrCloneSourcesToAnd `tfsdk:"and"`
+}
+type RouterPIMIPv4SrP2mpPoliciesStaticGroups struct {
+	GroupAddress              types.String                                                       `tfsdk:"group_address"`
+	GroupAddressOnly          types.Bool                                                         `tfsdk:"group_address_only"`
+	GroupMasks                []RouterPIMIPv4SrP2mpPoliciesStaticGroupsGroupMasks                `tfsdk:"group_masks"`
+	GroupMasksSourceAddresses []RouterPIMIPv4SrP2mpPoliciesStaticGroupsGroupMasksSourceAddresses `tfsdk:"group_masks_source_addresses"`
+	SourceMasks               []RouterPIMIPv4SrP2mpPoliciesStaticGroupsSourceMasks               `tfsdk:"source_masks"`
+	GroupMasksSourceMasks     []RouterPIMIPv4SrP2mpPoliciesStaticGroupsGroupMasksSourceMasks     `tfsdk:"group_masks_source_masks"`
+}
+type RouterPIMIPv4MofrrCloneJoinsToAnd struct {
+	BackupAddress types.String                               `tfsdk:"backup_address"`
+	Masklen       []RouterPIMIPv4MofrrCloneJoinsToAndMasklen `tfsdk:"masklen"`
+}
+type RouterPIMIPv4MofrrCloneSourcesToAnd struct {
+	BackupAddress types.String                                 `tfsdk:"backup_address"`
+	Masklen       []RouterPIMIPv4MofrrCloneSourcesToAndMasklen `tfsdk:"masklen"`
+}
+type RouterPIMIPv4SrP2mpPoliciesStaticGroupsGroupMasks struct {
+	GroupIncMask types.String `tfsdk:"group_inc_mask"`
+	GroupCount   types.Int64  `tfsdk:"group_count"`
+}
+type RouterPIMIPv4SrP2mpPoliciesStaticGroupsGroupMasksSourceAddresses struct {
+	GroupIncMask types.String `tfsdk:"group_inc_mask"`
+	SourceIp     types.String `tfsdk:"source_ip"`
+	GroupCount   types.Int64  `tfsdk:"group_count"`
+}
+type RouterPIMIPv4SrP2mpPoliciesStaticGroupsSourceMasks struct {
+	SourceIp      types.String `tfsdk:"source_ip"`
+	SourceIncMask types.String `tfsdk:"source_inc_mask"`
+	SourceCount   types.Int64  `tfsdk:"source_count"`
+}
+type RouterPIMIPv4SrP2mpPoliciesStaticGroupsGroupMasksSourceMasks struct {
+	GroupIncMask  types.String `tfsdk:"group_inc_mask"`
+	SourceIp      types.String `tfsdk:"source_ip"`
+	SourceIncMask types.String `tfsdk:"source_inc_mask"`
+	GroupCount    types.Int64  `tfsdk:"group_count"`
+	SourceCount   types.Int64  `tfsdk:"source_count"`
+}
+type RouterPIMIPv4MofrrCloneJoinsToAndMasklen struct {
+	MaskLength types.Int64 `tfsdk:"mask_length"`
+}
+type RouterPIMIPv4MofrrCloneSourcesToAndMasklen struct {
+	MaskLength types.Int64 `tfsdk:"mask_length"`
 }
 
 // End of section. //template:end types
@@ -613,6 +694,30 @@ func (data RouterPIMIPv4) toBody(ctx context.Context) string {
 	if !data.BsrCandidateBsrPriority.IsNull() && !data.BsrCandidateBsrPriority.IsUnknown() {
 		body, _ = sjson.Set(body, "bsr.candidate-bsr.priority", strconv.FormatInt(data.BsrCandidateBsrPriority.ValueInt64(), 10))
 	}
+	if !data.Mofrr.IsNull() && !data.Mofrr.IsUnknown() {
+		if data.Mofrr.ValueBool() {
+			body, _ = sjson.Set(body, "mofrr", map[string]string{})
+		}
+	}
+	if !data.MofrrFlow.IsNull() && !data.MofrrFlow.IsUnknown() {
+		body, _ = sjson.Set(body, "mofrr.flow", data.MofrrFlow.ValueString())
+	}
+	if !data.MofrrRib.IsNull() && !data.MofrrRib.IsUnknown() {
+		body, _ = sjson.Set(body, "mofrr.rib", data.MofrrRib.ValueString())
+	}
+	if !data.MofrrProtect.IsNull() && !data.MofrrProtect.IsUnknown() {
+		body, _ = sjson.Set(body, "mofrr.protect", data.MofrrProtect.ValueString())
+	}
+	if !data.MofrrProtectLocalFaultOnly.IsNull() && !data.MofrrProtectLocalFaultOnly.IsUnknown() {
+		if data.MofrrProtectLocalFaultOnly.ValueBool() {
+			body, _ = sjson.Set(body, "mofrr.local-fault-only", map[string]string{})
+		}
+	}
+	if !data.MofrrNonRevertive.IsNull() && !data.MofrrNonRevertive.IsUnknown() {
+		if data.MofrrNonRevertive.ValueBool() {
+			body, _ = sjson.Set(body, "mofrr.non-revertive", map[string]string{})
+		}
+	}
 	if len(data.RpAddresses) > 0 {
 		body, _ = sjson.Set(body, "rp-addresses.rp-address", []interface{}{})
 		for index, item := range data.RpAddresses {
@@ -751,6 +856,150 @@ func (data RouterPIMIPv4) toBody(ctx context.Context) string {
 			if !item.Listen.IsNull() && !item.Listen.IsUnknown() {
 				if item.Listen.ValueBool() {
 					body, _ = sjson.Set(body, "bsr.relay.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"listen", map[string]string{})
+				}
+			}
+		}
+	}
+	if len(data.MofrrCloneJoins) > 0 {
+		body, _ = sjson.Set(body, "mofrr.clone.joins.join", []interface{}{})
+		for index, item := range data.MofrrCloneJoins {
+			if !item.SourceAddress.IsNull() && !item.SourceAddress.IsUnknown() {
+				body, _ = sjson.Set(body, "mofrr.clone.joins.join"+"."+strconv.Itoa(index)+"."+"address", item.SourceAddress.ValueString())
+			}
+			if len(item.To) > 0 {
+				body, _ = sjson.Set(body, "mofrr.clone.joins.join"+"."+strconv.Itoa(index)+"."+"to", []interface{}{})
+				for cindex, citem := range item.To {
+					if !citem.PrimaryAddress.IsNull() && !citem.PrimaryAddress.IsUnknown() {
+						body, _ = sjson.Set(body, "mofrr.clone.joins.join"+"."+strconv.Itoa(index)+"."+"to"+"."+strconv.Itoa(cindex)+"."+"address", citem.PrimaryAddress.ValueString())
+					}
+					if len(citem.And) > 0 {
+						body, _ = sjson.Set(body, "mofrr.clone.joins.join"+"."+strconv.Itoa(index)+"."+"to"+"."+strconv.Itoa(cindex)+"."+"and", []interface{}{})
+						for ccindex, ccitem := range citem.And {
+							if !ccitem.BackupAddress.IsNull() && !ccitem.BackupAddress.IsUnknown() {
+								body, _ = sjson.Set(body, "mofrr.clone.joins.join"+"."+strconv.Itoa(index)+"."+"to"+"."+strconv.Itoa(cindex)+"."+"and"+"."+strconv.Itoa(ccindex)+"."+"address", ccitem.BackupAddress.ValueString())
+							}
+							if len(ccitem.Masklen) > 0 {
+								body, _ = sjson.Set(body, "mofrr.clone.joins.join"+"."+strconv.Itoa(index)+"."+"to"+"."+strconv.Itoa(cindex)+"."+"and"+"."+strconv.Itoa(ccindex)+"."+"masklen", []interface{}{})
+								for cccindex, cccitem := range ccitem.Masklen {
+									if !cccitem.MaskLength.IsNull() && !cccitem.MaskLength.IsUnknown() {
+										body, _ = sjson.Set(body, "mofrr.clone.joins.join"+"."+strconv.Itoa(index)+"."+"to"+"."+strconv.Itoa(cindex)+"."+"and"+"."+strconv.Itoa(ccindex)+"."+"masklen"+"."+strconv.Itoa(cccindex)+"."+"mask-length", strconv.FormatInt(cccitem.MaskLength.ValueInt64(), 10))
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	if len(data.MofrrCloneSources) > 0 {
+		body, _ = sjson.Set(body, "mofrr.clone.sources.source", []interface{}{})
+		for index, item := range data.MofrrCloneSources {
+			if !item.SourceAddress.IsNull() && !item.SourceAddress.IsUnknown() {
+				body, _ = sjson.Set(body, "mofrr.clone.sources.source"+"."+strconv.Itoa(index)+"."+"address", item.SourceAddress.ValueString())
+			}
+			if len(item.To) > 0 {
+				body, _ = sjson.Set(body, "mofrr.clone.sources.source"+"."+strconv.Itoa(index)+"."+"to", []interface{}{})
+				for cindex, citem := range item.To {
+					if !citem.PrimaryAddress.IsNull() && !citem.PrimaryAddress.IsUnknown() {
+						body, _ = sjson.Set(body, "mofrr.clone.sources.source"+"."+strconv.Itoa(index)+"."+"to"+"."+strconv.Itoa(cindex)+"."+"address", citem.PrimaryAddress.ValueString())
+					}
+					if len(citem.And) > 0 {
+						body, _ = sjson.Set(body, "mofrr.clone.sources.source"+"."+strconv.Itoa(index)+"."+"to"+"."+strconv.Itoa(cindex)+"."+"and", []interface{}{})
+						for ccindex, ccitem := range citem.And {
+							if !ccitem.BackupAddress.IsNull() && !ccitem.BackupAddress.IsUnknown() {
+								body, _ = sjson.Set(body, "mofrr.clone.sources.source"+"."+strconv.Itoa(index)+"."+"to"+"."+strconv.Itoa(cindex)+"."+"and"+"."+strconv.Itoa(ccindex)+"."+"address", ccitem.BackupAddress.ValueString())
+							}
+							if len(ccitem.Masklen) > 0 {
+								body, _ = sjson.Set(body, "mofrr.clone.sources.source"+"."+strconv.Itoa(index)+"."+"to"+"."+strconv.Itoa(cindex)+"."+"and"+"."+strconv.Itoa(ccindex)+"."+"masklen", []interface{}{})
+								for cccindex, cccitem := range ccitem.Masklen {
+									if !cccitem.MaskLength.IsNull() && !cccitem.MaskLength.IsUnknown() {
+										body, _ = sjson.Set(body, "mofrr.clone.sources.source"+"."+strconv.Itoa(index)+"."+"to"+"."+strconv.Itoa(cindex)+"."+"and"+"."+strconv.Itoa(ccindex)+"."+"masklen"+"."+strconv.Itoa(cccindex)+"."+"mask-length", strconv.FormatInt(cccitem.MaskLength.ValueInt64(), 10))
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	if len(data.SrP2mpPolicies) > 0 {
+		body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy", []interface{}{})
+		for index, item := range data.SrP2mpPolicies {
+			if !item.PolicyName.IsNull() && !item.PolicyName.IsUnknown() {
+				body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"sr-p2mp-policy-id", item.PolicyName.ValueString())
+			}
+			if len(item.StaticGroups) > 0 {
+				body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address", []interface{}{})
+				for cindex, citem := range item.StaticGroups {
+					if !citem.GroupAddress.IsNull() && !citem.GroupAddress.IsUnknown() {
+						body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address"+"."+strconv.Itoa(cindex)+"."+"group-address", citem.GroupAddress.ValueString())
+					}
+					if !citem.GroupAddressOnly.IsNull() && !citem.GroupAddressOnly.IsUnknown() {
+						if citem.GroupAddressOnly.ValueBool() {
+							body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address"+"."+strconv.Itoa(cindex)+"."+"group-address-only", map[string]string{})
+						}
+					}
+					if len(citem.GroupMasks) > 0 {
+						body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address"+"."+strconv.Itoa(cindex)+"."+"group-address-inc-mask", []interface{}{})
+						for ccindex, ccitem := range citem.GroupMasks {
+							if !ccitem.GroupIncMask.IsNull() && !ccitem.GroupIncMask.IsUnknown() {
+								body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address"+"."+strconv.Itoa(cindex)+"."+"group-address-inc-mask"+"."+strconv.Itoa(ccindex)+"."+"group-mask-address", ccitem.GroupIncMask.ValueString())
+							}
+							if !ccitem.GroupCount.IsNull() && !ccitem.GroupCount.IsUnknown() {
+								body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address"+"."+strconv.Itoa(cindex)+"."+"group-address-inc-mask"+"."+strconv.Itoa(ccindex)+"."+"group-address-count", strconv.FormatInt(ccitem.GroupCount.ValueInt64(), 10))
+							}
+						}
+					}
+					if len(citem.GroupMasksSourceAddresses) > 0 {
+						body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address"+"."+strconv.Itoa(cindex)+"."+"group-mask-address-source-address-inc-mask", []interface{}{})
+						for ccindex, ccitem := range citem.GroupMasksSourceAddresses {
+							if !ccitem.GroupIncMask.IsNull() && !ccitem.GroupIncMask.IsUnknown() {
+								body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address"+"."+strconv.Itoa(cindex)+"."+"group-mask-address-source-address-inc-mask"+"."+strconv.Itoa(ccindex)+"."+"group-mask-address", ccitem.GroupIncMask.ValueString())
+							}
+							if !ccitem.SourceIp.IsNull() && !ccitem.SourceIp.IsUnknown() {
+								body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address"+"."+strconv.Itoa(cindex)+"."+"group-mask-address-source-address-inc-mask"+"."+strconv.Itoa(ccindex)+"."+"source-address", ccitem.SourceIp.ValueString())
+							}
+							if !ccitem.GroupCount.IsNull() && !ccitem.GroupCount.IsUnknown() {
+								body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address"+"."+strconv.Itoa(cindex)+"."+"group-mask-address-source-address-inc-mask"+"."+strconv.Itoa(ccindex)+"."+"group-address-count", strconv.FormatInt(ccitem.GroupCount.ValueInt64(), 10))
+							}
+						}
+					}
+					if len(citem.SourceMasks) > 0 {
+						body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address"+"."+strconv.Itoa(cindex)+"."+"source-address-source-mask-address-inc-mask", []interface{}{})
+						for ccindex, ccitem := range citem.SourceMasks {
+							if !ccitem.SourceIp.IsNull() && !ccitem.SourceIp.IsUnknown() {
+								body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address"+"."+strconv.Itoa(cindex)+"."+"source-address-source-mask-address-inc-mask"+"."+strconv.Itoa(ccindex)+"."+"source-address", ccitem.SourceIp.ValueString())
+							}
+							if !ccitem.SourceIncMask.IsNull() && !ccitem.SourceIncMask.IsUnknown() {
+								body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address"+"."+strconv.Itoa(cindex)+"."+"source-address-source-mask-address-inc-mask"+"."+strconv.Itoa(ccindex)+"."+"source-mask-address", ccitem.SourceIncMask.ValueString())
+							}
+							if !ccitem.SourceCount.IsNull() && !ccitem.SourceCount.IsUnknown() {
+								body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address"+"."+strconv.Itoa(cindex)+"."+"source-address-source-mask-address-inc-mask"+"."+strconv.Itoa(ccindex)+"."+"source-address-count", strconv.FormatInt(ccitem.SourceCount.ValueInt64(), 10))
+							}
+						}
+					}
+					if len(citem.GroupMasksSourceMasks) > 0 {
+						body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address"+"."+strconv.Itoa(cindex)+"."+"group-mask-address-source-address-source-mask-address-inc-mask", []interface{}{})
+						for ccindex, ccitem := range citem.GroupMasksSourceMasks {
+							if !ccitem.GroupIncMask.IsNull() && !ccitem.GroupIncMask.IsUnknown() {
+								body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address"+"."+strconv.Itoa(cindex)+"."+"group-mask-address-source-address-source-mask-address-inc-mask"+"."+strconv.Itoa(ccindex)+"."+"group-mask-address", ccitem.GroupIncMask.ValueString())
+							}
+							if !ccitem.SourceIp.IsNull() && !ccitem.SourceIp.IsUnknown() {
+								body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address"+"."+strconv.Itoa(cindex)+"."+"group-mask-address-source-address-source-mask-address-inc-mask"+"."+strconv.Itoa(ccindex)+"."+"source-address", ccitem.SourceIp.ValueString())
+							}
+							if !ccitem.SourceIncMask.IsNull() && !ccitem.SourceIncMask.IsUnknown() {
+								body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address"+"."+strconv.Itoa(cindex)+"."+"group-mask-address-source-address-source-mask-address-inc-mask"+"."+strconv.Itoa(ccindex)+"."+"source-mask-address", ccitem.SourceIncMask.ValueString())
+							}
+							if !ccitem.GroupCount.IsNull() && !ccitem.GroupCount.IsUnknown() {
+								body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address"+"."+strconv.Itoa(cindex)+"."+"group-mask-address-source-address-source-mask-address-inc-mask"+"."+strconv.Itoa(ccindex)+"."+"group-address-count", strconv.FormatInt(ccitem.GroupCount.ValueInt64(), 10))
+							}
+							if !ccitem.SourceCount.IsNull() && !ccitem.SourceCount.IsUnknown() {
+								body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address"+"."+strconv.Itoa(cindex)+"."+"group-mask-address-source-address-source-mask-address-inc-mask"+"."+strconv.Itoa(ccindex)+"."+"source-address-count", strconv.FormatInt(ccitem.SourceCount.ValueInt64(), 10))
+							}
+						}
+					}
 				}
 			}
 		}
@@ -1697,6 +1946,508 @@ func (data *RouterPIMIPv4) updateFromBody(ctx context.Context, res []byte) {
 			data.BsrRelayVrfs[i].Listen = types.BoolNull()
 		}
 	}
+	if value := gjson.GetBytes(res, "mofrr"); !data.Mofrr.IsNull() {
+		if value.Exists() {
+			data.Mofrr = types.BoolValue(true)
+		} else {
+			data.Mofrr = types.BoolValue(false)
+		}
+	} else {
+		data.Mofrr = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "mofrr.flow"); value.Exists() && !data.MofrrFlow.IsNull() {
+		data.MofrrFlow = types.StringValue(value.String())
+	} else {
+		data.MofrrFlow = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "mofrr.rib"); value.Exists() && !data.MofrrRib.IsNull() {
+		data.MofrrRib = types.StringValue(value.String())
+	} else {
+		data.MofrrRib = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "mofrr.protect"); value.Exists() && !data.MofrrProtect.IsNull() {
+		data.MofrrProtect = types.StringValue(value.String())
+	} else {
+		data.MofrrProtect = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "mofrr.local-fault-only"); !data.MofrrProtectLocalFaultOnly.IsNull() {
+		if value.Exists() {
+			data.MofrrProtectLocalFaultOnly = types.BoolValue(true)
+		} else {
+			data.MofrrProtectLocalFaultOnly = types.BoolValue(false)
+		}
+	} else {
+		data.MofrrProtectLocalFaultOnly = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "mofrr.non-revertive"); !data.MofrrNonRevertive.IsNull() {
+		if value.Exists() {
+			data.MofrrNonRevertive = types.BoolValue(true)
+		} else {
+			data.MofrrNonRevertive = types.BoolValue(false)
+		}
+	} else {
+		data.MofrrNonRevertive = types.BoolNull()
+	}
+	for i := range data.MofrrCloneJoins {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MofrrCloneJoins[i].SourceAddress.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "mofrr.clone.joins.join").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("address"); value.Exists() && !data.MofrrCloneJoins[i].SourceAddress.IsNull() {
+			data.MofrrCloneJoins[i].SourceAddress = types.StringValue(value.String())
+		} else {
+			data.MofrrCloneJoins[i].SourceAddress = types.StringNull()
+		}
+		for ci := range data.MofrrCloneJoins[i].To {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MofrrCloneJoins[i].To[ci].PrimaryAddress.ValueString()}
+
+			var cr gjson.Result
+			r.Get("to").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("address"); value.Exists() && !data.MofrrCloneJoins[i].To[ci].PrimaryAddress.IsNull() {
+				data.MofrrCloneJoins[i].To[ci].PrimaryAddress = types.StringValue(value.String())
+			} else {
+				data.MofrrCloneJoins[i].To[ci].PrimaryAddress = types.StringNull()
+			}
+			for cci := range data.MofrrCloneJoins[i].To[ci].And {
+				keys := [...]string{"address"}
+				keyValues := [...]string{data.MofrrCloneJoins[i].To[ci].And[cci].BackupAddress.ValueString()}
+
+				var ccr gjson.Result
+				cr.Get("and").ForEach(
+					func(_, v gjson.Result) bool {
+						found := false
+						for ik := range keys {
+							if v.Get(keys[ik]).String() == keyValues[ik] {
+								found = true
+								continue
+							}
+							found = false
+							break
+						}
+						if found {
+							ccr = v
+							return false
+						}
+						return true
+					},
+				)
+				if value := ccr.Get("address"); value.Exists() && !data.MofrrCloneJoins[i].To[ci].And[cci].BackupAddress.IsNull() {
+					data.MofrrCloneJoins[i].To[ci].And[cci].BackupAddress = types.StringValue(value.String())
+				} else {
+					data.MofrrCloneJoins[i].To[ci].And[cci].BackupAddress = types.StringNull()
+				}
+				for ccci := range data.MofrrCloneJoins[i].To[ci].And[cci].Masklen {
+					keys := [...]string{"mask-length"}
+					keyValues := [...]string{strconv.FormatInt(data.MofrrCloneJoins[i].To[ci].And[cci].Masklen[ccci].MaskLength.ValueInt64(), 10)}
+
+					var cccr gjson.Result
+					ccr.Get("masklen").ForEach(
+						func(_, v gjson.Result) bool {
+							found := false
+							for ik := range keys {
+								if v.Get(keys[ik]).String() == keyValues[ik] {
+									found = true
+									continue
+								}
+								found = false
+								break
+							}
+							if found {
+								cccr = v
+								return false
+							}
+							return true
+						},
+					)
+					if value := cccr.Get("mask-length"); value.Exists() && !data.MofrrCloneJoins[i].To[ci].And[cci].Masklen[ccci].MaskLength.IsNull() {
+						data.MofrrCloneJoins[i].To[ci].And[cci].Masklen[ccci].MaskLength = types.Int64Value(value.Int())
+					} else {
+						data.MofrrCloneJoins[i].To[ci].And[cci].Masklen[ccci].MaskLength = types.Int64Null()
+					}
+				}
+			}
+		}
+	}
+	for i := range data.MofrrCloneSources {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MofrrCloneSources[i].SourceAddress.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "mofrr.clone.sources.source").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("address"); value.Exists() && !data.MofrrCloneSources[i].SourceAddress.IsNull() {
+			data.MofrrCloneSources[i].SourceAddress = types.StringValue(value.String())
+		} else {
+			data.MofrrCloneSources[i].SourceAddress = types.StringNull()
+		}
+		for ci := range data.MofrrCloneSources[i].To {
+			keys := [...]string{"address"}
+			keyValues := [...]string{data.MofrrCloneSources[i].To[ci].PrimaryAddress.ValueString()}
+
+			var cr gjson.Result
+			r.Get("to").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("address"); value.Exists() && !data.MofrrCloneSources[i].To[ci].PrimaryAddress.IsNull() {
+				data.MofrrCloneSources[i].To[ci].PrimaryAddress = types.StringValue(value.String())
+			} else {
+				data.MofrrCloneSources[i].To[ci].PrimaryAddress = types.StringNull()
+			}
+			for cci := range data.MofrrCloneSources[i].To[ci].And {
+				keys := [...]string{"address"}
+				keyValues := [...]string{data.MofrrCloneSources[i].To[ci].And[cci].BackupAddress.ValueString()}
+
+				var ccr gjson.Result
+				cr.Get("and").ForEach(
+					func(_, v gjson.Result) bool {
+						found := false
+						for ik := range keys {
+							if v.Get(keys[ik]).String() == keyValues[ik] {
+								found = true
+								continue
+							}
+							found = false
+							break
+						}
+						if found {
+							ccr = v
+							return false
+						}
+						return true
+					},
+				)
+				if value := ccr.Get("address"); value.Exists() && !data.MofrrCloneSources[i].To[ci].And[cci].BackupAddress.IsNull() {
+					data.MofrrCloneSources[i].To[ci].And[cci].BackupAddress = types.StringValue(value.String())
+				} else {
+					data.MofrrCloneSources[i].To[ci].And[cci].BackupAddress = types.StringNull()
+				}
+				for ccci := range data.MofrrCloneSources[i].To[ci].And[cci].Masklen {
+					keys := [...]string{"mask-length"}
+					keyValues := [...]string{strconv.FormatInt(data.MofrrCloneSources[i].To[ci].And[cci].Masklen[ccci].MaskLength.ValueInt64(), 10)}
+
+					var cccr gjson.Result
+					ccr.Get("masklen").ForEach(
+						func(_, v gjson.Result) bool {
+							found := false
+							for ik := range keys {
+								if v.Get(keys[ik]).String() == keyValues[ik] {
+									found = true
+									continue
+								}
+								found = false
+								break
+							}
+							if found {
+								cccr = v
+								return false
+							}
+							return true
+						},
+					)
+					if value := cccr.Get("mask-length"); value.Exists() && !data.MofrrCloneSources[i].To[ci].And[cci].Masklen[ccci].MaskLength.IsNull() {
+						data.MofrrCloneSources[i].To[ci].And[cci].Masklen[ccci].MaskLength = types.Int64Value(value.Int())
+					} else {
+						data.MofrrCloneSources[i].To[ci].And[cci].Masklen[ccci].MaskLength = types.Int64Null()
+					}
+				}
+			}
+		}
+	}
+	for i := range data.SrP2mpPolicies {
+		keys := [...]string{"sr-p2mp-policy-id"}
+		keyValues := [...]string{data.SrP2mpPolicies[i].PolicyName.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "sr-p2mp-policies.sr-p2mp-policy").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("sr-p2mp-policy-id"); value.Exists() && !data.SrP2mpPolicies[i].PolicyName.IsNull() {
+			data.SrP2mpPolicies[i].PolicyName = types.StringValue(value.String())
+		} else {
+			data.SrP2mpPolicies[i].PolicyName = types.StringNull()
+		}
+		for ci := range data.SrP2mpPolicies[i].StaticGroups {
+			keys := [...]string{"group-address"}
+			keyValues := [...]string{data.SrP2mpPolicies[i].StaticGroups[ci].GroupAddress.ValueString()}
+
+			var cr gjson.Result
+			r.Get("static-group.group-address").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("group-address"); value.Exists() && !data.SrP2mpPolicies[i].StaticGroups[ci].GroupAddress.IsNull() {
+				data.SrP2mpPolicies[i].StaticGroups[ci].GroupAddress = types.StringValue(value.String())
+			} else {
+				data.SrP2mpPolicies[i].StaticGroups[ci].GroupAddress = types.StringNull()
+			}
+			if value := cr.Get("group-address-only"); !data.SrP2mpPolicies[i].StaticGroups[ci].GroupAddressOnly.IsNull() {
+				if value.Exists() {
+					data.SrP2mpPolicies[i].StaticGroups[ci].GroupAddressOnly = types.BoolValue(true)
+				} else {
+					data.SrP2mpPolicies[i].StaticGroups[ci].GroupAddressOnly = types.BoolValue(false)
+				}
+			} else {
+				data.SrP2mpPolicies[i].StaticGroups[ci].GroupAddressOnly = types.BoolNull()
+			}
+			for cci := range data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasks {
+				keys := [...]string{"group-mask-address"}
+				keyValues := [...]string{data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasks[cci].GroupIncMask.ValueString()}
+
+				var ccr gjson.Result
+				cr.Get("group-address-inc-mask").ForEach(
+					func(_, v gjson.Result) bool {
+						found := false
+						for ik := range keys {
+							if v.Get(keys[ik]).String() == keyValues[ik] {
+								found = true
+								continue
+							}
+							found = false
+							break
+						}
+						if found {
+							ccr = v
+							return false
+						}
+						return true
+					},
+				)
+				if value := ccr.Get("group-mask-address"); value.Exists() && !data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasks[cci].GroupIncMask.IsNull() {
+					data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasks[cci].GroupIncMask = types.StringValue(value.String())
+				} else {
+					data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasks[cci].GroupIncMask = types.StringNull()
+				}
+				if value := ccr.Get("group-address-count"); value.Exists() && !data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasks[cci].GroupCount.IsNull() {
+					data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasks[cci].GroupCount = types.Int64Value(value.Int())
+				} else {
+					data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasks[cci].GroupCount = types.Int64Null()
+				}
+			}
+			for cci := range data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceAddresses {
+				keys := [...]string{"group-mask-address", "source-address"}
+				keyValues := [...]string{data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceAddresses[cci].GroupIncMask.ValueString(), data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceAddresses[cci].SourceIp.ValueString()}
+
+				var ccr gjson.Result
+				cr.Get("group-mask-address-source-address-inc-mask").ForEach(
+					func(_, v gjson.Result) bool {
+						found := false
+						for ik := range keys {
+							if v.Get(keys[ik]).String() == keyValues[ik] {
+								found = true
+								continue
+							}
+							found = false
+							break
+						}
+						if found {
+							ccr = v
+							return false
+						}
+						return true
+					},
+				)
+				if value := ccr.Get("group-mask-address"); value.Exists() && !data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceAddresses[cci].GroupIncMask.IsNull() {
+					data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceAddresses[cci].GroupIncMask = types.StringValue(value.String())
+				} else {
+					data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceAddresses[cci].GroupIncMask = types.StringNull()
+				}
+				if value := ccr.Get("source-address"); value.Exists() && !data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceAddresses[cci].SourceIp.IsNull() {
+					data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceAddresses[cci].SourceIp = types.StringValue(value.String())
+				} else {
+					data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceAddresses[cci].SourceIp = types.StringNull()
+				}
+				if value := ccr.Get("group-address-count"); value.Exists() && !data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceAddresses[cci].GroupCount.IsNull() {
+					data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceAddresses[cci].GroupCount = types.Int64Value(value.Int())
+				} else {
+					data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceAddresses[cci].GroupCount = types.Int64Null()
+				}
+			}
+			for cci := range data.SrP2mpPolicies[i].StaticGroups[ci].SourceMasks {
+				keys := [...]string{"source-address", "source-mask-address"}
+				keyValues := [...]string{data.SrP2mpPolicies[i].StaticGroups[ci].SourceMasks[cci].SourceIp.ValueString(), data.SrP2mpPolicies[i].StaticGroups[ci].SourceMasks[cci].SourceIncMask.ValueString()}
+
+				var ccr gjson.Result
+				cr.Get("source-address-source-mask-address-inc-mask").ForEach(
+					func(_, v gjson.Result) bool {
+						found := false
+						for ik := range keys {
+							if v.Get(keys[ik]).String() == keyValues[ik] {
+								found = true
+								continue
+							}
+							found = false
+							break
+						}
+						if found {
+							ccr = v
+							return false
+						}
+						return true
+					},
+				)
+				if value := ccr.Get("source-address"); value.Exists() && !data.SrP2mpPolicies[i].StaticGroups[ci].SourceMasks[cci].SourceIp.IsNull() {
+					data.SrP2mpPolicies[i].StaticGroups[ci].SourceMasks[cci].SourceIp = types.StringValue(value.String())
+				} else {
+					data.SrP2mpPolicies[i].StaticGroups[ci].SourceMasks[cci].SourceIp = types.StringNull()
+				}
+				if value := ccr.Get("source-mask-address"); value.Exists() && !data.SrP2mpPolicies[i].StaticGroups[ci].SourceMasks[cci].SourceIncMask.IsNull() {
+					data.SrP2mpPolicies[i].StaticGroups[ci].SourceMasks[cci].SourceIncMask = types.StringValue(value.String())
+				} else {
+					data.SrP2mpPolicies[i].StaticGroups[ci].SourceMasks[cci].SourceIncMask = types.StringNull()
+				}
+				if value := ccr.Get("source-address-count"); value.Exists() && !data.SrP2mpPolicies[i].StaticGroups[ci].SourceMasks[cci].SourceCount.IsNull() {
+					data.SrP2mpPolicies[i].StaticGroups[ci].SourceMasks[cci].SourceCount = types.Int64Value(value.Int())
+				} else {
+					data.SrP2mpPolicies[i].StaticGroups[ci].SourceMasks[cci].SourceCount = types.Int64Null()
+				}
+			}
+			for cci := range data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks {
+				keys := [...]string{"group-mask-address", "source-address", "source-mask-address"}
+				keyValues := [...]string{data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].GroupIncMask.ValueString(), data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].SourceIp.ValueString(), data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].SourceIncMask.ValueString()}
+
+				var ccr gjson.Result
+				cr.Get("group-mask-address-source-address-source-mask-address-inc-mask").ForEach(
+					func(_, v gjson.Result) bool {
+						found := false
+						for ik := range keys {
+							if v.Get(keys[ik]).String() == keyValues[ik] {
+								found = true
+								continue
+							}
+							found = false
+							break
+						}
+						if found {
+							ccr = v
+							return false
+						}
+						return true
+					},
+				)
+				if value := ccr.Get("group-mask-address"); value.Exists() && !data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].GroupIncMask.IsNull() {
+					data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].GroupIncMask = types.StringValue(value.String())
+				} else {
+					data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].GroupIncMask = types.StringNull()
+				}
+				if value := ccr.Get("source-address"); value.Exists() && !data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].SourceIp.IsNull() {
+					data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].SourceIp = types.StringValue(value.String())
+				} else {
+					data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].SourceIp = types.StringNull()
+				}
+				if value := ccr.Get("source-mask-address"); value.Exists() && !data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].SourceIncMask.IsNull() {
+					data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].SourceIncMask = types.StringValue(value.String())
+				} else {
+					data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].SourceIncMask = types.StringNull()
+				}
+				if value := ccr.Get("group-address-count"); value.Exists() && !data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].GroupCount.IsNull() {
+					data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].GroupCount = types.Int64Value(value.Int())
+				} else {
+					data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].GroupCount = types.Int64Null()
+				}
+				if value := ccr.Get("source-address-count"); value.Exists() && !data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].SourceCount.IsNull() {
+					data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].SourceCount = types.Int64Value(value.Int())
+				} else {
+					data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].SourceCount = types.Int64Null()
+				}
+			}
+		}
+	}
 	for i := range data.Interfaces {
 		keys := [...]string{"interface-name"}
 		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
@@ -2293,6 +3044,216 @@ func (data *RouterPIMIPv4) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
+	if value := gjson.GetBytes(res, "mofrr"); value.Exists() {
+		data.Mofrr = types.BoolValue(true)
+	} else {
+		data.Mofrr = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mofrr.flow"); value.Exists() {
+		data.MofrrFlow = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "mofrr.rib"); value.Exists() {
+		data.MofrrRib = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "mofrr.protect"); value.Exists() {
+		data.MofrrProtect = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "mofrr.local-fault-only"); value.Exists() {
+		data.MofrrProtectLocalFaultOnly = types.BoolValue(true)
+	} else {
+		data.MofrrProtectLocalFaultOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mofrr.non-revertive"); value.Exists() {
+		data.MofrrNonRevertive = types.BoolValue(true)
+	} else {
+		data.MofrrNonRevertive = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mofrr.clone.joins.join"); value.Exists() {
+		data.MofrrCloneJoins = make([]RouterPIMIPv4MofrrCloneJoins, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterPIMIPv4MofrrCloneJoins{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.SourceAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("to"); cValue.Exists() {
+				item.To = make([]RouterPIMIPv4MofrrCloneJoinsTo, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := RouterPIMIPv4MofrrCloneJoinsTo{}
+					if ccValue := cv.Get("address"); ccValue.Exists() {
+						cItem.PrimaryAddress = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("and"); ccValue.Exists() {
+						cItem.And = make([]RouterPIMIPv4MofrrCloneJoinsToAnd, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := RouterPIMIPv4MofrrCloneJoinsToAnd{}
+							if cccValue := ccv.Get("address"); cccValue.Exists() {
+								ccItem.BackupAddress = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("masklen"); cccValue.Exists() {
+								ccItem.Masklen = make([]RouterPIMIPv4MofrrCloneJoinsToAndMasklen, 0)
+								cccValue.ForEach(func(ccck, cccv gjson.Result) bool {
+									cccItem := RouterPIMIPv4MofrrCloneJoinsToAndMasklen{}
+									if ccccValue := cccv.Get("mask-length"); ccccValue.Exists() {
+										cccItem.MaskLength = types.Int64Value(ccccValue.Int())
+									}
+									ccItem.Masklen = append(ccItem.Masklen, cccItem)
+									return true
+								})
+							}
+							cItem.And = append(cItem.And, ccItem)
+							return true
+						})
+					}
+					item.To = append(item.To, cItem)
+					return true
+				})
+			}
+			data.MofrrCloneJoins = append(data.MofrrCloneJoins, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "mofrr.clone.sources.source"); value.Exists() {
+		data.MofrrCloneSources = make([]RouterPIMIPv4MofrrCloneSources, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterPIMIPv4MofrrCloneSources{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.SourceAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("to"); cValue.Exists() {
+				item.To = make([]RouterPIMIPv4MofrrCloneSourcesTo, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := RouterPIMIPv4MofrrCloneSourcesTo{}
+					if ccValue := cv.Get("address"); ccValue.Exists() {
+						cItem.PrimaryAddress = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("and"); ccValue.Exists() {
+						cItem.And = make([]RouterPIMIPv4MofrrCloneSourcesToAnd, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := RouterPIMIPv4MofrrCloneSourcesToAnd{}
+							if cccValue := ccv.Get("address"); cccValue.Exists() {
+								ccItem.BackupAddress = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("masklen"); cccValue.Exists() {
+								ccItem.Masklen = make([]RouterPIMIPv4MofrrCloneSourcesToAndMasklen, 0)
+								cccValue.ForEach(func(ccck, cccv gjson.Result) bool {
+									cccItem := RouterPIMIPv4MofrrCloneSourcesToAndMasklen{}
+									if ccccValue := cccv.Get("mask-length"); ccccValue.Exists() {
+										cccItem.MaskLength = types.Int64Value(ccccValue.Int())
+									}
+									ccItem.Masklen = append(ccItem.Masklen, cccItem)
+									return true
+								})
+							}
+							cItem.And = append(cItem.And, ccItem)
+							return true
+						})
+					}
+					item.To = append(item.To, cItem)
+					return true
+				})
+			}
+			data.MofrrCloneSources = append(data.MofrrCloneSources, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "sr-p2mp-policies.sr-p2mp-policy"); value.Exists() {
+		data.SrP2mpPolicies = make([]RouterPIMIPv4SrP2mpPolicies, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterPIMIPv4SrP2mpPolicies{}
+			if cValue := v.Get("sr-p2mp-policy-id"); cValue.Exists() {
+				item.PolicyName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("static-group.group-address"); cValue.Exists() {
+				item.StaticGroups = make([]RouterPIMIPv4SrP2mpPoliciesStaticGroups, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := RouterPIMIPv4SrP2mpPoliciesStaticGroups{}
+					if ccValue := cv.Get("group-address"); ccValue.Exists() {
+						cItem.GroupAddress = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("group-address-only"); ccValue.Exists() {
+						cItem.GroupAddressOnly = types.BoolValue(true)
+					} else {
+						cItem.GroupAddressOnly = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("group-address-inc-mask"); ccValue.Exists() {
+						cItem.GroupMasks = make([]RouterPIMIPv4SrP2mpPoliciesStaticGroupsGroupMasks, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := RouterPIMIPv4SrP2mpPoliciesStaticGroupsGroupMasks{}
+							if cccValue := ccv.Get("group-mask-address"); cccValue.Exists() {
+								ccItem.GroupIncMask = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("group-address-count"); cccValue.Exists() {
+								ccItem.GroupCount = types.Int64Value(cccValue.Int())
+							}
+							cItem.GroupMasks = append(cItem.GroupMasks, ccItem)
+							return true
+						})
+					}
+					if ccValue := cv.Get("group-mask-address-source-address-inc-mask"); ccValue.Exists() {
+						cItem.GroupMasksSourceAddresses = make([]RouterPIMIPv4SrP2mpPoliciesStaticGroupsGroupMasksSourceAddresses, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := RouterPIMIPv4SrP2mpPoliciesStaticGroupsGroupMasksSourceAddresses{}
+							if cccValue := ccv.Get("group-mask-address"); cccValue.Exists() {
+								ccItem.GroupIncMask = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("source-address"); cccValue.Exists() {
+								ccItem.SourceIp = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("group-address-count"); cccValue.Exists() {
+								ccItem.GroupCount = types.Int64Value(cccValue.Int())
+							}
+							cItem.GroupMasksSourceAddresses = append(cItem.GroupMasksSourceAddresses, ccItem)
+							return true
+						})
+					}
+					if ccValue := cv.Get("source-address-source-mask-address-inc-mask"); ccValue.Exists() {
+						cItem.SourceMasks = make([]RouterPIMIPv4SrP2mpPoliciesStaticGroupsSourceMasks, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := RouterPIMIPv4SrP2mpPoliciesStaticGroupsSourceMasks{}
+							if cccValue := ccv.Get("source-address"); cccValue.Exists() {
+								ccItem.SourceIp = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("source-mask-address"); cccValue.Exists() {
+								ccItem.SourceIncMask = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("source-address-count"); cccValue.Exists() {
+								ccItem.SourceCount = types.Int64Value(cccValue.Int())
+							}
+							cItem.SourceMasks = append(cItem.SourceMasks, ccItem)
+							return true
+						})
+					}
+					if ccValue := cv.Get("group-mask-address-source-address-source-mask-address-inc-mask"); ccValue.Exists() {
+						cItem.GroupMasksSourceMasks = make([]RouterPIMIPv4SrP2mpPoliciesStaticGroupsGroupMasksSourceMasks, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := RouterPIMIPv4SrP2mpPoliciesStaticGroupsGroupMasksSourceMasks{}
+							if cccValue := ccv.Get("group-mask-address"); cccValue.Exists() {
+								ccItem.GroupIncMask = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("source-address"); cccValue.Exists() {
+								ccItem.SourceIp = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("source-mask-address"); cccValue.Exists() {
+								ccItem.SourceIncMask = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("group-address-count"); cccValue.Exists() {
+								ccItem.GroupCount = types.Int64Value(cccValue.Int())
+							}
+							if cccValue := ccv.Get("source-address-count"); cccValue.Exists() {
+								ccItem.SourceCount = types.Int64Value(cccValue.Int())
+							}
+							cItem.GroupMasksSourceMasks = append(cItem.GroupMasksSourceMasks, ccItem)
+							return true
+						})
+					}
+					item.StaticGroups = append(item.StaticGroups, cItem)
+					return true
+				})
+			}
+			data.SrP2mpPolicies = append(data.SrP2mpPolicies, item)
+			return true
+		})
+	}
 	if value := gjson.GetBytes(res, "interfaces.interface"); value.Exists() {
 		data.Interfaces = make([]RouterPIMIPv4Interfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -2831,6 +3792,216 @@ func (data *RouterPIMIPv4Data) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
+	if value := gjson.GetBytes(res, "mofrr"); value.Exists() {
+		data.Mofrr = types.BoolValue(true)
+	} else {
+		data.Mofrr = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mofrr.flow"); value.Exists() {
+		data.MofrrFlow = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "mofrr.rib"); value.Exists() {
+		data.MofrrRib = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "mofrr.protect"); value.Exists() {
+		data.MofrrProtect = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "mofrr.local-fault-only"); value.Exists() {
+		data.MofrrProtectLocalFaultOnly = types.BoolValue(true)
+	} else {
+		data.MofrrProtectLocalFaultOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mofrr.non-revertive"); value.Exists() {
+		data.MofrrNonRevertive = types.BoolValue(true)
+	} else {
+		data.MofrrNonRevertive = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mofrr.clone.joins.join"); value.Exists() {
+		data.MofrrCloneJoins = make([]RouterPIMIPv4MofrrCloneJoins, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterPIMIPv4MofrrCloneJoins{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.SourceAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("to"); cValue.Exists() {
+				item.To = make([]RouterPIMIPv4MofrrCloneJoinsTo, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := RouterPIMIPv4MofrrCloneJoinsTo{}
+					if ccValue := cv.Get("address"); ccValue.Exists() {
+						cItem.PrimaryAddress = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("and"); ccValue.Exists() {
+						cItem.And = make([]RouterPIMIPv4MofrrCloneJoinsToAnd, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := RouterPIMIPv4MofrrCloneJoinsToAnd{}
+							if cccValue := ccv.Get("address"); cccValue.Exists() {
+								ccItem.BackupAddress = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("masklen"); cccValue.Exists() {
+								ccItem.Masklen = make([]RouterPIMIPv4MofrrCloneJoinsToAndMasklen, 0)
+								cccValue.ForEach(func(ccck, cccv gjson.Result) bool {
+									cccItem := RouterPIMIPv4MofrrCloneJoinsToAndMasklen{}
+									if ccccValue := cccv.Get("mask-length"); ccccValue.Exists() {
+										cccItem.MaskLength = types.Int64Value(ccccValue.Int())
+									}
+									ccItem.Masklen = append(ccItem.Masklen, cccItem)
+									return true
+								})
+							}
+							cItem.And = append(cItem.And, ccItem)
+							return true
+						})
+					}
+					item.To = append(item.To, cItem)
+					return true
+				})
+			}
+			data.MofrrCloneJoins = append(data.MofrrCloneJoins, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "mofrr.clone.sources.source"); value.Exists() {
+		data.MofrrCloneSources = make([]RouterPIMIPv4MofrrCloneSources, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterPIMIPv4MofrrCloneSources{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.SourceAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("to"); cValue.Exists() {
+				item.To = make([]RouterPIMIPv4MofrrCloneSourcesTo, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := RouterPIMIPv4MofrrCloneSourcesTo{}
+					if ccValue := cv.Get("address"); ccValue.Exists() {
+						cItem.PrimaryAddress = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("and"); ccValue.Exists() {
+						cItem.And = make([]RouterPIMIPv4MofrrCloneSourcesToAnd, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := RouterPIMIPv4MofrrCloneSourcesToAnd{}
+							if cccValue := ccv.Get("address"); cccValue.Exists() {
+								ccItem.BackupAddress = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("masklen"); cccValue.Exists() {
+								ccItem.Masklen = make([]RouterPIMIPv4MofrrCloneSourcesToAndMasklen, 0)
+								cccValue.ForEach(func(ccck, cccv gjson.Result) bool {
+									cccItem := RouterPIMIPv4MofrrCloneSourcesToAndMasklen{}
+									if ccccValue := cccv.Get("mask-length"); ccccValue.Exists() {
+										cccItem.MaskLength = types.Int64Value(ccccValue.Int())
+									}
+									ccItem.Masklen = append(ccItem.Masklen, cccItem)
+									return true
+								})
+							}
+							cItem.And = append(cItem.And, ccItem)
+							return true
+						})
+					}
+					item.To = append(item.To, cItem)
+					return true
+				})
+			}
+			data.MofrrCloneSources = append(data.MofrrCloneSources, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "sr-p2mp-policies.sr-p2mp-policy"); value.Exists() {
+		data.SrP2mpPolicies = make([]RouterPIMIPv4SrP2mpPolicies, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterPIMIPv4SrP2mpPolicies{}
+			if cValue := v.Get("sr-p2mp-policy-id"); cValue.Exists() {
+				item.PolicyName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("static-group.group-address"); cValue.Exists() {
+				item.StaticGroups = make([]RouterPIMIPv4SrP2mpPoliciesStaticGroups, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := RouterPIMIPv4SrP2mpPoliciesStaticGroups{}
+					if ccValue := cv.Get("group-address"); ccValue.Exists() {
+						cItem.GroupAddress = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("group-address-only"); ccValue.Exists() {
+						cItem.GroupAddressOnly = types.BoolValue(true)
+					} else {
+						cItem.GroupAddressOnly = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("group-address-inc-mask"); ccValue.Exists() {
+						cItem.GroupMasks = make([]RouterPIMIPv4SrP2mpPoliciesStaticGroupsGroupMasks, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := RouterPIMIPv4SrP2mpPoliciesStaticGroupsGroupMasks{}
+							if cccValue := ccv.Get("group-mask-address"); cccValue.Exists() {
+								ccItem.GroupIncMask = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("group-address-count"); cccValue.Exists() {
+								ccItem.GroupCount = types.Int64Value(cccValue.Int())
+							}
+							cItem.GroupMasks = append(cItem.GroupMasks, ccItem)
+							return true
+						})
+					}
+					if ccValue := cv.Get("group-mask-address-source-address-inc-mask"); ccValue.Exists() {
+						cItem.GroupMasksSourceAddresses = make([]RouterPIMIPv4SrP2mpPoliciesStaticGroupsGroupMasksSourceAddresses, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := RouterPIMIPv4SrP2mpPoliciesStaticGroupsGroupMasksSourceAddresses{}
+							if cccValue := ccv.Get("group-mask-address"); cccValue.Exists() {
+								ccItem.GroupIncMask = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("source-address"); cccValue.Exists() {
+								ccItem.SourceIp = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("group-address-count"); cccValue.Exists() {
+								ccItem.GroupCount = types.Int64Value(cccValue.Int())
+							}
+							cItem.GroupMasksSourceAddresses = append(cItem.GroupMasksSourceAddresses, ccItem)
+							return true
+						})
+					}
+					if ccValue := cv.Get("source-address-source-mask-address-inc-mask"); ccValue.Exists() {
+						cItem.SourceMasks = make([]RouterPIMIPv4SrP2mpPoliciesStaticGroupsSourceMasks, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := RouterPIMIPv4SrP2mpPoliciesStaticGroupsSourceMasks{}
+							if cccValue := ccv.Get("source-address"); cccValue.Exists() {
+								ccItem.SourceIp = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("source-mask-address"); cccValue.Exists() {
+								ccItem.SourceIncMask = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("source-address-count"); cccValue.Exists() {
+								ccItem.SourceCount = types.Int64Value(cccValue.Int())
+							}
+							cItem.SourceMasks = append(cItem.SourceMasks, ccItem)
+							return true
+						})
+					}
+					if ccValue := cv.Get("group-mask-address-source-address-source-mask-address-inc-mask"); ccValue.Exists() {
+						cItem.GroupMasksSourceMasks = make([]RouterPIMIPv4SrP2mpPoliciesStaticGroupsGroupMasksSourceMasks, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := RouterPIMIPv4SrP2mpPoliciesStaticGroupsGroupMasksSourceMasks{}
+							if cccValue := ccv.Get("group-mask-address"); cccValue.Exists() {
+								ccItem.GroupIncMask = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("source-address"); cccValue.Exists() {
+								ccItem.SourceIp = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("source-mask-address"); cccValue.Exists() {
+								ccItem.SourceIncMask = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("group-address-count"); cccValue.Exists() {
+								ccItem.GroupCount = types.Int64Value(cccValue.Int())
+							}
+							if cccValue := ccv.Get("source-address-count"); cccValue.Exists() {
+								ccItem.SourceCount = types.Int64Value(cccValue.Int())
+							}
+							cItem.GroupMasksSourceMasks = append(cItem.GroupMasksSourceMasks, ccItem)
+							return true
+						})
+					}
+					item.StaticGroups = append(item.StaticGroups, cItem)
+					return true
+				})
+			}
+			data.SrP2mpPolicies = append(data.SrP2mpPolicies, item)
+			return true
+		})
+	}
 	if value := gjson.GetBytes(res, "interfaces.interface"); value.Exists() {
 		data.Interfaces = make([]RouterPIMIPv4Interfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -2983,6 +4154,486 @@ func (data *RouterPIMIPv4) getDeletedItems(ctx context.Context, state RouterPIMI
 		if !found {
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v", state.getPath(), keyString))
 		}
+	}
+	for i := range state.SrP2mpPolicies {
+		keys := [...]string{"sr-p2mp-policy-id"}
+		stateKeyValues := [...]string{state.SrP2mpPolicies[i].PolicyName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SrP2mpPolicies[i].PolicyName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SrP2mpPolicies {
+			found = true
+			if state.SrP2mpPolicies[i].PolicyName.ValueString() != data.SrP2mpPolicies[j].PolicyName.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.SrP2mpPolicies[i].StaticGroups {
+					ckeys := [...]string{"group-address"}
+					cstateKeyValues := [...]string{state.SrP2mpPolicies[i].StaticGroups[ci].GroupAddress.ValueString()}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.SrP2mpPolicies[i].StaticGroups[ci].GroupAddress.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.SrP2mpPolicies[j].StaticGroups {
+						found = true
+						if state.SrP2mpPolicies[i].StaticGroups[ci].GroupAddress.ValueString() != data.SrP2mpPolicies[j].StaticGroups[cj].GroupAddress.ValueString() {
+							found = false
+						}
+						if found {
+							for cci := range state.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks {
+								cckeys := [...]string{"group-mask-address", "source-address", "source-mask-address"}
+								ccstateKeyValues := [...]string{state.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].GroupIncMask.ValueString(), state.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].SourceIp.ValueString(), state.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].SourceIncMask.ValueString()}
+								cckeyString := ""
+								for ccki := range cckeys {
+									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
+								}
+
+								ccemptyKeys := true
+								if !reflect.ValueOf(state.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].GroupIncMask.ValueString()).IsZero() {
+									ccemptyKeys = false
+								}
+								if !reflect.ValueOf(state.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].SourceIp.ValueString()).IsZero() {
+									ccemptyKeys = false
+								}
+								if !reflect.ValueOf(state.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].SourceIncMask.ValueString()).IsZero() {
+									ccemptyKeys = false
+								}
+								if ccemptyKeys {
+									continue
+								}
+
+								found := false
+								for ccj := range data.SrP2mpPolicies[j].StaticGroups[cj].GroupMasksSourceMasks {
+									found = true
+									if state.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].GroupIncMask.ValueString() != data.SrP2mpPolicies[j].StaticGroups[cj].GroupMasksSourceMasks[ccj].GroupIncMask.ValueString() {
+										found = false
+									}
+									if state.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].SourceIp.ValueString() != data.SrP2mpPolicies[j].StaticGroups[cj].GroupMasksSourceMasks[ccj].SourceIp.ValueString() {
+										found = false
+									}
+									if state.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].SourceIncMask.ValueString() != data.SrP2mpPolicies[j].StaticGroups[cj].GroupMasksSourceMasks[ccj].SourceIncMask.ValueString() {
+										found = false
+									}
+									if found {
+										if !state.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].SourceCount.IsNull() && data.SrP2mpPolicies[j].StaticGroups[cj].GroupMasksSourceMasks[ccj].SourceCount.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-p2mp-policies/sr-p2mp-policy%v/static-group/group-address%v/group-mask-address-source-address-source-mask-address-inc-mask%v/source-address-count", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										if !state.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].GroupCount.IsNull() && data.SrP2mpPolicies[j].StaticGroups[cj].GroupMasksSourceMasks[ccj].GroupCount.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-p2mp-policies/sr-p2mp-policy%v/static-group/group-address%v/group-mask-address-source-address-source-mask-address-inc-mask%v/group-address-count", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										break
+									}
+								}
+								if !found {
+									deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-p2mp-policies/sr-p2mp-policy%v/static-group/group-address%v/group-mask-address-source-address-source-mask-address-inc-mask%v", state.getPath(), keyString, ckeyString, cckeyString))
+								}
+							}
+							for cci := range state.SrP2mpPolicies[i].StaticGroups[ci].SourceMasks {
+								cckeys := [...]string{"source-address", "source-mask-address"}
+								ccstateKeyValues := [...]string{state.SrP2mpPolicies[i].StaticGroups[ci].SourceMasks[cci].SourceIp.ValueString(), state.SrP2mpPolicies[i].StaticGroups[ci].SourceMasks[cci].SourceIncMask.ValueString()}
+								cckeyString := ""
+								for ccki := range cckeys {
+									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
+								}
+
+								ccemptyKeys := true
+								if !reflect.ValueOf(state.SrP2mpPolicies[i].StaticGroups[ci].SourceMasks[cci].SourceIp.ValueString()).IsZero() {
+									ccemptyKeys = false
+								}
+								if !reflect.ValueOf(state.SrP2mpPolicies[i].StaticGroups[ci].SourceMasks[cci].SourceIncMask.ValueString()).IsZero() {
+									ccemptyKeys = false
+								}
+								if ccemptyKeys {
+									continue
+								}
+
+								found := false
+								for ccj := range data.SrP2mpPolicies[j].StaticGroups[cj].SourceMasks {
+									found = true
+									if state.SrP2mpPolicies[i].StaticGroups[ci].SourceMasks[cci].SourceIp.ValueString() != data.SrP2mpPolicies[j].StaticGroups[cj].SourceMasks[ccj].SourceIp.ValueString() {
+										found = false
+									}
+									if state.SrP2mpPolicies[i].StaticGroups[ci].SourceMasks[cci].SourceIncMask.ValueString() != data.SrP2mpPolicies[j].StaticGroups[cj].SourceMasks[ccj].SourceIncMask.ValueString() {
+										found = false
+									}
+									if found {
+										if !state.SrP2mpPolicies[i].StaticGroups[ci].SourceMasks[cci].SourceCount.IsNull() && data.SrP2mpPolicies[j].StaticGroups[cj].SourceMasks[ccj].SourceCount.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-p2mp-policies/sr-p2mp-policy%v/static-group/group-address%v/source-address-source-mask-address-inc-mask%v/source-address-count", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										break
+									}
+								}
+								if !found {
+									deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-p2mp-policies/sr-p2mp-policy%v/static-group/group-address%v/source-address-source-mask-address-inc-mask%v", state.getPath(), keyString, ckeyString, cckeyString))
+								}
+							}
+							for cci := range state.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceAddresses {
+								cckeys := [...]string{"group-mask-address", "source-address"}
+								ccstateKeyValues := [...]string{state.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceAddresses[cci].GroupIncMask.ValueString(), state.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceAddresses[cci].SourceIp.ValueString()}
+								cckeyString := ""
+								for ccki := range cckeys {
+									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
+								}
+
+								ccemptyKeys := true
+								if !reflect.ValueOf(state.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceAddresses[cci].GroupIncMask.ValueString()).IsZero() {
+									ccemptyKeys = false
+								}
+								if !reflect.ValueOf(state.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceAddresses[cci].SourceIp.ValueString()).IsZero() {
+									ccemptyKeys = false
+								}
+								if ccemptyKeys {
+									continue
+								}
+
+								found := false
+								for ccj := range data.SrP2mpPolicies[j].StaticGroups[cj].GroupMasksSourceAddresses {
+									found = true
+									if state.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceAddresses[cci].GroupIncMask.ValueString() != data.SrP2mpPolicies[j].StaticGroups[cj].GroupMasksSourceAddresses[ccj].GroupIncMask.ValueString() {
+										found = false
+									}
+									if state.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceAddresses[cci].SourceIp.ValueString() != data.SrP2mpPolicies[j].StaticGroups[cj].GroupMasksSourceAddresses[ccj].SourceIp.ValueString() {
+										found = false
+									}
+									if found {
+										if !state.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceAddresses[cci].GroupCount.IsNull() && data.SrP2mpPolicies[j].StaticGroups[cj].GroupMasksSourceAddresses[ccj].GroupCount.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-p2mp-policies/sr-p2mp-policy%v/static-group/group-address%v/group-mask-address-source-address-inc-mask%v/group-address-count", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										break
+									}
+								}
+								if !found {
+									deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-p2mp-policies/sr-p2mp-policy%v/static-group/group-address%v/group-mask-address-source-address-inc-mask%v", state.getPath(), keyString, ckeyString, cckeyString))
+								}
+							}
+							for cci := range state.SrP2mpPolicies[i].StaticGroups[ci].GroupMasks {
+								cckeys := [...]string{"group-mask-address"}
+								ccstateKeyValues := [...]string{state.SrP2mpPolicies[i].StaticGroups[ci].GroupMasks[cci].GroupIncMask.ValueString()}
+								cckeyString := ""
+								for ccki := range cckeys {
+									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
+								}
+
+								ccemptyKeys := true
+								if !reflect.ValueOf(state.SrP2mpPolicies[i].StaticGroups[ci].GroupMasks[cci].GroupIncMask.ValueString()).IsZero() {
+									ccemptyKeys = false
+								}
+								if ccemptyKeys {
+									continue
+								}
+
+								found := false
+								for ccj := range data.SrP2mpPolicies[j].StaticGroups[cj].GroupMasks {
+									found = true
+									if state.SrP2mpPolicies[i].StaticGroups[ci].GroupMasks[cci].GroupIncMask.ValueString() != data.SrP2mpPolicies[j].StaticGroups[cj].GroupMasks[ccj].GroupIncMask.ValueString() {
+										found = false
+									}
+									if found {
+										if !state.SrP2mpPolicies[i].StaticGroups[ci].GroupMasks[cci].GroupCount.IsNull() && data.SrP2mpPolicies[j].StaticGroups[cj].GroupMasks[ccj].GroupCount.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-p2mp-policies/sr-p2mp-policy%v/static-group/group-address%v/group-address-inc-mask%v/group-address-count", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										break
+									}
+								}
+								if !found {
+									deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-p2mp-policies/sr-p2mp-policy%v/static-group/group-address%v/group-address-inc-mask%v", state.getPath(), keyString, ckeyString, cckeyString))
+								}
+							}
+							if !state.SrP2mpPolicies[i].StaticGroups[ci].GroupAddressOnly.IsNull() && data.SrP2mpPolicies[j].StaticGroups[cj].GroupAddressOnly.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-p2mp-policies/sr-p2mp-policy%v/static-group/group-address%v/group-address-only", state.getPath(), keyString, ckeyString))
+							}
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-p2mp-policies/sr-p2mp-policy%v/static-group/group-address%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-p2mp-policies/sr-p2mp-policy%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.MofrrCloneSources {
+		keys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MofrrCloneSources[i].SourceAddress.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MofrrCloneSources[i].SourceAddress.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MofrrCloneSources {
+			found = true
+			if state.MofrrCloneSources[i].SourceAddress.ValueString() != data.MofrrCloneSources[j].SourceAddress.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.MofrrCloneSources[i].To {
+					ckeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MofrrCloneSources[i].To[ci].PrimaryAddress.ValueString()}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MofrrCloneSources[i].To[ci].PrimaryAddress.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MofrrCloneSources[j].To {
+						found = true
+						if state.MofrrCloneSources[i].To[ci].PrimaryAddress.ValueString() != data.MofrrCloneSources[j].To[cj].PrimaryAddress.ValueString() {
+							found = false
+						}
+						if found {
+							for cci := range state.MofrrCloneSources[i].To[ci].And {
+								cckeys := [...]string{"address"}
+								ccstateKeyValues := [...]string{state.MofrrCloneSources[i].To[ci].And[cci].BackupAddress.ValueString()}
+								cckeyString := ""
+								for ccki := range cckeys {
+									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
+								}
+
+								ccemptyKeys := true
+								if !reflect.ValueOf(state.MofrrCloneSources[i].To[ci].And[cci].BackupAddress.ValueString()).IsZero() {
+									ccemptyKeys = false
+								}
+								if ccemptyKeys {
+									continue
+								}
+
+								found := false
+								for ccj := range data.MofrrCloneSources[j].To[cj].And {
+									found = true
+									if state.MofrrCloneSources[i].To[ci].And[cci].BackupAddress.ValueString() != data.MofrrCloneSources[j].To[cj].And[ccj].BackupAddress.ValueString() {
+										found = false
+									}
+									if found {
+										for ccci := range state.MofrrCloneSources[i].To[ci].And[cci].Masklen {
+											ccckeys := [...]string{"mask-length"}
+											cccstateKeyValues := [...]string{strconv.FormatInt(state.MofrrCloneSources[i].To[ci].And[cci].Masklen[ccci].MaskLength.ValueInt64(), 10)}
+											ccckeyString := ""
+											for cccki := range ccckeys {
+												ccckeyString += "[" + ccckeys[cccki] + "=" + cccstateKeyValues[cccki] + "]"
+											}
+
+											cccemptyKeys := true
+											if !reflect.ValueOf(state.MofrrCloneSources[i].To[ci].And[cci].Masklen[ccci].MaskLength.ValueInt64()).IsZero() {
+												cccemptyKeys = false
+											}
+											if cccemptyKeys {
+												continue
+											}
+
+											found := false
+											for cccj := range data.MofrrCloneSources[j].To[cj].And[ccj].Masklen {
+												found = true
+												if state.MofrrCloneSources[i].To[ci].And[cci].Masklen[ccci].MaskLength.ValueInt64() != data.MofrrCloneSources[j].To[cj].And[ccj].Masklen[cccj].MaskLength.ValueInt64() {
+													found = false
+												}
+												if found {
+													break
+												}
+											}
+											if !found {
+												deletedItems = append(deletedItems, fmt.Sprintf("%v/mofrr/clone/sources/source%v/to%v/and%v/masklen%v", state.getPath(), keyString, ckeyString, cckeyString, ccckeyString))
+											}
+										}
+										break
+									}
+								}
+								if !found {
+									deletedItems = append(deletedItems, fmt.Sprintf("%v/mofrr/clone/sources/source%v/to%v/and%v", state.getPath(), keyString, ckeyString, cckeyString))
+								}
+							}
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/mofrr/clone/sources/source%v/to%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/mofrr/clone/sources/source%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.MofrrCloneJoins {
+		keys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MofrrCloneJoins[i].SourceAddress.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MofrrCloneJoins[i].SourceAddress.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MofrrCloneJoins {
+			found = true
+			if state.MofrrCloneJoins[i].SourceAddress.ValueString() != data.MofrrCloneJoins[j].SourceAddress.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.MofrrCloneJoins[i].To {
+					ckeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.MofrrCloneJoins[i].To[ci].PrimaryAddress.ValueString()}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MofrrCloneJoins[i].To[ci].PrimaryAddress.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MofrrCloneJoins[j].To {
+						found = true
+						if state.MofrrCloneJoins[i].To[ci].PrimaryAddress.ValueString() != data.MofrrCloneJoins[j].To[cj].PrimaryAddress.ValueString() {
+							found = false
+						}
+						if found {
+							for cci := range state.MofrrCloneJoins[i].To[ci].And {
+								cckeys := [...]string{"address"}
+								ccstateKeyValues := [...]string{state.MofrrCloneJoins[i].To[ci].And[cci].BackupAddress.ValueString()}
+								cckeyString := ""
+								for ccki := range cckeys {
+									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
+								}
+
+								ccemptyKeys := true
+								if !reflect.ValueOf(state.MofrrCloneJoins[i].To[ci].And[cci].BackupAddress.ValueString()).IsZero() {
+									ccemptyKeys = false
+								}
+								if ccemptyKeys {
+									continue
+								}
+
+								found := false
+								for ccj := range data.MofrrCloneJoins[j].To[cj].And {
+									found = true
+									if state.MofrrCloneJoins[i].To[ci].And[cci].BackupAddress.ValueString() != data.MofrrCloneJoins[j].To[cj].And[ccj].BackupAddress.ValueString() {
+										found = false
+									}
+									if found {
+										for ccci := range state.MofrrCloneJoins[i].To[ci].And[cci].Masklen {
+											ccckeys := [...]string{"mask-length"}
+											cccstateKeyValues := [...]string{strconv.FormatInt(state.MofrrCloneJoins[i].To[ci].And[cci].Masklen[ccci].MaskLength.ValueInt64(), 10)}
+											ccckeyString := ""
+											for cccki := range ccckeys {
+												ccckeyString += "[" + ccckeys[cccki] + "=" + cccstateKeyValues[cccki] + "]"
+											}
+
+											cccemptyKeys := true
+											if !reflect.ValueOf(state.MofrrCloneJoins[i].To[ci].And[cci].Masklen[ccci].MaskLength.ValueInt64()).IsZero() {
+												cccemptyKeys = false
+											}
+											if cccemptyKeys {
+												continue
+											}
+
+											found := false
+											for cccj := range data.MofrrCloneJoins[j].To[cj].And[ccj].Masklen {
+												found = true
+												if state.MofrrCloneJoins[i].To[ci].And[cci].Masklen[ccci].MaskLength.ValueInt64() != data.MofrrCloneJoins[j].To[cj].And[ccj].Masklen[cccj].MaskLength.ValueInt64() {
+													found = false
+												}
+												if found {
+													break
+												}
+											}
+											if !found {
+												deletedItems = append(deletedItems, fmt.Sprintf("%v/mofrr/clone/joins/join%v/to%v/and%v/masklen%v", state.getPath(), keyString, ckeyString, cckeyString, ccckeyString))
+											}
+										}
+										break
+									}
+								}
+								if !found {
+									deletedItems = append(deletedItems, fmt.Sprintf("%v/mofrr/clone/joins/join%v/to%v/and%v", state.getPath(), keyString, ckeyString, cckeyString))
+								}
+							}
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/mofrr/clone/joins/join%v/to%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/mofrr/clone/joins/join%v", state.getPath(), keyString))
+		}
+	}
+	if !state.MofrrNonRevertive.IsNull() && data.MofrrNonRevertive.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mofrr/non-revertive", state.getPath()))
+	}
+	if !state.MofrrProtectLocalFaultOnly.IsNull() && data.MofrrProtectLocalFaultOnly.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mofrr/local-fault-only", state.getPath()))
+	}
+	if !state.MofrrProtect.IsNull() && data.MofrrProtect.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mofrr/protect", state.getPath()))
+	}
+	if !state.MofrrRib.IsNull() && data.MofrrRib.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mofrr/rib", state.getPath()))
+	}
+	if !state.MofrrFlow.IsNull() && data.MofrrFlow.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mofrr/flow", state.getPath()))
+	}
+	if !state.Mofrr.IsNull() && data.Mofrr.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mofrr", state.getPath()))
 	}
 	for i := range state.BsrRelayVrfs {
 		keys := [...]string{"vrf-name"}
@@ -3577,6 +5228,130 @@ func (data *RouterPIMIPv4) getEmptyLeafsDelete(ctx context.Context) []string {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/interface%v/enable", data.getPath(), keyString))
 		}
 	}
+	for i := range data.SrP2mpPolicies {
+		keys := [...]string{"sr-p2mp-policy-id"}
+		keyValues := [...]string{data.SrP2mpPolicies[i].PolicyName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		for ci := range data.SrP2mpPolicies[i].StaticGroups {
+			ckeys := [...]string{"group-address"}
+			ckeyValues := [...]string{data.SrP2mpPolicies[i].StaticGroups[ci].GroupAddress.ValueString()}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+			for cci := range data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks {
+				cckeys := [...]string{"group-mask-address", "source-address", "source-mask-address"}
+				cckeyValues := [...]string{data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].GroupIncMask.ValueString(), data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].SourceIp.ValueString(), data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceMasks[cci].SourceIncMask.ValueString()}
+				cckeyString := ""
+				for ccki := range cckeys {
+					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
+				}
+			}
+			for cci := range data.SrP2mpPolicies[i].StaticGroups[ci].SourceMasks {
+				cckeys := [...]string{"source-address", "source-mask-address"}
+				cckeyValues := [...]string{data.SrP2mpPolicies[i].StaticGroups[ci].SourceMasks[cci].SourceIp.ValueString(), data.SrP2mpPolicies[i].StaticGroups[ci].SourceMasks[cci].SourceIncMask.ValueString()}
+				cckeyString := ""
+				for ccki := range cckeys {
+					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
+				}
+			}
+			for cci := range data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceAddresses {
+				cckeys := [...]string{"group-mask-address", "source-address"}
+				cckeyValues := [...]string{data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceAddresses[cci].GroupIncMask.ValueString(), data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasksSourceAddresses[cci].SourceIp.ValueString()}
+				cckeyString := ""
+				for ccki := range cckeys {
+					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
+				}
+			}
+			for cci := range data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasks {
+				cckeys := [...]string{"group-mask-address"}
+				cckeyValues := [...]string{data.SrP2mpPolicies[i].StaticGroups[ci].GroupMasks[cci].GroupIncMask.ValueString()}
+				cckeyString := ""
+				for ccki := range cckeys {
+					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
+				}
+			}
+			if !data.SrP2mpPolicies[i].StaticGroups[ci].GroupAddressOnly.IsNull() && !data.SrP2mpPolicies[i].StaticGroups[ci].GroupAddressOnly.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sr-p2mp-policies/sr-p2mp-policy%v/static-group/group-address%v/group-address-only", data.getPath(), keyString, ckeyString))
+			}
+		}
+	}
+	for i := range data.MofrrCloneSources {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MofrrCloneSources[i].SourceAddress.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		for ci := range data.MofrrCloneSources[i].To {
+			ckeys := [...]string{"address"}
+			ckeyValues := [...]string{data.MofrrCloneSources[i].To[ci].PrimaryAddress.ValueString()}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+			for cci := range data.MofrrCloneSources[i].To[ci].And {
+				cckeys := [...]string{"address"}
+				cckeyValues := [...]string{data.MofrrCloneSources[i].To[ci].And[cci].BackupAddress.ValueString()}
+				cckeyString := ""
+				for ccki := range cckeys {
+					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
+				}
+				for ccci := range data.MofrrCloneSources[i].To[ci].And[cci].Masklen {
+					ccckeys := [...]string{"mask-length"}
+					ccckeyValues := [...]string{strconv.FormatInt(data.MofrrCloneSources[i].To[ci].And[cci].Masklen[ccci].MaskLength.ValueInt64(), 10)}
+					ccckeyString := ""
+					for cccki := range ccckeys {
+						ccckeyString += "[" + ccckeys[cccki] + "=" + ccckeyValues[cccki] + "]"
+					}
+				}
+			}
+		}
+	}
+	for i := range data.MofrrCloneJoins {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MofrrCloneJoins[i].SourceAddress.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		for ci := range data.MofrrCloneJoins[i].To {
+			ckeys := [...]string{"address"}
+			ckeyValues := [...]string{data.MofrrCloneJoins[i].To[ci].PrimaryAddress.ValueString()}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+			for cci := range data.MofrrCloneJoins[i].To[ci].And {
+				cckeys := [...]string{"address"}
+				cckeyValues := [...]string{data.MofrrCloneJoins[i].To[ci].And[cci].BackupAddress.ValueString()}
+				cckeyString := ""
+				for ccki := range cckeys {
+					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
+				}
+				for ccci := range data.MofrrCloneJoins[i].To[ci].And[cci].Masklen {
+					ccckeys := [...]string{"mask-length"}
+					ccckeyValues := [...]string{strconv.FormatInt(data.MofrrCloneJoins[i].To[ci].And[cci].Masklen[ccci].MaskLength.ValueInt64(), 10)}
+					ccckeyString := ""
+					for cccki := range ccckeys {
+						ccckeyString += "[" + ccckeys[cccki] + "=" + ccckeyValues[cccki] + "]"
+					}
+				}
+			}
+		}
+	}
+	if !data.MofrrNonRevertive.IsNull() && !data.MofrrNonRevertive.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mofrr/non-revertive", data.getPath()))
+	}
+	if !data.MofrrProtectLocalFaultOnly.IsNull() && !data.MofrrProtectLocalFaultOnly.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mofrr/local-fault-only", data.getPath()))
+	}
+	if !data.Mofrr.IsNull() && !data.Mofrr.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mofrr", data.getPath()))
+	}
 	for i := range data.BsrRelayVrfs {
 		keys := [...]string{"vrf-name"}
 		keyValues := [...]string{data.BsrRelayVrfs[i].VrfName.ValueString()}
@@ -3740,6 +5515,54 @@ func (data *RouterPIMIPv4) getDeletePaths(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/interface%v", data.getPath(), keyString))
+	}
+	for i := range data.SrP2mpPolicies {
+		keys := [...]string{"sr-p2mp-policy-id"}
+		keyValues := [...]string{data.SrP2mpPolicies[i].PolicyName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-p2mp-policies/sr-p2mp-policy%v", data.getPath(), keyString))
+	}
+	for i := range data.MofrrCloneSources {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MofrrCloneSources[i].SourceAddress.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mofrr/clone/sources/source%v", data.getPath(), keyString))
+	}
+	for i := range data.MofrrCloneJoins {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MofrrCloneJoins[i].SourceAddress.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mofrr/clone/joins/join%v", data.getPath(), keyString))
+	}
+	if !data.MofrrNonRevertive.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mofrr/non-revertive", data.getPath()))
+	}
+	if !data.MofrrProtectLocalFaultOnly.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mofrr/local-fault-only", data.getPath()))
+	}
+	if !data.MofrrProtect.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mofrr/protect", data.getPath()))
+	}
+	if !data.MofrrRib.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mofrr/rib", data.getPath()))
+	}
+	if !data.MofrrFlow.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mofrr/flow", data.getPath()))
+	}
+	if !data.Mofrr.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mofrr", data.getPath()))
 	}
 	for i := range data.BsrRelayVrfs {
 		keys := [...]string{"vrf-name"}

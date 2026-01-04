@@ -14,7 +14,7 @@ This data source can read the Policy Map QoS configuration.
 
 ```terraform
 data "iosxr_policy_map_qos" "example" {
-  policy_map_name = "PM1"
+  policy_map_name = "PM-QOS"
 }
 ```
 

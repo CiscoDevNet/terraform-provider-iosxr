@@ -35,21 +35,30 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type IPSLA struct {
-	Device     types.String      `tfsdk:"device"`
-	Id         types.String      `tfsdk:"id"`
-	LowMemory  types.Int64       `tfsdk:"low_memory"`
-	KeyChain   types.String      `tfsdk:"key_chain"`
-	Operations []IPSLAOperations `tfsdk:"operations"`
-	Schedules  []IPSLASchedules  `tfsdk:"schedules"`
+	Device                     types.String      `tfsdk:"device"`
+	Id                         types.String      `tfsdk:"id"`
+	DeleteMode                 types.String      `tfsdk:"delete_mode"`
+	LowMemory                  types.Int64       `tfsdk:"low_memory"`
+	KeyChain                   types.String      `tfsdk:"key_chain"`
+	HwTimestampDisable         types.Bool        `tfsdk:"hw_timestamp_disable"`
+	Operations                 []IPSLAOperations `tfsdk:"operations"`
+	Schedules                  []IPSLASchedules  `tfsdk:"schedules"`
+	ServerTwamp                types.Bool        `tfsdk:"server_twamp"`
+	ServerTwampPort            types.Int64       `tfsdk:"server_twamp_port"`
+	ServerTwampTimerInactivity types.Int64       `tfsdk:"server_twamp_timer_inactivity"`
 }
 
 type IPSLAData struct {
-	Device     types.String      `tfsdk:"device"`
-	Id         types.String      `tfsdk:"id"`
-	LowMemory  types.Int64       `tfsdk:"low_memory"`
-	KeyChain   types.String      `tfsdk:"key_chain"`
-	Operations []IPSLAOperations `tfsdk:"operations"`
-	Schedules  []IPSLASchedules  `tfsdk:"schedules"`
+	Device                     types.String      `tfsdk:"device"`
+	Id                         types.String      `tfsdk:"id"`
+	LowMemory                  types.Int64       `tfsdk:"low_memory"`
+	KeyChain                   types.String      `tfsdk:"key_chain"`
+	HwTimestampDisable         types.Bool        `tfsdk:"hw_timestamp_disable"`
+	Operations                 []IPSLAOperations `tfsdk:"operations"`
+	Schedules                  []IPSLASchedules  `tfsdk:"schedules"`
+	ServerTwamp                types.Bool        `tfsdk:"server_twamp"`
+	ServerTwampPort            types.Int64       `tfsdk:"server_twamp_port"`
+	ServerTwampTimerInactivity types.Int64       `tfsdk:"server_twamp_timer_inactivity"`
 }
 type IPSLAOperations struct {
 	OperationNumber                                  types.Int64                                     `tfsdk:"operation_number"`
@@ -227,6 +236,22 @@ func (data IPSLA) toBody(ctx context.Context) string {
 	}
 	if !data.KeyChain.IsNull() && !data.KeyChain.IsUnknown() {
 		body, _ = sjson.Set(body, "key-chain", data.KeyChain.ValueString())
+	}
+	if !data.HwTimestampDisable.IsNull() && !data.HwTimestampDisable.IsUnknown() {
+		if data.HwTimestampDisable.ValueBool() {
+			body, _ = sjson.Set(body, "hw-timestamp.disable", map[string]string{})
+		}
+	}
+	if !data.ServerTwamp.IsNull() && !data.ServerTwamp.IsUnknown() {
+		if data.ServerTwamp.ValueBool() {
+			body, _ = sjson.Set(body, "server.twamp", map[string]string{})
+		}
+	}
+	if !data.ServerTwampPort.IsNull() && !data.ServerTwampPort.IsUnknown() {
+		body, _ = sjson.Set(body, "server.twamp.port", strconv.FormatInt(data.ServerTwampPort.ValueInt64(), 10))
+	}
+	if !data.ServerTwampTimerInactivity.IsNull() && !data.ServerTwampTimerInactivity.IsUnknown() {
+		body, _ = sjson.Set(body, "server.twamp.timer.inactivity", strconv.FormatInt(data.ServerTwampTimerInactivity.ValueInt64(), 10))
 	}
 	if len(data.Operations) > 0 {
 		body, _ = sjson.Set(body, "operations.operation", []interface{}{})
@@ -725,6 +750,15 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 		data.KeyChain = types.StringValue(value.String())
 	} else {
 		data.KeyChain = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "hw-timestamp.disable"); !data.HwTimestampDisable.IsNull() {
+		if value.Exists() {
+			data.HwTimestampDisable = types.BoolValue(true)
+		} else {
+			data.HwTimestampDisable = types.BoolValue(false)
+		}
+	} else {
+		data.HwTimestampDisable = types.BoolNull()
 	}
 	for i := range data.Operations {
 		keys := [...]string{"operation-number"}
@@ -1634,6 +1668,25 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.Schedules[i].Ageout = types.Int64Null()
 		}
 	}
+	if value := gjson.GetBytes(res, "server.twamp"); !data.ServerTwamp.IsNull() {
+		if value.Exists() {
+			data.ServerTwamp = types.BoolValue(true)
+		} else {
+			data.ServerTwamp = types.BoolValue(false)
+		}
+	} else {
+		data.ServerTwamp = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "server.twamp.port"); value.Exists() && !data.ServerTwampPort.IsNull() {
+		data.ServerTwampPort = types.Int64Value(value.Int())
+	} else {
+		data.ServerTwampPort = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "server.twamp.timer.inactivity"); value.Exists() && !data.ServerTwampTimerInactivity.IsNull() {
+		data.ServerTwampTimerInactivity = types.Int64Value(value.Int())
+	} else {
+		data.ServerTwampTimerInactivity = types.Int64Null()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -1646,6 +1699,11 @@ func (data *IPSLA) fromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "key-chain"); value.Exists() {
 		data.KeyChain = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "hw-timestamp.disable"); value.Exists() {
+		data.HwTimestampDisable = types.BoolValue(true)
+	} else {
+		data.HwTimestampDisable = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "operations.operation"); value.Exists() {
 		data.Operations = make([]IPSLAOperations, 0)
@@ -2144,6 +2202,17 @@ func (data *IPSLA) fromBody(ctx context.Context, res []byte) {
 			data.Schedules = append(data.Schedules, item)
 			return true
 		})
+	}
+	if value := gjson.GetBytes(res, "server.twamp"); value.Exists() {
+		data.ServerTwamp = types.BoolValue(true)
+	} else {
+		data.ServerTwamp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "server.twamp.port"); value.Exists() {
+		data.ServerTwampPort = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "server.twamp.timer.inactivity"); value.Exists() {
+		data.ServerTwampTimerInactivity = types.Int64Value(value.Int())
 	}
 }
 
@@ -2158,6 +2227,11 @@ func (data *IPSLAData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "key-chain"); value.Exists() {
 		data.KeyChain = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "hw-timestamp.disable"); value.Exists() {
+		data.HwTimestampDisable = types.BoolValue(true)
+	} else {
+		data.HwTimestampDisable = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "operations.operation"); value.Exists() {
 		data.Operations = make([]IPSLAOperations, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -2656,6 +2730,17 @@ func (data *IPSLAData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
+	if value := gjson.GetBytes(res, "server.twamp"); value.Exists() {
+		data.ServerTwamp = types.BoolValue(true)
+	} else {
+		data.ServerTwamp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "server.twamp.port"); value.Exists() {
+		data.ServerTwampPort = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "server.twamp.timer.inactivity"); value.Exists() {
+		data.ServerTwampTimerInactivity = types.Int64Value(value.Int())
+	}
 }
 
 // End of section. //template:end fromBodyData
@@ -2664,6 +2749,15 @@ func (data *IPSLAData) fromBody(ctx context.Context, res []byte) {
 
 func (data *IPSLA) getDeletedItems(ctx context.Context, state IPSLA) []string {
 	deletedItems := make([]string, 0)
+	if !state.ServerTwampTimerInactivity.IsNull() && data.ServerTwampTimerInactivity.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/server/twamp/timer/inactivity", state.getPath()))
+	}
+	if !state.ServerTwampPort.IsNull() && data.ServerTwampPort.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/server/twamp/port", state.getPath()))
+	}
+	if !state.ServerTwamp.IsNull() && data.ServerTwamp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/server/twamp", state.getPath()))
+	}
 	for i := range state.Schedules {
 		keys := [...]string{"operation-number"}
 		stateKeyValues := [...]string{strconv.FormatInt(state.Schedules[i].OperationNumber.ValueInt64(), 10)}
@@ -3234,6 +3328,9 @@ func (data *IPSLA) getDeletedItems(ctx context.Context, state IPSLA) []string {
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/operations/operation%v", state.getPath(), keyString))
 		}
 	}
+	if !state.HwTimestampDisable.IsNull() && data.HwTimestampDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/hw-timestamp/disable", state.getPath()))
+	}
 	if !state.KeyChain.IsNull() && data.KeyChain.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/key-chain", state.getPath()))
 	}
@@ -3249,6 +3346,9 @@ func (data *IPSLA) getDeletedItems(ctx context.Context, state IPSLA) []string {
 
 func (data *IPSLA) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.ServerTwamp.IsNull() && !data.ServerTwamp.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/twamp", data.getPath()))
+	}
 	for i := range data.Schedules {
 		keys := [...]string{"operation-number"}
 		keyValues := [...]string{strconv.FormatInt(data.Schedules[i].OperationNumber.ValueInt64(), 10)}
@@ -3360,6 +3460,9 @@ func (data *IPSLA) getEmptyLeafsDelete(ctx context.Context) []string {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/operations/operation%v/type/icmp/echo", data.getPath(), keyString))
 		}
 	}
+	if !data.HwTimestampDisable.IsNull() && !data.HwTimestampDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hw-timestamp/disable", data.getPath()))
+	}
 	return emptyLeafsDelete
 }
 
@@ -3369,6 +3472,15 @@ func (data *IPSLA) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *IPSLA) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
+	if !data.ServerTwampTimerInactivity.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/twamp/timer/inactivity", data.getPath()))
+	}
+	if !data.ServerTwampPort.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/twamp/port", data.getPath()))
+	}
+	if !data.ServerTwamp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/twamp", data.getPath()))
+	}
 	for i := range data.Schedules {
 		keys := [...]string{"operation-number"}
 		keyValues := [...]string{strconv.FormatInt(data.Schedules[i].OperationNumber.ValueInt64(), 10)}
@@ -3388,6 +3500,9 @@ func (data *IPSLA) getDeletePaths(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/operations/operation%v", data.getPath(), keyString))
+	}
+	if !data.HwTimestampDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/hw-timestamp/disable", data.getPath()))
 	}
 	if !data.KeyChain.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/key-chain", data.getPath()))

@@ -80,7 +80,6 @@ func TestAccDataSourceIosxrL2VPN(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "pw_routing_bgp_rd_four_byte_as_assigned_number", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "snmp_mib_interface_format_external", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "snmp_mib_pseudowire_statistics", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "xconnect_groups.0.group_name", "P2P"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -165,9 +164,6 @@ func testAccDataSourceIosxrL2VPNConfig() string {
 	config += `	pw_routing_bgp_rd_four_byte_as_assigned_number = 1` + "\n"
 	config += `	snmp_mib_interface_format_external = true` + "\n"
 	config += `	snmp_mib_pseudowire_statistics = true` + "\n"
-	config += `	xconnect_groups = [{` + "\n"
-	config += `		group_name = "P2P"` + "\n"
-	config += `	}]` + "\n"
 	config += `}` + "\n"
 
 	config += `

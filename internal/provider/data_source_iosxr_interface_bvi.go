@@ -99,10 +99,6 @@ func (d *InterfaceBVIDataSource) Schema(ctx context.Context, req datasource.Sche
 				MarkdownDescription: "Max suppress time (in minutes)",
 				Computed:            true,
 			},
-			"dampening_restart_penalty": schema.Int64Attribute{
-				MarkdownDescription: "Restart penalty",
-				Computed:            true,
-			},
 			"service_policy_input": schema.ListNestedAttribute{
 				MarkdownDescription: "Configure a policy in the input direction",
 				Computed:            true,
@@ -239,6 +235,14 @@ func (d *InterfaceBVIDataSource) Schema(ctx context.Context, req datasource.Sche
 				MarkdownDescription: "Enable IP processing without an explicit address",
 				Computed:            true,
 			},
+			"ipv4_forwarding_enable": schema.BoolAttribute{
+				MarkdownDescription: "enable ipv4 forwarding on a interface",
+				Computed:            true,
+			},
+			"ipv4_ttl_propagate_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable ipv4 ttl propagation on this interface",
+				Computed:            true,
+			},
 			"ipv4_verify_unicast_source_reachable_via_type": schema.StringAttribute{
 				MarkdownDescription: "Source reachable type",
 				Computed:            true,
@@ -305,6 +309,10 @@ func (d *InterfaceBVIDataSource) Schema(ctx context.Context, req datasource.Sche
 			},
 			"ipv6_enable": schema.BoolAttribute{
 				MarkdownDescription: "Enable IPv6 on interface",
+				Computed:            true,
+			},
+			"ipv6_ttl_propagate_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable ipv6 ttl propagation on this interface",
 				Computed:            true,
 			},
 			"ipv6_addresses": schema.ListNestedAttribute{
@@ -482,6 +490,474 @@ func (d *InterfaceBVIDataSource) Schema(ctx context.Context, req datasource.Sche
 			"mac_address": schema.StringAttribute{
 				MarkdownDescription: "Set the Mac address(xxxx.xxxx.xxxx) on an interface",
 				Computed:            true,
+			},
+			"ptp": schema.BoolAttribute{
+				MarkdownDescription: "Precision Time Protocol config",
+				Computed:            true,
+			},
+			"ptp_profile": schema.StringAttribute{
+				MarkdownDescription: "PTP Profile to use on this interface",
+				Computed:            true,
+			},
+			"ptp_transport_ipv4": schema.BoolAttribute{
+				MarkdownDescription: "IPv4 transport",
+				Computed:            true,
+			},
+			"ptp_transport_ethernet": schema.BoolAttribute{
+				MarkdownDescription: "Ethernet transport",
+				Computed:            true,
+			},
+			"ptp_transport_ipv6": schema.BoolAttribute{
+				MarkdownDescription: "IPv6 transport",
+				Computed:            true,
+			},
+			"ptp_clock_operation_one_step": schema.BoolAttribute{
+				MarkdownDescription: "One-step clock-operation",
+				Computed:            true,
+			},
+			"ptp_clock_operation_two_step": schema.BoolAttribute{
+				MarkdownDescription: "Two-step clock-operation",
+				Computed:            true,
+			},
+			"ptp_announce_interval": schema.StringAttribute{
+				MarkdownDescription: "Send Announce messages once every one or more seconds",
+				Computed:            true,
+			},
+			"ptp_announce_frequency": schema.StringAttribute{
+				MarkdownDescription: "Send Announce messages one or more times a second",
+				Computed:            true,
+			},
+			"ptp_announce_timeout": schema.Int64Attribute{
+				MarkdownDescription: "Configure the announce timeout value",
+				Computed:            true,
+			},
+			"ptp_announce_grant_duration": schema.Int64Attribute{
+				MarkdownDescription: "Configure the announce unicast grant duration value",
+				Computed:            true,
+			},
+			"ptp_sync_interval": schema.StringAttribute{
+				MarkdownDescription: "Send Announce messages once every one or more seconds",
+				Computed:            true,
+			},
+			"ptp_sync_frequency": schema.StringAttribute{
+				MarkdownDescription: "Send Announce messages one or more times a second",
+				Computed:            true,
+			},
+			"ptp_sync_grant_duration": schema.Int64Attribute{
+				MarkdownDescription: "Configure the sync unicast grant duration value",
+				Computed:            true,
+			},
+			"ptp_sync_timeout": schema.Int64Attribute{
+				MarkdownDescription: "Configure the sync timeout value",
+				Computed:            true,
+			},
+			"ptp_delay_request_interval": schema.StringAttribute{
+				MarkdownDescription: "Send Announce messages once every one or more seconds",
+				Computed:            true,
+			},
+			"ptp_delay_request_frequency": schema.StringAttribute{
+				MarkdownDescription: "Send Announce messages one or more times a second",
+				Computed:            true,
+			},
+			"ptp_cos": schema.Int64Attribute{
+				MarkdownDescription: "Specify the COS value to use",
+				Computed:            true,
+			},
+			"ptp_cos_event": schema.Int64Attribute{
+				MarkdownDescription: "Specify the COS value to use",
+				Computed:            true,
+			},
+			"ptp_cos_general": schema.Int64Attribute{
+				MarkdownDescription: "Specify the COS value to use",
+				Computed:            true,
+			},
+			"ptp_dscp": schema.Int64Attribute{
+				MarkdownDescription: "Specify the DSCP value to use",
+				Computed:            true,
+			},
+			"ptp_dscp_event": schema.Int64Attribute{
+				MarkdownDescription: "Specify the DSCP value to use",
+				Computed:            true,
+			},
+			"ptp_dscp_general": schema.Int64Attribute{
+				MarkdownDescription: "Specify the DSCP value to use",
+				Computed:            true,
+			},
+			"ptp_ipv4_ttl": schema.Int64Attribute{
+				MarkdownDescription: "Specify the IPv4 TTL value to use",
+				Computed:            true,
+			},
+			"ptp_ipv6_hop_limit": schema.Int64Attribute{
+				MarkdownDescription: "Specify the IPv6 hop limit value to use",
+				Computed:            true,
+			},
+			"ptp_delay_asymmetry_value": schema.Int64Attribute{
+				MarkdownDescription: "Delay asymmetry to apply to all primarys on the interface",
+				Computed:            true,
+			},
+			"ptp_delay_asymmetry_unit_nanoseconds": schema.BoolAttribute{
+				MarkdownDescription: "Use nanoseconds as the delay asymmetry units",
+				Computed:            true,
+			},
+			"ptp_delay_asymmetry_unit_microseconds": schema.BoolAttribute{
+				MarkdownDescription: "Use microseconds as the delay asymmetry units",
+				Computed:            true,
+			},
+			"ptp_delay_asymmetry_unit_milliseconds": schema.BoolAttribute{
+				MarkdownDescription: "Use milliseconds as the delay asymmetry units",
+				Computed:            true,
+			},
+			"ptp_delay_response_grant_duration": schema.Int64Attribute{
+				MarkdownDescription: "Configure the delay-response unicast grant duration value",
+				Computed:            true,
+			},
+			"ptp_delay_response_timeout": schema.Int64Attribute{
+				MarkdownDescription: "Configure the delay-response timeout value",
+				Computed:            true,
+			},
+			"ptp_unicast_grant_invalid_request_reduce": schema.BoolAttribute{
+				MarkdownDescription: "Reduce grant parameters",
+				Computed:            true,
+			},
+			"ptp_unicast_grant_invalid_request_deny": schema.BoolAttribute{
+				MarkdownDescription: "Deny grant",
+				Computed:            true,
+			},
+			"ptp_multicast": schema.BoolAttribute{
+				MarkdownDescription: "Allow multicast messages to be sent",
+				Computed:            true,
+			},
+			"ptp_multicast_mixed": schema.BoolAttribute{
+				MarkdownDescription: "Mixed-mode multicast",
+				Computed:            true,
+			},
+			"ptp_multicast_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable multicast transport",
+				Computed:            true,
+			},
+			"ptp_multicast_target_address_mac_forwardable": schema.BoolAttribute{
+				MarkdownDescription: "Forwardable mac-address",
+				Computed:            true,
+			},
+			"ptp_multicast_target_address_mac_non_forwardable": schema.BoolAttribute{
+				MarkdownDescription: "Non-forwardable mac-address",
+				Computed:            true,
+			},
+			"ptp_port_state_slave_only": schema.BoolAttribute{
+				MarkdownDescription: "Restrict the port state to subordinate",
+				Computed:            true,
+			},
+			"ptp_port_state_master_only": schema.BoolAttribute{
+				MarkdownDescription: "Restrict the port state to primary",
+				Computed:            true,
+			},
+			"ptp_port_state_any": schema.BoolAttribute{
+				MarkdownDescription: "Unrestrict the port state on this interface",
+				Computed:            true,
+			},
+			"ptp_source_ipv4_address": schema.StringAttribute{
+				MarkdownDescription: "Specify the IPv4 address to use",
+				Computed:            true,
+			},
+			"ptp_source_ipv4_address_disable": schema.BoolAttribute{
+				MarkdownDescription: "Use the interface IPv4 address",
+				Computed:            true,
+			},
+			"ptp_source_ipv6_address": schema.StringAttribute{
+				MarkdownDescription: "Set the IPv6 address to use when sending IPv6 packets",
+				Computed:            true,
+			},
+			"ptp_source_ipv6_address_disable": schema.BoolAttribute{
+				MarkdownDescription: "Use the interface IPv6 address",
+				Computed:            true,
+			},
+			"ptp_local_priority": schema.Int64Attribute{
+				MarkdownDescription: "Configure a local priority",
+				Computed:            true,
+			},
+			"ptp_slave_ipv4s": schema.ListNestedAttribute{
+				MarkdownDescription: "IPv4 address",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "IPv4 address",
+							Computed:            true,
+						},
+						"non_negotiated": schema.BoolAttribute{
+							MarkdownDescription: "Use non-negotiated unicast",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"ptp_slave_ipv6s": schema.ListNestedAttribute{
+				MarkdownDescription: "IPv6 address",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "IPv6 address",
+							Computed:            true,
+						},
+						"non_negotiated": schema.BoolAttribute{
+							MarkdownDescription: "Use non-negotiated unicast",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"ptp_slave_ethernets": schema.ListNestedAttribute{
+				MarkdownDescription: "Ethernet address",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "Ethernet address",
+							Computed:            true,
+						},
+						"non_negotiated": schema.BoolAttribute{
+							MarkdownDescription: "Use non-negotiated unicast",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"ptp_master_ipv4s": schema.ListNestedAttribute{
+				MarkdownDescription: "IPv4 address",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "IPv4 address",
+							Computed:            true,
+						},
+						"priority": schema.Int64Attribute{
+							MarkdownDescription: "Specify the priority of this primary",
+							Computed:            true,
+						},
+						"clock_class": schema.Int64Attribute{
+							MarkdownDescription: "Override the clock-class of this primary",
+							Computed:            true,
+						},
+						"multicast": schema.BoolAttribute{
+							MarkdownDescription: "Whether this primary sends messages multicast",
+							Computed:            true,
+						},
+						"multicast_mixed": schema.BoolAttribute{
+							MarkdownDescription: "Mixed-mode multicast",
+							Computed:            true,
+						},
+						"non_negotiated": schema.BoolAttribute{
+							MarkdownDescription: "Use non-negotiated unicast",
+							Computed:            true,
+						},
+						"delay_asymmetry": schema.Int64Attribute{
+							MarkdownDescription: "The expected delay asymmetry for this primary",
+							Computed:            true,
+						},
+						"nanoseconds": schema.BoolAttribute{
+							MarkdownDescription: "Use nanoseconds as the delay asymmetry units",
+							Computed:            true,
+						},
+						"microseconds": schema.BoolAttribute{
+							MarkdownDescription: "Use microseconds as the delay asymmetry units",
+							Computed:            true,
+						},
+						"milliseconds": schema.BoolAttribute{
+							MarkdownDescription: "Use milliseconds as the delay asymmetry units",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"ptp_master_ipv6s": schema.ListNestedAttribute{
+				MarkdownDescription: "IPv6 address",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "IPv6 address",
+							Computed:            true,
+						},
+						"priority": schema.Int64Attribute{
+							MarkdownDescription: "Specify the priority of this primary",
+							Computed:            true,
+						},
+						"clock_class": schema.Int64Attribute{
+							MarkdownDescription: "Override the clock-class of this primary",
+							Computed:            true,
+						},
+						"multicast": schema.BoolAttribute{
+							MarkdownDescription: "Whether this primary sends messages multicast",
+							Computed:            true,
+						},
+						"multicast_mixed": schema.BoolAttribute{
+							MarkdownDescription: "Mixed-mode multicast",
+							Computed:            true,
+						},
+						"non_negotiated": schema.BoolAttribute{
+							MarkdownDescription: "Use non-negotiated unicast",
+							Computed:            true,
+						},
+						"delay_asymmetry": schema.Int64Attribute{
+							MarkdownDescription: "The expected delay asymmetry for this primary",
+							Computed:            true,
+						},
+						"nanoseconds": schema.BoolAttribute{
+							MarkdownDescription: "Use nanoseconds as the delay asymmetry units",
+							Computed:            true,
+						},
+						"microseconds": schema.BoolAttribute{
+							MarkdownDescription: "Use microseconds as the delay asymmetry units",
+							Computed:            true,
+						},
+						"milliseconds": schema.BoolAttribute{
+							MarkdownDescription: "Use milliseconds as the delay asymmetry units",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"ptp_master_ethernets": schema.ListNestedAttribute{
+				MarkdownDescription: "Ethernet address",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "Ethernet address",
+							Computed:            true,
+						},
+						"priority": schema.Int64Attribute{
+							MarkdownDescription: "Specify the priority of this primary",
+							Computed:            true,
+						},
+						"clock_class": schema.Int64Attribute{
+							MarkdownDescription: "Override the clock-class of this primary",
+							Computed:            true,
+						},
+						"multicast": schema.BoolAttribute{
+							MarkdownDescription: "Whether this primary sends messages multicast",
+							Computed:            true,
+						},
+						"multicast_mixed": schema.BoolAttribute{
+							MarkdownDescription: "Mixed-mode multicast",
+							Computed:            true,
+						},
+						"non_negotiated": schema.BoolAttribute{
+							MarkdownDescription: "Use non-negotiated unicast",
+							Computed:            true,
+						},
+						"delay_asymmetry": schema.Int64Attribute{
+							MarkdownDescription: "The expected delay asymmetry for this primary",
+							Computed:            true,
+						},
+						"nanoseconds": schema.BoolAttribute{
+							MarkdownDescription: "Use nanoseconds as the delay asymmetry units",
+							Computed:            true,
+						},
+						"microseconds": schema.BoolAttribute{
+							MarkdownDescription: "Use microseconds as the delay asymmetry units",
+							Computed:            true,
+						},
+						"milliseconds": schema.BoolAttribute{
+							MarkdownDescription: "Use milliseconds as the delay asymmetry units",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"ptp_interop_profile_default": schema.BoolAttribute{
+				MarkdownDescription: "Default profile",
+				Computed:            true,
+			},
+			"ptp_interop_profile_g_8265_1": schema.BoolAttribute{
+				MarkdownDescription: "G.8265.1 telecom profile",
+				Computed:            true,
+			},
+			"ptp_interop_profile_g_8275_1": schema.BoolAttribute{
+				MarkdownDescription: "G.8275.1 telecom profile",
+				Computed:            true,
+			},
+			"ptp_interop_profile_g_8275_2": schema.BoolAttribute{
+				MarkdownDescription: "G.8275.2 telecom profile",
+				Computed:            true,
+			},
+			"ptp_interop_domain": schema.Int64Attribute{
+				MarkdownDescription: "Domain of the peer clock",
+				Computed:            true,
+			},
+			"ptp_interop_egress_conversion_priority1": schema.Int64Attribute{
+				MarkdownDescription: "The priority1 value to use for the peer clock",
+				Computed:            true,
+			},
+			"ptp_interop_egress_conversion_priority2": schema.Int64Attribute{
+				MarkdownDescription: "The priority2 value to use for the peer clock",
+				Computed:            true,
+			},
+			"ptp_interop_egress_conversion_clock_accuracy": schema.Int64Attribute{
+				MarkdownDescription: "The clock-accuracy value to use for the peer clock",
+				Computed:            true,
+			},
+			"ptp_interop_egress_conversion_offset_scaled_log_variance": schema.Int64Attribute{
+				MarkdownDescription: "The OSLV value to use for the peer clock",
+				Computed:            true,
+			},
+			"ptp_interop_egress_conversion_clock_class_default": schema.Int64Attribute{
+				MarkdownDescription: "Default clock class to use when a more specific mapping is not available",
+				Computed:            true,
+			},
+			"ptp_interop_egress_conversion_clock_class_mappings": schema.ListNestedAttribute{
+				MarkdownDescription: "Specific mapping for a given clock class value",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"clock_class_to_map_from": schema.Int64Attribute{
+							MarkdownDescription: "Specific mapping for a given clock class value",
+							Computed:            true,
+						},
+						"clock_class_to_map_to": schema.Int64Attribute{
+							MarkdownDescription: "Clock class to map to",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"ptp_interop_ingress_conversion_priority1": schema.Int64Attribute{
+				MarkdownDescription: "The priority1 value to use for the peer clock",
+				Computed:            true,
+			},
+			"ptp_interop_ingress_conversion_priority2": schema.Int64Attribute{
+				MarkdownDescription: "The priority2 value to use for the peer clock",
+				Computed:            true,
+			},
+			"ptp_interop_ingress_conversion_clock_accuracy": schema.Int64Attribute{
+				MarkdownDescription: "The clock-accuracy value to use for the peer clock",
+				Computed:            true,
+			},
+			"ptp_interop_ingress_conversion_offset_scaled_log_variance": schema.Int64Attribute{
+				MarkdownDescription: "The OSLV value to use for the peer clock",
+				Computed:            true,
+			},
+			"ptp_interop_ingress_conversion_clock_class_default": schema.Int64Attribute{
+				MarkdownDescription: "Default clock class to use when a more specific mapping is not available",
+				Computed:            true,
+			},
+			"ptp_interop_ingress_conversion_clock_class_mappings": schema.ListNestedAttribute{
+				MarkdownDescription: "Specific mapping for a given clock class value",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"clock_class_to_map_from": schema.Int64Attribute{
+							MarkdownDescription: "Specific mapping for a given clock class value",
+							Computed:            true,
+						},
+						"clock_class_to_map_to": schema.Int64Attribute{
+							MarkdownDescription: "Clock class to map to",
+							Computed:            true,
+						},
+					},
+				},
 			},
 		},
 	}

@@ -40,6 +40,7 @@ func TestAccIosxrIPSLA(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "low_memory", "100000"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "key_chain", "KEY_CHAIN"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "hw_timestamp_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "operations.0.operation_number", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "operations.0.udp_echo", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "operations.0.udp_echo_tag", "UDP_ECHO_TAG"))
@@ -73,6 +74,9 @@ func TestAccIosxrIPSLA(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "schedules.0.start_pending", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "schedules.0.recurring", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "schedules.0.ageout", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "server_twamp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "server_twamp_port", "862"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "server_twamp_timer_inactivity", "600"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -133,8 +137,10 @@ func testAccIosxrIPSLAConfig_minimum() string {
 
 func testAccIosxrIPSLAConfig_all() string {
 	config := `resource "iosxr_ipsla" "test" {` + "\n"
+	config += `	delete_mode = "all"` + "\n"
 	config += `	low_memory = 100000` + "\n"
 	config += `	key_chain = "KEY_CHAIN"` + "\n"
+	config += `	hw_timestamp_disable = true` + "\n"
 	config += `	operations = [{` + "\n"
 	config += `		operation_number = 1` + "\n"
 	config += `		udp_echo = true` + "\n"
@@ -174,6 +180,9 @@ func testAccIosxrIPSLAConfig_all() string {
 	config += `		recurring = true` + "\n"
 	config += `		ageout = 300` + "\n"
 	config += `		}]` + "\n"
+	config += `	server_twamp = true` + "\n"
+	config += `	server_twamp_port = 862` + "\n"
+	config += `	server_twamp_timer_inactivity = 600` + "\n"
 	config += `}` + "\n"
 	return config
 }

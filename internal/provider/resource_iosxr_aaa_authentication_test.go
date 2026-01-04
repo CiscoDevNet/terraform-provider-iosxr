@@ -82,6 +82,13 @@ func iosxrAAAAuthenticationImportStateIdFunc(resourceName string) resource.Impor
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrAAAAuthenticationPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group[server-group-name=AAA2]"
+	attributes = {
+		"server-group-name" = "AAA2"
+	}
+}
+
+resource "iosxr_gnmi" "PreReq1" {
 	path = "Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group[server-group-name=AAA3]"
 	attributes = {
 		"server-group-name" = "AAA3"
@@ -100,7 +107,7 @@ func testAccIosxrAAAAuthenticationConfig_minimum() string {
 	config += `		list = "AAA-LIST"` + "\n"
 	config += `		a1_tacacs = true` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -111,6 +118,7 @@ func testAccIosxrAAAAuthenticationConfig_minimum() string {
 
 func testAccIosxrAAAAuthenticationConfig_all() string {
 	config := `resource "iosxr_aaa_authentication" "test" {` + "\n"
+	config += `	delete_mode = "all"` + "\n"
 	config += `	login = [{` + "\n"
 	config += `		list = "AAA-LIST"` + "\n"
 	config += `		a1_tacacs = true` + "\n"
@@ -118,7 +126,7 @@ func testAccIosxrAAAAuthenticationConfig_all() string {
 	config += `		a3_group = "AAA3"` + "\n"
 	config += `		a4_local = true` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

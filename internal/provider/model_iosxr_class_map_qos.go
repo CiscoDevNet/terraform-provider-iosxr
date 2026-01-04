@@ -36,61 +36,95 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type ClassMapQoS struct {
-	Device                       types.String                             `tfsdk:"device"`
-	Id                           types.String                             `tfsdk:"id"`
-	ClassMapName                 types.String                             `tfsdk:"class_map_name"`
-	MatchAll                     types.Bool                               `tfsdk:"match_all"`
-	MatchAny                     types.Bool                               `tfsdk:"match_any"`
-	Description                  types.String                             `tfsdk:"description"`
-	MatchCos                     types.List                               `tfsdk:"match_cos"`
-	MatchDestinationAddressIpv4  []ClassMapQoSMatchDestinationAddressIpv4 `tfsdk:"match_destination_address_ipv4"`
-	MatchDestinationAddressIpv6  []ClassMapQoSMatchDestinationAddressIpv6 `tfsdk:"match_destination_address_ipv6"`
-	MatchDestinationMac          types.String                             `tfsdk:"match_destination_mac"`
-	MatchDestinationPort         types.List                               `tfsdk:"match_destination_port"`
-	MatchDscp                    types.List                               `tfsdk:"match_dscp"`
-	MatchDscpIpv4                types.List                               `tfsdk:"match_dscp_ipv4"`
-	MatchDscpIpv6                types.List                               `tfsdk:"match_dscp_ipv6"`
-	MatchMplsExperimentalTopmost types.List                               `tfsdk:"match_mpls_experimental_topmost"`
-	MatchPrecedence              types.List                               `tfsdk:"match_precedence"`
-	MatchPrecedenceIpv4          types.List                               `tfsdk:"match_precedence_ipv4"`
-	MatchPrecedenceIpv6          types.List                               `tfsdk:"match_precedence_ipv6"`
-	MatchProtocol                types.List                               `tfsdk:"match_protocol"`
-	MatchQosGroup                types.List                               `tfsdk:"match_qos_group"`
-	MatchSourceAddressIpv4       []ClassMapQoSMatchSourceAddressIpv4      `tfsdk:"match_source_address_ipv4"`
-	MatchSourceAddressIpv6       []ClassMapQoSMatchSourceAddressIpv6      `tfsdk:"match_source_address_ipv6"`
-	MatchSourceMac               types.String                             `tfsdk:"match_source_mac"`
-	MatchSourcePort              types.List                               `tfsdk:"match_source_port"`
-	MatchTrafficClass            types.List                               `tfsdk:"match_traffic_class"`
-	MatchVlan                    types.List                               `tfsdk:"match_vlan"`
+	Device                         types.String                             `tfsdk:"device"`
+	Id                             types.String                             `tfsdk:"id"`
+	ClassMapName                   types.String                             `tfsdk:"class_map_name"`
+	MatchAll                       types.Bool                               `tfsdk:"match_all"`
+	MatchAny                       types.Bool                               `tfsdk:"match_any"`
+	Description                    types.String                             `tfsdk:"description"`
+	MatchAccessGroupIpv4           types.List                               `tfsdk:"match_access_group_ipv4"`
+	MatchAccessGroupIpv6           types.List                               `tfsdk:"match_access_group_ipv6"`
+	MatchCos                       types.List                               `tfsdk:"match_cos"`
+	MatchCosInner                  types.List                               `tfsdk:"match_cos_inner"`
+	MatchDestinationAddressIpv4    []ClassMapQoSMatchDestinationAddressIpv4 `tfsdk:"match_destination_address_ipv4"`
+	MatchDestinationAddressIpv6    []ClassMapQoSMatchDestinationAddressIpv6 `tfsdk:"match_destination_address_ipv6"`
+	MatchDestinationMac            types.String                             `tfsdk:"match_destination_mac"`
+	MatchDestinationPort           types.List                               `tfsdk:"match_destination_port"`
+	MatchDiscardClass              types.List                               `tfsdk:"match_discard_class"`
+	MatchDscp                      types.List                               `tfsdk:"match_dscp"`
+	MatchDscpIpv4                  types.List                               `tfsdk:"match_dscp_ipv4"`
+	MatchDscpIpv6                  types.List                               `tfsdk:"match_dscp_ipv6"`
+	MatchEthertype                 types.List                               `tfsdk:"match_ethertype"`
+	MatchFragmentTypeDontFragment  types.Bool                               `tfsdk:"match_fragment_type_dont_fragment"`
+	MatchFragmentTypeFirstFragment types.Bool                               `tfsdk:"match_fragment_type_first_fragment"`
+	MatchFragmentTypeIsFragment    types.Bool                               `tfsdk:"match_fragment_type_is_fragment"`
+	MatchFragmentTypeLastFragment  types.Bool                               `tfsdk:"match_fragment_type_last_fragment"`
+	MatchIpv4IcmpCode              types.List                               `tfsdk:"match_ipv4_icmp_code"`
+	MatchIpv4IcmpType              types.List                               `tfsdk:"match_ipv4_icmp_type"`
+	MatchIpv6IcmpCode              types.List                               `tfsdk:"match_ipv6_icmp_code"`
+	MatchIpv6IcmpType              types.List                               `tfsdk:"match_ipv6_icmp_type"`
+	MatchMplsExperimentalTopmost   types.List                               `tfsdk:"match_mpls_experimental_topmost"`
+	MatchPacketLength              types.List                               `tfsdk:"match_packet_length"`
+	MatchPrecedence                types.List                               `tfsdk:"match_precedence"`
+	MatchPrecedenceIpv4            types.List                               `tfsdk:"match_precedence_ipv4"`
+	MatchPrecedenceIpv6            types.List                               `tfsdk:"match_precedence_ipv6"`
+	MatchProtocol                  types.List                               `tfsdk:"match_protocol"`
+	MatchQosGroup                  types.List                               `tfsdk:"match_qos_group"`
+	MatchSourceAddressIpv4         []ClassMapQoSMatchSourceAddressIpv4      `tfsdk:"match_source_address_ipv4"`
+	MatchSourceAddressIpv6         []ClassMapQoSMatchSourceAddressIpv6      `tfsdk:"match_source_address_ipv6"`
+	MatchSourceMac                 types.String                             `tfsdk:"match_source_mac"`
+	MatchSourcePort                types.List                               `tfsdk:"match_source_port"`
+	MatchTcpFlag                   types.Int64                              `tfsdk:"match_tcp_flag"`
+	MatchTcpFlagAny                types.Bool                               `tfsdk:"match_tcp_flag_any"`
+	MatchTrafficClass              types.List                               `tfsdk:"match_traffic_class"`
+	MatchVlan                      types.List                               `tfsdk:"match_vlan"`
+	MatchVlanInner                 types.List                               `tfsdk:"match_vlan_inner"`
 }
 
 type ClassMapQoSData struct {
-	Device                       types.String                             `tfsdk:"device"`
-	Id                           types.String                             `tfsdk:"id"`
-	ClassMapName                 types.String                             `tfsdk:"class_map_name"`
-	MatchAll                     types.Bool                               `tfsdk:"match_all"`
-	MatchAny                     types.Bool                               `tfsdk:"match_any"`
-	Description                  types.String                             `tfsdk:"description"`
-	MatchCos                     types.List                               `tfsdk:"match_cos"`
-	MatchDestinationAddressIpv4  []ClassMapQoSMatchDestinationAddressIpv4 `tfsdk:"match_destination_address_ipv4"`
-	MatchDestinationAddressIpv6  []ClassMapQoSMatchDestinationAddressIpv6 `tfsdk:"match_destination_address_ipv6"`
-	MatchDestinationMac          types.String                             `tfsdk:"match_destination_mac"`
-	MatchDestinationPort         types.List                               `tfsdk:"match_destination_port"`
-	MatchDscp                    types.List                               `tfsdk:"match_dscp"`
-	MatchDscpIpv4                types.List                               `tfsdk:"match_dscp_ipv4"`
-	MatchDscpIpv6                types.List                               `tfsdk:"match_dscp_ipv6"`
-	MatchMplsExperimentalTopmost types.List                               `tfsdk:"match_mpls_experimental_topmost"`
-	MatchPrecedence              types.List                               `tfsdk:"match_precedence"`
-	MatchPrecedenceIpv4          types.List                               `tfsdk:"match_precedence_ipv4"`
-	MatchPrecedenceIpv6          types.List                               `tfsdk:"match_precedence_ipv6"`
-	MatchProtocol                types.List                               `tfsdk:"match_protocol"`
-	MatchQosGroup                types.List                               `tfsdk:"match_qos_group"`
-	MatchSourceAddressIpv4       []ClassMapQoSMatchSourceAddressIpv4      `tfsdk:"match_source_address_ipv4"`
-	MatchSourceAddressIpv6       []ClassMapQoSMatchSourceAddressIpv6      `tfsdk:"match_source_address_ipv6"`
-	MatchSourceMac               types.String                             `tfsdk:"match_source_mac"`
-	MatchSourcePort              types.List                               `tfsdk:"match_source_port"`
-	MatchTrafficClass            types.List                               `tfsdk:"match_traffic_class"`
-	MatchVlan                    types.List                               `tfsdk:"match_vlan"`
+	Device                         types.String                             `tfsdk:"device"`
+	Id                             types.String                             `tfsdk:"id"`
+	ClassMapName                   types.String                             `tfsdk:"class_map_name"`
+	MatchAll                       types.Bool                               `tfsdk:"match_all"`
+	MatchAny                       types.Bool                               `tfsdk:"match_any"`
+	Description                    types.String                             `tfsdk:"description"`
+	MatchAccessGroupIpv4           types.List                               `tfsdk:"match_access_group_ipv4"`
+	MatchAccessGroupIpv6           types.List                               `tfsdk:"match_access_group_ipv6"`
+	MatchCos                       types.List                               `tfsdk:"match_cos"`
+	MatchCosInner                  types.List                               `tfsdk:"match_cos_inner"`
+	MatchDestinationAddressIpv4    []ClassMapQoSMatchDestinationAddressIpv4 `tfsdk:"match_destination_address_ipv4"`
+	MatchDestinationAddressIpv6    []ClassMapQoSMatchDestinationAddressIpv6 `tfsdk:"match_destination_address_ipv6"`
+	MatchDestinationMac            types.String                             `tfsdk:"match_destination_mac"`
+	MatchDestinationPort           types.List                               `tfsdk:"match_destination_port"`
+	MatchDiscardClass              types.List                               `tfsdk:"match_discard_class"`
+	MatchDscp                      types.List                               `tfsdk:"match_dscp"`
+	MatchDscpIpv4                  types.List                               `tfsdk:"match_dscp_ipv4"`
+	MatchDscpIpv6                  types.List                               `tfsdk:"match_dscp_ipv6"`
+	MatchEthertype                 types.List                               `tfsdk:"match_ethertype"`
+	MatchFragmentTypeDontFragment  types.Bool                               `tfsdk:"match_fragment_type_dont_fragment"`
+	MatchFragmentTypeFirstFragment types.Bool                               `tfsdk:"match_fragment_type_first_fragment"`
+	MatchFragmentTypeIsFragment    types.Bool                               `tfsdk:"match_fragment_type_is_fragment"`
+	MatchFragmentTypeLastFragment  types.Bool                               `tfsdk:"match_fragment_type_last_fragment"`
+	MatchIpv4IcmpCode              types.List                               `tfsdk:"match_ipv4_icmp_code"`
+	MatchIpv4IcmpType              types.List                               `tfsdk:"match_ipv4_icmp_type"`
+	MatchIpv6IcmpCode              types.List                               `tfsdk:"match_ipv6_icmp_code"`
+	MatchIpv6IcmpType              types.List                               `tfsdk:"match_ipv6_icmp_type"`
+	MatchMplsExperimentalTopmost   types.List                               `tfsdk:"match_mpls_experimental_topmost"`
+	MatchPacketLength              types.List                               `tfsdk:"match_packet_length"`
+	MatchPrecedence                types.List                               `tfsdk:"match_precedence"`
+	MatchPrecedenceIpv4            types.List                               `tfsdk:"match_precedence_ipv4"`
+	MatchPrecedenceIpv6            types.List                               `tfsdk:"match_precedence_ipv6"`
+	MatchProtocol                  types.List                               `tfsdk:"match_protocol"`
+	MatchQosGroup                  types.List                               `tfsdk:"match_qos_group"`
+	MatchSourceAddressIpv4         []ClassMapQoSMatchSourceAddressIpv4      `tfsdk:"match_source_address_ipv4"`
+	MatchSourceAddressIpv6         []ClassMapQoSMatchSourceAddressIpv6      `tfsdk:"match_source_address_ipv6"`
+	MatchSourceMac                 types.String                             `tfsdk:"match_source_mac"`
+	MatchSourcePort                types.List                               `tfsdk:"match_source_port"`
+	MatchTcpFlag                   types.Int64                              `tfsdk:"match_tcp_flag"`
+	MatchTcpFlagAny                types.Bool                               `tfsdk:"match_tcp_flag_any"`
+	MatchTrafficClass              types.List                               `tfsdk:"match_traffic_class"`
+	MatchVlan                      types.List                               `tfsdk:"match_vlan"`
+	MatchVlanInner                 types.List                               `tfsdk:"match_vlan_inner"`
 }
 type ClassMapQoSMatchDestinationAddressIpv4 struct {
 	Address types.String `tfsdk:"address"`
@@ -143,10 +177,25 @@ func (data ClassMapQoS) toBody(ctx context.Context) string {
 	if !data.Description.IsNull() && !data.Description.IsUnknown() {
 		body, _ = sjson.Set(body, "description", data.Description.ValueString())
 	}
+	if !data.MatchAccessGroupIpv4.IsNull() && !data.MatchAccessGroupIpv4.IsUnknown() {
+		var values []string
+		data.MatchAccessGroupIpv4.ElementsAs(ctx, &values, false)
+		body, _ = sjson.Set(body, "match.access-group.ipv4", values)
+	}
+	if !data.MatchAccessGroupIpv6.IsNull() && !data.MatchAccessGroupIpv6.IsUnknown() {
+		var values []string
+		data.MatchAccessGroupIpv6.ElementsAs(ctx, &values, false)
+		body, _ = sjson.Set(body, "match.access-group.ipv6", values)
+	}
 	if !data.MatchCos.IsNull() && !data.MatchCos.IsUnknown() {
 		var values []int
 		data.MatchCos.ElementsAs(ctx, &values, false)
 		body, _ = sjson.Set(body, "match.cos.value", values)
+	}
+	if !data.MatchCosInner.IsNull() && !data.MatchCosInner.IsUnknown() {
+		var values []int
+		data.MatchCosInner.ElementsAs(ctx, &values, false)
+		body, _ = sjson.Set(body, "match.cos-inner.value", values)
 	}
 	if !data.MatchDestinationMac.IsNull() && !data.MatchDestinationMac.IsUnknown() {
 		body, _ = sjson.Set(body, "match.destination-address.mac", data.MatchDestinationMac.ValueString())
@@ -155,6 +204,11 @@ func (data ClassMapQoS) toBody(ctx context.Context) string {
 		var values []string
 		data.MatchDestinationPort.ElementsAs(ctx, &values, false)
 		body, _ = sjson.Set(body, "match.destination-port.port-number", values)
+	}
+	if !data.MatchDiscardClass.IsNull() && !data.MatchDiscardClass.IsUnknown() {
+		var values []int
+		data.MatchDiscardClass.ElementsAs(ctx, &values, false)
+		body, _ = sjson.Set(body, "match.discard-class.id", values)
 	}
 	if !data.MatchDscp.IsNull() && !data.MatchDscp.IsUnknown() {
 		var values []string
@@ -171,10 +225,60 @@ func (data ClassMapQoS) toBody(ctx context.Context) string {
 		data.MatchDscpIpv6.ElementsAs(ctx, &values, false)
 		body, _ = sjson.Set(body, "match.dscp-ipv6.value", values)
 	}
+	if !data.MatchEthertype.IsNull() && !data.MatchEthertype.IsUnknown() {
+		var values []string
+		data.MatchEthertype.ElementsAs(ctx, &values, false)
+		body, _ = sjson.Set(body, "match.ethertype.value", values)
+	}
+	if !data.MatchFragmentTypeDontFragment.IsNull() && !data.MatchFragmentTypeDontFragment.IsUnknown() {
+		if data.MatchFragmentTypeDontFragment.ValueBool() {
+			body, _ = sjson.Set(body, "match.fragment-type.dont-fragment", map[string]string{})
+		}
+	}
+	if !data.MatchFragmentTypeFirstFragment.IsNull() && !data.MatchFragmentTypeFirstFragment.IsUnknown() {
+		if data.MatchFragmentTypeFirstFragment.ValueBool() {
+			body, _ = sjson.Set(body, "match.fragment-type.first-fragment", map[string]string{})
+		}
+	}
+	if !data.MatchFragmentTypeIsFragment.IsNull() && !data.MatchFragmentTypeIsFragment.IsUnknown() {
+		if data.MatchFragmentTypeIsFragment.ValueBool() {
+			body, _ = sjson.Set(body, "match.fragment-type.is-fragment", map[string]string{})
+		}
+	}
+	if !data.MatchFragmentTypeLastFragment.IsNull() && !data.MatchFragmentTypeLastFragment.IsUnknown() {
+		if data.MatchFragmentTypeLastFragment.ValueBool() {
+			body, _ = sjson.Set(body, "match.fragment-type.last-fragment", map[string]string{})
+		}
+	}
+	if !data.MatchIpv4IcmpCode.IsNull() && !data.MatchIpv4IcmpCode.IsUnknown() {
+		var values []string
+		data.MatchIpv4IcmpCode.ElementsAs(ctx, &values, false)
+		body, _ = sjson.Set(body, "match.ipv4.icmp-code.value", values)
+	}
+	if !data.MatchIpv4IcmpType.IsNull() && !data.MatchIpv4IcmpType.IsUnknown() {
+		var values []string
+		data.MatchIpv4IcmpType.ElementsAs(ctx, &values, false)
+		body, _ = sjson.Set(body, "match.ipv4.icmp-type.value", values)
+	}
+	if !data.MatchIpv6IcmpCode.IsNull() && !data.MatchIpv6IcmpCode.IsUnknown() {
+		var values []string
+		data.MatchIpv6IcmpCode.ElementsAs(ctx, &values, false)
+		body, _ = sjson.Set(body, "match.ipv6.icmp-code.value", values)
+	}
+	if !data.MatchIpv6IcmpType.IsNull() && !data.MatchIpv6IcmpType.IsUnknown() {
+		var values []string
+		data.MatchIpv6IcmpType.ElementsAs(ctx, &values, false)
+		body, _ = sjson.Set(body, "match.ipv6.icmp-type.value", values)
+	}
 	if !data.MatchMplsExperimentalTopmost.IsNull() && !data.MatchMplsExperimentalTopmost.IsUnknown() {
 		var values []int
 		data.MatchMplsExperimentalTopmost.ElementsAs(ctx, &values, false)
 		body, _ = sjson.Set(body, "match.mpls.experimental.topmost.label", values)
+	}
+	if !data.MatchPacketLength.IsNull() && !data.MatchPacketLength.IsUnknown() {
+		var values []string
+		data.MatchPacketLength.ElementsAs(ctx, &values, false)
+		body, _ = sjson.Set(body, "match.packet.length.value", values)
 	}
 	if !data.MatchPrecedence.IsNull() && !data.MatchPrecedence.IsUnknown() {
 		var values []string
@@ -209,6 +313,14 @@ func (data ClassMapQoS) toBody(ctx context.Context) string {
 		data.MatchSourcePort.ElementsAs(ctx, &values, false)
 		body, _ = sjson.Set(body, "match.source-port.number", values)
 	}
+	if !data.MatchTcpFlag.IsNull() && !data.MatchTcpFlag.IsUnknown() {
+		body, _ = sjson.Set(body, "match.tcp-flag.value", strconv.FormatInt(data.MatchTcpFlag.ValueInt64(), 10))
+	}
+	if !data.MatchTcpFlagAny.IsNull() && !data.MatchTcpFlagAny.IsUnknown() {
+		if data.MatchTcpFlagAny.ValueBool() {
+			body, _ = sjson.Set(body, "match.tcp-flag.any", map[string]string{})
+		}
+	}
 	if !data.MatchTrafficClass.IsNull() && !data.MatchTrafficClass.IsUnknown() {
 		var values []string
 		data.MatchTrafficClass.ElementsAs(ctx, &values, false)
@@ -218,6 +330,11 @@ func (data ClassMapQoS) toBody(ctx context.Context) string {
 		var values []string
 		data.MatchVlan.ElementsAs(ctx, &values, false)
 		body, _ = sjson.Set(body, "match.vlan.vlan-id", values)
+	}
+	if !data.MatchVlanInner.IsNull() && !data.MatchVlanInner.IsUnknown() {
+		var values []string
+		data.MatchVlanInner.ElementsAs(ctx, &values, false)
+		body, _ = sjson.Set(body, "match.vlan-inner.vlan-id", values)
 	}
 	if len(data.MatchDestinationAddressIpv4) > 0 {
 		body, _ = sjson.Set(body, "match.destination-address.ipv4.address-prefix", []interface{}{})
@@ -294,10 +411,25 @@ func (data *ClassMapQoS) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Description = types.StringNull()
 	}
+	if value := gjson.GetBytes(res, "match.access-group.ipv4"); value.Exists() && !data.MatchAccessGroupIpv4.IsNull() {
+		data.MatchAccessGroupIpv4 = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchAccessGroupIpv4 = types.ListNull(types.StringType)
+	}
+	if value := gjson.GetBytes(res, "match.access-group.ipv6"); value.Exists() && !data.MatchAccessGroupIpv6.IsNull() {
+		data.MatchAccessGroupIpv6 = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchAccessGroupIpv6 = types.ListNull(types.StringType)
+	}
 	if value := gjson.GetBytes(res, "match.cos.value"); value.Exists() && !data.MatchCos.IsNull() {
 		data.MatchCos = helpers.GetInt64List(value.Array())
 	} else {
 		data.MatchCos = types.ListNull(types.Int64Type)
+	}
+	if value := gjson.GetBytes(res, "match.cos-inner.value"); value.Exists() && !data.MatchCosInner.IsNull() {
+		data.MatchCosInner = helpers.GetInt64List(value.Array())
+	} else {
+		data.MatchCosInner = types.ListNull(types.Int64Type)
 	}
 	for i := range data.MatchDestinationAddressIpv4 {
 		keys := [...]string{"address", "netmask"}
@@ -377,6 +509,11 @@ func (data *ClassMapQoS) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.MatchDestinationPort = types.ListNull(types.StringType)
 	}
+	if value := gjson.GetBytes(res, "match.discard-class.id"); value.Exists() && !data.MatchDiscardClass.IsNull() {
+		data.MatchDiscardClass = helpers.GetInt64List(value.Array())
+	} else {
+		data.MatchDiscardClass = types.ListNull(types.Int64Type)
+	}
 	if value := gjson.GetBytes(res, "match.dscp.value"); value.Exists() && !data.MatchDscp.IsNull() {
 		data.MatchDscp = helpers.GetStringList(value.Array())
 	} else {
@@ -392,10 +529,76 @@ func (data *ClassMapQoS) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.MatchDscpIpv6 = types.ListNull(types.StringType)
 	}
+	if value := gjson.GetBytes(res, "match.ethertype.value"); value.Exists() && !data.MatchEthertype.IsNull() {
+		data.MatchEthertype = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchEthertype = types.ListNull(types.StringType)
+	}
+	if value := gjson.GetBytes(res, "match.fragment-type.dont-fragment"); !data.MatchFragmentTypeDontFragment.IsNull() {
+		if value.Exists() {
+			data.MatchFragmentTypeDontFragment = types.BoolValue(true)
+		} else {
+			data.MatchFragmentTypeDontFragment = types.BoolValue(false)
+		}
+	} else {
+		data.MatchFragmentTypeDontFragment = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "match.fragment-type.first-fragment"); !data.MatchFragmentTypeFirstFragment.IsNull() {
+		if value.Exists() {
+			data.MatchFragmentTypeFirstFragment = types.BoolValue(true)
+		} else {
+			data.MatchFragmentTypeFirstFragment = types.BoolValue(false)
+		}
+	} else {
+		data.MatchFragmentTypeFirstFragment = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "match.fragment-type.is-fragment"); !data.MatchFragmentTypeIsFragment.IsNull() {
+		if value.Exists() {
+			data.MatchFragmentTypeIsFragment = types.BoolValue(true)
+		} else {
+			data.MatchFragmentTypeIsFragment = types.BoolValue(false)
+		}
+	} else {
+		data.MatchFragmentTypeIsFragment = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "match.fragment-type.last-fragment"); !data.MatchFragmentTypeLastFragment.IsNull() {
+		if value.Exists() {
+			data.MatchFragmentTypeLastFragment = types.BoolValue(true)
+		} else {
+			data.MatchFragmentTypeLastFragment = types.BoolValue(false)
+		}
+	} else {
+		data.MatchFragmentTypeLastFragment = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "match.ipv4.icmp-code.value"); value.Exists() && !data.MatchIpv4IcmpCode.IsNull() {
+		data.MatchIpv4IcmpCode = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchIpv4IcmpCode = types.ListNull(types.StringType)
+	}
+	if value := gjson.GetBytes(res, "match.ipv4.icmp-type.value"); value.Exists() && !data.MatchIpv4IcmpType.IsNull() {
+		data.MatchIpv4IcmpType = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchIpv4IcmpType = types.ListNull(types.StringType)
+	}
+	if value := gjson.GetBytes(res, "match.ipv6.icmp-code.value"); value.Exists() && !data.MatchIpv6IcmpCode.IsNull() {
+		data.MatchIpv6IcmpCode = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchIpv6IcmpCode = types.ListNull(types.StringType)
+	}
+	if value := gjson.GetBytes(res, "match.ipv6.icmp-type.value"); value.Exists() && !data.MatchIpv6IcmpType.IsNull() {
+		data.MatchIpv6IcmpType = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchIpv6IcmpType = types.ListNull(types.StringType)
+	}
 	if value := gjson.GetBytes(res, "match.mpls.experimental.topmost.label"); value.Exists() && !data.MatchMplsExperimentalTopmost.IsNull() {
 		data.MatchMplsExperimentalTopmost = helpers.GetInt64List(value.Array())
 	} else {
 		data.MatchMplsExperimentalTopmost = types.ListNull(types.Int64Type)
+	}
+	if value := gjson.GetBytes(res, "match.packet.length.value"); value.Exists() && !data.MatchPacketLength.IsNull() {
+		data.MatchPacketLength = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchPacketLength = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "match.precedence.value"); value.Exists() && !data.MatchPrecedence.IsNull() {
 		data.MatchPrecedence = helpers.GetStringList(value.Array())
@@ -500,6 +703,20 @@ func (data *ClassMapQoS) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.MatchSourcePort = types.ListNull(types.StringType)
 	}
+	if value := gjson.GetBytes(res, "match.tcp-flag.value"); value.Exists() && !data.MatchTcpFlag.IsNull() {
+		data.MatchTcpFlag = types.Int64Value(value.Int())
+	} else {
+		data.MatchTcpFlag = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "match.tcp-flag.any"); !data.MatchTcpFlagAny.IsNull() {
+		if value.Exists() {
+			data.MatchTcpFlagAny = types.BoolValue(true)
+		} else {
+			data.MatchTcpFlagAny = types.BoolValue(false)
+		}
+	} else {
+		data.MatchTcpFlagAny = types.BoolNull()
+	}
 	if value := gjson.GetBytes(res, "match.traffic-class.id"); value.Exists() && !data.MatchTrafficClass.IsNull() {
 		data.MatchTrafficClass = helpers.GetStringList(value.Array())
 	} else {
@@ -509,6 +726,11 @@ func (data *ClassMapQoS) updateFromBody(ctx context.Context, res []byte) {
 		data.MatchVlan = helpers.GetStringList(value.Array())
 	} else {
 		data.MatchVlan = types.ListNull(types.StringType)
+	}
+	if value := gjson.GetBytes(res, "match.vlan-inner.vlan-id"); value.Exists() && !data.MatchVlanInner.IsNull() {
+		data.MatchVlanInner = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchVlanInner = types.ListNull(types.StringType)
 	}
 }
 
@@ -530,10 +752,25 @@ func (data *ClassMapQoS) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "match.access-group.ipv4"); value.Exists() {
+		data.MatchAccessGroupIpv4 = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchAccessGroupIpv4 = types.ListNull(types.StringType)
+	}
+	if value := gjson.GetBytes(res, "match.access-group.ipv6"); value.Exists() {
+		data.MatchAccessGroupIpv6 = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchAccessGroupIpv6 = types.ListNull(types.StringType)
+	}
 	if value := gjson.GetBytes(res, "match.cos.value"); value.Exists() {
 		data.MatchCos = helpers.GetInt64List(value.Array())
 	} else {
 		data.MatchCos = types.ListNull(types.Int64Type)
+	}
+	if value := gjson.GetBytes(res, "match.cos-inner.value"); value.Exists() {
+		data.MatchCosInner = helpers.GetInt64List(value.Array())
+	} else {
+		data.MatchCosInner = types.ListNull(types.Int64Type)
 	}
 	if value := gjson.GetBytes(res, "match.destination-address.ipv4.address-prefix"); value.Exists() {
 		data.MatchDestinationAddressIpv4 = make([]ClassMapQoSMatchDestinationAddressIpv4, 0)
@@ -571,6 +808,11 @@ func (data *ClassMapQoS) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.MatchDestinationPort = types.ListNull(types.StringType)
 	}
+	if value := gjson.GetBytes(res, "match.discard-class.id"); value.Exists() {
+		data.MatchDiscardClass = helpers.GetInt64List(value.Array())
+	} else {
+		data.MatchDiscardClass = types.ListNull(types.Int64Type)
+	}
 	if value := gjson.GetBytes(res, "match.dscp.value"); value.Exists() {
 		data.MatchDscp = helpers.GetStringList(value.Array())
 	} else {
@@ -586,10 +828,60 @@ func (data *ClassMapQoS) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.MatchDscpIpv6 = types.ListNull(types.StringType)
 	}
+	if value := gjson.GetBytes(res, "match.ethertype.value"); value.Exists() {
+		data.MatchEthertype = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchEthertype = types.ListNull(types.StringType)
+	}
+	if value := gjson.GetBytes(res, "match.fragment-type.dont-fragment"); value.Exists() {
+		data.MatchFragmentTypeDontFragment = types.BoolValue(true)
+	} else {
+		data.MatchFragmentTypeDontFragment = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "match.fragment-type.first-fragment"); value.Exists() {
+		data.MatchFragmentTypeFirstFragment = types.BoolValue(true)
+	} else {
+		data.MatchFragmentTypeFirstFragment = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "match.fragment-type.is-fragment"); value.Exists() {
+		data.MatchFragmentTypeIsFragment = types.BoolValue(true)
+	} else {
+		data.MatchFragmentTypeIsFragment = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "match.fragment-type.last-fragment"); value.Exists() {
+		data.MatchFragmentTypeLastFragment = types.BoolValue(true)
+	} else {
+		data.MatchFragmentTypeLastFragment = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "match.ipv4.icmp-code.value"); value.Exists() {
+		data.MatchIpv4IcmpCode = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchIpv4IcmpCode = types.ListNull(types.StringType)
+	}
+	if value := gjson.GetBytes(res, "match.ipv4.icmp-type.value"); value.Exists() {
+		data.MatchIpv4IcmpType = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchIpv4IcmpType = types.ListNull(types.StringType)
+	}
+	if value := gjson.GetBytes(res, "match.ipv6.icmp-code.value"); value.Exists() {
+		data.MatchIpv6IcmpCode = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchIpv6IcmpCode = types.ListNull(types.StringType)
+	}
+	if value := gjson.GetBytes(res, "match.ipv6.icmp-type.value"); value.Exists() {
+		data.MatchIpv6IcmpType = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchIpv6IcmpType = types.ListNull(types.StringType)
+	}
 	if value := gjson.GetBytes(res, "match.mpls.experimental.topmost.label"); value.Exists() {
 		data.MatchMplsExperimentalTopmost = helpers.GetInt64List(value.Array())
 	} else {
 		data.MatchMplsExperimentalTopmost = types.ListNull(types.Int64Type)
+	}
+	if value := gjson.GetBytes(res, "match.packet.length.value"); value.Exists() {
+		data.MatchPacketLength = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchPacketLength = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "match.precedence.value"); value.Exists() {
 		data.MatchPrecedence = helpers.GetStringList(value.Array())
@@ -652,6 +944,14 @@ func (data *ClassMapQoS) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.MatchSourcePort = types.ListNull(types.StringType)
 	}
+	if value := gjson.GetBytes(res, "match.tcp-flag.value"); value.Exists() {
+		data.MatchTcpFlag = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "match.tcp-flag.any"); value.Exists() {
+		data.MatchTcpFlagAny = types.BoolValue(true)
+	} else {
+		data.MatchTcpFlagAny = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "match.traffic-class.id"); value.Exists() {
 		data.MatchTrafficClass = helpers.GetStringList(value.Array())
 	} else {
@@ -661,6 +961,11 @@ func (data *ClassMapQoS) fromBody(ctx context.Context, res []byte) {
 		data.MatchVlan = helpers.GetStringList(value.Array())
 	} else {
 		data.MatchVlan = types.ListNull(types.StringType)
+	}
+	if value := gjson.GetBytes(res, "match.vlan-inner.vlan-id"); value.Exists() {
+		data.MatchVlanInner = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchVlanInner = types.ListNull(types.StringType)
 	}
 }
 
@@ -682,10 +987,25 @@ func (data *ClassMapQoSData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "match.access-group.ipv4"); value.Exists() {
+		data.MatchAccessGroupIpv4 = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchAccessGroupIpv4 = types.ListNull(types.StringType)
+	}
+	if value := gjson.GetBytes(res, "match.access-group.ipv6"); value.Exists() {
+		data.MatchAccessGroupIpv6 = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchAccessGroupIpv6 = types.ListNull(types.StringType)
+	}
 	if value := gjson.GetBytes(res, "match.cos.value"); value.Exists() {
 		data.MatchCos = helpers.GetInt64List(value.Array())
 	} else {
 		data.MatchCos = types.ListNull(types.Int64Type)
+	}
+	if value := gjson.GetBytes(res, "match.cos-inner.value"); value.Exists() {
+		data.MatchCosInner = helpers.GetInt64List(value.Array())
+	} else {
+		data.MatchCosInner = types.ListNull(types.Int64Type)
 	}
 	if value := gjson.GetBytes(res, "match.destination-address.ipv4.address-prefix"); value.Exists() {
 		data.MatchDestinationAddressIpv4 = make([]ClassMapQoSMatchDestinationAddressIpv4, 0)
@@ -723,6 +1043,11 @@ func (data *ClassMapQoSData) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.MatchDestinationPort = types.ListNull(types.StringType)
 	}
+	if value := gjson.GetBytes(res, "match.discard-class.id"); value.Exists() {
+		data.MatchDiscardClass = helpers.GetInt64List(value.Array())
+	} else {
+		data.MatchDiscardClass = types.ListNull(types.Int64Type)
+	}
 	if value := gjson.GetBytes(res, "match.dscp.value"); value.Exists() {
 		data.MatchDscp = helpers.GetStringList(value.Array())
 	} else {
@@ -738,10 +1063,60 @@ func (data *ClassMapQoSData) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.MatchDscpIpv6 = types.ListNull(types.StringType)
 	}
+	if value := gjson.GetBytes(res, "match.ethertype.value"); value.Exists() {
+		data.MatchEthertype = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchEthertype = types.ListNull(types.StringType)
+	}
+	if value := gjson.GetBytes(res, "match.fragment-type.dont-fragment"); value.Exists() {
+		data.MatchFragmentTypeDontFragment = types.BoolValue(true)
+	} else {
+		data.MatchFragmentTypeDontFragment = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "match.fragment-type.first-fragment"); value.Exists() {
+		data.MatchFragmentTypeFirstFragment = types.BoolValue(true)
+	} else {
+		data.MatchFragmentTypeFirstFragment = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "match.fragment-type.is-fragment"); value.Exists() {
+		data.MatchFragmentTypeIsFragment = types.BoolValue(true)
+	} else {
+		data.MatchFragmentTypeIsFragment = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "match.fragment-type.last-fragment"); value.Exists() {
+		data.MatchFragmentTypeLastFragment = types.BoolValue(true)
+	} else {
+		data.MatchFragmentTypeLastFragment = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "match.ipv4.icmp-code.value"); value.Exists() {
+		data.MatchIpv4IcmpCode = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchIpv4IcmpCode = types.ListNull(types.StringType)
+	}
+	if value := gjson.GetBytes(res, "match.ipv4.icmp-type.value"); value.Exists() {
+		data.MatchIpv4IcmpType = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchIpv4IcmpType = types.ListNull(types.StringType)
+	}
+	if value := gjson.GetBytes(res, "match.ipv6.icmp-code.value"); value.Exists() {
+		data.MatchIpv6IcmpCode = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchIpv6IcmpCode = types.ListNull(types.StringType)
+	}
+	if value := gjson.GetBytes(res, "match.ipv6.icmp-type.value"); value.Exists() {
+		data.MatchIpv6IcmpType = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchIpv6IcmpType = types.ListNull(types.StringType)
+	}
 	if value := gjson.GetBytes(res, "match.mpls.experimental.topmost.label"); value.Exists() {
 		data.MatchMplsExperimentalTopmost = helpers.GetInt64List(value.Array())
 	} else {
 		data.MatchMplsExperimentalTopmost = types.ListNull(types.Int64Type)
+	}
+	if value := gjson.GetBytes(res, "match.packet.length.value"); value.Exists() {
+		data.MatchPacketLength = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchPacketLength = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "match.precedence.value"); value.Exists() {
 		data.MatchPrecedence = helpers.GetStringList(value.Array())
@@ -804,6 +1179,14 @@ func (data *ClassMapQoSData) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.MatchSourcePort = types.ListNull(types.StringType)
 	}
+	if value := gjson.GetBytes(res, "match.tcp-flag.value"); value.Exists() {
+		data.MatchTcpFlag = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "match.tcp-flag.any"); value.Exists() {
+		data.MatchTcpFlagAny = types.BoolValue(true)
+	} else {
+		data.MatchTcpFlagAny = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "match.traffic-class.id"); value.Exists() {
 		data.MatchTrafficClass = helpers.GetStringList(value.Array())
 	} else {
@@ -814,6 +1197,11 @@ func (data *ClassMapQoSData) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.MatchVlan = types.ListNull(types.StringType)
 	}
+	if value := gjson.GetBytes(res, "match.vlan-inner.vlan-id"); value.Exists() {
+		data.MatchVlanInner = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchVlanInner = types.ListNull(types.StringType)
+	}
 }
 
 // End of section. //template:end fromBodyData
@@ -822,11 +1210,20 @@ func (data *ClassMapQoSData) fromBody(ctx context.Context, res []byte) {
 
 func (data *ClassMapQoS) getDeletedItems(ctx context.Context, state ClassMapQoS) []string {
 	deletedItems := make([]string, 0)
+	if !state.MatchVlanInner.IsNull() && data.MatchVlanInner.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/vlan-inner/vlan-id", state.getPath()))
+	}
 	if !state.MatchVlan.IsNull() && data.MatchVlan.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/vlan/vlan-id", state.getPath()))
 	}
 	if !state.MatchTrafficClass.IsNull() && data.MatchTrafficClass.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/traffic-class/id", state.getPath()))
+	}
+	if !state.MatchTcpFlagAny.IsNull() && data.MatchTcpFlagAny.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/tcp-flag/any", state.getPath()))
+	}
+	if !state.MatchTcpFlag.IsNull() && data.MatchTcpFlag.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/tcp-flag/value", state.getPath()))
 	}
 	if !state.MatchSourcePort.IsNull() && data.MatchSourcePort.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/source-port/number", state.getPath()))
@@ -921,8 +1318,38 @@ func (data *ClassMapQoS) getDeletedItems(ctx context.Context, state ClassMapQoS)
 	if !state.MatchPrecedence.IsNull() && data.MatchPrecedence.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/precedence/value", state.getPath()))
 	}
+	if !state.MatchPacketLength.IsNull() && data.MatchPacketLength.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/packet/length/value", state.getPath()))
+	}
 	if !state.MatchMplsExperimentalTopmost.IsNull() && data.MatchMplsExperimentalTopmost.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/mpls/experimental/topmost/label", state.getPath()))
+	}
+	if !state.MatchIpv6IcmpType.IsNull() && data.MatchIpv6IcmpType.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/ipv6/icmp-type/value", state.getPath()))
+	}
+	if !state.MatchIpv6IcmpCode.IsNull() && data.MatchIpv6IcmpCode.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/ipv6/icmp-code/value", state.getPath()))
+	}
+	if !state.MatchIpv4IcmpType.IsNull() && data.MatchIpv4IcmpType.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/ipv4/icmp-type/value", state.getPath()))
+	}
+	if !state.MatchIpv4IcmpCode.IsNull() && data.MatchIpv4IcmpCode.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/ipv4/icmp-code/value", state.getPath()))
+	}
+	if !state.MatchFragmentTypeLastFragment.IsNull() && data.MatchFragmentTypeLastFragment.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/fragment-type/last-fragment", state.getPath()))
+	}
+	if !state.MatchFragmentTypeIsFragment.IsNull() && data.MatchFragmentTypeIsFragment.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/fragment-type/is-fragment", state.getPath()))
+	}
+	if !state.MatchFragmentTypeFirstFragment.IsNull() && data.MatchFragmentTypeFirstFragment.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/fragment-type/first-fragment", state.getPath()))
+	}
+	if !state.MatchFragmentTypeDontFragment.IsNull() && data.MatchFragmentTypeDontFragment.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/fragment-type/dont-fragment", state.getPath()))
+	}
+	if !state.MatchEthertype.IsNull() && data.MatchEthertype.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/ethertype/value", state.getPath()))
 	}
 	if !state.MatchDscpIpv6.IsNull() && data.MatchDscpIpv6.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/dscp-ipv6/value", state.getPath()))
@@ -932,6 +1359,9 @@ func (data *ClassMapQoS) getDeletedItems(ctx context.Context, state ClassMapQoS)
 	}
 	if !state.MatchDscp.IsNull() && data.MatchDscp.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/dscp/value", state.getPath()))
+	}
+	if !state.MatchDiscardClass.IsNull() && data.MatchDiscardClass.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/discard-class/id", state.getPath()))
 	}
 	if !state.MatchDestinationPort.IsNull() && data.MatchDestinationPort.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/destination-port/port-number", state.getPath()))
@@ -1011,8 +1441,17 @@ func (data *ClassMapQoS) getDeletedItems(ctx context.Context, state ClassMapQoS)
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/match/destination-address/ipv4/address-prefix%v", state.getPath(), keyString))
 		}
 	}
+	if !state.MatchCosInner.IsNull() && data.MatchCosInner.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/cos-inner/value", state.getPath()))
+	}
 	if !state.MatchCos.IsNull() && data.MatchCos.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/cos/value", state.getPath()))
+	}
+	if !state.MatchAccessGroupIpv6.IsNull() && data.MatchAccessGroupIpv6.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/access-group/ipv6", state.getPath()))
+	}
+	if !state.MatchAccessGroupIpv4.IsNull() && data.MatchAccessGroupIpv4.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/access-group/ipv4", state.getPath()))
 	}
 	if !state.Description.IsNull() && data.Description.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/description", state.getPath()))
@@ -1032,6 +1471,9 @@ func (data *ClassMapQoS) getDeletedItems(ctx context.Context, state ClassMapQoS)
 
 func (data *ClassMapQoS) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.MatchTcpFlagAny.IsNull() && !data.MatchTcpFlagAny.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/match/tcp-flag/any", data.getPath()))
+	}
 	for i := range data.MatchSourceAddressIpv6 {
 		keys := [...]string{"address", "prefix-length"}
 		keyValues := [...]string{data.MatchSourceAddressIpv6[i].Address.ValueString(), strconv.FormatInt(data.MatchSourceAddressIpv6[i].PrefixLength.ValueInt64(), 10)}
@@ -1047,6 +1489,18 @@ func (data *ClassMapQoS) getEmptyLeafsDelete(ctx context.Context) []string {
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
+	}
+	if !data.MatchFragmentTypeLastFragment.IsNull() && !data.MatchFragmentTypeLastFragment.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/match/fragment-type/last-fragment", data.getPath()))
+	}
+	if !data.MatchFragmentTypeIsFragment.IsNull() && !data.MatchFragmentTypeIsFragment.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/match/fragment-type/is-fragment", data.getPath()))
+	}
+	if !data.MatchFragmentTypeFirstFragment.IsNull() && !data.MatchFragmentTypeFirstFragment.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/match/fragment-type/first-fragment", data.getPath()))
+	}
+	if !data.MatchFragmentTypeDontFragment.IsNull() && !data.MatchFragmentTypeDontFragment.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/match/fragment-type/dont-fragment", data.getPath()))
 	}
 	for i := range data.MatchDestinationAddressIpv6 {
 		keys := [...]string{"address", "prefix-length"}
@@ -1079,11 +1533,20 @@ func (data *ClassMapQoS) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *ClassMapQoS) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
+	if !data.MatchVlanInner.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/vlan-inner/vlan-id", data.getPath()))
+	}
 	if !data.MatchVlan.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/vlan/vlan-id", data.getPath()))
 	}
 	if !data.MatchTrafficClass.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/traffic-class/id", data.getPath()))
+	}
+	if !data.MatchTcpFlagAny.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/tcp-flag/any", data.getPath()))
+	}
+	if !data.MatchTcpFlag.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/tcp-flag/value", data.getPath()))
 	}
 	if !data.MatchSourcePort.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/source-port/number", data.getPath()))
@@ -1126,8 +1589,38 @@ func (data *ClassMapQoS) getDeletePaths(ctx context.Context) []string {
 	if !data.MatchPrecedence.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/precedence/value", data.getPath()))
 	}
+	if !data.MatchPacketLength.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/packet/length/value", data.getPath()))
+	}
 	if !data.MatchMplsExperimentalTopmost.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/mpls/experimental/topmost/label", data.getPath()))
+	}
+	if !data.MatchIpv6IcmpType.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/ipv6/icmp-type/value", data.getPath()))
+	}
+	if !data.MatchIpv6IcmpCode.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/ipv6/icmp-code/value", data.getPath()))
+	}
+	if !data.MatchIpv4IcmpType.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/ipv4/icmp-type/value", data.getPath()))
+	}
+	if !data.MatchIpv4IcmpCode.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/ipv4/icmp-code/value", data.getPath()))
+	}
+	if !data.MatchFragmentTypeLastFragment.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/fragment-type/last-fragment", data.getPath()))
+	}
+	if !data.MatchFragmentTypeIsFragment.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/fragment-type/is-fragment", data.getPath()))
+	}
+	if !data.MatchFragmentTypeFirstFragment.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/fragment-type/first-fragment", data.getPath()))
+	}
+	if !data.MatchFragmentTypeDontFragment.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/fragment-type/dont-fragment", data.getPath()))
+	}
+	if !data.MatchEthertype.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/ethertype/value", data.getPath()))
 	}
 	if !data.MatchDscpIpv6.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/dscp-ipv6/value", data.getPath()))
@@ -1137,6 +1630,9 @@ func (data *ClassMapQoS) getDeletePaths(ctx context.Context) []string {
 	}
 	if !data.MatchDscp.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/dscp/value", data.getPath()))
+	}
+	if !data.MatchDiscardClass.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/discard-class/id", data.getPath()))
 	}
 	if !data.MatchDestinationPort.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/destination-port/port-number", data.getPath()))
@@ -1164,8 +1660,17 @@ func (data *ClassMapQoS) getDeletePaths(ctx context.Context) []string {
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/destination-address/ipv4/address-prefix%v", data.getPath(), keyString))
 	}
+	if !data.MatchCosInner.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/cos-inner/value", data.getPath()))
+	}
 	if !data.MatchCos.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/cos/value", data.getPath()))
+	}
+	if !data.MatchAccessGroupIpv6.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/access-group/ipv6", data.getPath()))
+	}
+	if !data.MatchAccessGroupIpv4.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/access-group/ipv4", data.getPath()))
 	}
 	if !data.Description.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/description", data.getPath()))

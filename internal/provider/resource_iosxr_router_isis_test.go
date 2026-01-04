@@ -141,7 +141,7 @@ func TestAccIosxrRouterISIS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "lsp_fast_flooding_remote_psnp_delay", "1000"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "psnp_interval", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "nets.0.net_id", "49.0001.2222.2222.2222.00"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "affinity_maps.0.name", "22"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "affinity_maps.0.affinity_name", "22"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "affinity_maps.0.bit_position", "4"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "ignore_lsp_errors_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "purge_transmit_strict", "true"))
@@ -398,7 +398,7 @@ func testAccIosxrRouterISISConfig_all() string {
 	config += `		net_id = "49.0001.2222.2222.2222.00"` + "\n"
 	config += `		}]` + "\n"
 	config += `	affinity_maps = [{` + "\n"
-	config += `		name = "22"` + "\n"
+	config += `		affinity_name = "22"` + "\n"
 	config += `		bit_position = 4` + "\n"
 	config += `		}]` + "\n"
 	config += `	ignore_lsp_errors_disable = true` + "\n"

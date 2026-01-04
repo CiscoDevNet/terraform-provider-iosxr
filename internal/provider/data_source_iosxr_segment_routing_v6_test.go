@@ -36,6 +36,8 @@ func TestAccDataSourceIosxrSegmentRoutingV6(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "sid_holdtime", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "logging_locator_status", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "formats.0.name", "usid-f3216"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "formats.0.format_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "locators.0.locator_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "locators.0.name", "Locator1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "locators.0.micro_segment_behavior", "unode-psp-usd"))
@@ -91,6 +93,10 @@ func testAccDataSourceIosxrSegmentRoutingV6Config() string {
 	config += `	enable = true` + "\n"
 	config += `	sid_holdtime = 10` + "\n"
 	config += `	logging_locator_status = true` + "\n"
+	config += `	formats = [{` + "\n"
+	config += `		name = "usid-f3216"` + "\n"
+	config += `		format_enable = true` + "\n"
+	config += `	}]` + "\n"
 	config += `	locators = [{` + "\n"
 	config += `		locator_enable = true` + "\n"
 	config += `		name = "Locator1"` + "\n"

@@ -51,4 +51,6 @@ resource "iosxr_performance_measurement" "example" {
       address = "2001:db8::100"
     }
   ]
+  path_tracing                        = true
+  path_tracing_timestamp_template_st0 = true
 }

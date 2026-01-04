@@ -184,9 +184,50 @@ func (r *L2VPNXconnectGroupResource) Schema(ctx context.Context, req resource.Sc
 											int64validator.Between(0, 4294967295),
 										},
 									},
-									"backup_neighbors": schema.ListAttribute{
+									"backup_neighbors": schema.ListNestedAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Specify the peer to cross connect").String,
 										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"address": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Specify the peer to cross connect").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+													},
+												},
+												"pw_id": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Specify the pseudowire id").AddIntegerRangeDescription(1, 4294967295).String,
+													Required:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(1, 4294967295),
+													},
+												},
+												"pw_class": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("PW class template name to use for the backup PW").String,
+													Optional:            true,
+													Validators: []validator.String{
+														stringvalidator.LengthBetween(1, 32),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+													},
+												},
+												"mpls_static_label_local": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Local pseudowire label").AddIntegerRangeDescription(16, 1048575).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(16, 1048575),
+													},
+												},
+												"mpls_static_label_remote": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Remote pseudowire label").AddIntegerRangeDescription(16, 1048575).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(16, 1048575),
+													},
+												},
+											},
+										},
 									},
 									"mpls_static_label_local": schema.Int64Attribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Local pseudowire label").AddIntegerRangeDescription(16, 1048575).String,
@@ -241,9 +282,50 @@ func (r *L2VPNXconnectGroupResource) Schema(ctx context.Context, req resource.Sc
 											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 										},
 									},
-									"backup_neighbors": schema.ListAttribute{
+									"backup_neighbors": schema.ListNestedAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Specify the peer to cross connect").String,
 										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"address": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Specify the peer to cross connect").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+													},
+												},
+												"pw_id": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Specify the pseudowire id").AddIntegerRangeDescription(1, 4294967295).String,
+													Required:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(1, 4294967295),
+													},
+												},
+												"pw_class": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("PW class template name to use for the backup PW").String,
+													Optional:            true,
+													Validators: []validator.String{
+														stringvalidator.LengthBetween(1, 32),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+													},
+												},
+												"mpls_static_label_local": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Local pseudowire label").AddIntegerRangeDescription(16, 1048575).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(16, 1048575),
+													},
+												},
+												"mpls_static_label_remote": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Remote pseudowire label").AddIntegerRangeDescription(16, 1048575).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(16, 1048575),
+													},
+												},
+											},
+										},
 									},
 									"mpls_static_label_local": schema.Int64Attribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Local pseudowire label").AddIntegerRangeDescription(16, 1048575).String,
@@ -412,6 +494,382 @@ func (r *L2VPNXconnectGroupResource) Schema(ctx context.Context, req resource.Sc
 										},
 									},
 								},
+							},
+						},
+					},
+				},
+			},
+			"mp2mps": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify the MP2MP instance name").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"instance_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify the MP2MP instance name").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 26),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"vpn_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("VPN Identifier (VPN ID)").AddIntegerRangeDescription(1, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
+							},
+						},
+						"mtu": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set maximum transmission unit (payload) for this VPN MP2MP Instance").AddIntegerRangeDescription(64, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(64, 65535),
+							},
+						},
+						"shutdown": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("shutdown the L2VPN MP2MP Instance").String,
+							Optional:            true,
+						},
+						"l2_encapsulation": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure the L2 encapsulation for this L2VPN MP2MP Instance").AddStringEnumDescription("ethernet", "vlan").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("ethernet", "vlan"),
+							},
+						},
+						"interworking": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure the interworking option for this L2VPN MP2MP Instance").AddStringEnumDescription("ethernet").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("ethernet"),
+							},
+						},
+						"control_word_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable control-word").String,
+							Optional:            true,
+						},
+						"autodiscovery_bgp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable BGP auto-discovery in this MP2MP").String,
+							Optional:            true,
+						},
+						"autodiscovery_bgp_rd_auto": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Automatic route distinguisher").String,
+							Optional:            true,
+						},
+						"autodiscovery_bgp_rd_two_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS number").AddIntegerRangeDescription(1, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
+							},
+						},
+						"autodiscovery_bgp_rd_two_byte_as_index": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("AS:nn (hex or decimal format)").AddIntegerRangeDescription(0, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 4294967295),
+							},
+						},
+						"autodiscovery_bgp_rd_four_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number").AddIntegerRangeDescription(65536, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(65536, 4294967295),
+							},
+						},
+						"autodiscovery_bgp_rd_four_byte_as_index": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("AS:nn (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+						"autodiscovery_bgp_rd_ipv4_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+						"autodiscovery_bgp_rd_ipv4_address_index": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IP-address:nn (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+						"autodiscovery_bgp_route_target_import_two_byte_as_format": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number Route Target").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"two_byte_as_number": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number").AddIntegerRangeDescription(1, 65535).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65535),
+										},
+									},
+									"assigned_number": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("AS:nn (hex or decimal format)").AddIntegerRangeDescription(0, 4294967295).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 4294967295),
+										},
+									},
+								},
+							},
+						},
+						"autodiscovery_bgp_route_target_import_four_byte_as_format": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number Route Target").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"four_byte_as_number": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number").AddIntegerRangeDescription(65536, 4294967295).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(65536, 4294967295),
+										},
+									},
+									"assigned_number": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("AS:nn (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 65535),
+										},
+									},
+								},
+							},
+						},
+						"autodiscovery_bgp_route_target_import_ipv4_address_format": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"ipv4_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+										},
+									},
+									"assigned_number": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP-address:nn (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 65535),
+										},
+									},
+								},
+							},
+						},
+						"autodiscovery_bgp_route_target_export_two_byte_as_format": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number Route Target").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"two_byte_as_number": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number").AddIntegerRangeDescription(1, 65535).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65535),
+										},
+									},
+									"assigned_number": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("AS:nn (hex or decimal format)").AddIntegerRangeDescription(0, 4294967295).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 4294967295),
+										},
+									},
+								},
+							},
+						},
+						"autodiscovery_bgp_route_target_export_four_byte_as_format": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number Route Target").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"four_byte_as_number": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number").AddIntegerRangeDescription(65536, 4294967295).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(65536, 4294967295),
+										},
+									},
+									"assigned_number": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("AS:nn (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 65535),
+										},
+									},
+								},
+							},
+						},
+						"autodiscovery_bgp_route_target_export_ipv4_address_format": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"ipv4_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+										},
+									},
+									"assigned_number": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP-address:nn (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 65535),
+										},
+									},
+								},
+							},
+						},
+						"autodiscovery_bgp_route_target_two_byte_as_format": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number Route Target").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"two_byte_as_number": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number").AddIntegerRangeDescription(1, 65535).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65535),
+										},
+									},
+									"assigned_number": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("AS:nn (hex or decimal format)").AddIntegerRangeDescription(0, 4294967295).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 4294967295),
+										},
+									},
+								},
+							},
+						},
+						"autodiscovery_bgp_route_target_four_byte_as_format": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number Route Target").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"four_byte_as_number": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number").AddIntegerRangeDescription(65536, 4294967295).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(65536, 4294967295),
+										},
+									},
+									"assigned_number": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("AS:nn (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 65535),
+										},
+									},
+								},
+							},
+						},
+						"autodiscovery_bgp_route_target_ipv4_address_format": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"ipv4_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+										},
+									},
+									"assigned_number": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP-address:nn (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 65535),
+										},
+									},
+								},
+							},
+						},
+						"autodiscovery_bgp_signaling_protocol_bgp_ce_ids": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Local Customer Edge Identifier (CE ID)").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"local_ce_id_value": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Local Customer Edge Identifier (CE ID)").AddIntegerRangeDescription(1, 16384).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 16384),
+										},
+									},
+									"interfaces": schema.ListNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Specify the attachment circuit").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"interface_name": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Specify the attachment circuit").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+													},
+												},
+												"remote_ce_ids": schema.ListNestedAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Remote Customer Edge Identifier").String,
+													Optional:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"remote_ce_id_value": schema.Int64Attribute{
+																MarkdownDescription: helpers.NewAttributeDescription("Remote Customer Edge Identifier").String,
+																Required:            true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+									"vpws_seamless_integration": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("EVPN-VPWS Seamless Integration with BGP-AD VPWS").String,
+										Optional:            true,
+									},
+								},
+							},
+						},
+						"autodiscovery_bgp_signaling_protocol_bgp_ce_range": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Local Customer Edge Block Configurable Range").AddIntegerRangeDescription(11, 100).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(11, 100),
+							},
+						},
+						"autodiscovery_bgp_signaling_protocol_bgp_load_balancing_flow_label_transmit": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Insert Flow label when transmit ").String,
+							Optional:            true,
+						},
+						"autodiscovery_bgp_signaling_protocol_bgp_load_balancing_flow_label_receive": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Discard Flow label when receive").String,
+							Optional:            true,
+						},
+						"autodiscovery_bgp_signaling_protocol_bgp_load_balancing_flow_label_both": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Insert/Discard Flow label when transmit/recceive").String,
+							Optional:            true,
+						},
+						"autodiscovery_bgp_route_policy_export": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Export route policy").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 255),
 							},
 						},
 					},

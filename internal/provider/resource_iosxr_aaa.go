@@ -32,6 +32,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -80,74 +81,210 @@ func (r *AAAResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					stringvalidator.OneOf("all", "attributes"),
 				},
 			},
-			"tacacs_server_hosts": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify a TACACS+ server").String,
+			"default_taskgroup": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Default taskgroup to be used for remote authentication").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 800),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"banner_login": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("c banner-text c, where 'c' is a delimiting character").String,
+				Optional:            true,
+			},
+			"radius_server_groups": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Radius Server Groups").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"ordering_index": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("This is used to sort the servers in the order of precedence").AddIntegerRangeDescription(0, 4294967295).String,
-							Required:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(0, 4294967295),
-							},
-						},
-						"address": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specify a TACACS+ server").String,
+						"group_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Server group name").String,
 							Required:            true,
 						},
-						"port": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("TCP port for TACACS+ server (default is 49)").AddIntegerRangeDescription(1, 65535).String,
-							Required:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(1, 65535),
+						"servers": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify a RADIUS server").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"order": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Ordering index").String,
+										Required:            true,
+									},
+									"address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP address or hostname").String,
+										Required:            true,
+									},
+									"auth_port": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Authentication port").String,
+										Required:            true,
+									},
+									"acct_port": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Accounting port").String,
+										Required:            true,
+									},
+								},
 							},
 						},
-						"timeout": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Time to wait for this TACACS server to reply (overrides default)").AddIntegerRangeDescription(1, 1000).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(1, 1000),
-							},
-						},
-						"holddown_time": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Time for which this TACACS server is marked as dead").AddIntegerRangeDescription(0, 1200).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(0, 1200),
-							},
-						},
-						"key_type_7": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specifies that an encrypted key will follow").String,
-							Optional:            true,
-							Sensitive:           true,
-							Validators: []validator.String{
-								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
-							},
-						},
-						"key_type_6": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specifies that an encrypted type 6 key will follow").String,
-							Optional:            true,
-							Sensitive:           true,
-							Validators: []validator.String{
-								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
-							},
-						},
-						"single_connection": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Reuse connection to this server for all requests").String,
+						"load_balance_method_least_outstanding_batch_size": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Batch size for load balancing").String,
 							Optional:            true,
 						},
-						"single_connection_idle_timeout": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Idle timeout for a single-connection to the server").AddIntegerRangeDescription(500, 7200).String,
+						"load_balance_method_least_outstanding_ignore_preferred_server": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Ignore preferred server").String,
 							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(500, 7200),
+						},
+						"deadtime": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Dead time in minutes").String,
+							Optional:            true,
+						},
+						"throttle_access": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Throttle access requests").AddDefaultValueDescription("0").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             int64default.StaticInt64(0),
+						},
+						"throttle_access_timeout": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Throttle access timeout").AddDefaultValueDescription("3").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             int64default.StaticInt64(3),
+						},
+						"throttle_accounting": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Throttle accounting requests").AddDefaultValueDescription("0").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             int64default.StaticInt64(0),
+						},
+						"server_privates": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify a private RADIUS server").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"order": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Ordering index").String,
+										Required:            true,
+									},
+									"address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP address or hostname").String,
+										Required:            true,
+									},
+									"auth_port": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Authentication port").String,
+										Required:            true,
+									},
+									"acct_port": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Accounting port").String,
+										Required:            true,
+									},
+									"key_type_7": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Type 7 encrypted key").String,
+										Optional:            true,
+										Sensitive:           true,
+									},
+									"key_type_6": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Type 6 encrypted key").String,
+										Optional:            true,
+										Sensitive:           true,
+									},
+									"timeout": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Timeout in seconds").String,
+										Optional:            true,
+									},
+									"retransmit": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Retransmit count").String,
+										Optional:            true,
+									},
+									"test_username": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Test username").String,
+										Optional:            true,
+									},
+									"idle_time": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Idle time in minutes").String,
+										Optional:            true,
+									},
+									"ignore_auth_port": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Ignore authentication port").String,
+										Optional:            true,
+									},
+									"ignore_acct_port": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Ignore accounting port").String,
+										Optional:            true,
+									},
+								},
 							},
+						},
+						"vrf": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("VRF name").String,
+							Optional:            true,
+						},
+						"source_interface": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Source interface").String,
+							Optional:            true,
+						},
+						"authorization_request_accept": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Authorization request accept").String,
+							Optional:            true,
+						},
+						"authorization_request_reject": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Authorization request reject").String,
+							Optional:            true,
+						},
+						"authorization_request_radius_attribute_list": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Authorization request RADIUS attribute list").String,
+							Optional:            true,
+						},
+						"authorization_reply_accept": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Authorization reply accept").String,
+							Optional:            true,
+						},
+						"authorization_reply_reject": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Authorization reply reject").String,
+							Optional:            true,
+						},
+						"authorization_reply_radius_attribute_list": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Authorization reply RADIUS attribute list").String,
+							Optional:            true,
+						},
+						"accounting_request_accept": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Accounting request accept").String,
+							Optional:            true,
+						},
+						"accounting_request_reject": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Accounting request reject").String,
+							Optional:            true,
+						},
+						"accounting_request_radius_attribute_list": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Accounting request RADIUS attribute list").String,
+							Optional:            true,
+						},
+						"accounting_reply_accept": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Accounting reply accept").String,
+							Optional:            true,
+						},
+						"accounting_reply_reject": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Accounting reply reject").String,
+							Optional:            true,
+						},
+						"accounting_reply_radius_attribute_list": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Accounting reply RADIUS attribute list").String,
+							Optional:            true,
 						},
 					},
 				},
 			},
-			"tacacs_server_key_type_7": schema.StringAttribute{
+			"server_radius_dynamic_author_port": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify the COA Server port to listen on").AddIntegerRangeDescription(1000, 5000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1000, 5000),
+				},
+			},
+			"server_radius_dynamic_author_ignore_server_key": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ignore  server-key").String,
+				Optional:            true,
+			},
+			"server_radius_dynamic_author_server_key_type_7": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specifies that an encrypted key will follow").String,
 				Optional:            true,
 				Sensitive:           true,
@@ -155,7 +292,7 @@ func (r *AAAResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
 				},
 			},
-			"tacacs_server_key_type_6": schema.StringAttribute{
+			"server_radius_dynamic_author_server_key_type_6": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specifies that an encrypted type 6 key will follow").String,
 				Optional:            true,
 				Sensitive:           true,
@@ -163,169 +300,115 @@ func (r *AAAResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
 				},
 			},
-			"tacacs_server_timeout": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Time to wait for a TACACS server to reply").AddIntegerRangeDescription(1, 1000).String,
+			"server_radius_dynamic_author_clients": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("COA client configuration").String,
 				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(1, 1000),
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("COA client configuration").String,
+							Required:            true,
+						},
+						"vrf": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("VRF to which COA Client belongs").String,
+							Required:            true,
+						},
+						"server_key_type_7": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies that an encrypted key will follow").String,
+							Optional:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+							},
+						},
+						"server_key_type_6": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies that an encrypted type 6 key will follow").String,
+							Optional:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+							},
+						},
+					},
 				},
-			},
-			"tacacs_server_holddown_time": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Time for which a TACACS server is marked as dead").AddIntegerRangeDescription(0, 1200).String,
-				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(0, 1200),
-				},
-			},
-			"tacacs_server_ipv4_dscp": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Set IP DSCP (DiffServ CodePoint)").String,
-				Optional:            true,
-			},
-			"tacacs_server_ipv6_dscp": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Set IP DSCP (DiffServ CodePoint)").String,
-				Optional:            true,
 			},
 			"tacacs_server_groups": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Server group name").String,
+				MarkdownDescription: helpers.NewAttributeDescription("TACACS Server Groups").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"group_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Server group name").String,
 							Required:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 253),
-							},
 						},
 						"servers": schema.ListNestedAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specify a TACACS+ server (Max 10)").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Specify a TACACS server").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"order": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("This is used to sort the servers in the order of precedence").AddIntegerRangeDescription(0, 4294967295).String,
+										MarkdownDescription: helpers.NewAttributeDescription("Ordering index").String,
 										Required:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(0, 4294967295),
-										},
 									},
 									"address": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Specify a TACACS+ server (Max 10)").String,
+										MarkdownDescription: helpers.NewAttributeDescription("IP address or hostname").String,
 										Required:            true,
 									},
 								},
 							},
 						},
 						"vrf": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("VRF to which this server group belongs to").String,
+							MarkdownDescription: helpers.NewAttributeDescription("VRF name").String,
 							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
-							},
 						},
 						"holddown_time": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Time for which TACACS servers of this group is marked as dead").AddIntegerRangeDescription(0, 1200).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Holddown time in minutes").String,
 							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(0, 1200),
-							},
 						},
 						"server_privates": schema.ListNestedAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specify a private (to this server group) TACACS+ server (max 10)").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Specify a private TACACS server").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"order": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("This is used to sort the servers in the order of precedence").AddIntegerRangeDescription(0, 4294967295).String,
+										MarkdownDescription: helpers.NewAttributeDescription("Ordering index").String,
 										Required:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(0, 4294967295),
-										},
 									},
 									"address": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Specify a private (to this server group) TACACS+ server (max 10)").String,
+										MarkdownDescription: helpers.NewAttributeDescription("IP address or hostname").String,
 										Required:            true,
 									},
 									"port": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("TCP port for TACACS+ server (default is 49)").AddIntegerRangeDescription(1, 65535).String,
+										MarkdownDescription: helpers.NewAttributeDescription("TCP port").String,
 										Required:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(1, 65535),
-										},
 									},
 									"key_type_7": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Specifies that an encrypted key will follow").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Type 7 encrypted key").String,
 										Optional:            true,
 										Sensitive:           true,
-										Validators: []validator.String{
-											stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
-										},
 									},
 									"key_type_6": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Specifies that an encrypted type 6 key will follow").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Type 6 encrypted key").String,
 										Optional:            true,
 										Sensitive:           true,
-										Validators: []validator.String{
-											stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
-										},
 									},
 									"single_connection": schema.BoolAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Reuse connection to this server for all requests(2)").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Use single connection").String,
 										Optional:            true,
 									},
 									"single_connection_idle_timeout": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Idle timeout for a single-connection to the server").AddIntegerRangeDescription(500, 7200).String,
+										MarkdownDescription: helpers.NewAttributeDescription("Single connection idle timeout in seconds").String,
 										Optional:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(500, 7200),
-										},
 									},
 									"timeout": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Time to wait for a TACACS server to reply").AddIntegerRangeDescription(1, 1000).String,
+										MarkdownDescription: helpers.NewAttributeDescription("Timeout in seconds").String,
 										Optional:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(1, 1000),
-										},
 									},
 									"holddown_time": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Time for which this TACACS server is marked as dead").AddIntegerRangeDescription(0, 1200).String,
+										MarkdownDescription: helpers.NewAttributeDescription("Holddown time in minutes").String,
 										Optional:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(0, 1200),
-										},
 									},
 								},
-							},
-						},
-					},
-				},
-			},
-			"tacacs_source_interface": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify interface for source address in TACACS+ packets").String,
-				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
-				},
-			},
-			"tacacs_vrfs": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("VRF for this source interface configuration").String,
-				Optional:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"vrf_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Name of the VRF").String,
-							Required:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 1024),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
-							},
-						},
-						"source_interface": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specify interface for source address in TACACS+ packets").String,
-							Required:            true,
-							Validators: []validator.String{
-								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
 							},
 						},
 					},
@@ -458,6 +541,1519 @@ func (r *AAAResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 512),
+							},
+						},
+					},
+				},
+			},
+			"taskgroups": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Taskgroup name").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"group_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Taskgroup name").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 253),
+							},
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description for the task group").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 800),
+							},
+						},
+						"task_read_bgp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Border Gateway Protocol").String,
+							Optional:            true,
+						},
+						"task_read_ospf": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Open Shortest Pathway First").String,
+							Optional:            true,
+						},
+						"task_read_hsrp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Hot Standby Routing Protocol").String,
+							Optional:            true,
+						},
+						"task_read_isis": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Intermediate System-Intermediate System").String,
+							Optional:            true,
+						},
+						"task_read_route_map": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Policy filtering and redistribution of routes").String,
+							Optional:            true,
+						},
+						"task_read_route_policy": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route Policy").String,
+							Optional:            true,
+						},
+						"task_read_static": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Static Routing").String,
+							Optional:            true,
+						},
+						"task_read_vrrp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Virtual Router Redundancy Protocol").String,
+							Optional:            true,
+						},
+						"task_read_cef": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Cisco Express Forwarding/FIB").String,
+							Optional:            true,
+						},
+						"task_read_lpts": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Local Packet Transport Service").String,
+							Optional:            true,
+						},
+						"task_read_ipv4": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4").String,
+							Optional:            true,
+						},
+						"task_read_rib": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Controls and monitors the routing table (RIB)").String,
+							Optional:            true,
+						},
+						"task_read_multicast": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Multicast management including PIM, IGMP, etc.").String,
+							Optional:            true,
+						},
+						"task_read_mpls_te": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Multi-protocol Label Switching - Traffic Engineering").String,
+							Optional:            true,
+						},
+						"task_read_mpls_ldp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Multi-protocol Label Switching - Label Distribution Protocol").String,
+							Optional:            true,
+						},
+						"task_read_mpls_static": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Multi-protocol Label Switching - Static configuration").String,
+							Optional:            true,
+						},
+						"task_read_ouni": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Optical UNI").String,
+							Optional:            true,
+						},
+						"task_read_fabric": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Fabric Management").String,
+							Optional:            true,
+						},
+						"task_read_bundle": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Bundles").String,
+							Optional:            true,
+						},
+						"task_read_network": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4, IPv6, ICMP, CLNS, ...").String,
+							Optional:            true,
+						},
+						"task_read_transport": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("TCP/UDP").String,
+							Optional:            true,
+						},
+						"task_read_ppp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Point-to-Point Protocol").String,
+							Optional:            true,
+						},
+						"task_read_hdlc": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("High-level Data Link Control").String,
+							Optional:            true,
+						},
+						"task_read_pos_dpt": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Packet-Over-SONET/Dynamic Packet Transport").String,
+							Optional:            true,
+						},
+						"task_read_sonet_sdh": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("SONET/SDH Transport including APS/MSP").String,
+							Optional:            true,
+						},
+						"task_read_dwdm": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("DWDM Transport").String,
+							Optional:            true,
+						},
+						"task_read_tunnel": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("GRE, UTI").String,
+							Optional:            true,
+						},
+						"task_read_vlan": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Virtual Local Area Network").String,
+							Optional:            true,
+						},
+						"task_read_qos": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Quality of Service").String,
+							Optional:            true,
+						},
+						"task_read_acl": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Access Control List").String,
+							Optional:            true,
+						},
+						"task_read_aaa": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("AAA").String,
+							Optional:            true,
+						},
+						"task_read_crypto": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ipsec, ssl").String,
+							Optional:            true,
+						},
+						"task_read_snmp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Simple Network Management Protocol").String,
+							Optional:            true,
+						},
+						"task_read_config_mgmt": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Create/copy/delete configuration checkpoints").String,
+							Optional:            true,
+						},
+						"task_read_config_services": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure/monitor web server, ORB, SSH, XML Agent.").String,
+							Optional:            true,
+						},
+						"task_read_host_services": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure/monitor hostname, clock, timestamps, etc.").String,
+							Optional:            true,
+						},
+						"task_read_boot": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("reload, boot").String,
+							Optional:            true,
+						},
+						"task_read_fault_mgr": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure/monitor fault manager settings").String,
+							Optional:            true,
+						},
+						"task_read_filesystem": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Execute rcs, erase, format, fsck, etc.").String,
+							Optional:            true,
+						},
+						"task_read_interface": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure/monitor basic (or common) interface characteristics").String,
+							Optional:            true,
+						},
+						"task_read_ip_services": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure/monitor DNS, DHCP, ARP, NTP, ARM, Domain services").String,
+							Optional:            true,
+						},
+						"task_read_pkg_mgmt": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Install operations, SAM").String,
+							Optional:            true,
+						},
+						"task_read_system": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("LR Redundancy/pairing, logical interface/node grouping, LACP").String,
+							Optional:            true,
+						},
+						"task_read_tty_access": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure/monitor Line (tty/vty), banner, etc.").String,
+							Optional:            true,
+						},
+						"task_read_basic_services": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Ping, show version/privileges, etc.").String,
+							Optional:            true,
+						},
+						"task_read_cdp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Cisco Discovery Protocol").String,
+							Optional:            true,
+						},
+						"task_read_diag": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("exception, coredump, itrace, monitor, stats").String,
+							Optional:            true,
+						},
+						"task_read_ext_access": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Execute RCP, RSH, FTP, TFTP, rlogin, telnet, ...").String,
+							Optional:            true,
+						},
+						"task_read_bcdl": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Bulk Content Downloader").String,
+							Optional:            true,
+						},
+						"task_read_sysmgr": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Placement/process, chkpt, mbus, gsp, netio, qnet, SysDB, qsm, driver infrastructure").String,
+							Optional:            true,
+						},
+						"task_read_logging": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("logging, alarm").String,
+							Optional:            true,
+						},
+						"task_read_netflow": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Netflow application").String,
+							Optional:            true,
+						},
+						"task_read_drivers": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Driver related functions").String,
+							Optional:            true,
+						},
+						"task_read_fr": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Frame-Relay").String,
+							Optional:            true,
+						},
+						"task_read_monitor": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Monitor system resource/performance characteristics").String,
+							Optional:            true,
+						},
+						"task_read_inventory": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Inventory information management").String,
+							Optional:            true,
+						},
+						"task_read_ipv6": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv6").String,
+							Optional:            true,
+						},
+						"task_read_admin": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Admin plane functions").String,
+							Optional:            true,
+						},
+						"task_read_atm": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Asynchronous Transfer Mode").String,
+							Optional:            true,
+						},
+						"task_read_bfd": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Bidirectional Forwarding Protocol").String,
+							Optional:            true,
+						},
+						"task_read_rip": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Routing Information Protocol").String,
+							Optional:            true,
+						},
+						"task_read_eigrp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enhanced Interior Gateway Routing Protocol").String,
+							Optional:            true,
+						},
+						"task_read_sbc": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Session Border Controller").String,
+							Optional:            true,
+						},
+						"task_read_firewall": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Firewall operations").String,
+							Optional:            true,
+						},
+						"task_read_l2vpn": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Layer 2 VPN").String,
+							Optional:            true,
+						},
+						"task_read_ethernet_services": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Ethernet Services and OAM").String,
+							Optional:            true,
+						},
+						"task_read_eem": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Embedded Event Manager").String,
+							Optional:            true,
+						},
+						"task_read_li": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Lawful Intercept component").String,
+							Optional:            true,
+						},
+						"task_read_ancp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Access Node Control Protocol").String,
+							Optional:            true,
+						},
+						"task_read_cgn": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Carrier Grade Nat").String,
+							Optional:            true,
+						},
+						"task_read_call_home": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("call-home").String,
+							Optional:            true,
+						},
+						"task_read_rcmd": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Routing Convergence Monitoring and Diagnostics").String,
+							Optional:            true,
+						},
+						"task_read_vpdn": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Virtual Private Dial-up Network (VPDN)").String,
+							Optional:            true,
+						},
+						"task_read_nps": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Network Positioning System (NPS)").String,
+							Optional:            true,
+						},
+						"task_read_lisp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Locator/Identifier Separation Protocol").String,
+							Optional:            true,
+						},
+						"task_read_pbr": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Policy Based Routing").String,
+							Optional:            true,
+						},
+						"task_read_otn": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Optical Transport Network").String,
+							Optional:            true,
+						},
+						"task_read_nacm": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Netconf Authorization Control Module").String,
+							Optional:            true,
+						},
+						"task_read_plat_mgr": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Platform Mgr Module").String,
+							Optional:            true,
+						},
+						"task_read_cpri": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("cpri controller taskid").String,
+							Optional:            true,
+						},
+						"task_read_lldp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Support LLDP protocol").String,
+							Optional:            true,
+						},
+						"task_read_l2rib": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Layer 2 RIB").String,
+							Optional:            true,
+						},
+						"task_read_dossier": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Support for dossier related collection/CLIs").String,
+							Optional:            true,
+						},
+						"task_read_fti": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Support for FTI CLIs").String,
+							Optional:            true,
+						},
+						"task_read_fc": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Fibre Channel controller taskid").String,
+							Optional:            true,
+						},
+						"task_write_bgp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Border Gateway Protocol").String,
+							Optional:            true,
+						},
+						"task_write_ospf": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Open Shortest Pathway First").String,
+							Optional:            true,
+						},
+						"task_write_hsrp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Hot Standby Routing Protocol").String,
+							Optional:            true,
+						},
+						"task_write_isis": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Intermediate System-Intermediate System").String,
+							Optional:            true,
+						},
+						"task_write_route_map": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Policy filtering and redistribution of routes").String,
+							Optional:            true,
+						},
+						"task_write_route_policy": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route Policy").String,
+							Optional:            true,
+						},
+						"task_write_static": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Static Routing").String,
+							Optional:            true,
+						},
+						"task_write_vrrp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Virtual Router Redundancy Protocol").String,
+							Optional:            true,
+						},
+						"task_write_cef": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Cisco Express Forwarding/FIB").String,
+							Optional:            true,
+						},
+						"task_write_lpts": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Local Packet Transport Service").String,
+							Optional:            true,
+						},
+						"task_write_ipv4": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4").String,
+							Optional:            true,
+						},
+						"task_write_rib": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Controls and monitors the routing table (RIB)").String,
+							Optional:            true,
+						},
+						"task_write_multicast": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Multicast management including PIM, IGMP, etc.").String,
+							Optional:            true,
+						},
+						"task_write_mpls_te": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Multi-protocol Label Switching - Traffic Engineering").String,
+							Optional:            true,
+						},
+						"task_write_mpls_ldp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Multi-protocol Label Switching - Label Distribution Protocol").String,
+							Optional:            true,
+						},
+						"task_write_mpls_static": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Multi-protocol Label Switching - Static configuration").String,
+							Optional:            true,
+						},
+						"task_write_ouni": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Optical UNI").String,
+							Optional:            true,
+						},
+						"task_write_fabric": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Fabric Management").String,
+							Optional:            true,
+						},
+						"task_write_bundle": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Bundles").String,
+							Optional:            true,
+						},
+						"task_write_network": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4, IPv6, ICMP, CLNS, ...").String,
+							Optional:            true,
+						},
+						"task_write_transport": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("TCP/UDP").String,
+							Optional:            true,
+						},
+						"task_write_ppp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Point-to-Point Protocol").String,
+							Optional:            true,
+						},
+						"task_write_hdlc": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("High-level Data Link Control").String,
+							Optional:            true,
+						},
+						"task_write_pos_dpt": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Packet-Over-SONET/Dynamic Packet Transport").String,
+							Optional:            true,
+						},
+						"task_write_sonet_sdh": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("SONET/SDH Transport including APS/MSP").String,
+							Optional:            true,
+						},
+						"task_write_dwdm": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("DWDM Transport").String,
+							Optional:            true,
+						},
+						"task_write_tunnel": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("GRE, UTI").String,
+							Optional:            true,
+						},
+						"task_write_vlan": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Virtual Local Area Network").String,
+							Optional:            true,
+						},
+						"task_write_qos": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Quality of Service").String,
+							Optional:            true,
+						},
+						"task_write_acl": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Access Control List").String,
+							Optional:            true,
+						},
+						"task_write_aaa": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("AAA").String,
+							Optional:            true,
+						},
+						"task_write_crypto": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ipsec, ssl").String,
+							Optional:            true,
+						},
+						"task_write_snmp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Simple Network Management Protocol").String,
+							Optional:            true,
+						},
+						"task_write_config_mgmt": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Create/copy/delete configuration checkpoints").String,
+							Optional:            true,
+						},
+						"task_write_config_services": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure/monitor web server, ORB, SSH, XML Agent.").String,
+							Optional:            true,
+						},
+						"task_write_host_services": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure/monitor hostname, clock, timestamps, etc.").String,
+							Optional:            true,
+						},
+						"task_write_boot": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("reload, boot").String,
+							Optional:            true,
+						},
+						"task_write_fault_mgr": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure/monitor fault manager settings").String,
+							Optional:            true,
+						},
+						"task_write_filesystem": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Execute rcs, erase, format, fsck, etc.").String,
+							Optional:            true,
+						},
+						"task_write_interface": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure/monitor basic (or common) interface characteristics").String,
+							Optional:            true,
+						},
+						"task_write_ip_services": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure/monitor DNS, DHCP, ARP, NTP, ARM, Domain services").String,
+							Optional:            true,
+						},
+						"task_write_pkg_mgmt": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Install operations, SAM").String,
+							Optional:            true,
+						},
+						"task_write_system": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("LR Redundancy/pairing, logical interface/node grouping, LACP").String,
+							Optional:            true,
+						},
+						"task_write_tty_access": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure/monitor Line (tty/vty), banner, etc.").String,
+							Optional:            true,
+						},
+						"task_write_basic_services": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Ping, show version/privileges, etc.").String,
+							Optional:            true,
+						},
+						"task_write_cdp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Cisco Discovery Protocol").String,
+							Optional:            true,
+						},
+						"task_write_diag": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("exception, coredump, itrace, monitor, stats").String,
+							Optional:            true,
+						},
+						"task_write_ext_access": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Execute RCP, RSH, FTP, TFTP, rlogin, telnet, ...").String,
+							Optional:            true,
+						},
+						"task_write_bcdl": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Bulk Content Downloader").String,
+							Optional:            true,
+						},
+						"task_write_sysmgr": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Placement/process, chkpt, mbus, gsp, netio, qnet, SysDB, qsm, driver infrastructure").String,
+							Optional:            true,
+						},
+						"task_write_logging": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("logging, alarm").String,
+							Optional:            true,
+						},
+						"task_write_netflow": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Netflow application").String,
+							Optional:            true,
+						},
+						"task_write_drivers": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Driver related functions").String,
+							Optional:            true,
+						},
+						"task_write_fr": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Frame-Relay").String,
+							Optional:            true,
+						},
+						"task_write_monitor": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Monitor system resource/performance characteristics").String,
+							Optional:            true,
+						},
+						"task_write_inventory": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Inventory information management").String,
+							Optional:            true,
+						},
+						"task_write_ipv6": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv6").String,
+							Optional:            true,
+						},
+						"task_write_admin": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Admin plane functions").String,
+							Optional:            true,
+						},
+						"task_write_atm": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Asynchronous Transfer Mode").String,
+							Optional:            true,
+						},
+						"task_write_bfd": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Bidirectional Forwarding Protocol").String,
+							Optional:            true,
+						},
+						"task_write_rip": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Routing Information Protocol").String,
+							Optional:            true,
+						},
+						"task_write_eigrp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enhanced Interior Gateway Routing Protocol").String,
+							Optional:            true,
+						},
+						"task_write_sbc": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Session Border Controller").String,
+							Optional:            true,
+						},
+						"task_write_firewall": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Firewall operations").String,
+							Optional:            true,
+						},
+						"task_write_l2vpn": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Layer 2 VPN").String,
+							Optional:            true,
+						},
+						"task_write_ethernet_services": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Ethernet Services and OAM").String,
+							Optional:            true,
+						},
+						"task_write_eem": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Embedded Event Manager").String,
+							Optional:            true,
+						},
+						"task_write_li": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Lawful Intercept component").String,
+							Optional:            true,
+						},
+						"task_write_ancp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Access Node Control Protocol").String,
+							Optional:            true,
+						},
+						"task_write_cgn": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Carrier Grade Nat").String,
+							Optional:            true,
+						},
+						"task_write_call_home": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("call-home").String,
+							Optional:            true,
+						},
+						"task_write_rcmd": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Routing Convergence Monitoring and Diagnostics").String,
+							Optional:            true,
+						},
+						"task_write_vpdn": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Virtual Private Dial-up Network (VPDN)").String,
+							Optional:            true,
+						},
+						"task_write_nps": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Network Positioning System (NPS)").String,
+							Optional:            true,
+						},
+						"task_write_lisp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Locator/Identifier Separation Protocol").String,
+							Optional:            true,
+						},
+						"task_write_pbr": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Policy Based Routing").String,
+							Optional:            true,
+						},
+						"task_write_otn": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Optical Transport Network").String,
+							Optional:            true,
+						},
+						"task_write_nacm": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Netconf Authorization Control Module").String,
+							Optional:            true,
+						},
+						"task_write_plat_mgr": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Platform Mgr Module").String,
+							Optional:            true,
+						},
+						"task_write_cpri": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("cpri controller taskid").String,
+							Optional:            true,
+						},
+						"task_write_lldp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Support LLDP protocol").String,
+							Optional:            true,
+						},
+						"task_write_l2rib": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Layer 2 RIB").String,
+							Optional:            true,
+						},
+						"task_write_dossier": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Support for dossier related collection/CLIs").String,
+							Optional:            true,
+						},
+						"task_write_fti": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Support for FTI CLIs").String,
+							Optional:            true,
+						},
+						"task_write_fc": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Fibre Channel controller taskid").String,
+							Optional:            true,
+						},
+						"task_execute_bgp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Border Gateway Protocol").String,
+							Optional:            true,
+						},
+						"task_execute_ospf": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Open Shortest Pathway First").String,
+							Optional:            true,
+						},
+						"task_execute_hsrp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Hot Standby Routing Protocol").String,
+							Optional:            true,
+						},
+						"task_execute_isis": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Intermediate System-Intermediate System").String,
+							Optional:            true,
+						},
+						"task_execute_route_map": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Policy filtering and redistribution of routes").String,
+							Optional:            true,
+						},
+						"task_execute_route_policy": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route Policy").String,
+							Optional:            true,
+						},
+						"task_execute_static": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Static Routing").String,
+							Optional:            true,
+						},
+						"task_execute_vrrp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Virtual Router Redundancy Protocol").String,
+							Optional:            true,
+						},
+						"task_execute_cef": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Cisco Express Forwarding/FIB").String,
+							Optional:            true,
+						},
+						"task_execute_lpts": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Local Packet Transport Service").String,
+							Optional:            true,
+						},
+						"task_execute_ipv4": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4").String,
+							Optional:            true,
+						},
+						"task_execute_rib": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Controls and monitors the routing table (RIB)").String,
+							Optional:            true,
+						},
+						"task_execute_multicast": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Multicast management including PIM, IGMP, etc.").String,
+							Optional:            true,
+						},
+						"task_execute_mpls_te": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Multi-protocol Label Switching - Traffic Engineering").String,
+							Optional:            true,
+						},
+						"task_execute_mpls_ldp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Multi-protocol Label Switching - Label Distribution Protocol").String,
+							Optional:            true,
+						},
+						"task_execute_mpls_static": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Multi-protocol Label Switching - Static configuration").String,
+							Optional:            true,
+						},
+						"task_execute_ouni": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Optical UNI").String,
+							Optional:            true,
+						},
+						"task_execute_fabric": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Fabric Management").String,
+							Optional:            true,
+						},
+						"task_execute_bundle": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Bundles").String,
+							Optional:            true,
+						},
+						"task_execute_network": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4, IPv6, ICMP, CLNS, ...").String,
+							Optional:            true,
+						},
+						"task_execute_transport": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("TCP/UDP").String,
+							Optional:            true,
+						},
+						"task_execute_ppp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Point-to-Point Protocol").String,
+							Optional:            true,
+						},
+						"task_execute_hdlc": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("High-level Data Link Control").String,
+							Optional:            true,
+						},
+						"task_execute_pos_dpt": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Packet-Over-SONET/Dynamic Packet Transport").String,
+							Optional:            true,
+						},
+						"task_execute_sonet_sdh": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("SONET/SDH Transport including APS/MSP").String,
+							Optional:            true,
+						},
+						"task_execute_dwdm": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("DWDM Transport").String,
+							Optional:            true,
+						},
+						"task_execute_tunnel": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("GRE, UTI").String,
+							Optional:            true,
+						},
+						"task_execute_vlan": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Virtual Local Area Network").String,
+							Optional:            true,
+						},
+						"task_execute_qos": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Quality of Service").String,
+							Optional:            true,
+						},
+						"task_execute_acl": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Access Control List").String,
+							Optional:            true,
+						},
+						"task_execute_aaa": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("AAA").String,
+							Optional:            true,
+						},
+						"task_execute_crypto": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ipsec, ssl").String,
+							Optional:            true,
+						},
+						"task_execute_snmp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Simple Network Management Protocol").String,
+							Optional:            true,
+						},
+						"task_execute_config_mgmt": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Create/copy/delete configuration checkpoints").String,
+							Optional:            true,
+						},
+						"task_execute_config_services": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure/monitor web server, ORB, SSH, XML Agent.").String,
+							Optional:            true,
+						},
+						"task_execute_host_services": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure/monitor hostname, clock, timestamps, etc.").String,
+							Optional:            true,
+						},
+						"task_execute_boot": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("reload, boot").String,
+							Optional:            true,
+						},
+						"task_execute_fault_mgr": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure/monitor fault manager settings").String,
+							Optional:            true,
+						},
+						"task_execute_filesystem": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Execute rcs, erase, format, fsck, etc.").String,
+							Optional:            true,
+						},
+						"task_execute_interface": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure/monitor basic (or common) interface characteristics").String,
+							Optional:            true,
+						},
+						"task_execute_ip_services": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure/monitor DNS, DHCP, ARP, NTP, ARM, Domain services").String,
+							Optional:            true,
+						},
+						"task_execute_pkg_mgmt": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Install operations, SAM").String,
+							Optional:            true,
+						},
+						"task_execute_system": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("LR Redundancy/pairing, logical interface/node grouping, LACP").String,
+							Optional:            true,
+						},
+						"task_execute_tty_access": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure/monitor Line (tty/vty), banner, etc.").String,
+							Optional:            true,
+						},
+						"task_execute_basic_services": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Ping, show version/privileges, etc.").String,
+							Optional:            true,
+						},
+						"task_execute_cdp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Cisco Discovery Protocol").String,
+							Optional:            true,
+						},
+						"task_execute_diag": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("exception, coredump, itrace, monitor, stats").String,
+							Optional:            true,
+						},
+						"task_execute_ext_access": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Execute RCP, RSH, FTP, TFTP, rlogin, telnet, ...").String,
+							Optional:            true,
+						},
+						"task_execute_bcdl": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Bulk Content Downloader").String,
+							Optional:            true,
+						},
+						"task_execute_sysmgr": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Placement/process, chkpt, mbus, gsp, netio, qnet, SysDB, qsm, driver infrastructure").String,
+							Optional:            true,
+						},
+						"task_execute_logging": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("logging, alarm").String,
+							Optional:            true,
+						},
+						"task_execute_netflow": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Netflow application").String,
+							Optional:            true,
+						},
+						"task_execute_drivers": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Driver related functions").String,
+							Optional:            true,
+						},
+						"task_execute_fr": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Frame-Relay").String,
+							Optional:            true,
+						},
+						"task_execute_monitor": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Monitor system resource/performance characteristics").String,
+							Optional:            true,
+						},
+						"task_execute_inventory": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Inventory information management").String,
+							Optional:            true,
+						},
+						"task_execute_ipv6": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv6").String,
+							Optional:            true,
+						},
+						"task_execute_admin": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Admin plane functions").String,
+							Optional:            true,
+						},
+						"task_execute_atm": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Asynchronous Transfer Mode").String,
+							Optional:            true,
+						},
+						"task_execute_bfd": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Bidirectional Forwarding Protocol").String,
+							Optional:            true,
+						},
+						"task_execute_rip": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Routing Information Protocol").String,
+							Optional:            true,
+						},
+						"task_execute_eigrp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enhanced Interior Gateway Routing Protocol").String,
+							Optional:            true,
+						},
+						"task_execute_sbc": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Session Border Controller").String,
+							Optional:            true,
+						},
+						"task_execute_firewall": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Firewall operations").String,
+							Optional:            true,
+						},
+						"task_execute_l2vpn": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Layer 2 VPN").String,
+							Optional:            true,
+						},
+						"task_execute_ethernet_services": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Ethernet Services and OAM").String,
+							Optional:            true,
+						},
+						"task_execute_eem": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Embedded Event Manager").String,
+							Optional:            true,
+						},
+						"task_execute_li": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Lawful Intercept component").String,
+							Optional:            true,
+						},
+						"task_execute_ancp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Access Node Control Protocol").String,
+							Optional:            true,
+						},
+						"task_execute_cgn": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Carrier Grade Nat").String,
+							Optional:            true,
+						},
+						"task_execute_call_home": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("call-home").String,
+							Optional:            true,
+						},
+						"task_execute_rcmd": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Routing Convergence Monitoring and Diagnostics").String,
+							Optional:            true,
+						},
+						"task_execute_vpdn": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Virtual Private Dial-up Network (VPDN)").String,
+							Optional:            true,
+						},
+						"task_execute_nps": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Network Positioning System (NPS)").String,
+							Optional:            true,
+						},
+						"task_execute_lisp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Locator/Identifier Separation Protocol").String,
+							Optional:            true,
+						},
+						"task_execute_pbr": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Policy Based Routing").String,
+							Optional:            true,
+						},
+						"task_execute_otn": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Optical Transport Network").String,
+							Optional:            true,
+						},
+						"task_execute_nacm": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Netconf Authorization Control Module").String,
+							Optional:            true,
+						},
+						"task_execute_plat_mgr": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Platform Mgr Module").String,
+							Optional:            true,
+						},
+						"task_execute_cpri": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("cpri controller taskid").String,
+							Optional:            true,
+						},
+						"task_execute_lldp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Support LLDP protocol").String,
+							Optional:            true,
+						},
+						"task_execute_l2rib": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Layer 2 RIB").String,
+							Optional:            true,
+						},
+						"task_execute_dossier": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Support for dossier related collection/CLIs").String,
+							Optional:            true,
+						},
+						"task_execute_fti": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Support for FTI CLIs").String,
+							Optional:            true,
+						},
+						"task_execute_fc": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Fibre Channel controller taskid").String,
+							Optional:            true,
+						},
+						"task_debug_bgp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Border Gateway Protocol").String,
+							Optional:            true,
+						},
+						"task_debug_ospf": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Open Shortest Pathway First").String,
+							Optional:            true,
+						},
+						"task_debug_hsrp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Hot Standby Routing Protocol").String,
+							Optional:            true,
+						},
+						"task_debug_isis": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Intermediate System-Intermediate System").String,
+							Optional:            true,
+						},
+						"task_debug_route_map": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Policy filtering and redistribution of routes").String,
+							Optional:            true,
+						},
+						"task_debug_route_policy": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route Policy").String,
+							Optional:            true,
+						},
+						"task_debug_static": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Static Routing").String,
+							Optional:            true,
+						},
+						"task_debug_vrrp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Virtual Router Redundancy Protocol").String,
+							Optional:            true,
+						},
+						"task_debug_cef": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Cisco Express Forwarding/FIB").String,
+							Optional:            true,
+						},
+						"task_debug_lpts": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Local Packet Transport Service").String,
+							Optional:            true,
+						},
+						"task_debug_ipv4": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4").String,
+							Optional:            true,
+						},
+						"task_debug_rib": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Controls and monitors the routing table (RIB)").String,
+							Optional:            true,
+						},
+						"task_debug_multicast": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Multicast management including PIM, IGMP, etc.").String,
+							Optional:            true,
+						},
+						"task_debug_mpls_te": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Multi-protocol Label Switching - Traffic Engineering").String,
+							Optional:            true,
+						},
+						"task_debug_mpls_ldp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Multi-protocol Label Switching - Label Distribution Protocol").String,
+							Optional:            true,
+						},
+						"task_debug_mpls_static": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Multi-protocol Label Switching - Static configuration").String,
+							Optional:            true,
+						},
+						"task_debug_ouni": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Optical UNI").String,
+							Optional:            true,
+						},
+						"task_debug_fabric": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Fabric Management").String,
+							Optional:            true,
+						},
+						"task_debug_bundle": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Bundles").String,
+							Optional:            true,
+						},
+						"task_debug_network": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4, IPv6, ICMP, CLNS, ...").String,
+							Optional:            true,
+						},
+						"task_debug_transport": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("TCP/UDP").String,
+							Optional:            true,
+						},
+						"task_debug_ppp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Point-to-Point Protocol").String,
+							Optional:            true,
+						},
+						"task_debug_hdlc": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("High-level Data Link Control").String,
+							Optional:            true,
+						},
+						"task_debug_pos_dpt": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Packet-Over-SONET/Dynamic Packet Transport").String,
+							Optional:            true,
+						},
+						"task_debug_sonet_sdh": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("SONET/SDH Transport including APS/MSP").String,
+							Optional:            true,
+						},
+						"task_debug_dwdm": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("DWDM Transport").String,
+							Optional:            true,
+						},
+						"task_debug_tunnel": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("GRE, UTI").String,
+							Optional:            true,
+						},
+						"task_debug_vlan": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Virtual Local Area Network").String,
+							Optional:            true,
+						},
+						"task_debug_qos": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Quality of Service").String,
+							Optional:            true,
+						},
+						"task_debug_acl": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Access Control List").String,
+							Optional:            true,
+						},
+						"task_debug_aaa": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("AAA").String,
+							Optional:            true,
+						},
+						"task_debug_crypto": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ipsec, ssl").String,
+							Optional:            true,
+						},
+						"task_debug_snmp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Simple Network Management Protocol").String,
+							Optional:            true,
+						},
+						"task_debug_config_mgmt": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Create/copy/delete configuration checkpoints").String,
+							Optional:            true,
+						},
+						"task_debug_config_services": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure/monitor web server, ORB, SSH, XML Agent.").String,
+							Optional:            true,
+						},
+						"task_debug_host_services": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure/monitor hostname, clock, timestamps, etc.").String,
+							Optional:            true,
+						},
+						"task_debug_boot": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("reload, boot").String,
+							Optional:            true,
+						},
+						"task_debug_fault_mgr": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure/monitor fault manager settings").String,
+							Optional:            true,
+						},
+						"task_debug_filesystem": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Execute rcs, erase, format, fsck, etc.").String,
+							Optional:            true,
+						},
+						"task_debug_interface": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure/monitor basic (or common) interface characteristics").String,
+							Optional:            true,
+						},
+						"task_debug_ip_services": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure/monitor DNS, DHCP, ARP, NTP, ARM, Domain services").String,
+							Optional:            true,
+						},
+						"task_debug_pkg_mgmt": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Install operations, SAM").String,
+							Optional:            true,
+						},
+						"task_debug_system": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("LR Redundancy/pairing, logical interface/node grouping, LACP").String,
+							Optional:            true,
+						},
+						"task_debug_tty_access": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure/monitor Line (tty/vty), banner, etc.").String,
+							Optional:            true,
+						},
+						"task_debug_basic_services": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Ping, show version/privileges, etc.").String,
+							Optional:            true,
+						},
+						"task_debug_cdp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Cisco Discovery Protocol").String,
+							Optional:            true,
+						},
+						"task_debug_diag": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("exception, coredump, itrace, monitor, stats").String,
+							Optional:            true,
+						},
+						"task_debug_ext_access": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Execute RCP, RSH, FTP, TFTP, rlogin, telnet, ...").String,
+							Optional:            true,
+						},
+						"task_debug_bcdl": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Bulk Content Downloader").String,
+							Optional:            true,
+						},
+						"task_debug_sysmgr": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Placement/process, chkpt, mbus, gsp, netio, qnet, SysDB, qsm, driver infrastructure").String,
+							Optional:            true,
+						},
+						"task_debug_logging": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("logging, alarm").String,
+							Optional:            true,
+						},
+						"task_debug_netflow": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Netflow application").String,
+							Optional:            true,
+						},
+						"task_debug_drivers": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Driver related functions").String,
+							Optional:            true,
+						},
+						"task_debug_fr": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Frame-Relay").String,
+							Optional:            true,
+						},
+						"task_debug_monitor": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Monitor system resource/performance characteristics").String,
+							Optional:            true,
+						},
+						"task_debug_inventory": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Inventory information management").String,
+							Optional:            true,
+						},
+						"task_debug_ipv6": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv6").String,
+							Optional:            true,
+						},
+						"task_debug_admin": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Admin plane functions").String,
+							Optional:            true,
+						},
+						"task_debug_atm": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Asynchronous Transfer Mode").String,
+							Optional:            true,
+						},
+						"task_debug_bfd": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Bidirectional Forwarding Protocol").String,
+							Optional:            true,
+						},
+						"task_debug_rip": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Routing Information Protocol").String,
+							Optional:            true,
+						},
+						"task_debug_eigrp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enhanced Interior Gateway Routing Protocol").String,
+							Optional:            true,
+						},
+						"task_debug_sbc": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Session Border Controller").String,
+							Optional:            true,
+						},
+						"task_debug_firewall": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Firewall operations").String,
+							Optional:            true,
+						},
+						"task_debug_l2vpn": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Layer 2 VPN").String,
+							Optional:            true,
+						},
+						"task_debug_ethernet_services": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Ethernet Services and OAM").String,
+							Optional:            true,
+						},
+						"task_debug_eem": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Embedded Event Manager").String,
+							Optional:            true,
+						},
+						"task_debug_li": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Lawful Intercept component").String,
+							Optional:            true,
+						},
+						"task_debug_ancp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Access Node Control Protocol").String,
+							Optional:            true,
+						},
+						"task_debug_cgn": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Carrier Grade Nat").String,
+							Optional:            true,
+						},
+						"task_debug_call_home": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("call-home").String,
+							Optional:            true,
+						},
+						"task_debug_rcmd": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Routing Convergence Monitoring and Diagnostics").String,
+							Optional:            true,
+						},
+						"task_debug_vpdn": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Virtual Private Dial-up Network (VPDN)").String,
+							Optional:            true,
+						},
+						"task_debug_nps": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Network Positioning System (NPS)").String,
+							Optional:            true,
+						},
+						"task_debug_lisp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Locator/Identifier Separation Protocol").String,
+							Optional:            true,
+						},
+						"task_debug_pbr": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Policy Based Routing").String,
+							Optional:            true,
+						},
+						"task_debug_otn": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Optical Transport Network").String,
+							Optional:            true,
+						},
+						"task_debug_nacm": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Netconf Authorization Control Module").String,
+							Optional:            true,
+						},
+						"task_debug_plat_mgr": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Platform Mgr Module").String,
+							Optional:            true,
+						},
+						"task_debug_cpri": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("cpri controller taskid").String,
+							Optional:            true,
+						},
+						"task_debug_lldp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Support LLDP protocol").String,
+							Optional:            true,
+						},
+						"task_debug_l2rib": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Layer 2 RIB").String,
+							Optional:            true,
+						},
+						"task_debug_dossier": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Support for dossier related collection/CLIs").String,
+							Optional:            true,
+						},
+						"task_debug_fti": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Support for FTI CLIs").String,
+							Optional:            true,
+						},
+						"task_debug_fc": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Fibre Channel controller taskid").String,
+							Optional:            true,
+						},
+						"inherit_taskgroup_root_lr": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Root LR taskgroup").String,
+							Optional:            true,
+						},
+						"inherit_taskgroup_netadmin": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Network administrators taskgroup").String,
+							Optional:            true,
+						},
+						"inherit_taskgroup_sysadmin": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("System administrators taskgroup").String,
+							Optional:            true,
+						},
+						"inherit_taskgroup_serviceadmin": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Service administrators taskgroup").String,
+							Optional:            true,
+						},
+						"inherit_taskgroup_operator": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Operator taskgroup").String,
+							Optional:            true,
+						},
+						"inherit_taskgroup_cisco_support": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Technical support group").String,
+							Optional:            true,
+						},
+						"inherit_taskgroups": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of the task group to include").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"group_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Name of the task group to include").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 253),
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"usergroups": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Usergroup name").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"group_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Usergroup name").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 253),
+							},
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description for the user group").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 800),
+							},
+						},
+						"taskgroup_root_lr": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Root LR group").String,
+							Optional:            true,
+						},
+						"taskgroup_netadmin": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Network administrators group").String,
+							Optional:            true,
+						},
+						"taskgroup_sysadmin": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("System administrators group").String,
+							Optional:            true,
+						},
+						"taskgroup_serviceadmin": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Service administrators group").String,
+							Optional:            true,
+						},
+						"taskgroup_operator": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Operator group").String,
+							Optional:            true,
+						},
+						"taskgroup_cisco_support": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Technical support group").String,
+							Optional:            true,
+						},
+						"taskgroup_maintenance": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Maintenance group").String,
+							Optional:            true,
+						},
+						"taskgroup_provisioning": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Provisioning group").String,
+							Optional:            true,
+						},
+						"taskgroup_retrieve": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Retrieve group").String,
+							Optional:            true,
+						},
+						"taskgroup_read_only": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Read only group").String,
+							Optional:            true,
+						},
+						"taskgroups": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of the task group").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"group_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Name of the task group").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 800),
+										},
+									},
+								},
+							},
+						},
+						"inherit_usergroups": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("User group to be inherited by this group").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"group_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("User group to be inherited by this group").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 253),
+										},
+									},
+								},
 							},
 						},
 					},

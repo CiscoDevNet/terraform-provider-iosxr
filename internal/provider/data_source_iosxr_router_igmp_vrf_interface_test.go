@@ -72,6 +72,14 @@ resource "iosxr_gnmi" "PreReq0" {
 	}
 }
 
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
+	attributes = {
+		"vrf-name" = "VRF1"
+	}
+	depends_on = [iosxr_gnmi.PreReq0, ]
+}
+
 `
 
 // End of section. //template:end testPrerequisites
@@ -82,7 +90,7 @@ func testAccDataSourceIosxrRouterIGMPVRFInterfaceConfig() string {
 	config := `resource "iosxr_router_igmp_vrf_interface" "test" {` + "\n"
 	config += `	delete_mode = "attributes"` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
-	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	interface_name = "GigabitEthernet0/0/0/2"` + "\n"
 	config += `	version = 3` + "\n"
 	config += `	router_enable = true` + "\n"
 	config += `	dvmrp_enable = true` + "\n"
@@ -107,13 +115,13 @@ func testAccDataSourceIosxrRouterIGMPVRFInterfaceConfig() string {
 	config += `			include = true` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `
 		data "iosxr_router_igmp_vrf_interface" "test" {
 			vrf_name = "VRF1"
-			interface_name = "GigabitEthernet0/0/0/1"
+			interface_name = "GigabitEthernet0/0/0/2"
 			depends_on = [iosxr_router_igmp_vrf_interface.test]
 		}
 	`

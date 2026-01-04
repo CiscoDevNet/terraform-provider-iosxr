@@ -157,8 +157,8 @@ resource "iosxr_router_isis" "example" {
   ]
   affinity_maps = [
     {
-      name         = "22"
-      bit_position = 4
+      affinity_name = "22"
+      bit_position  = 4
     }
   ]
   ignore_lsp_errors_disable          = true

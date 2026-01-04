@@ -66,6 +66,7 @@ type SegmentRoutingV6Data struct {
 }
 type SegmentRoutingV6Formats struct {
 	Name                                  types.String `tfsdk:"name"`
+	FormatEnable                          types.Bool   `tfsdk:"format_enable"`
 	UsidLocalIdBlockRangesLibStart        types.Int64  `tfsdk:"usid_local_id_block_ranges_lib_start"`
 	UsidLocalIdBlockRangesExplictLibStart types.Int64  `tfsdk:"usid_local_id_block_ranges_explict_lib_start"`
 	UsidWideLocalIdBlockExplicitRange     types.Int64  `tfsdk:"usid_wide_local_id_block_explicit_range"`
@@ -100,7 +101,7 @@ func (data SegmentRoutingV6) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.Enable.IsNull() && !data.Enable.IsUnknown() {
 		if data.Enable.ValueBool() {
-			body, _ = sjson.Set(body, "enable", map[string]string{})
+			body, _ = sjson.Set(body, "enable", []interface{}{nil})
 		}
 	}
 	if !data.SidHoldtime.IsNull() && !data.SidHoldtime.IsUnknown() {
@@ -108,7 +109,7 @@ func (data SegmentRoutingV6) toBody(ctx context.Context) string {
 	}
 	if !data.LoggingLocatorStatus.IsNull() && !data.LoggingLocatorStatus.IsUnknown() {
 		if data.LoggingLocatorStatus.ValueBool() {
-			body, _ = sjson.Set(body, "logging.locator-status", map[string]string{})
+			body, _ = sjson.Set(body, "logging.locator-status", []interface{}{nil})
 		}
 	}
 	if !data.EncapsulationTrafficClassOption.IsNull() && !data.EncapsulationTrafficClassOption.IsUnknown() {
@@ -132,6 +133,11 @@ func (data SegmentRoutingV6) toBody(ctx context.Context) string {
 			if !item.Name.IsNull() && !item.Name.IsUnknown() {
 				body, _ = sjson.Set(body, "formats.formats.format"+"."+strconv.Itoa(index)+"."+"name", item.Name.ValueString())
 			}
+			if !item.FormatEnable.IsNull() && !item.FormatEnable.IsUnknown() {
+				if item.FormatEnable.ValueBool() {
+					body, _ = sjson.Set(body, "formats.formats.format"+"."+strconv.Itoa(index)+"."+"format-enable", []interface{}{nil})
+				}
+			}
 			if !item.UsidLocalIdBlockRangesLibStart.IsNull() && !item.UsidLocalIdBlockRangesLibStart.IsUnknown() {
 				body, _ = sjson.Set(body, "formats.formats.format"+"."+strconv.Itoa(index)+"."+"usid.local-id-block-ranges.lib-start", strconv.FormatInt(item.UsidLocalIdBlockRangesLibStart.ValueInt64(), 10))
 			}
@@ -148,7 +154,7 @@ func (data SegmentRoutingV6) toBody(ctx context.Context) string {
 		for index, item := range data.Locators {
 			if !item.LocatorEnable.IsNull() && !item.LocatorEnable.IsUnknown() {
 				if item.LocatorEnable.ValueBool() {
-					body, _ = sjson.Set(body, "locators.locators.locator"+"."+strconv.Itoa(index)+"."+"locator-enable", map[string]string{})
+					body, _ = sjson.Set(body, "locators.locators.locator"+"."+strconv.Itoa(index)+"."+"locator-enable", []interface{}{nil})
 				}
 			}
 			if !item.Name.IsNull() && !item.Name.IsUnknown() {
@@ -165,7 +171,7 @@ func (data SegmentRoutingV6) toBody(ctx context.Context) string {
 			}
 			if !item.Anycast.IsNull() && !item.Anycast.IsUnknown() {
 				if item.Anycast.ValueBool() {
-					body, _ = sjson.Set(body, "locators.locators.locator"+"."+strconv.Itoa(index)+"."+"anycast", map[string]string{})
+					body, _ = sjson.Set(body, "locators.locators.locator"+"."+strconv.Itoa(index)+"."+"anycast", []interface{}{nil})
 				}
 			}
 			if !item.Algorithm.IsNull() && !item.Algorithm.IsUnknown() {
@@ -231,6 +237,15 @@ func (data *SegmentRoutingV6) updateFromBody(ctx context.Context, res []byte) {
 			data.Formats[i].Name = types.StringValue(value.String())
 		} else {
 			data.Formats[i].Name = types.StringNull()
+		}
+		if value := r.Get("format-enable"); !data.Formats[i].FormatEnable.IsNull() {
+			if value.Exists() {
+				data.Formats[i].FormatEnable = types.BoolValue(true)
+			} else {
+				data.Formats[i].FormatEnable = types.BoolValue(false)
+			}
+		} else {
+			data.Formats[i].FormatEnable = types.BoolNull()
 		}
 		if value := r.Get("usid.local-id-block-ranges.lib-start"); value.Exists() && !data.Formats[i].UsidLocalIdBlockRangesLibStart.IsNull() {
 			data.Formats[i].UsidLocalIdBlockRangesLibStart = types.Int64Value(value.Int())
@@ -367,6 +382,11 @@ func (data *SegmentRoutingV6) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("name"); cValue.Exists() {
 				item.Name = types.StringValue(cValue.String())
 			}
+			if cValue := v.Get("format-enable"); cValue.Exists() {
+				item.FormatEnable = types.BoolValue(true)
+			} else {
+				item.FormatEnable = types.BoolValue(false)
+			}
 			if cValue := v.Get("usid.local-id-block-ranges.lib-start"); cValue.Exists() {
 				item.UsidLocalIdBlockRangesLibStart = types.Int64Value(cValue.Int())
 			}
@@ -454,6 +474,11 @@ func (data *SegmentRoutingV6Data) fromBody(ctx context.Context, res []byte) {
 			item := SegmentRoutingV6Formats{}
 			if cValue := v.Get("name"); cValue.Exists() {
 				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("format-enable"); cValue.Exists() {
+				item.FormatEnable = types.BoolValue(true)
+			} else {
+				item.FormatEnable = types.BoolValue(false)
 			}
 			if cValue := v.Get("usid.local-id-block-ranges.lib-start"); cValue.Exists() {
 				item.UsidLocalIdBlockRangesLibStart = types.Int64Value(cValue.Int())
@@ -619,6 +644,9 @@ func (data *SegmentRoutingV6) getDeletedItems(ctx context.Context, state Segment
 				if !state.Formats[i].UsidLocalIdBlockRangesLibStart.IsNull() && data.Formats[j].UsidLocalIdBlockRangesLibStart.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/formats/formats/format%v/usid/local-id-block-ranges/lib-start", state.getPath(), keyString))
 				}
+				if !state.Formats[i].FormatEnable.IsNull() && data.Formats[j].FormatEnable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/formats/formats/format%v/format-enable", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -664,6 +692,9 @@ func (data *SegmentRoutingV6) getEmptyLeafsDelete(ctx context.Context) []string 
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.Formats[i].FormatEnable.IsNull() && !data.Formats[i].FormatEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/formats/formats/format%v/format-enable", data.getPath(), keyString))
 		}
 	}
 	if !data.LoggingLocatorStatus.IsNull() && !data.LoggingLocatorStatus.ValueBool() {

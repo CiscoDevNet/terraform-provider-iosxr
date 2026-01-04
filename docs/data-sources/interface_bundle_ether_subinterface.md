@@ -40,7 +40,6 @@ data "iosxr_interface_bundle_ether_subinterface" "example" {
 - `dampening` (Boolean) configure state dampening on the given interface
 - `dampening_decay_half_life` (Number) Decay half life (in minutes)
 - `dampening_max_suppress_time` (Number) Max suppress time (in minutes)
-- `dampening_restart_penalty` (Number) Restart penalty
 - `dampening_reuse_threshold` (Number) Reuse threshold
 - `dampening_suppress_threshold` (Number) Suppress threshold
 - `description` (String) Set description for this interface
@@ -63,6 +62,7 @@ data "iosxr_interface_bundle_ether_subinterface" "example" {
 - `ipv4_access_group_ingress_interface_statistics` (Boolean) Per interface statistics in hardware
 - `ipv4_address` (String) IP address
 - `ipv4_algorithm` (Number) Algorithm to be associated with this address
+- `ipv4_forwarding_enable` (Boolean) enable ipv4 forwarding on a interface
 - `ipv4_helper_addresses` (Attributes List) Specify a destination address for UDP broadcasts (see [below for nested schema](#nestedatt--ipv4_helper_addresses))
 - `ipv4_mask_reply` (Boolean) Enable sending ICMP mask reply messages
 - `ipv4_mtu` (Number) Set IPv4 Maximum Transmission Unit
@@ -72,6 +72,7 @@ data "iosxr_interface_bundle_ether_subinterface" "example" {
 - `ipv4_route_tag` (Number) Route-tag to be associated with this address
 - `ipv4_secondaries` (Attributes List) IP address and Mask (see [below for nested schema](#nestedatt--ipv4_secondaries))
 - `ipv4_tcp_mss_adjust` (Boolean) Enable tcp mss adjust on this interface
+- `ipv4_ttl_propagate_disable` (Boolean) Disable ipv4 ttl propagation on this interface
 - `ipv4_unnumbered` (String) Enable IP processing without an explicit address
 - `ipv4_unreachables_disable` (Boolean) Override sending of ICMP Unreachable messages
 - `ipv4_verify_unicast_source_reachable_via_allow_default` (Boolean) Allow default route to match when checking source address
@@ -105,6 +106,7 @@ data "iosxr_interface_bundle_ether_subinterface" "example" {
 - `ipv6_nd_suppress_ra` (Boolean) Suppress IPv6 Router Advertisements
 - `ipv6_nd_unicast_ra` (Boolean) Send Unicast Solicited IPv6 Router Advertisements
 - `ipv6_tcp_mss_adjust` (Boolean) Enable tcp mss adjust on this interface
+- `ipv6_ttl_propagate_disable` (Boolean) Disable ipv6 ttl propagation on this interface
 - `ipv6_unreachables_disable` (Boolean) Override sending of ICMP Unreachable messages
 - `ipv6_verify_unicast_source_reachable_via_allow_default` (Boolean) Allow default route to match when checking source address
 - `ipv6_verify_unicast_source_reachable_via_allow_self_ping` (Boolean) Allow router to ping itself (opens vulnerability in verification)
@@ -121,6 +123,75 @@ data "iosxr_interface_bundle_ether_subinterface" "example" {
 - `multipoint` (Boolean) multipoint sub-interface
 - `point_to_point` (Boolean) point-to-point sub-interface
 - `proxy_arp` (Boolean) Enable proxy ARP
+- `ptp` (Boolean) Precision Time Protocol config
+- `ptp_announce_frequency` (String) Send Announce messages one or more times a second
+- `ptp_announce_grant_duration` (Number) Configure the announce unicast grant duration value
+- `ptp_announce_interval` (String) Send Announce messages once every one or more seconds
+- `ptp_announce_timeout` (Number) Configure the announce timeout value
+- `ptp_clock_operation_one_step` (Boolean) One-step clock-operation
+- `ptp_clock_operation_two_step` (Boolean) Two-step clock-operation
+- `ptp_cos` (Number) Specify the COS value to use
+- `ptp_cos_event` (Number) Specify the COS value to use
+- `ptp_cos_general` (Number) Specify the COS value to use
+- `ptp_delay_asymmetry_unit_microseconds` (Boolean) Use microseconds as the delay asymmetry units
+- `ptp_delay_asymmetry_unit_milliseconds` (Boolean) Use milliseconds as the delay asymmetry units
+- `ptp_delay_asymmetry_unit_nanoseconds` (Boolean) Use nanoseconds as the delay asymmetry units
+- `ptp_delay_asymmetry_value` (Number) Delay asymmetry to apply to all primarys on the interface
+- `ptp_delay_request_frequency` (String) Send Announce messages one or more times a second
+- `ptp_delay_request_interval` (String) Send Announce messages once every one or more seconds
+- `ptp_delay_response_grant_duration` (Number) Configure the delay-response unicast grant duration value
+- `ptp_delay_response_timeout` (Number) Configure the delay-response timeout value
+- `ptp_dscp` (Number) Specify the DSCP value to use
+- `ptp_dscp_event` (Number) Specify the DSCP value to use
+- `ptp_dscp_general` (Number) Specify the DSCP value to use
+- `ptp_interop_domain` (Number) Domain of the peer clock
+- `ptp_interop_egress_conversion_clock_accuracy` (Number) The clock-accuracy value to use for the peer clock
+- `ptp_interop_egress_conversion_clock_class_default` (Number) Default clock class to use when a more specific mapping is not available
+- `ptp_interop_egress_conversion_clock_class_mappings` (Attributes List) Specific mapping for a given clock class value (see [below for nested schema](#nestedatt--ptp_interop_egress_conversion_clock_class_mappings))
+- `ptp_interop_egress_conversion_offset_scaled_log_variance` (Number) The OSLV value to use for the peer clock
+- `ptp_interop_egress_conversion_priority1` (Number) The priority1 value to use for the peer clock
+- `ptp_interop_egress_conversion_priority2` (Number) The priority2 value to use for the peer clock
+- `ptp_interop_ingress_conversion_clock_accuracy` (Number) The clock-accuracy value to use for the peer clock
+- `ptp_interop_ingress_conversion_clock_class_default` (Number) Default clock class to use when a more specific mapping is not available
+- `ptp_interop_ingress_conversion_clock_class_mappings` (Attributes List) Specific mapping for a given clock class value (see [below for nested schema](#nestedatt--ptp_interop_ingress_conversion_clock_class_mappings))
+- `ptp_interop_ingress_conversion_offset_scaled_log_variance` (Number) The OSLV value to use for the peer clock
+- `ptp_interop_ingress_conversion_priority1` (Number) The priority1 value to use for the peer clock
+- `ptp_interop_ingress_conversion_priority2` (Number) The priority2 value to use for the peer clock
+- `ptp_interop_profile_default` (Boolean) Default profile
+- `ptp_interop_profile_g_8265_1` (Boolean) G.8265.1 telecom profile
+- `ptp_interop_profile_g_8275_1` (Boolean) G.8275.1 telecom profile
+- `ptp_interop_profile_g_8275_2` (Boolean) G.8275.2 telecom profile
+- `ptp_ipv4_ttl` (Number) Specify the IPv4 TTL value to use
+- `ptp_ipv6_hop_limit` (Number) Specify the IPv6 hop limit value to use
+- `ptp_local_priority` (Number) Configure a local priority
+- `ptp_master_ethernets` (Attributes List) Ethernet address (see [below for nested schema](#nestedatt--ptp_master_ethernets))
+- `ptp_master_ipv4s` (Attributes List) IPv4 address (see [below for nested schema](#nestedatt--ptp_master_ipv4s))
+- `ptp_master_ipv6s` (Attributes List) IPv6 address (see [below for nested schema](#nestedatt--ptp_master_ipv6s))
+- `ptp_multicast` (Boolean) Allow multicast messages to be sent
+- `ptp_multicast_disable` (Boolean) Disable multicast transport
+- `ptp_multicast_mixed` (Boolean) Mixed-mode multicast
+- `ptp_multicast_target_address_mac_forwardable` (Boolean) Forwardable mac-address
+- `ptp_multicast_target_address_mac_non_forwardable` (Boolean) Non-forwardable mac-address
+- `ptp_port_state_any` (Boolean) Unrestrict the port state on this interface
+- `ptp_port_state_master_only` (Boolean) Restrict the port state to primary
+- `ptp_port_state_slave_only` (Boolean) Restrict the port state to subordinate
+- `ptp_profile` (String) PTP Profile to use on this interface
+- `ptp_slave_ethernets` (Attributes List) Ethernet address (see [below for nested schema](#nestedatt--ptp_slave_ethernets))
+- `ptp_slave_ipv4s` (Attributes List) IPv4 address (see [below for nested schema](#nestedatt--ptp_slave_ipv4s))
+- `ptp_slave_ipv6s` (Attributes List) IPv6 address (see [below for nested schema](#nestedatt--ptp_slave_ipv6s))
+- `ptp_source_ipv4_address` (String) Specify the IPv4 address to use
+- `ptp_source_ipv4_address_disable` (Boolean) Use the interface IPv4 address
+- `ptp_source_ipv6_address` (String) Set the IPv6 address to use when sending IPv6 packets
+- `ptp_source_ipv6_address_disable` (Boolean) Use the interface IPv6 address
+- `ptp_sync_frequency` (String) Send Announce messages one or more times a second
+- `ptp_sync_grant_duration` (Number) Configure the sync unicast grant duration value
+- `ptp_sync_interval` (String) Send Announce messages once every one or more seconds
+- `ptp_sync_timeout` (Number) Configure the sync timeout value
+- `ptp_transport_ethernet` (Boolean) Ethernet transport
+- `ptp_transport_ipv4` (Boolean) IPv4 transport
+- `ptp_transport_ipv6` (Boolean) IPv6 transport
+- `ptp_unicast_grant_invalid_request_deny` (Boolean) Deny grant
+- `ptp_unicast_grant_invalid_request_reduce` (Boolean) Reduce grant parameters
 - `rewrite_ingress_tag_pop_one` (Boolean) Remove outer tag only
 - `rewrite_ingress_tag_pop_two` (Boolean) Remove two outermost tags
 - `service_policy_input` (Attributes List) Configure a policy in the input direction (see [below for nested schema](#nestedatt--service_policy_input))
@@ -238,6 +309,102 @@ Read-Only:
 - `prefix_length` (Number) Prefix Length
 - `route_tag` (Number) Route-tag to be associated with this address
 - `zone` (String) IPv6 address zone
+
+
+<a id="nestedatt--ptp_interop_egress_conversion_clock_class_mappings"></a>
+### Nested Schema for `ptp_interop_egress_conversion_clock_class_mappings`
+
+Read-Only:
+
+- `clock_class_to_map_from` (Number) Specific mapping for a given clock class value
+- `clock_class_to_map_to` (Number) Clock class to map to
+
+
+<a id="nestedatt--ptp_interop_ingress_conversion_clock_class_mappings"></a>
+### Nested Schema for `ptp_interop_ingress_conversion_clock_class_mappings`
+
+Read-Only:
+
+- `clock_class_to_map_from` (Number) Specific mapping for a given clock class value
+- `clock_class_to_map_to` (Number) Clock class to map to
+
+
+<a id="nestedatt--ptp_master_ethernets"></a>
+### Nested Schema for `ptp_master_ethernets`
+
+Read-Only:
+
+- `address` (String) Ethernet address
+- `clock_class` (Number) Override the clock-class of this primary
+- `delay_asymmetry` (Number) The expected delay asymmetry for this primary
+- `microseconds` (Boolean) Use microseconds as the delay asymmetry units
+- `milliseconds` (Boolean) Use milliseconds as the delay asymmetry units
+- `multicast` (Boolean) Whether this primary sends messages multicast
+- `multicast_mixed` (Boolean) Mixed-mode multicast
+- `nanoseconds` (Boolean) Use nanoseconds as the delay asymmetry units
+- `non_negotiated` (Boolean) Use non-negotiated unicast
+- `priority` (Number) Specify the priority of this primary
+
+
+<a id="nestedatt--ptp_master_ipv4s"></a>
+### Nested Schema for `ptp_master_ipv4s`
+
+Read-Only:
+
+- `address` (String) IPv4 address
+- `clock_class` (Number) Override the clock-class of this primary
+- `delay_asymmetry` (Number) The expected delay asymmetry for this primary
+- `microseconds` (Boolean) Use microseconds as the delay asymmetry units
+- `milliseconds` (Boolean) Use milliseconds as the delay asymmetry units
+- `multicast` (Boolean) Whether this primary sends messages multicast
+- `multicast_mixed` (Boolean) Mixed-mode multicast
+- `nanoseconds` (Boolean) Use nanoseconds as the delay asymmetry units
+- `non_negotiated` (Boolean) Use non-negotiated unicast
+- `priority` (Number) Specify the priority of this primary
+
+
+<a id="nestedatt--ptp_master_ipv6s"></a>
+### Nested Schema for `ptp_master_ipv6s`
+
+Read-Only:
+
+- `address` (String) IPv6 address
+- `clock_class` (Number) Override the clock-class of this primary
+- `delay_asymmetry` (Number) The expected delay asymmetry for this primary
+- `microseconds` (Boolean) Use microseconds as the delay asymmetry units
+- `milliseconds` (Boolean) Use milliseconds as the delay asymmetry units
+- `multicast` (Boolean) Whether this primary sends messages multicast
+- `multicast_mixed` (Boolean) Mixed-mode multicast
+- `nanoseconds` (Boolean) Use nanoseconds as the delay asymmetry units
+- `non_negotiated` (Boolean) Use non-negotiated unicast
+- `priority` (Number) Specify the priority of this primary
+
+
+<a id="nestedatt--ptp_slave_ethernets"></a>
+### Nested Schema for `ptp_slave_ethernets`
+
+Read-Only:
+
+- `address` (String) Ethernet address
+- `non_negotiated` (Boolean) Use non-negotiated unicast
+
+
+<a id="nestedatt--ptp_slave_ipv4s"></a>
+### Nested Schema for `ptp_slave_ipv4s`
+
+Read-Only:
+
+- `address` (String) IPv4 address
+- `non_negotiated` (Boolean) Use non-negotiated unicast
+
+
+<a id="nestedatt--ptp_slave_ipv6s"></a>
+### Nested Schema for `ptp_slave_ipv6s`
+
+Read-Only:
+
+- `address` (String) IPv6 address
+- `non_negotiated` (Boolean) Use non-negotiated unicast
 
 
 <a id="nestedatt--service_policy_input"></a>

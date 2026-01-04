@@ -32,6 +32,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -108,6 +109,112 @@ func (r *RouterOSPFAreaInterfaceResource) Schema(ctx context.Context, req resour
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
+			"affinity_flex_algos": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Affinity attribute name").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"affinity_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Affinity attribute name").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+							},
+						},
+					},
+				},
+			},
+			"neighbors": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify a neighbor router").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify a neighbor router").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+						"database_filter_all_out": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Outgoing LSA").String,
+							Optional:            true,
+						},
+						"priority": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("OSPF priority of non-broadcast neighbor").AddIntegerRangeDescription(0, 255).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 255),
+							},
+						},
+						"poll_interval": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("OSPF dead-router polling interval").AddIntegerRangeDescription(0, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+						"cost": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("OSPF cost for point-to-multipoint neighbor").AddIntegerRangeDescription(1, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
+							},
+						},
+					},
+				},
+			},
+			"authentication_key_encrypted": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specifies an ENCRYPTED password (key) will follow").String,
+				Optional:            true,
+				Sensitive:           true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+				},
+			},
+			"message_digest_keys": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Message digest authentication password (key)").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"key_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Message digest authentication password (key)").AddIntegerRangeDescription(1, 255).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 255),
+							},
+						},
+						"md5_encrypted": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies an ENCRYPTED password (key) will follow").String,
+							Required:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+							},
+						},
+					},
+				},
+			},
+			"authentication": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable authentication").String,
+				Optional:            true,
+			},
+			"authentication_message_digest": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use message-digest authentication").String,
+				Optional:            true,
+			},
+			"authentication_keychain_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify keychain name").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+				},
+			},
+			"authentication_null": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use no authentication").String,
+				Optional:            true,
+			},
 			"network_broadcast": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specify OSPF broadcast multi-access network").String,
 				Optional:            true,
@@ -124,8 +231,94 @@ func (r *RouterOSPFAreaInterfaceResource) Schema(ctx context.Context, req resour
 				MarkdownDescription: helpers.NewAttributeDescription("Specify OSPF point-to-multipoint network").String,
 				Optional:            true,
 			},
+			"mpls_ldp_sync": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("LDP IGP synchronization for interfaces").String,
+				Optional:            true,
+			},
+			"mpls_ldp_sync_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable MPLS LDP sync on interfaces").String,
+				Optional:            true,
+			},
 			"cost": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Interface cost").AddIntegerRangeDescription(1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
+				},
+			},
+			"cost_fallback": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Cost when cumulative bandwidth goes below the theshold").AddIntegerRangeDescription(1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
+				},
+			},
+			"cost_fallback_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Threshold bandwidth when cost-fallback is applied").AddIntegerRangeDescription(1, 4294967).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4294967),
+				},
+			},
+			"cost_fallback_anomaly_delay_igp_metric_increment": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Increment the IGP cost by the specified value").AddIntegerRangeDescription(1, 65534).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65534),
+				},
+			},
+			"cost_fallback_anomaly_delay_igp_metric_multiplier": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Multiply the IGP cost by the specified value").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"cost_fallback_anomaly_delay_igp_metric_value": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set the IGP cost to the specified value").AddIntegerRangeDescription(1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
+				},
+			},
+			"cost_fallback_anomaly_delay_igp_metric_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable igp-metric").String,
+				Optional:            true,
+			},
+			"cost_fallback_anomaly_delay_te_metric_increment": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Increment the TE metric by the specified value").AddIntegerRangeDescription(1, 4294967294).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4294967294),
+				},
+			},
+			"cost_fallback_anomaly_delay_te_metric_multiplier": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Multiply the TE metric by the specified value").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"cost_fallback_anomaly_delay_te_metric_value": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set the TE cost to the specified value").AddIntegerRangeDescription(1, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4294967295),
+				},
+			},
+			"cost_fallback_anomaly_delay_te_metric_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable te-metric").String,
+				Optional:            true,
+			},
+			"hello_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Time between HELLO packets").AddIntegerRangeDescription(1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
+				},
+			},
+			"dead_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Seconds").AddIntegerRangeDescription(1, 65535).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 65535),
@@ -138,6 +331,52 @@ func (r *RouterOSPFAreaInterfaceResource) Schema(ctx context.Context, req resour
 					int64validator.Between(0, 255),
 				},
 			},
+			"retransmit_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Time between retransmitting lost link state advertisements").AddIntegerRangeDescription(1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
+				},
+			},
+			"transmit_delay": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Estimated time needed to send link-state update packet").AddIntegerRangeDescription(1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
+				},
+			},
+			"flood_reduction_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable flooding reduction").String,
+				Optional:            true,
+			},
+			"flood_reduction_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable flooding reduction").String,
+				Optional:            true,
+			},
+			"demand_circuit_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable demand circuits").String,
+				Optional:            true,
+			},
+			"demand_circuit_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable demand circuits").String,
+				Optional:            true,
+			},
+			"mtu_ignore_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Ignores the MTU in DBD packets").String,
+				Optional:            true,
+			},
+			"mtu_ignore_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable ignoring of MTU in DBD packets").String,
+				Optional:            true,
+			},
+			"database_filter_all_out_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable filtering").String,
+				Optional:            true,
+			},
+			"database_filter_all_out_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable filtering").String,
+				Optional:            true,
+			},
 			"passive_enable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable passive").String,
 				Optional:            true,
@@ -146,23 +385,321 @@ func (r *RouterOSPFAreaInterfaceResource) Schema(ctx context.Context, req resour
 				MarkdownDescription: helpers.NewAttributeDescription("Disable passive").String,
 				Optional:            true,
 			},
-			"fast_reroute_per_prefix_ti_lfa": schema.BoolAttribute{
+			"distribute_list_acl": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("In-bound access-list name.").String,
+				Optional:            true,
+			},
+			"distribute_list_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Route Policy to filter OSPF prefixes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"packet_size": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Customize size of OSPF packets upto MTU").AddIntegerRangeDescription(576, 10000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(576, 10000),
+				},
+			},
+			"bfd_fast_detect": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable Fast detection").String,
+				Optional:            true,
+			},
+			"bfd_fast_detect_strict_mode": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Hold down neighbor session until BFD session is up").String,
+				Optional:            true,
+			},
+			"bfd_fast_detect_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent bfd settings from being inherited from the parent").String,
+				Optional:            true,
+			},
+			"bfd_minimum_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Minimum interval").AddIntegerRangeDescription(3, 30000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(3, 30000),
+				},
+			},
+			"bfd_multiplier": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Detect multiplier").AddIntegerRangeDescription(2, 50).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(2, 50),
+				},
+			},
+			"security_ttl": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable ttl security").String,
+				Optional:            true,
+			},
+			"security_ttl_hops": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IP hops").AddIntegerRangeDescription(1, 254).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 254),
+				},
+			},
+			"security_ttl_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable TTL security").String,
+				Optional:            true,
+			},
+			"prefix_suppression": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable primary address suppression").String,
+				Optional:            true,
+			},
+			"prefix_suppression_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable primary address suppression").String,
+				Optional:            true,
+			},
+			"prefix_suppression_secondary_address": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable secondary address suppression").String,
+				Optional:            true,
+			},
+			"prefix_suppression_secondary_address_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable secondary address suppression").String,
+				Optional:            true,
+			},
+			"fast_reroute_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable IP Fast Reroute").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_link": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable per-link Computation").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_link_exclude_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Exclude an interface from Per-link LFA").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Exclude an interface from Per-link LFA").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+							},
+						},
+					},
+				},
+			},
+			"fast_reroute_per_link_lfa_candidate_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Include an interface to LFA candidate in computation").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Include an interface to LFA candidate in computation").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+							},
+						},
+					},
+				},
+			},
+			"fast_reroute_per_link_use_candidate_only_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable backup selection from candidate-list only").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_link_use_candidate_only_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable backup selection from candidate-list only").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable per-prefix Computation").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_exclude_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Exclude an interface from Per-prefix LFA").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Exclude an interface from Per-prefix LFA").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+							},
+						},
+					},
+				},
+			},
+			"fast_reroute_per_prefix_lfa_candidate_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Include an interface to LFA candidate in computation").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Include an interface to LFA candidate in computation").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+							},
+						},
+					},
+				},
+			},
+			"fast_reroute_per_prefix_use_candidate_only_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable backup selection from candidate-list only").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_use_candidate_only_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable backup selection from candidate-list only").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_remote_lfa_tunnel_mpls_ldp": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("MPLS LDP tunnel").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_remote_lfa_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable remote LFA computation").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_remote_lfa_maximum_cost": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum path cost to remote LFA").AddIntegerRangeDescription(1, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4294967295),
+				},
+			},
+			"fast_reroute_per_prefix_ti_lfa_enable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable TI LFA computation").String,
 				Optional:            true,
 			},
-			"fast_reroute_per_prefix_tiebreaker_srlg_disjoint": schema.Int64Attribute{
+			"fast_reroute_per_prefix_ti_lfa_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable TI LFA computation").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_downstream_index": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set preference order among tiebreakers").AddIntegerRangeDescription(1, 255).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 255),
 				},
 			},
-			"fast_reroute_per_prefix_tiebreaker_node_protecting": schema.Int64Attribute{
+			"fast_reroute_per_prefix_tiebreaker_downstream_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable tiebreaker").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_lc_disjoint_index": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set preference order among tiebreakers").AddIntegerRangeDescription(1, 255).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 255),
 				},
+			},
+			"fast_reroute_per_prefix_tiebreaker_lc_disjoint_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable tiebreaker").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set preference order among tiebreakers").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable tiebreaker").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_node_protecting_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set preference order among tiebreakers").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"fast_reroute_per_prefix_tiebreaker_node_protecting_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable tiebreaker").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_primary_path_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set preference order among tiebreakers").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"fast_reroute_per_prefix_tiebreaker_primary_path_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable tiebreaker").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_secondary_path_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set preference order among tiebreakers").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"fast_reroute_per_prefix_tiebreaker_secondary_path_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable tiebreaker").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_interface_disjoint_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set preference order among tiebreakers").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"fast_reroute_per_prefix_tiebreaker_interface_disjoint_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable tiebreaker").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set preference order among tiebreakers").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"fast_reroute_per_prefix_tiebreaker_srlg_disjoint_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable tiebreaker").String,
+				Optional:            true,
+			},
+			"loopback_stub_network_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable advertising loopback as a stub network").String,
+				Optional:            true,
+			},
+			"loopback_stub_network_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable advertising loopback as a stub network").String,
+				Optional:            true,
+			},
+			"link_down_fast_detect": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable fast or early detection of link-down events").String,
+				Optional:            true,
+			},
+			"prefix_sid_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SID Index").AddIntegerRangeDescription(0, 1048575).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 1048575),
+				},
+			},
+			"prefix_sid_index_explicit_null": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Force penultimate hop to send explicit-null label").String,
+				Optional:            true,
+			},
+			"prefix_sid_index_n_flag_clear": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Not a node SID (e.g. for anycast SID use)").String,
+				Optional:            true,
+			},
+			"prefix_sid_absolute": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SID value").AddIntegerRangeDescription(16000, 1048575).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(16000, 1048575),
+				},
+			},
+			"prefix_sid_absolute_explicit_null": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Force penultimate hop to send explicit-null label").String,
+				Optional:            true,
+			},
+			"prefix_sid_absolute_n_flag_clear": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Not a node SID (e.g. for anycast SID use)").String,
+				Optional:            true,
 			},
 			"prefix_sid_strict_spf_index": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("SID Index").AddIntegerRangeDescription(0, 1048575).String,
@@ -170,6 +707,29 @@ func (r *RouterOSPFAreaInterfaceResource) Schema(ctx context.Context, req resour
 				Validators: []validator.Int64{
 					int64validator.Between(0, 1048575),
 				},
+			},
+			"prefix_sid_strict_spf_index_explicit_null": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Force penultimate hop to send explicit-null label").String,
+				Optional:            true,
+			},
+			"prefix_sid_strict_spf_index_n_flag_clear": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Not a node SID (e.g. for anycast SID use)").String,
+				Optional:            true,
+			},
+			"prefix_sid_strict_spf_absolute": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SID value").AddIntegerRangeDescription(16000, 1048575).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(16000, 1048575),
+				},
+			},
+			"prefix_sid_strict_spf_absolute_explicit_null": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Force penultimate hop to send explicit-null label").String,
+				Optional:            true,
+			},
+			"prefix_sid_strict_spf_absolute_n_flag_clear": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Not a node SID (e.g. for anycast SID use)").String,
+				Optional:            true,
 			},
 			"prefix_sid_algorithms": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Algorithm Specific Prefix SID Configuration").String,
@@ -183,7 +743,7 @@ func (r *RouterOSPFAreaInterfaceResource) Schema(ctx context.Context, req resour
 								int64validator.Between(128, 255),
 							},
 						},
-						"index_sid_index": schema.Int64Attribute{
+						"index": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("SID Index").AddIntegerRangeDescription(0, 1048575).String,
 							Optional:            true,
 							Validators: []validator.Int64{
@@ -198,7 +758,7 @@ func (r *RouterOSPFAreaInterfaceResource) Schema(ctx context.Context, req resour
 							MarkdownDescription: helpers.NewAttributeDescription("Not a node SID (e.g. for anycast SID use)").String,
 							Optional:            true,
 						},
-						"absolute_sid_label": schema.Int64Attribute{
+						"absolute": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("SID value").AddIntegerRangeDescription(16000, 1048575).String,
 							Optional:            true,
 							Validators: []validator.Int64{
@@ -215,6 +775,98 @@ func (r *RouterOSPFAreaInterfaceResource) Schema(ctx context.Context, req resour
 						},
 					},
 				},
+			},
+			"segment_routing_forwarding_mpls": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use MPLS for Segment-routing forwarding").String,
+				Optional:            true,
+			},
+			"segment_routing_forwarding_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable Segment-routing on interface").String,
+				Optional:            true,
+			},
+			"adjacency_sid_indexes": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SID Index").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"sid_index": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("SID Index").AddIntegerRangeDescription(0, 1048575).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 1048575),
+							},
+						},
+						"protected": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Protect the static adjacency SID").String,
+							Optional:            true,
+						},
+						"neighbor_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Provide Neighbor IP address associated with this SID").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+					},
+				},
+			},
+			"adjacency_sid_absolutes": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SID value").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"sid_value": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("SID value").AddIntegerRangeDescription(15000, 1048575).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(15000, 1048575),
+							},
+						},
+						"protected": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Protect the static adjacency SID").String,
+							Optional:            true,
+						},
+						"neighbor_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Provide Neighbor IP address associated with this SID").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+					},
+				},
+			},
+			"weight": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Interface weight").AddIntegerRangeDescription(1, 16777214).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 16777214),
+				},
+			},
+			"advertise_prefix_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify the route-policy for conditional advertising").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"delay_normalize_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Normalization interval").AddIntegerRangeDescription(1, 16777215).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 16777215),
+				},
+			},
+			"delay_normalize_offset": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Normalization offset").AddIntegerRangeDescription(0, 16777215).AddDefaultValueDescription("0").String,
+				Optional:            true,
+				Computed:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 16777215),
+				},
+				Default: int64default.StaticInt64(0),
 			},
 		},
 	}

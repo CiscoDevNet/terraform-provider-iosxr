@@ -97,9 +97,37 @@ func (r *EVPNInterfaceResource) Schema(ctx context.Context, req resource.SchemaR
 					int64validator.Between(1, 4294967295),
 				},
 			},
-			"ethernet_segment_identifier_type_zero_esi": schema.StringAttribute{
+			"timers_peering": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Interface-specific peering timer").AddIntegerRangeDescription(0, 300).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 300),
+				},
+			},
+			"timers_recovery": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Interface-specific recovery timer").AddIntegerRangeDescription(0, 3600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 3600),
+				},
+			},
+			"timers_carving": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Interface-specific carving timer").AddIntegerRangeDescription(0, 300).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 300),
+				},
+			},
+			"timers_ac_debounce": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Interface-specific AC Debounce timer").AddIntegerRangeDescription(0, 300000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 300000),
+				},
+			},
+			"ethernet_segment_esi_zero": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("ESI value").String,
-				Required:            true,
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 254),
 				},
@@ -118,6 +146,70 @@ func (r *EVPNInterfaceResource) Schema(ctx context.Context, req resource.SchemaR
 			},
 			"ethernet_segment_load_balancing_mode_single_flow_active": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Single-Flow-Active load balancing").String,
+				Optional:            true,
+			},
+			"ethernet_segment_force_single_homed": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Ethernet segment is to remain single-home").String,
+				Optional:            true,
+			},
+			"ethernet_segment_service_carving_manual_primary": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Primary services list").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 150),
+				},
+			},
+			"ethernet_segment_service_carving_manual_secondary": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Secondary services list").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 150),
+				},
+			},
+			"ethernet_segment_service_carving_hrw": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("HRW mode of carving services").String,
+				Optional:            true,
+			},
+			"ethernet_segment_service_carving_multicast_hrw_s_g": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("HRW s,g mode").String,
+				Optional:            true,
+			},
+			"ethernet_segment_service_carving_multicast_hrw_g": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("HRW *,g mode").String,
+				Optional:            true,
+			},
+			"ethernet_segment_service_carving_preference_based_weight": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Preference value").AddIntegerRangeDescription(0, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 65535),
+				},
+			},
+			"ethernet_segment_service_carving_preference_based_access_driven": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Access-Driven DF Election").String,
+				Optional:            true,
+			},
+			"ethernet_segment_bgp_rt": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set ES-Import Route Target").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
+				},
+			},
+			"ethernet_segment_convergence_reroute": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Redirect unicast traffic to backup peer").String,
+				Optional:            true,
+			},
+			"ethernet_segment_convergence_mac_mobility": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("MAC-Mobility triggered reconvergence").String,
+				Optional:            true,
+			},
+			"ethernet_segment_convergence_nexthop_tracking": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable EVPN procedures to be influenced by BGP nexthop reachability").String,
+				Optional:            true,
+			},
+			"access_signal_bundle_down": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Signal Bundle Down").String,
 				Optional:            true,
 			},
 		},

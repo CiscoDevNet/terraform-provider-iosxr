@@ -1,7 +1,6 @@
 ---
 name: EVPN Segment Routing SRv6 EVI
 path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn/evis/segment-routing/srv6/evi[vpn-id=%v]
-#no_delete_attributes: true
 doc_category: EVPN
 attributes:
   - yang_name: vpn-id

@@ -19,8 +19,7 @@ description: |-
 - BREAKING CHANGE: Consolidate `iosxr_l2vpn_xconnect_group_p2p` into `iosxr_l2vpn_xconnect_group` resource and data source
 - BREAKING CHANGE: Consolidate `iosxr_l2vpn_bridge_group` into `iosxr_l2vpn_bridge_group_bridge_domain` resource and data source
 - BREAKING CHANGE: Decompose `iosxr_segment_routing_te` on-demand-colors into `iosxr_segment_routing_te_on_demand_color` resource and data source
-- BREAKING CHANGE: Decompose `iosxr_mpls_ldp` into `iosxr_mpls_ldp`, `iosxr_mpls_ldp_address_family`, `iosxr_mpls_ldp_interface`, `iosxr_mpls_ldp_mldp`,
-  `iosxr_mpls_ldp_vrf` resource and data source
+- BREAKING CHANGE: Decompose `iosxr_mpls_ldp` into `iosxr_mpls_ldp`, `iosxr_mpls_ldp_address_family`, `iosxr_mpls_ldp_interface`, `iosxr_mpls_ldp_mldp`, `iosxr_mpls_ldp_vrf` resource and data source
 - BREAKING CHANGE: Rename `bgp_rd` attributes for consistency with other definitions in `iosxr_evpn_evi` resource and data source
 - BREAKING CHANGE: Rename `pcc_source_address` to `pcc_source_address_ipv4` in `iosxr_segment_routing_te` resource and data source
 - BREAKING CHANGE: Rename `pce_peers` to `pce_peers_ipv4` in `iosxr_segment_routing_te` resource and data source

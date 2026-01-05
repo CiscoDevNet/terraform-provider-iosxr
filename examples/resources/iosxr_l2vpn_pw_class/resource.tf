@@ -1,5 +1,5 @@
 resource "iosxr_l2vpn_pw_class" "example" {
-  pw_class_name                                                = "PW-CLASS1"
+  name                                                         = "PW-CLASS1"
   encapsulation_mpls                                           = true
   encapsulation_mpls_protocol_ldp                              = true
   encapsulation_mpls_control_word                              = true

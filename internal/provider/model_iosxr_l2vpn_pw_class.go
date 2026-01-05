@@ -37,7 +37,7 @@ type L2VPNPWClass struct {
 	Device                                                      types.String `tfsdk:"device"`
 	Id                                                          types.String `tfsdk:"id"`
 	DeleteMode                                                  types.String `tfsdk:"delete_mode"`
-	PwClassName                                                 types.String `tfsdk:"pw_class_name"`
+	Name                                                        types.String `tfsdk:"name"`
 	EncapsulationMpls                                           types.Bool   `tfsdk:"encapsulation_mpls"`
 	EncapsulationMplsProtocolLdp                                types.Bool   `tfsdk:"encapsulation_mpls_protocol_ldp"`
 	EncapsulationMplsControlWord                                types.Bool   `tfsdk:"encapsulation_mpls_control_word"`
@@ -79,7 +79,7 @@ type L2VPNPWClass struct {
 type L2VPNPWClassData struct {
 	Device                                                      types.String `tfsdk:"device"`
 	Id                                                          types.String `tfsdk:"id"`
-	PwClassName                                                 types.String `tfsdk:"pw_class_name"`
+	Name                                                        types.String `tfsdk:"name"`
 	EncapsulationMpls                                           types.Bool   `tfsdk:"encapsulation_mpls"`
 	EncapsulationMplsProtocolLdp                                types.Bool   `tfsdk:"encapsulation_mpls_protocol_ldp"`
 	EncapsulationMplsControlWord                                types.Bool   `tfsdk:"encapsulation_mpls_control_word"`
@@ -123,11 +123,11 @@ type L2VPNPWClassData struct {
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
 
 func (data L2VPNPWClass) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/pw-classes/pw-class[pw-class-name=%s]", data.PwClassName.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/pw-classes/pw-class[pw-class-name=%s]", data.Name.ValueString())
 }
 
 func (data L2VPNPWClassData) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/pw-classes/pw-class[pw-class-name=%s]", data.PwClassName.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/pw-classes/pw-class[pw-class-name=%s]", data.Name.ValueString())
 }
 
 // End of section. //template:end getPath
@@ -136,8 +136,8 @@ func (data L2VPNPWClassData) getPath() string {
 
 func (data L2VPNPWClass) toBody(ctx context.Context) string {
 	body := "{}"
-	if !data.PwClassName.IsNull() && !data.PwClassName.IsUnknown() {
-		body, _ = sjson.Set(body, "pw-class-name", data.PwClassName.ValueString())
+	if !data.Name.IsNull() && !data.Name.IsUnknown() {
+		body, _ = sjson.Set(body, "pw-class-name", data.Name.ValueString())
 	}
 	if !data.EncapsulationMpls.IsNull() && !data.EncapsulationMpls.IsUnknown() {
 		if data.EncapsulationMpls.ValueBool() {

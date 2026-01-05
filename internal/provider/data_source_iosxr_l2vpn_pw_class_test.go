@@ -90,7 +90,7 @@ resource "iosxr_gnmi" "PreReq0" {
 func testAccDataSourceIosxrL2VPNPWClassConfig() string {
 	config := `resource "iosxr_l2vpn_pw_class" "test" {` + "\n"
 	config += `	delete_mode = "attributes"` + "\n"
-	config += `	pw_class_name = "PW-CLASS1"` + "\n"
+	config += `	name = "PW-CLASS1"` + "\n"
 	config += `	encapsulation_mpls = true` + "\n"
 	config += `	encapsulation_mpls_protocol_ldp = true` + "\n"
 	config += `	encapsulation_mpls_control_word = true` + "\n"
@@ -122,7 +122,7 @@ func testAccDataSourceIosxrL2VPNPWClassConfig() string {
 
 	config += `
 		data "iosxr_l2vpn_pw_class" "test" {
-			pw_class_name = "PW-CLASS1"
+			name = "PW-CLASS1"
 			depends_on = [iosxr_l2vpn_pw_class.test]
 		}
 	`

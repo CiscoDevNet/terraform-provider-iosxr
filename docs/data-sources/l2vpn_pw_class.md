@@ -14,7 +14,7 @@ This data source can read the L2VPN PW Class configuration.
 
 ```terraform
 data "iosxr_l2vpn_pw_class" "example" {
-  pw_class_name = "PW-CLASS1"
+  name = "PW-CLASS1"
 }
 ```
 
@@ -23,7 +23,7 @@ data "iosxr_l2vpn_pw_class" "example" {
 
 ### Required
 
-- `pw_class_name` (String) Pseudowire class template
+- `name` (String) Pseudowire class template
 
 ### Optional
 

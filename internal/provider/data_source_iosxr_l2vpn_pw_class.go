@@ -67,7 +67,7 @@ func (d *L2VPNPWClassDataSource) Schema(ctx context.Context, req datasource.Sche
 				MarkdownDescription: "The path of the retrieved object.",
 				Computed:            true,
 			},
-			"pw_class_name": schema.StringAttribute{
+			"name": schema.StringAttribute{
 				MarkdownDescription: "Pseudowire class template",
 				Required:            true,
 			},

@@ -14,7 +14,7 @@ This resource can manage the L2VPN PW Class configuration.
 
 ```terraform
 resource "iosxr_l2vpn_pw_class" "example" {
-  pw_class_name                                                = "PW-CLASS1"
+  name                                                         = "PW-CLASS1"
   encapsulation_mpls                                           = true
   encapsulation_mpls_protocol_ldp                              = true
   encapsulation_mpls_control_word                              = true
@@ -43,7 +43,7 @@ resource "iosxr_l2vpn_pw_class" "example" {
 
 ### Required
 
-- `pw_class_name` (String) Pseudowire class template
+- `name` (String) Pseudowire class template
 
 ### Optional
 
@@ -107,5 +107,5 @@ Import is supported using the following syntax:
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import iosxr_l2vpn_pw_class.example "<pw_class_name>"
+terraform import iosxr_l2vpn_pw_class.example "<name>"
 ```

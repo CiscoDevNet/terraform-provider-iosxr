@@ -35,7 +35,7 @@ import (
 
 func TestAccIosxrL2VPNPWClass(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "pw_class_name", "PW-CLASS1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "name", "PW-CLASS1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_protocol_ldp", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_control_word", "true"))
@@ -92,9 +92,9 @@ func TestAccIosxrL2VPNPWClass(t *testing.T) {
 func iosxrL2VPNPWClassImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 		primary := s.RootModule().Resources[resourceName].Primary
-		PwClassName := primary.Attributes["pw_class_name"]
+		Name := primary.Attributes["name"]
 
-		return fmt.Sprintf("%s", PwClassName), nil
+		return fmt.Sprintf("%s", Name), nil
 	}
 }
 
@@ -116,7 +116,7 @@ resource "iosxr_gnmi" "PreReq0" {
 
 func testAccIosxrL2VPNPWClassConfig_minimum() string {
 	config := `resource "iosxr_l2vpn_pw_class" "test" {` + "\n"
-	config += `	pw_class_name = "PW-CLASS1"` + "\n"
+	config += `	name = "PW-CLASS1"` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
@@ -129,7 +129,7 @@ func testAccIosxrL2VPNPWClassConfig_minimum() string {
 func testAccIosxrL2VPNPWClassConfig_all() string {
 	config := `resource "iosxr_l2vpn_pw_class" "test" {` + "\n"
 	config += `	delete_mode = "all"` + "\n"
-	config += `	pw_class_name = "PW-CLASS1"` + "\n"
+	config += `	name = "PW-CLASS1"` + "\n"
 	config += `	encapsulation_mpls = true` + "\n"
 	config += `	encapsulation_mpls_protocol_ldp = true` + "\n"
 	config += `	encapsulation_mpls_control_word = true` + "\n"

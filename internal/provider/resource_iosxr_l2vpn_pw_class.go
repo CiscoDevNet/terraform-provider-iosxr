@@ -80,7 +80,7 @@ func (r *L2VPNPWClassResource) Schema(ctx context.Context, req resource.SchemaRe
 					stringvalidator.OneOf("all", "attributes"),
 				},
 			},
-			"pw_class_name": schema.StringAttribute{
+			"name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Pseudowire class template").String,
 				Required:            true,
 				Validators: []validator.String{
@@ -547,15 +547,15 @@ func (r *L2VPNPWClassResource) ImportState(ctx context.Context, req resource.Imp
 	idParts = helpers.RemoveEmptyStrings(idParts)
 
 	if len(idParts) != 1 && len(idParts) != 2 {
-		expectedIdentifier := "Expected import identifier with format: '<pw_class_name>'"
-		expectedIdentifier += " or '<pw_class_name>,<device>'"
+		expectedIdentifier := "Expected import identifier with format: '<name>'"
+		expectedIdentifier += " or '<name>,<device>'"
 		resp.Diagnostics.AddError(
 			"Unexpected Import Identifier",
 			fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
 		)
 		return
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("pw_class_name"), idParts[0])...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("name"), idParts[0])...)
 	if len(idParts) == 2 {
 		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
 	}

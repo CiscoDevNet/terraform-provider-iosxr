@@ -4,6 +4,7 @@ path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/pw-classes/pw-class[pw-class-name=%s]
 doc_category: L2VPN
 attributes:
   - yang_name: pw-class-name
+    tf_name: name
     id: true
     example: PW-CLASS1
   - yang_name: encapsulation/mpls

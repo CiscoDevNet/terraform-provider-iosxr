@@ -340,6 +340,235 @@ attributes:
     tf_name: ipv6_nd_prefix_default_no_autoconfig
     exclude_test: true
     example: true
+  - yang_name: Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/Cisco-IOS-XR-um-ethernet-cfm-cfg:cfm/mep/domain
+    xpath: Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/mep/domain
+    tf_name: ethernet_cfm_mep_domains
+    test_tags: [NCS, C8000]
+    include_example: true
+    no_augment_config: true
+    type: List
+    description: "CFM Maintenance End Point domain configuration"
+    attributes:
+      - yang_name: domain-name
+        tf_name: domain_name
+        type: String
+        no_augment_config: true
+        description: "Domain name"
+        id: true
+        example: DOMAIN1
+      - yang_name: service
+        tf_name: service
+        type: String
+        no_augment_config: true
+        description: "Service name"
+        optional: true
+        example: SERVICE1
+      - yang_name: mep-id
+        tf_name: mep_id
+        type: Int64
+        no_augment_config: true
+        description: "MEP ID"
+        optional: true
+        example: 1
+      - yang_name: propagate-remote-status
+        tf_name: propagate_remote_status
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        description: "Propagate remote status"
+        example: true
+      - yang_name: cos
+        tf_name: cos
+        type: Int64
+        no_augment_config: true
+        description: "Class of Service"
+        example: 5
+      - yang_name: loss-measurement/counters/aggregate
+        tf_name: loss_measurement_counters_aggregate
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        description: "Allocate aggregated packet counters"
+        exclude_test: true
+        example: true
+      - yang_name: loss-measurement/counters/priority/cos-range/start-of-cos-range
+        tf_name: loss_measurement_counters_priority_cos_range_start
+        type: Int64
+        no_augment_config: true
+        description: "Start of CoS range"
+        optional: true
+        example: 1
+      - yang_name: loss-measurement/counters/priority/cos-range/end-of-cos-range
+        tf_name: loss_measurement_counters_priority_cos_range_end
+        type: Int64
+        no_augment_config: true
+        description: "End of CoS range"
+        optional: true
+        example: 7
+      - yang_name: loss-measurement/counters/priority/cos-values/cos-value1
+        tf_name: loss_measurement_counters_priority_cos_value_1
+        type: Int64
+        no_augment_config: true
+        description: "CoS value 1"
+        optional: true
+        exclude_test: true
+        example: 1
+      - yang_name: loss-measurement/counters/priority/cos-values/cos-value2
+        tf_name: loss_measurement_counters_priority_cos_value_2
+        type: Int64
+        no_augment_config: true
+        description: "CoS value 2"
+        optional: true
+        exclude_test: true
+        example: 2
+      - yang_name: loss-measurement/counters/priority/cos-values/cos-value3
+        tf_name: loss_measurement_counters_priority_cos_value_3
+        type: Int64
+        no_augment_config: true
+        description: "CoS value 3"
+        optional: true
+        exclude_test: true
+        example: 3
+      - yang_name: loss-measurement/counters/priority/cos-values/cos-value4
+        tf_name: loss_measurement_counters_priority_cos_value_4
+        type: Int64
+        no_augment_config: true
+        description: "CoS value 4"
+        optional: true
+        exclude_test: true
+        example: 4
+      - yang_name: loss-measurement/counters/priority/cos-values/cos-value5
+        tf_name: loss_measurement_counters_priority_cos_value_5
+        type: Int64
+        no_augment_config: true
+        description: "CoS value 5"
+        optional: true
+        exclude_test: true
+        example: 5
+      - yang_name: loss-measurement/counters/priority/cos-values/cos-value6
+        tf_name: loss_measurement_counters_priority_cos_value_6
+        type: Int64
+        no_augment_config: true
+        description: "CoS value 6"
+        optional: true
+        exclude_test: true
+        example: 6
+      - yang_name: loss-measurement/counters/priority/cos-values/cos-value7
+        tf_name: loss_measurement_counters_priority_cos_value_7
+        type: Int64
+        no_augment_config: true
+        description: "CoS value 7"
+        optional: true
+        exclude_test: true
+        example: 7
+      - yang_name: sla/operation/profile/target/mep-id/profile-target-mep-id
+        tf_name: sla_operation_profile_target_mep_ids
+        type: List
+        no_augment_config: true
+        description: "SLA operation profile target MEP IDs"
+        attributes:
+          - yang_name: profile-name
+            tf_name: profile_name
+            type: String
+            no_augment_config: true
+            description: "Profile name"
+            id: true
+            example: SLA-PROFILE-1
+          - yang_name: mep-id
+            tf_name: mep_id
+            type: Int64
+            no_augment_config: true
+            description: "Target MEP ID"
+            id: true
+            example: 2
+      - yang_name: sla/operation/profile/target/mac-address/profile-target-mac-address
+        tf_name: sla_operation_profile_target_mac_addresses
+        type: List
+        no_augment_config: true
+        description: "SLA operation profile target MAC addresses"
+        attributes:
+          - yang_name: profile-name
+            tf_name: profile_name
+            type: String
+            no_augment_config: true
+            description: "Profile name"
+            id: true
+            example: SLA-PROFILE-2
+          - yang_name: mac-address
+            tf_name: mac_address
+            type: String
+            no_augment_config: true
+            description: "Target MAC address"
+            id: true
+            example: 00:11:22:33:44:55
+  - yang_name: Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/Cisco-IOS-XR-um-ethernet-cfm-cfg:cfm/ais/transmission/up/interval
+    xpath: Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/ais/transmission/up/interval
+    tf_name: ethernet_cfm_ais_transmission_up_interval
+    test_tags: [NCS, C8000]
+    include_example: true
+    no_augment_config: true
+    type: String
+    delete_parent: true
+    enum_values:
+      - "1s"
+      - "1m"
+    description: "Specify the AIS transmission interval"
+    example: 1s
+  - yang_name: Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/Cisco-IOS-XR-um-ethernet-cfm-cfg:cfm/ais/transmission/up/cos
+    xpath: Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/ais/transmission/up/cos
+    tf_name: ethernet_cfm_ais_transmission_up_cos
+    test_tags: [NCS, C8000]
+    include_example: true
+    no_augment_config: true
+    type: Int64
+    delete_parent: true
+    min_int: 0
+    max_int: 7
+    description: "Specify CoS bits for AIS messages"
+    example: 5
+  - yang_name: Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/Cisco-IOS-XR-um-ethernet-cfm-cfg:cfm/bandwidth-notifications/hold-off
+    xpath: Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/bandwidth-notifications/hold-off
+    tf_name: ethernet_cfm_bandwidth_notifications_hold_off
+    test_tags: [NCS, C8000]
+    include_example: true
+    no_augment_config: true
+    type: Int64
+    min_int: 0
+    max_int: 600
+    description: "Hold-off time (in seconds)"
+    example: 60
+  - yang_name: Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/Cisco-IOS-XR-um-ethernet-cfm-cfg:cfm/bandwidth-notifications/wait-to-restore
+    xpath: Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/bandwidth-notifications/wait-to-restore
+    tf_name: ethernet_cfm_bandwidth_notifications_wait_to_restore
+    test_tags: [NCS, C8000]
+    include_example: true
+    no_augment_config: true
+    type: Int64
+    min_int: 0
+    max_int: 600
+    description: "Wait-to-restore time (in seconds)"
+    example: 30
+  - yang_name: Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/Cisco-IOS-XR-um-ethernet-cfm-cfg:cfm/bandwidth-notifications/loss-threshold
+    xpath: Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/bandwidth-notifications/loss-threshold
+    tf_name: ethernet_cfm_bandwidth_notifications_loss_threshold
+    test_tags: [NCS, C8000]
+    include_example: true
+    no_augment_config: true
+    type: Int64
+    min_int: 2
+    max_int: 255
+    description: "Loss threshold (in number of BNMs)"
+    example: 5
+  - yang_name: Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/Cisco-IOS-XR-um-ethernet-cfm-cfg:cfm/bandwidth-notifications/log/changes
+    xpath: Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/bandwidth-notifications/log/changes
+    tf_name: ethernet_cfm_bandwidth_notifications_log_changes
+    test_tags: [NCS, C8000]
+    include_example: true
+    no_augment_config: true
+    type: Bool
+    type_yang_bool: presence
+    description: "Enable logging of bandwidth changes"
+    example: true
   - yang_name: Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/ingress-monitors/ingress-monitor
     tf_name: flow_ipv4_ingress_monitors
     test_tags: [FLOW]

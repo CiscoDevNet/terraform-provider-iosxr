@@ -610,6 +610,145 @@ func (r *InterfaceBundleEtherResource) Schema(ctx context.Context, req resource.
 				MarkdownDescription: helpers.NewAttributeDescription("Do not use prefix for autoconfiguration").String,
 				Optional:            true,
 			},
+			"ethernet_cfm_mep_domains": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("CFM Maintenance End Point domain configuration").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"domain_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Domain name").String,
+							Required:            true,
+						},
+						"service": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Service name").String,
+							Optional:            true,
+						},
+						"mep_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("MEP ID").String,
+							Optional:            true,
+						},
+						"propagate_remote_status": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Propagate remote status").String,
+							Optional:            true,
+						},
+						"cos": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Class of Service").String,
+							Optional:            true,
+						},
+						"loss_measurement_counters_aggregate": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Allocate aggregated packet counters").String,
+							Optional:            true,
+						},
+						"loss_measurement_counters_priority_cos_range_start": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Start of CoS range").String,
+							Optional:            true,
+						},
+						"loss_measurement_counters_priority_cos_range_end": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("End of CoS range").String,
+							Optional:            true,
+						},
+						"loss_measurement_counters_priority_cos_value_1": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("CoS value 1").String,
+							Optional:            true,
+						},
+						"loss_measurement_counters_priority_cos_value_2": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("CoS value 2").String,
+							Optional:            true,
+						},
+						"loss_measurement_counters_priority_cos_value_3": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("CoS value 3").String,
+							Optional:            true,
+						},
+						"loss_measurement_counters_priority_cos_value_4": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("CoS value 4").String,
+							Optional:            true,
+						},
+						"loss_measurement_counters_priority_cos_value_5": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("CoS value 5").String,
+							Optional:            true,
+						},
+						"loss_measurement_counters_priority_cos_value_6": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("CoS value 6").String,
+							Optional:            true,
+						},
+						"loss_measurement_counters_priority_cos_value_7": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("CoS value 7").String,
+							Optional:            true,
+						},
+						"sla_operation_profile_target_mep_ids": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("SLA operation profile target MEP IDs").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"profile_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Profile name").String,
+										Required:            true,
+									},
+									"mep_id": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Target MEP ID").String,
+										Required:            true,
+									},
+								},
+							},
+						},
+						"sla_operation_profile_target_mac_addresses": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("SLA operation profile target MAC addresses").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"profile_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Profile name").String,
+										Required:            true,
+									},
+									"mac_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Target MAC address").String,
+										Required:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"ethernet_cfm_ais_transmission_up_interval": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify the AIS transmission interval").AddStringEnumDescription("1s", "1m").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("1s", "1m"),
+				},
+			},
+			"ethernet_cfm_ais_transmission_up_cos": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify CoS bits for AIS messages").AddIntegerRangeDescription(0, 7).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 7),
+				},
+			},
+			"ethernet_cfm_bandwidth_notifications_hold_off": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Hold-off time (in seconds)").AddIntegerRangeDescription(0, 600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 600),
+				},
+			},
+			"ethernet_cfm_bandwidth_notifications_wait_to_restore": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Wait-to-restore time (in seconds)").AddIntegerRangeDescription(0, 600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 600),
+				},
+			},
+			"ethernet_cfm_bandwidth_notifications_loss_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Loss threshold (in number of BNMs)").AddIntegerRangeDescription(2, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(2, 255),
+				},
+			},
+			"ethernet_cfm_bandwidth_notifications_log_changes": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable logging of bandwidth changes").String,
+				Optional:            true,
+			},
 			"flow_ipv4_ingress_monitors": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specify a flow monitor for packets").String,
 				Optional:            true,

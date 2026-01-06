@@ -124,6 +124,13 @@ type InterfaceEthernet struct {
 	Ipv6NdRedirects                                                          types.Bool                                                       `tfsdk:"ipv6_nd_redirects"`
 	Ipv6NdPrefixDefaultNoAdv                                                 types.Bool                                                       `tfsdk:"ipv6_nd_prefix_default_no_adv"`
 	Ipv6NdPrefixDefaultNoAutoconfig                                          types.Bool                                                       `tfsdk:"ipv6_nd_prefix_default_no_autoconfig"`
+	EthernetCfmMepDomains                                                    []InterfaceEthernetEthernetCfmMepDomains                         `tfsdk:"ethernet_cfm_mep_domains"`
+	EthernetCfmAisTransmissionUpInterval                                     types.String                                                     `tfsdk:"ethernet_cfm_ais_transmission_up_interval"`
+	EthernetCfmAisTransmissionUpCos                                          types.Int64                                                      `tfsdk:"ethernet_cfm_ais_transmission_up_cos"`
+	EthernetCfmBandwidthNotificationsHoldOff                                 types.Int64                                                      `tfsdk:"ethernet_cfm_bandwidth_notifications_hold_off"`
+	EthernetCfmBandwidthNotificationsWaitToRestore                           types.Int64                                                      `tfsdk:"ethernet_cfm_bandwidth_notifications_wait_to_restore"`
+	EthernetCfmBandwidthNotificationsLossThreshold                           types.Int64                                                      `tfsdk:"ethernet_cfm_bandwidth_notifications_loss_threshold"`
+	EthernetCfmBandwidthNotificationsLogChanges                              types.Bool                                                       `tfsdk:"ethernet_cfm_bandwidth_notifications_log_changes"`
 	FlowIpv4IngressMonitors                                                  []InterfaceEthernetFlowIpv4IngressMonitors                       `tfsdk:"flow_ipv4_ingress_monitors"`
 	FlowIpv4IngressMonitorSamplers                                           []InterfaceEthernetFlowIpv4IngressMonitorSamplers                `tfsdk:"flow_ipv4_ingress_monitor_samplers"`
 	FlowIpv4EgressMonitors                                                   []InterfaceEthernetFlowIpv4EgressMonitors                        `tfsdk:"flow_ipv4_egress_monitors"`
@@ -347,6 +354,13 @@ type InterfaceEthernetData struct {
 	Ipv6NdRedirects                                                          types.Bool                                                       `tfsdk:"ipv6_nd_redirects"`
 	Ipv6NdPrefixDefaultNoAdv                                                 types.Bool                                                       `tfsdk:"ipv6_nd_prefix_default_no_adv"`
 	Ipv6NdPrefixDefaultNoAutoconfig                                          types.Bool                                                       `tfsdk:"ipv6_nd_prefix_default_no_autoconfig"`
+	EthernetCfmMepDomains                                                    []InterfaceEthernetEthernetCfmMepDomains                         `tfsdk:"ethernet_cfm_mep_domains"`
+	EthernetCfmAisTransmissionUpInterval                                     types.String                                                     `tfsdk:"ethernet_cfm_ais_transmission_up_interval"`
+	EthernetCfmAisTransmissionUpCos                                          types.Int64                                                      `tfsdk:"ethernet_cfm_ais_transmission_up_cos"`
+	EthernetCfmBandwidthNotificationsHoldOff                                 types.Int64                                                      `tfsdk:"ethernet_cfm_bandwidth_notifications_hold_off"`
+	EthernetCfmBandwidthNotificationsWaitToRestore                           types.Int64                                                      `tfsdk:"ethernet_cfm_bandwidth_notifications_wait_to_restore"`
+	EthernetCfmBandwidthNotificationsLossThreshold                           types.Int64                                                      `tfsdk:"ethernet_cfm_bandwidth_notifications_loss_threshold"`
+	EthernetCfmBandwidthNotificationsLogChanges                              types.Bool                                                       `tfsdk:"ethernet_cfm_bandwidth_notifications_log_changes"`
 	FlowIpv4IngressMonitors                                                  []InterfaceEthernetFlowIpv4IngressMonitors                       `tfsdk:"flow_ipv4_ingress_monitors"`
 	FlowIpv4IngressMonitorSamplers                                           []InterfaceEthernetFlowIpv4IngressMonitorSamplers                `tfsdk:"flow_ipv4_ingress_monitor_samplers"`
 	FlowIpv4EgressMonitors                                                   []InterfaceEthernetFlowIpv4EgressMonitors                        `tfsdk:"flow_ipv4_egress_monitors"`
@@ -510,6 +524,25 @@ type InterfaceEthernetIpv6Eui64Addresses struct {
 	RouteTag     types.Int64  `tfsdk:"route_tag"`
 	Algorithm    types.Int64  `tfsdk:"algorithm"`
 }
+type InterfaceEthernetEthernetCfmMepDomains struct {
+	DomainName                                   types.String                                                                  `tfsdk:"domain_name"`
+	Service                                      types.String                                                                  `tfsdk:"service"`
+	MepId                                        types.Int64                                                                   `tfsdk:"mep_id"`
+	PropagateRemoteStatus                        types.Bool                                                                    `tfsdk:"propagate_remote_status"`
+	Cos                                          types.Int64                                                                   `tfsdk:"cos"`
+	LossMeasurementCountersAggregate             types.Bool                                                                    `tfsdk:"loss_measurement_counters_aggregate"`
+	LossMeasurementCountersPriorityCosRangeStart types.Int64                                                                   `tfsdk:"loss_measurement_counters_priority_cos_range_start"`
+	LossMeasurementCountersPriorityCosRangeEnd   types.Int64                                                                   `tfsdk:"loss_measurement_counters_priority_cos_range_end"`
+	LossMeasurementCountersPriorityCosValue1     types.Int64                                                                   `tfsdk:"loss_measurement_counters_priority_cos_value_1"`
+	LossMeasurementCountersPriorityCosValue2     types.Int64                                                                   `tfsdk:"loss_measurement_counters_priority_cos_value_2"`
+	LossMeasurementCountersPriorityCosValue3     types.Int64                                                                   `tfsdk:"loss_measurement_counters_priority_cos_value_3"`
+	LossMeasurementCountersPriorityCosValue4     types.Int64                                                                   `tfsdk:"loss_measurement_counters_priority_cos_value_4"`
+	LossMeasurementCountersPriorityCosValue5     types.Int64                                                                   `tfsdk:"loss_measurement_counters_priority_cos_value_5"`
+	LossMeasurementCountersPriorityCosValue6     types.Int64                                                                   `tfsdk:"loss_measurement_counters_priority_cos_value_6"`
+	LossMeasurementCountersPriorityCosValue7     types.Int64                                                                   `tfsdk:"loss_measurement_counters_priority_cos_value_7"`
+	SlaOperationProfileTargetMepIds              []InterfaceEthernetEthernetCfmMepDomainsSlaOperationProfileTargetMepIds       `tfsdk:"sla_operation_profile_target_mep_ids"`
+	SlaOperationProfileTargetMacAddresses        []InterfaceEthernetEthernetCfmMepDomainsSlaOperationProfileTargetMacAddresses `tfsdk:"sla_operation_profile_target_mac_addresses"`
+}
 type InterfaceEthernetFlowIpv4IngressMonitors struct {
 	MonitorMapName types.String `tfsdk:"monitor_map_name"`
 }
@@ -605,6 +638,14 @@ type InterfaceEthernetPtpInteropEgressConversionClockClassMappings struct {
 type InterfaceEthernetPtpInteropIngressConversionClockClassMappings struct {
 	ClockClassToMapFrom types.Int64 `tfsdk:"clock_class_to_map_from"`
 	ClockClassToMapTo   types.Int64 `tfsdk:"clock_class_to_map_to"`
+}
+type InterfaceEthernetEthernetCfmMepDomainsSlaOperationProfileTargetMepIds struct {
+	ProfileName types.String `tfsdk:"profile_name"`
+	MepId       types.Int64  `tfsdk:"mep_id"`
+}
+type InterfaceEthernetEthernetCfmMepDomainsSlaOperationProfileTargetMacAddresses struct {
+	ProfileName types.String `tfsdk:"profile_name"`
+	MacAddress  types.String `tfsdk:"mac_address"`
 }
 
 // End of section. //template:end types
@@ -931,6 +972,26 @@ func (data InterfaceEthernet) toBody(ctx context.Context) string {
 	if !data.Ipv6NdPrefixDefaultNoAutoconfig.IsNull() && !data.Ipv6NdPrefixDefaultNoAutoconfig.IsUnknown() {
 		if data.Ipv6NdPrefixDefaultNoAutoconfig.ValueBool() {
 			body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-ipv6-nd-cfg:nd.prefix.default.no-autoconfig", map[string]string{})
+		}
+	}
+	if !data.EthernetCfmAisTransmissionUpInterval.IsNull() && !data.EthernetCfmAisTransmissionUpInterval.IsUnknown() {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.ais.transmission.up.interval", data.EthernetCfmAisTransmissionUpInterval.ValueString())
+	}
+	if !data.EthernetCfmAisTransmissionUpCos.IsNull() && !data.EthernetCfmAisTransmissionUpCos.IsUnknown() {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.ais.transmission.up.cos", strconv.FormatInt(data.EthernetCfmAisTransmissionUpCos.ValueInt64(), 10))
+	}
+	if !data.EthernetCfmBandwidthNotificationsHoldOff.IsNull() && !data.EthernetCfmBandwidthNotificationsHoldOff.IsUnknown() {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.bandwidth-notifications.hold-off", strconv.FormatInt(data.EthernetCfmBandwidthNotificationsHoldOff.ValueInt64(), 10))
+	}
+	if !data.EthernetCfmBandwidthNotificationsWaitToRestore.IsNull() && !data.EthernetCfmBandwidthNotificationsWaitToRestore.IsUnknown() {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.bandwidth-notifications.wait-to-restore", strconv.FormatInt(data.EthernetCfmBandwidthNotificationsWaitToRestore.ValueInt64(), 10))
+	}
+	if !data.EthernetCfmBandwidthNotificationsLossThreshold.IsNull() && !data.EthernetCfmBandwidthNotificationsLossThreshold.IsUnknown() {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.bandwidth-notifications.loss-threshold", strconv.FormatInt(data.EthernetCfmBandwidthNotificationsLossThreshold.ValueInt64(), 10))
+	}
+	if !data.EthernetCfmBandwidthNotificationsLogChanges.IsNull() && !data.EthernetCfmBandwidthNotificationsLogChanges.IsUnknown() {
+		if data.EthernetCfmBandwidthNotificationsLogChanges.ValueBool() {
+			body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.bandwidth-notifications.log.changes", map[string]string{})
 		}
 	}
 	if !data.FrequencySynchronization.IsNull() && !data.FrequencySynchronization.IsUnknown() {
@@ -1439,6 +1500,82 @@ func (data InterfaceEthernet) toBody(ctx context.Context) string {
 			}
 			if !item.Algorithm.IsNull() && !item.Algorithm.IsUnknown() {
 				body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.eui64-addresses.eui64-address"+"."+strconv.Itoa(index)+"."+"algorithm", strconv.FormatInt(item.Algorithm.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.EthernetCfmMepDomains) > 0 {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain", []interface{}{})
+		for index, item := range data.EthernetCfmMepDomains {
+			if !item.DomainName.IsNull() && !item.DomainName.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"domain-name", item.DomainName.ValueString())
+			}
+			if !item.Service.IsNull() && !item.Service.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"service", item.Service.ValueString())
+			}
+			if !item.MepId.IsNull() && !item.MepId.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"mep-id", strconv.FormatInt(item.MepId.ValueInt64(), 10))
+			}
+			if !item.PropagateRemoteStatus.IsNull() && !item.PropagateRemoteStatus.IsUnknown() {
+				if item.PropagateRemoteStatus.ValueBool() {
+					body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"propagate-remote-status", map[string]string{})
+				}
+			}
+			if !item.Cos.IsNull() && !item.Cos.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"cos", strconv.FormatInt(item.Cos.ValueInt64(), 10))
+			}
+			if !item.LossMeasurementCountersAggregate.IsNull() && !item.LossMeasurementCountersAggregate.IsUnknown() {
+				if item.LossMeasurementCountersAggregate.ValueBool() {
+					body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"loss-measurement.counters.aggregate", map[string]string{})
+				}
+			}
+			if !item.LossMeasurementCountersPriorityCosRangeStart.IsNull() && !item.LossMeasurementCountersPriorityCosRangeStart.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"loss-measurement.counters.priority.cos-range.start-of-cos-range", strconv.FormatInt(item.LossMeasurementCountersPriorityCosRangeStart.ValueInt64(), 10))
+			}
+			if !item.LossMeasurementCountersPriorityCosRangeEnd.IsNull() && !item.LossMeasurementCountersPriorityCosRangeEnd.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"loss-measurement.counters.priority.cos-range.end-of-cos-range", strconv.FormatInt(item.LossMeasurementCountersPriorityCosRangeEnd.ValueInt64(), 10))
+			}
+			if !item.LossMeasurementCountersPriorityCosValue1.IsNull() && !item.LossMeasurementCountersPriorityCosValue1.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"loss-measurement.counters.priority.cos-values.cos-value1", strconv.FormatInt(item.LossMeasurementCountersPriorityCosValue1.ValueInt64(), 10))
+			}
+			if !item.LossMeasurementCountersPriorityCosValue2.IsNull() && !item.LossMeasurementCountersPriorityCosValue2.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"loss-measurement.counters.priority.cos-values.cos-value2", strconv.FormatInt(item.LossMeasurementCountersPriorityCosValue2.ValueInt64(), 10))
+			}
+			if !item.LossMeasurementCountersPriorityCosValue3.IsNull() && !item.LossMeasurementCountersPriorityCosValue3.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"loss-measurement.counters.priority.cos-values.cos-value3", strconv.FormatInt(item.LossMeasurementCountersPriorityCosValue3.ValueInt64(), 10))
+			}
+			if !item.LossMeasurementCountersPriorityCosValue4.IsNull() && !item.LossMeasurementCountersPriorityCosValue4.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"loss-measurement.counters.priority.cos-values.cos-value4", strconv.FormatInt(item.LossMeasurementCountersPriorityCosValue4.ValueInt64(), 10))
+			}
+			if !item.LossMeasurementCountersPriorityCosValue5.IsNull() && !item.LossMeasurementCountersPriorityCosValue5.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"loss-measurement.counters.priority.cos-values.cos-value5", strconv.FormatInt(item.LossMeasurementCountersPriorityCosValue5.ValueInt64(), 10))
+			}
+			if !item.LossMeasurementCountersPriorityCosValue6.IsNull() && !item.LossMeasurementCountersPriorityCosValue6.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"loss-measurement.counters.priority.cos-values.cos-value6", strconv.FormatInt(item.LossMeasurementCountersPriorityCosValue6.ValueInt64(), 10))
+			}
+			if !item.LossMeasurementCountersPriorityCosValue7.IsNull() && !item.LossMeasurementCountersPriorityCosValue7.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"loss-measurement.counters.priority.cos-values.cos-value7", strconv.FormatInt(item.LossMeasurementCountersPriorityCosValue7.ValueInt64(), 10))
+			}
+			if len(item.SlaOperationProfileTargetMepIds) > 0 {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"sla.operation.profile.target.mep-id.profile-target-mep-id", []interface{}{})
+				for cindex, citem := range item.SlaOperationProfileTargetMepIds {
+					if !citem.ProfileName.IsNull() && !citem.ProfileName.IsUnknown() {
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"sla.operation.profile.target.mep-id.profile-target-mep-id"+"."+strconv.Itoa(cindex)+"."+"profile-name", citem.ProfileName.ValueString())
+					}
+					if !citem.MepId.IsNull() && !citem.MepId.IsUnknown() {
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"sla.operation.profile.target.mep-id.profile-target-mep-id"+"."+strconv.Itoa(cindex)+"."+"mep-id", strconv.FormatInt(citem.MepId.ValueInt64(), 10))
+					}
+				}
+			}
+			if len(item.SlaOperationProfileTargetMacAddresses) > 0 {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"sla.operation.profile.target.mac-address.profile-target-mac-address", []interface{}{})
+				for cindex, citem := range item.SlaOperationProfileTargetMacAddresses {
+					if !citem.ProfileName.IsNull() && !citem.ProfileName.IsUnknown() {
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"sla.operation.profile.target.mac-address.profile-target-mac-address"+"."+strconv.Itoa(cindex)+"."+"profile-name", citem.ProfileName.ValueString())
+					}
+					if !citem.MacAddress.IsNull() && !citem.MacAddress.IsUnknown() {
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"sla.operation.profile.target.mac-address.profile-target-mac-address"+"."+strconv.Itoa(cindex)+"."+"mac-address", citem.MacAddress.ValueString())
+					}
+				}
 			}
 		}
 	}
@@ -2545,6 +2682,215 @@ func (data *InterfaceEthernet) updateFromBody(ctx context.Context, res []byte) {
 		}
 	} else {
 		data.Ipv6NdPrefixDefaultNoAutoconfig = types.BoolNull()
+	}
+	for i := range data.EthernetCfmMepDomains {
+		keys := [...]string{"domain-name"}
+		keyValues := [...]string{data.EthernetCfmMepDomains[i].DomainName.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("domain-name"); value.Exists() && !data.EthernetCfmMepDomains[i].DomainName.IsNull() {
+			data.EthernetCfmMepDomains[i].DomainName = types.StringValue(value.String())
+		} else {
+			data.EthernetCfmMepDomains[i].DomainName = types.StringNull()
+		}
+		if value := r.Get("service"); value.Exists() && !data.EthernetCfmMepDomains[i].Service.IsNull() {
+			data.EthernetCfmMepDomains[i].Service = types.StringValue(value.String())
+		} else {
+			data.EthernetCfmMepDomains[i].Service = types.StringNull()
+		}
+		if value := r.Get("mep-id"); value.Exists() && !data.EthernetCfmMepDomains[i].MepId.IsNull() {
+			data.EthernetCfmMepDomains[i].MepId = types.Int64Value(value.Int())
+		} else {
+			data.EthernetCfmMepDomains[i].MepId = types.Int64Null()
+		}
+		if value := r.Get("propagate-remote-status"); !data.EthernetCfmMepDomains[i].PropagateRemoteStatus.IsNull() {
+			if value.Exists() {
+				data.EthernetCfmMepDomains[i].PropagateRemoteStatus = types.BoolValue(true)
+			} else {
+				data.EthernetCfmMepDomains[i].PropagateRemoteStatus = types.BoolValue(false)
+			}
+		} else {
+			data.EthernetCfmMepDomains[i].PropagateRemoteStatus = types.BoolNull()
+		}
+		if value := r.Get("cos"); value.Exists() && !data.EthernetCfmMepDomains[i].Cos.IsNull() {
+			data.EthernetCfmMepDomains[i].Cos = types.Int64Value(value.Int())
+		} else {
+			data.EthernetCfmMepDomains[i].Cos = types.Int64Null()
+		}
+		if value := r.Get("loss-measurement.counters.aggregate"); !data.EthernetCfmMepDomains[i].LossMeasurementCountersAggregate.IsNull() {
+			if value.Exists() {
+				data.EthernetCfmMepDomains[i].LossMeasurementCountersAggregate = types.BoolValue(true)
+			} else {
+				data.EthernetCfmMepDomains[i].LossMeasurementCountersAggregate = types.BoolValue(false)
+			}
+		} else {
+			data.EthernetCfmMepDomains[i].LossMeasurementCountersAggregate = types.BoolNull()
+		}
+		if value := r.Get("loss-measurement.counters.priority.cos-range.start-of-cos-range"); value.Exists() && !data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosRangeStart.IsNull() {
+			data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosRangeStart = types.Int64Value(value.Int())
+		} else {
+			data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosRangeStart = types.Int64Null()
+		}
+		if value := r.Get("loss-measurement.counters.priority.cos-range.end-of-cos-range"); value.Exists() && !data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosRangeEnd.IsNull() {
+			data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosRangeEnd = types.Int64Value(value.Int())
+		} else {
+			data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosRangeEnd = types.Int64Null()
+		}
+		if value := r.Get("loss-measurement.counters.priority.cos-values.cos-value1"); value.Exists() && !data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue1.IsNull() {
+			data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue1 = types.Int64Value(value.Int())
+		} else {
+			data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue1 = types.Int64Null()
+		}
+		if value := r.Get("loss-measurement.counters.priority.cos-values.cos-value2"); value.Exists() && !data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue2.IsNull() {
+			data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue2 = types.Int64Value(value.Int())
+		} else {
+			data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue2 = types.Int64Null()
+		}
+		if value := r.Get("loss-measurement.counters.priority.cos-values.cos-value3"); value.Exists() && !data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue3.IsNull() {
+			data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue3 = types.Int64Value(value.Int())
+		} else {
+			data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue3 = types.Int64Null()
+		}
+		if value := r.Get("loss-measurement.counters.priority.cos-values.cos-value4"); value.Exists() && !data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue4.IsNull() {
+			data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue4 = types.Int64Value(value.Int())
+		} else {
+			data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue4 = types.Int64Null()
+		}
+		if value := r.Get("loss-measurement.counters.priority.cos-values.cos-value5"); value.Exists() && !data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue5.IsNull() {
+			data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue5 = types.Int64Value(value.Int())
+		} else {
+			data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue5 = types.Int64Null()
+		}
+		if value := r.Get("loss-measurement.counters.priority.cos-values.cos-value6"); value.Exists() && !data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue6.IsNull() {
+			data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue6 = types.Int64Value(value.Int())
+		} else {
+			data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue6 = types.Int64Null()
+		}
+		if value := r.Get("loss-measurement.counters.priority.cos-values.cos-value7"); value.Exists() && !data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue7.IsNull() {
+			data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue7 = types.Int64Value(value.Int())
+		} else {
+			data.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue7 = types.Int64Null()
+		}
+		for ci := range data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds {
+			keys := [...]string{"profile-name", "mep-id"}
+			keyValues := [...]string{data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].ProfileName.ValueString(), strconv.FormatInt(data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].MepId.ValueInt64(), 10)}
+
+			var cr gjson.Result
+			r.Get("sla.operation.profile.target.mep-id.profile-target-mep-id").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("profile-name"); value.Exists() && !data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].ProfileName.IsNull() {
+				data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].ProfileName = types.StringValue(value.String())
+			} else {
+				data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].ProfileName = types.StringNull()
+			}
+			if value := cr.Get("mep-id"); value.Exists() && !data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].MepId.IsNull() {
+				data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].MepId = types.Int64Value(value.Int())
+			} else {
+				data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].MepId = types.Int64Null()
+			}
+		}
+		for ci := range data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses {
+			keys := [...]string{"profile-name", "mac-address"}
+			keyValues := [...]string{data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].ProfileName.ValueString(), data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].MacAddress.ValueString()}
+
+			var cr gjson.Result
+			r.Get("sla.operation.profile.target.mac-address.profile-target-mac-address").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("profile-name"); value.Exists() && !data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].ProfileName.IsNull() {
+				data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].ProfileName = types.StringValue(value.String())
+			} else {
+				data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].ProfileName = types.StringNull()
+			}
+			if value := cr.Get("mac-address"); value.Exists() && !data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].MacAddress.IsNull() {
+				data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].MacAddress = types.StringValue(value.String())
+			} else {
+				data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].MacAddress = types.StringNull()
+			}
+		}
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.ais.transmission.up.interval"); value.Exists() && !data.EthernetCfmAisTransmissionUpInterval.IsNull() {
+		data.EthernetCfmAisTransmissionUpInterval = types.StringValue(value.String())
+	} else {
+		data.EthernetCfmAisTransmissionUpInterval = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.ais.transmission.up.cos"); value.Exists() && !data.EthernetCfmAisTransmissionUpCos.IsNull() {
+		data.EthernetCfmAisTransmissionUpCos = types.Int64Value(value.Int())
+	} else {
+		data.EthernetCfmAisTransmissionUpCos = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.bandwidth-notifications.hold-off"); value.Exists() && !data.EthernetCfmBandwidthNotificationsHoldOff.IsNull() {
+		data.EthernetCfmBandwidthNotificationsHoldOff = types.Int64Value(value.Int())
+	} else {
+		data.EthernetCfmBandwidthNotificationsHoldOff = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.bandwidth-notifications.wait-to-restore"); value.Exists() && !data.EthernetCfmBandwidthNotificationsWaitToRestore.IsNull() {
+		data.EthernetCfmBandwidthNotificationsWaitToRestore = types.Int64Value(value.Int())
+	} else {
+		data.EthernetCfmBandwidthNotificationsWaitToRestore = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.bandwidth-notifications.loss-threshold"); value.Exists() && !data.EthernetCfmBandwidthNotificationsLossThreshold.IsNull() {
+		data.EthernetCfmBandwidthNotificationsLossThreshold = types.Int64Value(value.Int())
+	} else {
+		data.EthernetCfmBandwidthNotificationsLossThreshold = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.bandwidth-notifications.log.changes"); !data.EthernetCfmBandwidthNotificationsLogChanges.IsNull() {
+		if value.Exists() {
+			data.EthernetCfmBandwidthNotificationsLogChanges = types.BoolValue(true)
+		} else {
+			data.EthernetCfmBandwidthNotificationsLogChanges = types.BoolValue(false)
+		}
+	} else {
+		data.EthernetCfmBandwidthNotificationsLogChanges = types.BoolNull()
 	}
 	for i := range data.FlowIpv4IngressMonitors {
 		keys := [...]string{"monitor-map-name"}
@@ -4525,6 +4871,111 @@ func (data *InterfaceEthernet) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Ipv6NdPrefixDefaultNoAutoconfig = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"); value.Exists() {
+		data.EthernetCfmMepDomains = make([]InterfaceEthernetEthernetCfmMepDomains, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := InterfaceEthernetEthernetCfmMepDomains{}
+			if cValue := v.Get("domain-name"); cValue.Exists() {
+				item.DomainName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("service"); cValue.Exists() {
+				item.Service = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("mep-id"); cValue.Exists() {
+				item.MepId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("propagate-remote-status"); cValue.Exists() {
+				item.PropagateRemoteStatus = types.BoolValue(true)
+			} else {
+				item.PropagateRemoteStatus = types.BoolValue(false)
+			}
+			if cValue := v.Get("cos"); cValue.Exists() {
+				item.Cos = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("loss-measurement.counters.aggregate"); cValue.Exists() {
+				item.LossMeasurementCountersAggregate = types.BoolValue(true)
+			} else {
+				item.LossMeasurementCountersAggregate = types.BoolValue(false)
+			}
+			if cValue := v.Get("loss-measurement.counters.priority.cos-range.start-of-cos-range"); cValue.Exists() {
+				item.LossMeasurementCountersPriorityCosRangeStart = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("loss-measurement.counters.priority.cos-range.end-of-cos-range"); cValue.Exists() {
+				item.LossMeasurementCountersPriorityCosRangeEnd = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("loss-measurement.counters.priority.cos-values.cos-value1"); cValue.Exists() {
+				item.LossMeasurementCountersPriorityCosValue1 = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("loss-measurement.counters.priority.cos-values.cos-value2"); cValue.Exists() {
+				item.LossMeasurementCountersPriorityCosValue2 = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("loss-measurement.counters.priority.cos-values.cos-value3"); cValue.Exists() {
+				item.LossMeasurementCountersPriorityCosValue3 = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("loss-measurement.counters.priority.cos-values.cos-value4"); cValue.Exists() {
+				item.LossMeasurementCountersPriorityCosValue4 = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("loss-measurement.counters.priority.cos-values.cos-value5"); cValue.Exists() {
+				item.LossMeasurementCountersPriorityCosValue5 = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("loss-measurement.counters.priority.cos-values.cos-value6"); cValue.Exists() {
+				item.LossMeasurementCountersPriorityCosValue6 = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("loss-measurement.counters.priority.cos-values.cos-value7"); cValue.Exists() {
+				item.LossMeasurementCountersPriorityCosValue7 = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("sla.operation.profile.target.mep-id.profile-target-mep-id"); cValue.Exists() {
+				item.SlaOperationProfileTargetMepIds = make([]InterfaceEthernetEthernetCfmMepDomainsSlaOperationProfileTargetMepIds, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := InterfaceEthernetEthernetCfmMepDomainsSlaOperationProfileTargetMepIds{}
+					if ccValue := cv.Get("profile-name"); ccValue.Exists() {
+						cItem.ProfileName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("mep-id"); ccValue.Exists() {
+						cItem.MepId = types.Int64Value(ccValue.Int())
+					}
+					item.SlaOperationProfileTargetMepIds = append(item.SlaOperationProfileTargetMepIds, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("sla.operation.profile.target.mac-address.profile-target-mac-address"); cValue.Exists() {
+				item.SlaOperationProfileTargetMacAddresses = make([]InterfaceEthernetEthernetCfmMepDomainsSlaOperationProfileTargetMacAddresses, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := InterfaceEthernetEthernetCfmMepDomainsSlaOperationProfileTargetMacAddresses{}
+					if ccValue := cv.Get("profile-name"); ccValue.Exists() {
+						cItem.ProfileName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("mac-address"); ccValue.Exists() {
+						cItem.MacAddress = types.StringValue(ccValue.String())
+					}
+					item.SlaOperationProfileTargetMacAddresses = append(item.SlaOperationProfileTargetMacAddresses, cItem)
+					return true
+				})
+			}
+			data.EthernetCfmMepDomains = append(data.EthernetCfmMepDomains, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.ais.transmission.up.interval"); value.Exists() {
+		data.EthernetCfmAisTransmissionUpInterval = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.ais.transmission.up.cos"); value.Exists() {
+		data.EthernetCfmAisTransmissionUpCos = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.bandwidth-notifications.hold-off"); value.Exists() {
+		data.EthernetCfmBandwidthNotificationsHoldOff = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.bandwidth-notifications.wait-to-restore"); value.Exists() {
+		data.EthernetCfmBandwidthNotificationsWaitToRestore = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.bandwidth-notifications.loss-threshold"); value.Exists() {
+		data.EthernetCfmBandwidthNotificationsLossThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.bandwidth-notifications.log.changes"); value.Exists() {
+		data.EthernetCfmBandwidthNotificationsLogChanges = types.BoolValue(true)
+	} else {
+		data.EthernetCfmBandwidthNotificationsLogChanges = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-flow-cfg:flow.ipv4.monitor.ingress-monitors.ingress-monitor"); value.Exists() {
 		data.FlowIpv4IngressMonitors = make([]InterfaceEthernetFlowIpv4IngressMonitors, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -5745,6 +6196,111 @@ func (data *InterfaceEthernetData) fromBody(ctx context.Context, res []byte) {
 		data.Ipv6NdPrefixDefaultNoAutoconfig = types.BoolValue(true)
 	} else {
 		data.Ipv6NdPrefixDefaultNoAutoconfig = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"); value.Exists() {
+		data.EthernetCfmMepDomains = make([]InterfaceEthernetEthernetCfmMepDomains, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := InterfaceEthernetEthernetCfmMepDomains{}
+			if cValue := v.Get("domain-name"); cValue.Exists() {
+				item.DomainName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("service"); cValue.Exists() {
+				item.Service = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("mep-id"); cValue.Exists() {
+				item.MepId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("propagate-remote-status"); cValue.Exists() {
+				item.PropagateRemoteStatus = types.BoolValue(true)
+			} else {
+				item.PropagateRemoteStatus = types.BoolValue(false)
+			}
+			if cValue := v.Get("cos"); cValue.Exists() {
+				item.Cos = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("loss-measurement.counters.aggregate"); cValue.Exists() {
+				item.LossMeasurementCountersAggregate = types.BoolValue(true)
+			} else {
+				item.LossMeasurementCountersAggregate = types.BoolValue(false)
+			}
+			if cValue := v.Get("loss-measurement.counters.priority.cos-range.start-of-cos-range"); cValue.Exists() {
+				item.LossMeasurementCountersPriorityCosRangeStart = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("loss-measurement.counters.priority.cos-range.end-of-cos-range"); cValue.Exists() {
+				item.LossMeasurementCountersPriorityCosRangeEnd = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("loss-measurement.counters.priority.cos-values.cos-value1"); cValue.Exists() {
+				item.LossMeasurementCountersPriorityCosValue1 = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("loss-measurement.counters.priority.cos-values.cos-value2"); cValue.Exists() {
+				item.LossMeasurementCountersPriorityCosValue2 = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("loss-measurement.counters.priority.cos-values.cos-value3"); cValue.Exists() {
+				item.LossMeasurementCountersPriorityCosValue3 = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("loss-measurement.counters.priority.cos-values.cos-value4"); cValue.Exists() {
+				item.LossMeasurementCountersPriorityCosValue4 = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("loss-measurement.counters.priority.cos-values.cos-value5"); cValue.Exists() {
+				item.LossMeasurementCountersPriorityCosValue5 = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("loss-measurement.counters.priority.cos-values.cos-value6"); cValue.Exists() {
+				item.LossMeasurementCountersPriorityCosValue6 = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("loss-measurement.counters.priority.cos-values.cos-value7"); cValue.Exists() {
+				item.LossMeasurementCountersPriorityCosValue7 = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("sla.operation.profile.target.mep-id.profile-target-mep-id"); cValue.Exists() {
+				item.SlaOperationProfileTargetMepIds = make([]InterfaceEthernetEthernetCfmMepDomainsSlaOperationProfileTargetMepIds, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := InterfaceEthernetEthernetCfmMepDomainsSlaOperationProfileTargetMepIds{}
+					if ccValue := cv.Get("profile-name"); ccValue.Exists() {
+						cItem.ProfileName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("mep-id"); ccValue.Exists() {
+						cItem.MepId = types.Int64Value(ccValue.Int())
+					}
+					item.SlaOperationProfileTargetMepIds = append(item.SlaOperationProfileTargetMepIds, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("sla.operation.profile.target.mac-address.profile-target-mac-address"); cValue.Exists() {
+				item.SlaOperationProfileTargetMacAddresses = make([]InterfaceEthernetEthernetCfmMepDomainsSlaOperationProfileTargetMacAddresses, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := InterfaceEthernetEthernetCfmMepDomainsSlaOperationProfileTargetMacAddresses{}
+					if ccValue := cv.Get("profile-name"); ccValue.Exists() {
+						cItem.ProfileName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("mac-address"); ccValue.Exists() {
+						cItem.MacAddress = types.StringValue(ccValue.String())
+					}
+					item.SlaOperationProfileTargetMacAddresses = append(item.SlaOperationProfileTargetMacAddresses, cItem)
+					return true
+				})
+			}
+			data.EthernetCfmMepDomains = append(data.EthernetCfmMepDomains, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.ais.transmission.up.interval"); value.Exists() {
+		data.EthernetCfmAisTransmissionUpInterval = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.ais.transmission.up.cos"); value.Exists() {
+		data.EthernetCfmAisTransmissionUpCos = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.bandwidth-notifications.hold-off"); value.Exists() {
+		data.EthernetCfmBandwidthNotificationsHoldOff = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.bandwidth-notifications.wait-to-restore"); value.Exists() {
+		data.EthernetCfmBandwidthNotificationsWaitToRestore = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.bandwidth-notifications.loss-threshold"); value.Exists() {
+		data.EthernetCfmBandwidthNotificationsLossThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.bandwidth-notifications.log.changes"); value.Exists() {
+		data.EthernetCfmBandwidthNotificationsLogChanges = types.BoolValue(true)
+	} else {
+		data.EthernetCfmBandwidthNotificationsLogChanges = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-flow-cfg:flow.ipv4.monitor.ingress-monitors.ingress-monitor"); value.Exists() {
 		data.FlowIpv4IngressMonitors = make([]InterfaceEthernetFlowIpv4IngressMonitors, 0)
@@ -7555,6 +8111,168 @@ func (data *InterfaceEthernet) getDeletedItems(ctx context.Context, state Interf
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/ingress-monitors/ingress-monitor%v", state.getPath(), keyString))
 		}
 	}
+	if !state.EthernetCfmBandwidthNotificationsLogChanges.IsNull() && data.EthernetCfmBandwidthNotificationsLogChanges.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/bandwidth-notifications/log/changes", state.getPath()))
+	}
+	if !state.EthernetCfmBandwidthNotificationsLossThreshold.IsNull() && data.EthernetCfmBandwidthNotificationsLossThreshold.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/bandwidth-notifications/loss-threshold", state.getPath()))
+	}
+	if !state.EthernetCfmBandwidthNotificationsWaitToRestore.IsNull() && data.EthernetCfmBandwidthNotificationsWaitToRestore.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/bandwidth-notifications/wait-to-restore", state.getPath()))
+	}
+	if !state.EthernetCfmBandwidthNotificationsHoldOff.IsNull() && data.EthernetCfmBandwidthNotificationsHoldOff.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/bandwidth-notifications/hold-off", state.getPath()))
+	}
+	if !state.EthernetCfmAisTransmissionUpCos.IsNull() && data.EthernetCfmAisTransmissionUpCos.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/ais/transmission/up", state.getPath()))
+	}
+	if !state.EthernetCfmAisTransmissionUpInterval.IsNull() && data.EthernetCfmAisTransmissionUpInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/ais/transmission/up", state.getPath()))
+	}
+	for i := range state.EthernetCfmMepDomains {
+		keys := [...]string{"domain-name"}
+		stateKeyValues := [...]string{state.EthernetCfmMepDomains[i].DomainName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.EthernetCfmMepDomains[i].DomainName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.EthernetCfmMepDomains {
+			found = true
+			if state.EthernetCfmMepDomains[i].DomainName.ValueString() != data.EthernetCfmMepDomains[j].DomainName.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses {
+					ckeys := [...]string{"profile-name", "mac-address"}
+					cstateKeyValues := [...]string{state.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].ProfileName.ValueString(), state.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].MacAddress.ValueString()}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].ProfileName.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].MacAddress.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.EthernetCfmMepDomains[j].SlaOperationProfileTargetMacAddresses {
+						found = true
+						if state.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].ProfileName.ValueString() != data.EthernetCfmMepDomains[j].SlaOperationProfileTargetMacAddresses[cj].ProfileName.ValueString() {
+							found = false
+						}
+						if state.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].MacAddress.ValueString() != data.EthernetCfmMepDomains[j].SlaOperationProfileTargetMacAddresses[cj].MacAddress.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/mep/domain%v/sla/operation/profile/target/mac-address/profile-target-mac-address%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				for ci := range state.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds {
+					ckeys := [...]string{"profile-name", "mep-id"}
+					cstateKeyValues := [...]string{state.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].ProfileName.ValueString(), strconv.FormatInt(state.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].MepId.ValueInt64(), 10)}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].ProfileName.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].MepId.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.EthernetCfmMepDomains[j].SlaOperationProfileTargetMepIds {
+						found = true
+						if state.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].ProfileName.ValueString() != data.EthernetCfmMepDomains[j].SlaOperationProfileTargetMepIds[cj].ProfileName.ValueString() {
+							found = false
+						}
+						if state.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].MepId.ValueInt64() != data.EthernetCfmMepDomains[j].SlaOperationProfileTargetMepIds[cj].MepId.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/mep/domain%v/sla/operation/profile/target/mep-id/profile-target-mep-id%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				if !state.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue7.IsNull() && data.EthernetCfmMepDomains[j].LossMeasurementCountersPriorityCosValue7.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/mep/domain%v/loss-measurement/counters/priority/cos-values/cos-value7", state.getPath(), keyString))
+				}
+				if !state.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue6.IsNull() && data.EthernetCfmMepDomains[j].LossMeasurementCountersPriorityCosValue6.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/mep/domain%v/loss-measurement/counters/priority/cos-values/cos-value6", state.getPath(), keyString))
+				}
+				if !state.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue5.IsNull() && data.EthernetCfmMepDomains[j].LossMeasurementCountersPriorityCosValue5.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/mep/domain%v/loss-measurement/counters/priority/cos-values/cos-value5", state.getPath(), keyString))
+				}
+				if !state.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue4.IsNull() && data.EthernetCfmMepDomains[j].LossMeasurementCountersPriorityCosValue4.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/mep/domain%v/loss-measurement/counters/priority/cos-values/cos-value4", state.getPath(), keyString))
+				}
+				if !state.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue3.IsNull() && data.EthernetCfmMepDomains[j].LossMeasurementCountersPriorityCosValue3.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/mep/domain%v/loss-measurement/counters/priority/cos-values/cos-value3", state.getPath(), keyString))
+				}
+				if !state.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue2.IsNull() && data.EthernetCfmMepDomains[j].LossMeasurementCountersPriorityCosValue2.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/mep/domain%v/loss-measurement/counters/priority/cos-values/cos-value2", state.getPath(), keyString))
+				}
+				if !state.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosValue1.IsNull() && data.EthernetCfmMepDomains[j].LossMeasurementCountersPriorityCosValue1.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/mep/domain%v/loss-measurement/counters/priority/cos-values/cos-value1", state.getPath(), keyString))
+				}
+				if !state.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosRangeEnd.IsNull() && data.EthernetCfmMepDomains[j].LossMeasurementCountersPriorityCosRangeEnd.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/mep/domain%v/loss-measurement/counters/priority/cos-range/end-of-cos-range", state.getPath(), keyString))
+				}
+				if !state.EthernetCfmMepDomains[i].LossMeasurementCountersPriorityCosRangeStart.IsNull() && data.EthernetCfmMepDomains[j].LossMeasurementCountersPriorityCosRangeStart.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/mep/domain%v/loss-measurement/counters/priority/cos-range/start-of-cos-range", state.getPath(), keyString))
+				}
+				if !state.EthernetCfmMepDomains[i].LossMeasurementCountersAggregate.IsNull() && data.EthernetCfmMepDomains[j].LossMeasurementCountersAggregate.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/mep/domain%v/loss-measurement/counters/aggregate", state.getPath(), keyString))
+				}
+				if !state.EthernetCfmMepDomains[i].Cos.IsNull() && data.EthernetCfmMepDomains[j].Cos.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/mep/domain%v/cos", state.getPath(), keyString))
+				}
+				if !state.EthernetCfmMepDomains[i].PropagateRemoteStatus.IsNull() && data.EthernetCfmMepDomains[j].PropagateRemoteStatus.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/mep/domain%v/propagate-remote-status", state.getPath(), keyString))
+				}
+				if !state.EthernetCfmMepDomains[i].MepId.IsNull() && data.EthernetCfmMepDomains[j].MepId.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/mep/domain%v/mep-id", state.getPath(), keyString))
+				}
+				if !state.EthernetCfmMepDomains[i].Service.IsNull() && data.EthernetCfmMepDomains[j].Service.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/mep/domain%v/service", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/mep/domain%v", state.getPath(), keyString))
+		}
+	}
 	if !state.Ipv6NdPrefixDefaultNoAutoconfig.IsNull() && data.Ipv6NdPrefixDefaultNoAutoconfig.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/prefix/default/no-autoconfig", state.getPath()))
 	}
@@ -8342,6 +9060,39 @@ func (data *InterfaceEthernet) getEmptyLeafsDelete(ctx context.Context) []string
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	if !data.EthernetCfmBandwidthNotificationsLogChanges.IsNull() && !data.EthernetCfmBandwidthNotificationsLogChanges.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/bandwidth-notifications/log/changes", data.getPath()))
+	}
+	for i := range data.EthernetCfmMepDomains {
+		keys := [...]string{"domain-name"}
+		keyValues := [...]string{data.EthernetCfmMepDomains[i].DomainName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		for ci := range data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses {
+			ckeys := [...]string{"profile-name", "mac-address"}
+			ckeyValues := [...]string{data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].ProfileName.ValueString(), data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMacAddresses[ci].MacAddress.ValueString()}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+		}
+		for ci := range data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds {
+			ckeys := [...]string{"profile-name", "mep-id"}
+			ckeyValues := [...]string{data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].ProfileName.ValueString(), strconv.FormatInt(data.EthernetCfmMepDomains[i].SlaOperationProfileTargetMepIds[ci].MepId.ValueInt64(), 10)}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+		}
+		if !data.EthernetCfmMepDomains[i].LossMeasurementCountersAggregate.IsNull() && !data.EthernetCfmMepDomains[i].LossMeasurementCountersAggregate.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/mep/domain%v/loss-measurement/counters/aggregate", data.getPath(), keyString))
+		}
+		if !data.EthernetCfmMepDomains[i].PropagateRemoteStatus.IsNull() && !data.EthernetCfmMepDomains[i].PropagateRemoteStatus.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/mep/domain%v/propagate-remote-status", data.getPath(), keyString))
+		}
+	}
 	if !data.Ipv6NdPrefixDefaultNoAutoconfig.IsNull() && !data.Ipv6NdPrefixDefaultNoAutoconfig.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/prefix/default/no-autoconfig", data.getPath()))
 	}
@@ -9015,6 +9766,34 @@ func (data *InterfaceEthernet) getDeletePaths(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/ingress-monitors/ingress-monitor%v", data.getPath(), keyString))
+	}
+	if !data.EthernetCfmBandwidthNotificationsLogChanges.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/bandwidth-notifications/log/changes", data.getPath()))
+	}
+	if !data.EthernetCfmBandwidthNotificationsLossThreshold.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/bandwidth-notifications/loss-threshold", data.getPath()))
+	}
+	if !data.EthernetCfmBandwidthNotificationsWaitToRestore.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/bandwidth-notifications/wait-to-restore", data.getPath()))
+	}
+	if !data.EthernetCfmBandwidthNotificationsHoldOff.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/bandwidth-notifications/hold-off", data.getPath()))
+	}
+	if !data.EthernetCfmAisTransmissionUpCos.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/ais/transmission/up", data.getPath()))
+	}
+	if !data.EthernetCfmAisTransmissionUpInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/ais/transmission/up", data.getPath()))
+	}
+	for i := range data.EthernetCfmMepDomains {
+		keys := [...]string{"domain-name"}
+		keyValues := [...]string{data.EthernetCfmMepDomains[i].DomainName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/mep/domain%v", data.getPath(), keyString))
 	}
 	if !data.Ipv6NdPrefixDefaultNoAutoconfig.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/prefix/default/no-autoconfig", data.getPath()))

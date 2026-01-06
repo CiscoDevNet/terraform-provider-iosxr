@@ -455,6 +455,130 @@ func (d *InterfaceBundleEtherDataSource) Schema(ctx context.Context, req datasou
 				MarkdownDescription: "Do not use prefix for autoconfiguration",
 				Computed:            true,
 			},
+			"ethernet_cfm_mep_domains": schema.ListNestedAttribute{
+				MarkdownDescription: "CFM Maintenance End Point domain configuration",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"domain_name": schema.StringAttribute{
+							MarkdownDescription: "Domain name",
+							Computed:            true,
+						},
+						"service": schema.StringAttribute{
+							MarkdownDescription: "Service name",
+							Computed:            true,
+						},
+						"mep_id": schema.Int64Attribute{
+							MarkdownDescription: "MEP ID",
+							Computed:            true,
+						},
+						"propagate_remote_status": schema.BoolAttribute{
+							MarkdownDescription: "Propagate remote status",
+							Computed:            true,
+						},
+						"cos": schema.Int64Attribute{
+							MarkdownDescription: "Class of Service",
+							Computed:            true,
+						},
+						"loss_measurement_counters_aggregate": schema.BoolAttribute{
+							MarkdownDescription: "Allocate aggregated packet counters",
+							Computed:            true,
+						},
+						"loss_measurement_counters_priority_cos_range_start": schema.Int64Attribute{
+							MarkdownDescription: "Start of CoS range",
+							Computed:            true,
+						},
+						"loss_measurement_counters_priority_cos_range_end": schema.Int64Attribute{
+							MarkdownDescription: "End of CoS range",
+							Computed:            true,
+						},
+						"loss_measurement_counters_priority_cos_value_1": schema.Int64Attribute{
+							MarkdownDescription: "CoS value 1",
+							Computed:            true,
+						},
+						"loss_measurement_counters_priority_cos_value_2": schema.Int64Attribute{
+							MarkdownDescription: "CoS value 2",
+							Computed:            true,
+						},
+						"loss_measurement_counters_priority_cos_value_3": schema.Int64Attribute{
+							MarkdownDescription: "CoS value 3",
+							Computed:            true,
+						},
+						"loss_measurement_counters_priority_cos_value_4": schema.Int64Attribute{
+							MarkdownDescription: "CoS value 4",
+							Computed:            true,
+						},
+						"loss_measurement_counters_priority_cos_value_5": schema.Int64Attribute{
+							MarkdownDescription: "CoS value 5",
+							Computed:            true,
+						},
+						"loss_measurement_counters_priority_cos_value_6": schema.Int64Attribute{
+							MarkdownDescription: "CoS value 6",
+							Computed:            true,
+						},
+						"loss_measurement_counters_priority_cos_value_7": schema.Int64Attribute{
+							MarkdownDescription: "CoS value 7",
+							Computed:            true,
+						},
+						"sla_operation_profile_target_mep_ids": schema.ListNestedAttribute{
+							MarkdownDescription: "SLA operation profile target MEP IDs",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"profile_name": schema.StringAttribute{
+										MarkdownDescription: "Profile name",
+										Computed:            true,
+									},
+									"mep_id": schema.Int64Attribute{
+										MarkdownDescription: "Target MEP ID",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"sla_operation_profile_target_mac_addresses": schema.ListNestedAttribute{
+							MarkdownDescription: "SLA operation profile target MAC addresses",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"profile_name": schema.StringAttribute{
+										MarkdownDescription: "Profile name",
+										Computed:            true,
+									},
+									"mac_address": schema.StringAttribute{
+										MarkdownDescription: "Target MAC address",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"ethernet_cfm_ais_transmission_up_interval": schema.StringAttribute{
+				MarkdownDescription: "Specify the AIS transmission interval",
+				Computed:            true,
+			},
+			"ethernet_cfm_ais_transmission_up_cos": schema.Int64Attribute{
+				MarkdownDescription: "Specify CoS bits for AIS messages",
+				Computed:            true,
+			},
+			"ethernet_cfm_bandwidth_notifications_hold_off": schema.Int64Attribute{
+				MarkdownDescription: "Hold-off time (in seconds)",
+				Computed:            true,
+			},
+			"ethernet_cfm_bandwidth_notifications_wait_to_restore": schema.Int64Attribute{
+				MarkdownDescription: "Wait-to-restore time (in seconds)",
+				Computed:            true,
+			},
+			"ethernet_cfm_bandwidth_notifications_loss_threshold": schema.Int64Attribute{
+				MarkdownDescription: "Loss threshold (in number of BNMs)",
+				Computed:            true,
+			},
+			"ethernet_cfm_bandwidth_notifications_log_changes": schema.BoolAttribute{
+				MarkdownDescription: "Enable logging of bandwidth changes",
+				Computed:            true,
+			},
 			"flow_ipv4_ingress_monitors": schema.ListNestedAttribute{
 				MarkdownDescription: "Specify a flow monitor for packets",
 				Computed:            true,

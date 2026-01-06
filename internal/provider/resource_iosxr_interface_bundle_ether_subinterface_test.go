@@ -142,6 +142,36 @@ func TestAccIosxrInterfaceBundleEtherSubinterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ipv6_nd_ra_lifetime", "3600"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ipv6_nd_redirects", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ipv6_nd_prefix_default_no_adv", "true"))
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ethernet_cfm_mep_domains.0.domain_name", "DOMAIN1"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ethernet_cfm_mep_domains.0.service", "SERVICE1"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ethernet_cfm_mep_domains.0.mep_id", "1"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ethernet_cfm_mep_domains.0.cos", "5"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ethernet_cfm_mep_domains.0.loss_measurement_counters_priority_cos_range_start", "1"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ethernet_cfm_mep_domains.0.loss_measurement_counters_priority_cos_range_end", "7"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ethernet_cfm_mep_domains.0.sla_operation_profile_target_mep_ids.0.profile_name", "SLA-PROFILE-1"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ethernet_cfm_mep_domains.0.sla_operation_profile_target_mep_ids.0.mep_id", "2"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ethernet_cfm_mep_domains.0.sla_operation_profile_target_mac_addresses.0.profile_name", "SLA-PROFILE-2"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ethernet_cfm_mep_domains.0.sla_operation_profile_target_mac_addresses.0.mac_address", "00:11:22:33:44:55"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ethernet_cfm_ais_transmission_up_interval", "1s"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ethernet_cfm_ais_transmission_up_cos", "5"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ethernet_cfm_bandwidth_notifications_hold_off", "60"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ethernet_cfm_bandwidth_notifications_wait_to_restore", "30"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ethernet_cfm_bandwidth_notifications_loss_threshold", "5"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ethernet_cfm_bandwidth_notifications_log_changes", "true"))
+	}
 	if os.Getenv("FLOW") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "flow_ipv4_ingress_monitor_samplers.0.monitor_map_name", "MMAP1"))
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "flow_ipv4_ingress_monitor_samplers.0.sampler_map_name", "SMAP1"))
@@ -603,6 +633,42 @@ func testAccIosxrInterfaceBundleEtherSubinterfaceConfig_all() string {
 	config += `	ipv6_nd_ra_lifetime = 3600` + "\n"
 	config += `	ipv6_nd_redirects = true` + "\n"
 	config += `	ipv6_nd_prefix_default_no_adv = true` + "\n"
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ethernet_cfm_mep_domains = [{` + "\n"
+		config += `		domain_name = "DOMAIN1"` + "\n"
+		config += `		service = "SERVICE1"` + "\n"
+		config += `		mep_id = 1` + "\n"
+		config += `		cos = 5` + "\n"
+		config += `		loss_measurement_counters_priority_cos_range_start = 1` + "\n"
+		config += `		loss_measurement_counters_priority_cos_range_end = 7` + "\n"
+		config += `		sla_operation_profile_target_mep_ids = [{` + "\n"
+		config += `			profile_name = "SLA-PROFILE-1"` + "\n"
+		config += `			mep_id = 2` + "\n"
+		config += `		}]` + "\n"
+		config += `		sla_operation_profile_target_mac_addresses = [{` + "\n"
+		config += `			profile_name = "SLA-PROFILE-2"` + "\n"
+		config += `			mac_address = "00:11:22:33:44:55"` + "\n"
+		config += `		}]` + "\n"
+		config += `		}]` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ethernet_cfm_ais_transmission_up_interval = "1s"` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ethernet_cfm_ais_transmission_up_cos = 5` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ethernet_cfm_bandwidth_notifications_hold_off = 60` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ethernet_cfm_bandwidth_notifications_wait_to_restore = 30` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ethernet_cfm_bandwidth_notifications_loss_threshold = 5` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	ethernet_cfm_bandwidth_notifications_log_changes = true` + "\n"
+	}
 	if os.Getenv("FLOW") != "" {
 		config += `	flow_ipv4_ingress_monitor_samplers = [{` + "\n"
 		config += `		monitor_map_name = "MMAP1"` + "\n"

@@ -73,22 +73,51 @@ resource "iosxr_interface_ethernet" "example" {
       algorithm     = 128
     }
   ]
-  ipv6_autoconfig                                                                    = false
-  ipv6_dhcp                                                                          = false
-  ipv6_mtu                                                                           = 1280
-  ipv6_unreachables_disable                                                          = true
-  ipv6_nd_reachable_time                                                             = 1800
-  ipv6_nd_cache_limit                                                                = 1000
-  ipv6_nd_dad_attempts                                                               = 3
-  ipv6_nd_unicast_ra                                                                 = true
-  ipv6_nd_managed_config_flag                                                        = true
-  ipv6_nd_other_config_flag                                                          = true
-  ipv6_nd_ns_interval                                                                = 60000
-  ipv6_nd_ra_interval_max                                                            = 10
-  ipv6_nd_ra_interval_min                                                            = 5
-  ipv6_nd_ra_lifetime                                                                = 3600
-  ipv6_nd_redirects                                                                  = true
-  ipv6_nd_prefix_default_no_adv                                                      = true
+  ipv6_autoconfig               = false
+  ipv6_dhcp                     = false
+  ipv6_mtu                      = 1280
+  ipv6_unreachables_disable     = true
+  ipv6_nd_reachable_time        = 1800
+  ipv6_nd_cache_limit           = 1000
+  ipv6_nd_dad_attempts          = 3
+  ipv6_nd_unicast_ra            = true
+  ipv6_nd_managed_config_flag   = true
+  ipv6_nd_other_config_flag     = true
+  ipv6_nd_ns_interval           = 60000
+  ipv6_nd_ra_interval_max       = 10
+  ipv6_nd_ra_interval_min       = 5
+  ipv6_nd_ra_lifetime           = 3600
+  ipv6_nd_redirects             = true
+  ipv6_nd_prefix_default_no_adv = true
+  ethernet_cfm_mep_domains = [
+    {
+      domain_name                                        = "DOMAIN1"
+      service                                            = "SERVICE1"
+      mep_id                                             = 1
+      propagate_remote_status                            = true
+      cos                                                = 5
+      loss_measurement_counters_priority_cos_range_start = 1
+      loss_measurement_counters_priority_cos_range_end   = 7
+      sla_operation_profile_target_mep_ids = [
+        {
+          profile_name = "SLA-PROFILE-1"
+          mep_id       = 2
+        }
+      ]
+      sla_operation_profile_target_mac_addresses = [
+        {
+          profile_name = "SLA-PROFILE-2"
+          mac_address  = "00:11:22:33:44:55"
+        }
+      ]
+    }
+  ]
+  ethernet_cfm_ais_transmission_up_interval                                          = "1s"
+  ethernet_cfm_ais_transmission_up_cos                                               = 5
+  ethernet_cfm_bandwidth_notifications_hold_off                                      = 60
+  ethernet_cfm_bandwidth_notifications_wait_to_restore                               = 30
+  ethernet_cfm_bandwidth_notifications_loss_threshold                                = 5
+  ethernet_cfm_bandwidth_notifications_log_changes                                   = true
   frequency_synchronization                                                          = true
   frequency_synchronization_ssm_disable                                              = true
   frequency_synchronization_priority                                                 = 10

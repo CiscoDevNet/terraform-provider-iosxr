@@ -45,6 +45,13 @@ data "iosxr_interface_bundle_ether_subinterface" "example" {
 - `description` (String) Set description for this interface
 - `encapsulation_dot1q_second_dot1q` (Number) Configure second (inner 802.1Q) VLAN ID on the subinterface
 - `encapsulation_dot1q_vlan_id` (Number) Configure first (outer) VLAN ID on the subinterface
+- `ethernet_cfm_ais_transmission_up_cos` (Number) Specify CoS bits for AIS messages
+- `ethernet_cfm_ais_transmission_up_interval` (String) Specify the AIS transmission interval
+- `ethernet_cfm_bandwidth_notifications_hold_off` (Number) Hold-off time (in seconds)
+- `ethernet_cfm_bandwidth_notifications_log_changes` (Boolean) Enable logging of bandwidth changes
+- `ethernet_cfm_bandwidth_notifications_loss_threshold` (Number) Loss threshold (in number of BNMs)
+- `ethernet_cfm_bandwidth_notifications_wait_to_restore` (Number) Wait-to-restore time (in seconds)
+- `ethernet_cfm_mep_domains` (Attributes List) CFM Maintenance End Point domain configuration (see [below for nested schema](#nestedatt--ethernet_cfm_mep_domains))
 - `flow_ipv4_egress_monitor_samplers` (Attributes List) Specify a flow monitor and sampler for outgoing packets (see [below for nested schema](#nestedatt--flow_ipv4_egress_monitor_samplers))
 - `flow_ipv4_egress_monitors` (Attributes List) Specify a flow monitor for packets (see [below for nested schema](#nestedatt--flow_ipv4_egress_monitors))
 - `flow_ipv4_ingress_monitor_samplers` (Attributes List) Specify a flow monitor and sampler for incoming packets (see [below for nested schema](#nestedatt--flow_ipv4_ingress_monitor_samplers))
@@ -198,6 +205,47 @@ data "iosxr_interface_bundle_ether_subinterface" "example" {
 - `service_policy_output` (Attributes List) Configure a policy in the output direction (see [below for nested schema](#nestedatt--service_policy_output))
 - `shutdown` (Boolean) shutdown the given interface
 - `vrf` (String) Set VRF in which the interface operates
+
+<a id="nestedatt--ethernet_cfm_mep_domains"></a>
+### Nested Schema for `ethernet_cfm_mep_domains`
+
+Read-Only:
+
+- `cos` (Number) Class of Service
+- `domain_name` (String) Domain name
+- `loss_measurement_counters_aggregate` (Boolean) Allocate aggregated packet counters
+- `loss_measurement_counters_priority_cos_range_end` (Number) End of CoS range
+- `loss_measurement_counters_priority_cos_range_start` (Number) Start of CoS range
+- `loss_measurement_counters_priority_cos_value_1` (Number) CoS value 1
+- `loss_measurement_counters_priority_cos_value_2` (Number) CoS value 2
+- `loss_measurement_counters_priority_cos_value_3` (Number) CoS value 3
+- `loss_measurement_counters_priority_cos_value_4` (Number) CoS value 4
+- `loss_measurement_counters_priority_cos_value_5` (Number) CoS value 5
+- `loss_measurement_counters_priority_cos_value_6` (Number) CoS value 6
+- `loss_measurement_counters_priority_cos_value_7` (Number) CoS value 7
+- `mep_id` (Number) MEP ID
+- `service` (String) Service name
+- `sla_operation_profile_target_mac_addresses` (Attributes List) SLA operation profile target MAC addresses (see [below for nested schema](#nestedatt--ethernet_cfm_mep_domains--sla_operation_profile_target_mac_addresses))
+- `sla_operation_profile_target_mep_ids` (Attributes List) SLA operation profile target MEP IDs (see [below for nested schema](#nestedatt--ethernet_cfm_mep_domains--sla_operation_profile_target_mep_ids))
+
+<a id="nestedatt--ethernet_cfm_mep_domains--sla_operation_profile_target_mac_addresses"></a>
+### Nested Schema for `ethernet_cfm_mep_domains.sla_operation_profile_target_mac_addresses`
+
+Read-Only:
+
+- `mac_address` (String) Target MAC address
+- `profile_name` (String) Profile name
+
+
+<a id="nestedatt--ethernet_cfm_mep_domains--sla_operation_profile_target_mep_ids"></a>
+### Nested Schema for `ethernet_cfm_mep_domains.sla_operation_profile_target_mep_ids`
+
+Read-Only:
+
+- `mep_id` (Number) Target MEP ID
+- `profile_name` (String) Profile name
+
+
 
 <a id="nestedatt--flow_ipv4_egress_monitor_samplers"></a>
 ### Nested Schema for `flow_ipv4_egress_monitor_samplers`

@@ -89,59 +89,87 @@ resource "iosxr_interface_bundle_ether_subinterface" "example" {
       algorithm     = 128
     }
   ]
-  ipv6_autoconfig                              = false
-  ipv6_dhcp                                    = false
-  ipv6_mtu                                     = 1280
-  ipv6_unreachables_disable                    = true
-  ipv6_nd_reachable_time                       = 1800
-  ipv6_nd_cache_limit                          = 1000
-  ipv6_nd_dad_attempts                         = 3
-  ipv6_nd_unicast_ra                           = true
-  ipv6_nd_managed_config_flag                  = true
-  ipv6_nd_other_config_flag                    = true
-  ipv6_nd_ns_interval                          = 60000
-  ipv6_nd_ra_interval_max                      = 10
-  ipv6_nd_ra_interval_min                      = 5
-  ipv6_nd_ra_lifetime                          = 3600
-  ipv6_nd_redirects                            = true
-  ipv6_nd_prefix_default_no_adv                = true
-  arp_timeout                                  = 30
-  arp_learning_local                           = true
-  arp_gratuitous_ignore                        = true
-  proxy_arp                                    = true
-  mpls_mtu                                     = 1500
-  lldp                                         = true
-  lldp_transmit_disable                        = true
-  lldp_receive_disable                         = true
-  ptp                                          = true
-  ptp_profile                                  = "Profile-1"
-  ptp_transport_ethernet                       = true
-  ptp_clock_operation_one_step                 = true
-  ptp_announce_interval                        = "2"
-  ptp_announce_timeout                         = 5
-  ptp_announce_grant_duration                  = 300
-  ptp_sync_interval                            = "2"
-  ptp_sync_grant_duration                      = 300
-  ptp_sync_timeout                             = 3000
-  ptp_delay_request_interval                   = "2"
-  ptp_cos                                      = 6
-  ptp_cos_event                                = 6
-  ptp_cos_general                              = 6
-  ptp_dscp                                     = 46
-  ptp_dscp_event                               = 46
-  ptp_dscp_general                             = 46
-  ptp_ipv4_ttl                                 = 10
-  ptp_ipv6_hop_limit                           = 10
-  ptp_delay_asymmetry_value                    = 1000
-  ptp_delay_asymmetry_unit_microseconds        = true
-  ptp_delay_response_grant_duration            = 300
-  ptp_delay_response_timeout                   = 3000
-  ptp_unicast_grant_invalid_request_reduce     = true
-  ptp_multicast                                = true
-  ptp_multicast_mixed                          = true
-  ptp_multicast_target_address_mac_forwardable = true
-  ptp_port_state_master_only                   = true
-  ptp_local_priority                           = 128
+  ipv6_autoconfig               = false
+  ipv6_dhcp                     = false
+  ipv6_mtu                      = 1280
+  ipv6_unreachables_disable     = true
+  ipv6_nd_reachable_time        = 1800
+  ipv6_nd_cache_limit           = 1000
+  ipv6_nd_dad_attempts          = 3
+  ipv6_nd_unicast_ra            = true
+  ipv6_nd_managed_config_flag   = true
+  ipv6_nd_other_config_flag     = true
+  ipv6_nd_ns_interval           = 60000
+  ipv6_nd_ra_interval_max       = 10
+  ipv6_nd_ra_interval_min       = 5
+  ipv6_nd_ra_lifetime           = 3600
+  ipv6_nd_redirects             = true
+  ipv6_nd_prefix_default_no_adv = true
+  ethernet_cfm_mep_domains = [
+    {
+      domain_name                                        = "DOMAIN1"
+      service                                            = "SERVICE1"
+      mep_id                                             = 1
+      cos                                                = 5
+      loss_measurement_counters_priority_cos_range_start = 1
+      loss_measurement_counters_priority_cos_range_end   = 7
+      sla_operation_profile_target_mep_ids = [
+        {
+          profile_name = "SLA-PROFILE-1"
+          mep_id       = 2
+        }
+      ]
+      sla_operation_profile_target_mac_addresses = [
+        {
+          profile_name = "SLA-PROFILE-2"
+          mac_address  = "00:11:22:33:44:55"
+        }
+      ]
+    }
+  ]
+  ethernet_cfm_ais_transmission_up_interval            = "1s"
+  ethernet_cfm_ais_transmission_up_cos                 = 5
+  ethernet_cfm_bandwidth_notifications_hold_off        = 60
+  ethernet_cfm_bandwidth_notifications_wait_to_restore = 30
+  ethernet_cfm_bandwidth_notifications_loss_threshold  = 5
+  ethernet_cfm_bandwidth_notifications_log_changes     = true
+  arp_timeout                                          = 30
+  arp_learning_local                                   = true
+  arp_gratuitous_ignore                                = true
+  proxy_arp                                            = true
+  mpls_mtu                                             = 1500
+  lldp                                                 = true
+  lldp_transmit_disable                                = true
+  lldp_receive_disable                                 = true
+  ptp                                                  = true
+  ptp_profile                                          = "Profile-1"
+  ptp_transport_ethernet                               = true
+  ptp_clock_operation_one_step                         = true
+  ptp_announce_interval                                = "2"
+  ptp_announce_timeout                                 = 5
+  ptp_announce_grant_duration                          = 300
+  ptp_sync_interval                                    = "2"
+  ptp_sync_grant_duration                              = 300
+  ptp_sync_timeout                                     = 3000
+  ptp_delay_request_interval                           = "2"
+  ptp_cos                                              = 6
+  ptp_cos_event                                        = 6
+  ptp_cos_general                                      = 6
+  ptp_dscp                                             = 46
+  ptp_dscp_event                                       = 46
+  ptp_dscp_general                                     = 46
+  ptp_ipv4_ttl                                         = 10
+  ptp_ipv6_hop_limit                                   = 10
+  ptp_delay_asymmetry_value                            = 1000
+  ptp_delay_asymmetry_unit_microseconds                = true
+  ptp_delay_response_grant_duration                    = 300
+  ptp_delay_response_timeout                           = 3000
+  ptp_unicast_grant_invalid_request_reduce             = true
+  ptp_multicast                                        = true
+  ptp_multicast_mixed                                  = true
+  ptp_multicast_target_address_mac_forwardable         = true
+  ptp_port_state_master_only                           = true
+  ptp_local_priority                                   = 128
   ptp_slave_ipv4s = [
     {
       address        = "10.2.2.2"
@@ -258,6 +286,18 @@ resource "iosxr_interface_bundle_ether_subinterface" "example" {
   - Range: `1`-`4094`
 - `encapsulation_dot1q_vlan_id` (Number) Configure first (outer) VLAN ID on the subinterface
   - Range: `1`-`4094`
+- `ethernet_cfm_ais_transmission_up_cos` (Number) Specify CoS bits for AIS messages
+  - Range: `0`-`7`
+- `ethernet_cfm_ais_transmission_up_interval` (String) Specify the AIS transmission interval
+  - Choices: `1s`, `1m`
+- `ethernet_cfm_bandwidth_notifications_hold_off` (Number) Hold-off time (in seconds)
+  - Range: `0`-`600`
+- `ethernet_cfm_bandwidth_notifications_log_changes` (Boolean) Enable logging of bandwidth changes
+- `ethernet_cfm_bandwidth_notifications_loss_threshold` (Number) Loss threshold (in number of BNMs)
+  - Range: `2`-`255`
+- `ethernet_cfm_bandwidth_notifications_wait_to_restore` (Number) Wait-to-restore time (in seconds)
+  - Range: `0`-`600`
+- `ethernet_cfm_mep_domains` (Attributes List) CFM Maintenance End Point domain configuration (see [below for nested schema](#nestedatt--ethernet_cfm_mep_domains))
 - `flow_ipv4_egress_monitor_samplers` (Attributes List) Specify a flow monitor and sampler for outgoing packets (see [below for nested schema](#nestedatt--flow_ipv4_egress_monitor_samplers))
 - `flow_ipv4_egress_monitors` (Attributes List) Specify a flow monitor for packets (see [below for nested schema](#nestedatt--flow_ipv4_egress_monitors))
 - `flow_ipv4_ingress_monitor_samplers` (Attributes List) Specify a flow monitor and sampler for incoming packets (see [below for nested schema](#nestedatt--flow_ipv4_ingress_monitor_samplers))
@@ -463,6 +503,50 @@ resource "iosxr_interface_bundle_ether_subinterface" "example" {
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--ethernet_cfm_mep_domains"></a>
+### Nested Schema for `ethernet_cfm_mep_domains`
+
+Required:
+
+- `domain_name` (String) Domain name
+
+Optional:
+
+- `cos` (Number) Class of Service
+- `loss_measurement_counters_aggregate` (Boolean) Allocate aggregated packet counters
+- `loss_measurement_counters_priority_cos_range_end` (Number) End of CoS range
+- `loss_measurement_counters_priority_cos_range_start` (Number) Start of CoS range
+- `loss_measurement_counters_priority_cos_value_1` (Number) CoS value 1
+- `loss_measurement_counters_priority_cos_value_2` (Number) CoS value 2
+- `loss_measurement_counters_priority_cos_value_3` (Number) CoS value 3
+- `loss_measurement_counters_priority_cos_value_4` (Number) CoS value 4
+- `loss_measurement_counters_priority_cos_value_5` (Number) CoS value 5
+- `loss_measurement_counters_priority_cos_value_6` (Number) CoS value 6
+- `loss_measurement_counters_priority_cos_value_7` (Number) CoS value 7
+- `mep_id` (Number) MEP ID
+- `service` (String) Service name
+- `sla_operation_profile_target_mac_addresses` (Attributes List) SLA operation profile target MAC addresses (see [below for nested schema](#nestedatt--ethernet_cfm_mep_domains--sla_operation_profile_target_mac_addresses))
+- `sla_operation_profile_target_mep_ids` (Attributes List) SLA operation profile target MEP IDs (see [below for nested schema](#nestedatt--ethernet_cfm_mep_domains--sla_operation_profile_target_mep_ids))
+
+<a id="nestedatt--ethernet_cfm_mep_domains--sla_operation_profile_target_mac_addresses"></a>
+### Nested Schema for `ethernet_cfm_mep_domains.sla_operation_profile_target_mac_addresses`
+
+Required:
+
+- `mac_address` (String) Target MAC address
+- `profile_name` (String) Profile name
+
+
+<a id="nestedatt--ethernet_cfm_mep_domains--sla_operation_profile_target_mep_ids"></a>
+### Nested Schema for `ethernet_cfm_mep_domains.sla_operation_profile_target_mep_ids`
+
+Required:
+
+- `mep_id` (Number) Target MEP ID
+- `profile_name` (String) Profile name
+
+
 
 <a id="nestedatt--flow_ipv4_egress_monitor_samplers"></a>
 ### Nested Schema for `flow_ipv4_egress_monitor_samplers`

@@ -13,6 +13,7 @@ description: |-
   - Interface types:
       `iosxr_interface_ethernet` `iosxr_interface_bundle_ether` `iosxr_interface_bundle_ether_subinterface` `iosxr_interface_bvi`
       `iosxr_interface_loopback` `iosxr_interface_tunnel_ip` `iosxr_interface_tunnel_te`
+- BREAKING CHANGE: Consolidate `iosxr_logging_source_interface` into `iosxr_logging` resource and data source
 - BREAKING CHANGE: Consolidate `iosxr_evpn_group` into `iosxr_evpn` resource and data source
 - BREAKING CHANGE: Consolidate `iosxr_segment_routing_te_policy_candidate_path` into `iosxr_segment_routing_te_policy` resource and data source
 - BREAKING CHANGE: Consolidate `iosxr_snmp_server_view` into `iosxr_snmp_server` resource and data source
@@ -20,6 +21,12 @@ description: |-
 - BREAKING CHANGE: Consolidate `iosxr_l2vpn_bridge_group` into `iosxr_l2vpn_bridge_group_bridge_domain` resource and data source
 - BREAKING CHANGE: Decompose `iosxr_segment_routing_te` on-demand-colors into `iosxr_segment_routing_te_on_demand_color` resource and data source
 - BREAKING CHANGE: Decompose `iosxr_mpls_ldp` into `iosxr_mpls_ldp`, `iosxr_mpls_ldp_address_family`, `iosxr_mpls_ldp_interface`, `iosxr_mpls_ldp_mldp`, `iosxr_mpls_ldp_vrf` resource and data source
+- BREAKING CHANGE: Rename `local_as_replace_as` to `local_as_no_prepend_replace_as` in `iosxr_router_bgp_neighbor_group` resource and data source
+- BREAKING CHANGE: Rename `local_as_dual_as` to `local_as_no_prepend_replace_as_dual_as` in `iosxr_router_bgp_neighbor_group` resource and data source
+- BREAKING CHANGE: Rename `buffered_logging_buffer_size` to `buffered_size` in `iosxr_logging` resource and data source
+- BREAKING CHANGE: Rename `encapsulation_mpls_load_balancing_flow_label_code_one7` to `encapsulation_mpls_load_balancing_flow_label_code_17` in `iosxr_l2vpn_pw_class` resource and data source
+- BREAKING CHANGE: Rename `encapsulation_mpls_load_balancing_flow_label_code_one7_disable` to `encapsulation_mpls_load_balancing_flow_label_code_17_disable` in `iosxr_l2vpn_pw_class` resource and data source
+- BREAKING CHANGE: Rename `encapsulation_mpls_transport_mode_passthrough` to `encapsulation_mpls_transport_mode_vlan_passthrough` in `iosxr_l2vpn_pw_class` resource and data source
 - BREAKING CHANGE: Rename `bgp_rd` attributes for consistency with other definitions in `iosxr_evpn_evi` resource and data source
 - BREAKING CHANGE: Rename `pcc_source_address` to `pcc_source_address_ipv4` in `iosxr_segment_routing_te` resource and data source
 - BREAKING CHANGE: Rename `pce_peers` to `pce_peers_ipv4` in `iosxr_segment_routing_te` resource and data source
@@ -34,6 +41,8 @@ description: |-
 - BREAKING CHANGE: Rename `lsp_password_levels` to `lsp_password_accept_levels` in `iosxr_router_isis` resource and data source
 
 - Add many new attributes across all resources and data sources
+- Add `iosxr_ethernet_sla` resource and data source
+- Add `iosxr_ethernet_cfm` resource and data source
 - Add `iosxr_cef_load_balancing_8000` resource and data source
 - Add `iosxr_generic_interface_list` resource and data source
 - Add `iosxr_srlg` resource and data source
@@ -47,7 +56,6 @@ description: |-
 - Add `iosxr_router_bgp_af_group` resource and data source
 - Add `iosxr_bmp_server` resource and data source
 - Add `iosxr_hw_module_profile_8000` resource and data source
-- Add `iosxr_interface_tunnel_te` resource and data source
 - Add `iosxr_rsvp` resource and data source
 - Add `iosxr_rsvp_interface` resource and data source
 - Add `iosxr_class_map_traffic` resource and data source
@@ -86,7 +94,8 @@ description: |-
 - Add `iosxr_vty_pool` resource and data source
 - Add `iosxr_telemetry_model_driven` resource and data source
 - Add `iosxr_l2vpn_bridge_group_bridge_domain_neighbor` resource and data source
-- Add `iosxr_l2vpn_bridge_group_bridge_domain_vrf` resource and data source
+- Add `iosxr_l2vpn_bridge_group_bridge_access_vfi` resource and data source
+- Add `iosxr_l2vpn_bridge_group_bridge_domain_vfi` resource and data source
 - Add `iosxr_control_plane` resource and data source
 - Add `iosxr_segment_routing_mapping` resource and data source
 - Add `iosxr_call_home` resource and data source
@@ -95,6 +104,7 @@ description: |-
 - Add `iosxr_line_default` resource and data source
 - Add `iosxr_line_template` resource and data source
 - Add `iosxr_track` resource and data source
+- Add `iosxr_ipsla_responder` resource and data source
 - Add `iosxr_ipsla` resource and data source
 - Add `iosxr_router_mld` resource and data source
 - Add `iosxr_router_mld_interface` resource and data source
@@ -115,12 +125,13 @@ description: |-
 - Add `iosxr_linux_networking` resource and data source
 - Add `iosxr_cef` resource and data source
 - Add `iosxr_cef_pbts_forward_class` resource and data source
-- Add `iosxr_hardware_module_shutdown` resource and data source
+- Add `iosxr_hw_module_shutdown` resource and data source
 - Add `iosxr_performance_measurement` resource and data source
 - Add `iosxr_performance_measurement_interface` resource and data source
 - Add `iosxr_performance_measurement_delay_profile` resource and data source
 - Add `iosxr_performance_measurement_liveness_profile` resource and data source
-- Add `iosxr_performance_measurement_endpoint` resource and data source
+- Add `iosxr_performance_measurement_endpoint_ipv6` resource and data source
+- Add `iosxr_performance_measurement_endpoint_ipv4` resource and data source
 - Add `iosxr_xml_agent` resource and data source
 - Add `iosxr_netconf_agent_tty` resource and data source
 - Add `iosxr_netconf_yang_agent` resource and data source

@@ -54,10 +54,20 @@ resource "iosxr_logging" "example" {
       discriminator_nomatch3                         = "NOMATCH3"
     }
   ]
-  history             = "emergencies"
-  history_size        = 500
-  hostnameprefix      = "HOSTNAME01"
-  localfilesize       = 1000
+  history        = "emergencies"
+  history_size   = 500
+  hostnameprefix = "HOSTNAME01"
+  localfilesize  = 1000
+  source_interfaces = [
+    {
+      name = "Loopback0"
+      vrfs = [
+        {
+          name = "VRF1"
+        }
+      ]
+    }
+  ]
   suppress_duplicates = true
   format_rfc5424      = true
   yang                = "emergencies"
@@ -163,6 +173,7 @@ resource "iosxr_logging" "example" {
 - `monitor_discriminator_nomatch1` (String) Set no-match discriminator 1
 - `monitor_discriminator_nomatch2` (String) Set no-match discriminator 2
 - `monitor_discriminator_nomatch3` (String) Set no-match discriminator 3
+- `source_interfaces` (Attributes List) Specify interface for source address in logging transactions (see [below for nested schema](#nestedatt--source_interfaces))
 - `suppress_duplicates` (Boolean) Suppress consecutive duplicate messages
 - `suppress_rules` (Attributes List) Configure a specified suppression rule (see [below for nested schema](#nestedatt--suppress_rules))
 - `trap` (String) Set trap logging
@@ -204,6 +215,26 @@ Optional:
 Required:
 
 - `match` (String) Configure match string to filter
+
+
+<a id="nestedatt--source_interfaces"></a>
+### Nested Schema for `source_interfaces`
+
+Required:
+
+- `name` (String) Specify interface for source address in logging transactions
+
+Optional:
+
+- `vrfs` (Attributes List) Set VRF option (see [below for nested schema](#nestedatt--source_interfaces--vrfs))
+
+<a id="nestedatt--source_interfaces--vrfs"></a>
+### Nested Schema for `source_interfaces.vrfs`
+
+Required:
+
+- `name` (String) Set VRF option
+
 
 
 <a id="nestedatt--suppress_rules"></a>

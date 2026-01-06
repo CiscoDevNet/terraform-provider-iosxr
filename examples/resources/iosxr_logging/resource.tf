@@ -39,10 +39,20 @@ resource "iosxr_logging" "example" {
       discriminator_nomatch3                         = "NOMATCH3"
     }
   ]
-  history             = "emergencies"
-  history_size        = 500
-  hostnameprefix      = "HOSTNAME01"
-  localfilesize       = 1000
+  history        = "emergencies"
+  history_size   = 500
+  hostnameprefix = "HOSTNAME01"
+  localfilesize  = 1000
+  source_interfaces = [
+    {
+      name = "Loopback0"
+      vrfs = [
+        {
+          name = "VRF1"
+        }
+      ]
+    }
+  ]
   suppress_duplicates = true
   format_rfc5424      = true
   yang                = "emergencies"

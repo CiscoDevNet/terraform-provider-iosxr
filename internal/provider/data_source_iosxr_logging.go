@@ -279,6 +279,30 @@ func (d *LoggingDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				MarkdownDescription: "Set size of the local log file",
 				Computed:            true,
 			},
+			"source_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify interface for source address in logging transactions",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: "Specify interface for source address in logging transactions",
+							Computed:            true,
+						},
+						"vrfs": schema.ListNestedAttribute{
+							MarkdownDescription: "Set VRF option",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"name": schema.StringAttribute{
+										MarkdownDescription: "Set VRF option",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 			"suppress_duplicates": schema.BoolAttribute{
 				MarkdownDescription: "Suppress consecutive duplicate messages",
 				Computed:            true,

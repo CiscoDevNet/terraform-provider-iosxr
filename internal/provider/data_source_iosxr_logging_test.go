@@ -72,6 +72,8 @@ func TestAccDataSourceIosxrLogging(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "history_size", "500"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "hostnameprefix", "HOSTNAME01"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "localfilesize", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "source_interfaces.0.name", "Loopback0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "source_interfaces.0.vrfs.0.name", "VRF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "suppress_duplicates", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "format_rfc5424", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "yang", "emergencies"))
@@ -150,6 +152,12 @@ func testAccDataSourceIosxrLoggingConfig() string {
 	config += `	history_size = 500` + "\n"
 	config += `	hostnameprefix = "HOSTNAME01"` + "\n"
 	config += `	localfilesize = 1000` + "\n"
+	config += `	source_interfaces = [{` + "\n"
+	config += `		name = "Loopback0"` + "\n"
+	config += `		vrfs = [{` + "\n"
+	config += `			name = "VRF1"` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
 	config += `	suppress_duplicates = true` + "\n"
 	config += `	format_rfc5424 = true` + "\n"
 	config += `	yang = "emergencies"` + "\n"

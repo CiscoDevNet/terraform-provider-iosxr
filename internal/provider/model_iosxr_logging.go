@@ -35,120 +35,122 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type Logging struct {
-	Device                         types.String           `tfsdk:"device"`
-	Id                             types.String           `tfsdk:"id"`
-	DeleteMode                     types.String           `tfsdk:"delete_mode"`
-	Console                        types.String           `tfsdk:"console"`
-	Trap                           types.String           `tfsdk:"trap"`
-	Monitor                        types.String           `tfsdk:"monitor"`
-	ConsoleFacility                types.String           `tfsdk:"console_facility"`
-	MonitorDiscriminatorMatch1     types.String           `tfsdk:"monitor_discriminator_match1"`
-	MonitorDiscriminatorMatch2     types.String           `tfsdk:"monitor_discriminator_match2"`
-	MonitorDiscriminatorMatch3     types.String           `tfsdk:"monitor_discriminator_match3"`
-	MonitorDiscriminatorNomatch1   types.String           `tfsdk:"monitor_discriminator_nomatch1"`
-	MonitorDiscriminatorNomatch2   types.String           `tfsdk:"monitor_discriminator_nomatch2"`
-	MonitorDiscriminatorNomatch3   types.String           `tfsdk:"monitor_discriminator_nomatch3"`
-	ArchiveDisk0                   types.Bool             `tfsdk:"archive_disk0"`
-	ArchiveDisk1                   types.Bool             `tfsdk:"archive_disk1"`
-	ArchiveHarddisk                types.Bool             `tfsdk:"archive_harddisk"`
-	ArchiveFrequencyDaily          types.Bool             `tfsdk:"archive_frequency_daily"`
-	ArchiveFrequencyWeekly         types.Bool             `tfsdk:"archive_frequency_weekly"`
-	ArchiveFilesize                types.Int64            `tfsdk:"archive_filesize"`
-	ArchiveSize                    types.Int64            `tfsdk:"archive_size"`
-	ArchiveLength                  types.Int64            `tfsdk:"archive_length"`
-	ArchiveSeverity                types.String           `tfsdk:"archive_severity"`
-	ArchiveThreshold               types.Int64            `tfsdk:"archive_threshold"`
-	Ipv4Dscp                       types.String           `tfsdk:"ipv4_dscp"`
-	Ipv4Precedence                 types.String           `tfsdk:"ipv4_precedence"`
-	Ipv6Dscp                       types.String           `tfsdk:"ipv6_dscp"`
-	Ipv6Precedence                 types.String           `tfsdk:"ipv6_precedence"`
-	FacilityLevel                  types.String           `tfsdk:"facility_level"`
-	BufferedEntriesCount           types.Int64            `tfsdk:"buffered_entries_count"`
-	BufferedSize                   types.Int64            `tfsdk:"buffered_size"`
-	BufferedLevel                  types.String           `tfsdk:"buffered_level"`
-	BufferedDiscriminatorMatch1    types.String           `tfsdk:"buffered_discriminator_match1"`
-	BufferedDiscriminatorMatch2    types.String           `tfsdk:"buffered_discriminator_match2"`
-	BufferedDiscriminatorMatch3    types.String           `tfsdk:"buffered_discriminator_match3"`
-	BufferedDiscriminatorNomatch1  types.String           `tfsdk:"buffered_discriminator_nomatch1"`
-	BufferedDiscriminatorNomatch2  types.String           `tfsdk:"buffered_discriminator_nomatch2"`
-	BufferedDiscriminatorNomatch3  types.String           `tfsdk:"buffered_discriminator_nomatch3"`
-	ContainerAll                   types.Bool             `tfsdk:"container_all"`
-	ContainerFetchTimestamp        types.Bool             `tfsdk:"container_fetch_timestamp"`
-	File                           []LoggingFile          `tfsdk:"file"`
-	History                        types.String           `tfsdk:"history"`
-	HistorySize                    types.Int64            `tfsdk:"history_size"`
-	Hostnameprefix                 types.String           `tfsdk:"hostnameprefix"`
-	Localfilesize                  types.Int64            `tfsdk:"localfilesize"`
-	SuppressDuplicates             types.Bool             `tfsdk:"suppress_duplicates"`
-	FormatRfc5424                  types.Bool             `tfsdk:"format_rfc5424"`
-	FormatBsd                      types.Bool             `tfsdk:"format_bsd"`
-	Yang                           types.String           `tfsdk:"yang"`
-	SuppressRules                  []LoggingSuppressRules `tfsdk:"suppress_rules"`
-	EventsBufferSize               types.Int64            `tfsdk:"events_buffer_size"`
-	FilterMatches                  []LoggingFilterMatches `tfsdk:"filter_matches"`
-	EventsDisplayLocation          types.Bool             `tfsdk:"events_display_location"`
-	EventsLevel                    types.String           `tfsdk:"events_level"`
-	EventsThreshold                types.Int64            `tfsdk:"events_threshold"`
-	EventsPrecfgSuppression        types.String           `tfsdk:"events_precfg_suppression"`
-	EventsPrecfgSuppressionTimeout types.Int64            `tfsdk:"events_precfg_suppression_timeout"`
+	Device                         types.String              `tfsdk:"device"`
+	Id                             types.String              `tfsdk:"id"`
+	DeleteMode                     types.String              `tfsdk:"delete_mode"`
+	Console                        types.String              `tfsdk:"console"`
+	Trap                           types.String              `tfsdk:"trap"`
+	Monitor                        types.String              `tfsdk:"monitor"`
+	ConsoleFacility                types.String              `tfsdk:"console_facility"`
+	MonitorDiscriminatorMatch1     types.String              `tfsdk:"monitor_discriminator_match1"`
+	MonitorDiscriminatorMatch2     types.String              `tfsdk:"monitor_discriminator_match2"`
+	MonitorDiscriminatorMatch3     types.String              `tfsdk:"monitor_discriminator_match3"`
+	MonitorDiscriminatorNomatch1   types.String              `tfsdk:"monitor_discriminator_nomatch1"`
+	MonitorDiscriminatorNomatch2   types.String              `tfsdk:"monitor_discriminator_nomatch2"`
+	MonitorDiscriminatorNomatch3   types.String              `tfsdk:"monitor_discriminator_nomatch3"`
+	ArchiveDisk0                   types.Bool                `tfsdk:"archive_disk0"`
+	ArchiveDisk1                   types.Bool                `tfsdk:"archive_disk1"`
+	ArchiveHarddisk                types.Bool                `tfsdk:"archive_harddisk"`
+	ArchiveFrequencyDaily          types.Bool                `tfsdk:"archive_frequency_daily"`
+	ArchiveFrequencyWeekly         types.Bool                `tfsdk:"archive_frequency_weekly"`
+	ArchiveFilesize                types.Int64               `tfsdk:"archive_filesize"`
+	ArchiveSize                    types.Int64               `tfsdk:"archive_size"`
+	ArchiveLength                  types.Int64               `tfsdk:"archive_length"`
+	ArchiveSeverity                types.String              `tfsdk:"archive_severity"`
+	ArchiveThreshold               types.Int64               `tfsdk:"archive_threshold"`
+	Ipv4Dscp                       types.String              `tfsdk:"ipv4_dscp"`
+	Ipv4Precedence                 types.String              `tfsdk:"ipv4_precedence"`
+	Ipv6Dscp                       types.String              `tfsdk:"ipv6_dscp"`
+	Ipv6Precedence                 types.String              `tfsdk:"ipv6_precedence"`
+	FacilityLevel                  types.String              `tfsdk:"facility_level"`
+	BufferedEntriesCount           types.Int64               `tfsdk:"buffered_entries_count"`
+	BufferedSize                   types.Int64               `tfsdk:"buffered_size"`
+	BufferedLevel                  types.String              `tfsdk:"buffered_level"`
+	BufferedDiscriminatorMatch1    types.String              `tfsdk:"buffered_discriminator_match1"`
+	BufferedDiscriminatorMatch2    types.String              `tfsdk:"buffered_discriminator_match2"`
+	BufferedDiscriminatorMatch3    types.String              `tfsdk:"buffered_discriminator_match3"`
+	BufferedDiscriminatorNomatch1  types.String              `tfsdk:"buffered_discriminator_nomatch1"`
+	BufferedDiscriminatorNomatch2  types.String              `tfsdk:"buffered_discriminator_nomatch2"`
+	BufferedDiscriminatorNomatch3  types.String              `tfsdk:"buffered_discriminator_nomatch3"`
+	ContainerAll                   types.Bool                `tfsdk:"container_all"`
+	ContainerFetchTimestamp        types.Bool                `tfsdk:"container_fetch_timestamp"`
+	File                           []LoggingFile             `tfsdk:"file"`
+	History                        types.String              `tfsdk:"history"`
+	HistorySize                    types.Int64               `tfsdk:"history_size"`
+	Hostnameprefix                 types.String              `tfsdk:"hostnameprefix"`
+	Localfilesize                  types.Int64               `tfsdk:"localfilesize"`
+	SourceInterfaces               []LoggingSourceInterfaces `tfsdk:"source_interfaces"`
+	SuppressDuplicates             types.Bool                `tfsdk:"suppress_duplicates"`
+	FormatRfc5424                  types.Bool                `tfsdk:"format_rfc5424"`
+	FormatBsd                      types.Bool                `tfsdk:"format_bsd"`
+	Yang                           types.String              `tfsdk:"yang"`
+	SuppressRules                  []LoggingSuppressRules    `tfsdk:"suppress_rules"`
+	EventsBufferSize               types.Int64               `tfsdk:"events_buffer_size"`
+	FilterMatches                  []LoggingFilterMatches    `tfsdk:"filter_matches"`
+	EventsDisplayLocation          types.Bool                `tfsdk:"events_display_location"`
+	EventsLevel                    types.String              `tfsdk:"events_level"`
+	EventsThreshold                types.Int64               `tfsdk:"events_threshold"`
+	EventsPrecfgSuppression        types.String              `tfsdk:"events_precfg_suppression"`
+	EventsPrecfgSuppressionTimeout types.Int64               `tfsdk:"events_precfg_suppression_timeout"`
 }
 
 type LoggingData struct {
-	Device                         types.String           `tfsdk:"device"`
-	Id                             types.String           `tfsdk:"id"`
-	Console                        types.String           `tfsdk:"console"`
-	Trap                           types.String           `tfsdk:"trap"`
-	Monitor                        types.String           `tfsdk:"monitor"`
-	ConsoleFacility                types.String           `tfsdk:"console_facility"`
-	MonitorDiscriminatorMatch1     types.String           `tfsdk:"monitor_discriminator_match1"`
-	MonitorDiscriminatorMatch2     types.String           `tfsdk:"monitor_discriminator_match2"`
-	MonitorDiscriminatorMatch3     types.String           `tfsdk:"monitor_discriminator_match3"`
-	MonitorDiscriminatorNomatch1   types.String           `tfsdk:"monitor_discriminator_nomatch1"`
-	MonitorDiscriminatorNomatch2   types.String           `tfsdk:"monitor_discriminator_nomatch2"`
-	MonitorDiscriminatorNomatch3   types.String           `tfsdk:"monitor_discriminator_nomatch3"`
-	ArchiveDisk0                   types.Bool             `tfsdk:"archive_disk0"`
-	ArchiveDisk1                   types.Bool             `tfsdk:"archive_disk1"`
-	ArchiveHarddisk                types.Bool             `tfsdk:"archive_harddisk"`
-	ArchiveFrequencyDaily          types.Bool             `tfsdk:"archive_frequency_daily"`
-	ArchiveFrequencyWeekly         types.Bool             `tfsdk:"archive_frequency_weekly"`
-	ArchiveFilesize                types.Int64            `tfsdk:"archive_filesize"`
-	ArchiveSize                    types.Int64            `tfsdk:"archive_size"`
-	ArchiveLength                  types.Int64            `tfsdk:"archive_length"`
-	ArchiveSeverity                types.String           `tfsdk:"archive_severity"`
-	ArchiveThreshold               types.Int64            `tfsdk:"archive_threshold"`
-	Ipv4Dscp                       types.String           `tfsdk:"ipv4_dscp"`
-	Ipv4Precedence                 types.String           `tfsdk:"ipv4_precedence"`
-	Ipv6Dscp                       types.String           `tfsdk:"ipv6_dscp"`
-	Ipv6Precedence                 types.String           `tfsdk:"ipv6_precedence"`
-	FacilityLevel                  types.String           `tfsdk:"facility_level"`
-	BufferedEntriesCount           types.Int64            `tfsdk:"buffered_entries_count"`
-	BufferedSize                   types.Int64            `tfsdk:"buffered_size"`
-	BufferedLevel                  types.String           `tfsdk:"buffered_level"`
-	BufferedDiscriminatorMatch1    types.String           `tfsdk:"buffered_discriminator_match1"`
-	BufferedDiscriminatorMatch2    types.String           `tfsdk:"buffered_discriminator_match2"`
-	BufferedDiscriminatorMatch3    types.String           `tfsdk:"buffered_discriminator_match3"`
-	BufferedDiscriminatorNomatch1  types.String           `tfsdk:"buffered_discriminator_nomatch1"`
-	BufferedDiscriminatorNomatch2  types.String           `tfsdk:"buffered_discriminator_nomatch2"`
-	BufferedDiscriminatorNomatch3  types.String           `tfsdk:"buffered_discriminator_nomatch3"`
-	ContainerAll                   types.Bool             `tfsdk:"container_all"`
-	ContainerFetchTimestamp        types.Bool             `tfsdk:"container_fetch_timestamp"`
-	File                           []LoggingFile          `tfsdk:"file"`
-	History                        types.String           `tfsdk:"history"`
-	HistorySize                    types.Int64            `tfsdk:"history_size"`
-	Hostnameprefix                 types.String           `tfsdk:"hostnameprefix"`
-	Localfilesize                  types.Int64            `tfsdk:"localfilesize"`
-	SuppressDuplicates             types.Bool             `tfsdk:"suppress_duplicates"`
-	FormatRfc5424                  types.Bool             `tfsdk:"format_rfc5424"`
-	FormatBsd                      types.Bool             `tfsdk:"format_bsd"`
-	Yang                           types.String           `tfsdk:"yang"`
-	SuppressRules                  []LoggingSuppressRules `tfsdk:"suppress_rules"`
-	EventsBufferSize               types.Int64            `tfsdk:"events_buffer_size"`
-	FilterMatches                  []LoggingFilterMatches `tfsdk:"filter_matches"`
-	EventsDisplayLocation          types.Bool             `tfsdk:"events_display_location"`
-	EventsLevel                    types.String           `tfsdk:"events_level"`
-	EventsThreshold                types.Int64            `tfsdk:"events_threshold"`
-	EventsPrecfgSuppression        types.String           `tfsdk:"events_precfg_suppression"`
-	EventsPrecfgSuppressionTimeout types.Int64            `tfsdk:"events_precfg_suppression_timeout"`
+	Device                         types.String              `tfsdk:"device"`
+	Id                             types.String              `tfsdk:"id"`
+	Console                        types.String              `tfsdk:"console"`
+	Trap                           types.String              `tfsdk:"trap"`
+	Monitor                        types.String              `tfsdk:"monitor"`
+	ConsoleFacility                types.String              `tfsdk:"console_facility"`
+	MonitorDiscriminatorMatch1     types.String              `tfsdk:"monitor_discriminator_match1"`
+	MonitorDiscriminatorMatch2     types.String              `tfsdk:"monitor_discriminator_match2"`
+	MonitorDiscriminatorMatch3     types.String              `tfsdk:"monitor_discriminator_match3"`
+	MonitorDiscriminatorNomatch1   types.String              `tfsdk:"monitor_discriminator_nomatch1"`
+	MonitorDiscriminatorNomatch2   types.String              `tfsdk:"monitor_discriminator_nomatch2"`
+	MonitorDiscriminatorNomatch3   types.String              `tfsdk:"monitor_discriminator_nomatch3"`
+	ArchiveDisk0                   types.Bool                `tfsdk:"archive_disk0"`
+	ArchiveDisk1                   types.Bool                `tfsdk:"archive_disk1"`
+	ArchiveHarddisk                types.Bool                `tfsdk:"archive_harddisk"`
+	ArchiveFrequencyDaily          types.Bool                `tfsdk:"archive_frequency_daily"`
+	ArchiveFrequencyWeekly         types.Bool                `tfsdk:"archive_frequency_weekly"`
+	ArchiveFilesize                types.Int64               `tfsdk:"archive_filesize"`
+	ArchiveSize                    types.Int64               `tfsdk:"archive_size"`
+	ArchiveLength                  types.Int64               `tfsdk:"archive_length"`
+	ArchiveSeverity                types.String              `tfsdk:"archive_severity"`
+	ArchiveThreshold               types.Int64               `tfsdk:"archive_threshold"`
+	Ipv4Dscp                       types.String              `tfsdk:"ipv4_dscp"`
+	Ipv4Precedence                 types.String              `tfsdk:"ipv4_precedence"`
+	Ipv6Dscp                       types.String              `tfsdk:"ipv6_dscp"`
+	Ipv6Precedence                 types.String              `tfsdk:"ipv6_precedence"`
+	FacilityLevel                  types.String              `tfsdk:"facility_level"`
+	BufferedEntriesCount           types.Int64               `tfsdk:"buffered_entries_count"`
+	BufferedSize                   types.Int64               `tfsdk:"buffered_size"`
+	BufferedLevel                  types.String              `tfsdk:"buffered_level"`
+	BufferedDiscriminatorMatch1    types.String              `tfsdk:"buffered_discriminator_match1"`
+	BufferedDiscriminatorMatch2    types.String              `tfsdk:"buffered_discriminator_match2"`
+	BufferedDiscriminatorMatch3    types.String              `tfsdk:"buffered_discriminator_match3"`
+	BufferedDiscriminatorNomatch1  types.String              `tfsdk:"buffered_discriminator_nomatch1"`
+	BufferedDiscriminatorNomatch2  types.String              `tfsdk:"buffered_discriminator_nomatch2"`
+	BufferedDiscriminatorNomatch3  types.String              `tfsdk:"buffered_discriminator_nomatch3"`
+	ContainerAll                   types.Bool                `tfsdk:"container_all"`
+	ContainerFetchTimestamp        types.Bool                `tfsdk:"container_fetch_timestamp"`
+	File                           []LoggingFile             `tfsdk:"file"`
+	History                        types.String              `tfsdk:"history"`
+	HistorySize                    types.Int64               `tfsdk:"history_size"`
+	Hostnameprefix                 types.String              `tfsdk:"hostnameprefix"`
+	Localfilesize                  types.Int64               `tfsdk:"localfilesize"`
+	SourceInterfaces               []LoggingSourceInterfaces `tfsdk:"source_interfaces"`
+	SuppressDuplicates             types.Bool                `tfsdk:"suppress_duplicates"`
+	FormatRfc5424                  types.Bool                `tfsdk:"format_rfc5424"`
+	FormatBsd                      types.Bool                `tfsdk:"format_bsd"`
+	Yang                           types.String              `tfsdk:"yang"`
+	SuppressRules                  []LoggingSuppressRules    `tfsdk:"suppress_rules"`
+	EventsBufferSize               types.Int64               `tfsdk:"events_buffer_size"`
+	FilterMatches                  []LoggingFilterMatches    `tfsdk:"filter_matches"`
+	EventsDisplayLocation          types.Bool                `tfsdk:"events_display_location"`
+	EventsLevel                    types.String              `tfsdk:"events_level"`
+	EventsThreshold                types.Int64               `tfsdk:"events_threshold"`
+	EventsPrecfgSuppression        types.String              `tfsdk:"events_precfg_suppression"`
+	EventsPrecfgSuppressionTimeout types.Int64               `tfsdk:"events_precfg_suppression_timeout"`
 }
 type LoggingFile struct {
 	FileName                                 types.String `tfsdk:"file_name"`
@@ -163,6 +165,10 @@ type LoggingFile struct {
 	DiscriminatorNomatch2                    types.String `tfsdk:"discriminator_nomatch2"`
 	DiscriminatorNomatch3                    types.String `tfsdk:"discriminator_nomatch3"`
 }
+type LoggingSourceInterfaces struct {
+	Name types.String                  `tfsdk:"name"`
+	Vrfs []LoggingSourceInterfacesVrfs `tfsdk:"vrfs"`
+}
 type LoggingSuppressRules struct {
 	RuleName             types.String                               `tfsdk:"rule_name"`
 	Alarms               []LoggingSuppressRulesAlarms               `tfsdk:"alarms"`
@@ -172,6 +178,9 @@ type LoggingSuppressRules struct {
 }
 type LoggingFilterMatches struct {
 	Match types.String `tfsdk:"match"`
+}
+type LoggingSourceInterfacesVrfs struct {
+	Name types.String `tfsdk:"name"`
 }
 type LoggingSuppressRulesAlarms struct {
 	MessageCategory types.String `tfsdk:"message_category"`
@@ -407,6 +416,22 @@ func (data Logging) toBody(ctx context.Context) string {
 			}
 			if !item.DiscriminatorNomatch3.IsNull() && !item.DiscriminatorNomatch3.IsUnknown() {
 				body, _ = sjson.Set(body, "files.file"+"."+strconv.Itoa(index)+"."+"discriminator.nomatch3", item.DiscriminatorNomatch3.ValueString())
+			}
+		}
+	}
+	if len(data.SourceInterfaces) > 0 {
+		body, _ = sjson.Set(body, "source-interfaces.source-interface", []interface{}{})
+		for index, item := range data.SourceInterfaces {
+			if !item.Name.IsNull() && !item.Name.IsUnknown() {
+				body, _ = sjson.Set(body, "source-interfaces.source-interface"+"."+strconv.Itoa(index)+"."+"source-interface-name", item.Name.ValueString())
+			}
+			if len(item.Vrfs) > 0 {
+				body, _ = sjson.Set(body, "source-interfaces.source-interface"+"."+strconv.Itoa(index)+"."+"vrfs.vrf", []interface{}{})
+				for cindex, citem := range item.Vrfs {
+					if !citem.Name.IsNull() && !citem.Name.IsUnknown() {
+						body, _ = sjson.Set(body, "source-interfaces.source-interface"+"."+strconv.Itoa(index)+"."+"vrfs.vrf"+"."+strconv.Itoa(cindex)+"."+"vrf-name", citem.Name.ValueString())
+					}
+				}
 			}
 		}
 	}
@@ -772,6 +797,64 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 		data.Localfilesize = types.Int64Value(value.Int())
 	} else {
 		data.Localfilesize = types.Int64Null()
+	}
+	for i := range data.SourceInterfaces {
+		keys := [...]string{"source-interface-name"}
+		keyValues := [...]string{data.SourceInterfaces[i].Name.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "source-interfaces.source-interface").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("source-interface-name"); value.Exists() && !data.SourceInterfaces[i].Name.IsNull() {
+			data.SourceInterfaces[i].Name = types.StringValue(value.String())
+		} else {
+			data.SourceInterfaces[i].Name = types.StringNull()
+		}
+		for ci := range data.SourceInterfaces[i].Vrfs {
+			keys := [...]string{"vrf-name"}
+			keyValues := [...]string{data.SourceInterfaces[i].Vrfs[ci].Name.ValueString()}
+
+			var cr gjson.Result
+			r.Get("vrfs.vrf").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("vrf-name"); value.Exists() && !data.SourceInterfaces[i].Vrfs[ci].Name.IsNull() {
+				data.SourceInterfaces[i].Vrfs[ci].Name = types.StringValue(value.String())
+			} else {
+				data.SourceInterfaces[i].Vrfs[ci].Name = types.StringNull()
+			}
+		}
 	}
 	if value := gjson.GetBytes(res, "suppress.duplicates"); !data.SuppressDuplicates.IsNull() {
 		if value.Exists() {
@@ -1165,6 +1248,28 @@ func (data *Logging) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "localfilesize"); value.Exists() {
 		data.Localfilesize = types.Int64Value(value.Int())
 	}
+	if value := gjson.GetBytes(res, "source-interfaces.source-interface"); value.Exists() {
+		data.SourceInterfaces = make([]LoggingSourceInterfaces, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := LoggingSourceInterfaces{}
+			if cValue := v.Get("source-interface-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("vrfs.vrf"); cValue.Exists() {
+				item.Vrfs = make([]LoggingSourceInterfacesVrfs, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := LoggingSourceInterfacesVrfs{}
+					if ccValue := cv.Get("vrf-name"); ccValue.Exists() {
+						cItem.Name = types.StringValue(ccValue.String())
+					}
+					item.Vrfs = append(item.Vrfs, cItem)
+					return true
+				})
+			}
+			data.SourceInterfaces = append(data.SourceInterfaces, item)
+			return true
+		})
+	}
 	if value := gjson.GetBytes(res, "suppress.duplicates"); value.Exists() {
 		data.SuppressDuplicates = types.BoolValue(true)
 	} else {
@@ -1445,6 +1550,28 @@ func (data *LoggingData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "localfilesize"); value.Exists() {
 		data.Localfilesize = types.Int64Value(value.Int())
 	}
+	if value := gjson.GetBytes(res, "source-interfaces.source-interface"); value.Exists() {
+		data.SourceInterfaces = make([]LoggingSourceInterfaces, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := LoggingSourceInterfaces{}
+			if cValue := v.Get("source-interface-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("vrfs.vrf"); cValue.Exists() {
+				item.Vrfs = make([]LoggingSourceInterfacesVrfs, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := LoggingSourceInterfacesVrfs{}
+					if ccValue := cv.Get("vrf-name"); ccValue.Exists() {
+						cItem.Name = types.StringValue(ccValue.String())
+					}
+					item.Vrfs = append(item.Vrfs, cItem)
+					return true
+				})
+			}
+			data.SourceInterfaces = append(data.SourceInterfaces, item)
+			return true
+		})
+	}
 	if value := gjson.GetBytes(res, "suppress.duplicates"); value.Exists() {
 		data.SuppressDuplicates = types.BoolValue(true)
 	} else {
@@ -1719,6 +1846,66 @@ func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []strin
 	if !state.SuppressDuplicates.IsNull() && data.SuppressDuplicates.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/suppress/duplicates", state.getPath()))
 	}
+	for i := range state.SourceInterfaces {
+		keys := [...]string{"source-interface-name"}
+		stateKeyValues := [...]string{state.SourceInterfaces[i].Name.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SourceInterfaces[i].Name.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SourceInterfaces {
+			found = true
+			if state.SourceInterfaces[i].Name.ValueString() != data.SourceInterfaces[j].Name.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.SourceInterfaces[i].Vrfs {
+					ckeys := [...]string{"vrf-name"}
+					cstateKeyValues := [...]string{state.SourceInterfaces[i].Vrfs[ci].Name.ValueString()}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.SourceInterfaces[i].Vrfs[ci].Name.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.SourceInterfaces[j].Vrfs {
+						found = true
+						if state.SourceInterfaces[i].Vrfs[ci].Name.ValueString() != data.SourceInterfaces[j].Vrfs[cj].Name.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/source-interfaces/source-interface%v/vrfs/vrf%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/source-interfaces/source-interface%v", state.getPath(), keyString))
+		}
+	}
 	if !state.Localfilesize.IsNull() && data.Localfilesize.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/localfilesize", state.getPath()))
 	}
@@ -1958,6 +2145,22 @@ func (data *Logging) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.SuppressDuplicates.IsNull() && !data.SuppressDuplicates.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/suppress/duplicates", data.getPath()))
 	}
+	for i := range data.SourceInterfaces {
+		keys := [...]string{"source-interface-name"}
+		keyValues := [...]string{data.SourceInterfaces[i].Name.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		for ci := range data.SourceInterfaces[i].Vrfs {
+			ckeys := [...]string{"vrf-name"}
+			ckeyValues := [...]string{data.SourceInterfaces[i].Vrfs[ci].Name.ValueString()}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+		}
+	}
 	for i := range data.File {
 		keys := [...]string{"file-name"}
 		keyValues := [...]string{data.File[i].FileName.ValueString()}
@@ -2045,6 +2248,16 @@ func (data *Logging) getDeletePaths(ctx context.Context) []string {
 	}
 	if !data.SuppressDuplicates.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/suppress/duplicates", data.getPath()))
+	}
+	for i := range data.SourceInterfaces {
+		keys := [...]string{"source-interface-name"}
+		keyValues := [...]string{data.SourceInterfaces[i].Name.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/source-interfaces/source-interface%v", data.getPath(), keyString))
 	}
 	if !data.Localfilesize.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/localfilesize", data.getPath()))

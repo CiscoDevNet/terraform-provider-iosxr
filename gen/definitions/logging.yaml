@@ -148,6 +148,22 @@ attributes:
     example: HOSTNAME01
   - yang_name: localfilesize
     example: 1000
+  - yang_name: source-interfaces/source-interface
+    tf_name: source_interfaces
+    type: List
+    attributes:
+      - yang_name: source-interface-name
+        tf_name: name
+        id: true
+        example: Loopback0
+      - yang_name: vrfs/vrf
+        tf_name: vrfs
+        type: List
+        attributes:
+          - yang_name: vrf-name
+            tf_name: name
+            id: true
+            example: VRF1
   - yang_name: suppress/duplicates
     example: true
   - yang_name: format/rfc5424

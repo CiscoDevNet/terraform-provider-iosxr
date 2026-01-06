@@ -432,6 +432,33 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 					int64validator.Between(0, 4294967295),
 				},
 			},
+			"source_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify interface for source address in logging transactions").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify interface for source address in logging transactions").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+							},
+						},
+						"vrfs": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set VRF option").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Set VRF option").String,
+										Required:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 			"suppress_duplicates": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Suppress consecutive duplicate messages").String,
 				Optional:            true,

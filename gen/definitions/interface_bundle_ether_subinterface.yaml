@@ -10,7 +10,7 @@ attributes:
     no_augment_config: true
     string_patterns:
       - '^[0-9]+\.[0-9]+$'
-    example: 100.100
+    example: "100.100"
   - yang_name: sub-interface-type/point-to-point
     tf_name: point_to_point
     example: false

@@ -10,7 +10,7 @@ attributes:
     type: String
     id: true
     no_augment_config: true
-    example: 100
+    example: "100"
   - yang_name: shutdown
     minimum_test_value: false
     example: false

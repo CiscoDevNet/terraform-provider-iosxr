@@ -26,7 +26,7 @@ attributes:
     type: String
     id: true
     no_augment_config: true
-    example: 0/0/0/1
+    example: "0/0/0/1"
   - yang_name: sub-interface-type/l2transport
     tf_name: l2transport
     example: false

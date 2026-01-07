@@ -27,7 +27,7 @@ attributes:
     no_augment_config: true
     string_patterns:
       - '^[0-9]+(/[0-9]+)*\.[0-9]+$'
-    example: 0/0/0/0.100
+    example: "0/0/0/0.100"
   - yang_name: sub-interface-type/l2transport
     tf_name: l2transport
     example: false

@@ -8,7 +8,7 @@ attributes:
     type: String
     id: true
     no_augment_config: true
-    example: 10
+    example: "10"
   - yang_name: sub-interface-type/point-to-point
     tf_name: point_to_point
     example: false

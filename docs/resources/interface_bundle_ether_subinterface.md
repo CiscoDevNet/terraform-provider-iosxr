@@ -14,7 +14,7 @@ This resource can manage the Interface Bundle Ether Subinterface configuration.
 
 ```terraform
 resource "iosxr_interface_bundle_ether_subinterface" "example" {
-  name                         = "Bundle-Ether100.100"
+  name                         = "100.100"
   point_to_point               = false
   multipoint                   = false
   dampening                    = true
@@ -256,7 +256,7 @@ resource "iosxr_interface_bundle_ether_subinterface" "example" {
 
 ### Required
 
-- `name` (String) Interface configuration subcommands
+- `name` (String) Bundle-Ether subinterface ID
 
 ### Optional
 

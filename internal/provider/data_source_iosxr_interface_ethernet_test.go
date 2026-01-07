@@ -522,7 +522,8 @@ resource "iosxr_gnmi" "PreReq3" {
 func testAccDataSourceIosxrInterfaceEthernetConfig() string {
 	config := `resource "iosxr_interface_ethernet" "test" {` + "\n"
 	config += `	delete_mode = "attributes"` + "\n"
-	config += `	name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	type = "GigabitEthernet"` + "\n"
+	config += `	name = "0/0/0/1"` + "\n"
 	config += `	l2transport = false` + "\n"
 	config += `	point_to_point = false` + "\n"
 	config += `	multipoint = false` + "\n"
@@ -950,7 +951,8 @@ func testAccDataSourceIosxrInterfaceEthernetConfig() string {
 
 	config += `
 		data "iosxr_interface_ethernet" "test" {
-			name = "GigabitEthernet0/0/0/1"
+			type = "GigabitEthernet"
+			name = "0/0/0/1"
 			depends_on = [iosxr_interface_ethernet.test]
 		}
 	`

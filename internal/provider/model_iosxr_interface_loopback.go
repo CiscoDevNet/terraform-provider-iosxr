@@ -164,11 +164,11 @@ type InterfaceLoopbackIpv6Eui64Addresses struct {
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
 
 func (data InterfaceLoopback) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s]", data.Name.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=Loopback%s]", data.Name.ValueString())
 }
 
 func (data InterfaceLoopbackData) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s]", data.Name.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=Loopback%s]", data.Name.ValueString())
 }
 
 // End of section. //template:end getPath
@@ -178,7 +178,7 @@ func (data InterfaceLoopbackData) getPath() string {
 func (data InterfaceLoopback) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.Name.IsNull() && !data.Name.IsUnknown() {
-		body, _ = sjson.Set(body, "interface-name", data.Name.ValueString())
+		body, _ = sjson.Set(body, "", data.Name.ValueString())
 	}
 	if !data.Dampening.IsNull() && !data.Dampening.IsUnknown() {
 		if data.Dampening.ValueBool() {

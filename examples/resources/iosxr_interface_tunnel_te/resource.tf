@@ -1,5 +1,4 @@
 resource "iosxr_interface_tunnel_te" "example" {
-  type                               = "tunnel-te"
   name                               = "100"
   shutdown                           = false
   logging_events_link_status         = true

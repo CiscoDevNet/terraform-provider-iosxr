@@ -14,7 +14,7 @@ This resource can manage the Interface BVI configuration.
 
 ```terraform
 resource "iosxr_interface_bvi" "example" {
-  name                         = "BVI100"
+  name                         = "100"
   point_to_point               = false
   multipoint                   = false
   dampening                    = true
@@ -189,7 +189,7 @@ resource "iosxr_interface_bvi" "example" {
 
 ### Required
 
-- `name` (String) Interface configuration subcommands
+- `name` (String) BVI interface ID
 
 ### Optional
 

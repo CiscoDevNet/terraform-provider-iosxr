@@ -1,5 +1,4 @@
 resource "iosxr_interface_tunnel_ip" "example" {
-  type                       = "tunnel-ip"
   name                       = "100"
   shutdown                   = false
   mtu                        = 1400

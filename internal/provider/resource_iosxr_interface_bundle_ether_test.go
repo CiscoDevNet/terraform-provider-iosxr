@@ -35,7 +35,7 @@ import (
 
 func TestAccIosxrInterfaceBundleEther(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether.test", "name", "Bundle-Ether10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether.test", "name", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether.test", "point_to_point", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether.test", "multipoint", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether.test", "dampening", "true"))
@@ -523,7 +523,7 @@ resource "iosxr_gnmi" "PreReq3" {
 
 func testAccIosxrInterfaceBundleEtherConfig_minimum() string {
 	config := `resource "iosxr_interface_bundle_ether" "test" {` + "\n"
-	config += `	name = "Bundle-Ether10"` + "\n"
+	config += `	name = "10"` + "\n"
 	config += `	shutdown = false` + "\n"
 	config += `	load_interval = 30` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
@@ -538,7 +538,7 @@ func testAccIosxrInterfaceBundleEtherConfig_minimum() string {
 func testAccIosxrInterfaceBundleEtherConfig_all() string {
 	config := `resource "iosxr_interface_bundle_ether" "test" {` + "\n"
 	config += `	delete_mode = "all"` + "\n"
-	config += `	name = "Bundle-Ether10"` + "\n"
+	config += `	name = "10"` + "\n"
 	config += `	point_to_point = false` + "\n"
 	config += `	multipoint = false` + "\n"
 	config += `	dampening = true` + "\n"

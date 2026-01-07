@@ -538,11 +538,11 @@ type InterfaceBundleEtherSubinterfaceEthernetCfmMepDomainsSlaOperationProfileTar
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
 
 func (data InterfaceBundleEtherSubinterface) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s]", data.Name.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=Bundle-Ether%s]", data.Name.ValueString())
 }
 
 func (data InterfaceBundleEtherSubinterfaceData) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s]", data.Name.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=Bundle-Ether%s]", data.Name.ValueString())
 }
 
 // End of section. //template:end getPath
@@ -552,7 +552,7 @@ func (data InterfaceBundleEtherSubinterfaceData) getPath() string {
 func (data InterfaceBundleEtherSubinterface) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.Name.IsNull() && !data.Name.IsUnknown() {
-		body, _ = sjson.Set(body, "interface-name", data.Name.ValueString())
+		body, _ = sjson.Set(body, "", data.Name.ValueString())
 	}
 	if !data.PointToPoint.IsNull() && !data.PointToPoint.IsUnknown() {
 		if data.PointToPoint.ValueBool() {

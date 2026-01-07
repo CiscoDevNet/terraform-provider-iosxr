@@ -82,10 +82,10 @@ func (r *InterfaceBundleEtherSubinterfaceResource) Schema(ctx context.Context, r
 				},
 			},
 			"name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Interface configuration subcommands").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Bundle-Ether subinterface ID").String,
 				Required:            true,
 				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[0-9]+\.[0-9]+$`), ""),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),

@@ -141,10 +141,9 @@ func TestAccIosxrInterfaceTunnelTE(t *testing.T) {
 func iosxrInterfaceTunnelTEImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 		primary := s.RootModule().Resources[resourceName].Primary
-		Type := primary.Attributes["type"]
 		Name := primary.Attributes["name"]
 
-		return fmt.Sprintf("%s,%s", Type, Name), nil
+		return fmt.Sprintf("%s", Name), nil
 	}
 }
 
@@ -158,7 +157,6 @@ func iosxrInterfaceTunnelTEImportStateIdFunc(resourceName string) resource.Impor
 
 func testAccIosxrInterfaceTunnelTEConfig_minimum() string {
 	config := `resource "iosxr_interface_tunnel_te" "test" {` + "\n"
-	config += `	type = "tunnel-te"` + "\n"
 	config += `	name = "100"` + "\n"
 	config += `	shutdown = false` + "\n"
 	config += `	load_interval = 30` + "\n"
@@ -172,7 +170,6 @@ func testAccIosxrInterfaceTunnelTEConfig_minimum() string {
 
 func testAccIosxrInterfaceTunnelTEConfig_all() string {
 	config := `resource "iosxr_interface_tunnel_te" "test" {` + "\n"
-	config += `	type = "tunnel-te"` + "\n"
 	config += `	name = "100"` + "\n"
 	config += `	shutdown = false` + "\n"
 	config += `	logging_events_link_status = true` + "\n"

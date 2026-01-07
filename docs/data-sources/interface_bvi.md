@@ -14,7 +14,7 @@ This data source can read the Interface BVI configuration.
 
 ```terraform
 data "iosxr_interface_bvi" "example" {
-  name = "BVI100"
+  name = "100"
 }
 ```
 
@@ -23,7 +23,7 @@ data "iosxr_interface_bvi" "example" {
 
 ### Required
 
-- `name` (String) Interface configuration subcommands
+- `name` (String) BVI interface ID
 
 ### Optional
 

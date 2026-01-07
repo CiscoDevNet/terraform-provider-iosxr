@@ -130,10 +130,9 @@ func TestAccIosxrInterfaceTunnelIP(t *testing.T) {
 func iosxrInterfaceTunnelIPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 		primary := s.RootModule().Resources[resourceName].Primary
-		Type := primary.Attributes["type"]
 		Name := primary.Attributes["name"]
 
-		return fmt.Sprintf("%s,%s", Type, Name), nil
+		return fmt.Sprintf("%s", Name), nil
 	}
 }
 
@@ -198,7 +197,6 @@ resource "iosxr_gnmi" "PreReq2" {
 
 func testAccIosxrInterfaceTunnelIPConfig_minimum() string {
 	config := `resource "iosxr_interface_tunnel_ip" "test" {` + "\n"
-	config += `	type = "tunnel-ip"` + "\n"
 	config += `	name = "100"` + "\n"
 	config += `	shutdown = false` + "\n"
 	config += `	load_interval = 30` + "\n"
@@ -215,7 +213,6 @@ func testAccIosxrInterfaceTunnelIPConfig_minimum() string {
 
 func testAccIosxrInterfaceTunnelIPConfig_all() string {
 	config := `resource "iosxr_interface_tunnel_ip" "test" {` + "\n"
-	config += `	type = "tunnel-ip"` + "\n"
 	config += `	name = "100"` + "\n"
 	config += `	shutdown = false` + "\n"
 	config += `	mtu = 1400` + "\n"

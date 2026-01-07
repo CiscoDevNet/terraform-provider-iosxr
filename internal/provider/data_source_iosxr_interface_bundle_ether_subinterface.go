@@ -68,7 +68,7 @@ func (d *InterfaceBundleEtherSubinterfaceDataSource) Schema(ctx context.Context,
 				Computed:            true,
 			},
 			"name": schema.StringAttribute{
-				MarkdownDescription: "Interface configuration subcommands",
+				MarkdownDescription: "Bundle-Ether subinterface ID",
 				Required:            true,
 			},
 			"point_to_point": schema.BoolAttribute{

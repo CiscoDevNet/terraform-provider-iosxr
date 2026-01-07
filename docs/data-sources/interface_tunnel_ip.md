@@ -14,7 +14,6 @@ This data source can read the Interface Tunnel IP configuration.
 
 ```terraform
 data "iosxr_interface_tunnel_ip" "example" {
-  type = "tunnel-ip"
   name = "100"
 }
 ```
@@ -25,7 +24,6 @@ data "iosxr_interface_tunnel_ip" "example" {
 ### Required
 
 - `name` (String) tunnel-ip interface ID
-- `type` (String) Interface type
 
 ### Optional
 

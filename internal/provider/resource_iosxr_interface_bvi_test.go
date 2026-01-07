@@ -35,7 +35,7 @@ import (
 
 func TestAccIosxrInterfaceBVI(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "name", "BVI100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "name", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "point_to_point", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "multipoint", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bvi.test", "dampening", "true"))
@@ -420,7 +420,7 @@ resource "iosxr_gnmi" "PreReq3" {
 
 func testAccIosxrInterfaceBVIConfig_minimum() string {
 	config := `resource "iosxr_interface_bvi" "test" {` + "\n"
-	config += `	name = "BVI100"` + "\n"
+	config += `	name = "100"` + "\n"
 	config += `	shutdown = false` + "\n"
 	config += `	load_interval = 30` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
@@ -435,7 +435,7 @@ func testAccIosxrInterfaceBVIConfig_minimum() string {
 func testAccIosxrInterfaceBVIConfig_all() string {
 	config := `resource "iosxr_interface_bvi" "test" {` + "\n"
 	config += `	delete_mode = "all"` + "\n"
-	config += `	name = "BVI100"` + "\n"
+	config += `	name = "100"` + "\n"
 	config += `	point_to_point = false` + "\n"
 	config += `	multipoint = false` + "\n"
 	config += `	dampening = true` + "\n"

@@ -14,7 +14,8 @@ This data source can read the Interface Ethernet configuration.
 
 ```terraform
 data "iosxr_interface_ethernet" "example" {
-  name = "GigabitEthernet0/0/0/1"
+  type = "GigabitEthernet"
+  name = "0/0/0/1"
 }
 ```
 
@@ -23,7 +24,8 @@ data "iosxr_interface_ethernet" "example" {
 
 ### Required
 
-- `name` (String) Interface configuration subcommands
+- `name` (String) Ethernet interface ID
+- `type` (String) Interface type
 
 ### Optional
 

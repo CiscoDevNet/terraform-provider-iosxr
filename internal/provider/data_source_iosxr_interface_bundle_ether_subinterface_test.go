@@ -473,7 +473,7 @@ resource "iosxr_gnmi" "PreReq4" {
 func testAccDataSourceIosxrInterfaceBundleEtherSubinterfaceConfig() string {
 	config := `resource "iosxr_interface_bundle_ether_subinterface" "test" {` + "\n"
 	config += `	delete_mode = "attributes"` + "\n"
-	config += `	name = "Bundle-Ether100.100"` + "\n"
+	config += `	name = "100.100"` + "\n"
 	config += `	point_to_point = false` + "\n"
 	config += `	multipoint = false` + "\n"
 	config += `	dampening = true` + "\n"
@@ -842,7 +842,7 @@ func testAccDataSourceIosxrInterfaceBundleEtherSubinterfaceConfig() string {
 
 	config += `
 		data "iosxr_interface_bundle_ether_subinterface" "test" {
-			name = "Bundle-Ether100.100"
+			name = "100.100"
 			depends_on = [iosxr_interface_bundle_ether_subinterface.test]
 		}
 	`

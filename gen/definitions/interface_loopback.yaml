@@ -1,13 +1,14 @@
 ---
 name: Interface Loopback
-path: Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s]
+path: Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=Loopback%s]
 doc_category: Interface
 attributes:
-  - yang_name: interface-name
-    tf_name: name
-    string_patterns:
-      - '^Loopback[1-9]+$'
-    example: Loopback100
+  - tf_name: name
+    description: Loopback interface ID
+    type: String
+    id: true
+    no_augment_config: true
+    example: 100
   - yang_name: dampening
     example: true
   - yang_name: dampening/decay-half-life/value

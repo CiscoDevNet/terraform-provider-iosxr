@@ -1,5 +1,5 @@
 resource "iosxr_interface_loopback" "example" {
-  name                         = "Loopback100"
+  name                         = "100"
   dampening                    = true
   dampening_decay_half_life    = 2
   dampening_reuse_threshold    = 10

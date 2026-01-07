@@ -114,7 +114,7 @@ func TestAccDataSourceIosxrInterfaceLoopback(t *testing.T) {
 func testAccDataSourceIosxrInterfaceLoopbackConfig() string {
 	config := `resource "iosxr_interface_loopback" "test" {` + "\n"
 	config += `	delete_mode = "attributes"` + "\n"
-	config += `	name = "Loopback100"` + "\n"
+	config += `	name = "100"` + "\n"
 	config += `	dampening = true` + "\n"
 	config += `	dampening_decay_half_life = 2` + "\n"
 	config += `	dampening_reuse_threshold = 10` + "\n"
@@ -185,7 +185,7 @@ func testAccDataSourceIosxrInterfaceLoopbackConfig() string {
 
 	config += `
 		data "iosxr_interface_loopback" "test" {
-			name = "Loopback100"
+			name = "100"
 			depends_on = [iosxr_interface_loopback.test]
 		}
 	`

@@ -14,7 +14,7 @@ This data source can read the Interface Loopback configuration.
 
 ```terraform
 data "iosxr_interface_loopback" "example" {
-  name = "Loopback100"
+  name = "100"
 }
 ```
 
@@ -23,7 +23,7 @@ data "iosxr_interface_loopback" "example" {
 
 ### Required
 
-- `name` (String) Interface configuration subcommands
+- `name` (String) Loopback interface ID
 
 ### Optional
 

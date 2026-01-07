@@ -1,1 +1,1 @@
-terraform import iosxr_interface_ethernet.example "<name>"
+terraform import iosxr_interface_ethernet.example "<type>,<name>"

@@ -1,1 +1,1 @@
-terraform import iosxr_interface_tunnel_te.example "<type>,<name>"
+terraform import iosxr_interface_tunnel_te.example "<name>"

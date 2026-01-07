@@ -14,7 +14,6 @@ This resource can manage the Interface Tunnel IP configuration.
 
 ```terraform
 resource "iosxr_interface_tunnel_ip" "example" {
-  type                       = "tunnel-ip"
   name                       = "100"
   shutdown                   = false
   mtu                        = 1400
@@ -57,8 +56,6 @@ resource "iosxr_interface_tunnel_ip" "example" {
 ### Required
 
 - `name` (String) tunnel-ip interface ID
-- `type` (String) Interface type
-  - Choices: `tunnel-ip`
 
 ### Optional
 
@@ -150,5 +147,5 @@ Import is supported using the following syntax:
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import iosxr_interface_tunnel_ip.example "<type>,<name>"
+terraform import iosxr_interface_tunnel_ip.example "<name>"
 ```

@@ -38,6 +38,7 @@ type InterfaceEthernet struct {
 	Device                                                                   types.String                                                     `tfsdk:"device"`
 	Id                                                                       types.String                                                     `tfsdk:"id"`
 	DeleteMode                                                               types.String                                                     `tfsdk:"delete_mode"`
+	Type                                                                     types.String                                                     `tfsdk:"type"`
 	Name                                                                     types.String                                                     `tfsdk:"name"`
 	L2transport                                                              types.Bool                                                       `tfsdk:"l2transport"`
 	PointToPoint                                                             types.Bool                                                       `tfsdk:"point_to_point"`
@@ -268,6 +269,7 @@ type InterfaceEthernet struct {
 type InterfaceEthernetData struct {
 	Device                                                                   types.String                                                     `tfsdk:"device"`
 	Id                                                                       types.String                                                     `tfsdk:"id"`
+	Type                                                                     types.String                                                     `tfsdk:"type"`
 	Name                                                                     types.String                                                     `tfsdk:"name"`
 	L2transport                                                              types.Bool                                                       `tfsdk:"l2transport"`
 	PointToPoint                                                             types.Bool                                                       `tfsdk:"point_to_point"`
@@ -653,11 +655,11 @@ type InterfaceEthernetEthernetCfmMepDomainsSlaOperationProfileTargetMacAddresses
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
 
 func (data InterfaceEthernet) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s]", data.Name.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s%s]", data.Type.ValueString(), data.Name.ValueString())
 }
 
 func (data InterfaceEthernetData) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s]", data.Name.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s%s]", data.Type.ValueString(), data.Name.ValueString())
 }
 
 // End of section. //template:end getPath
@@ -666,8 +668,11 @@ func (data InterfaceEthernetData) getPath() string {
 
 func (data InterfaceEthernet) toBody(ctx context.Context) string {
 	body := "{}"
+	if !data.Type.IsNull() && !data.Type.IsUnknown() {
+		body, _ = sjson.Set(body, "", data.Type.ValueString())
+	}
 	if !data.Name.IsNull() && !data.Name.IsUnknown() {
-		body, _ = sjson.Set(body, "interface-name", data.Name.ValueString())
+		body, _ = sjson.Set(body, "", data.Name.ValueString())
 	}
 	if !data.L2transport.IsNull() && !data.L2transport.IsUnknown() {
 		if data.L2transport.ValueBool() {

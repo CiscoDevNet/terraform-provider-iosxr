@@ -2,8 +2,7 @@
 
 - BREAKING CHANGE: Decompose `iosxr_interface` into individual interface type resource and data source
   - Interface types:
-      `iosxr_interface_ethernet` `iosxr_interface_bundle_ether` `iosxr_interface_bundle_ether_subinterface` `iosxr_interface_bvi`
-      `iosxr_interface_loopback` `iosxr_interface_tunnel_ip` `iosxr_interface_tunnel_te`
+      `iosxr_interface_ethernet` `iosxr_interface_ethernet_subinterface` `iosxr_interface_bundle_ether` `iosxr_interface_bundle_ether_subinterface` `iosxr_interface_bvi` `iosxr_interface_loopback` `iosxr_interface_tunnel_ip` `iosxr_interface_tunnel_te`
 - BREAKING CHANGE: Consolidate `iosxr_logging_source_interface` into `iosxr_logging` resource and data source
 - BREAKING CHANGE: Consolidate `iosxr_evpn_group` into `iosxr_evpn` resource and data source
 - BREAKING CHANGE: Consolidate `iosxr_segment_routing_te_policy_candidate_path` into `iosxr_segment_routing_te_policy` resource and data source
@@ -12,6 +11,7 @@
 - BREAKING CHANGE: Consolidate `iosxr_l2vpn_bridge_group` into `iosxr_l2vpn_bridge_group_bridge_domain` resource and data source
 - BREAKING CHANGE: Decompose `iosxr_segment_routing_te` on-demand-colors into `iosxr_segment_routing_te_on_demand_color` resource and data source
 - BREAKING CHANGE: Decompose `iosxr_mpls_ldp` into `iosxr_mpls_ldp`, `iosxr_mpls_ldp_address_family`, `iosxr_mpls_ldp_interface`, `iosxr_mpls_ldp_mldp`, `iosxr_mpls_ldp_vrf` resource and data source
+- BREAKING CHANGE: Rename `dampening_decay_half_life_value` to `dampening_decay_half_life` in `iosxr_interface` resource and data source
 - BREAKING CHANGE: Rename `local_as_replace_as` to `local_as_no_prepend_replace_as` in `iosxr_router_bgp_neighbor_group` resource and data source
 - BREAKING CHANGE: Rename `local_as_dual_as` to `local_as_no_prepend_replace_as_dual_as` in `iosxr_router_bgp_neighbor_group` resource and data source
 - BREAKING CHANGE: Rename `buffered_logging_buffer_size` to `buffered_size` in `iosxr_logging` resource and data source

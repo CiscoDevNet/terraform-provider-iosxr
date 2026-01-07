@@ -14,7 +14,8 @@ This resource can manage the Interface Ethernet configuration.
 
 ```terraform
 resource "iosxr_interface_ethernet" "example" {
-  name                         = "GigabitEthernet0/0/0/1"
+  type                         = "GigabitEthernet"
+  name                         = "0/0/0/1"
   l2transport                  = false
   point_to_point               = false
   multipoint                   = false
@@ -280,7 +281,9 @@ resource "iosxr_interface_ethernet" "example" {
 
 ### Required
 
-- `name` (String) Interface configuration subcommands
+- `name` (String) Ethernet interface ID
+- `type` (String) Interface type
+  - Choices: `MgmtEth`, `FastEthernet`, `GigabitEthernet`, `TenGigE`, `TwentyFiveGigE`, `FortyGigE`, `FiftyGigE`, `HundredGigE`, `TwoHundredGigE`, `FourHundredGigE`, `EightHundredGigE`
 
 ### Optional
 
@@ -962,5 +965,5 @@ Import is supported using the following syntax:
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import iosxr_interface_ethernet.example "<name>"
+terraform import iosxr_interface_ethernet.example "<type>,<name>"
 ```

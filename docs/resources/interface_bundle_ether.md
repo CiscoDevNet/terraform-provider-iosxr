@@ -14,7 +14,7 @@ This resource can manage the Interface Bundle Ether configuration.
 
 ```terraform
 resource "iosxr_interface_bundle_ether" "example" {
-  name                         = "Bundle-Ether10"
+  name                         = "10"
   point_to_point               = false
   multipoint                   = false
   dampening                    = true
@@ -286,7 +286,7 @@ resource "iosxr_interface_bundle_ether" "example" {
 
 ### Required
 
-- `name` (String) Interface configuration subcommands
+- `name` (String) Bundle-Ether interface ID
 
 ### Optional
 

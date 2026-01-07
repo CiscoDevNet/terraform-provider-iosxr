@@ -129,7 +129,6 @@ func TestAccDataSourceIosxrInterfaceTunnelTE(t *testing.T) {
 
 func testAccDataSourceIosxrInterfaceTunnelTEConfig() string {
 	config := `resource "iosxr_interface_tunnel_te" "test" {` + "\n"
-	config += `	type = "tunnel-te"` + "\n"
 	config += `	name = "100"` + "\n"
 	config += `	shutdown = false` + "\n"
 	config += `	logging_events_link_status = true` + "\n"
@@ -214,7 +213,6 @@ func testAccDataSourceIosxrInterfaceTunnelTEConfig() string {
 
 	config += `
 		data "iosxr_interface_tunnel_te" "test" {
-			type = "tunnel-te"
 			name = "100"
 			depends_on = [iosxr_interface_tunnel_te.test]
 		}

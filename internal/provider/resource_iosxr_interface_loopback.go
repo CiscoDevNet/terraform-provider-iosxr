@@ -82,11 +82,8 @@ func (r *InterfaceLoopbackResource) Schema(ctx context.Context, req resource.Sch
 				},
 			},
 			"name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Interface configuration subcommands").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Loopback interface ID").String,
 				Required:            true,
-				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
-				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},

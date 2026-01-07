@@ -394,7 +394,7 @@ resource "iosxr_gnmi" "PreReq3" {
 func testAccDataSourceIosxrInterfaceBVIConfig() string {
 	config := `resource "iosxr_interface_bvi" "test" {` + "\n"
 	config += `	delete_mode = "attributes"` + "\n"
-	config += `	name = "BVI100"` + "\n"
+	config += `	name = "100"` + "\n"
 	config += `	point_to_point = false` + "\n"
 	config += `	multipoint = false` + "\n"
 	config += `	dampening = true` + "\n"
@@ -676,7 +676,7 @@ func testAccDataSourceIosxrInterfaceBVIConfig() string {
 
 	config += `
 		data "iosxr_interface_bvi" "test" {
-			name = "BVI100"
+			name = "100"
 			depends_on = [iosxr_interface_bvi.test]
 		}
 	`

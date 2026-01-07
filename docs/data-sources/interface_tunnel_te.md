@@ -14,7 +14,6 @@ This data source can read the Interface Tunnel TE configuration.
 
 ```terraform
 data "iosxr_interface_tunnel_te" "example" {
-  type = "tunnel-te"
   name = "100"
 }
 ```
@@ -25,7 +24,6 @@ data "iosxr_interface_tunnel_te" "example" {
 ### Required
 
 - `name` (String) tunnel-te interface ID
-- `type` (String) Interface type
 
 ### Optional
 

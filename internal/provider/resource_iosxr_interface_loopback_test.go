@@ -35,7 +35,7 @@ import (
 
 func TestAccIosxrInterfaceLoopback(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_loopback.test", "name", "Loopback100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_loopback.test", "name", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_loopback.test", "dampening", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_loopback.test", "dampening_decay_half_life", "2"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_loopback.test", "dampening_reuse_threshold", "10"))
@@ -140,7 +140,7 @@ func iosxrInterfaceLoopbackImportStateIdFunc(resourceName string) resource.Impor
 
 func testAccIosxrInterfaceLoopbackConfig_minimum() string {
 	config := `resource "iosxr_interface_loopback" "test" {` + "\n"
-	config += `	name = "Loopback100"` + "\n"
+	config += `	name = "100"` + "\n"
 	config += `	shutdown = true` + "\n"
 	config += `	load_interval = 30` + "\n"
 	config += `}` + "\n"
@@ -154,7 +154,7 @@ func testAccIosxrInterfaceLoopbackConfig_minimum() string {
 func testAccIosxrInterfaceLoopbackConfig_all() string {
 	config := `resource "iosxr_interface_loopback" "test" {` + "\n"
 	config += `	delete_mode = "all"` + "\n"
-	config += `	name = "Loopback100"` + "\n"
+	config += `	name = "100"` + "\n"
 	config += `	dampening = true` + "\n"
 	config += `	dampening_decay_half_life = 2` + "\n"
 	config += `	dampening_reuse_threshold = 10` + "\n"

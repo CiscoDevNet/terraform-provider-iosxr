@@ -67,10 +67,6 @@ func (d *InterfaceTunnelTEDataSource) Schema(ctx context.Context, req datasource
 				MarkdownDescription: "The path of the retrieved object.",
 				Computed:            true,
 			},
-			"type": schema.StringAttribute{
-				MarkdownDescription: "Interface type",
-				Required:            true,
-			},
 			"name": schema.StringAttribute{
 				MarkdownDescription: "tunnel-te interface ID",
 				Required:            true,

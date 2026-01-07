@@ -35,7 +35,8 @@ import (
 
 func TestAccIosxrInterfaceEthernet(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "name", "GigabitEthernet0/0/0/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "type", "GigabitEthernet"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "name", "0/0/0/1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "l2transport", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "point_to_point", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "multipoint", "false"))
@@ -448,9 +449,10 @@ func TestAccIosxrInterfaceEthernet(t *testing.T) {
 func iosxrInterfaceEthernetImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 		primary := s.RootModule().Resources[resourceName].Primary
+		Type := primary.Attributes["type"]
 		Name := primary.Attributes["name"]
 
-		return fmt.Sprintf("%s", Name), nil
+		return fmt.Sprintf("%s,%s", Type, Name), nil
 	}
 }
 
@@ -548,7 +550,8 @@ resource "iosxr_gnmi" "PreReq3" {
 
 func testAccIosxrInterfaceEthernetConfig_minimum() string {
 	config := `resource "iosxr_interface_ethernet" "test" {` + "\n"
-	config += `	name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	type = "GigabitEthernet"` + "\n"
+	config += `	name = "0/0/0/1"` + "\n"
 	config += `	shutdown = true` + "\n"
 	config += `	load_interval = 30` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
@@ -563,7 +566,8 @@ func testAccIosxrInterfaceEthernetConfig_minimum() string {
 func testAccIosxrInterfaceEthernetConfig_all() string {
 	config := `resource "iosxr_interface_ethernet" "test" {` + "\n"
 	config += `	delete_mode = "all"` + "\n"
-	config += `	name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	type = "GigabitEthernet"` + "\n"
+	config += `	name = "0/0/0/1"` + "\n"
 	config += `	l2transport = false` + "\n"
 	config += `	point_to_point = false` + "\n"
 	config += `	multipoint = false` + "\n"

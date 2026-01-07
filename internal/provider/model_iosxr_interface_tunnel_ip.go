@@ -37,7 +37,6 @@ import (
 type InterfaceTunnelIP struct {
 	Device                                    types.String                     `tfsdk:"device"`
 	Id                                        types.String                     `tfsdk:"id"`
-	Type                                      types.String                     `tfsdk:"type"`
 	Name                                      types.String                     `tfsdk:"name"`
 	Shutdown                                  types.Bool                       `tfsdk:"shutdown"`
 	Mtu                                       types.Int64                      `tfsdk:"mtu"`
@@ -95,7 +94,6 @@ type InterfaceTunnelIP struct {
 type InterfaceTunnelIPData struct {
 	Device                                    types.String                     `tfsdk:"device"`
 	Id                                        types.String                     `tfsdk:"id"`
-	Type                                      types.String                     `tfsdk:"type"`
 	Name                                      types.String                     `tfsdk:"name"`
 	Shutdown                                  types.Bool                       `tfsdk:"shutdown"`
 	Mtu                                       types.Int64                      `tfsdk:"mtu"`
@@ -160,11 +158,11 @@ type InterfaceTunnelIPIpv6Addresses struct {
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
 
 func (data InterfaceTunnelIP) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s%s]", data.Type.ValueString(), data.Name.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=tunnel-ip%s]", data.Name.ValueString())
 }
 
 func (data InterfaceTunnelIPData) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s%s]", data.Type.ValueString(), data.Name.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=tunnel-ip%s]", data.Name.ValueString())
 }
 
 // End of section. //template:end getPath

@@ -1,13 +1,14 @@
 ---
 name: Interface BVI
-path: Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s]
+path: Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=BVI%s]
 doc_category: Interface
 attributes:
-  - yang_name: interface-name
-    tf_name: name
-    string_patterns:
-      - '^BVI[1-9]+$'
-    example: BVI100
+  - tf_name: name
+    description: BVI interface ID
+    type: String
+    id: true
+    no_augment_config: true
+    example: 100
   - yang_name: sub-interface-type/point-to-point
     tf_name: point_to_point
     example: false

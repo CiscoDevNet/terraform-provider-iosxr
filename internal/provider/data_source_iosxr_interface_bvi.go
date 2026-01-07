@@ -68,7 +68,7 @@ func (d *InterfaceBVIDataSource) Schema(ctx context.Context, req datasource.Sche
 				Computed:            true,
 			},
 			"name": schema.StringAttribute{
-				MarkdownDescription: "Interface configuration subcommands",
+				MarkdownDescription: "BVI interface ID",
 				Required:            true,
 			},
 			"point_to_point": schema.BoolAttribute{

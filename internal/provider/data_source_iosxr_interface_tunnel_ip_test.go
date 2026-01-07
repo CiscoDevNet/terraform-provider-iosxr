@@ -170,7 +170,6 @@ resource "iosxr_gnmi" "PreReq2" {
 
 func testAccDataSourceIosxrInterfaceTunnelIPConfig() string {
 	config := `resource "iosxr_interface_tunnel_ip" "test" {` + "\n"
-	config += `	type = "tunnel-ip"` + "\n"
 	config += `	name = "100"` + "\n"
 	config += `	shutdown = false` + "\n"
 	config += `	mtu = 1400` + "\n"
@@ -240,7 +239,6 @@ func testAccDataSourceIosxrInterfaceTunnelIPConfig() string {
 
 	config += `
 		data "iosxr_interface_tunnel_ip" "test" {
-			type = "tunnel-ip"
 			name = "100"
 			depends_on = [iosxr_interface_tunnel_ip.test]
 		}

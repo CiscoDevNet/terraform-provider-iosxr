@@ -1,5 +1,5 @@
 resource "iosxr_interface_bvi" "example" {
-  name                         = "BVI100"
+  name                         = "100"
   point_to_point               = false
   multipoint                   = false
   dampening                    = true

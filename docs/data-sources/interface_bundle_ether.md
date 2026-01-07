@@ -14,7 +14,7 @@ This data source can read the Interface Bundle Ether configuration.
 
 ```terraform
 data "iosxr_interface_bundle_ether" "example" {
-  name = "Bundle-Ether10"
+  name = "10"
 }
 ```
 
@@ -23,7 +23,7 @@ data "iosxr_interface_bundle_ether" "example" {
 
 ### Required
 
-- `name` (String) Interface configuration subcommands
+- `name` (String) Bundle-Ether interface ID
 
 ### Optional
 

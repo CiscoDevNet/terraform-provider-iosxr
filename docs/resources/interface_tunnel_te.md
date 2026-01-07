@@ -14,7 +14,6 @@ This resource can manage the Interface Tunnel TE configuration.
 
 ```terraform
 resource "iosxr_interface_tunnel_te" "example" {
-  type                               = "tunnel-te"
   name                               = "100"
   shutdown                           = false
   logging_events_link_status         = true
@@ -108,8 +107,6 @@ resource "iosxr_interface_tunnel_te" "example" {
 ### Required
 
 - `name` (String) tunnel-te interface ID
-- `type` (String) Interface type
-  - Choices: `tunnel-te`
 
 ### Optional
 
@@ -302,5 +299,5 @@ Import is supported using the following syntax:
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import iosxr_interface_tunnel_te.example "<type>,<name>"
+terraform import iosxr_interface_tunnel_te.example "<name>"
 ```

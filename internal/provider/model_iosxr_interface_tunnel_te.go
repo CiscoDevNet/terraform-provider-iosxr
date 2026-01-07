@@ -38,7 +38,6 @@ import (
 type InterfaceTunnelTE struct {
 	Device                                                           types.String                             `tfsdk:"device"`
 	Id                                                               types.String                             `tfsdk:"id"`
-	Type                                                             types.String                             `tfsdk:"type"`
 	Name                                                             types.String                             `tfsdk:"name"`
 	Shutdown                                                         types.Bool                               `tfsdk:"shutdown"`
 	LoggingEventsLinkStatus                                          types.Bool                               `tfsdk:"logging_events_link_status"`
@@ -144,7 +143,6 @@ type InterfaceTunnelTE struct {
 type InterfaceTunnelTEData struct {
 	Device                                                           types.String                             `tfsdk:"device"`
 	Id                                                               types.String                             `tfsdk:"id"`
-	Type                                                             types.String                             `tfsdk:"type"`
 	Name                                                             types.String                             `tfsdk:"name"`
 	Shutdown                                                         types.Bool                               `tfsdk:"shutdown"`
 	LoggingEventsLinkStatus                                          types.Bool                               `tfsdk:"logging_events_link_status"`
@@ -272,11 +270,11 @@ type InterfaceTunnelTEPathOptions struct {
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
 
 func (data InterfaceTunnelTE) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s%s]", data.Type.ValueString(), data.Name.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=tunnel-te%s]", data.Name.ValueString())
 }
 
 func (data InterfaceTunnelTEData) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s%s]", data.Type.ValueString(), data.Name.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=tunnel-te%s]", data.Name.ValueString())
 }
 
 // End of section. //template:end getPath

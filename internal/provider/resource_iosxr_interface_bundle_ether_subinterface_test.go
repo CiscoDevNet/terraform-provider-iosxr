@@ -35,7 +35,7 @@ import (
 
 func TestAccIosxrInterfaceBundleEtherSubinterface(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "name", "Bundle-Ether100.100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "name", "100.100"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "point_to_point", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "multipoint", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "dampening", "true"))
@@ -499,7 +499,7 @@ resource "iosxr_gnmi" "PreReq4" {
 
 func testAccIosxrInterfaceBundleEtherSubinterfaceConfig_minimum() string {
 	config := `resource "iosxr_interface_bundle_ether_subinterface" "test" {` + "\n"
-	config += `	name = "Bundle-Ether100.100"` + "\n"
+	config += `	name = "100.100"` + "\n"
 	config += `	shutdown = false` + "\n"
 	config += `	load_interval = 30` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, iosxr_gnmi.PreReq4, ]` + "\n"
@@ -514,7 +514,7 @@ func testAccIosxrInterfaceBundleEtherSubinterfaceConfig_minimum() string {
 func testAccIosxrInterfaceBundleEtherSubinterfaceConfig_all() string {
 	config := `resource "iosxr_interface_bundle_ether_subinterface" "test" {` + "\n"
 	config += `	delete_mode = "all"` + "\n"
-	config += `	name = "Bundle-Ether100.100"` + "\n"
+	config += `	name = "100.100"` + "\n"
 	config += `	point_to_point = false` + "\n"
 	config += `	multipoint = false` + "\n"
 	config += `	dampening = true` + "\n"

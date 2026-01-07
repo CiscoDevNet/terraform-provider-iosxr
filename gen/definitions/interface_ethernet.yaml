@@ -1,25 +1,32 @@
 ---
 name: Interface Ethernet
-path: Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s]
+path: Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s%s]
 doc_category: Interface
 attributes:
-  - yang_name: interface-name
-    tf_name: name
-    string_patterns:
-      - '^MgmtEth[0-9]+(/[0-9]+)*(\.[0-9]+)?$'
-      - '^FastEthernet[0-9]+(/[0-9]+)*(\.[0-9]+)?$'
-      - '^GigabitEthernet[0-9]+(/[0-9]+)*(\.[0-9]+)?$'
-      - '^TenGigE[0-9]+(/[0-9]+)*(\.[0-9]+)?$'
-      - '^TwentyFiveGigE[0-9]+(/[0-9]+)*(\.[0-9]+)?$'
-      - '^FortyGigE[0-9]+(/[0-9]+)*(\.[0-9]+)?$'
-      - '^FiftyGigE[0-9]+(/[0-9]+)*(\.[0-9]+)?$'
-      - '^HundredGigE[0-9]+(/[0-9]+)*(\.[0-9]+)?$'
-      - '^TwoHundredGigE[0-9]+(/[0-9]+)*(\.[0-9]+)?$'
-      - '^FourHundredGigE[0-9]+(/[0-9]+)*(\.[0-9]+)?$'
-      - '^EightHundredGigE[0-9]+(/[0-9]+)*(\.[0-9]+)?$'
-    example: GigabitEthernet0/0/0/1
-    # example: TenGigE0/0/0/2
-    # example: FourHundredGigE0/0/0/0
+  - tf_name: type
+    description: Interface type
+    type: String
+    id: true
+    no_augment_config: true
+    enum_values:
+      - MgmtEth
+      - FastEthernet
+      - GigabitEthernet
+      - TenGigE
+      - TwentyFiveGigE
+      - FortyGigE
+      - FiftyGigE
+      - HundredGigE
+      - TwoHundredGigE
+      - FourHundredGigE
+      - EightHundredGigE
+    example: GigabitEthernet
+  - tf_name: name
+    description: Ethernet interface ID
+    type: String
+    id: true
+    no_augment_config: true
+    example: 0/0/0/1
   - yang_name: sub-interface-type/l2transport
     tf_name: l2transport
     example: false

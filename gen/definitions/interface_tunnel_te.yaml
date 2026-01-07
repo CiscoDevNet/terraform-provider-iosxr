@@ -1,26 +1,15 @@
 ---
 name: Interface Tunnel TE
-path: Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s%s]
-augment_path: Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=tunnel-te%s]
+path: Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=tunnel-te%s]
 doc_category: Interface
 no_delete_attributes: true
 attributes:
-  - tf_name: type
-    description: Interface type
-    type: String
-    reference: true
-    no_augment_config: true
-    enum_values:
-      - tunnel-te
-    example: tunnel-te
   - tf_name: name
     description: tunnel-te interface ID
     type: String
     id: true
     no_augment_config: true
-    string_patterns:
-      - '^[0-9]+$'
-    example: "100"
+    example: 100
   - yang_name: shutdown
     minimum_test_value: false
     example: false

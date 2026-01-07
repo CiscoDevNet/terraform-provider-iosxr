@@ -68,7 +68,7 @@ func (d *InterfaceLoopbackDataSource) Schema(ctx context.Context, req datasource
 				Computed:            true,
 			},
 			"name": schema.StringAttribute{
-				MarkdownDescription: "Interface configuration subcommands",
+				MarkdownDescription: "Loopback interface ID",
 				Required:            true,
 			},
 			"dampening": schema.BoolAttribute{

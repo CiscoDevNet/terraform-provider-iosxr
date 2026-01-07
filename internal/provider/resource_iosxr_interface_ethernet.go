@@ -81,12 +81,19 @@ func (r *InterfaceEthernetResource) Schema(ctx context.Context, req resource.Sch
 					stringvalidator.OneOf("all", "attributes"),
 				},
 			},
-			"name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Interface configuration subcommands").String,
+			"type": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Interface type").AddStringEnumDescription("MgmtEth", "FastEthernet", "GigabitEthernet", "TenGigE", "TwentyFiveGigE", "FortyGigE", "FiftyGigE", "HundredGigE", "TwoHundredGigE", "FourHundredGigE", "EightHundredGigE").String,
 				Required:            true,
 				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+					stringvalidator.OneOf("MgmtEth", "FastEthernet", "GigabitEthernet", "TenGigE", "TwentyFiveGigE", "FortyGigE", "FiftyGigE", "HundredGigE", "TwoHundredGigE", "FourHundredGigE", "EightHundredGigE"),
 				},
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
+			},
+			"name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Ethernet interface ID").String,
+				Required:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
@@ -2302,17 +2309,18 @@ func (r *InterfaceEthernetResource) ImportState(ctx context.Context, req resourc
 	idParts := strings.Split(req.ID, ",")
 	idParts = helpers.RemoveEmptyStrings(idParts)
 
-	if len(idParts) != 1 && len(idParts) != 2 {
-		expectedIdentifier := "Expected import identifier with format: '<name>'"
-		expectedIdentifier += " or '<name>,<device>'"
+	if len(idParts) != 2 && len(idParts) != 3 {
+		expectedIdentifier := "Expected import identifier with format: '<type>,<name>'"
+		expectedIdentifier += " or '<type>,<name>,<device>'"
 		resp.Diagnostics.AddError(
 			"Unexpected Import Identifier",
 			fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
 		)
 		return
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("name"), idParts[0])...)
-	if len(idParts) == 2 {
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("type"), idParts[0])...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("name"), idParts[1])...)
+	if len(idParts) == 3 {
 		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
 	}
 

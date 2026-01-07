@@ -31,7 +31,7 @@ resource "iosxr_evpn" "example" {
   ethernet_segment_type_one_auto_generation_disable = true
   groups = [
     {
-      group_name = 10
+      group_id = 10
       core_interfaces = [
         {
           interface_name = "GigabitEthernet0/0/0/2"
@@ -174,7 +174,7 @@ resource "iosxr_evpn" "example" {
 
 Required:
 
-- `group_name` (Number) Configure EVPN group
+- `group_id` (Number) Configure EVPN group
   - Range: `1`-`4294967295`
 
 Optional:

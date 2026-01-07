@@ -131,7 +131,7 @@ type EVPNData struct {
 	VirtualAccessEviEthernetSegmentBgpRt               types.String           `tfsdk:"virtual_access_evi_ethernet_segment_bgp_rt"`
 }
 type EVPNGroups struct {
-	GroupName      types.Int64                `tfsdk:"group_name"`
+	GroupId        types.Int64                `tfsdk:"group_id"`
 	CoreInterfaces []EVPNGroupsCoreInterfaces `tfsdk:"core_interfaces"`
 }
 type EVPNSrv6Locators struct {
@@ -335,8 +335,8 @@ func (data EVPN) toBody(ctx context.Context) string {
 	if len(data.Groups) > 0 {
 		body, _ = sjson.Set(body, "groups.group", []interface{}{})
 		for index, item := range data.Groups {
-			if !item.GroupName.IsNull() && !item.GroupName.IsUnknown() {
-				body, _ = sjson.Set(body, "groups.group"+"."+strconv.Itoa(index)+"."+"group-name", strconv.FormatInt(item.GroupName.ValueInt64(), 10))
+			if !item.GroupId.IsNull() && !item.GroupId.IsUnknown() {
+				body, _ = sjson.Set(body, "groups.group"+"."+strconv.Itoa(index)+"."+"group-name", strconv.FormatInt(item.GroupId.ValueInt64(), 10))
 			}
 			if len(item.CoreInterfaces) > 0 {
 				body, _ = sjson.Set(body, "groups.group"+"."+strconv.Itoa(index)+"."+"core.interface", []interface{}{})
@@ -585,7 +585,7 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 	}
 	for i := range data.Groups {
 		keys := [...]string{"group-name"}
-		keyValues := [...]string{strconv.FormatInt(data.Groups[i].GroupName.ValueInt64(), 10)}
+		keyValues := [...]string{strconv.FormatInt(data.Groups[i].GroupId.ValueInt64(), 10)}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "groups.group").ForEach(
@@ -606,10 +606,10 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("group-name"); value.Exists() && !data.Groups[i].GroupName.IsNull() {
-			data.Groups[i].GroupName = types.Int64Value(value.Int())
+		if value := r.Get("group-name"); value.Exists() && !data.Groups[i].GroupId.IsNull() {
+			data.Groups[i].GroupId = types.Int64Value(value.Int())
 		} else {
-			data.Groups[i].GroupName = types.Int64Null()
+			data.Groups[i].GroupId = types.Int64Null()
 		}
 		for ci := range data.Groups[i].CoreInterfaces {
 			keys := [...]string{"interface-name"}
@@ -1095,7 +1095,7 @@ func (data *EVPN) fromBody(ctx context.Context, res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNGroups{}
 			if cValue := v.Get("group-name"); cValue.Exists() {
-				item.GroupName = types.Int64Value(cValue.Int())
+				item.GroupId = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("core.interface"); cValue.Exists() {
 				item.CoreInterfaces = make([]EVPNGroupsCoreInterfaces, 0)
@@ -1390,7 +1390,7 @@ func (data *EVPNData) fromBody(ctx context.Context, res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNGroups{}
 			if cValue := v.Get("group-name"); cValue.Exists() {
-				item.GroupName = types.Int64Value(cValue.Int())
+				item.GroupId = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("core.interface"); cValue.Exists() {
 				item.CoreInterfaces = make([]EVPNGroupsCoreInterfaces, 0)
@@ -1849,14 +1849,14 @@ func (data *EVPN) getDeletedItems(ctx context.Context, state EVPN) []string {
 	}
 	for i := range state.Groups {
 		keys := [...]string{"group-name"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.Groups[i].GroupName.ValueInt64(), 10)}
+		stateKeyValues := [...]string{strconv.FormatInt(state.Groups[i].GroupId.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.Groups[i].GroupName.ValueInt64()).IsZero() {
+		if !reflect.ValueOf(state.Groups[i].GroupId.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -1866,7 +1866,7 @@ func (data *EVPN) getDeletedItems(ctx context.Context, state EVPN) []string {
 		found := false
 		for j := range data.Groups {
 			found = true
-			if state.Groups[i].GroupName.ValueInt64() != data.Groups[j].GroupName.ValueInt64() {
+			if state.Groups[i].GroupId.ValueInt64() != data.Groups[j].GroupId.ValueInt64() {
 				found = false
 			}
 			if found {
@@ -2044,7 +2044,7 @@ func (data *EVPN) getEmptyLeafsDelete(ctx context.Context) []string {
 	}
 	for i := range data.Groups {
 		keys := [...]string{"group-name"}
-		keyValues := [...]string{strconv.FormatInt(data.Groups[i].GroupName.ValueInt64(), 10)}
+		keyValues := [...]string{strconv.FormatInt(data.Groups[i].GroupId.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
@@ -2171,7 +2171,7 @@ func (data *EVPN) getDeletePaths(ctx context.Context) []string {
 	}
 	for i := range data.Groups {
 		keys := [...]string{"group-name"}
-		keyValues := [...]string{strconv.FormatInt(data.Groups[i].GroupName.ValueInt64(), 10)}
+		keyValues := [...]string{strconv.FormatInt(data.Groups[i].GroupId.ValueInt64(), 10)}
 
 		keyString := ""
 		for ki := range keys {

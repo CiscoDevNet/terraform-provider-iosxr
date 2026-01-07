@@ -50,7 +50,7 @@ func TestAccIosxrEVPN(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "staggered_bringup_timer", "3000"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "logging_df_election", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "ethernet_segment_type_one_auto_generation_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "groups.0.group_name", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "groups.0.group_id", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "groups.0.core_interfaces.0.interface_name", "GigabitEthernet0/0/0/2"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "srv6", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "srv6_locators.0.locator_name", "LOC1"))
@@ -170,7 +170,7 @@ func testAccIosxrEVPNConfig_all() string {
 	config += `	logging_df_election = true` + "\n"
 	config += `	ethernet_segment_type_one_auto_generation_disable = true` + "\n"
 	config += `	groups = [{` + "\n"
-	config += `		group_name = 10` + "\n"
+	config += `		group_id = 10` + "\n"
 	config += `		core_interfaces = [{` + "\n"
 	config += `			interface_name = "GigabitEthernet0/0/0/2"` + "\n"
 	config += `		}]` + "\n"

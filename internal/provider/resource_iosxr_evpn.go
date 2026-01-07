@@ -207,7 +207,7 @@ func (r *EVPNResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"group_name": schema.Int64Attribute{
+						"group_id": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Configure EVPN group").AddIntegerRangeDescription(1, 4294967295).String,
 							Required:            true,
 							Validators: []validator.Int64{

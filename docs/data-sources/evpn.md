@@ -77,7 +77,7 @@ data "iosxr_evpn" "example" {
 Read-Only:
 
 - `core_interfaces` (Attributes List) configure EVPN group core interface (see [below for nested schema](#nestedatt--groups--core_interfaces))
-- `group_name` (Number) Configure EVPN group
+- `group_id` (Number) Configure EVPN group
 
 <a id="nestedatt--groups--core_interfaces"></a>
 ### Nested Schema for `groups.core_interfaces`

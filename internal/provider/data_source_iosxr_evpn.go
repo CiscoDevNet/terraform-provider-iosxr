@@ -148,7 +148,7 @@ func (d *EVPNDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"group_name": schema.Int64Attribute{
+						"group_id": schema.Int64Attribute{
 							MarkdownDescription: "Configure EVPN group",
 							Computed:            true,
 						},

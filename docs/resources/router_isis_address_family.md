@@ -275,7 +275,6 @@ resource "iosxr_router_isis_address_family" "example" {
 
 - `af_name` (String) af-name
   - Choices: `ipv4`, `ipv6`
-- `default_information_originate_route_policy` (String) text
 - `process_id` (String) Process ID
 - `saf_name` (String) saf-name
   - Choices: `multicast`, `unicast`
@@ -289,6 +288,7 @@ resource "iosxr_router_isis_address_family" "example" {
 - `attached_bit_send` (String) Modify how we set the attached bit
   - Choices: `always-set`, `never-set`
 - `default_information_originate` (Boolean) Distribute a default route
+- `default_information_originate_route_policy` (String) text
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.

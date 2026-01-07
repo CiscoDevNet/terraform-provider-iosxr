@@ -510,6 +510,7 @@ attributes:
     example: true
   - yang_name: default-information/originate/route-policy/text
     tf_name: default_information_originate_route_policy
+    optional: true
     delete_parent: true
     example: "ROUTE_POLICY_1"
   - yang_name: segment-routing/bundle-member-adj-sid

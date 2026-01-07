@@ -1115,7 +1115,7 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 			},
 			"default_information_originate_route_policy": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("text").String,
-				Required:            true,
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 255),
 				},

@@ -288,7 +288,6 @@ func testAccIosxrRouterISISAddressFamilyConfig_minimum() string {
 	config += `	process_id = "P1"` + "\n"
 	config += `	af_name = "ipv4"` + "\n"
 	config += `	saf_name = "unicast"` + "\n"
-	config += `	default_information_originate_route_policy = "ROUTE_POLICY_1"` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config

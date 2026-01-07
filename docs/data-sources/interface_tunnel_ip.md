@@ -44,6 +44,7 @@ data "iosxr_interface_tunnel_ip" "example" {
 - `ipv4_forwarding_enable` (Boolean) enable ipv4 forwarding on a interface
 - `ipv4_netmask` (String) IP subnet mask
 - `ipv4_ttl_propagate_disable` (Boolean) Disable ipv4 ttl propagation on this interface
+- `ipv4_unnumbered` (String) Enable IP processing without an explicit address
 - `ipv6_access_group_egress_acl` (String) Access-list name
 - `ipv6_access_group_egress_interface_statistics` (Boolean) Per interface statistics in hardware
 - `ipv6_access_group_ingress_acl1` (String) Access-list name
@@ -81,7 +82,6 @@ data "iosxr_interface_tunnel_ip" "example" {
 - `tunnel_ttl_disable` (Boolean) Disable decrement of TTL
 - `tunnel_ttl_value` (Number) Enter the TTL value
 - `tunnel_vrf` (String) set tunnel vrf membership
-- `unnumbered` (String) Enable IP processing without an explicit address
 - `vrf` (String) Set VRF in which the interface operates
 
 <a id="nestedatt--ipv6_addresses"></a>

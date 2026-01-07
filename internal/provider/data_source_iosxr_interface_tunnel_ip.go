@@ -107,7 +107,7 @@ func (d *InterfaceTunnelIPDataSource) Schema(ctx context.Context, req datasource
 				MarkdownDescription: "IP subnet mask",
 				Computed:            true,
 			},
-			"unnumbered": schema.StringAttribute{
+			"ipv4_unnumbered": schema.StringAttribute{
 				MarkdownDescription: "Enable IP processing without an explicit address",
 				Computed:            true,
 			},

@@ -5,7 +5,7 @@ resource "iosxr_interface_tunnel_te" "example" {
   bandwidth                          = 1000000
   description                        = "My Interface Description"
   load_interval                      = 30
-  unnumbered                         = "Loopback0"
+  ipv4_unnumbered                    = "Loopback0"
   mpls_mtu                           = 1400
   affinity_value                     = "11"
   affinity_mask                      = "ff"

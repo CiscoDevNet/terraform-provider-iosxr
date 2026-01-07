@@ -47,7 +47,7 @@ type InterfaceTunnelIP struct {
 	Vrf                                       types.String                     `tfsdk:"vrf"`
 	Ipv4Address                               types.String                     `tfsdk:"ipv4_address"`
 	Ipv4Netmask                               types.String                     `tfsdk:"ipv4_netmask"`
-	Unnumbered                                types.String                     `tfsdk:"unnumbered"`
+	Ipv4Unnumbered                            types.String                     `tfsdk:"ipv4_unnumbered"`
 	Ipv4ForwardingEnable                      types.Bool                       `tfsdk:"ipv4_forwarding_enable"`
 	Ipv4TtlPropagateDisable                   types.Bool                       `tfsdk:"ipv4_ttl_propagate_disable"`
 	Ipv4AccessGroupIngressAcl1                types.String                     `tfsdk:"ipv4_access_group_ingress_acl1"`
@@ -104,7 +104,7 @@ type InterfaceTunnelIPData struct {
 	Vrf                                       types.String                     `tfsdk:"vrf"`
 	Ipv4Address                               types.String                     `tfsdk:"ipv4_address"`
 	Ipv4Netmask                               types.String                     `tfsdk:"ipv4_netmask"`
-	Unnumbered                                types.String                     `tfsdk:"unnumbered"`
+	Ipv4Unnumbered                            types.String                     `tfsdk:"ipv4_unnumbered"`
 	Ipv4ForwardingEnable                      types.Bool                       `tfsdk:"ipv4_forwarding_enable"`
 	Ipv4TtlPropagateDisable                   types.Bool                       `tfsdk:"ipv4_ttl_propagate_disable"`
 	Ipv4AccessGroupIngressAcl1                types.String                     `tfsdk:"ipv4_access_group_ingress_acl1"`
@@ -205,8 +205,8 @@ func (data InterfaceTunnelIP) toBody(ctx context.Context) string {
 	if !data.Ipv4Netmask.IsNull() && !data.Ipv4Netmask.IsUnknown() {
 		body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.address.netmask", data.Ipv4Netmask.ValueString())
 	}
-	if !data.Unnumbered.IsNull() && !data.Unnumbered.IsUnknown() {
-		body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.unnumbered", data.Unnumbered.ValueString())
+	if !data.Ipv4Unnumbered.IsNull() && !data.Ipv4Unnumbered.IsUnknown() {
+		body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.unnumbered", data.Ipv4Unnumbered.ValueString())
 	}
 	if !data.Ipv4ForwardingEnable.IsNull() && !data.Ipv4ForwardingEnable.IsUnknown() {
 		if data.Ipv4ForwardingEnable.ValueBool() {
@@ -437,10 +437,10 @@ func (data *InterfaceTunnelIP) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Ipv4Netmask = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.unnumbered"); value.Exists() && !data.Unnumbered.IsNull() {
-		data.Unnumbered = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.unnumbered"); value.Exists() && !data.Ipv4Unnumbered.IsNull() {
+		data.Ipv4Unnumbered = types.StringValue(value.String())
 	} else {
-		data.Unnumbered = types.StringNull()
+		data.Ipv4Unnumbered = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable"); !data.Ipv4ForwardingEnable.IsNull() {
 		if value.Exists() {
@@ -788,7 +788,7 @@ func (data *InterfaceTunnelIP) fromBody(ctx context.Context, res []byte) {
 		data.Ipv4Netmask = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.unnumbered"); value.Exists() {
-		data.Unnumbered = types.StringValue(value.String())
+		data.Ipv4Unnumbered = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable"); value.Exists() {
 		data.Ipv4ForwardingEnable = types.BoolValue(true)
@@ -1000,7 +1000,7 @@ func (data *InterfaceTunnelIPData) fromBody(ctx context.Context, res []byte) {
 		data.Ipv4Netmask = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.unnumbered"); value.Exists() {
-		data.Unnumbered = types.StringValue(value.String())
+		data.Ipv4Unnumbered = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable"); value.Exists() {
 		data.Ipv4ForwardingEnable = types.BoolValue(true)
@@ -1337,7 +1337,7 @@ func (data *InterfaceTunnelIP) getDeletedItems(ctx context.Context, state Interf
 	if !state.Ipv4ForwardingEnable.IsNull() && data.Ipv4ForwardingEnable.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable", state.getPath()))
 	}
-	if !state.Unnumbered.IsNull() && data.Unnumbered.IsNull() {
+	if !state.Ipv4Unnumbered.IsNull() && data.Ipv4Unnumbered.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered", state.getPath()))
 	}
 	if !state.Ipv4Netmask.IsNull() && data.Ipv4Netmask.IsNull() {
@@ -1580,7 +1580,7 @@ func (data *InterfaceTunnelIP) getDeletePaths(ctx context.Context) []string {
 	if !data.Ipv4ForwardingEnable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable", data.getPath()))
 	}
-	if !data.Unnumbered.IsNull() {
+	if !data.Ipv4Unnumbered.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered", data.getPath()))
 	}
 	if !data.Ipv4Netmask.IsNull() {

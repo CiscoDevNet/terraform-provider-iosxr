@@ -122,7 +122,7 @@ func (r *InterfaceTunnelTEResource) Schema(ctx context.Context, req resource.Sch
 					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
 				},
 			},
-			"unnumbered": schema.StringAttribute{
+			"ipv4_unnumbered": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable IP processing without an explicit address").String,
 				Optional:            true,
 				Validators: []validator.String{

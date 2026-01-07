@@ -37,7 +37,7 @@ func TestAccDataSourceIosxrInterfaceTunnelTE(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_tunnel_te.test", "bandwidth", "1000000"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_tunnel_te.test", "description", "My Interface Description"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_tunnel_te.test", "load_interval", "30"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_tunnel_te.test", "unnumbered", "Loopback0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_tunnel_te.test", "ipv4_unnumbered", "Loopback0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_tunnel_te.test", "mpls_mtu", "1400"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_tunnel_te.test", "affinity_value", "11"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_tunnel_te.test", "affinity_mask", "ff"))
@@ -135,7 +135,7 @@ func testAccDataSourceIosxrInterfaceTunnelTEConfig() string {
 	config += `	bandwidth = 1000000` + "\n"
 	config += `	description = "My Interface Description"` + "\n"
 	config += `	load_interval = 30` + "\n"
-	config += `	unnumbered = "Loopback0"` + "\n"
+	config += `	ipv4_unnumbered = "Loopback0"` + "\n"
 	config += `	mpls_mtu = 1400` + "\n"
 	config += `	affinity_value = "11"` + "\n"
 	config += `	affinity_mask = "ff"` + "\n"

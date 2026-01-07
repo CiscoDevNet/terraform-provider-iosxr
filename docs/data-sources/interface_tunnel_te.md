@@ -90,6 +90,7 @@ data "iosxr_interface_tunnel_te" "example" {
 - `ipv4_forwarding_enable` (Boolean) enable ipv4 forwarding on a interface
 - `ipv4_netmask` (String) IP subnet mask
 - `ipv4_ttl_propagate_disable` (Boolean) Disable ipv4 ttl propagation on this interface
+- `ipv4_unnumbered` (String) Enable IP processing without an explicit address
 - `ipv6_enable` (Boolean) Enable IPv6 on interface
 - `ipv6_ttl_propagate_disable` (Boolean) Disable ipv6 ttl propagation on this interface
 - `load_interval` (Number) Specify interval for load calculation for an interface
@@ -130,7 +131,6 @@ data "iosxr_interface_tunnel_te" "example" {
 - `signalled_bandwidth_sub_pool` (Boolean) Specify sub-pool bandwidth
 - `signalled_name` (String) The signaling name to assign to tunnel
 - `soft_preemption` (Boolean) Enable the soft-preemption feature on this tunnel
-- `unnumbered` (String) Enable IP processing without an explicit address
 
 <a id="nestedatt--autoroute_destinations"></a>
 ### Nested Schema for `autoroute_destinations`

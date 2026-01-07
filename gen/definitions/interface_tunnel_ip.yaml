@@ -39,7 +39,7 @@ attributes:
     delete_parent: true
     example: "255.255.255.0"
   - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered
-    tf_name: unnumbered
+    tf_name: ipv4_unnumbered
     exclude_test: true
     example: Loopback0
   - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable

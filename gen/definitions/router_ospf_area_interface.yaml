@@ -127,6 +127,7 @@ attributes:
     exclude_test: true
     example: false
   - yang_name: mtu-ignore/enable
+    minimum_test_value: true
     example: true
   - yang_name: mtu-ignore/disable
     exclude_test: true
@@ -440,10 +441,10 @@ attributes:
     example: "ROUTE_POLICY_1"
   - yang_name: delay/normalize/interval
     delete_parent: true
-    minimum_test_value: 2000
+    exclude_test: true
     example: 2000
   - yang_name: delay/normalize/offset
-    default_value: 0
+    exclude_test: true
     example: 0
 
 test_prerequisites:

@@ -222,8 +222,6 @@ resource "iosxr_router_ospf" "example" {
   loopback_stub_network_enable                    = true
   link_down_fast_detect                           = true
   weight                                          = 1000
-  delay_normalize_interval                        = 2000
-  delay_normalize_offset                          = 0
   microloop_avoidance                             = true
   microloop_avoidance_segment_routing             = true
   microloop_avoidance_rib_update_delay            = 3000
@@ -295,8 +293,6 @@ resource "iosxr_router_ospf" "example" {
   monitor_convergence_track_summary_routes  = true
   monitor_convergence_track_external_routes = true
   monitor_convergence_track_ip_frr          = true
-  ucmp                                      = true
-  ucmp_variance                             = 200
   ucmp_prefix_list                          = "PREFIX_LIST_1"
   ucmp_exclude_interfaces = [
     {

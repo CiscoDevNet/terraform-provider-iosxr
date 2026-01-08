@@ -80,8 +80,6 @@ func TestAccIosxrRouterOSPFArea(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area.test", "multi_area_interfaces.0.fast_reroute_per_prefix_tiebreaker_interface_disjoint_index", "70"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area.test", "multi_area_interfaces.0.fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index", "80"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area.test", "multi_area_interfaces.0.passive_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area.test", "multi_area_interfaces.0.delay_normalize_interval", "2000"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area.test", "multi_area_interfaces.0.delay_normalize_offset", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area.test", "mpls_traffic_eng", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area.test", "mpls_ldp_sync", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area.test", "mpls_ldp_sync_igp_shortcuts", "true"))
@@ -142,8 +140,6 @@ func TestAccIosxrRouterOSPFArea(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area.test", "loopback_stub_network_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area.test", "link_down_fast_detect", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area.test", "weight", "1000"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area.test", "delay_normalize_interval", "2000"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area.test", "delay_normalize_offset", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area.test", "virtual_links.0.address", "192.168.1.4"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area.test", "virtual_links.0.hello_interval", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area.test", "virtual_links.0.dead_interval", "40"))
@@ -220,7 +216,8 @@ func testAccIosxrRouterOSPFAreaConfig_minimum() string {
 	config := `resource "iosxr_router_ospf_area" "test" {` + "\n"
 	config += `	process_name = "OSPF1"` + "\n"
 	config += `	area_id = "1"` + "\n"
-	config += `	delay_normalize_interval = 2000` + "\n"
+	config += `	mpls_traffic_eng = true` + "\n"
+	config += `	weight = 1000` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
@@ -296,8 +293,6 @@ func testAccIosxrRouterOSPFAreaConfig_all() string {
 	config += `		fast_reroute_per_prefix_tiebreaker_interface_disjoint_index = 70` + "\n"
 	config += `		fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index = 80` + "\n"
 	config += `		passive_disable = true` + "\n"
-	config += `		delay_normalize_interval = 2000` + "\n"
-	config += `		delay_normalize_offset = 0` + "\n"
 	config += `		}]` + "\n"
 	config += `	mpls_traffic_eng = true` + "\n"
 	config += `	mpls_ldp_sync = true` + "\n"
@@ -371,8 +366,6 @@ func testAccIosxrRouterOSPFAreaConfig_all() string {
 	config += `	loopback_stub_network_enable = true` + "\n"
 	config += `	link_down_fast_detect = true` + "\n"
 	config += `	weight = 1000` + "\n"
-	config += `	delay_normalize_interval = 2000` + "\n"
-	config += `	delay_normalize_offset = 0` + "\n"
 	config += `	virtual_links = [{` + "\n"
 	config += `		address = "192.168.1.4"` + "\n"
 	config += `		hello_interval = 10` + "\n"

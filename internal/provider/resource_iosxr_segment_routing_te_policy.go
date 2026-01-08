@@ -33,7 +33,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -517,13 +516,11 @@ func (r *SegmentRoutingTEPolicyResource) Schema(ctx context.Context, req resourc
 							},
 						},
 						"effective_metric_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Metric type, advertised to other protocols").AddStringEnumDescription("default", "hopcount", "igp", "latency", "te").AddDefaultValueDescription("default").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Metric type, advertised to other protocols").AddStringEnumDescription("default", "hopcount", "igp", "latency", "te").String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("default", "hopcount", "igp", "latency", "te"),
 							},
-							Default: stringdefault.StaticString("default"),
 						},
 					},
 				},
@@ -641,13 +638,11 @@ func (r *SegmentRoutingTEPolicyResource) Schema(ctx context.Context, req resourc
 				},
 			},
 			"effective_metric_type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Metric type, advertised to other protocols").AddStringEnumDescription("default", "hopcount", "igp", "latency", "te").AddDefaultValueDescription("default").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Metric type, advertised to other protocols").AddStringEnumDescription("default", "hopcount", "igp", "latency", "te").String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("default", "hopcount", "igp", "latency", "te"),
 				},
-				Default: stringdefault.StaticString("default"),
 			},
 			"srv6_locator_name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("SRv6 locator name").String,

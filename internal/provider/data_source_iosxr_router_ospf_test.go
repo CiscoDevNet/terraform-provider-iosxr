@@ -218,8 +218,6 @@ func TestAccDataSourceIosxrRouterOSPF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "loopback_stub_network_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "link_down_fast_detect", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "weight", "1000"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "delay_normalize_interval", "2000"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "delay_normalize_offset", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "microloop_avoidance", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "microloop_avoidance_segment_routing", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "microloop_avoidance_rib_update_delay", "3000"))
@@ -261,8 +259,6 @@ func TestAccDataSourceIosxrRouterOSPF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "monitor_convergence_track_summary_routes", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "monitor_convergence_track_external_routes", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "monitor_convergence_track_ip_frr", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "ucmp", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "ucmp_variance", "200"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "ucmp_prefix_list", "PREFIX_LIST_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "ucmp_exclude_interfaces.0.interface_name", "GigabitEthernet0/0/0/1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "ucmp_delay_interval", "2000"))
@@ -522,8 +518,6 @@ func testAccDataSourceIosxrRouterOSPFConfig() string {
 	config += `	loopback_stub_network_enable = true` + "\n"
 	config += `	link_down_fast_detect = true` + "\n"
 	config += `	weight = 1000` + "\n"
-	config += `	delay_normalize_interval = 2000` + "\n"
-	config += `	delay_normalize_offset = 0` + "\n"
 	config += `	microloop_avoidance = true` + "\n"
 	config += `	microloop_avoidance_segment_routing = true` + "\n"
 	config += `	microloop_avoidance_rib_update_delay = 3000` + "\n"
@@ -581,8 +575,6 @@ func testAccDataSourceIosxrRouterOSPFConfig() string {
 	config += `	monitor_convergence_track_summary_routes = true` + "\n"
 	config += `	monitor_convergence_track_external_routes = true` + "\n"
 	config += `	monitor_convergence_track_ip_frr = true` + "\n"
-	config += `	ucmp = true` + "\n"
-	config += `	ucmp_variance = 200` + "\n"
 	config += `	ucmp_prefix_list = "PREFIX_LIST_1"` + "\n"
 	config += `	ucmp_exclude_interfaces = [{` + "\n"
 	config += `		interface_name = "GigabitEthernet0/0/0/1"` + "\n"

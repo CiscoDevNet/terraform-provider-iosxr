@@ -83,8 +83,6 @@ resource "iosxr_router_ospf_vrf_area" "example" {
   loopback_stub_network_enable                                  = true
   link_down_fast_detect                                         = true
   weight                                                        = 1000
-  delay_normalize_interval                                      = 2000
-  delay_normalize_offset                                        = 0
   virtual_links = [
     {
       address                      = "192.168.1.4"

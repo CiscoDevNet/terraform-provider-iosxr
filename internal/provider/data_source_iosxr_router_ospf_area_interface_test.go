@@ -97,8 +97,6 @@ func TestAccDataSourceIosxrRouterOSPFAreaInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "prefix_sid_algorithms.0.index_explicit_null", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "prefix_sid_algorithms.0.index_n_flag_clear", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "advertise_prefix_route_policy", "ROUTE_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "delay_normalize_interval", "2000"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "delay_normalize_offset", "0"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -242,8 +240,6 @@ func testAccDataSourceIosxrRouterOSPFAreaInterfaceConfig() string {
 	config += `		index_n_flag_clear = true` + "\n"
 	config += `	}]` + "\n"
 	config += `	advertise_prefix_route_policy = "ROUTE_POLICY_1"` + "\n"
-	config += `	delay_normalize_interval = 2000` + "\n"
-	config += `	delay_normalize_offset = 0` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 

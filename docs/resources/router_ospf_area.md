@@ -92,8 +92,6 @@ resource "iosxr_router_ospf_area" "example" {
       fast_reroute_per_prefix_tiebreaker_interface_disjoint_index   = 70
       fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index        = 80
       passive_disable                                               = true
-      delay_normalize_interval                                      = 2000
-      delay_normalize_offset                                        = 0
     }
   ]
   mpls_traffic_eng                   = true
@@ -178,8 +176,6 @@ resource "iosxr_router_ospf_area" "example" {
   loopback_stub_network_enable                                  = true
   link_down_fast_detect                                         = true
   weight                                                        = 1000
-  delay_normalize_interval                                      = 2000
-  delay_normalize_offset                                        = 0
   virtual_links = [
     {
       address                      = "192.168.1.4"
@@ -250,7 +246,6 @@ resource "iosxr_router_ospf_area" "example" {
   - Range: `1`-`16777215`
 - `delay_normalize_offset` (Number) Normalization offset
   - Range: `0`-`16777215`
-  - Default value: `0`
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `demand_circuit_disable` (Boolean) Disable demand circuits
@@ -442,7 +437,6 @@ Optional:
   - Range: `1`-`16777215`
 - `delay_normalize_offset` (Number) Normalization offset
   - Range: `0`-`16777215`
-  - Default value: `0`
 - `distribute_list_acl` (String) In-bound access-list name.
 - `distribute_list_route_policy` (String) Route Policy to filter OSPF prefixes
 - `fast_reroute_disable` (Boolean) Disable IP Fast Reroute

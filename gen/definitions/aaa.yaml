@@ -72,19 +72,16 @@ attributes:
         tf_name: throttle_access
         type: Int64
         description: "Throttle access requests"
-        default_value: 0
         example: 100
       - yang_name: throttle/access-timeout
         tf_name: throttle_access_timeout
         type: Int64
         description: "Throttle access timeout"
-        default_value: 3
         example: 5
       - yang_name: throttle/accounting
         tf_name: throttle_accounting
         type: Int64
         description: "Throttle accounting requests"
-        default_value: 0
         example: 50
       - yang_name: server-privates/server-private
         tf_name: server_privates

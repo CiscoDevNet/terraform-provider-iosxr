@@ -109,8 +109,6 @@ resource "iosxr_router_ospf_vrf_area_interface" "example" {
     }
   ]
   advertise_prefix_route_policy = "ROUTE_POLICY_1"
-  delay_normalize_interval      = 2000
-  delay_normalize_offset        = 0
 }
 ```
 
@@ -169,7 +167,6 @@ resource "iosxr_router_ospf_vrf_area_interface" "example" {
   - Range: `1`-`16777215`
 - `delay_normalize_offset` (Number) Normalization offset
   - Range: `0`-`16777215`
-  - Default value: `0`
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `demand_circuit_disable` (Boolean) Disable demand circuits

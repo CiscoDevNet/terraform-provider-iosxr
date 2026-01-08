@@ -149,7 +149,6 @@ resource "iosxr_segment_routing_te_policy" "example" {
 - `device` (String) A device name from the provider configuration.
 - `effective_metric_type` (String) Metric type, advertised to other protocols
   - Choices: `default`, `hopcount`, `igp`, `latency`, `te`
-  - Default value: `default`
 - `effective_metric_value` (Number) Integer value of metric
   - Range: `0`-`4294967295`
 - `ipv6_disable` (Boolean) IPv6 disable
@@ -232,7 +231,6 @@ Optional:
   - Range: `0`-`255`
 - `effective_metric_type` (String) Metric type, advertised to other protocols
   - Choices: `default`, `hopcount`, `igp`, `latency`, `te`
-  - Default value: `default`
 - `effective_metric_value` (Number) Integer value of metric
   - Range: `0`-`4294967295`
 - `lock_duration` (Number) Keep protect cpath locked as active lsp after higher preference cpath lsp is made standby

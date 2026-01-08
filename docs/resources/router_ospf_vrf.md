@@ -221,8 +221,6 @@ resource "iosxr_router_ospf_vrf" "example" {
   loopback_stub_network_enable                    = true
   link_down_fast_detect                           = true
   weight                                          = 1000
-  delay_normalize_interval                        = 2000
-  delay_normalize_offset                          = 0
   microloop_avoidance                             = true
   microloop_avoidance_segment_routing             = true
   microloop_avoidance_rib_update_delay            = 3000
@@ -257,8 +255,6 @@ resource "iosxr_router_ospf_vrf" "example" {
   adjacency_stagger_simultaneous_neighbors     = 20
   snmp_context                                 = "CONTEXT1"
   snmp_trap                                    = true
-  ucmp                                         = true
-  ucmp_variance                                = 200
   ucmp_prefix_list                             = "PREFIX_LIST_1"
   ucmp_exclude_interfaces = [
     {
@@ -339,7 +335,6 @@ resource "iosxr_router_ospf_vrf" "example" {
   - Range: `1`-`16777215`
 - `delay_normalize_offset` (Number) Normalization offset
   - Range: `0`-`16777215`
-  - Default value: `0`
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `demand_circuit_disable` (Boolean) Disable OSPF demand circuit
@@ -606,7 +601,6 @@ resource "iosxr_router_ospf_vrf" "example" {
 - `ucmp_prefix_list` (String) Filter prefixes for which UCMP path are calculated
 - `ucmp_variance` (Number) Set the Variance for UCMP path metric
   - Range: `101`-`10000`
-  - Default value: `200`
 - `weight` (Number) Interface weight
   - Range: `1`-`16777214`
 

@@ -206,8 +206,6 @@ resource "iosxr_router_ospf_vrf" "example" {
   loopback_stub_network_enable                    = true
   link_down_fast_detect                           = true
   weight                                          = 1000
-  delay_normalize_interval                        = 2000
-  delay_normalize_offset                          = 0
   microloop_avoidance                             = true
   microloop_avoidance_segment_routing             = true
   microloop_avoidance_rib_update_delay            = 3000
@@ -242,8 +240,6 @@ resource "iosxr_router_ospf_vrf" "example" {
   adjacency_stagger_simultaneous_neighbors     = 20
   snmp_context                                 = "CONTEXT1"
   snmp_trap                                    = true
-  ucmp                                         = true
-  ucmp_variance                                = 200
   ucmp_prefix_list                             = "PREFIX_LIST_1"
   ucmp_exclude_interfaces = [
     {

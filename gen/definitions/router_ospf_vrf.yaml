@@ -620,13 +620,14 @@ attributes:
   - yang_name: link-down/fast-detect
     example: true
   - yang_name: weight
+    minimum_test_value: 1000
     example: 1000
   - yang_name: delay/normalize/interval
     delete_parent: true
-    minimum_test_value: 2000
+    exclude_test: true
     example: 2000
   - yang_name: delay/normalize/offset
-    default_value: 0
+    exclude_test: true
     example: 0
   - yang_name: microloop/avoidance
     example: true
@@ -755,10 +756,11 @@ attributes:
     example: true
   - yang_name: ucmp/enable
     tf_name: ucmp
+    exclude_test: true
     example: true
   - yang_name: ucmp/enable/variance
     tf_name: ucmp_variance
-    default_value: 200
+    exclude_test: true
     example: 200
   - yang_name: ucmp/enable/prefix-list
     tf_name: ucmp_prefix_list

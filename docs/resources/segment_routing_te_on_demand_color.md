@@ -116,7 +116,6 @@ resource "iosxr_segment_routing_te_on_demand_color" "example" {
 - `dynamic_pcep` (Boolean) Use Path Computation Element. Applicable for SR-MPLS and SRv6 policies
 - `effective_metric_type` (String) Metric type, advertised to other protocols
   - Choices: `default`, `hopcount`, `igp`, `latency`, `te`
-  - Default value: `default`
 - `effective_metric_value` (Number) Integer value of metric
   - Range: `0`-`4294967295`
 - `max_install_standby_paths` (Number) Allow additional candidate paths to warm up non forwarding LSPs

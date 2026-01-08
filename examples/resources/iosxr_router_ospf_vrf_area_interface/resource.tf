@@ -94,6 +94,4 @@ resource "iosxr_router_ospf_vrf_area_interface" "example" {
     }
   ]
   advertise_prefix_route_policy = "ROUTE_POLICY_1"
-  delay_normalize_interval      = 2000
-  delay_normalize_offset        = 0
 }

@@ -32,7 +32,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -1496,13 +1495,11 @@ func (r *RouterOSPFResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 			},
 			"delay_normalize_offset": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Normalization offset").AddIntegerRangeDescription(0, 16777215).AddDefaultValueDescription("0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Normalization offset").AddIntegerRangeDescription(0, 16777215).String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 16777215),
 				},
-				Default: int64default.StaticInt64(0),
 			},
 			"microloop_avoidance": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Avoid microloops").String,
@@ -1853,13 +1850,11 @@ func (r *RouterOSPFResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Optional:            true,
 			},
 			"ucmp_variance": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Set the Variance for UCMP path metric").AddIntegerRangeDescription(101, 10000).AddDefaultValueDescription("200").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Set the Variance for UCMP path metric").AddIntegerRangeDescription(101, 10000).String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(101, 10000),
 				},
-				Default: int64default.StaticInt64(200),
 			},
 			"ucmp_prefix_list": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Filter prefixes for which UCMP path are calculated").String,

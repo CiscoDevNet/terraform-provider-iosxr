@@ -533,11 +533,8 @@ Optional:
 - `servers` (Attributes List) Specify a RADIUS server (see [below for nested schema](#nestedatt--radius_server_groups--servers))
 - `source_interface` (String) Source interface
 - `throttle_access` (Number) Throttle access requests
-  - Default value: `0`
 - `throttle_access_timeout` (Number) Throttle access timeout
-  - Default value: `3`
 - `throttle_accounting` (Number) Throttle accounting requests
-  - Default value: `0`
 - `vrf` (String) VRF name
 
 <a id="nestedatt--radius_server_groups--server_privates"></a>

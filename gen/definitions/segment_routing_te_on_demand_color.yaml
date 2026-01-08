@@ -186,7 +186,6 @@ attributes:
     example: 1000
   - yang_name: effective-metric/metric-value-type/metric-type
     tf_name: effective_metric_type
-    default_value: default
     minimum_test_value: '"default"'
     example: igp
   - yang_name: srv6/locator/locator-name

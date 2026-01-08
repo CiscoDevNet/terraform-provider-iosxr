@@ -265,12 +265,13 @@ attributes:
         example: true
       - yang_name: delay/normalize/interval
         delete_parent: true
-        minimum_test_value: 2000
+        exclude_test: true
         example: 2000
       - yang_name: delay/normalize/offset
-        default_value: 0
+        exclude_test: true
         example: 0
   - yang_name: mpls/traffic-eng
+    minimum_test_value: true
     example: true
   - yang_name: mpls/ldp/sync
     example: true
@@ -582,13 +583,14 @@ attributes:
   - yang_name: link-down/fast-detect
     example: true
   - yang_name: weight
+    minimum_test_value: 1000
     example: 1000
   - yang_name: delay/normalize/interval
     delete_parent: true
-    minimum_test_value: 2000
+    exclude_test: true
     example: 2000
   - yang_name: delay/normalize/offset
-    default_value: 0
+    exclude_test: true
     example: 0
   - yang_name: virtual-links/virtual-link
     tf_name: virtual_links

@@ -87,8 +87,6 @@ func TestAccDataSourceIosxrRouterOSPFVRFArea(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf_area.test", "loopback_stub_network_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf_area.test", "link_down_fast_detect", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf_area.test", "weight", "1000"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf_area.test", "delay_normalize_interval", "2000"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf_area.test", "delay_normalize_offset", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf_area.test", "virtual_links.0.address", "192.168.1.4"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf_area.test", "virtual_links.0.hello_interval", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf_area.test", "virtual_links.0.dead_interval", "40"))
@@ -222,8 +220,6 @@ func testAccDataSourceIosxrRouterOSPFVRFAreaConfig() string {
 	config += `	loopback_stub_network_enable = true` + "\n"
 	config += `	link_down_fast_detect = true` + "\n"
 	config += `	weight = 1000` + "\n"
-	config += `	delay_normalize_interval = 2000` + "\n"
-	config += `	delay_normalize_offset = 0` + "\n"
 	config += `	virtual_links = [{` + "\n"
 	config += `		address = "192.168.1.4"` + "\n"
 	config += `		hello_interval = 10` + "\n"

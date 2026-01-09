@@ -312,6 +312,13 @@ func (r *InterfaceBundleEtherResource) Schema(ctx context.Context, req resource.
 				MarkdownDescription: helpers.NewAttributeDescription("Enable tcp mss adjust on this interface").String,
 				Optional:            true,
 			},
+			"ipv4_unnumbered": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable IP processing without an explicit address").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+				},
+			},
 			"ipv4_forwarding_enable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("enable ipv4 forwarding on a interface").String,
 				Optional:            true,

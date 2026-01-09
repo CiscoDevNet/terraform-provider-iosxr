@@ -67,6 +67,7 @@ type InterfaceBundleEther struct {
 	Ipv4HelperAddresses                                []InterfaceBundleEtherIpv4HelperAddresses                           `tfsdk:"ipv4_helper_addresses"`
 	Ipv4UnreachablesDisable                            types.Bool                                                          `tfsdk:"ipv4_unreachables_disable"`
 	Ipv4TcpMssAdjust                                   types.Bool                                                          `tfsdk:"ipv4_tcp_mss_adjust"`
+	Ipv4Unnumbered                                     types.String                                                        `tfsdk:"ipv4_unnumbered"`
 	Ipv4ForwardingEnable                               types.Bool                                                          `tfsdk:"ipv4_forwarding_enable"`
 	Ipv4TtlPropagateDisable                            types.Bool                                                          `tfsdk:"ipv4_ttl_propagate_disable"`
 	Ipv4VerifyUnicastSourceReachableViaType            types.String                                                        `tfsdk:"ipv4_verify_unicast_source_reachable_via_type"`
@@ -272,6 +273,7 @@ type InterfaceBundleEtherData struct {
 	Ipv4HelperAddresses                                []InterfaceBundleEtherIpv4HelperAddresses                           `tfsdk:"ipv4_helper_addresses"`
 	Ipv4UnreachablesDisable                            types.Bool                                                          `tfsdk:"ipv4_unreachables_disable"`
 	Ipv4TcpMssAdjust                                   types.Bool                                                          `tfsdk:"ipv4_tcp_mss_adjust"`
+	Ipv4Unnumbered                                     types.String                                                        `tfsdk:"ipv4_unnumbered"`
 	Ipv4ForwardingEnable                               types.Bool                                                          `tfsdk:"ipv4_forwarding_enable"`
 	Ipv4TtlPropagateDisable                            types.Bool                                                          `tfsdk:"ipv4_ttl_propagate_disable"`
 	Ipv4VerifyUnicastSourceReachableViaType            types.String                                                        `tfsdk:"ipv4_verify_unicast_source_reachable_via_type"`
@@ -698,6 +700,9 @@ func (data InterfaceBundleEther) toBody(ctx context.Context) string {
 		if data.Ipv4TcpMssAdjust.ValueBool() {
 			body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:tcp-mss-adjust.enable", map[string]string{})
 		}
+	}
+	if !data.Ipv4Unnumbered.IsNull() && !data.Ipv4Unnumbered.IsUnknown() {
+		body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.unnumbered", data.Ipv4Unnumbered.ValueString())
 	}
 	if !data.Ipv4ForwardingEnable.IsNull() && !data.Ipv4ForwardingEnable.IsUnknown() {
 		if data.Ipv4ForwardingEnable.ValueBool() {
@@ -2026,6 +2031,11 @@ func (data *InterfaceBundleEther) updateFromBody(ctx context.Context, res []byte
 		}
 	} else {
 		data.Ipv4TcpMssAdjust = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.unnumbered"); value.Exists() && !data.Ipv4Unnumbered.IsNull() {
+		data.Ipv4Unnumbered = types.StringValue(value.String())
+	} else {
+		data.Ipv4Unnumbered = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable"); !data.Ipv4ForwardingEnable.IsNull() {
 		if value.Exists() {
@@ -4211,6 +4221,9 @@ func (data *InterfaceBundleEther) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Ipv4TcpMssAdjust = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.unnumbered"); value.Exists() {
+		data.Ipv4Unnumbered = types.StringValue(value.String())
+	}
 	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable"); value.Exists() {
 		data.Ipv4ForwardingEnable = types.BoolValue(true)
 	} else {
@@ -5416,6 +5429,9 @@ func (data *InterfaceBundleEtherData) fromBody(ctx context.Context, res []byte) 
 		data.Ipv4TcpMssAdjust = types.BoolValue(true)
 	} else {
 		data.Ipv4TcpMssAdjust = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.unnumbered"); value.Exists() {
+		data.Ipv4Unnumbered = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable"); value.Exists() {
 		data.Ipv4ForwardingEnable = types.BoolValue(true)
@@ -7760,6 +7776,9 @@ func (data *InterfaceBundleEther) getDeletedItems(ctx context.Context, state Int
 	if !state.Ipv4ForwardingEnable.IsNull() && data.Ipv4ForwardingEnable.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable", state.getPath()))
 	}
+	if !state.Ipv4Unnumbered.IsNull() && data.Ipv4Unnumbered.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered", state.getPath()))
+	}
 	if !state.Ipv4TcpMssAdjust.IsNull() && data.Ipv4TcpMssAdjust.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:tcp-mss-adjust/enable", state.getPath()))
 	}
@@ -9115,6 +9134,9 @@ func (data *InterfaceBundleEther) getDeletePaths(ctx context.Context) []string {
 	}
 	if !data.Ipv4ForwardingEnable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable", data.getPath()))
+	}
+	if !data.Ipv4Unnumbered.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered", data.getPath()))
 	}
 	if !data.Ipv4TcpMssAdjust.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:tcp-mss-adjust/enable", data.getPath()))

@@ -146,6 +146,10 @@ attributes:
     tf_name: ipv4_tcp_mss_adjust
     exclude_test: true
     example: true
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered
+    tf_name: ipv4_unnumbered
+    exclude_test: true
+    example: Loopback0
   - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable
     tf_name: ipv4_forwarding_enable
     exclude_test: true

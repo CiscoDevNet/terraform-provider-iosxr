@@ -231,6 +231,10 @@ func (d *InterfaceBundleEtherDataSource) Schema(ctx context.Context, req datasou
 				MarkdownDescription: "Enable tcp mss adjust on this interface",
 				Computed:            true,
 			},
+			"ipv4_unnumbered": schema.StringAttribute{
+				MarkdownDescription: "Enable IP processing without an explicit address",
+				Computed:            true,
+			},
 			"ipv4_forwarding_enable": schema.BoolAttribute{
 				MarkdownDescription: "enable ipv4 forwarding on a interface",
 				Computed:            true,

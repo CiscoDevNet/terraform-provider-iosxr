@@ -380,6 +380,7 @@ resource "iosxr_interface_bundle_ether" "example" {
 - `ipv4_secondaries` (Attributes List) IP address and Mask (see [below for nested schema](#nestedatt--ipv4_secondaries))
 - `ipv4_tcp_mss_adjust` (Boolean) Enable tcp mss adjust on this interface
 - `ipv4_ttl_propagate_disable` (Boolean) Disable ipv4 ttl propagation on this interface
+- `ipv4_unnumbered` (String) Enable IP processing without an explicit address
 - `ipv4_unreachables_disable` (Boolean) Override sending of ICMP Unreachable messages
 - `ipv4_verify_unicast_source_reachable_via_allow_default` (Boolean) Allow default route to match when checking source address
 - `ipv4_verify_unicast_source_reachable_via_allow_self_ping` (Boolean) Allow router to ping itself (opens vulnerability in verification)

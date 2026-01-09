@@ -88,12 +88,18 @@ func TestAccIosxrInterfaceBundleEtherSubinterface(t *testing.T) {
 	if os.Getenv("XRV9K") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ipv4_access_group_ingress_interface_statistics", "true"))
 	}
+	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ipv4_access_group_ingress_compress", "0"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ipv4_access_group_egress_acl", "ACL1"))
 	if os.Getenv("XRV9K") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ipv4_access_group_egress_hardware_count", "true"))
 	}
 	if os.Getenv("XRV9K") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ipv4_access_group_egress_interface_statistics", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ipv4_access_group_egress_compress", "0"))
 	}
 	if os.Getenv("XRV9K") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ipv6_verify_unicast_source_reachable_via_type", "any"))
@@ -108,9 +114,15 @@ func TestAccIosxrInterfaceBundleEtherSubinterface(t *testing.T) {
 	if os.Getenv("XRV9K") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ipv6_access_group_ingress_interface_statistics", "true"))
 	}
+	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ipv6_access_group_ingress_compress", "0"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ipv6_access_group_egress_acl", "ACL2"))
 	if os.Getenv("XRV9K") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ipv6_access_group_egress_interface_statistics", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ipv6_access_group_egress_compress", "0"))
 	}
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ipv6_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ipv6_addresses.0.address", "2001:db8:1:1::1"))
@@ -575,12 +587,18 @@ func testAccIosxrInterfaceBundleEtherSubinterfaceConfig_all() string {
 	if os.Getenv("XRV9K") != "" {
 		config += `	ipv4_access_group_ingress_interface_statistics = true` + "\n"
 	}
+	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
+		config += `	ipv4_access_group_ingress_compress = 0` + "\n"
+	}
 	config += `	ipv4_access_group_egress_acl = "ACL1"` + "\n"
 	if os.Getenv("XRV9K") != "" {
 		config += `	ipv4_access_group_egress_hardware_count = true` + "\n"
 	}
 	if os.Getenv("XRV9K") != "" {
 		config += `	ipv4_access_group_egress_interface_statistics = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
+		config += `	ipv4_access_group_egress_compress = 0` + "\n"
 	}
 	if os.Getenv("XRV9K") != "" {
 		config += `	ipv6_verify_unicast_source_reachable_via_type = "any"` + "\n"
@@ -595,9 +613,15 @@ func testAccIosxrInterfaceBundleEtherSubinterfaceConfig_all() string {
 	if os.Getenv("XRV9K") != "" {
 		config += `	ipv6_access_group_ingress_interface_statistics = true` + "\n"
 	}
+	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
+		config += `	ipv6_access_group_ingress_compress = 0` + "\n"
+	}
 	config += `	ipv6_access_group_egress_acl = "ACL2"` + "\n"
 	if os.Getenv("XRV9K") != "" {
 		config += `	ipv6_access_group_egress_interface_statistics = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
+		config += `	ipv6_access_group_egress_compress = 0` + "\n"
 	}
 	config += `	ipv6_enable = true` + "\n"
 	config += `	ipv6_addresses = [{` + "\n"

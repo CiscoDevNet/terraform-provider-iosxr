@@ -76,16 +76,20 @@ type InterfaceBundleEther struct {
 	Ipv4AccessGroupIngressAcl1                         types.String                                                        `tfsdk:"ipv4_access_group_ingress_acl1"`
 	Ipv4AccessGroupIngressHardwareCount                types.Bool                                                          `tfsdk:"ipv4_access_group_ingress_hardware_count"`
 	Ipv4AccessGroupIngressInterfaceStatistics          types.Bool                                                          `tfsdk:"ipv4_access_group_ingress_interface_statistics"`
+	Ipv4AccessGroupIngressCompress                     types.Int64                                                         `tfsdk:"ipv4_access_group_ingress_compress"`
 	Ipv4AccessGroupEgressAcl                           types.String                                                        `tfsdk:"ipv4_access_group_egress_acl"`
 	Ipv4AccessGroupEgressHardwareCount                 types.Bool                                                          `tfsdk:"ipv4_access_group_egress_hardware_count"`
 	Ipv4AccessGroupEgressInterfaceStatistics           types.Bool                                                          `tfsdk:"ipv4_access_group_egress_interface_statistics"`
+	Ipv4AccessGroupEgressCompress                      types.Int64                                                         `tfsdk:"ipv4_access_group_egress_compress"`
 	Ipv6VerifyUnicastSourceReachableViaType            types.String                                                        `tfsdk:"ipv6_verify_unicast_source_reachable_via_type"`
 	Ipv6VerifyUnicastSourceReachableViaAllowSelfPing   types.Bool                                                          `tfsdk:"ipv6_verify_unicast_source_reachable_via_allow_self_ping"`
 	Ipv6VerifyUnicastSourceReachableViaAllowDefault    types.Bool                                                          `tfsdk:"ipv6_verify_unicast_source_reachable_via_allow_default"`
 	Ipv6AccessGroupIngressAcl1                         types.String                                                        `tfsdk:"ipv6_access_group_ingress_acl1"`
 	Ipv6AccessGroupIngressInterfaceStatistics          types.Bool                                                          `tfsdk:"ipv6_access_group_ingress_interface_statistics"`
+	Ipv6AccessGroupIngressCompress                     types.Int64                                                         `tfsdk:"ipv6_access_group_ingress_compress"`
 	Ipv6AccessGroupEgressAcl                           types.String                                                        `tfsdk:"ipv6_access_group_egress_acl"`
 	Ipv6AccessGroupEgressInterfaceStatistics           types.Bool                                                          `tfsdk:"ipv6_access_group_egress_interface_statistics"`
+	Ipv6AccessGroupEgressCompress                      types.Int64                                                         `tfsdk:"ipv6_access_group_egress_compress"`
 	Ipv6Enable                                         types.Bool                                                          `tfsdk:"ipv6_enable"`
 	Ipv6TtlPropagateDisable                            types.Bool                                                          `tfsdk:"ipv6_ttl_propagate_disable"`
 	Ipv6Addresses                                      []InterfaceBundleEtherIpv6Addresses                                 `tfsdk:"ipv6_addresses"`
@@ -282,16 +286,20 @@ type InterfaceBundleEtherData struct {
 	Ipv4AccessGroupIngressAcl1                         types.String                                                        `tfsdk:"ipv4_access_group_ingress_acl1"`
 	Ipv4AccessGroupIngressHardwareCount                types.Bool                                                          `tfsdk:"ipv4_access_group_ingress_hardware_count"`
 	Ipv4AccessGroupIngressInterfaceStatistics          types.Bool                                                          `tfsdk:"ipv4_access_group_ingress_interface_statistics"`
+	Ipv4AccessGroupIngressCompress                     types.Int64                                                         `tfsdk:"ipv4_access_group_ingress_compress"`
 	Ipv4AccessGroupEgressAcl                           types.String                                                        `tfsdk:"ipv4_access_group_egress_acl"`
 	Ipv4AccessGroupEgressHardwareCount                 types.Bool                                                          `tfsdk:"ipv4_access_group_egress_hardware_count"`
 	Ipv4AccessGroupEgressInterfaceStatistics           types.Bool                                                          `tfsdk:"ipv4_access_group_egress_interface_statistics"`
+	Ipv4AccessGroupEgressCompress                      types.Int64                                                         `tfsdk:"ipv4_access_group_egress_compress"`
 	Ipv6VerifyUnicastSourceReachableViaType            types.String                                                        `tfsdk:"ipv6_verify_unicast_source_reachable_via_type"`
 	Ipv6VerifyUnicastSourceReachableViaAllowSelfPing   types.Bool                                                          `tfsdk:"ipv6_verify_unicast_source_reachable_via_allow_self_ping"`
 	Ipv6VerifyUnicastSourceReachableViaAllowDefault    types.Bool                                                          `tfsdk:"ipv6_verify_unicast_source_reachable_via_allow_default"`
 	Ipv6AccessGroupIngressAcl1                         types.String                                                        `tfsdk:"ipv6_access_group_ingress_acl1"`
 	Ipv6AccessGroupIngressInterfaceStatistics          types.Bool                                                          `tfsdk:"ipv6_access_group_ingress_interface_statistics"`
+	Ipv6AccessGroupIngressCompress                     types.Int64                                                         `tfsdk:"ipv6_access_group_ingress_compress"`
 	Ipv6AccessGroupEgressAcl                           types.String                                                        `tfsdk:"ipv6_access_group_egress_acl"`
 	Ipv6AccessGroupEgressInterfaceStatistics           types.Bool                                                          `tfsdk:"ipv6_access_group_egress_interface_statistics"`
+	Ipv6AccessGroupEgressCompress                      types.Int64                                                         `tfsdk:"ipv6_access_group_egress_compress"`
 	Ipv6Enable                                         types.Bool                                                          `tfsdk:"ipv6_enable"`
 	Ipv6TtlPropagateDisable                            types.Bool                                                          `tfsdk:"ipv6_ttl_propagate_disable"`
 	Ipv6Addresses                                      []InterfaceBundleEtherIpv6Addresses                                 `tfsdk:"ipv6_addresses"`
@@ -736,6 +744,9 @@ func (data InterfaceBundleEther) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.interface-statistics", []interface{}{nil})
 		}
 	}
+	if !data.Ipv4AccessGroupIngressCompress.IsNull() && !data.Ipv4AccessGroupIngressCompress.IsUnknown() {
+		body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.compress", strconv.FormatInt(data.Ipv4AccessGroupIngressCompress.ValueInt64(), 10))
+	}
 	if !data.Ipv4AccessGroupEgressAcl.IsNull() && !data.Ipv4AccessGroupEgressAcl.IsUnknown() {
 		body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.access-list-name.name", data.Ipv4AccessGroupEgressAcl.ValueString())
 	}
@@ -748,6 +759,9 @@ func (data InterfaceBundleEther) toBody(ctx context.Context) string {
 		if data.Ipv4AccessGroupEgressInterfaceStatistics.ValueBool() {
 			body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.interface-statistics", []interface{}{nil})
 		}
+	}
+	if !data.Ipv4AccessGroupEgressCompress.IsNull() && !data.Ipv4AccessGroupEgressCompress.IsUnknown() {
+		body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.compress", strconv.FormatInt(data.Ipv4AccessGroupEgressCompress.ValueInt64(), 10))
 	}
 	if !data.Ipv6VerifyUnicastSourceReachableViaType.IsNull() && !data.Ipv6VerifyUnicastSourceReachableViaType.IsUnknown() {
 		body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-ipv6-cfg:verify.unicast.source.reachable-via.type", data.Ipv6VerifyUnicastSourceReachableViaType.ValueString())
@@ -766,6 +780,9 @@ func (data InterfaceBundleEther) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.interface-statistics", []interface{}{nil})
 		}
 	}
+	if !data.Ipv6AccessGroupIngressCompress.IsNull() && !data.Ipv6AccessGroupIngressCompress.IsUnknown() {
+		body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.compress", strconv.FormatInt(data.Ipv6AccessGroupIngressCompress.ValueInt64(), 10))
+	}
 	if !data.Ipv6AccessGroupEgressAcl.IsNull() && !data.Ipv6AccessGroupEgressAcl.IsUnknown() {
 		body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.access-list-name.name", data.Ipv6AccessGroupEgressAcl.ValueString())
 	}
@@ -773,6 +790,9 @@ func (data InterfaceBundleEther) toBody(ctx context.Context) string {
 		if data.Ipv6AccessGroupEgressInterfaceStatistics.ValueBool() {
 			body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.interface-statistics", []interface{}{nil})
 		}
+	}
+	if !data.Ipv6AccessGroupEgressCompress.IsNull() && !data.Ipv6AccessGroupEgressCompress.IsUnknown() {
+		body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.compress", strconv.FormatInt(data.Ipv6AccessGroupEgressCompress.ValueInt64(), 10))
 	}
 	if !data.Ipv6Enable.IsNull() && !data.Ipv6Enable.IsUnknown() {
 		if data.Ipv6Enable.ValueBool() {
@@ -2097,6 +2117,11 @@ func (data *InterfaceBundleEther) updateFromBody(ctx context.Context, res []byte
 	} else {
 		data.Ipv4AccessGroupIngressInterfaceStatistics = types.BoolNull()
 	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.compress"); value.Exists() && !data.Ipv4AccessGroupIngressCompress.IsNull() {
+		data.Ipv4AccessGroupIngressCompress = types.Int64Value(value.Int())
+	} else {
+		data.Ipv4AccessGroupIngressCompress = types.Int64Null()
+	}
 	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.access-list-name.name"); value.Exists() && !data.Ipv4AccessGroupEgressAcl.IsNull() {
 		data.Ipv4AccessGroupEgressAcl = types.StringValue(value.String())
 	} else {
@@ -2119,6 +2144,11 @@ func (data *InterfaceBundleEther) updateFromBody(ctx context.Context, res []byte
 		}
 	} else {
 		data.Ipv4AccessGroupEgressInterfaceStatistics = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.compress"); value.Exists() && !data.Ipv4AccessGroupEgressCompress.IsNull() {
+		data.Ipv4AccessGroupEgressCompress = types.Int64Value(value.Int())
+	} else {
+		data.Ipv4AccessGroupEgressCompress = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ipv6-cfg:verify.unicast.source.reachable-via.type"); value.Exists() && !data.Ipv6VerifyUnicastSourceReachableViaType.IsNull() {
 		data.Ipv6VerifyUnicastSourceReachableViaType = types.StringValue(value.String())
@@ -2153,6 +2183,11 @@ func (data *InterfaceBundleEther) updateFromBody(ctx context.Context, res []byte
 	} else {
 		data.Ipv6AccessGroupIngressInterfaceStatistics = types.BoolNull()
 	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.compress"); value.Exists() && !data.Ipv6AccessGroupIngressCompress.IsNull() {
+		data.Ipv6AccessGroupIngressCompress = types.Int64Value(value.Int())
+	} else {
+		data.Ipv6AccessGroupIngressCompress = types.Int64Null()
+	}
 	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.access-list-name.name"); value.Exists() && !data.Ipv6AccessGroupEgressAcl.IsNull() {
 		data.Ipv6AccessGroupEgressAcl = types.StringValue(value.String())
 	} else {
@@ -2166,6 +2201,11 @@ func (data *InterfaceBundleEther) updateFromBody(ctx context.Context, res []byte
 		}
 	} else {
 		data.Ipv6AccessGroupEgressInterfaceStatistics = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.compress"); value.Exists() && !data.Ipv6AccessGroupEgressCompress.IsNull() {
+		data.Ipv6AccessGroupEgressCompress = types.Int64Value(value.Int())
+	} else {
+		data.Ipv6AccessGroupEgressCompress = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:enable"); !data.Ipv6Enable.IsNull() {
 		if value.Exists() {
@@ -4260,6 +4300,9 @@ func (data *InterfaceBundleEther) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Ipv4AccessGroupIngressInterfaceStatistics = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.compress"); value.Exists() {
+		data.Ipv4AccessGroupIngressCompress = types.Int64Value(value.Int())
+	}
 	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.access-list-name.name"); value.Exists() {
 		data.Ipv4AccessGroupEgressAcl = types.StringValue(value.String())
 	}
@@ -4272,6 +4315,9 @@ func (data *InterfaceBundleEther) fromBody(ctx context.Context, res []byte) {
 		data.Ipv4AccessGroupEgressInterfaceStatistics = types.BoolValue(true)
 	} else {
 		data.Ipv4AccessGroupEgressInterfaceStatistics = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.compress"); value.Exists() {
+		data.Ipv4AccessGroupEgressCompress = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ipv6-cfg:verify.unicast.source.reachable-via.type"); value.Exists() {
 		data.Ipv6VerifyUnicastSourceReachableViaType = types.StringValue(value.String())
@@ -4294,6 +4340,9 @@ func (data *InterfaceBundleEther) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Ipv6AccessGroupIngressInterfaceStatistics = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.compress"); value.Exists() {
+		data.Ipv6AccessGroupIngressCompress = types.Int64Value(value.Int())
+	}
 	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.access-list-name.name"); value.Exists() {
 		data.Ipv6AccessGroupEgressAcl = types.StringValue(value.String())
 	}
@@ -4301,6 +4350,9 @@ func (data *InterfaceBundleEther) fromBody(ctx context.Context, res []byte) {
 		data.Ipv6AccessGroupEgressInterfaceStatistics = types.BoolValue(true)
 	} else {
 		data.Ipv6AccessGroupEgressInterfaceStatistics = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.compress"); value.Exists() {
+		data.Ipv6AccessGroupEgressCompress = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:enable"); value.Exists() {
 		data.Ipv6Enable = types.BoolValue(true)
@@ -5469,6 +5521,9 @@ func (data *InterfaceBundleEtherData) fromBody(ctx context.Context, res []byte) 
 	} else {
 		data.Ipv4AccessGroupIngressInterfaceStatistics = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.compress"); value.Exists() {
+		data.Ipv4AccessGroupIngressCompress = types.Int64Value(value.Int())
+	}
 	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.access-list-name.name"); value.Exists() {
 		data.Ipv4AccessGroupEgressAcl = types.StringValue(value.String())
 	}
@@ -5481,6 +5536,9 @@ func (data *InterfaceBundleEtherData) fromBody(ctx context.Context, res []byte) 
 		data.Ipv4AccessGroupEgressInterfaceStatistics = types.BoolValue(true)
 	} else {
 		data.Ipv4AccessGroupEgressInterfaceStatistics = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.compress"); value.Exists() {
+		data.Ipv4AccessGroupEgressCompress = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ipv6-cfg:verify.unicast.source.reachable-via.type"); value.Exists() {
 		data.Ipv6VerifyUnicastSourceReachableViaType = types.StringValue(value.String())
@@ -5503,6 +5561,9 @@ func (data *InterfaceBundleEtherData) fromBody(ctx context.Context, res []byte) 
 	} else {
 		data.Ipv6AccessGroupIngressInterfaceStatistics = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.compress"); value.Exists() {
+		data.Ipv6AccessGroupIngressCompress = types.Int64Value(value.Int())
+	}
 	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.access-list-name.name"); value.Exists() {
 		data.Ipv6AccessGroupEgressAcl = types.StringValue(value.String())
 	}
@@ -5510,6 +5571,9 @@ func (data *InterfaceBundleEtherData) fromBody(ctx context.Context, res []byte) 
 		data.Ipv6AccessGroupEgressInterfaceStatistics = types.BoolValue(true)
 	} else {
 		data.Ipv6AccessGroupEgressInterfaceStatistics = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.compress"); value.Exists() {
+		data.Ipv6AccessGroupEgressCompress = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:enable"); value.Exists() {
 		data.Ipv6Enable = types.BoolValue(true)
@@ -7722,11 +7786,17 @@ func (data *InterfaceBundleEther) getDeletedItems(ctx context.Context, state Int
 	if !state.Ipv6Enable.IsNull() && data.Ipv6Enable.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:enable", state.getPath()))
 	}
+	if !state.Ipv6AccessGroupEgressCompress.IsNull() && data.Ipv6AccessGroupEgressCompress.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/compress", state.getPath()))
+	}
 	if !state.Ipv6AccessGroupEgressInterfaceStatistics.IsNull() && data.Ipv6AccessGroupEgressInterfaceStatistics.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/interface-statistics", state.getPath()))
 	}
 	if !state.Ipv6AccessGroupEgressAcl.IsNull() && data.Ipv6AccessGroupEgressAcl.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress", state.getPath()))
+	}
+	if !state.Ipv6AccessGroupIngressCompress.IsNull() && data.Ipv6AccessGroupIngressCompress.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/compress", state.getPath()))
 	}
 	if !state.Ipv6AccessGroupIngressInterfaceStatistics.IsNull() && data.Ipv6AccessGroupIngressInterfaceStatistics.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/interface-statistics", state.getPath()))
@@ -7743,6 +7813,9 @@ func (data *InterfaceBundleEther) getDeletedItems(ctx context.Context, state Int
 	if !state.Ipv6VerifyUnicastSourceReachableViaType.IsNull() && data.Ipv6VerifyUnicastSourceReachableViaType.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via", state.getPath()))
 	}
+	if !state.Ipv4AccessGroupEgressCompress.IsNull() && data.Ipv4AccessGroupEgressCompress.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress", state.getPath()))
+	}
 	if !state.Ipv4AccessGroupEgressInterfaceStatistics.IsNull() && data.Ipv4AccessGroupEgressInterfaceStatistics.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress", state.getPath()))
 	}
@@ -7751,6 +7824,9 @@ func (data *InterfaceBundleEther) getDeletedItems(ctx context.Context, state Int
 	}
 	if !state.Ipv4AccessGroupEgressAcl.IsNull() && data.Ipv4AccessGroupEgressAcl.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress", state.getPath()))
+	}
+	if !state.Ipv4AccessGroupIngressCompress.IsNull() && data.Ipv4AccessGroupIngressCompress.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress", state.getPath()))
 	}
 	if !state.Ipv4AccessGroupIngressInterfaceStatistics.IsNull() && data.Ipv4AccessGroupIngressInterfaceStatistics.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress", state.getPath()))
@@ -9081,11 +9157,17 @@ func (data *InterfaceBundleEther) getDeletePaths(ctx context.Context) []string {
 	if !data.Ipv6Enable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:enable", data.getPath()))
 	}
+	if !data.Ipv6AccessGroupEgressCompress.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/compress", data.getPath()))
+	}
 	if !data.Ipv6AccessGroupEgressInterfaceStatistics.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/interface-statistics", data.getPath()))
 	}
 	if !data.Ipv6AccessGroupEgressAcl.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress", data.getPath()))
+	}
+	if !data.Ipv6AccessGroupIngressCompress.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/compress", data.getPath()))
 	}
 	if !data.Ipv6AccessGroupIngressInterfaceStatistics.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/interface-statistics", data.getPath()))
@@ -9102,6 +9184,9 @@ func (data *InterfaceBundleEther) getDeletePaths(ctx context.Context) []string {
 	if !data.Ipv6VerifyUnicastSourceReachableViaType.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via", data.getPath()))
 	}
+	if !data.Ipv4AccessGroupEgressCompress.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress", data.getPath()))
+	}
 	if !data.Ipv4AccessGroupEgressInterfaceStatistics.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress", data.getPath()))
 	}
@@ -9110,6 +9195,9 @@ func (data *InterfaceBundleEther) getDeletePaths(ctx context.Context) []string {
 	}
 	if !data.Ipv4AccessGroupEgressAcl.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress", data.getPath()))
+	}
+	if !data.Ipv4AccessGroupIngressCompress.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress", data.getPath()))
 	}
 	if !data.Ipv4AccessGroupIngressInterfaceStatistics.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress", data.getPath()))

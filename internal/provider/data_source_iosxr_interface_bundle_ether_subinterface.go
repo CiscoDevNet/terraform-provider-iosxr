@@ -291,6 +291,10 @@ func (d *InterfaceBundleEtherSubinterfaceDataSource) Schema(ctx context.Context,
 				MarkdownDescription: "Per interface statistics in hardware",
 				Computed:            true,
 			},
+			"ipv4_access_group_ingress_compress": schema.Int64Attribute{
+				MarkdownDescription: "Specify ACL compression in hardware",
+				Computed:            true,
+			},
 			"ipv4_access_group_egress_acl": schema.StringAttribute{
 				MarkdownDescription: "Access-list name",
 				Computed:            true,
@@ -301,6 +305,10 @@ func (d *InterfaceBundleEtherSubinterfaceDataSource) Schema(ctx context.Context,
 			},
 			"ipv4_access_group_egress_interface_statistics": schema.BoolAttribute{
 				MarkdownDescription: "Per interface statistics in hardware",
+				Computed:            true,
+			},
+			"ipv4_access_group_egress_compress": schema.Int64Attribute{
+				MarkdownDescription: "Specify ACL compression in hardware",
 				Computed:            true,
 			},
 			"ipv6_verify_unicast_source_reachable_via_type": schema.StringAttribute{
@@ -323,12 +331,20 @@ func (d *InterfaceBundleEtherSubinterfaceDataSource) Schema(ctx context.Context,
 				MarkdownDescription: "Per interface statistics in hardware",
 				Computed:            true,
 			},
+			"ipv6_access_group_ingress_compress": schema.Int64Attribute{
+				MarkdownDescription: "Specify ACL compression in hardware",
+				Computed:            true,
+			},
 			"ipv6_access_group_egress_acl": schema.StringAttribute{
 				MarkdownDescription: "Access-list name",
 				Computed:            true,
 			},
 			"ipv6_access_group_egress_interface_statistics": schema.BoolAttribute{
 				MarkdownDescription: "Per interface statistics in hardware",
+				Computed:            true,
+			},
+			"ipv6_access_group_egress_compress": schema.Int64Attribute{
+				MarkdownDescription: "Specify ACL compression in hardware",
 				Computed:            true,
 			},
 			"ipv6_enable": schema.BoolAttribute{

@@ -358,6 +358,13 @@ func (r *InterfaceBVIResource) Schema(ctx context.Context, req resource.SchemaRe
 				MarkdownDescription: helpers.NewAttributeDescription("Per interface statistics in hardware").String,
 				Optional:            true,
 			},
+			"ipv4_access_group_ingress_compress": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify ACL compression in hardware").AddIntegerRangeDescription(0, 4).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4),
+				},
+			},
 			"ipv4_access_group_egress_acl": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Access-list name").String,
 				Optional:            true,
@@ -373,6 +380,13 @@ func (r *InterfaceBVIResource) Schema(ctx context.Context, req resource.SchemaRe
 			"ipv4_access_group_egress_interface_statistics": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Per interface statistics in hardware").String,
 				Optional:            true,
+			},
+			"ipv4_access_group_egress_compress": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify ACL compression in hardware").AddIntegerRangeDescription(0, 4).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4),
+				},
 			},
 			"ipv6_verify_unicast_source_reachable_via_type": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Source reachable type").AddStringEnumDescription("any", "rx").String,
@@ -401,6 +415,13 @@ func (r *InterfaceBVIResource) Schema(ctx context.Context, req resource.SchemaRe
 				MarkdownDescription: helpers.NewAttributeDescription("Per interface statistics in hardware").String,
 				Optional:            true,
 			},
+			"ipv6_access_group_ingress_compress": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify ACL compression in hardware").AddIntegerRangeDescription(0, 4).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4),
+				},
+			},
 			"ipv6_access_group_egress_acl": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Access-list name").String,
 				Optional:            true,
@@ -412,6 +433,13 @@ func (r *InterfaceBVIResource) Schema(ctx context.Context, req resource.SchemaRe
 			"ipv6_access_group_egress_interface_statistics": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Per interface statistics in hardware").String,
 				Optional:            true,
+			},
+			"ipv6_access_group_egress_compress": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify ACL compression in hardware").AddIntegerRangeDescription(0, 4).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4),
+				},
 			},
 			"ipv6_enable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable IPv6 on interface").String,

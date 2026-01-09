@@ -359,9 +359,13 @@ resource "iosxr_interface_bundle_ether" "example" {
 - `flow_ipv6_ingress_monitor_samplers` (Attributes List) Specify a flow monitor and sampler for incoming packets (see [below for nested schema](#nestedatt--flow_ipv6_ingress_monitor_samplers))
 - `flow_ipv6_ingress_monitors` (Attributes List) Specify a flow monitor for packets (see [below for nested schema](#nestedatt--flow_ipv6_ingress_monitors))
 - `ipv4_access_group_egress_acl` (String) Access-list name
+- `ipv4_access_group_egress_compress` (Number) Specify ACL compression in hardware
+  - Range: `0`-`4`
 - `ipv4_access_group_egress_hardware_count` (Boolean) Count packets in hardware
 - `ipv4_access_group_egress_interface_statistics` (Boolean) Per interface statistics in hardware
 - `ipv4_access_group_ingress_acl1` (String) Access-list name
+- `ipv4_access_group_ingress_compress` (Number) Specify ACL compression in hardware
+  - Range: `0`-`4`
 - `ipv4_access_group_ingress_hardware_count` (Boolean) Count packets in hardware
 - `ipv4_access_group_ingress_interface_statistics` (Boolean) Per interface statistics in hardware
 - `ipv4_address` (String) IP address
@@ -387,8 +391,12 @@ resource "iosxr_interface_bundle_ether" "example" {
 - `ipv4_verify_unicast_source_reachable_via_type` (String) Source reachable type
   - Choices: `any`, `rx`
 - `ipv6_access_group_egress_acl` (String) Access-list name
+- `ipv6_access_group_egress_compress` (Number) Specify ACL compression in hardware
+  - Range: `0`-`4`
 - `ipv6_access_group_egress_interface_statistics` (Boolean) Per interface statistics in hardware
 - `ipv6_access_group_ingress_acl1` (String) Access-list name
+- `ipv6_access_group_ingress_compress` (Number) Specify ACL compression in hardware
+  - Range: `0`-`4`
 - `ipv6_access_group_ingress_interface_statistics` (Boolean) Per interface statistics in hardware
 - `ipv6_addresses` (Attributes List) IPv6 address (see [below for nested schema](#nestedatt--ipv6_addresses))
 - `ipv6_autoconfig` (Boolean) Enable slaac on Mgmt interface

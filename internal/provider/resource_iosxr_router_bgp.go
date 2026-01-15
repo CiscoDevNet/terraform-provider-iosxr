@@ -1392,7 +1392,7 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 								int64validator.Between(1, 128),
 							},
 						},
-						"max_lengch": schema.Int64Attribute{
+						"max_length": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Maximum prefix length").AddIntegerRangeDescription(1, 128).String,
 							Required:            true,
 							Validators: []validator.Int64{

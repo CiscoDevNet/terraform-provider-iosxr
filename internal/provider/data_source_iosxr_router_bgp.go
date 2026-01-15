@@ -1101,7 +1101,7 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							MarkdownDescription: "route prefix",
 							Computed:            true,
 						},
-						"max_lengch": schema.Int64Attribute{
+						"max_length": schema.Int64Attribute{
 							MarkdownDescription: "Maximum prefix length",
 							Computed:            true,
 						},

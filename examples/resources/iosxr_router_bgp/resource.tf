@@ -202,7 +202,7 @@ resource "iosxr_router_bgp" "example" {
     {
       route_address = "172.16.1.0"
       route_prefix  = 24
-      max_lengch    = 24
+      max_length    = 24
       origin_as     = 501
     }
   ]

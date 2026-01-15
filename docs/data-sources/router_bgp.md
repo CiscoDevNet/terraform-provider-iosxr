@@ -366,7 +366,7 @@ Read-Only:
 
 Read-Only:
 
-- `max_lengch` (Number) Maximum prefix length
+- `max_length` (Number) Maximum prefix length
 - `origin_as` (Number) Origin Autonomous System number (in asplain format)
 - `route_address` (String) Network/Minimum prefix length
 - `route_prefix` (Number) route prefix

@@ -398,7 +398,7 @@ type RouterBGPBgpConfederationPeers struct {
 type RouterBGPRpkiRoutes struct {
 	RouteAddress types.String `tfsdk:"route_address"`
 	RoutePrefix  types.Int64  `tfsdk:"route_prefix"`
-	MaxLengch    types.Int64  `tfsdk:"max_lengch"`
+	MaxLength    types.Int64  `tfsdk:"max_length"`
 	OriginAs     types.Int64  `tfsdk:"origin_as"`
 }
 type RouterBGPRpkiServers struct {
@@ -1469,8 +1469,8 @@ func (data RouterBGP) toBody(ctx context.Context) string {
 			if !item.RoutePrefix.IsNull() && !item.RoutePrefix.IsUnknown() {
 				body, _ = sjson.Set(body, "rpki.routes.route"+"."+strconv.Itoa(index)+"."+"route-prefix", strconv.FormatInt(item.RoutePrefix.ValueInt64(), 10))
 			}
-			if !item.MaxLengch.IsNull() && !item.MaxLengch.IsUnknown() {
-				body, _ = sjson.Set(body, "rpki.routes.route"+"."+strconv.Itoa(index)+"."+"max", strconv.FormatInt(item.MaxLengch.ValueInt64(), 10))
+			if !item.MaxLength.IsNull() && !item.MaxLength.IsUnknown() {
+				body, _ = sjson.Set(body, "rpki.routes.route"+"."+strconv.Itoa(index)+"."+"max", strconv.FormatInt(item.MaxLength.ValueInt64(), 10))
 			}
 			if !item.OriginAs.IsNull() && !item.OriginAs.IsUnknown() {
 				body, _ = sjson.Set(body, "rpki.routes.route"+"."+strconv.Itoa(index)+"."+"origin", strconv.FormatInt(item.OriginAs.ValueInt64(), 10))
@@ -3483,7 +3483,7 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 	}
 	for i := range data.RpkiRoutes {
 		keys := [...]string{"route-address", "route-prefix", "max", "origin"}
-		keyValues := [...]string{data.RpkiRoutes[i].RouteAddress.ValueString(), strconv.FormatInt(data.RpkiRoutes[i].RoutePrefix.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].MaxLengch.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].OriginAs.ValueInt64(), 10)}
+		keyValues := [...]string{data.RpkiRoutes[i].RouteAddress.ValueString(), strconv.FormatInt(data.RpkiRoutes[i].RoutePrefix.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].MaxLength.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].OriginAs.ValueInt64(), 10)}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "rpki.routes.route").ForEach(
@@ -3514,10 +3514,10 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.RpkiRoutes[i].RoutePrefix = types.Int64Null()
 		}
-		if value := r.Get("max"); value.Exists() && !data.RpkiRoutes[i].MaxLengch.IsNull() {
-			data.RpkiRoutes[i].MaxLengch = types.Int64Value(value.Int())
+		if value := r.Get("max"); value.Exists() && !data.RpkiRoutes[i].MaxLength.IsNull() {
+			data.RpkiRoutes[i].MaxLength = types.Int64Value(value.Int())
 		} else {
-			data.RpkiRoutes[i].MaxLengch = types.Int64Null()
+			data.RpkiRoutes[i].MaxLength = types.Int64Null()
 		}
 		if value := r.Get("origin"); value.Exists() && !data.RpkiRoutes[i].OriginAs.IsNull() {
 			data.RpkiRoutes[i].OriginAs = types.Int64Value(value.Int())
@@ -4675,7 +4675,7 @@ func (data *RouterBGP) fromBody(ctx context.Context, res []byte) {
 				item.RoutePrefix = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("max"); cValue.Exists() {
-				item.MaxLengch = types.Int64Value(cValue.Int())
+				item.MaxLength = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("origin"); cValue.Exists() {
 				item.OriginAs = types.Int64Value(cValue.Int())
@@ -5790,7 +5790,7 @@ func (data *RouterBGPData) fromBody(ctx context.Context, res []byte) {
 				item.RoutePrefix = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("max"); cValue.Exists() {
-				item.MaxLengch = types.Int64Value(cValue.Int())
+				item.MaxLength = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("origin"); cValue.Exists() {
 				item.OriginAs = types.Int64Value(cValue.Int())
@@ -5919,7 +5919,7 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 	}
 	for i := range state.RpkiRoutes {
 		keys := [...]string{"route-address", "route-prefix", "max", "origin"}
-		stateKeyValues := [...]string{state.RpkiRoutes[i].RouteAddress.ValueString(), strconv.FormatInt(state.RpkiRoutes[i].RoutePrefix.ValueInt64(), 10), strconv.FormatInt(state.RpkiRoutes[i].MaxLengch.ValueInt64(), 10), strconv.FormatInt(state.RpkiRoutes[i].OriginAs.ValueInt64(), 10)}
+		stateKeyValues := [...]string{state.RpkiRoutes[i].RouteAddress.ValueString(), strconv.FormatInt(state.RpkiRoutes[i].RoutePrefix.ValueInt64(), 10), strconv.FormatInt(state.RpkiRoutes[i].MaxLength.ValueInt64(), 10), strconv.FormatInt(state.RpkiRoutes[i].OriginAs.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -5932,7 +5932,7 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 		if !reflect.ValueOf(state.RpkiRoutes[i].RoutePrefix.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.RpkiRoutes[i].MaxLengch.ValueInt64()).IsZero() {
+		if !reflect.ValueOf(state.RpkiRoutes[i].MaxLength.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
 		if !reflect.ValueOf(state.RpkiRoutes[i].OriginAs.ValueInt64()).IsZero() {
@@ -5951,7 +5951,7 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 			if state.RpkiRoutes[i].RoutePrefix.ValueInt64() != data.RpkiRoutes[j].RoutePrefix.ValueInt64() {
 				found = false
 			}
-			if state.RpkiRoutes[i].MaxLengch.ValueInt64() != data.RpkiRoutes[j].MaxLengch.ValueInt64() {
+			if state.RpkiRoutes[i].MaxLength.ValueInt64() != data.RpkiRoutes[j].MaxLength.ValueInt64() {
 				found = false
 			}
 			if state.RpkiRoutes[i].OriginAs.ValueInt64() != data.RpkiRoutes[j].OriginAs.ValueInt64() {
@@ -7010,7 +7010,7 @@ func (data *RouterBGP) getEmptyLeafsDelete(ctx context.Context) []string {
 	}
 	for i := range data.RpkiRoutes {
 		keys := [...]string{"route-address", "route-prefix", "max", "origin"}
-		keyValues := [...]string{data.RpkiRoutes[i].RouteAddress.ValueString(), strconv.FormatInt(data.RpkiRoutes[i].RoutePrefix.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].MaxLengch.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].OriginAs.ValueInt64(), 10)}
+		keyValues := [...]string{data.RpkiRoutes[i].RouteAddress.ValueString(), strconv.FormatInt(data.RpkiRoutes[i].RoutePrefix.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].MaxLength.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].OriginAs.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
@@ -7520,7 +7520,7 @@ func (data *RouterBGP) getDeletePaths(ctx context.Context) []string {
 	}
 	for i := range data.RpkiRoutes {
 		keys := [...]string{"route-address", "route-prefix", "max", "origin"}
-		keyValues := [...]string{data.RpkiRoutes[i].RouteAddress.ValueString(), strconv.FormatInt(data.RpkiRoutes[i].RoutePrefix.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].MaxLengch.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].OriginAs.ValueInt64(), 10)}
+		keyValues := [...]string{data.RpkiRoutes[i].RouteAddress.ValueString(), strconv.FormatInt(data.RpkiRoutes[i].RoutePrefix.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].MaxLength.ValueInt64(), 10), strconv.FormatInt(data.RpkiRoutes[i].OriginAs.ValueInt64(), 10)}
 
 		keyString := ""
 		for ki := range keys {

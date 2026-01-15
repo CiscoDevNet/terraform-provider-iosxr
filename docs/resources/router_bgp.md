@@ -217,7 +217,7 @@ resource "iosxr_router_bgp" "example" {
     {
       route_address = "172.16.1.0"
       route_prefix  = 24
-      max_lengch    = 24
+      max_length    = 24
       origin_as     = 501
     }
   ]
@@ -671,7 +671,7 @@ Required:
 
 Required:
 
-- `max_lengch` (Number) Maximum prefix length
+- `max_length` (Number) Maximum prefix length
   - Range: `1`-`128`
 - `origin_as` (Number) Origin Autonomous System number (in asplain format)
   - Range: `1`-`4294967295`

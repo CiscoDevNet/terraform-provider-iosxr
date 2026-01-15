@@ -885,7 +885,7 @@ attributes:
         id: true
         example: 24
       - yang_name: max
-        tf_name: max_lengch
+        tf_name: max_length
         id: true
         example: 24
       - yang_name: origin

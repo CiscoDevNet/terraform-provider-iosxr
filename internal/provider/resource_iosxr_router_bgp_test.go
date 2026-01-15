@@ -191,7 +191,7 @@ func TestAccIosxrRouterBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "bfd_minimum_interval", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "rpki_routes.0.route_address", "172.16.1.0"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "rpki_routes.0.route_prefix", "24"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "rpki_routes.0.max_lengch", "24"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "rpki_routes.0.max_length", "24"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "rpki_routes.0.origin_as", "501"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "rpki_servers.0.server", "192.168.1.200"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "rpki_servers.0.refresh_time_seconds", "120"))
@@ -498,7 +498,7 @@ func testAccIosxrRouterBGPConfig_all() string {
 	config += `	rpki_routes = [{` + "\n"
 	config += `		route_address = "172.16.1.0"` + "\n"
 	config += `		route_prefix = 24` + "\n"
-	config += `		max_lengch = 24` + "\n"
+	config += `		max_length = 24` + "\n"
 	config += `		origin_as = 501` + "\n"
 	config += `		}]` + "\n"
 	config += `	rpki_servers = [{` + "\n"

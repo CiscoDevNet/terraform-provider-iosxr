@@ -88,7 +88,7 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 				{{- if .Sensitive}}
 				Sensitive:           true,
 				{{- end}}
-			{{- if or (eq .Type "List") (eq .Type "Set")}}
+				{{- if or (eq .Type "List") (eq .Type "Set")}}
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						{{- range  .Attributes}}
@@ -103,7 +103,7 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 							{{- if .Sensitive}}
 							Sensitive:           true,
 							{{- end}}
-						{{- if or (eq .Type "List") (eq .Type "Set")}}
+							{{- if or (eq .Type "List") (eq .Type "Set")}}
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									{{- range  .Attributes}}
@@ -118,46 +118,46 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 										{{- if .Sensitive}}
 										Sensitive:           true,
 										{{- end}}
-								{{- if or (eq .Type "List") (eq .Type "Set")}}
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											{{- range  .Attributes}}
-											"{{.TfName}}": schema.{{if eq .Type "List"}}ListNested{{else if eq .Type "Set"}}SetNested{{else if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else if or (eq .Type "StringSet") (eq .Type "Int64Set")}}Set{{else}}{{.Type}}{{end}}Attribute{
-												MarkdownDescription: "{{.Description}}",
-												{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
-												ElementType:         types.StringType,
-												{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
-												ElementType:         types.Int64Type,
-												{{- end}}
-												Computed:            true,
-												{{- if .Sensitive}}
-												Sensitive:           true,
-												{{- end}}
-											{{- if or (eq .Type "List") (eq .Type "Set")}}
-												NestedObject: schema.NestedAttributeObject{
-													Attributes: map[string]schema.Attribute{
-														{{- range  .Attributes}}
-														"{{.TfName}}": schema.{{if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else if or (eq .Type "StringSet") (eq .Type "Int64Set")}}Set{{else}}{{.Type}}{{end}}Attribute{
-															MarkdownDescription: "{{.Description}}",
-															{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
-															ElementType:         types.StringType,
-															{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
-															ElementType:         types.Int64Type,
-															{{- end}}
-															Computed:            true,
-															{{- if .Sensitive}}
-															Sensitive:           true,
-															{{- end}}
+										{{- if or (eq .Type "List") (eq .Type "Set")}}
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												{{- range  .Attributes}}
+												"{{.TfName}}": schema.{{if eq .Type "List"}}ListNested{{else if eq .Type "Set"}}SetNested{{else if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else if or (eq .Type "StringSet") (eq .Type "Int64Set")}}Set{{else}}{{.Type}}{{end}}Attribute{
+													MarkdownDescription: "{{.Description}}",
+													{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
+													ElementType:         types.StringType,
+													{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
+													ElementType:         types.Int64Type,
+													{{- end}}
+													Computed:            true,
+													{{- if .Sensitive}}
+													Sensitive:           true,
+													{{- end}}
+													{{- if or (eq .Type "List") (eq .Type "Set")}}
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															{{- range  .Attributes}}
+															"{{.TfName}}": schema.{{if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else if or (eq .Type "StringSet") (eq .Type "Int64Set")}}Set{{else}}{{.Type}}{{end}}Attribute{
+																MarkdownDescription: "{{.Description}}",
+																{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
+																ElementType:         types.StringType,
+																{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
+																ElementType:         types.Int64Type,
+																{{- end}}
+																Computed:            true,
+																{{- if .Sensitive}}
+																Sensitive:           true,
+																{{- end}}
+														},
+														{{- end}}
+														},
 													},
 													{{- end}}
-													},
-												},
-												{{- end}}
+											},
+											{{- end}}
+											},
 										},
 										{{- end}}
-										},
-									},
-									{{- end}}
 								},
 								{{- end}}
 								},

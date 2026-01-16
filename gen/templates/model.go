@@ -640,11 +640,11 @@ func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte)
 						}
 						return true
 					},
-			)
+				)
 
-			{{- range .Attributes}}
-			{{- if not .WriteOnly}}
-			{{- if eq .Type "Int64"}}
+				{{- range .Attributes}}
+				{{- if not .WriteOnly}}
+				{{- if eq .Type "Int64"}}
 				if value := ccr.Get("{{toJsonPath .YangName .XPath}}"); value.Exists() && !data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}}.IsNull() {
 					data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = types.Int64Value(value.Int())
 				} else {

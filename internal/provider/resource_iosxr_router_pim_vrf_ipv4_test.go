@@ -233,7 +233,6 @@ func testAccIosxrRouterPIMVRFIPv4Config_minimum() string {
 
 func testAccIosxrRouterPIMVRFIPv4Config_all() string {
 	config := `resource "iosxr_router_pim_vrf_ipv4" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	rp_addresses = [{` + "\n"
 	config += `		address = "10.1.1.1"` + "\n"

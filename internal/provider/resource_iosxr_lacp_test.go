@@ -92,7 +92,6 @@ func testAccIosxrLACPConfig_minimum() string {
 
 func testAccIosxrLACPConfig_all() string {
 	config := `resource "iosxr_lacp" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	mac = "00:11:00:11:00:11"` + "\n"
 	config += `	priority = 1` + "\n"
 	config += `}` + "\n"

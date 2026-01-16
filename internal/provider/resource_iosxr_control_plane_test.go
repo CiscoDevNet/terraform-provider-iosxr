@@ -210,7 +210,6 @@ func testAccIosxrControlPlaneConfig_minimum() string {
 
 func testAccIosxrControlPlaneConfig_all() string {
 	config := `resource "iosxr_control_plane" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	mgmt_inband_interfaces = [{` + "\n"
 	config += `		interface_name = "GigabitEthernet0/0/0/0"` + "\n"
 	config += `		ssh = true` + "\n"

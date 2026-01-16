@@ -525,7 +525,6 @@ func testAccIosxrInterfaceBundleEtherSubinterfaceConfig_minimum() string {
 
 func testAccIosxrInterfaceBundleEtherSubinterfaceConfig_all() string {
 	config := `resource "iosxr_interface_bundle_ether_subinterface" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	name = "100.100"` + "\n"
 	config += `	point_to_point = false` + "\n"
 	config += `	multipoint = false` + "\n"

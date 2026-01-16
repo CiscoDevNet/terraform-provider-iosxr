@@ -145,7 +145,6 @@ func testAccIosxrLoggingConfig_minimum() string {
 
 func testAccIosxrLoggingConfig_all() string {
 	config := `resource "iosxr_logging" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	console = "disable"` + "\n"
 	config += `	trap = "informational"` + "\n"
 	config += `	monitor = "disable"` + "\n"

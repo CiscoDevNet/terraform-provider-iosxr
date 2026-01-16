@@ -46,6 +46,7 @@ func TestAccIosxrAAA(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_aaa.test", "radius_server_groups.0.servers.0.auth_port", "1812"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_aaa.test", "radius_server_groups.0.servers.0.acct_port", "1813"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_aaa.test", "radius_server_groups.0.load_balance_method_least_outstanding_batch_size", "25"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_aaa.test", "radius_server_groups.0.load_balance_method_least_outstanding", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_aaa.test", "radius_server_groups.0.load_balance_method_least_outstanding_ignore_preferred_server", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_aaa.test", "radius_server_groups.0.deadtime", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_aaa.test", "radius_server_groups.0.throttle_access", "100"))
@@ -543,6 +544,7 @@ func testAccIosxrAAAConfig_minimum() string {
 
 func testAccIosxrAAAConfig_all() string {
 	config := `resource "iosxr_aaa" "test" {` + "\n"
+	config += `	delete_mode = "all"` + "\n"
 	config += `	default_taskgroup = "FULL-TGRP"` + "\n"
 	config += `	banner_login = "^C AAA Banner! ^C"` + "\n"
 	config += `	radius_server_groups = [{` + "\n"
@@ -554,6 +556,7 @@ func testAccIosxrAAAConfig_all() string {
 	config += `			acct_port = 1813` + "\n"
 	config += `		}]` + "\n"
 	config += `		load_balance_method_least_outstanding_batch_size = 25` + "\n"
+	config += `		load_balance_method_least_outstanding = true` + "\n"
 	config += `		load_balance_method_least_outstanding_ignore_preferred_server = true` + "\n"
 	config += `		deadtime = 5` + "\n"
 	config += `		throttle_access = 100` + "\n"

@@ -116,7 +116,6 @@ func testAccIosxrPerformanceMeasurementInterfaceConfig_minimum() string {
 
 func testAccIosxrPerformanceMeasurementInterfaceConfig_all() string {
 	config := `resource "iosxr_performance_measurement_interface" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	delay_measurement = true` + "\n"
 	config += `	delay_measurement_advertise_delay = 1000` + "\n"

@@ -131,7 +131,6 @@ func testAccIosxrRouterVRRPInterfaceIPv6Config_minimum() string {
 
 func testAccIosxrRouterVRRPInterfaceIPv6Config_all() string {
 	config := `resource "iosxr_router_vrrp_interface_ipv6" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/2"` + "\n"
 	config += `	vrrp_id = 124` + "\n"
 	config += `	global_addresses = [{` + "\n"

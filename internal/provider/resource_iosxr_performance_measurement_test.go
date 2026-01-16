@@ -115,7 +115,6 @@ func testAccIosxrPerformanceMeasurementConfig_minimum() string {
 
 func testAccIosxrPerformanceMeasurementConfig_all() string {
 	config := `resource "iosxr_performance_measurement" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	source_address_ipv4 = "10.1.1.1"` + "\n"
 	config += `	source_address_ipv6 = "2001:db8::1"` + "\n"
 	config += `	protocol_twamp_light_measurement_delay_unauthenticated_querier_dst_port = 862` + "\n"

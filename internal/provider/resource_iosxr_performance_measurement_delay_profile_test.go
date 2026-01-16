@@ -197,7 +197,6 @@ func testAccIosxrPerformanceMeasurementDelayProfileConfig_minimum() string {
 
 func testAccIosxrPerformanceMeasurementDelayProfileConfig_all() string {
 	config := `resource "iosxr_performance_measurement_delay_profile" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	interfaces_default = true` + "\n"
 	config += `	interfaces_default_probe_computation_interval = 60` + "\n"
 	config += `	interfaces_default_probe_tx_interval = 30000` + "\n"

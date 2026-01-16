@@ -210,7 +210,6 @@ func testAccIosxrRouterISISInterfaceAddressFamilyConfig_minimum() string {
 
 func testAccIosxrRouterISISInterfaceAddressFamilyConfig_all() string {
 	config := `resource "iosxr_router_isis_interface_address_family" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	process_id = "P1"` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	af_name = "ipv4"` + "\n"

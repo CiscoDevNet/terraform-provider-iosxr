@@ -97,7 +97,6 @@ func testAccIosxrGenericInterfaceListConfig_minimum() string {
 
 func testAccIosxrGenericInterfaceListConfig_all() string {
 	config := `resource "iosxr_generic_interface_list" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	list_name = "INTF-LIST1"` + "\n"
 	config += `	interfaces = [{` + "\n"
 	config += `		interface_name = "Bundle-Ether101"` + "\n"

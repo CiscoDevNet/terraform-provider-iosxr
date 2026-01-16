@@ -129,6 +129,10 @@ func (r *AAAResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							MarkdownDescription: helpers.NewAttributeDescription("Batch size for load balancing").String,
 							Optional:            true,
 						},
+						"load_balance_method_least_outstanding": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use least outstanding load balancing method").String,
+							Optional:            true,
+						},
 						"load_balance_method_least_outstanding_ignore_preferred_server": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Ignore preferred server").String,
 							Optional:            true,

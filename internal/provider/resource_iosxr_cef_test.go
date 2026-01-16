@@ -104,7 +104,6 @@ func testAccIosxrCEFConfig_minimum() string {
 
 func testAccIosxrCEFConfig_all() string {
 	config := `resource "iosxr_cef" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	adjacency_route_override_rib = true` + "\n"
 	config += `	platform_lsm_frr_holdtime = 60` + "\n"
 	config += `	retry_service_time = 50` + "\n"

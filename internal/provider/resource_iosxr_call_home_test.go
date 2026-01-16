@@ -121,7 +121,6 @@ func testAccIosxrCallHomeConfig_minimum() string {
 
 func testAccIosxrCallHomeConfig_all() string {
 	config := `resource "iosxr_call_home" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	service_active = true` + "\n"
 	config += `	mail_servers = [{` + "\n"
 	config += `		mail_server_name = "smtp.example.com"` + "\n"

@@ -136,7 +136,6 @@ func testAccIosxrLineDefaultConfig_minimum() string {
 
 func testAccIosxrLineDefaultConfig_all() string {
 	config := `resource "iosxr_line_default" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	autocommand = "show version"` + "\n"
 	config += `	access_class_ingress = "CONSOLE_ACL"` + "\n"
 	config += `	access_class_egress = "CONSOLE_ACL"` + "\n"

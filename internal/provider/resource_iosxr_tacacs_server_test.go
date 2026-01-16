@@ -104,7 +104,6 @@ func testAccIosxrTACACSServerConfig_minimum() string {
 
 func testAccIosxrTACACSServerConfig_all() string {
 	config := `resource "iosxr_tacacs_server" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	hosts = [{` + "\n"
 	config += `		ordering_index = 10` + "\n"
 	config += `		address = "9.0.1.68"` + "\n"

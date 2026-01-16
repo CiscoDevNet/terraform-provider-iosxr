@@ -105,7 +105,6 @@ func testAccIosxrSRLGConfig_minimum() string {
 
 func testAccIosxrSRLGConfig_all() string {
 	config := `resource "iosxr_srlg" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	names = [{` + "\n"
 	config += `		srlg_name = "SRLG1"` + "\n"
 	config += `		value = 100` + "\n"

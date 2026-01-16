@@ -141,7 +141,6 @@ func testAccIosxrSegmentRoutingTEOnDemandColorConfig_minimum() string {
 
 func testAccIosxrSegmentRoutingTEOnDemandColorConfig_all() string {
 	config := `resource "iosxr_segment_routing_te_on_demand_color" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	color = 100` + "\n"
 	config += `	dynamic_anycast_sid_inclusion = true` + "\n"
 	config += `	dynamic_metric_type = "latency"` + "\n"

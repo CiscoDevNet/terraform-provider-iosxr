@@ -145,6 +145,7 @@ func testAccIosxrSSHConfig_minimum() string {
 
 func testAccIosxrSSHConfig_all() string {
 	config := `resource "iosxr_ssh" "test" {` + "\n"
+	config += `	delete_mode = "all"` + "\n"
 	config += `	timeout = 60` + "\n"
 	config += `	server_vrfs = [{` + "\n"
 	config += `		vrf_name = "VRF1"` + "\n"

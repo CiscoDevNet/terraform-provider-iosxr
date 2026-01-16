@@ -241,7 +241,6 @@ func testAccIosxrL2VPNBridgeGroupBridgeDomainConfig_minimum() string {
 
 func testAccIosxrL2VPNBridgeGroupBridgeDomainConfig_all() string {
 	config := `resource "iosxr_l2vpn_bridge_group_bridge_domain" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	bridge_group_name = "BG123"` + "\n"
 	config += `	bridge_domain_name = "BD123"` + "\n"
 	config += `	mtu = 1500` + "\n"

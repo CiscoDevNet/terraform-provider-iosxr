@@ -169,7 +169,6 @@ func testAccIosxrRouterISISInterfaceConfig_minimum() string {
 
 func testAccIosxrRouterISISInterfaceConfig_all() string {
 	config := `resource "iosxr_router_isis_interface" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	process_id = "P1"` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	mesh_group = 1` + "\n"

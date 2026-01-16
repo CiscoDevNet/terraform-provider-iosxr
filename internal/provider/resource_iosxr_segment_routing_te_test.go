@@ -194,7 +194,6 @@ func testAccIosxrSegmentRoutingTEConfig_minimum() string {
 
 func testAccIosxrSegmentRoutingTEConfig_all() string {
 	config := `resource "iosxr_segment_routing_te" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	te_latency = true` + "\n"
 	config += `	max_install_standby_paths = 2` + "\n"
 	config += `	kshortest_paths = 120` + "\n"

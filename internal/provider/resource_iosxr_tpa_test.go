@@ -108,6 +108,7 @@ func testAccIosxrTPAConfig_minimum() string {
 
 func testAccIosxrTPAConfig_all() string {
 	config := `resource "iosxr_tpa" "test" {` + "\n"
+	config += `	delete_mode = "all"` + "\n"
 	config += `	statistics_update_frequency = 60` + "\n"
 	config += `	statistics_max_lpts_events = 10000000` + "\n"
 	config += `	statistics_max_intf_events = 10000000` + "\n"

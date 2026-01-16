@@ -148,7 +148,6 @@ func testAccIosxrMPLSLDPVRFConfig_minimum() string {
 
 func testAccIosxrMPLSLDPVRFConfig_all() string {
 	config := `resource "iosxr_mpls_ldp_vrf" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	router_id = "1.2.3.4"` + "\n"
 	config += `	session_downstream_on_demand_with = "ACL1"` + "\n"

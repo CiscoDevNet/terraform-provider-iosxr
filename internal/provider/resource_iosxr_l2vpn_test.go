@@ -136,7 +136,6 @@ func testAccIosxrL2VPNConfig_minimum() string {
 
 func testAccIosxrL2VPNConfig_all() string {
 	config := `resource "iosxr_l2vpn" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	description = "My L2VPN Description"` + "\n"
 	config += `	router_id = "1.2.3.4"` + "\n"
 	config += `	redundancy_iccp_groups = [{` + "\n"

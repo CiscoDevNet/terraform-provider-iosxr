@@ -565,7 +565,6 @@ func testAccIosxrInterfaceEthernetConfig_minimum() string {
 
 func testAccIosxrInterfaceEthernetConfig_all() string {
 	config := `resource "iosxr_interface_ethernet" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	type = "GigabitEthernet"` + "\n"
 	config += `	name = "0/0/0/1"` + "\n"
 	config += `	l2transport = false` + "\n"

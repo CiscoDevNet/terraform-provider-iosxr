@@ -317,7 +317,6 @@ func testAccIosxrRouterBGPConfig_minimum() string {
 
 func testAccIosxrRouterBGPConfig_all() string {
 	config := `resource "iosxr_router_bgp" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	as_number = "65001"` + "\n"
 	config += `	default_metric = 125` + "\n"
 	config += `	mvpn = true` + "\n"

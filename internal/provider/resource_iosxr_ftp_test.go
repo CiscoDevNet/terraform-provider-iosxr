@@ -99,7 +99,6 @@ func testAccIosxrFTPConfig_minimum() string {
 
 func testAccIosxrFTPConfig_all() string {
 	config := `resource "iosxr_ftp" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	client_vrfs = [{` + "\n"
 	config += `		vrf_name = "VRF1"` + "\n"
 	config += `		passive = true` + "\n"

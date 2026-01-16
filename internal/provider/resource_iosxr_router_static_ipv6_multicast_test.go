@@ -150,7 +150,6 @@ func testAccIosxrRouterStaticIPv6MulticastConfig_minimum() string {
 
 func testAccIosxrRouterStaticIPv6MulticastConfig_all() string {
 	config := `resource "iosxr_router_static_ipv6_multicast" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	prefix_address = "1::"` + "\n"
 	config += `	prefix_length = 64` + "\n"
 	config += `	nexthop_interfaces = [{` + "\n"

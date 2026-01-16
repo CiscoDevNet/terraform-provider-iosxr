@@ -121,7 +121,6 @@ func testAccIosxrRouterIGMPConfig_minimum() string {
 
 func testAccIosxrRouterIGMPConfig_all() string {
 	config := `resource "iosxr_router_igmp" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	accounting_max_history = 30` + "\n"
 	config += `	nsf_lifetime = 300` + "\n"
 	config += `	dvmrp_enable = true` + "\n"

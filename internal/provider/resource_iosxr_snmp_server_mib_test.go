@@ -119,7 +119,6 @@ func testAccIosxrSNMPServerMIBConfig_minimum() string {
 
 func testAccIosxrSNMPServerMIBConfig_all() string {
 	config := `resource "iosxr_snmp_server_mib" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	cbqosmib_cache = true` + "\n"
 	config += `	cbqosmib_cache_refresh_time = 30` + "\n"
 	config += `	cbqosmib_cache_service_policy_count = 100` + "\n"

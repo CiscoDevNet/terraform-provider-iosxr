@@ -111,7 +111,6 @@ func testAccIosxrMPLSLDPInterfaceConfig_minimum() string {
 
 func testAccIosxrMPLSLDPInterfaceConfig_all() string {
 	config := `resource "iosxr_mpls_ldp_interface" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	discovery_hello_holdtime = 30` + "\n"
 	config += `	discovery_hello_interval = 3` + "\n"

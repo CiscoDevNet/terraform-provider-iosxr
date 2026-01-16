@@ -153,7 +153,6 @@ func testAccIosxrEVPNConfig_minimum() string {
 
 func testAccIosxrEVPNConfig_all() string {
 	config := `resource "iosxr_evpn" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	bgp_rd_ipv4_address = "192.168.1.1"` + "\n"
 	config += `	bgp_rd_ipv4_address_index = 100` + "\n"
 	config += `	timers_recovery = 120` + "\n"

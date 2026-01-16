@@ -184,7 +184,6 @@ func testAccIosxrL2VPNBridgeGroupBridgeDomainVFIConfig_minimum() string {
 
 func testAccIosxrL2VPNBridgeGroupBridgeDomainVFIConfig_all() string {
 	config := `resource "iosxr_l2vpn_bridge_group_bridge_domain_vfi" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	bridge_group_name = "BG123"` + "\n"
 	config += `	bridge_domain_name = "BD123"` + "\n"
 	config += `	vfi_name = "VFI1"` + "\n"

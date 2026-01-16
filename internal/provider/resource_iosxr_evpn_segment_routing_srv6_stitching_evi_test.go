@@ -126,7 +126,6 @@ func testAccIosxrEVPNSegmentRoutingSRv6StitchingEVIConfig_minimum() string {
 
 func testAccIosxrEVPNSegmentRoutingSRv6StitchingEVIConfig_all() string {
 	config := `resource "iosxr_evpn_segment_routing_srv6_stitching_evi" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	vpn_id = 104` + "\n"
 	config += `	description = "My Description"` + "\n"
 	config += `	bgp_rd_four_byte_as_number = 65536` + "\n"

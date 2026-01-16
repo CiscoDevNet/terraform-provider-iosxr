@@ -121,7 +121,6 @@ func testAccIosxrMACSecPolicyConfig_minimum() string {
 
 func testAccIosxrMACSecPolicyConfig_all() string {
 	config := `resource "iosxr_macsec_policy" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	policy_name = "POLICY1"` + "\n"
 	config += `	key_server_priority = 100` + "\n"
 	config += `	cipher_suite = "GCM-AES-256"` + "\n"

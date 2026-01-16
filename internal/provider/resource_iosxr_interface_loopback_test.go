@@ -153,7 +153,6 @@ func testAccIosxrInterfaceLoopbackConfig_minimum() string {
 
 func testAccIosxrInterfaceLoopbackConfig_all() string {
 	config := `resource "iosxr_interface_loopback" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	name = "100"` + "\n"
 	config += `	dampening = true` + "\n"
 	config += `	dampening_decay_half_life = 2` + "\n"

@@ -94,7 +94,6 @@ func testAccIosxrFPDConfig_minimum() string {
 
 func testAccIosxrFPDConfig_all() string {
 	config := `resource "iosxr_fpd" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	auto_upgrade_enable = true` + "\n"
 	config += `}` + "\n"
 	return config

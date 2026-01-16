@@ -265,7 +265,6 @@ func testAccIosxrSNMPServerConfig_minimum() string {
 
 func testAccIosxrSNMPServerConfig_all() string {
 	config := `resource "iosxr_snmp_server" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	location = "My location"` + "\n"
 	config += `	contact = "My contact"` + "\n"
 	config += `	chassis_id = "Chassis1"` + "\n"

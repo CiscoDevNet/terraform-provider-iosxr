@@ -130,7 +130,6 @@ func testAccIosxrMPLSLDPConfig_minimum() string {
 
 func testAccIosxrMPLSLDPConfig_all() string {
 	config := `resource "iosxr_mpls_ldp" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	router_id = "1.2.3.4"` + "\n"
 	config += `	graceful_restart = true` + "\n"
 	config += `	graceful_restart_reconnect_timeout = 120` + "\n"

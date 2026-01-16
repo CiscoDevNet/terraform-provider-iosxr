@@ -113,7 +113,6 @@ func testAccIosxrLPTSPuntPoliceConfig_minimum() string {
 
 func testAccIosxrLPTSPuntPoliceConfig_all() string {
 	config := `resource "iosxr_lpts_punt_police" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	mcast_rate = 1000` + "\n"
 	config += `	bcast_rate = 1000` + "\n"
 	config += `	protocol_arp_rate = 2000` + "\n"

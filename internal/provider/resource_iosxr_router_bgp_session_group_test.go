@@ -176,7 +176,6 @@ func testAccIosxrRouterBGPSessionGroupConfig_minimum() string {
 
 func testAccIosxrRouterBGPSessionGroupConfig_all() string {
 	config := `resource "iosxr_router_bgp_session_group" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	as_number = "65001"` + "\n"
 	config += `	name = "SGROUP1"` + "\n"
 	config += `	remote_as = "65001"` + "\n"

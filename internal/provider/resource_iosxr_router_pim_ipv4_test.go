@@ -271,7 +271,6 @@ func testAccIosxrRouterPIMIPv4Config_minimum() string {
 
 func testAccIosxrRouterPIMIPv4Config_all() string {
 	config := `resource "iosxr_router_pim_ipv4" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	rp_addresses = [{` + "\n"
 	config += `		address = "10.1.1.1"` + "\n"
 	config += `		access_list = "RP_ACL"` + "\n"

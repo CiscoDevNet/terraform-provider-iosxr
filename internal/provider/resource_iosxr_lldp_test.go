@@ -110,7 +110,6 @@ func testAccIosxrLLDPConfig_minimum() string {
 
 func testAccIosxrLLDPConfig_all() string {
 	config := `resource "iosxr_lldp" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	holdtime = 50` + "\n"
 	config += `	timer = 6` + "\n"
 	config += `	reinit = 3` + "\n"

@@ -150,7 +150,6 @@ func testAccIosxrL2VPNXconnectGroupConfig_minimum() string {
 
 func testAccIosxrL2VPNXconnectGroupConfig_all() string {
 	config := `resource "iosxr_l2vpn_xconnect_group" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	group_name = "P2P"` + "\n"
 	config += `	p2ps = [{` + "\n"
 	config += `		p2p_xconnect_name = "XC"` + "\n"

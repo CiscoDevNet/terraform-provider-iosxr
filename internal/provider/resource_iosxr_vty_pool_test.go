@@ -102,7 +102,6 @@ func testAccIosxrVTYPoolConfig_minimum() string {
 
 func testAccIosxrVTYPoolConfig_all() string {
 	config := `resource "iosxr_vty_pool" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	default_first_vty = 0` + "\n"
 	config += `	default_last_vty = 10` + "\n"
 	config += `	default_line_template = "default"` + "\n"

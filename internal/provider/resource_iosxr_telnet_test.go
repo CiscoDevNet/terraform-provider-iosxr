@@ -102,7 +102,6 @@ func testAccIosxrTelnetConfig_minimum() string {
 
 func testAccIosxrTelnetConfig_all() string {
 	config := `resource "iosxr_telnet" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	ipv4_client_source_interface = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	ipv6_client_source_interface = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	vrfs = [{` + "\n"

@@ -170,7 +170,6 @@ func testAccIosxrRouterStaticVRFIPv4MulticastConfig_minimum() string {
 
 func testAccIosxrRouterStaticVRFIPv4MulticastConfig_all() string {
 	config := `resource "iosxr_router_static_vrf_ipv4_multicast" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	vrf_name = "VRF2"` + "\n"
 	config += `	prefix_address = "100.0.1.0"` + "\n"
 	config += `	prefix_length = 24` + "\n"

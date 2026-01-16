@@ -100,7 +100,6 @@ func testAccIosxrTrackConfig_minimum() string {
 
 func testAccIosxrTrackConfig_all() string {
 	config := `resource "iosxr_track" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	track_name = "TRACK1"` + "\n"
 	config += `	delay_up = 10` + "\n"
 	config += `	delay_down = 5` + "\n"

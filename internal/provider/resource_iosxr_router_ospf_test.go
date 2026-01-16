@@ -353,7 +353,6 @@ func testAccIosxrRouterOSPFConfig_minimum() string {
 
 func testAccIosxrRouterOSPFConfig_all() string {
 	config := `resource "iosxr_router_ospf" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	process_name = "OSPF1"` + "\n"
 	config += `	mpls_traffic_eng_router_id_ipv4_address = "10.1.1.1"` + "\n"
 	config += `	mpls_traffic_eng_multicast_intact = true` + "\n"

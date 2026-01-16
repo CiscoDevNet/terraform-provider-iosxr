@@ -59,6 +59,7 @@ Read-Only:
 - `authorization_request_reject` (Boolean) Authorization request reject
 - `deadtime` (Number) Dead time in minutes
 - `group_name` (String) Server group name
+- `load_balance_method_least_outstanding` (Boolean) Use least outstanding load balancing method
 - `load_balance_method_least_outstanding_batch_size` (Number) Batch size for load balancing
 - `load_balance_method_least_outstanding_ignore_preferred_server` (Boolean) Ignore preferred server
 - `server_privates` (Attributes List) Specify a private RADIUS server (see [below for nested schema](#nestedatt--radius_server_groups--server_privates))

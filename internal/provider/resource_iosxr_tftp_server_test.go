@@ -103,7 +103,6 @@ func testAccIosxrTFTPServerConfig_minimum() string {
 
 func testAccIosxrTFTPServerConfig_all() string {
 	config := `resource "iosxr_tftp_server" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	vrfs = [{` + "\n"
 	config += `		vrf_name = "VRF1"` + "\n"
 	config += `		ipv4_server_access_list = "ACL1"` + "\n"

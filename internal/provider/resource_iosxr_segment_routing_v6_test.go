@@ -125,7 +125,6 @@ func testAccIosxrSegmentRoutingV6Config_minimum() string {
 
 func testAccIosxrSegmentRoutingV6Config_all() string {
 	config := `resource "iosxr_segment_routing_v6" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	enable = true` + "\n"
 	config += `	sid_holdtime = 10` + "\n"
 	config += `	logging_locator_status = true` + "\n"

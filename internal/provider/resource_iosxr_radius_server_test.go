@@ -125,7 +125,6 @@ func testAccIosxrRadiusServerConfig_minimum() string {
 
 func testAccIosxrRadiusServerConfig_all() string {
 	config := `resource "iosxr_radius_server" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	hosts = [{` + "\n"
 	config += `		order = 1` + "\n"
 	config += `		address = "10.1.1.1"` + "\n"

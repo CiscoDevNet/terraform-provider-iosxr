@@ -140,7 +140,6 @@ func testAccIosxrLineTemplateConfig_minimum() string {
 
 func testAccIosxrLineTemplateConfig_all() string {
 	config := `resource "iosxr_line_template" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	template_name = "Template-1"` + "\n"
 	config += `	autocommand = "show version"` + "\n"
 	config += `	access_class_ingress = "CONSOLE_ACL"` + "\n"

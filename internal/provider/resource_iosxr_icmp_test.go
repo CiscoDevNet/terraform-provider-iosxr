@@ -94,7 +94,6 @@ func testAccIosxrICMPConfig_minimum() string {
 
 func testAccIosxrICMPConfig_all() string {
 	config := `resource "iosxr_icmp" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	ipv4_source_vrf = true` + "\n"
 	config += `	ipv4_rate_limit_unreachable_rate = 1000` + "\n"
 	config += `	ipv4_rate_limit_unreachable_df_rate = 1000` + "\n"

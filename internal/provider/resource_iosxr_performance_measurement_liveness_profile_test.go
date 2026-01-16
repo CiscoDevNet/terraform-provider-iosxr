@@ -128,7 +128,6 @@ func testAccIosxrPerformanceMeasurementLivenessProfileConfig_minimum() string {
 
 func testAccIosxrPerformanceMeasurementLivenessProfileConfig_all() string {
 	config := `resource "iosxr_performance_measurement_liveness_profile" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	sr_policy_default = true` + "\n"
 	config += `	sr_policy_default_liveness_detection_multiplier = 5` + "\n"
 	config += `	sr_policy_default_probe_tx_interval = 30000` + "\n"

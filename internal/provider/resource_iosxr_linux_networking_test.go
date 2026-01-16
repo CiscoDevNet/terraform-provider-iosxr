@@ -107,7 +107,6 @@ func testAccIosxrLinuxNetworkingConfig_minimum() string {
 
 func testAccIosxrLinuxNetworkingConfig_all() string {
 	config := `resource "iosxr_linux_networking" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		config += `	statistics_synchronization_sixty_seconds = true` + "\n"
 	}

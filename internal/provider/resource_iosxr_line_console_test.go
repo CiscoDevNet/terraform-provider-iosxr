@@ -135,7 +135,6 @@ func testAccIosxrLineConsoleConfig_minimum() string {
 
 func testAccIosxrLineConsoleConfig_all() string {
 	config := `resource "iosxr_line_console" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	access_class_ingress = "CONSOLE_ACL"` + "\n"
 	config += `	access_class_egress = "CONSOLE_ACL"` + "\n"
 	config += `	disconnect_character = "0x0a"` + "\n"

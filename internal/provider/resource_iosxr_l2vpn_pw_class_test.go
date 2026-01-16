@@ -128,7 +128,6 @@ func testAccIosxrL2VPNPWClassConfig_minimum() string {
 
 func testAccIosxrL2VPNPWClassConfig_all() string {
 	config := `resource "iosxr_l2vpn_pw_class" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	name = "PW-CLASS1"` + "\n"
 	config += `	encapsulation_mpls = true` + "\n"
 	config += `	encapsulation_mpls_protocol_ldp = true` + "\n"

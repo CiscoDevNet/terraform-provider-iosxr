@@ -123,7 +123,6 @@ func testAccIosxrRouterIGMPVRFConfig_minimum() string {
 
 func testAccIosxrRouterIGMPVRFConfig_all() string {
 	config := `resource "iosxr_router_igmp_vrf" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	dvmrp_enable = true` + "\n"
 	config += `	robustness_count = 5` + "\n"

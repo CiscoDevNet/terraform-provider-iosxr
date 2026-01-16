@@ -189,7 +189,6 @@ func testAccIosxrHWModuleProfileConfig_minimum() string {
 
 func testAccIosxrHWModuleProfileConfig_all() string {
 	config := `resource "iosxr_hw_module_profile" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	if os.Getenv("NCS") != "" {
 		config += `	profile_load_balance_algorithm_hash_polynomial_index = 5` + "\n"
 	}

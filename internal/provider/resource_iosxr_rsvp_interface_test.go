@@ -116,7 +116,6 @@ func testAccIosxrRSVPInterfaceConfig_minimum() string {
 
 func testAccIosxrRSVPInterfaceConfig_all() string {
 	config := `resource "iosxr_rsvp_interface" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	bandwidth_mam_percentage_total = 80` + "\n"
 	config += `	bandwidth_mam_percentage_flow = 20` + "\n"

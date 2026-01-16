@@ -142,7 +142,6 @@ func testAccIosxrAAAAuthorizationConfig_minimum() string {
 
 func testAccIosxrAAAAuthorizationConfig_all() string {
 	config := `resource "iosxr_aaa_authorization" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	exec = [{` + "\n"
 	config += `		list = "AAA-EXEC"` + "\n"
 	config += `		a1_tacacs = true` + "\n"

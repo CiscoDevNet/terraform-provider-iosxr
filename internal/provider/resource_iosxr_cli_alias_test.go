@@ -99,7 +99,6 @@ func testAccIosxrCLIAliasConfig_minimum() string {
 
 func testAccIosxrCLIAliasConfig_all() string {
 	config := `resource "iosxr_cli_alias" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	aliases = [{` + "\n"
 	config += `		name = "show-version"` + "\n"
 	config += `		command = "show version"` + "\n"

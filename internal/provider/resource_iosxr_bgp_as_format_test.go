@@ -91,7 +91,6 @@ func testAccIosxrBGPASFormatConfig_minimum() string {
 
 func testAccIosxrBGPASFormatConfig_all() string {
 	config := `resource "iosxr_bgp_as_format" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	as_format = "asplain"` + "\n"
 	config += `}` + "\n"
 	return config

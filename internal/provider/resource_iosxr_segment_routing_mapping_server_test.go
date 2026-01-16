@@ -114,7 +114,6 @@ func testAccIosxrSegmentRoutingMappingServerConfig_minimum() string {
 
 func testAccIosxrSegmentRoutingMappingServerConfig_all() string {
 	config := `resource "iosxr_segment_routing_mapping_server" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	mapping_prefix_sid_address_families = [{` + "\n"
 	config += `		af_name = "ipv4"` + "\n"
 	config += `		prefix_addresses = [{` + "\n"

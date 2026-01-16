@@ -80,14 +80,14 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 				{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
 				ElementType:         types.Int64Type,
 				{{- end}}
-			{{- if or .Id .Reference}}
-			Required:            true,
-			{{- else}}
-			Computed:            true,
-			{{- end}}
-			{{- if .Sensitive}}
-			Sensitive:           true,
-			{{- end}}
+				{{- if or .Id .Reference}}
+				Required:            true,
+				{{- else}}
+				Computed:            true,
+				{{- end}}
+				{{- if .Sensitive}}
+				Sensitive:           true,
+				{{- end}}
 			{{- if or (eq .Type "List") (eq .Type "Set")}}
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -96,13 +96,13 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 							MarkdownDescription: "{{.Description}}",
 							{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
 							ElementType:         types.StringType,
-						{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
-						ElementType:         types.Int64Type,
-						{{- end}}
-						Computed:            true,
-						{{- if .Sensitive}}
-						Sensitive:           true,
-						{{- end}}
+							{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
+							ElementType:         types.Int64Type,
+							{{- end}}
+							Computed:            true,
+							{{- if .Sensitive}}
+							Sensitive:           true,
+							{{- end}}
 						{{- if or (eq .Type "List") (eq .Type "Set")}}
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -111,13 +111,13 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 										MarkdownDescription: "{{.Description}}",
 										{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
 										ElementType:         types.StringType,
-									{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
-									ElementType:         types.Int64Type,
-									{{- end}}
-									Computed:            true,
-									{{- if .Sensitive}}
-									Sensitive:           true,
-									{{- end}}
+										{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
+										ElementType:         types.Int64Type,
+										{{- end}}
+										Computed:            true,
+										{{- if .Sensitive}}
+										Sensitive:           true,
+										{{- end}}
 								{{- if or (eq .Type "List") (eq .Type "Set")}}
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
@@ -126,13 +126,13 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 												MarkdownDescription: "{{.Description}}",
 												{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
 												ElementType:         types.StringType,
-											{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
-											ElementType:         types.Int64Type,
-											{{- end}}
-											Computed:            true,
-											{{- if .Sensitive}}
-											Sensitive:           true,
-											{{- end}}
+												{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
+												ElementType:         types.Int64Type,
+												{{- end}}
+												Computed:            true,
+												{{- if .Sensitive}}
+												Sensitive:           true,
+												{{- end}}
 											{{- if or (eq .Type "List") (eq .Type "Set")}}
 												NestedObject: schema.NestedAttributeObject{
 													Attributes: map[string]schema.Attribute{
@@ -141,13 +141,13 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 															MarkdownDescription: "{{.Description}}",
 															{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
 															ElementType:         types.StringType,
-														{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
-														ElementType:         types.Int64Type,
-														{{- end}}
-														Computed:            true,
-														{{- if .Sensitive}}
-														Sensitive:           true,
-														{{- end}}
+															{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
+															ElementType:         types.Int64Type,
+															{{- end}}
+															Computed:            true,
+															{{- if .Sensitive}}
+															Sensitive:           true,
+															{{- end}}
 													},
 													{{- end}}
 													},

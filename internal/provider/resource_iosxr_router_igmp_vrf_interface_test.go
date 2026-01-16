@@ -131,7 +131,6 @@ func testAccIosxrRouterIGMPVRFInterfaceConfig_minimum() string {
 
 func testAccIosxrRouterIGMPVRFInterfaceConfig_all() string {
 	config := `resource "iosxr_router_igmp_vrf_interface" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/2"` + "\n"
 	config += `	version = 3` + "\n"

@@ -137,7 +137,6 @@ func testAccIosxrIPSLAConfig_minimum() string {
 
 func testAccIosxrIPSLAConfig_all() string {
 	config := `resource "iosxr_ipsla" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	low_memory = 100000` + "\n"
 	config += `	key_chain = "KEY_CHAIN"` + "\n"
 	config += `	hw_timestamp_disable = true` + "\n"

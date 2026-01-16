@@ -198,7 +198,6 @@ func testAccIosxrRouterOSPFAreaInterfaceConfig_minimum() string {
 
 func testAccIosxrRouterOSPFAreaInterfaceConfig_all() string {
 	config := `resource "iosxr_router_ospf_area_interface" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	process_name = "OSPF1"` + "\n"
 	config += `	area_id = "0"` + "\n"
 	config += `	interface_name = "Loopback1"` + "\n"

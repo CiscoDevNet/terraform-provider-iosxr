@@ -118,7 +118,6 @@ func testAccIosxrAAAAuthenticationConfig_minimum() string {
 
 func testAccIosxrAAAAuthenticationConfig_all() string {
 	config := `resource "iosxr_aaa_authentication" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	login = [{` + "\n"
 	config += `		list = "AAA-LIST"` + "\n"
 	config += `		a1_tacacs = true` + "\n"

@@ -110,7 +110,6 @@ func testAccIosxrIPSLAResponderConfig_minimum() string {
 
 func testAccIosxrIPSLAResponderConfig_all() string {
 	config := `resource "iosxr_ipsla_responder" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	if os.Getenv("XRV9K") != "" || os.Getenv("NCS") != "" {
 		config += `	type_udp_ipv4 = [{` + "\n"
 		config += `		address = "10.1.1.1"` + "\n"

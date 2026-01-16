@@ -72,6 +72,7 @@ type AAARadiusServerGroups struct {
 	GroupName                                              types.String                          `tfsdk:"group_name"`
 	Servers                                                []AAARadiusServerGroupsServers        `tfsdk:"servers"`
 	LoadBalanceMethodLeastOutstandingBatchSize             types.Int64                           `tfsdk:"load_balance_method_least_outstanding_batch_size"`
+	LoadBalanceMethodLeastOutstanding                      types.Bool                            `tfsdk:"load_balance_method_least_outstanding"`
 	LoadBalanceMethodLeastOutstandingIgnorePreferredServer types.Bool                            `tfsdk:"load_balance_method_least_outstanding_ignore_preferred_server"`
 	Deadtime                                               types.Int64                           `tfsdk:"deadtime"`
 	ThrottleAccess                                         types.Int64                           `tfsdk:"throttle_access"`
@@ -591,7 +592,15 @@ func (data AAA) toBody(ctx context.Context) string {
 			if !item.LoadBalanceMethodLeastOutstandingBatchSize.IsNull() && !item.LoadBalanceMethodLeastOutstandingBatchSize.IsUnknown() {
 				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"load-balance.method.least-outstanding.batch-size", strconv.FormatInt(item.LoadBalanceMethodLeastOutstandingBatchSize.ValueInt64(), 10))
 			}
+			if !item.LoadBalanceMethodLeastOutstanding.IsNull() && !item.LoadBalanceMethodLeastOutstanding.IsUnknown() {
+				if item.LoadBalanceMethodLeastOutstanding.ValueBool() {
+					body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"load-balance.method.least-outstanding", map[string]string{})
+				}
+			}
 			if !item.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() && !item.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsUnknown() {
+				if item.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.ValueBool() {
+					body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"load-balance.method.least-outstanding.ignore-preferred-server", map[string]string{})
+				}
 			}
 			if !item.Deadtime.IsNull() && !item.Deadtime.IsUnknown() {
 				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"deadtime", strconv.FormatInt(item.Deadtime.ValueInt64(), 10))
@@ -612,29 +621,53 @@ func (data AAA) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"source-interface", item.SourceInterface.ValueString())
 			}
 			if !item.AuthorizationRequestAccept.IsNull() && !item.AuthorizationRequestAccept.IsUnknown() {
+				if item.AuthorizationRequestAccept.ValueBool() {
+					body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"authorization.request.accept", map[string]string{})
+				}
 			}
 			if !item.AuthorizationRequestReject.IsNull() && !item.AuthorizationRequestReject.IsUnknown() {
+				if item.AuthorizationRequestReject.ValueBool() {
+					body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"authorization.request.reject", map[string]string{})
+				}
 			}
 			if !item.AuthorizationRequestRadiusAttributeList.IsNull() && !item.AuthorizationRequestRadiusAttributeList.IsUnknown() {
 				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"authorization.request.radius-attribute-list", item.AuthorizationRequestRadiusAttributeList.ValueString())
 			}
 			if !item.AuthorizationReplyAccept.IsNull() && !item.AuthorizationReplyAccept.IsUnknown() {
+				if item.AuthorizationReplyAccept.ValueBool() {
+					body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"authorization.reply.accept", map[string]string{})
+				}
 			}
 			if !item.AuthorizationReplyReject.IsNull() && !item.AuthorizationReplyReject.IsUnknown() {
+				if item.AuthorizationReplyReject.ValueBool() {
+					body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"authorization.reply.reject", map[string]string{})
+				}
 			}
 			if !item.AuthorizationReplyRadiusAttributeList.IsNull() && !item.AuthorizationReplyRadiusAttributeList.IsUnknown() {
 				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"authorization.reply.radius-attribute-list", item.AuthorizationReplyRadiusAttributeList.ValueString())
 			}
 			if !item.AccountingRequestAccept.IsNull() && !item.AccountingRequestAccept.IsUnknown() {
+				if item.AccountingRequestAccept.ValueBool() {
+					body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"accounting.request.accept", map[string]string{})
+				}
 			}
 			if !item.AccountingRequestReject.IsNull() && !item.AccountingRequestReject.IsUnknown() {
+				if item.AccountingRequestReject.ValueBool() {
+					body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"accounting.request.reject", map[string]string{})
+				}
 			}
 			if !item.AccountingRequestRadiusAttributeList.IsNull() && !item.AccountingRequestRadiusAttributeList.IsUnknown() {
 				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"accounting.request.radius-attribute-list", item.AccountingRequestRadiusAttributeList.ValueString())
 			}
 			if !item.AccountingReplyAccept.IsNull() && !item.AccountingReplyAccept.IsUnknown() {
+				if item.AccountingReplyAccept.ValueBool() {
+					body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"accounting.reply.accept", map[string]string{})
+				}
 			}
 			if !item.AccountingReplyReject.IsNull() && !item.AccountingReplyReject.IsUnknown() {
+				if item.AccountingReplyReject.ValueBool() {
+					body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"accounting.reply.reject", map[string]string{})
+				}
 			}
 			if !item.AccountingReplyRadiusAttributeList.IsNull() && !item.AccountingReplyRadiusAttributeList.IsUnknown() {
 				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"accounting.reply.radius-attribute-list", item.AccountingReplyRadiusAttributeList.ValueString())
@@ -690,8 +723,14 @@ func (data AAA) toBody(ctx context.Context) string {
 						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"server-privates.server-private"+"."+strconv.Itoa(cindex)+"."+"idle-time", strconv.FormatInt(citem.IdleTime.ValueInt64(), 10))
 					}
 					if !citem.IgnoreAuthPort.IsNull() && !citem.IgnoreAuthPort.IsUnknown() {
+						if citem.IgnoreAuthPort.ValueBool() {
+							body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"server-privates.server-private"+"."+strconv.Itoa(cindex)+"."+"ignore-auth-port", map[string]string{})
+						}
 					}
 					if !citem.IgnoreAcctPort.IsNull() && !citem.IgnoreAcctPort.IsUnknown() {
+						if citem.IgnoreAcctPort.ValueBool() {
+							body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"server-privates.server-private"+"."+strconv.Itoa(cindex)+"."+"ignore-acct-port", map[string]string{})
+						}
 					}
 				}
 			}
@@ -756,6 +795,9 @@ func (data AAA) toBody(ctx context.Context) string {
 						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"server-privates.server-private"+"."+strconv.Itoa(cindex)+"."+"key.six", citem.KeyType6.ValueString())
 					}
 					if !citem.SingleConnection.IsNull() && !citem.SingleConnection.IsUnknown() {
+						if citem.SingleConnection.ValueBool() {
+							body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"server-privates.server-private"+"."+strconv.Itoa(cindex)+"."+"single-connection", map[string]string{})
+						}
 					}
 					if !citem.SingleConnectionIdleTimeout.IsNull() && !citem.SingleConnectionIdleTimeout.IsUnknown() {
 						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"server-privates.server-private"+"."+strconv.Itoa(cindex)+"."+"single-connection-idle-timeout", strconv.FormatInt(citem.SingleConnectionIdleTimeout.ValueInt64(), 10))
@@ -2787,6 +2829,15 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 			data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingBatchSize = types.Int64Value(value.Int())
 		} else {
 			data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingBatchSize = types.Int64Null()
+		}
+		if value := r.Get("load-balance.method.least-outstanding"); !data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding.IsNull() {
+			if value.Exists() {
+				data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding = types.BoolValue(true)
+			} else {
+				data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding = types.BoolValue(false)
+			}
+		} else {
+			data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding = types.BoolNull()
 		}
 		if value := r.Get("load-balance.method.least-outstanding.ignore-preferred-server"); !data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() {
 			if value.Exists() {
@@ -6774,6 +6825,11 @@ func (data *AAA) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("load-balance.method.least-outstanding.batch-size"); cValue.Exists() {
 				item.LoadBalanceMethodLeastOutstandingBatchSize = types.Int64Value(cValue.Int())
 			}
+			if cValue := v.Get("load-balance.method.least-outstanding"); cValue.Exists() {
+				item.LoadBalanceMethodLeastOutstanding = types.BoolValue(true)
+			} else {
+				item.LoadBalanceMethodLeastOutstanding = types.BoolValue(false)
+			}
 			if cValue := v.Get("load-balance.method.least-outstanding.ignore-preferred-server"); cValue.Exists() {
 				item.LoadBalanceMethodLeastOutstandingIgnorePreferredServer = types.BoolValue(true)
 			} else {
@@ -8956,6 +9012,11 @@ func (data *AAAData) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("load-balance.method.least-outstanding.batch-size"); cValue.Exists() {
 				item.LoadBalanceMethodLeastOutstandingBatchSize = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("load-balance.method.least-outstanding"); cValue.Exists() {
+				item.LoadBalanceMethodLeastOutstanding = types.BoolValue(true)
+			} else {
+				item.LoadBalanceMethodLeastOutstanding = types.BoolValue(false)
 			}
 			if cValue := v.Get("load-balance.method.least-outstanding.ignore-preferred-server"); cValue.Exists() {
 				item.LoadBalanceMethodLeastOutstandingIgnorePreferredServer = types.BoolValue(true)
@@ -12787,6 +12848,9 @@ func (data *AAA) getDeletedItems(ctx context.Context, state AAA) []string {
 				if !state.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() && data.RadiusServerGroups[j].LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/load-balance/method/least-outstanding/ignore-preferred-server", state.getPath(), keyString))
 				}
+				if !state.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding.IsNull() && data.RadiusServerGroups[j].LoadBalanceMethodLeastOutstanding.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/load-balance/method/least-outstanding", state.getPath(), keyString))
+				}
 				if !state.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingBatchSize.IsNull() && data.RadiusServerGroups[j].LoadBalanceMethodLeastOutstandingBatchSize.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/load-balance/method/least-outstanding/batch-size", state.getPath(), keyString))
 				}
@@ -14105,6 +14169,9 @@ func (data *AAA) getEmptyLeafsDelete(ctx context.Context) []string {
 		}
 		if !data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() && !data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingIgnorePreferredServer.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/load-balance/method/least-outstanding/ignore-preferred-server", data.getPath(), keyString))
+		}
+		if !data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding.IsNull() && !data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/load-balance/method/least-outstanding", data.getPath(), keyString))
 		}
 		for ci := range data.RadiusServerGroups[i].Servers {
 			ckeys := [...]string{"ordering-index", "address", "auth-port", "acct-port"}

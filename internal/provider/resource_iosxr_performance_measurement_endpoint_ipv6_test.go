@@ -122,7 +122,6 @@ func testAccIosxrPerformanceMeasurementEndpointIPv6Config_minimum() string {
 
 func testAccIosxrPerformanceMeasurementEndpointIPv6Config_all() string {
 	config := `resource "iosxr_performance_measurement_endpoint_ipv6" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	address = "2001:db8::1"` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	source_address_ipv6 = "2001:1:1:1::100"` + "\n"

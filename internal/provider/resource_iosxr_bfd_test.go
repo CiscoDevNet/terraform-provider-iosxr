@@ -123,7 +123,6 @@ func testAccIosxrBFDConfig_minimum() string {
 
 func testAccIosxrBFDConfig_all() string {
 	config := `resource "iosxr_bfd" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	echo_disable = false` + "\n"
 	config += `	echo_latency_detect = true` + "\n"
 	config += `	echo_latency_detect_percentage = 200` + "\n"

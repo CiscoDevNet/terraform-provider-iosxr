@@ -106,7 +106,6 @@ func testAccIosxrDomainVRFConfig_minimum() string {
 
 func testAccIosxrDomainVRFConfig_all() string {
 	config := `resource "iosxr_domain_vrf" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	vrf_name = "TEST-VRF"` + "\n"
 	config += `	domains = [{` + "\n"
 	config += `		domain_name = "example.com"` + "\n"

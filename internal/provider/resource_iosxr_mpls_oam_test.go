@@ -97,7 +97,6 @@ func testAccIosxrMPLSOAMConfig_minimum() string {
 
 func testAccIosxrMPLSOAMConfig_all() string {
 	config := `resource "iosxr_mpls_oam" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	oam = true` + "\n"
 	config += `	oam_echo_disable_vendor_extension = true` + "\n"
 	config += `	oam_echo_reply_mode_control_channel_allow_reverse_lsp = true` + "\n"

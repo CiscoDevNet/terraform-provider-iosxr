@@ -178,7 +178,6 @@ func testAccIosxrPTPProfileConfig_minimum() string {
 
 func testAccIosxrPTPProfileConfig_all() string {
 	config := `resource "iosxr_ptp_profile" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	profile_name = "Profile-1"` + "\n"
 	config += `	port_state_master_only = true` + "\n"
 	config += `	source_ipv4_address = "10.1.1.1"` + "\n"

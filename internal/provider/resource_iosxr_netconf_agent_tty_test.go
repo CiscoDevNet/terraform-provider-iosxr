@@ -93,7 +93,6 @@ func testAccIosxrNetconfAgentTTYConfig_minimum() string {
 
 func testAccIosxrNetconfAgentTTYConfig_all() string {
 	config := `resource "iosxr_netconf_agent_tty" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	throttle_process_rate = 5000` + "\n"
 	config += `	throttle_memory = 300` + "\n"
 	config += `	throttle_offload_memory = 0` + "\n"

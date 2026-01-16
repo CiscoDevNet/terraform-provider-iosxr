@@ -124,7 +124,6 @@ func testAccIosxrEthernetCFMConfig_minimum() string {
 
 func testAccIosxrEthernetCFMConfig_all() string {
 	config := `resource "iosxr_ethernet_cfm" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	traceroute_cache_hold_time = 60` + "\n"
 	config += `	traceroute_cache_size = 3000` + "\n"
 	config += `	domains = [{` + "\n"

@@ -95,7 +95,6 @@ func testAccIosxrMACSecConfig_minimum() string {
 
 func testAccIosxrMACSecConfig_all() string {
 	config := `resource "iosxr_macsec" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	shutdown = true` + "\n"
 	config += `	fips = true` + "\n"
 	config += `}` + "\n"

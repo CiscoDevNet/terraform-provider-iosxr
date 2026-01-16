@@ -98,7 +98,6 @@ func testAccIosxrCDPConfig_minimum() string {
 
 func testAccIosxrCDPConfig_all() string {
 	config := `resource "iosxr_cdp" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	enable = true` + "\n"
 	config += `	holdtime = 12` + "\n"
 	config += `	timer = 34` + "\n"

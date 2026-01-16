@@ -110,7 +110,6 @@ func testAccIosxrErrorDisableRecoveryConfig_minimum() string {
 
 func testAccIosxrErrorDisableRecoveryConfig_all() string {
 	config := `resource "iosxr_error_disable_recovery" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	link_oam_session_down_interval = 30` + "\n"
 	config += `	link_oam_discovery_timeout_interval = 40` + "\n"
 	config += `	link_oam_capabilities_conflict_interval = 50` + "\n"

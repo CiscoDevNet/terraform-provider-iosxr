@@ -103,7 +103,6 @@ func testAccIosxrDomainConfig_minimum() string {
 
 func testAccIosxrDomainConfig_all() string {
 	config := `resource "iosxr_domain" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	domains = [{` + "\n"
 	config += `		domain_name = "example.com"` + "\n"
 	config += `		order = 0` + "\n"

@@ -224,7 +224,6 @@ func testAccIosxrRouterPIMIPv6Config_minimum() string {
 
 func testAccIosxrRouterPIMIPv6Config_all() string {
 	config := `resource "iosxr_router_pim_ipv6" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	rp_addresses = [{` + "\n"
 	config += `		address = "2001:db8::1"` + "\n"
 	config += `		access_list = "RP_ACL_V6"` + "\n"

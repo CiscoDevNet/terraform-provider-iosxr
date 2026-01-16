@@ -128,7 +128,6 @@ func testAccIosxrTelemetryModelDrivenConfig_minimum() string {
 
 func testAccIosxrTelemetryModelDrivenConfig_all() string {
 	config := `resource "iosxr_telemetry_model_driven" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	max_containers_per_path = 16` + "\n"
 	config += `	max_sensor_paths = 1000` + "\n"
 	config += `	tcp_send_timeout = 30` + "\n"

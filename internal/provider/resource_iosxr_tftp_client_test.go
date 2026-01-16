@@ -98,7 +98,6 @@ func testAccIosxrTFTPClientConfig_minimum() string {
 
 func testAccIosxrTFTPClientConfig_all() string {
 	config := `resource "iosxr_tftp_client" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	client_vrfs = [{` + "\n"
 	config += `		vrf_name = "VRF1"` + "\n"
 	config += `		source_interface = "Loopback0"` + "\n"

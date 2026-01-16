@@ -446,7 +446,6 @@ func testAccIosxrInterfaceBVIConfig_minimum() string {
 
 func testAccIosxrInterfaceBVIConfig_all() string {
 	config := `resource "iosxr_interface_bvi" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	name = "100"` + "\n"
 	config += `	point_to_point = false` + "\n"
 	config += `	multipoint = false` + "\n"

@@ -122,7 +122,6 @@ func testAccIosxrPerformanceMeasurementEndpointIPv4Config_minimum() string {
 
 func testAccIosxrPerformanceMeasurementEndpointIPv4Config_all() string {
 	config := `resource "iosxr_performance_measurement_endpoint_ipv4" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	address = "10.1.1.1"` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	source_address_ipv4 = "10.1.1.100"` + "\n"

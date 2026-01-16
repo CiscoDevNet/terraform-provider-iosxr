@@ -128,7 +128,6 @@ func testAccIosxrRSVPConfig_minimum() string {
 
 func testAccIosxrRSVPConfig_all() string {
 	config := `resource "iosxr_rsvp" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	signalling_graceful_restart = true` + "\n"
 	config += `	signalling_graceful_restart_lsp_ctype = true` + "\n"
 	config += `	signalling_graceful_restart_recovery_time = 300` + "\n"

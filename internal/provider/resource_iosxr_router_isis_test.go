@@ -264,7 +264,6 @@ func testAccIosxrRouterISISConfig_minimum() string {
 
 func testAccIosxrRouterISISConfig_all() string {
 	config := `resource "iosxr_router_isis" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	process_id = "P1"` + "\n"
 	config += `	segment_routing_global_block_lower_bound = 16000` + "\n"
 	config += `	segment_routing_global_block_upper_bound = 29999` + "\n"

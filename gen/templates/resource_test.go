@@ -345,7 +345,7 @@ func testAccIosxr{{camelCase .Name}}Config_minimum() string {
 
 func testAccIosxr{{camelCase .Name}}Config_all() string {
 	config := `resource "iosxr_{{snakeCase $name}}" "test" {` + "\n"
-	{{- if and (not .NoDelete) (not .NoDeleteAttributes) (not .DefaultDeleteAttributes)}}
+	{{- if and (not .NoDelete) (not .NoDeleteAttributes) .DefaultDeleteAttributes}}
 	config += `	delete_mode = "all"` + "\n"
 	{{- end}}
 	{{- range  .Attributes}}

@@ -293,7 +293,6 @@ func testAccIosxrPCEConfig_minimum() string {
 
 func testAccIosxrPCEConfig_all() string {
 	config := `resource "iosxr_pce" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	address_ipv4 = "77.77.77.1"` + "\n"
 	config += `	address_ipv6 = "2001:db8::1"` + "\n"
 	config += `	state_sync_ipv4s = [{` + "\n"

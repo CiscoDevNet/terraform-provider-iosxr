@@ -138,7 +138,6 @@ func testAccIosxrPTPConfig_minimum() string {
 
 func testAccIosxrPTPConfig_all() string {
 	config := `resource "iosxr_ptp" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	frequency_priority = 10` + "\n"
 	config += `	time_of_day_priority = 10` + "\n"
 	config += `	ipv6_verify_checksum = true` + "\n"

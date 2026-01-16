@@ -132,7 +132,6 @@ func testAccIosxrLoggingVRFConfig_minimum() string {
 
 func testAccIosxrLoggingVRFConfig_all() string {
 	config := `resource "iosxr_logging_vrf" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	vrf_name = "default"` + "\n"
 	config += `	hostnames = [{` + "\n"
 	config += `		name = "server.cisco.com"` + "\n"

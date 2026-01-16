@@ -101,7 +101,6 @@ func testAccIosxrCEFLoadBalancing8000Config_minimum() string {
 
 func testAccIosxrCEFLoadBalancing8000Config_all() string {
 	config := `resource "iosxr_cef_load_balancing_8000" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	platform_load_balance_hash_rotate = 1` + "\n"
 	config += `	platform_load_balance_fields_userdata_ipv6_udp = [{` + "\n"
 	config += `		location_string = "0_RP0_CPU0"` + "\n"

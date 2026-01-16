@@ -117,7 +117,6 @@ func testAccIosxrXMLAgentConfig_minimum() string {
 
 func testAccIosxrXMLAgentConfig_all() string {
 	config := `resource "iosxr_xml_agent" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	enable = true` + "\n"
 	config += `	tty_enable = true` + "\n"
 	config += `	tty_streaming_size = 1000` + "\n"

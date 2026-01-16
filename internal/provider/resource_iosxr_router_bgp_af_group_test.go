@@ -199,7 +199,6 @@ func testAccIosxrRouterBGPAFGroupConfig_minimum() string {
 
 func testAccIosxrRouterBGPAFGroupConfig_all() string {
 	config := `resource "iosxr_router_bgp_af_group" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	as_number = "65001"` + "\n"
 	config += `	af_group_name = "AFGROUP1"` + "\n"
 	config += `	af_name = "vpnv4-unicast"` + "\n"

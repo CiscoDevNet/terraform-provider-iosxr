@@ -107,7 +107,6 @@ func testAccIosxrRouterVRRPInterfaceConfig_minimum() string {
 
 func testAccIosxrRouterVRRPInterfaceConfig_all() string {
 	config := `resource "iosxr_router_vrrp_interface" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	mac_refresh = 14` + "\n"
 	config += `	delay_minimum = 1234` + "\n"

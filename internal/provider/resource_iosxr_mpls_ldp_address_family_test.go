@@ -125,7 +125,6 @@ func testAccIosxrMPLSLDPAddressFamilyConfig_minimum() string {
 
 func testAccIosxrMPLSLDPAddressFamilyConfig_all() string {
 	config := `resource "iosxr_mpls_ldp_address_family" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	af_name = "ipv4"` + "\n"
 	config += `	discovery_transport_address_ipv4 = "192.168.1.1"` + "\n"
 	config += `	discovery_targeted_hello_accept = true` + "\n"

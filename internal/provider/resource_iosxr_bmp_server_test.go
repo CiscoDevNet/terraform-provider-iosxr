@@ -109,7 +109,6 @@ func testAccIosxrBMPServerConfig_minimum() string {
 
 func testAccIosxrBMPServerConfig_all() string {
 	config := `resource "iosxr_bmp_server" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	all_route_monitorings = [{` + "\n"
 	config += `		route_mon = "inbound-pre-policy"` + "\n"
 	config += `		advertisement_interval = 60` + "\n"

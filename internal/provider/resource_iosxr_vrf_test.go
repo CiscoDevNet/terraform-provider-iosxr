@@ -260,7 +260,6 @@ func testAccIosxrVRFConfig_minimum() string {
 
 func testAccIosxrVRFConfig_all() string {
 	config := `resource "iosxr_vrf" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	vrf_name = "VRF4"` + "\n"
 	config += `	description = "My VRF Description"` + "\n"
 	if os.Getenv("XRV9K") != "" || os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {

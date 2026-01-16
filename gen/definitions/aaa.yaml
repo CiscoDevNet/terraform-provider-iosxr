@@ -58,9 +58,16 @@ attributes:
         type: Int64
         description: "Batch size for load balancing"
         example: 25
+      - yang_name: load-balance/method/least-outstanding
+        tf_name: load_balance_method_least_outstanding
+        type: Bool
+        type_yang_bool: presence
+        description: "Use least outstanding load balancing method"
+        example: true
       - yang_name: load-balance/method/least-outstanding/ignore-preferred-server
         tf_name: load_balance_method_least_outstanding_ignore_preferred_server
         type: Bool
+        type_yang_bool: presence
         description: "Ignore preferred server"
         example: true
       - yang_name: deadtime
@@ -151,11 +158,13 @@ attributes:
           - yang_name: ignore-auth-port
             tf_name: ignore_auth_port
             type: Bool
+            type_yang_bool: presence
             description: "Ignore authentication port"
             example: true
           - yang_name: ignore-acct-port
             tf_name: ignore_acct_port
             type: Bool
+            type_yang_bool: presence
             description: "Ignore accounting port"
             example: true
       - yang_name: vrf
@@ -171,12 +180,14 @@ attributes:
       - yang_name: authorization/request/accept
         tf_name: authorization_request_accept
         type: Bool
+        type_yang_bool: presence
         description: "Authorization request accept"
         delete_parent: true
         example: true
       - yang_name: authorization/request/reject
         tf_name: authorization_request_reject
         type: Bool
+        type_yang_bool: presence
         description: "Authorization request reject"
         delete_parent: true
         exclude_test: true
@@ -189,6 +200,7 @@ attributes:
       - yang_name: authorization/reply/accept
         tf_name: authorization_reply_accept
         type: Bool
+        type_yang_bool: presence
         description: "Authorization reply accept"
         delete_parent: true
         exclude_test: true
@@ -196,6 +208,7 @@ attributes:
       - yang_name: authorization/reply/reject
         tf_name: authorization_reply_reject
         type: Bool
+        type_yang_bool: presence
         description: "Authorization reply reject"
         delete_parent: true
         example: true
@@ -207,12 +220,14 @@ attributes:
       - yang_name: accounting/request/accept
         tf_name: accounting_request_accept
         type: Bool
+        type_yang_bool: presence
         description: "Accounting request accept"
         delete_parent: true
         example: true
       - yang_name: accounting/request/reject
         tf_name: accounting_request_reject
         type: Bool
+        type_yang_bool: presence
         description: "Accounting request reject"
         delete_parent: true
         exclude_test: true
@@ -225,6 +240,7 @@ attributes:
       - yang_name: accounting/reply/accept
         tf_name: accounting_reply_accept
         type: Bool
+        type_yang_bool: presence
         description: "Accounting reply accept"
         delete_parent: true
         exclude_test: true
@@ -232,6 +248,7 @@ attributes:
       - yang_name: accounting/reply/reject
         tf_name: accounting_reply_reject
         type: Bool
+        type_yang_bool: presence
         description: "Accounting reply reject"
         delete_parent: true
         example: true
@@ -362,6 +379,7 @@ attributes:
           - yang_name: single-connection
             tf_name: single_connection
             type: Bool
+            type_yang_bool: presence
             description: "Use single connection"
             example: true
           - yang_name: single-connection-idle-timeout

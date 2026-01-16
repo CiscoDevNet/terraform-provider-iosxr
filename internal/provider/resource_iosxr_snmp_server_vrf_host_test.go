@@ -115,7 +115,6 @@ func testAccIosxrSNMPServerVRFHostConfig_minimum() string {
 
 func testAccIosxrSNMPServerVRFHostConfig_all() string {
 	config := `resource "iosxr_snmp_server_vrf_host" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	address = "11.11.11.11"` + "\n"
 	config += `	traps_unencrypted_strings = [{` + "\n"

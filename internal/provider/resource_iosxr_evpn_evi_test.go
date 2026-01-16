@@ -138,7 +138,6 @@ func testAccIosxrEVPNEVIConfig_minimum() string {
 
 func testAccIosxrEVPNEVIConfig_all() string {
 	config := `resource "iosxr_evpn_evi" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	vpn_id = 101` + "\n"
 	config += `	description = "My Description"` + "\n"
 	config += `	bgp_rd_four_byte_as_number = 65536` + "\n"

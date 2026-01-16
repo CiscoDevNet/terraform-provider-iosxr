@@ -28,6 +28,7 @@ resource "iosxr_aaa" "example" {
         }
       ]
       load_balance_method_least_outstanding_batch_size              = 25
+      load_balance_method_least_outstanding                         = true
       load_balance_method_least_outstanding_ignore_preferred_server = true
       deadtime                                                      = 5
       throttle_access                                               = 100
@@ -527,6 +528,7 @@ Optional:
 - `authorization_request_radius_attribute_list` (String) Authorization request RADIUS attribute list
 - `authorization_request_reject` (Boolean) Authorization request reject
 - `deadtime` (Number) Dead time in minutes
+- `load_balance_method_least_outstanding` (Boolean) Use least outstanding load balancing method
 - `load_balance_method_least_outstanding_batch_size` (Number) Batch size for load balancing
 - `load_balance_method_least_outstanding_ignore_preferred_server` (Boolean) Ignore preferred server
 - `server_privates` (Attributes List) Specify a private RADIUS server (see [below for nested schema](#nestedatt--radius_server_groups--server_privates))

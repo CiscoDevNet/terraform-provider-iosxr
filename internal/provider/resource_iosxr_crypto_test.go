@@ -165,7 +165,6 @@ func testAccIosxrCryptoConfig_minimum() string {
 
 func testAccIosxrCryptoConfig_all() string {
 	config := `resource "iosxr_crypto" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	ca_trustpoint_system_description = "System trustpoint description"` + "\n"
 	config += `	ca_trustpoint_system_enrollment_retry_count = 10` + "\n"
 	config += `	ca_trustpoint_system_enrollment_retry_period = 5` + "\n"

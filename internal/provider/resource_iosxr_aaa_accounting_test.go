@@ -154,7 +154,6 @@ func testAccIosxrAAAAccountingConfig_minimum() string {
 
 func testAccIosxrAAAAccountingConfig_all() string {
 	config := `resource "iosxr_aaa_accounting" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	update_newinfo = true` + "\n"
 	config += `	exec = [{` + "\n"
 	config += `		list = "AAA-EXEC"` + "\n"

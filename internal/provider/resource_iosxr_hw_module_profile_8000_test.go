@@ -157,7 +157,6 @@ func testAccIosxrHWModuleProfile8000Config_minimum() string {
 
 func testAccIosxrHWModuleProfile8000Config_all() string {
 	config := `resource "iosxr_hw_module_profile_8000" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	profile_tcam_fib_ipv4_unicast_percent = 50` + "\n"
 	config += `	profile_tcam_fib_ipv6_unicast_percent = 50` + "\n"
 	config += `	profile_tcam_format_access_list_ipv4_src_addr = true` + "\n"

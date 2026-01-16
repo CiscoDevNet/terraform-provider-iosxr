@@ -76,7 +76,6 @@ type {{camelCase .Name}}Data struct {
 {{- if or (eq .Type "List") (eq .Type "Set")}}
 type {{$name}}{{toGoName .TfName}} struct {
 {{- range .Attributes}}
-{{- if and .TfName .Type}}
 {{- if or (eq .Type "List") (eq .Type "Set")}}
 	{{toGoName .TfName}} []{{$name}}{{$cname}}{{toGoName .TfName}} `tfsdk:"{{.TfName}}"`
 {{- else if or (eq .Type "StringList") (eq .Type "Int64List")}}
@@ -85,7 +84,6 @@ type {{$name}}{{toGoName .TfName}} struct {
 	{{toGoName .TfName}} types.Set `tfsdk:"{{.TfName}}"`
 {{- else}}
 	{{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
-{{- end}}
 {{- end}}
 {{- end}}
 }

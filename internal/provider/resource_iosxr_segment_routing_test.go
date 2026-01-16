@@ -96,7 +96,6 @@ func testAccIosxrSegmentRoutingConfig_minimum() string {
 
 func testAccIosxrSegmentRoutingConfig_all() string {
 	config := `resource "iosxr_segment_routing" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	local_block_lower_bound = 15000` + "\n"
 	config += `	local_block_upper_bound = 15999` + "\n"
 	config += `	global_block_lower_bound = 16000` + "\n"

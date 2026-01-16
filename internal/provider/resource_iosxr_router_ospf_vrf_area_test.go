@@ -192,7 +192,6 @@ func testAccIosxrRouterOSPFVRFAreaConfig_minimum() string {
 
 func testAccIosxrRouterOSPFVRFAreaConfig_all() string {
 	config := `resource "iosxr_router_ospf_vrf_area" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	process_name = "OSPF1"` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	area_id = "1"` + "\n"

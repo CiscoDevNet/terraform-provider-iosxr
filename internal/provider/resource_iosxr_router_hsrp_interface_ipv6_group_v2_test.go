@@ -120,7 +120,6 @@ func testAccIosxrRouterHSRPInterfaceIPv6GroupV2Config_minimum() string {
 
 func testAccIosxrRouterHSRPInterfaceIPv6GroupV2Config_all() string {
 	config := `resource "iosxr_router_hsrp_interface_ipv6_group_v2" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/2"` + "\n"
 	config += `	group_id = 4000` + "\n"
 	config += `	addresses = [{` + "\n"

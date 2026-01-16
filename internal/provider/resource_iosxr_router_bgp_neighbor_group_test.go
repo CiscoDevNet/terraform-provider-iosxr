@@ -267,7 +267,6 @@ func testAccIosxrRouterBGPNeighborGroupConfig_minimum() string {
 
 func testAccIosxrRouterBGPNeighborGroupConfig_all() string {
 	config := `resource "iosxr_router_bgp_neighbor_group" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	as_number = "65001"` + "\n"
 	config += `	name = "GROUP1"` + "\n"
 	config += `	remote_as = "65001"` + "\n"

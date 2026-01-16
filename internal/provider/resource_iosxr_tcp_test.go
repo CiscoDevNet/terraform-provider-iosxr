@@ -106,7 +106,6 @@ func testAccIosxrTCPConfig_minimum() string {
 
 func testAccIosxrTCPConfig_all() string {
 	config := `resource "iosxr_tcp" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	window_size = 32768` + "\n"
 	config += `	synwait_time = 15` + "\n"
 	config += `	path_mtu_discovery = true` + "\n"

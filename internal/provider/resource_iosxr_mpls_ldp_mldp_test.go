@@ -128,7 +128,6 @@ func testAccIosxrMPLSLDPMLDPConfig_minimum() string {
 
 func testAccIosxrMPLSLDPMLDPConfig_all() string {
 	config := `resource "iosxr_mpls_ldp_mldp" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	logging_notifications = true` + "\n"
 	config += `	logging_internal = true` + "\n"
 	config += `	address_families = [{` + "\n"

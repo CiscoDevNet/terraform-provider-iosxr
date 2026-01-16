@@ -130,7 +130,6 @@ func testAccIosxrRouterVRRPInterfaceIPv4Config_minimum() string {
 
 func testAccIosxrRouterVRRPInterfaceIPv4Config_all() string {
 	config := `resource "iosxr_router_vrrp_interface_ipv4" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	vrrp_id = 123` + "\n"
 	config += `	version = 2` + "\n"

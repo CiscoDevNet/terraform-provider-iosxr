@@ -197,7 +197,6 @@ func testAccIosxrNTPConfig_minimum() string {
 
 func testAccIosxrNTPConfig_all() string {
 	config := `resource "iosxr_ntp" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	ipv4_precedence = "network"` + "\n"
 	config += `	ipv6_dscp = "af11"` + "\n"
 	config += `	access_group_ipv6_peer = "peer1"` + "\n"

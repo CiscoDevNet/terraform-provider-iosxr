@@ -229,7 +229,6 @@ func testAccIosxrRouterBGPVRFConfig_minimum() string {
 
 func testAccIosxrRouterBGPVRFConfig_all() string {
 	config := `resource "iosxr_router_bgp_vrf" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	as_number = "65001"` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	mpls_activate_interfaces = [{` + "\n"

@@ -299,7 +299,6 @@ func testAccIosxrRouterISISAddressFamilyConfig_minimum() string {
 
 func testAccIosxrRouterISISAddressFamilyConfig_all() string {
 	config := `resource "iosxr_router_isis_address_family" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	process_id = "P1"` + "\n"
 	config += `	af_name = "ipv4"` + "\n"
 	config += `	saf_name = "unicast"` + "\n"

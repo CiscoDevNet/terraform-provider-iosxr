@@ -112,6 +112,10 @@ func (d *AAADataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 							MarkdownDescription: "Batch size for load balancing",
 							Computed:            true,
 						},
+						"load_balance_method_least_outstanding": schema.BoolAttribute{
+							MarkdownDescription: "Use least outstanding load balancing method",
+							Computed:            true,
+						},
 						"load_balance_method_least_outstanding_ignore_preferred_server": schema.BoolAttribute{
 							MarkdownDescription: "Ignore preferred server",
 							Computed:            true,

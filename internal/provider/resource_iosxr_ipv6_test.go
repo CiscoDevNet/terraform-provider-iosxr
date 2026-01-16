@@ -101,7 +101,6 @@ func testAccIosxrIPv6Config_minimum() string {
 
 func testAccIosxrIPv6Config_all() string {
 	config := `resource "iosxr_ipv6" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	hop_limit = 123` + "\n"
 	config += `	icmp_error_interval = 2111` + "\n"
 	config += `	icmp_error_interval_bucket_size = 123` + "\n"

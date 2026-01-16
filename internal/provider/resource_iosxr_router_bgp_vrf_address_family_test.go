@@ -246,7 +246,6 @@ func testAccIosxrRouterBGPVRFAddressFamilyConfig_minimum() string {
 
 func testAccIosxrRouterBGPVRFAddressFamilyConfig_all() string {
 	config := `resource "iosxr_router_bgp_vrf_address_family" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	as_number = "65001"` + "\n"
 	config += `	vrf_name = "VRF2"` + "\n"
 	config += `	af_name = "ipv4-unicast"` + "\n"

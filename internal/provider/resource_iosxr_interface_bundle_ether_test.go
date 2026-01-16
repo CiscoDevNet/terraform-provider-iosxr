@@ -549,7 +549,6 @@ func testAccIosxrInterfaceBundleEtherConfig_minimum() string {
 
 func testAccIosxrInterfaceBundleEtherConfig_all() string {
 	config := `resource "iosxr_interface_bundle_ether" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	name = "10"` + "\n"
 	config += `	point_to_point = false` + "\n"
 	config += `	multipoint = false` + "\n"

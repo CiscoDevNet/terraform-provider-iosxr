@@ -122,7 +122,6 @@ func testAccIosxrRouterMLDVRFConfig_minimum() string {
 
 func testAccIosxrRouterMLDVRFConfig_all() string {
 	config := `resource "iosxr_router_mld_vrf" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	robustness_variable = 5` + "\n"
 	config += `	maximum_groups = 50000` + "\n"

@@ -119,7 +119,6 @@ func testAccIosxrRouterMLDConfig_minimum() string {
 
 func testAccIosxrRouterMLDConfig_all() string {
 	config := `resource "iosxr_router_mld" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	nsf_lifetime = 300` + "\n"
 	config += `	robustness_variable = 5` + "\n"
 	config += `	maximum_groups = 50000` + "\n"

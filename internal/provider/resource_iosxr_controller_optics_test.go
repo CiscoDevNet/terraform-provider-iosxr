@@ -110,7 +110,6 @@ func testAccIosxrControllerOpticsConfig_minimum() string {
 
 func testAccIosxrControllerOpticsConfig_all() string {
 	config := `resource "iosxr_controller_optics" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	type = "Optics"` + "\n"
 	config += `	name = "0/0/0/1"` + "\n"
 	config += `	active = "act"` + "\n"

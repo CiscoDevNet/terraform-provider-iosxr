@@ -188,7 +188,6 @@ func testAccIosxrRouterBGPNeighborAddressFamilyConfig_minimum() string {
 
 func testAccIosxrRouterBGPNeighborAddressFamilyConfig_all() string {
 	config := `resource "iosxr_router_bgp_neighbor_address_family" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	as_number = "65001"` + "\n"
 	config += `	address = "10.1.1.2"` + "\n"
 	config += `	af_name = "vpnv4-unicast"` + "\n"

@@ -171,7 +171,6 @@ func testAccIosxrSegmentRoutingTEPolicyConfig_minimum() string {
 
 func testAccIosxrSegmentRoutingTEPolicyConfig_all() string {
 	config := `resource "iosxr_segment_routing_te_policy" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	policy_name = "POLICY1"` + "\n"
 	config += `	ipv6_disable = true` + "\n"
 	config += `	transit_eligible = true` + "\n"

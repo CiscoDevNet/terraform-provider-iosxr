@@ -13,6 +13,7 @@ resource "iosxr_aaa" "example" {
         }
       ]
       load_balance_method_least_outstanding_batch_size              = 25
+      load_balance_method_least_outstanding                         = true
       load_balance_method_least_outstanding_ignore_preferred_server = true
       deadtime                                                      = 5
       throttle_access                                               = 100

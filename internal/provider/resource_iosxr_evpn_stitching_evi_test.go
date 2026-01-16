@@ -138,7 +138,6 @@ func testAccIosxrEVPNStitchingEVIConfig_minimum() string {
 
 func testAccIosxrEVPNStitchingEVIConfig_all() string {
 	config := `resource "iosxr_evpn_stitching_evi" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	vpn_id = 102` + "\n"
 	config += `	description = "My Description"` + "\n"
 	config += `	bgp_rd_four_byte_as_number = 65536` + "\n"

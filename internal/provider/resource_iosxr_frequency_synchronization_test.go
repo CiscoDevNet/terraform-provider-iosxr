@@ -97,7 +97,6 @@ func testAccIosxrFrequencySynchronizationConfig_minimum() string {
 
 func testAccIosxrFrequencySynchronizationConfig_all() string {
 	config := `resource "iosxr_frequency_synchronization" "test" {` + "\n"
-	config += `	delete_mode = "all"` + "\n"
 	config += `	quality_itu_t_option_one = true` + "\n"
 	config += `	clock_interface_timing_mode_system = true` + "\n"
 	config += `	system_timing_mode_clock_only = true` + "\n"

@@ -87,16 +87,32 @@ func (d *FlowExporterMapDataSource) Schema(ctx context.Context, req datasource.S
 				MarkdownDescription: "Source interface whose address can be used as source address for export packets",
 				Computed:            true,
 			},
+			"source_address_ipv4_address": schema.StringAttribute{
+				MarkdownDescription: "Source IPv4 address",
+				Computed:            true,
+			},
+			"source_address_ipv6_address": schema.StringAttribute{
+				MarkdownDescription: "Source IPv6 address",
+				Computed:            true,
+			},
+			"router_id_ipv4_address": schema.StringAttribute{
+				MarkdownDescription: "router-id in IPv4 address format",
+				Computed:            true,
+			},
+			"router_id_ipv6_address": schema.StringAttribute{
+				MarkdownDescription: "router-id in IPv6 address format",
+				Computed:            true,
+			},
 			"dscp": schema.Int64Attribute{
 				MarkdownDescription: "Specify DSCP value for ipv4 export packets or traffic-class for ipv6 export packets",
 				Computed:            true,
 			},
-			"packet_length": schema.Int64Attribute{
-				MarkdownDescription: "Export Packet maximum L3 length, should conform to outgoing interface mtu",
-				Computed:            true,
-			},
 			"transport_udp": schema.Int64Attribute{
 				MarkdownDescription: "Use UDP as transport protocol",
+				Computed:            true,
+			},
+			"packet_length": schema.Int64Attribute{
+				MarkdownDescription: "Export Packet maximum L3 length, should conform to outgoing interface mtu",
 				Computed:            true,
 			},
 			"dfbit_set": schema.BoolAttribute{

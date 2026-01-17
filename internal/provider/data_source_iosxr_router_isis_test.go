@@ -32,7 +32,13 @@ import (
 
 func TestAccDataSourceIosxrRouterISIS(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "is_type", "level-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "segment_routing_global_block_lower_bound", "16000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "segment_routing_global_block_upper_bound", "29999"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "receive_application_flex_algo_delay_app_only", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_refresh_interval", "16000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_refresh_interval_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_refresh_interval_levels.0.lsp_refresh_interval", "16000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "oor_set_overload_bit_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "set_overload_bit", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "set_overload_bit_on_startup_time_to_advertise", "300"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "set_overload_bit_advertise_external", "true"))
@@ -41,44 +47,137 @@ func TestAccDataSourceIosxrRouterISIS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "set_overload_bit_levels.0.on_startup_time_to_advertise", "300"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "set_overload_bit_levels.0.advertise_external", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "set_overload_bit_levels.0.advertise_interlevel", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_mtu", "1400"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_mtu_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_mtu_levels.0.lsp_mtu", "1400"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "extended_admin_group", "both"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "nsr", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "nsr_restart_time", "240"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "nsf_ietf", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "nsf_lifetime", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "nsf_interface_timer", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "nsf_interface_expires", "2"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "log_adjacency_changes", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_check_interval", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_check_interval_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_check_interval_levels.0.lsp_check_interval", "20"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_gen_interval_maximum_wait", "5000"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_gen_interval_initial_wait", "50"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_gen_interval_secondary_wait", "200"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_refresh_interval", "65000"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "max_lsp_lifetime", "65535"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_password_hmac_md5_encrypted", "060506324F41584B564B0F49584B"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_gen_interval_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_gen_interval_levels.0.initial_wait", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_gen_interval_levels.0.secondary_wait", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_gen_interval_levels.0.maximum_wait", "5000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "adjacency_stagger", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "adjacency_stagger_initial_neighbors", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "adjacency_stagger_max_neighbors", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "hostname_dynamic_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "is_type", "level-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "multi_part_tlv_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "multi_part_tlv_disable_neighbor", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "multi_part_tlv_disable_prefix_tlvs", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "multi_part_tlv_disable_router_capability", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "multi_part_tlv_disable_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "multi_part_tlv_disable_levels.0.neighbor", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "multi_part_tlv_disable_levels.0.prefix_tlvs", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "multi_part_tlv_disable_levels.0.router_capability", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "log_adjacency_changes", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "log_pdu_drops", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "log_format_brief", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "log_sizes.0.log_type", "adjacency"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "log_sizes.0.size_number", "30"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_password_hmac_md5_send_only", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_password_hmac_md5_snp_send_only", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_password_hmac_md5_enable_poi", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_password_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_password_levels.0.hmac_md5_send_only", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_password_levels.0.hmac_md5_snp_send_only", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_password_levels.0.hmac_md5_enable_poi", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "authentication_check_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "iid_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "mpls_ldp_sync", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "mpls_ldp_sync_level", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "protocol_shutdown", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "min_lsp_arrival_initial_wait", "40"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "min_lsp_arrival_secondary_wait", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "min_lsp_arrival_maximum_wait", "2000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "min_lsp_arrival_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "min_lsp_arrival_levels.0.initial_wait", "40"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "min_lsp_arrival_levels.0.secondary_wait", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "min_lsp_arrival_levels.0.maximum_wait", "2000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "max_metric", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "max_metric_on_startup_advertise", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "max_metric_external", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "max_metric_interlevel", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "max_metric_default_route", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "max_metric_srv6_locator", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "max_metric_te", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "max_metric_delay", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "max_metric_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "max_metric_levels.0.on_startup_advertise", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "max_metric_levels.0.external", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "max_metric_levels.0.interlevel", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "max_metric_levels.0.default_route", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "max_metric_levels.0.srv6_locator", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "max_metric_levels.0.te", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "max_metric_levels.0.delay", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "distribute_link_state", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "distribute_link_state_level", "2"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "distribute_link_state_instance_id", "32"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "distribute_link_state_throttle", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "distribute_link_state_level", "2"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "affinity_maps.0.name", "22"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "affinity_maps.0.bit_position", "4"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.number", "128"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.advertise_definition", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.metric_type", "delay"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "distribute_link_state_exclude_interarea", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "distribute_link_state_exclude_external", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "distribute_link_state_route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "max_lsp_lifetime", "1200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "max_lsp_lifetime_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "max_lsp_lifetime_levels.0.max_lsp_lifetime", "1200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "instance_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "hello_padding", "adaptive"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_fast_flooding", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_fast_flooding_max_lsp_tx", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_fast_flooding_remote_psnp_delay", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "psnp_interval", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "nets.0.net_id", "49.0001.2222.2222.2222.00"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "interfaces.0.interface_name", "GigabitEthernet0/0/0/1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "interfaces.0.circuit_type", "level-1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "interfaces.0.hello_padding", "always"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "interfaces.0.priority_levels.0.level_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "interfaces.0.priority_levels.0.priority", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "interfaces.0.point_to_point", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "interfaces.0.state", "passive"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "affinity_maps.0.affinity_name", "22"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "affinity_maps.0.bit_position", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "ignore_lsp_errors_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "purge_transmit_strict", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "purge_transmit_strict_strict_value", "level-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "srlg_admin_weight", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "srlg_names.0.srlg_name", "SRLG-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "srlg_names.0.admin_weight", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "srlg_names.0.static_ipv4_addresses.0.local_end_point", "10.0.0.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "srlg_names.0.static_ipv4_addresses.0.remote_end_point", "10.0.0.2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.number", "128"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.minimum_bandwidth", "1000000000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.maximum_delay", "1000000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.priority", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.metric_type", "delay"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.advertise_definition", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.prefix_metric", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.auto_cost_reference_bandwidth", "1000000000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.auto_cost_reference_bandwidth_granularity", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.auto_cost_reference_group_mode", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.affinity_exclude_any.0", "AFFINITY-2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.affinity_include_any.0", "AFFINITY-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.affinity_include_all.0", "AFFINITY-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.affinity_reverse_exclude_any.0", "AFFINITY-2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.affinity_reverse_include_any.0", "AFFINITY-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.affinity_reverse_include_all.0", "AFFINITY-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.srlg_exclude_any.0", "SRLG-EXCLUDE-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.fast_reroute_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.microloop_avoidance_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.data_plane_segment_routing", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.data_plane_ip", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.ucmp_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.address_family.0.af_name", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.address_family.0.saf_name", "unicast"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.address_family.0.maximum_paths", "10"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterISISConfig(),
+				Config: testAccDataSourceIosxrRouterISISPrerequisitesConfig + testAccDataSourceIosxrRouterISISConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -88,6 +187,36 @@ func TestAccDataSourceIosxrRouterISIS(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccDataSourceIosxrRouterISISPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
+	attributes = {
+		"route-policy-name" = "ROUTE_POLICY_1"
+		"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
+	}
+}
+
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/affinity-maps/affinity-map[affinity-attribute-name=AFFINITY-1]"
+	delete = false
+	attributes = {
+		"affinity-attribute-name" = "AFFINITY-1"
+		"bit-position" = "1"
+	}
+	depends_on = [iosxr_gnmi.PreReq0, ]
+}
+
+resource "iosxr_gnmi" "PreReq2" {
+	path = "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/affinity-maps/affinity-map[affinity-attribute-name=AFFINITY-2]"
+	delete = false
+	attributes = {
+		"affinity-attribute-name" = "AFFINITY-2"
+		"bit-position" = "2"
+	}
+	depends_on = [iosxr_gnmi.PreReq0, ]
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
@@ -97,7 +226,15 @@ func testAccDataSourceIosxrRouterISISConfig() string {
 	config := `resource "iosxr_router_isis" "test" {` + "\n"
 	config += `	delete_mode = "attributes"` + "\n"
 	config += `	process_id = "P1"` + "\n"
-	config += `	is_type = "level-1"` + "\n"
+	config += `	segment_routing_global_block_lower_bound = 16000` + "\n"
+	config += `	segment_routing_global_block_upper_bound = 29999` + "\n"
+	config += `	receive_application_flex_algo_delay_app_only = true` + "\n"
+	config += `	lsp_refresh_interval = 16000` + "\n"
+	config += `	lsp_refresh_interval_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		lsp_refresh_interval = 16000` + "\n"
+	config += `	}]` + "\n"
+	config += `	oor_set_overload_bit_disable = true` + "\n"
 	config += `	set_overload_bit = true` + "\n"
 	config += `	set_overload_bit_on_startup_time_to_advertise = 300` + "\n"
 	config += `	set_overload_bit_advertise_external = true` + "\n"
@@ -108,48 +245,164 @@ func testAccDataSourceIosxrRouterISISConfig() string {
 	config += `		advertise_external = true` + "\n"
 	config += `		advertise_interlevel = true` + "\n"
 	config += `	}]` + "\n"
+	config += `	lsp_mtu = 1400` + "\n"
+	config += `	lsp_mtu_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		lsp_mtu = 1400` + "\n"
+	config += `	}]` + "\n"
+	config += `	extended_admin_group = "both"` + "\n"
 	config += `	nsr = true` + "\n"
+	config += `	nsr_restart_time = 240` + "\n"
 	config += `	nsf_ietf = true` + "\n"
 	config += `	nsf_lifetime = 10` + "\n"
 	config += `	nsf_interface_timer = 5` + "\n"
 	config += `	nsf_interface_expires = 2` + "\n"
-	config += `	log_adjacency_changes = true` + "\n"
+	config += `	lsp_check_interval = 20` + "\n"
+	config += `	lsp_check_interval_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		lsp_check_interval = 20` + "\n"
+	config += `	}]` + "\n"
 	config += `	lsp_gen_interval_maximum_wait = 5000` + "\n"
 	config += `	lsp_gen_interval_initial_wait = 50` + "\n"
 	config += `	lsp_gen_interval_secondary_wait = 200` + "\n"
-	config += `	lsp_refresh_interval = 65000` + "\n"
-	config += `	max_lsp_lifetime = 65535` + "\n"
+	config += `	lsp_gen_interval_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		initial_wait = 50` + "\n"
+	config += `		secondary_wait = 200` + "\n"
+	config += `		maximum_wait = 5000` + "\n"
+	config += `	}]` + "\n"
+	config += `	adjacency_stagger = true` + "\n"
+	config += `	adjacency_stagger_initial_neighbors = 5` + "\n"
+	config += `	adjacency_stagger_max_neighbors = 20` + "\n"
+	config += `	hostname_dynamic_disable = true` + "\n"
+	config += `	is_type = "level-1"` + "\n"
+	config += `	multi_part_tlv_disable = true` + "\n"
+	config += `	multi_part_tlv_disable_neighbor = true` + "\n"
+	config += `	multi_part_tlv_disable_prefix_tlvs = true` + "\n"
+	config += `	multi_part_tlv_disable_router_capability = true` + "\n"
+	config += `	multi_part_tlv_disable_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		neighbor = true` + "\n"
+	config += `		prefix_tlvs = true` + "\n"
+	config += `		router_capability = true` + "\n"
+	config += `	}]` + "\n"
+	config += `	log_adjacency_changes = true` + "\n"
+	config += `	log_pdu_drops = true` + "\n"
+	config += `	log_format_brief = true` + "\n"
+	config += `	log_sizes = [{` + "\n"
+	config += `		log_type = "adjacency"` + "\n"
+	config += `		size_number = 30` + "\n"
+	config += `	}]` + "\n"
 	config += `	lsp_password_hmac_md5_encrypted = "060506324F41584B564B0F49584B"` + "\n"
 	config += `	lsp_password_hmac_md5_send_only = true` + "\n"
 	config += `	lsp_password_hmac_md5_snp_send_only = true` + "\n"
 	config += `	lsp_password_hmac_md5_enable_poi = true` + "\n"
+	config += `	lsp_password_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		hmac_md5_encrypted = "060506324F41584B564B0F49584B"` + "\n"
+	config += `		hmac_md5_send_only = true` + "\n"
+	config += `		hmac_md5_snp_send_only = true` + "\n"
+	config += `		hmac_md5_enable_poi = true` + "\n"
+	config += `	}]` + "\n"
+	config += `	authentication_check_disable = true` + "\n"
+	config += `	iid_disable = true` + "\n"
+	config += `	mpls_ldp_sync = true` + "\n"
+	config += `	mpls_ldp_sync_level = 1` + "\n"
+	config += `	protocol_shutdown = true` + "\n"
+	config += `	min_lsp_arrival_initial_wait = 40` + "\n"
+	config += `	min_lsp_arrival_secondary_wait = 100` + "\n"
+	config += `	min_lsp_arrival_maximum_wait = 2000` + "\n"
+	config += `	min_lsp_arrival_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		initial_wait = 40` + "\n"
+	config += `		secondary_wait = 100` + "\n"
+	config += `		maximum_wait = 2000` + "\n"
+	config += `	}]` + "\n"
+	config += `	max_metric = true` + "\n"
+	config += `	max_metric_on_startup_advertise = 300` + "\n"
+	config += `	max_metric_external = true` + "\n"
+	config += `	max_metric_interlevel = true` + "\n"
+	config += `	max_metric_default_route = true` + "\n"
+	config += `	max_metric_srv6_locator = true` + "\n"
+	config += `	max_metric_te = true` + "\n"
+	config += `	max_metric_delay = true` + "\n"
+	config += `	max_metric_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		on_startup_advertise = 300` + "\n"
+	config += `		external = true` + "\n"
+	config += `		interlevel = true` + "\n"
+	config += `		default_route = true` + "\n"
+	config += `		srv6_locator = true` + "\n"
+	config += `		te = true` + "\n"
+	config += `		delay = true` + "\n"
+	config += `	}]` + "\n"
 	config += `	distribute_link_state = true` + "\n"
+	config += `	distribute_link_state_level = 2` + "\n"
 	config += `	distribute_link_state_instance_id = 32` + "\n"
 	config += `	distribute_link_state_throttle = 1` + "\n"
-	config += `	distribute_link_state_level = 2` + "\n"
-	config += `	affinity_maps = [{` + "\n"
-	config += `		name = "22"` + "\n"
-	config += `		bit_position = 4` + "\n"
+	config += `	distribute_link_state_exclude_interarea = true` + "\n"
+	config += `	distribute_link_state_exclude_external = true` + "\n"
+	config += `	distribute_link_state_route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `	max_lsp_lifetime = 1200` + "\n"
+	config += `	max_lsp_lifetime_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		max_lsp_lifetime = 1200` + "\n"
 	config += `	}]` + "\n"
-	config += `	flex_algos = [{` + "\n"
-	config += `		number = 128` + "\n"
-	config += `		advertise_definition = true` + "\n"
-	config += `		metric_type = "delay"` + "\n"
-	config += `	}]` + "\n"
+	config += `	instance_id = 1` + "\n"
+	config += `	hello_padding = "adaptive"` + "\n"
+	config += `	lsp_fast_flooding = true` + "\n"
+	config += `	lsp_fast_flooding_max_lsp_tx = 500` + "\n"
+	config += `	lsp_fast_flooding_remote_psnp_delay = 1000` + "\n"
+	config += `	psnp_interval = 100` + "\n"
 	config += `	nets = [{` + "\n"
 	config += `		net_id = "49.0001.2222.2222.2222.00"` + "\n"
 	config += `	}]` + "\n"
-	config += `	interfaces = [{` + "\n"
-	config += `		interface_name = "GigabitEthernet0/0/0/1"` + "\n"
-	config += `		circuit_type = "level-1"` + "\n"
-	config += `		hello_padding = "always"` + "\n"
-	config += `		priority_levels = [{` + "\n"
-	config += `			level_number = 1` + "\n"
-	config += `			priority = 10` + "\n"
-	config += `		}]` + "\n"
-	config += `		point_to_point = false` + "\n"
-	config += `		state = "passive"` + "\n"
+	config += `	affinity_maps = [{` + "\n"
+	config += `		affinity_name = "22"` + "\n"
+	config += `		bit_position = 4` + "\n"
 	config += `	}]` + "\n"
+	config += `	ignore_lsp_errors_disable = true` + "\n"
+	config += `	purge_transmit_strict = true` + "\n"
+	config += `	purge_transmit_strict_strict_value = "level-1"` + "\n"
+	config += `	srlg_admin_weight = 500` + "\n"
+	config += `	srlg_names = [{` + "\n"
+	config += `		srlg_name = "SRLG-1"` + "\n"
+	config += `		admin_weight = 500` + "\n"
+	config += `		static_ipv4_addresses = [{` + "\n"
+	config += `			local_end_point = "10.0.0.1"` + "\n"
+	config += `			remote_end_point = "10.0.0.2"` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
+	config += `	flex_algos = [{` + "\n"
+	config += `		number = 128` + "\n"
+	config += `		minimum_bandwidth = 1000000000` + "\n"
+	config += `		maximum_delay = 1000000` + "\n"
+	config += `		priority = 10` + "\n"
+	config += `		metric_type = "delay"` + "\n"
+	config += `		advertise_definition = true` + "\n"
+	config += `		prefix_metric = true` + "\n"
+	config += `		auto_cost_reference_bandwidth = 1000000000` + "\n"
+	config += `		auto_cost_reference_bandwidth_granularity = 1000` + "\n"
+	config += `		auto_cost_reference_group_mode = true` + "\n"
+	config += `		affinity_exclude_any = ["AFFINITY-2"]` + "\n"
+	config += `		affinity_include_any = ["AFFINITY-1"]` + "\n"
+	config += `		affinity_include_all = ["AFFINITY-1"]` + "\n"
+	config += `		affinity_reverse_exclude_any = ["AFFINITY-2"]` + "\n"
+	config += `		affinity_reverse_include_any = ["AFFINITY-1"]` + "\n"
+	config += `		affinity_reverse_include_all = ["AFFINITY-1"]` + "\n"
+	config += `		srlg_exclude_any = ["SRLG-EXCLUDE-1"]` + "\n"
+	config += `		fast_reroute_disable = true` + "\n"
+	config += `		microloop_avoidance_disable = true` + "\n"
+	config += `		data_plane_segment_routing = true` + "\n"
+	config += `		data_plane_ip = false` + "\n"
+	config += `		ucmp_disable = true` + "\n"
+	config += `		address_family = [{` + "\n"
+	config += `			af_name = "ipv4"` + "\n"
+	config += `			saf_name = "unicast"` + "\n"
+	config += `			maximum_paths = 10` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

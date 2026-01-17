@@ -36,25 +36,31 @@ import (
 func TestAccIosxrRouterBGPVRFAddressFamily(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "af_name", "ipv4-unicast"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "additional_paths_send", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "additional_paths_send_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "additional_paths_receive", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "additional_paths_receive_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "additional_paths_selection_route_policy", "ADDITIONAL_PATHS_POLICY"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "allocate_label_all", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "allocate_label_all_unlabeled_path", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "advertise_best_external", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "segment_routing_srv6_locator", "locator101"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "segment_routing_srv6_usid_allocation_wide_local_id_block", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "segment_routing_srv6_alloc_mode_per_vrf", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "distance_bgp_external_route", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "distance_bgp_internal_route", "195"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "distance_bgp_local_route", "190"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "bgp_attribute_download", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "allow_vpn_default_originate", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "maximum_paths_ebgp_multipath", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "maximum_paths_ebgp_selective", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "maximum_paths_ebgp_route_policy", "MULTIPATH_POLICY"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "maximum_paths_ebgp_route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "maximum_paths_ibgp_multipath", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "maximum_paths_ibgp_unequal_cost", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "maximum_paths_ibgp_unequal_cost_deterministic", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "maximum_paths_ibgp_selective", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "maximum_paths_ibgp_route_policy", "MULTIPATH_POLICY"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "label_mode_per_prefix", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "segment_routing_srv6_locator", "LocAlgo11"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "segment_routing_srv6_alloc_mode_per_vrf", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "maximum_paths_ibgp_route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "additional_paths_send", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "additional_paths_receive", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "additional_paths_advertise_limit", "40"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "additional_paths_selection_route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "advertise_best_external", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "advertise_local_labeled_route_safi_unicast", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "networks.0.address", "10.1.0.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "networks.0.prefix", "16"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "networks.0.route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "aggregate_addresses.0.address", "10.0.0.0"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "aggregate_addresses.0.prefix", "8"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "aggregate_addresses.0.as_set", "true"))
@@ -63,36 +69,48 @@ func TestAccIosxrRouterBGPVRFAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "aggregate_addresses.0.route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "aggregate_addresses.0.description", "Aggregate route description"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "aggregate_addresses.0.set_tag", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "networks.0.address", "10.1.0.0"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "networks.0.prefix", "16"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "networks.0.route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_ospf.0.router_tag", "OSPF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_ospf.0.match_internal_external_nssa_external_2", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_ospf.0.metric", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_ospf.0.multipath", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_ospf.0.route_policy", "REDISTRIBUTE_POLICY"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_ospf.0.route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_eigrp.0.instance_name", "EIGRP1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_eigrp.0.match_internal_external", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_eigrp.0.metric", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_eigrp.0.multipath", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_eigrp.0.route_policy", "REDISTRIBUTE_POLICY"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_eigrp.0.route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_isis.0.instance_name", "ISIS1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_isis.0.level_1_level_2_level_1_inter_area", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_isis.0.metric", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_isis.0.multipath", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_isis.0.route_policy", "REDISTRIBUTE_POLICY"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_isis.0.route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_connected", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_connected_metric", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_connected_multipath", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_connected_route_policy", "REDISTRIBUTE_POLICY"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_connected_route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_static", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_static_metric", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_static_multipath", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_static_route_policy", "REDISTRIBUTE_POLICY"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_static_route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_rip", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_rip_metric", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_rip_multipath", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_rip_route_policy", "REDISTRIBUTE_POLICY"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_rip_route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "table_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "label_mode_per_prefix", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "bgp_origin_as_validation_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "bgp_origin_as_validation_signal_ibgp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "bgp_bestpath_origin_as_use_validity", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "bgp_bestpath_origin_as_allow_invalid", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "bgp_dampening_decay_half_life", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "bgp_dampening_reuse_threshold", "40"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "bgp_dampening_suppress_threshold", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "bgp_dampening_max_suppress_time", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "dynamic_med_interval", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "weight_reset_on_import", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "nexthop_route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "as_path_loopcheck_out_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "mvpn_single_forwarder_selection", "highest-ip-address"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -136,64 +154,39 @@ func iosxrRouterBGPVRFAddressFamilyImportStateIdFunc(resourceName string) resour
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRouterBGPVRFAddressFamilyPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies"
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
 	attributes = {
+		"route-policy-name" = "ROUTE_POLICY_1"
+		"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
 	}
-	lists = [
-		{
-			name = "route-policy"
-			key = "route-policy-name"
-			items = [
-				{
-					"route-policy-name" = "ROUTE_POLICY_1"
-					"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
-				},
-				{
-					"route-policy-name" = "ADDITIONAL_PATHS_POLICY"
-					"rpl-route-policy" = "route-policy ADDITIONAL_PATHS_POLICY\n  pass\nend-policy\n"
-				},
-				{
-					"route-policy-name" = "ALLOCATE_LABEL_POLICY"
-					"rpl-route-policy" = "route-policy ALLOCATE_LABEL_POLICY\n  pass\nend-policy\n"
-				},
-				{
-					"route-policy-name" = "MULTIPATH_POLICY"
-					"rpl-route-policy" = "route-policy MULTIPATH_POLICY\n  pass\nend-policy\n"
-				},
-				{
-					"route-policy-name" = "REDISTRIBUTE_POLICY"
-					"rpl-route-policy" = "route-policy REDISTRIBUTE_POLICY\n  pass\nend-policy\n"
-				},
-				{
-					"route-policy-name" = "LABEL_MODE_POLICY"
-					"rpl-route-policy" = "route-policy LABEL_MODE_POLICY\n  pass\nend-policy\n"
-				},
-				{
-					"route-policy-name" = "SRv6_ALLOC_POLICY"
-					"rpl-route-policy" = "route-policy SRv6_ALLOC_POLICY\n  pass\nend-policy\n"
-				},
-			]
-		},
-	]
 }
 
 resource "iosxr_gnmi" "PreReq1" {
-	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF3]"
+	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF2]"
 	attributes = {
-		"vrf-name" = "VRF3"
+		"vrf-name" = "VRF2"
 	}
 }
 
 resource "iosxr_gnmi" "PreReq2" {
-	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF3]/Cisco-IOS-XR-um-router-bgp-cfg:rd/Cisco-IOS-XR-um-router-bgp-cfg:two-byte-as"
+	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF2]/Cisco-IOS-XR-um-router-bgp-cfg:rd/Cisco-IOS-XR-um-router-bgp-cfg:two-byte-as"
 	attributes = {
 		"two-byte-as-number" = "65001"
-		"asn2-index" = "3"
+		"asn2-index" = "2"
 	}
 	depends_on = [iosxr_gnmi.PreReq1, ]
 }
 
 resource "iosxr_gnmi" "PreReq3" {
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
+	attributes = {
+		"as-number" = "65001"
+		"bgp/router-id" = "22.22.22.22"
+	}
+	depends_on = [iosxr_gnmi.PreReq2, ]
+}
+
+resource "iosxr_gnmi" "PreReq4" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
 	attributes = {
 		"as-number" = "65001"
@@ -209,7 +202,26 @@ resource "iosxr_gnmi" "PreReq3" {
 			]
 		},
 	]
-	depends_on = [iosxr_gnmi.PreReq2, ]
+	depends_on = [iosxr_gnmi.PreReq3, ]
+}
+
+resource "iosxr_gnmi" "PreReq5" {
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
+	attributes = {
+		"as-number" = "65001"
+	}
+	lists = [
+		{
+			name = "address-families/address-family"
+			key = "af-name"
+			items = [
+				{
+					"af-name" = "vpnv6-unicast"
+				},
+			]
+		},
+	]
+	depends_on = [iosxr_gnmi.PreReq3, ]
 }
 
 `
@@ -221,9 +233,9 @@ resource "iosxr_gnmi" "PreReq3" {
 func testAccIosxrRouterBGPVRFAddressFamilyConfig_minimum() string {
 	config := `resource "iosxr_router_bgp_vrf_address_family" "test" {` + "\n"
 	config += `	as_number = "65001"` + "\n"
-	config += `	vrf_name = "VRF3"` + "\n"
+	config += `	vrf_name = "VRF2"` + "\n"
 	config += `	af_name = "ipv4-unicast"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, iosxr_gnmi.PreReq4, iosxr_gnmi.PreReq5, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -235,27 +247,35 @@ func testAccIosxrRouterBGPVRFAddressFamilyConfig_minimum() string {
 func testAccIosxrRouterBGPVRFAddressFamilyConfig_all() string {
 	config := `resource "iosxr_router_bgp_vrf_address_family" "test" {` + "\n"
 	config += `	as_number = "65001"` + "\n"
-	config += `	vrf_name = "VRF3"` + "\n"
+	config += `	vrf_name = "VRF2"` + "\n"
 	config += `	af_name = "ipv4-unicast"` + "\n"
-	config += `	additional_paths_send = true` + "\n"
-	config += `	additional_paths_send_disable = true` + "\n"
-	config += `	additional_paths_receive = true` + "\n"
-	config += `	additional_paths_receive_disable = true` + "\n"
-	config += `	additional_paths_selection_route_policy = "ADDITIONAL_PATHS_POLICY"` + "\n"
-	config += `	allocate_label_all = true` + "\n"
-	config += `	allocate_label_all_unlabeled_path = true` + "\n"
-	config += `	advertise_best_external = true` + "\n"
+	config += `	segment_routing_srv6_locator = "locator101"` + "\n"
+	config += `	segment_routing_srv6_usid_allocation_wide_local_id_block = true` + "\n"
+	config += `	segment_routing_srv6_alloc_mode_per_vrf = true` + "\n"
+	config += `	distance_bgp_external_route = 200` + "\n"
+	config += `	distance_bgp_internal_route = 195` + "\n"
+	config += `	distance_bgp_local_route = 190` + "\n"
+	config += `	bgp_attribute_download = true` + "\n"
+	config += `	allow_vpn_default_originate = true` + "\n"
 	config += `	maximum_paths_ebgp_multipath = 10` + "\n"
 	config += `	maximum_paths_ebgp_selective = true` + "\n"
-	config += `	maximum_paths_ebgp_route_policy = "MULTIPATH_POLICY"` + "\n"
+	config += `	maximum_paths_ebgp_route_policy = "ROUTE_POLICY_1"` + "\n"
 	config += `	maximum_paths_ibgp_multipath = 10` + "\n"
 	config += `	maximum_paths_ibgp_unequal_cost = true` + "\n"
 	config += `	maximum_paths_ibgp_unequal_cost_deterministic = true` + "\n"
 	config += `	maximum_paths_ibgp_selective = true` + "\n"
-	config += `	maximum_paths_ibgp_route_policy = "MULTIPATH_POLICY"` + "\n"
-	config += `	label_mode_per_prefix = true` + "\n"
-	config += `	segment_routing_srv6_locator = "LocAlgo11"` + "\n"
-	config += `	segment_routing_srv6_alloc_mode_per_vrf = true` + "\n"
+	config += `	maximum_paths_ibgp_route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `	additional_paths_send = true` + "\n"
+	config += `	additional_paths_receive = true` + "\n"
+	config += `	additional_paths_advertise_limit = 40` + "\n"
+	config += `	additional_paths_selection_route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `	advertise_best_external = true` + "\n"
+	config += `	advertise_local_labeled_route_safi_unicast = "disable"` + "\n"
+	config += `	networks = [{` + "\n"
+	config += `		address = "10.1.0.0"` + "\n"
+	config += `		prefix = 16` + "\n"
+	config += `		route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `		}]` + "\n"
 	config += `	aggregate_addresses = [{` + "\n"
 	config += `		address = "10.0.0.0"` + "\n"
 	config += `		prefix = 8` + "\n"
@@ -266,45 +286,55 @@ func testAccIosxrRouterBGPVRFAddressFamilyConfig_all() string {
 	config += `		description = "Aggregate route description"` + "\n"
 	config += `		set_tag = 100` + "\n"
 	config += `		}]` + "\n"
-	config += `	networks = [{` + "\n"
-	config += `		address = "10.1.0.0"` + "\n"
-	config += `		prefix = 16` + "\n"
-	config += `		route_policy = "ROUTE_POLICY_1"` + "\n"
-	config += `		}]` + "\n"
 	config += `	redistribute_ospf = [{` + "\n"
 	config += `		router_tag = "OSPF1"` + "\n"
 	config += `		match_internal_external_nssa_external_2 = true` + "\n"
 	config += `		metric = 100` + "\n"
 	config += `		multipath = true` + "\n"
-	config += `		route_policy = "REDISTRIBUTE_POLICY"` + "\n"
+	config += `		route_policy = "ROUTE_POLICY_1"` + "\n"
 	config += `		}]` + "\n"
 	config += `	redistribute_eigrp = [{` + "\n"
 	config += `		instance_name = "EIGRP1"` + "\n"
 	config += `		match_internal_external = true` + "\n"
 	config += `		metric = 100` + "\n"
 	config += `		multipath = true` + "\n"
-	config += `		route_policy = "REDISTRIBUTE_POLICY"` + "\n"
+	config += `		route_policy = "ROUTE_POLICY_1"` + "\n"
 	config += `		}]` + "\n"
 	config += `	redistribute_isis = [{` + "\n"
 	config += `		instance_name = "ISIS1"` + "\n"
 	config += `		level_1_level_2_level_1_inter_area = true` + "\n"
 	config += `		metric = 100` + "\n"
 	config += `		multipath = true` + "\n"
-	config += `		route_policy = "REDISTRIBUTE_POLICY"` + "\n"
+	config += `		route_policy = "ROUTE_POLICY_1"` + "\n"
 	config += `		}]` + "\n"
 	config += `	redistribute_connected = true` + "\n"
 	config += `	redistribute_connected_metric = 100` + "\n"
 	config += `	redistribute_connected_multipath = true` + "\n"
-	config += `	redistribute_connected_route_policy = "REDISTRIBUTE_POLICY"` + "\n"
+	config += `	redistribute_connected_route_policy = "ROUTE_POLICY_1"` + "\n"
 	config += `	redistribute_static = true` + "\n"
 	config += `	redistribute_static_metric = 100` + "\n"
 	config += `	redistribute_static_multipath = true` + "\n"
-	config += `	redistribute_static_route_policy = "REDISTRIBUTE_POLICY"` + "\n"
+	config += `	redistribute_static_route_policy = "ROUTE_POLICY_1"` + "\n"
 	config += `	redistribute_rip = true` + "\n"
 	config += `	redistribute_rip_metric = 100` + "\n"
 	config += `	redistribute_rip_multipath = true` + "\n"
-	config += `	redistribute_rip_route_policy = "REDISTRIBUTE_POLICY"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
+	config += `	redistribute_rip_route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `	table_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `	label_mode_per_prefix = true` + "\n"
+	config += `	bgp_origin_as_validation_enable = true` + "\n"
+	config += `	bgp_origin_as_validation_signal_ibgp = true` + "\n"
+	config += `	bgp_bestpath_origin_as_use_validity = true` + "\n"
+	config += `	bgp_bestpath_origin_as_allow_invalid = true` + "\n"
+	config += `	bgp_dampening_decay_half_life = 30` + "\n"
+	config += `	bgp_dampening_reuse_threshold = 40` + "\n"
+	config += `	bgp_dampening_suppress_threshold = 50` + "\n"
+	config += `	bgp_dampening_max_suppress_time = 30` + "\n"
+	config += `	dynamic_med_interval = 5` + "\n"
+	config += `	weight_reset_on_import = true` + "\n"
+	config += `	nexthop_route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `	as_path_loopcheck_out_disable = true` + "\n"
+	config += `	mvpn_single_forwarder_selection = "highest-ip-address"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, iosxr_gnmi.PreReq4, iosxr_gnmi.PreReq5, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

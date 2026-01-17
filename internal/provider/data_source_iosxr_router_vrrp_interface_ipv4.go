@@ -94,6 +94,11 @@ func (d *RouterVRRPInterfaceIPv4DataSource) Schema(ctx context.Context, req data
 			"text_authentication": schema.StringAttribute{
 				MarkdownDescription: "Set plain text authentication string",
 				Computed:            true,
+				Sensitive:           true,
+			},
+			"unicast_peer": schema.StringAttribute{
+				MarkdownDescription: "Enable Unicast (Multicast will be disabled) of VRRP to a Peer",
+				Computed:            true,
 			},
 			"secondary_addresses": schema.ListNestedAttribute{
 				MarkdownDescription: "VRRP IPv4 address",

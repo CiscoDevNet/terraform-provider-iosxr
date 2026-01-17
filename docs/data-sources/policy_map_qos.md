@@ -14,7 +14,7 @@ This data source can read the Policy Map QoS configuration.
 
 ```terraform
 data "iosxr_policy_map_qos" "example" {
-  policy_map_name = "PM1"
+  policy_map_name = "PM-QOS"
 }
 ```
 
@@ -42,20 +42,59 @@ Read-Only:
 
 - `bandwidth_remaining_unit` (String) Bandwidth value unit
 - `bandwidth_remaining_value` (String) Bandwidth value
+- `bandwidth_unit` (String) Unit of bandwidth for this class
+- `bandwidth_value` (String) Value of bandwidth for this class
 - `name` (String) Name of the class-map
+- `police_burst_unit` (String) Burst size unit
+- `police_burst_value` (Number) Burst size (BC)
 - `police_conform_action_drop` (Boolean) Drop packet
+- `police_conform_action_set_cos` (Number) Sets the specific IEEE 802.1Q Layer 2 CoS value of an outgoing packet. This command should be used by a router if a user wants to mark a packet that is being sent to a switch. Switches can leverage Layer 2 header information, including a CoS value marking. Packets entering an interface cannot be set with a CoS value.
+- `police_conform_action_set_discard_class` (Number) Sets the discard class on IPv4 or MPLS packets. The discard-class can be used only in service policies that are attached in the ingress policy.
+- `police_conform_action_set_dscp` (String) Set IP DSCP (DiffServ CodePoint)
+- `police_conform_action_set_mpls_experimental_imposition` (Number) Sets the experimental value of the MPLS packet imposition labels. Imposition can be used only in service policies that are attached in the ingress policy
+- `police_conform_action_set_mpls_experimental_topmost` (Number) Sets the experimental value of the MPLS packet top-most labels.
+- `police_conform_action_set_precedence` (String) Set IP Precedence
+- `police_conform_action_set_qos_group` (Number) Sets the QoS group identifiers on IPv4 or MPLS packets. The set qos-group is supported only on an ingress policy.
 - `police_conform_action_transmit` (Boolean) Transmit packet
 - `police_exceed_action_drop` (Boolean) Drop packet
+- `police_exceed_action_set_cos` (Number) Sets the specific IEEE 802.1Q Layer 2 CoS value of an outgoing packet. This command should be used by a router if a user wants to mark a packet that is being sent to a switch. Switches can leverage Layer 2 header information, including a CoS value marking. Packets entering an interface cannot be set with a CoS value.
+- `police_exceed_action_set_discard_class` (Number) Sets the discard class on IPv4 or MPLS packets. The discard-class can be used only in service policies that are attached in the ingress policy.
+- `police_exceed_action_set_dscp` (String) Set IP DSCP (DiffServ CodePoint)
+- `police_exceed_action_set_mpls_experimental_imposition` (Number) Sets the experimental value of the MPLS packet imposition labels. Imposition can be used only in service policies that are attached in the ingress policy
+- `police_exceed_action_set_mpls_experimental_topmost` (Number) Sets the experimental value of the MPLS packet top-most labels.
+- `police_exceed_action_set_precedence` (String) Set IP Precedence
+- `police_exceed_action_set_qos_group` (Number) Sets the QoS group identifiers on IPv4 or MPLS packets. The set qos-group is supported only on an ingress policy.
 - `police_exceed_action_transmit` (Boolean) Transmit packet
+- `police_peak_burst_unit` (String) Burst size unit
+- `police_peak_burst_value` (Number) Exess burst size (BC)
+- `police_peak_rate_unit` (String) Unit of Peak Information Rate
+- `police_peak_rate_value` (String) Peak Information Rate
 - `police_rate_unit` (String) Rate unit
 - `police_rate_value` (String) Committed Information Rate
 - `police_violate_action_drop` (Boolean) Drop packet
+- `police_violate_action_set_cos` (Number) Sets the specific IEEE 802.1Q Layer 2 CoS value of an outgoing packet. This command should be used by a router if a user wants to mark a packet that is being sent to a switch. Switches can leverage Layer 2 header information, including a CoS value marking. Packets entering an interface cannot be set with a CoS value.
+- `police_violate_action_set_discard_class` (Number) Sets the discard class on IPv4 or MPLS packets. The discard-class can be used only in service policies that are attached in the ingress policy.
+- `police_violate_action_set_dscp` (String) Set IP DSCP (DiffServ CodePoint)
+- `police_violate_action_set_mpls_experimental_imposition` (Number) Sets the experimental value of the MPLS packet imposition labels. Imposition can be used only in service policies that are attached in the ingress policy
+- `police_violate_action_set_mpls_experimental_topmost` (Number) Sets the experimental value of the MPLS packet top-most labels.
+- `police_violate_action_set_precedence` (String) Set IP Precedence
+- `police_violate_action_set_qos_group` (Number) Sets the QoS group identifiers on IPv4 or MPLS packets. The set qos-group is supported only on an ingress policy.
 - `police_violate_action_transmit` (Boolean) Transmit packet
 - `priority_level` (Number) Configure a priority level
 - `queue_limits` (Attributes List) Configure queue-limit (taildrop threshold) for this class (see [below for nested schema](#nestedatt--classes--queue_limits))
+- `random_detect` (Attributes List) Enable Random Early Detection. All RED profiles in a class must be based on the same field. (see [below for nested schema](#nestedatt--classes--random_detect))
+- `random_detect_default` (Boolean) Enable RED with default min and max thresholds
 - `service_policy_name` (String) Name of the child service policy
+- `set_cos` (Number) Sets the specific IEEE 802.1Q Layer 2 CoS value of an outgoing packet. This command should be used by a router if a user wants to mark a packet that is being sent to a switch. Switches can leverage Layer 2 header information, including a CoS value marking. Packets entering an interface cannot be set with a CoS value.
+- `set_discard_class` (Number) Sets the discard class on IPv4 or MPLS packets. The discard-class can be used only in service policies that are attached in the ingress policy.
 - `set_dscp` (String) Set IP DSCP (DiffServ CodePoint)
+- `set_mpls_experimental_imposition` (Number) Sets the experimental value of the MPLS packet imposition labels. Imposition can be used only in service policies that are attached in the ingress policy
 - `set_mpls_experimental_topmost` (Number) Sets the experimental value of the MPLS packet top-most labels.
+- `set_precedence` (String) Set IP Precedence
+- `set_qos_group` (Number) Sets the QoS group identifiers on IPv4 or MPLS packets. The set qos-group is supported only on an ingress policy.
+- `set_traffic_class` (Number) Sets the Traffic Class identifiers on IPv4 or MPLS packets. The set traffic-class is supported only on an ingress policy.
+- `shape_average_excess_burst_size` (Number) Excess burst size
+- `shape_average_excess_burst_unit` (String) Unit of Excess burst size
 - `shape_average_rate_unit` (String) Shape rate unit
 - `shape_average_rate_value` (String) Value of Shape rate
 - `type` (String) The type of class-map
@@ -67,3 +106,14 @@ Read-Only:
 
 - `unit` (String) queue-limit unit
 - `value` (String) queue-limit value
+
+
+<a id="nestedatt--classes--random_detect"></a>
+### Nested Schema for `classes.random_detect`
+
+Read-Only:
+
+- `maximum_threshold_unit` (String) threshold unit
+- `maximum_threshold_value` (Number) Maximum threshold
+- `minimum_threshold_unit` (String) threshold unit
+- `minimum_threshold_value` (Number) Minimum threshold

@@ -21,14 +21,15 @@ resource "iosxr_router_vrrp_interface_ipv6" "example" {
       address = "2001:db8::1"
     }
   ]
-  address_linklocal_autoconfig = true
-  priority                     = 250
-  name                         = "TEST2"
-  timer_advertisement_seconds  = 10
-  timer_force                  = true
-  preempt_disable              = false
-  preempt_delay                = 255
-  accept_mode_disable          = true
+  address_linklocal           = "fe80::2"
+  priority                    = 250
+  name                        = "TEST2"
+  unicast_peer                = "fe80::3"
+  timer_advertisement_seconds = 10
+  timer_force                 = true
+  preempt_disable             = false
+  preempt_delay               = 255
+  accept_mode_disable         = true
   track_interfaces = [
     {
       interface_name     = "GigabitEthernet0/0/0/4"
@@ -77,6 +78,7 @@ resource "iosxr_router_vrrp_interface_ipv6" "example" {
 - `timer_force` (Boolean) Force the configured values to be used
 - `track_interfaces` (Attributes List) Track an interface (see [below for nested schema](#nestedatt--track_interfaces))
 - `track_objects` (Attributes List) Object Tracking (see [below for nested schema](#nestedatt--track_objects))
+- `unicast_peer` (String) Enable Unicast (Multicast will be disabled) of VRRP to a Peer
 
 ### Read-Only
 

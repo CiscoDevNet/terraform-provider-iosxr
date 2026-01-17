@@ -33,17 +33,17 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type TagSet struct {
-	Device    types.String `tfsdk:"device"`
-	Id        types.String `tfsdk:"id"`
-	SetName   types.String `tfsdk:"set_name"`
-	RplTagSet types.String `tfsdk:"rpl_tag_set"`
+	Device  types.String `tfsdk:"device"`
+	Id      types.String `tfsdk:"id"`
+	SetName types.String `tfsdk:"set_name"`
+	Rpl     types.String `tfsdk:"rpl"`
 }
 
 type TagSetData struct {
-	Device    types.String `tfsdk:"device"`
-	Id        types.String `tfsdk:"id"`
-	SetName   types.String `tfsdk:"set_name"`
-	RplTagSet types.String `tfsdk:"rpl_tag_set"`
+	Device  types.String `tfsdk:"device"`
+	Id      types.String `tfsdk:"id"`
+	SetName types.String `tfsdk:"set_name"`
+	Rpl     types.String `tfsdk:"rpl"`
 }
 
 // End of section. //template:end types
@@ -67,8 +67,8 @@ func (data TagSet) toBody(ctx context.Context) string {
 	if !data.SetName.IsNull() && !data.SetName.IsUnknown() {
 		body, _ = sjson.Set(body, "set-name", data.SetName.ValueString())
 	}
-	if !data.RplTagSet.IsNull() && !data.RplTagSet.IsUnknown() {
-		body, _ = sjson.Set(body, "rpl-tag-set", data.RplTagSet.ValueString())
+	if !data.Rpl.IsNull() && !data.Rpl.IsUnknown() {
+		body, _ = sjson.Set(body, "rpl-tag-set", data.Rpl.ValueString())
 	}
 	return body
 }
@@ -78,10 +78,10 @@ func (data TagSet) toBody(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *TagSet) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "rpl-tag-set"); value.Exists() && !data.RplTagSet.IsNull() {
-		data.RplTagSet = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "rpl-tag-set"); value.Exists() && !data.Rpl.IsNull() {
+		data.Rpl = types.StringValue(value.String())
 	} else {
-		data.RplTagSet = types.StringNull()
+		data.Rpl = types.StringNull()
 	}
 }
 
@@ -91,7 +91,7 @@ func (data *TagSet) updateFromBody(ctx context.Context, res []byte) {
 
 func (data *TagSet) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rpl-tag-set"); value.Exists() {
-		data.RplTagSet = types.StringValue(value.String())
+		data.Rpl = types.StringValue(value.String())
 	}
 }
 
@@ -101,7 +101,7 @@ func (data *TagSet) fromBody(ctx context.Context, res []byte) {
 
 func (data *TagSetData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rpl-tag-set"); value.Exists() {
-		data.RplTagSet = types.StringValue(value.String())
+		data.Rpl = types.StringValue(value.String())
 	}
 }
 
@@ -111,7 +111,7 @@ func (data *TagSetData) fromBody(ctx context.Context, res []byte) {
 
 func (data *TagSet) getDeletedItems(ctx context.Context, state TagSet) []string {
 	deletedItems := make([]string, 0)
-	if !state.RplTagSet.IsNull() && data.RplTagSet.IsNull() {
+	if !state.Rpl.IsNull() && data.Rpl.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/rpl-tag-set", state.getPath()))
 	}
 	return deletedItems
@@ -132,7 +132,7 @@ func (data *TagSet) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *TagSet) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.RplTagSet.IsNull() {
+	if !data.Rpl.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/rpl-tag-set", data.getPath()))
 	}
 	return deletePaths

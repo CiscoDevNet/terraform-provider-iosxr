@@ -36,12 +36,30 @@ import (
 func TestAccIosxrSegmentRoutingV6(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "enable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "encapsulation_source_address", "fccc:0:214::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "sid_holdtime", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "logging_locator_status", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "formats.0.name", "usid-f3216"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "formats.0.format_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "locators.0.locator_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "locators.0.name", "Locator1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "locators.0.micro_segment_behavior", "unode-psp-usd"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "locators.0.prefix", "fccc:0:214::"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "locators.0.prefix_length", "48"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "locators.0.anycast", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "locators.0.algorithm", "128"))
+	if os.Getenv("XRV9K") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "encapsulation_traffic_class_option", "value"))
+	}
+	if os.Getenv("XRV9K") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "encapsulation_traffic_class_value", "1"))
+	}
+	if os.Getenv("XRV9K") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "encapsulation_hop_limit_option", "count"))
+	}
+	if os.Getenv("XRV9K") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "encapsulation_hop_limit_value", "1"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "encapsulation_source_address", "fccc:0:214::1"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -95,7 +113,7 @@ resource "iosxr_gnmi" "PreReq0" {
 
 func testAccIosxrSegmentRoutingV6Config_minimum() string {
 	config := `resource "iosxr_segment_routing_v6" "test" {` + "\n"
-	config += `	enable = true` + "\n"
+	config += `	sid_holdtime = 10` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
@@ -108,14 +126,34 @@ func testAccIosxrSegmentRoutingV6Config_minimum() string {
 func testAccIosxrSegmentRoutingV6Config_all() string {
 	config := `resource "iosxr_segment_routing_v6" "test" {` + "\n"
 	config += `	enable = true` + "\n"
-	config += `	encapsulation_source_address = "fccc:0:214::1"` + "\n"
+	config += `	sid_holdtime = 10` + "\n"
+	config += `	logging_locator_status = true` + "\n"
+	config += `	formats = [{` + "\n"
+	config += `		name = "usid-f3216"` + "\n"
+	config += `		format_enable = true` + "\n"
+	config += `		}]` + "\n"
 	config += `	locators = [{` + "\n"
 	config += `		locator_enable = true` + "\n"
 	config += `		name = "Locator1"` + "\n"
 	config += `		micro_segment_behavior = "unode-psp-usd"` + "\n"
 	config += `		prefix = "fccc:0:214::"` + "\n"
 	config += `		prefix_length = 48` + "\n"
+	config += `		anycast = true` + "\n"
+	config += `		algorithm = 128` + "\n"
 	config += `		}]` + "\n"
+	if os.Getenv("XRV9K") != "" {
+		config += `	encapsulation_traffic_class_option = "value"` + "\n"
+	}
+	if os.Getenv("XRV9K") != "" {
+		config += `	encapsulation_traffic_class_value = 1` + "\n"
+	}
+	if os.Getenv("XRV9K") != "" {
+		config += `	encapsulation_hop_limit_option = "count"` + "\n"
+	}
+	if os.Getenv("XRV9K") != "" {
+		config += `	encapsulation_hop_limit_value = 1` + "\n"
+	}
+	config += `	encapsulation_source_address = "fccc:0:214::1"` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config

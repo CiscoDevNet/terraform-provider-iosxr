@@ -114,78 +114,6 @@ func (r *RouterHSRPInterfaceIPv4GroupV1Resource) Schema(ctx context.Context, req
 				MarkdownDescription: helpers.NewAttributeDescription("Learn virtual IP address from peer").String,
 				Optional:            true,
 			},
-			"priority": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Priority level").AddIntegerRangeDescription(0, 255).String,
-				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(0, 255),
-				},
-			},
-			"mac_address": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Use specified mac address for the virtual router").String,
-				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
-				},
-			},
-			"name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("MGO session name").String,
-				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.LengthBetween(1, 800),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
-				},
-			},
-			"preempt_delay": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Wait before preempting").AddIntegerRangeDescription(0, 3600).String,
-				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(0, 3600),
-				},
-			},
-			"timers_msec": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify hellotime in milliseconds").AddIntegerRangeDescription(100, 3000).String,
-				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(100, 3000),
-				},
-			},
-			"timers_msec_holdtime": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify hold time in milliseconds").AddIntegerRangeDescription(100, 3000).String,
-				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(100, 3000),
-				},
-			},
-			"timers_seconds": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Hold time in seconds").AddIntegerRangeDescription(1, 255).String,
-				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(1, 255),
-				},
-			},
-			"timers_seconds_holdtime": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Hold time in seconds").AddIntegerRangeDescription(1, 255).String,
-				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(1, 255),
-				},
-			},
-			"bfd_fast_detect_peer_ipv4": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("BFD peer interface IPv4 address").String,
-				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
-				},
-			},
-			"bfd_fast_detect_peer_interface": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Select an interface over which to run BFD").String,
-				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
-				},
-			},
 			"secondary_ipv4_addresses": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set secondary hot standby IP address").String,
 				Optional:            true,
@@ -200,6 +128,20 @@ func (r *RouterHSRPInterfaceIPv4GroupV1Resource) Schema(ctx context.Context, req
 							},
 						},
 					},
+				},
+			},
+			"priority": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Priority level").AddIntegerRangeDescription(0, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 255),
+				},
+			},
+			"preempt_delay": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Wait before preempting").AddIntegerRangeDescription(0, 3600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 3600),
 				},
 			},
 			"track_interfaces": schema.ListNestedAttribute{
@@ -245,6 +187,64 @@ func (r *RouterHSRPInterfaceIPv4GroupV1Resource) Schema(ctx context.Context, req
 							},
 						},
 					},
+				},
+			},
+			"timers_msec": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify hellotime in milliseconds").AddIntegerRangeDescription(100, 3000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(100, 3000),
+				},
+			},
+			"timers_msec_holdtime": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify hold time in milliseconds").AddIntegerRangeDescription(100, 3000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(100, 3000),
+				},
+			},
+			"timers_seconds": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Hold time in seconds").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"timers_seconds_holdtime": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Hold time in seconds").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"mac_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use specified mac address for the virtual router").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
+				},
+			},
+			"name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("MGO session name").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 800),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"bfd_fast_detect_peer_ipv4": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("BFD peer interface IPv4 address").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+				},
+			},
+			"bfd_fast_detect_peer_interface": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Select an interface over which to run BFD").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
 				},
 			},
 		},

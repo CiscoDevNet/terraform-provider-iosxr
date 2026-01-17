@@ -48,6 +48,7 @@ data "iosxr_router_vrrp_interface_ipv6" "example" {
 - `timer_force` (Boolean) Force the configured values to be used
 - `track_interfaces` (Attributes List) Track an interface (see [below for nested schema](#nestedatt--track_interfaces))
 - `track_objects` (Attributes List) Object Tracking (see [below for nested schema](#nestedatt--track_objects))
+- `unicast_peer` (String) Enable Unicast (Multicast will be disabled) of VRRP to a Peer
 
 <a id="nestedatt--global_addresses"></a>
 ### Nested Schema for `global_addresses`

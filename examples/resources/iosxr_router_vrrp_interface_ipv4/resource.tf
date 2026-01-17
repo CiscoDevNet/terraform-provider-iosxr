@@ -6,6 +6,7 @@ resource "iosxr_router_vrrp_interface_ipv4" "example" {
   priority            = 250
   name                = "TEST"
   text_authentication = "password"
+  unicast_peer        = "1.1.1.2"
   secondary_addresses = [
     {
       address = "2.2.2.2"

@@ -35,29 +35,34 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type SegmentRoutingV6 struct {
-	Device                     types.String               `tfsdk:"device"`
-	Id                         types.String               `tfsdk:"id"`
-	DeleteMode                 types.String               `tfsdk:"delete_mode"`
-	Enable                     types.Bool                 `tfsdk:"enable"`
-	EncapsulationSourceAddress types.String               `tfsdk:"encapsulation_source_address"`
-	Locators                   []SegmentRoutingV6Locators `tfsdk:"locators"`
-	Formats                    []SegmentRoutingV6Formats  `tfsdk:"formats"`
+	Device                          types.String               `tfsdk:"device"`
+	Id                              types.String               `tfsdk:"id"`
+	DeleteMode                      types.String               `tfsdk:"delete_mode"`
+	Enable                          types.Bool                 `tfsdk:"enable"`
+	SidHoldtime                     types.Int64                `tfsdk:"sid_holdtime"`
+	LoggingLocatorStatus            types.Bool                 `tfsdk:"logging_locator_status"`
+	Formats                         []SegmentRoutingV6Formats  `tfsdk:"formats"`
+	Locators                        []SegmentRoutingV6Locators `tfsdk:"locators"`
+	EncapsulationTrafficClassOption types.String               `tfsdk:"encapsulation_traffic_class_option"`
+	EncapsulationTrafficClassValue  types.Int64                `tfsdk:"encapsulation_traffic_class_value"`
+	EncapsulationHopLimitOption     types.String               `tfsdk:"encapsulation_hop_limit_option"`
+	EncapsulationHopLimitValue      types.Int64                `tfsdk:"encapsulation_hop_limit_value"`
+	EncapsulationSourceAddress      types.String               `tfsdk:"encapsulation_source_address"`
 }
 
 type SegmentRoutingV6Data struct {
-	Device                     types.String               `tfsdk:"device"`
-	Id                         types.String               `tfsdk:"id"`
-	Enable                     types.Bool                 `tfsdk:"enable"`
-	EncapsulationSourceAddress types.String               `tfsdk:"encapsulation_source_address"`
-	Locators                   []SegmentRoutingV6Locators `tfsdk:"locators"`
-	Formats                    []SegmentRoutingV6Formats  `tfsdk:"formats"`
-}
-type SegmentRoutingV6Locators struct {
-	LocatorEnable        types.Bool   `tfsdk:"locator_enable"`
-	Name                 types.String `tfsdk:"name"`
-	MicroSegmentBehavior types.String `tfsdk:"micro_segment_behavior"`
-	Prefix               types.String `tfsdk:"prefix"`
-	PrefixLength         types.Int64  `tfsdk:"prefix_length"`
+	Device                          types.String               `tfsdk:"device"`
+	Id                              types.String               `tfsdk:"id"`
+	Enable                          types.Bool                 `tfsdk:"enable"`
+	SidHoldtime                     types.Int64                `tfsdk:"sid_holdtime"`
+	LoggingLocatorStatus            types.Bool                 `tfsdk:"logging_locator_status"`
+	Formats                         []SegmentRoutingV6Formats  `tfsdk:"formats"`
+	Locators                        []SegmentRoutingV6Locators `tfsdk:"locators"`
+	EncapsulationTrafficClassOption types.String               `tfsdk:"encapsulation_traffic_class_option"`
+	EncapsulationTrafficClassValue  types.Int64                `tfsdk:"encapsulation_traffic_class_value"`
+	EncapsulationHopLimitOption     types.String               `tfsdk:"encapsulation_hop_limit_option"`
+	EncapsulationHopLimitValue      types.Int64                `tfsdk:"encapsulation_hop_limit_value"`
+	EncapsulationSourceAddress      types.String               `tfsdk:"encapsulation_source_address"`
 }
 type SegmentRoutingV6Formats struct {
 	Name                                  types.String `tfsdk:"name"`
@@ -65,6 +70,15 @@ type SegmentRoutingV6Formats struct {
 	UsidLocalIdBlockRangesLibStart        types.Int64  `tfsdk:"usid_local_id_block_ranges_lib_start"`
 	UsidLocalIdBlockRangesExplictLibStart types.Int64  `tfsdk:"usid_local_id_block_ranges_explict_lib_start"`
 	UsidWideLocalIdBlockExplicitRange     types.Int64  `tfsdk:"usid_wide_local_id_block_explicit_range"`
+}
+type SegmentRoutingV6Locators struct {
+	LocatorEnable        types.Bool   `tfsdk:"locator_enable"`
+	Name                 types.String `tfsdk:"name"`
+	MicroSegmentBehavior types.String `tfsdk:"micro_segment_behavior"`
+	Prefix               types.String `tfsdk:"prefix"`
+	PrefixLength         types.Int64  `tfsdk:"prefix_length"`
+	Anycast              types.Bool   `tfsdk:"anycast"`
+	Algorithm            types.Int64  `tfsdk:"algorithm"`
 }
 
 // End of section. //template:end types
@@ -87,18 +101,60 @@ func (data SegmentRoutingV6) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.Enable.IsNull() && !data.Enable.IsUnknown() {
 		if data.Enable.ValueBool() {
-			body, _ = sjson.Set(body, "enable", map[string]string{})
+			body, _ = sjson.Set(body, "enable", []interface{}{nil})
 		}
+	}
+	if !data.SidHoldtime.IsNull() && !data.SidHoldtime.IsUnknown() {
+		body, _ = sjson.Set(body, "sid-holdtime", strconv.FormatInt(data.SidHoldtime.ValueInt64(), 10))
+	}
+	if !data.LoggingLocatorStatus.IsNull() && !data.LoggingLocatorStatus.IsUnknown() {
+		if data.LoggingLocatorStatus.ValueBool() {
+			body, _ = sjson.Set(body, "logging.locator-status", []interface{}{nil})
+		}
+	}
+	if !data.EncapsulationTrafficClassOption.IsNull() && !data.EncapsulationTrafficClassOption.IsUnknown() {
+		body, _ = sjson.Set(body, "encapsulation.traffic-class.option", data.EncapsulationTrafficClassOption.ValueString())
+	}
+	if !data.EncapsulationTrafficClassValue.IsNull() && !data.EncapsulationTrafficClassValue.IsUnknown() {
+		body, _ = sjson.Set(body, "encapsulation.traffic-class.value", strconv.FormatInt(data.EncapsulationTrafficClassValue.ValueInt64(), 10))
+	}
+	if !data.EncapsulationHopLimitOption.IsNull() && !data.EncapsulationHopLimitOption.IsUnknown() {
+		body, _ = sjson.Set(body, "encapsulation.hop-limit.option", data.EncapsulationHopLimitOption.ValueString())
+	}
+	if !data.EncapsulationHopLimitValue.IsNull() && !data.EncapsulationHopLimitValue.IsUnknown() {
+		body, _ = sjson.Set(body, "encapsulation.hop-limit.value", strconv.FormatInt(data.EncapsulationHopLimitValue.ValueInt64(), 10))
 	}
 	if !data.EncapsulationSourceAddress.IsNull() && !data.EncapsulationSourceAddress.IsUnknown() {
 		body, _ = sjson.Set(body, "encapsulation.source-address", data.EncapsulationSourceAddress.ValueString())
+	}
+	if len(data.Formats) > 0 {
+		body, _ = sjson.Set(body, "formats.formats.format", []interface{}{})
+		for index, item := range data.Formats {
+			if !item.Name.IsNull() && !item.Name.IsUnknown() {
+				body, _ = sjson.Set(body, "formats.formats.format"+"."+strconv.Itoa(index)+"."+"name", item.Name.ValueString())
+			}
+			if !item.FormatEnable.IsNull() && !item.FormatEnable.IsUnknown() {
+				if item.FormatEnable.ValueBool() {
+					body, _ = sjson.Set(body, "formats.formats.format"+"."+strconv.Itoa(index)+"."+"format-enable", []interface{}{nil})
+				}
+			}
+			if !item.UsidLocalIdBlockRangesLibStart.IsNull() && !item.UsidLocalIdBlockRangesLibStart.IsUnknown() {
+				body, _ = sjson.Set(body, "formats.formats.format"+"."+strconv.Itoa(index)+"."+"usid.local-id-block-ranges.lib-start", strconv.FormatInt(item.UsidLocalIdBlockRangesLibStart.ValueInt64(), 10))
+			}
+			if !item.UsidLocalIdBlockRangesExplictLibStart.IsNull() && !item.UsidLocalIdBlockRangesExplictLibStart.IsUnknown() {
+				body, _ = sjson.Set(body, "formats.formats.format"+"."+strconv.Itoa(index)+"."+"usid.local-id-block-ranges.explict-lib-start", strconv.FormatInt(item.UsidLocalIdBlockRangesExplictLibStart.ValueInt64(), 10))
+			}
+			if !item.UsidWideLocalIdBlockExplicitRange.IsNull() && !item.UsidWideLocalIdBlockExplicitRange.IsUnknown() {
+				body, _ = sjson.Set(body, "formats.formats.format"+"."+strconv.Itoa(index)+"."+"usid.wide-local-id-block-explicit-range", strconv.FormatInt(item.UsidWideLocalIdBlockExplicitRange.ValueInt64(), 10))
+			}
+		}
 	}
 	if len(data.Locators) > 0 {
 		body, _ = sjson.Set(body, "locators.locators.locator", []interface{}{})
 		for index, item := range data.Locators {
 			if !item.LocatorEnable.IsNull() && !item.LocatorEnable.IsUnknown() {
 				if item.LocatorEnable.ValueBool() {
-					body, _ = sjson.Set(body, "locators.locators.locator"+"."+strconv.Itoa(index)+"."+"locator-enable", map[string]string{})
+					body, _ = sjson.Set(body, "locators.locators.locator"+"."+strconv.Itoa(index)+"."+"locator-enable", []interface{}{nil})
 				}
 			}
 			if !item.Name.IsNull() && !item.Name.IsUnknown() {
@@ -113,27 +169,13 @@ func (data SegmentRoutingV6) toBody(ctx context.Context) string {
 			if !item.PrefixLength.IsNull() && !item.PrefixLength.IsUnknown() {
 				body, _ = sjson.Set(body, "locators.locators.locator"+"."+strconv.Itoa(index)+"."+"prefix.prefix-length", strconv.FormatInt(item.PrefixLength.ValueInt64(), 10))
 			}
-		}
-	}
-	if len(data.Formats) > 0 {
-		body, _ = sjson.Set(body, "formats.formats.format", []interface{}{})
-		for index, item := range data.Formats {
-			if !item.Name.IsNull() && !item.Name.IsUnknown() {
-				body, _ = sjson.Set(body, "formats.formats.format"+"."+strconv.Itoa(index)+"."+"name", item.Name.ValueString())
-			}
-			if !item.FormatEnable.IsNull() && !item.FormatEnable.IsUnknown() {
-				if item.FormatEnable.ValueBool() {
-					body, _ = sjson.Set(body, "formats.formats.format"+"."+strconv.Itoa(index)+"."+"format-enable", map[string]string{})
+			if !item.Anycast.IsNull() && !item.Anycast.IsUnknown() {
+				if item.Anycast.ValueBool() {
+					body, _ = sjson.Set(body, "locators.locators.locator"+"."+strconv.Itoa(index)+"."+"anycast", []interface{}{nil})
 				}
 			}
-			if !item.UsidLocalIdBlockRangesLibStart.IsNull() && !item.UsidLocalIdBlockRangesLibStart.IsUnknown() {
-				body, _ = sjson.Set(body, "formats.formats.format"+"."+strconv.Itoa(index)+"."+"usid.local-id-block-ranges.lib-start", strconv.FormatInt(item.UsidLocalIdBlockRangesLibStart.ValueInt64(), 10))
-			}
-			if !item.UsidLocalIdBlockRangesExplictLibStart.IsNull() && !item.UsidLocalIdBlockRangesExplictLibStart.IsUnknown() {
-				body, _ = sjson.Set(body, "formats.formats.format"+"."+strconv.Itoa(index)+"."+"usid.local-id-block-ranges.explict-lib-start", strconv.FormatInt(item.UsidLocalIdBlockRangesExplictLibStart.ValueInt64(), 10))
-			}
-			if !item.UsidWideLocalIdBlockExplicitRange.IsNull() && !item.UsidWideLocalIdBlockExplicitRange.IsUnknown() {
-				body, _ = sjson.Set(body, "formats.formats.format"+"."+strconv.Itoa(index)+"."+"usid.wide-local-id-block-explicit-range", strconv.FormatInt(item.UsidWideLocalIdBlockExplicitRange.ValueInt64(), 10))
+			if !item.Algorithm.IsNull() && !item.Algorithm.IsUnknown() {
+				body, _ = sjson.Set(body, "locators.locators.locator"+"."+strconv.Itoa(index)+"."+"algorithm", strconv.FormatInt(item.Algorithm.ValueInt64(), 10))
 			}
 		}
 	}
@@ -154,63 +196,19 @@ func (data *SegmentRoutingV6) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Enable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "encapsulation.source-address"); value.Exists() && !data.EncapsulationSourceAddress.IsNull() {
-		data.EncapsulationSourceAddress = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "sid-holdtime"); value.Exists() && !data.SidHoldtime.IsNull() {
+		data.SidHoldtime = types.Int64Value(value.Int())
 	} else {
-		data.EncapsulationSourceAddress = types.StringNull()
+		data.SidHoldtime = types.Int64Null()
 	}
-	for i := range data.Locators {
-		keys := [...]string{"name"}
-		keyValues := [...]string{data.Locators[i].Name.ValueString()}
-
-		var r gjson.Result
-		gjson.GetBytes(res, "locators.locators.locator").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("locator-enable"); !data.Locators[i].LocatorEnable.IsNull() {
-			if value.Exists() {
-				data.Locators[i].LocatorEnable = types.BoolValue(true)
-			} else {
-				data.Locators[i].LocatorEnable = types.BoolValue(false)
-			}
+	if value := gjson.GetBytes(res, "logging.locator-status"); !data.LoggingLocatorStatus.IsNull() {
+		if value.Exists() {
+			data.LoggingLocatorStatus = types.BoolValue(true)
 		} else {
-			data.Locators[i].LocatorEnable = types.BoolNull()
+			data.LoggingLocatorStatus = types.BoolValue(false)
 		}
-		if value := r.Get("name"); value.Exists() && !data.Locators[i].Name.IsNull() {
-			data.Locators[i].Name = types.StringValue(value.String())
-		} else {
-			data.Locators[i].Name = types.StringNull()
-		}
-		if value := r.Get("micro-segment.behavior"); value.Exists() && !data.Locators[i].MicroSegmentBehavior.IsNull() {
-			data.Locators[i].MicroSegmentBehavior = types.StringValue(value.String())
-		} else {
-			data.Locators[i].MicroSegmentBehavior = types.StringNull()
-		}
-		if value := r.Get("prefix.prefix"); value.Exists() && !data.Locators[i].Prefix.IsNull() {
-			data.Locators[i].Prefix = types.StringValue(value.String())
-		} else {
-			data.Locators[i].Prefix = types.StringNull()
-		}
-		if value := r.Get("prefix.prefix-length"); value.Exists() && !data.Locators[i].PrefixLength.IsNull() {
-			data.Locators[i].PrefixLength = types.Int64Value(value.Int())
-		} else {
-			data.Locators[i].PrefixLength = types.Int64Null()
-		}
+	} else {
+		data.LoggingLocatorStatus = types.BoolNull()
 	}
 	for i := range data.Formats {
 		keys := [...]string{"name"}
@@ -265,6 +263,98 @@ func (data *SegmentRoutingV6) updateFromBody(ctx context.Context, res []byte) {
 			data.Formats[i].UsidWideLocalIdBlockExplicitRange = types.Int64Null()
 		}
 	}
+	for i := range data.Locators {
+		keys := [...]string{"name"}
+		keyValues := [...]string{data.Locators[i].Name.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "locators.locators.locator").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("locator-enable"); !data.Locators[i].LocatorEnable.IsNull() {
+			if value.Exists() {
+				data.Locators[i].LocatorEnable = types.BoolValue(true)
+			} else {
+				data.Locators[i].LocatorEnable = types.BoolValue(false)
+			}
+		} else {
+			data.Locators[i].LocatorEnable = types.BoolNull()
+		}
+		if value := r.Get("name"); value.Exists() && !data.Locators[i].Name.IsNull() {
+			data.Locators[i].Name = types.StringValue(value.String())
+		} else {
+			data.Locators[i].Name = types.StringNull()
+		}
+		if value := r.Get("micro-segment.behavior"); value.Exists() && !data.Locators[i].MicroSegmentBehavior.IsNull() {
+			data.Locators[i].MicroSegmentBehavior = types.StringValue(value.String())
+		} else {
+			data.Locators[i].MicroSegmentBehavior = types.StringNull()
+		}
+		if value := r.Get("prefix.prefix"); value.Exists() && !data.Locators[i].Prefix.IsNull() {
+			data.Locators[i].Prefix = types.StringValue(value.String())
+		} else {
+			data.Locators[i].Prefix = types.StringNull()
+		}
+		if value := r.Get("prefix.prefix-length"); value.Exists() && !data.Locators[i].PrefixLength.IsNull() {
+			data.Locators[i].PrefixLength = types.Int64Value(value.Int())
+		} else {
+			data.Locators[i].PrefixLength = types.Int64Null()
+		}
+		if value := r.Get("anycast"); !data.Locators[i].Anycast.IsNull() {
+			if value.Exists() {
+				data.Locators[i].Anycast = types.BoolValue(true)
+			} else {
+				data.Locators[i].Anycast = types.BoolValue(false)
+			}
+		} else {
+			data.Locators[i].Anycast = types.BoolNull()
+		}
+		if value := r.Get("algorithm"); value.Exists() && !data.Locators[i].Algorithm.IsNull() {
+			data.Locators[i].Algorithm = types.Int64Value(value.Int())
+		} else {
+			data.Locators[i].Algorithm = types.Int64Null()
+		}
+	}
+	if value := gjson.GetBytes(res, "encapsulation.traffic-class.option"); value.Exists() && !data.EncapsulationTrafficClassOption.IsNull() {
+		data.EncapsulationTrafficClassOption = types.StringValue(value.String())
+	} else {
+		data.EncapsulationTrafficClassOption = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "encapsulation.traffic-class.value"); value.Exists() && !data.EncapsulationTrafficClassValue.IsNull() {
+		data.EncapsulationTrafficClassValue = types.Int64Value(value.Int())
+	} else {
+		data.EncapsulationTrafficClassValue = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "encapsulation.hop-limit.option"); value.Exists() && !data.EncapsulationHopLimitOption.IsNull() {
+		data.EncapsulationHopLimitOption = types.StringValue(value.String())
+	} else {
+		data.EncapsulationHopLimitOption = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "encapsulation.hop-limit.value"); value.Exists() && !data.EncapsulationHopLimitValue.IsNull() {
+		data.EncapsulationHopLimitValue = types.Int64Value(value.Int())
+	} else {
+		data.EncapsulationHopLimitValue = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "encapsulation.source-address"); value.Exists() && !data.EncapsulationSourceAddress.IsNull() {
+		data.EncapsulationSourceAddress = types.StringValue(value.String())
+	} else {
+		data.EncapsulationSourceAddress = types.StringNull()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -277,33 +367,13 @@ func (data *SegmentRoutingV6) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Enable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "encapsulation.source-address"); value.Exists() {
-		data.EncapsulationSourceAddress = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "sid-holdtime"); value.Exists() {
+		data.SidHoldtime = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "locators.locators.locator"); value.Exists() {
-		data.Locators = make([]SegmentRoutingV6Locators, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := SegmentRoutingV6Locators{}
-			if cValue := v.Get("locator-enable"); cValue.Exists() {
-				item.LocatorEnable = types.BoolValue(true)
-			} else {
-				item.LocatorEnable = types.BoolValue(false)
-			}
-			if cValue := v.Get("name"); cValue.Exists() {
-				item.Name = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("micro-segment.behavior"); cValue.Exists() {
-				item.MicroSegmentBehavior = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("prefix.prefix"); cValue.Exists() {
-				item.Prefix = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("prefix.prefix-length"); cValue.Exists() {
-				item.PrefixLength = types.Int64Value(cValue.Int())
-			}
-			data.Locators = append(data.Locators, item)
-			return true
-		})
+	if value := gjson.GetBytes(res, "logging.locator-status"); value.Exists() {
+		data.LoggingLocatorStatus = types.BoolValue(true)
+	} else {
+		data.LoggingLocatorStatus = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "formats.formats.format"); value.Exists() {
 		data.Formats = make([]SegmentRoutingV6Formats, 0)
@@ -329,6 +399,54 @@ func (data *SegmentRoutingV6) fromBody(ctx context.Context, res []byte) {
 			data.Formats = append(data.Formats, item)
 			return true
 		})
+	}
+	if value := gjson.GetBytes(res, "locators.locators.locator"); value.Exists() {
+		data.Locators = make([]SegmentRoutingV6Locators, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := SegmentRoutingV6Locators{}
+			if cValue := v.Get("locator-enable"); cValue.Exists() {
+				item.LocatorEnable = types.BoolValue(true)
+			} else {
+				item.LocatorEnable = types.BoolValue(false)
+			}
+			if cValue := v.Get("name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("micro-segment.behavior"); cValue.Exists() {
+				item.MicroSegmentBehavior = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("prefix.prefix"); cValue.Exists() {
+				item.Prefix = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("prefix.prefix-length"); cValue.Exists() {
+				item.PrefixLength = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("anycast"); cValue.Exists() {
+				item.Anycast = types.BoolValue(true)
+			} else {
+				item.Anycast = types.BoolValue(false)
+			}
+			if cValue := v.Get("algorithm"); cValue.Exists() {
+				item.Algorithm = types.Int64Value(cValue.Int())
+			}
+			data.Locators = append(data.Locators, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "encapsulation.traffic-class.option"); value.Exists() {
+		data.EncapsulationTrafficClassOption = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "encapsulation.traffic-class.value"); value.Exists() {
+		data.EncapsulationTrafficClassValue = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "encapsulation.hop-limit.option"); value.Exists() {
+		data.EncapsulationHopLimitOption = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "encapsulation.hop-limit.value"); value.Exists() {
+		data.EncapsulationHopLimitValue = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "encapsulation.source-address"); value.Exists() {
+		data.EncapsulationSourceAddress = types.StringValue(value.String())
 	}
 }
 
@@ -342,33 +460,13 @@ func (data *SegmentRoutingV6Data) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Enable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "encapsulation.source-address"); value.Exists() {
-		data.EncapsulationSourceAddress = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "sid-holdtime"); value.Exists() {
+		data.SidHoldtime = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "locators.locators.locator"); value.Exists() {
-		data.Locators = make([]SegmentRoutingV6Locators, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := SegmentRoutingV6Locators{}
-			if cValue := v.Get("locator-enable"); cValue.Exists() {
-				item.LocatorEnable = types.BoolValue(true)
-			} else {
-				item.LocatorEnable = types.BoolValue(false)
-			}
-			if cValue := v.Get("name"); cValue.Exists() {
-				item.Name = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("micro-segment.behavior"); cValue.Exists() {
-				item.MicroSegmentBehavior = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("prefix.prefix"); cValue.Exists() {
-				item.Prefix = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("prefix.prefix-length"); cValue.Exists() {
-				item.PrefixLength = types.Int64Value(cValue.Int())
-			}
-			data.Locators = append(data.Locators, item)
-			return true
-		})
+	if value := gjson.GetBytes(res, "logging.locator-status"); value.Exists() {
+		data.LoggingLocatorStatus = types.BoolValue(true)
+	} else {
+		data.LoggingLocatorStatus = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "formats.formats.format"); value.Exists() {
 		data.Formats = make([]SegmentRoutingV6Formats, 0)
@@ -395,6 +493,54 @@ func (data *SegmentRoutingV6Data) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
+	if value := gjson.GetBytes(res, "locators.locators.locator"); value.Exists() {
+		data.Locators = make([]SegmentRoutingV6Locators, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := SegmentRoutingV6Locators{}
+			if cValue := v.Get("locator-enable"); cValue.Exists() {
+				item.LocatorEnable = types.BoolValue(true)
+			} else {
+				item.LocatorEnable = types.BoolValue(false)
+			}
+			if cValue := v.Get("name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("micro-segment.behavior"); cValue.Exists() {
+				item.MicroSegmentBehavior = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("prefix.prefix"); cValue.Exists() {
+				item.Prefix = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("prefix.prefix-length"); cValue.Exists() {
+				item.PrefixLength = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("anycast"); cValue.Exists() {
+				item.Anycast = types.BoolValue(true)
+			} else {
+				item.Anycast = types.BoolValue(false)
+			}
+			if cValue := v.Get("algorithm"); cValue.Exists() {
+				item.Algorithm = types.Int64Value(cValue.Int())
+			}
+			data.Locators = append(data.Locators, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "encapsulation.traffic-class.option"); value.Exists() {
+		data.EncapsulationTrafficClassOption = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "encapsulation.traffic-class.value"); value.Exists() {
+		data.EncapsulationTrafficClassValue = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "encapsulation.hop-limit.option"); value.Exists() {
+		data.EncapsulationHopLimitOption = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "encapsulation.hop-limit.value"); value.Exists() {
+		data.EncapsulationHopLimitValue = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "encapsulation.source-address"); value.Exists() {
+		data.EncapsulationSourceAddress = types.StringValue(value.String())
+	}
 }
 
 // End of section. //template:end fromBodyData
@@ -403,6 +549,69 @@ func (data *SegmentRoutingV6Data) fromBody(ctx context.Context, res []byte) {
 
 func (data *SegmentRoutingV6) getDeletedItems(ctx context.Context, state SegmentRoutingV6) []string {
 	deletedItems := make([]string, 0)
+	if !state.EncapsulationSourceAddress.IsNull() && data.EncapsulationSourceAddress.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/source-address", state.getPath()))
+	}
+	if !state.EncapsulationHopLimitValue.IsNull() && data.EncapsulationHopLimitValue.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/hop-limit/value", state.getPath()))
+	}
+	if !state.EncapsulationHopLimitOption.IsNull() && data.EncapsulationHopLimitOption.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/hop-limit/option", state.getPath()))
+	}
+	if !state.EncapsulationTrafficClassValue.IsNull() && data.EncapsulationTrafficClassValue.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/traffic-class/value", state.getPath()))
+	}
+	if !state.EncapsulationTrafficClassOption.IsNull() && data.EncapsulationTrafficClassOption.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/traffic-class/option", state.getPath()))
+	}
+	for i := range state.Locators {
+		keys := [...]string{"name"}
+		stateKeyValues := [...]string{state.Locators[i].Name.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Locators[i].Name.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Locators {
+			found = true
+			if state.Locators[i].Name.ValueString() != data.Locators[j].Name.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.Locators[i].Algorithm.IsNull() && data.Locators[j].Algorithm.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/locators/locators/locator%v/algorithm", state.getPath(), keyString))
+				}
+				if !state.Locators[i].Anycast.IsNull() && data.Locators[j].Anycast.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/locators/locators/locator%v/anycast", state.getPath(), keyString))
+				}
+				if !state.Locators[i].PrefixLength.IsNull() && data.Locators[j].PrefixLength.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/locators/locators/locator%v/prefix/prefix-length", state.getPath(), keyString))
+				}
+				if !state.Locators[i].Prefix.IsNull() && data.Locators[j].Prefix.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/locators/locators/locator%v/prefix/prefix", state.getPath(), keyString))
+				}
+				if !state.Locators[i].MicroSegmentBehavior.IsNull() && data.Locators[j].MicroSegmentBehavior.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/locators/locators/locator%v/micro-segment/behavior", state.getPath(), keyString))
+				}
+				if !state.Locators[i].LocatorEnable.IsNull() && data.Locators[j].LocatorEnable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/locators/locators/locator%v/locator-enable", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/locators/locators/locator%v", state.getPath(), keyString))
+		}
+	}
 	for i := range state.Formats {
 		keys := [...]string{"name"}
 		stateKeyValues := [...]string{state.Formats[i].Name.ValueString()}
@@ -445,50 +654,11 @@ func (data *SegmentRoutingV6) getDeletedItems(ctx context.Context, state Segment
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/formats/formats/format%v", state.getPath(), keyString))
 		}
 	}
-	for i := range state.Locators {
-		keys := [...]string{"name"}
-		stateKeyValues := [...]string{state.Locators[i].Name.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.Locators[i].Name.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.Locators {
-			found = true
-			if state.Locators[i].Name.ValueString() != data.Locators[j].Name.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.Locators[i].PrefixLength.IsNull() && data.Locators[j].PrefixLength.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/locators/locators/locator%v/prefix/prefix-length", state.getPath(), keyString))
-				}
-				if !state.Locators[i].Prefix.IsNull() && data.Locators[j].Prefix.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/locators/locators/locator%v/prefix/prefix", state.getPath(), keyString))
-				}
-				if !state.Locators[i].MicroSegmentBehavior.IsNull() && data.Locators[j].MicroSegmentBehavior.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/locators/locators/locator%v/micro-segment/behavior", state.getPath(), keyString))
-				}
-				if !state.Locators[i].LocatorEnable.IsNull() && data.Locators[j].LocatorEnable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/locators/locators/locator%v/locator-enable", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/locators/locators/locator%v", state.getPath(), keyString))
-		}
+	if !state.LoggingLocatorStatus.IsNull() && data.LoggingLocatorStatus.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/logging/locator-status", state.getPath()))
 	}
-	if !state.EncapsulationSourceAddress.IsNull() && data.EncapsulationSourceAddress.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/source-address", state.getPath()))
+	if !state.SidHoldtime.IsNull() && data.SidHoldtime.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/sid-holdtime", state.getPath()))
 	}
 	if !state.Enable.IsNull() && data.Enable.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/enable", state.getPath()))
@@ -502,6 +672,20 @@ func (data *SegmentRoutingV6) getDeletedItems(ctx context.Context, state Segment
 
 func (data *SegmentRoutingV6) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	for i := range data.Locators {
+		keys := [...]string{"name"}
+		keyValues := [...]string{data.Locators[i].Name.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.Locators[i].Anycast.IsNull() && !data.Locators[i].Anycast.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/locators/locators/locator%v/anycast", data.getPath(), keyString))
+		}
+		if !data.Locators[i].LocatorEnable.IsNull() && !data.Locators[i].LocatorEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/locators/locators/locator%v/locator-enable", data.getPath(), keyString))
+		}
+	}
 	for i := range data.Formats {
 		keys := [...]string{"name"}
 		keyValues := [...]string{data.Formats[i].Name.ValueString()}
@@ -513,16 +697,8 @@ func (data *SegmentRoutingV6) getEmptyLeafsDelete(ctx context.Context) []string 
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/formats/formats/format%v/format-enable", data.getPath(), keyString))
 		}
 	}
-	for i := range data.Locators {
-		keys := [...]string{"name"}
-		keyValues := [...]string{data.Locators[i].Name.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		if !data.Locators[i].LocatorEnable.IsNull() && !data.Locators[i].LocatorEnable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/locators/locators/locator%v/locator-enable", data.getPath(), keyString))
-		}
+	if !data.LoggingLocatorStatus.IsNull() && !data.LoggingLocatorStatus.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/logging/locator-status", data.getPath()))
 	}
 	if !data.Enable.IsNull() && !data.Enable.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/enable", data.getPath()))
@@ -536,15 +712,20 @@ func (data *SegmentRoutingV6) getEmptyLeafsDelete(ctx context.Context) []string 
 
 func (data *SegmentRoutingV6) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	for i := range data.Formats {
-		keys := [...]string{"name"}
-		keyValues := [...]string{data.Formats[i].Name.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/formats/formats/format%v", data.getPath(), keyString))
+	if !data.EncapsulationSourceAddress.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/source-address", data.getPath()))
+	}
+	if !data.EncapsulationHopLimitValue.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/hop-limit/value", data.getPath()))
+	}
+	if !data.EncapsulationHopLimitOption.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/hop-limit/option", data.getPath()))
+	}
+	if !data.EncapsulationTrafficClassValue.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/traffic-class/value", data.getPath()))
+	}
+	if !data.EncapsulationTrafficClassOption.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/traffic-class/option", data.getPath()))
 	}
 	for i := range data.Locators {
 		keys := [...]string{"name"}
@@ -556,8 +737,21 @@ func (data *SegmentRoutingV6) getDeletePaths(ctx context.Context) []string {
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/locators/locators/locator%v", data.getPath(), keyString))
 	}
-	if !data.EncapsulationSourceAddress.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/source-address", data.getPath()))
+	for i := range data.Formats {
+		keys := [...]string{"name"}
+		keyValues := [...]string{data.Formats[i].Name.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/formats/formats/format%v", data.getPath(), keyString))
+	}
+	if !data.LoggingLocatorStatus.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/logging/locator-status", data.getPath()))
+	}
+	if !data.SidHoldtime.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/sid-holdtime", data.getPath()))
 	}
 	if !data.Enable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/enable", data.getPath()))

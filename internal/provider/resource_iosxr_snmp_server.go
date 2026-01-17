@@ -27,6 +27,7 @@ import (
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -93,24 +94,121 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 					stringvalidator.LengthBetween(1, 255),
 				},
 			},
-			"traps_rf": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP RF-MIB traps").String,
+			"chassis_id": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("String to uniquely identify this chassis").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"packetsize": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Largest SNMP packet size").AddIntegerRangeDescription(484, 65500).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(484, 65500),
+				},
+			},
+			"trap_timeout": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set timeout for TRAP message retransmissions").AddIntegerRangeDescription(1, 1000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 1000),
+				},
+			},
+			"queue_length": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Message queue length for each TRAP host").AddIntegerRangeDescription(1, 5000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 5000),
+				},
+			},
+			"throttle_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set throttle time for handling incoming messages").AddIntegerRangeDescription(50, 1000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(50, 1000),
+				},
+			},
+			"overload_control": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set overload-control params for handling incoming messages in critical processing mode").AddIntegerRangeDescription(0, 300).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 300),
+				},
+			},
+			"overload_throttle_rate": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Overload throttle rate for incoming queue (default 500 msec)").AddIntegerRangeDescription(0, 1000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 1000),
+				},
+			},
+			"communities": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The UNENCRYPTED (cleartext) community string").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"community": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The UNENCRYPTED (cleartext) community string").String,
+							Required:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+							},
+						},
+						"view": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Restrict this community to a named view").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"ro": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Read-only community").String,
+							Optional:            true,
+						},
+						"rw": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Read-write community").String,
+							Optional:            true,
+						},
+						"sdrowner": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("SDR Owner permissions for MIB Objects").String,
+							Optional:            true,
+						},
+						"systemowner": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("System Owner permissions for MIB objects").String,
+							Optional:            true,
+						},
+						"ipv4": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Type of Access-list").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"ipv6": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Type of Access-list").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+					},
+				},
+			},
+			"traps_snmp_authentication": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMPv2-MIB authenticationFailure trap").String,
 				Optional:            true,
 			},
-			"traps_bfd": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable BFD traps").String,
+			"traps_snmp_coldstart": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMPv2-MIB coldStart trap").String,
 				Optional:            true,
 			},
-			"traps_ntp": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP Cisco Ntp traps").String,
-				Optional:            true,
-			},
-			"traps_ethernet_oam_events": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable all OAM event traps").String,
-				Optional:            true,
-			},
-			"traps_copy_complete": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable CISCO-CONFIG-COPY-MIB ccCopyCompletion traps").String,
+			"traps_snmp_warmstart": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMPv2-MIB warmStart trap").String,
 				Optional:            true,
 			},
 			"traps_snmp_linkup": schema.BoolAttribute{
@@ -121,40 +219,9 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMPv2-MIB linDownp traps").String,
 				Optional:            true,
 			},
-			"traps_power": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP entity power traps").String,
+			"traps_snmp_all": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable all traps").String,
 				Optional:            true,
-			},
-			"traps_config": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP config traps").String,
-				Optional:            true,
-			},
-			"traps_entity": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP entity traps").String,
-				Optional:            true,
-			},
-			"traps_system": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP SYSTEMMIB-MIB traps").String,
-				Optional:            true,
-			},
-			"traps_bridgemib": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP Trap for Bridge MIB").String,
-				Optional:            true,
-			},
-			"traps_entity_state_operstatus": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable entity oper status enable notification").String,
-				Optional:            true,
-			},
-			"traps_entity_redundancy_all": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable all CISCO-ENTITY-REDUNDANCY-MIB traps").String,
-				Optional:            true,
-			},
-			"trap_source": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Assign an interface for the source address of all traps").String,
-				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
-				},
 			},
 			"traps_l2vpn_all": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable all L2VPN traps").String,
@@ -168,12 +235,151 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				MarkdownDescription: helpers.NewAttributeDescription("Enable VC down traps").String,
 				Optional:            true,
 			},
+			"traps_l2vpn_cisco": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Cisco format including extra varbinds (default IETF)").String,
+				Optional:            true,
+			},
+			"traps_vpls_all": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable all VPLS traps").String,
+				Optional:            true,
+			},
+			"traps_vpls_status": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable VPLS Status traps").String,
+				Optional:            true,
+			},
+			"traps_vpls_full_raise": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable VPLS Full Raise traps").String,
+				Optional:            true,
+			},
+			"traps_vpls_full_clear": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable VPLS Full Clear traps").String,
+				Optional:            true,
+			},
+			"traps_bfd": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable BFD traps").String,
+				Optional:            true,
+			},
+			"traps_config": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP config traps").String,
+				Optional:            true,
+			},
+			"traps_cfm": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable traps for 802.1ag Connectivity Fault Management").String,
+				Optional:            true,
+			},
+			"traps_ethernet_oam_events": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable all OAM event traps").String,
+				Optional:            true,
+			},
+			"traps_rf": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP RF-MIB traps").String,
+				Optional:            true,
+			},
 			"traps_sensor": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP entity sensor traps").String,
 				Optional:            true,
 			},
-			"traps_fru_ctrl": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP entity FRU control traps").String,
+			"traps_mpls_l3vpn_all": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable all MPLS L3VPN traps").String,
+				Optional:            true,
+			},
+			"traps_mpls_l3vpn_vrf_up": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable VRF up traps").String,
+				Optional:            true,
+			},
+			"traps_mpls_l3vpn_vrf_down": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable VRF down traps").String,
+				Optional:            true,
+			},
+			"traps_mpls_l3vpn_mid_threshold_exceeded": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable mid-threshold exceeded traps").String,
+				Optional:            true,
+			},
+			"traps_mpls_l3vpn_max_threshold_exceeded": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable max-threshold exceeded traps").String,
+				Optional:            true,
+			},
+			"traps_mpls_l3vpn_max_threshold_cleared": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable max-threshold cleared traps").String,
+				Optional:            true,
+			},
+			"traps_mpls_l3vpn_max_threshold_reissue_notif_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Time interval (secs) for re-issuing max-threshold notification").AddIntegerRangeDescription(0, 2147483647).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 2147483647),
+				},
+			},
+			"traps_mpls_traffic_eng_cisco": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("MPLS TE tunnel traps in Cisco format (default ietf)").String,
+				Optional:            true,
+			},
+			"traps_mpls_traffic_eng_cisco_ext_bringup_fail": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable MPLS TE tunnel bringup-fail trap").String,
+				Optional:            true,
+			},
+			"traps_mpls_traffic_eng_cisco_ext_insuff_bw": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable MPLS TE tunnel insufficient bandwidth trap").String,
+				Optional:            true,
+			},
+			"traps_mpls_traffic_eng_cisco_ext_preempt": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable MPLS TE tunnel preempt trap").String,
+				Optional:            true,
+			},
+			"traps_mpls_traffic_eng_cisco_ext_reroute_pending": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable MPLS TE tunnel reroute-pending trap").String,
+				Optional:            true,
+			},
+			"traps_mpls_traffic_eng_cisco_ext_reroute_pending_clear": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable MPLS TE tunnel reroute-pending clear trap").String,
+				Optional:            true,
+			},
+			"traps_mpls_traffic_eng_down": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable MPLS TE tunnel down traps").String,
+				Optional:            true,
+			},
+			"traps_mpls_traffic_eng_p2mp_down": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable MPLS TE P2MP tunnel destination down traps").String,
+				Optional:            true,
+			},
+			"traps_mpls_traffic_eng_p2mp_up": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable MPLS TE P2MP tunnel destination up traps").String,
+				Optional:            true,
+			},
+			"traps_mpls_traffic_eng_reoptimize": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable MPLS TE tunnel reoptimize traps").String,
+				Optional:            true,
+			},
+			"traps_mpls_traffic_eng_reroute": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable MPLS TE tunnel reroute traps").String,
+				Optional:            true,
+			},
+			"traps_mpls_traffic_eng_up": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable MPLS TE tunnel up traps").String,
+				Optional:            true,
+			},
+			"traps_ntp": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP Cisco Ntp traps").String,
+				Optional:            true,
+			},
+			"traps_bgp_cbgp_two_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable CISCO-BGP4-MIB v2 traps").String,
+				Optional:            true,
+			},
+			"traps_bgp_cbgp_two_updown": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable CISCO-BGP4-MIB v2 up/down traps").String,
+				Optional:            true,
+			},
+			"traps_bgp_enable_updown": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable BGP4-MIB and CISCO-BGP4-MIB traps").String,
+				Optional:            true,
+			},
+			"traps_bgp_enable_cisco_bgp4_mib": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable CISCO-BGP4-MIB v2 up/down traps").String,
+				Optional:            true,
+			},
+			"traps_hsrp": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP hsrp traps").String,
 				Optional:            true,
 			},
 			"traps_isis_all": schema.BoolAttribute{
@@ -252,100 +458,297 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				MarkdownDescription: helpers.NewAttributeDescription("isisLSPErrorDetected").String,
 				Optional:            true,
 			},
-			"traps_bgp_cbgp_two_enable": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable CISCO-BGP4-MIB v2 traps").String,
+			"traps_vrrp_events": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable all VRRP event traps").String,
 				Optional:            true,
 			},
-			"traps_bgp_cbgp_two_updown": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable CISCO-BGP4-MIB v2 up/down traps").String,
+			"traps_alarm": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP Cisco alarm traps").String,
 				Optional:            true,
 			},
-			"traps_bgp_enable_updown": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable BGP4-MIB and CISCO-BGP4-MIB traps").String,
+			"traps_bridgemib": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP Trap for Bridge MIB").String,
 				Optional:            true,
 			},
-			"traps_bgp_enable_cisco_bgp4_mib": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable CISCO-BGP4-MIB v2 up/down traps").String,
+			"traps_copy_complete": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable CISCO-CONFIG-COPY-MIB ccCopyCompletion traps").String,
 				Optional:            true,
 			},
-			"users": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Name of the user").String,
+			"traps_entity": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP entity traps").String,
+				Optional:            true,
+			},
+			"traps_cisco_entity_ext": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP entity traps").String,
+				Optional:            true,
+			},
+			"traps_entity_redundancy_all": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable all CISCO-ENTITY-REDUNDANCY-MIB traps").String,
+				Optional:            true,
+			},
+			"traps_entity_redundancy_switchover": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable switchover traps").String,
+				Optional:            true,
+			},
+			"traps_entity_redundancy_status": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable status change traps").String,
+				Optional:            true,
+			},
+			"traps_entity_state_switchover": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable entity state switchover notifications").String,
+				Optional:            true,
+			},
+			"traps_entity_state_operstatus": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable entity oper status enable notification").String,
+				Optional:            true,
+			},
+			"traps_flash_insertion": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable ciscoFlashDeviceInsertedNotif").String,
+				Optional:            true,
+			},
+			"traps_flash_removal": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable ciscoFlashDeviceRemovedNotif").String,
+				Optional:            true,
+			},
+			"traps_fru_ctrl": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP entity FRU control traps").String,
+				Optional:            true,
+			},
+			"traps_ipsla": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP RTTMON-MIB IPSLA traps").String,
+				Optional:            true,
+			},
+			"traps_mpls_ldp_down": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable MPLS LDP session down traps").String,
+				Optional:            true,
+			},
+			"traps_mpls_ldp_up": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable MPLS LDP session up traps").String,
+				Optional:            true,
+			},
+			"traps_mpls_ldp_threshold": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable MPLS LDP threshold traps").String,
+				Optional:            true,
+			},
+			"traps_pim_neighbor_change": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable neighbor change trap").String,
+				Optional:            true,
+			},
+			"traps_pim_interface_state_change": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable interface state change trap").String,
+				Optional:            true,
+			},
+			"traps_pim_invalid_message_received": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable invalid message received trap").String,
+				Optional:            true,
+			},
+			"traps_pim_rp_mapping_change": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable rp mapping change trap").String,
+				Optional:            true,
+			},
+			"traps_power": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP entity power traps").String,
+				Optional:            true,
+			},
+			"traps_syslog": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP syslog traps").String,
+				Optional:            true,
+			},
+			"traps_system": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP SYSTEMMIB-MIB traps").String,
+				Optional:            true,
+			},
+			"hosts": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify hosts to receive SNMP notifications").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"user_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Name of the user").String,
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify hosts to receive SNMP notifications").String,
 							Required:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 32),
-							},
 						},
-						"group_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Group to which the user belongs").String,
-							Required:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
-							},
-						},
-						"v3_auth_md5_encryption_aes": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specifies an aes-128 ENCRYPTED authentication password").String,
+						"traps_unencrypted_strings": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The UNENCRYPTED (cleartext) community string").String,
 							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 1024),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-zA-Z]+`), ""),
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"community_string": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("The UNENCRYPTED (cleartext) community string").String,
+										Required:            true,
+										Sensitive:           true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 32),
+										},
+									},
+									"udp_port": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("udp port to which notifications should be sent").AddIntegerRangeDescription(1, 65535).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65535),
+										},
+									},
+									"version_v2c": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Use 2c for SNMPv2c").String,
+										Optional:            true,
+									},
+									"version_v3_security_level": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Security level").AddStringEnumDescription("auth", "noauth", "priv").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("auth", "noauth", "priv"),
+										},
+									},
+								},
 							},
 						},
-						"v3_auth_md5_encryption_default": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specifies an default ENCRYPTED authentication password").String,
+						"informs_unencrypted_strings": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The UNENCRYPTED (cleartext) community string").String,
 							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"community_string": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("The UNENCRYPTED (cleartext) community string").String,
+										Required:            true,
+										Sensitive:           true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 32),
+										},
+									},
+									"udp_port": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("udp port to which notifications should be sent").AddIntegerRangeDescription(1, 65535).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65535),
+										},
+									},
+									"version_v2c": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Use 2c for SNMPv2c").String,
+										Optional:            true,
+									},
+									"version_v3_security_level": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Security level").AddStringEnumDescription("auth", "noauth", "priv").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("auth", "noauth", "priv"),
+										},
+									},
+								},
 							},
-						},
-						"v3_auth_sha_encryption_aes": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specifies an aes-128 ENCRYPTED authentication password").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 1024),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-zA-Z]+`), ""),
-							},
-						},
-						"v3_auth_sha_encryption_default": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specifies an default ENCRYPTED authentication password").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
-							},
-						},
-						"v3_priv_aes_aes_128_encryption_default": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specifies an default ENCRYPTED authentication password").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
-							},
-						},
-						"v3_priv_aes_aes_128_encryption_aes": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specifies an aes-128 ENCRYPTED authentication password").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 1024),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-zA-Z]+`), ""),
-							},
-						},
-						"v3_ipv4": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Type of Access-list").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
-							},
-						},
-						"v3_systemowner": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("System Owner permissions for MIB objects").String,
-							Optional:            true,
 						},
 					},
+				},
+			},
+			"views": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Name of the view").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"view_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of the view").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"mib_view_families": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("MIB view family").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("MIB view family name").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 1024),
+										},
+									},
+									"included": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("MIB family is included in the view").String,
+										Optional:            true,
+									},
+									"excluded": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("MIB family is excluded from the view").String,
+										Optional:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"trap_source": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Assign an interface for the source address of all traps").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+				},
+			},
+			"trap_source_ipv4": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 address of the interface").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+				},
+			},
+			"trap_source_ipv6": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv6 address of the interface").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+				},
+			},
+			"trap_source_port": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Change the source port of all traps (default 161).").AddIntegerRangeDescription(1024, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1024, 65535),
+				},
+			},
+			"trap_throttle_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set throttle time for handling more traps").AddIntegerRangeDescription(10, 500).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(10, 500),
+				},
+			},
+			"trap_authentication_vrf_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable authentication traps for packets on a vrf").String,
+				Optional:            true,
+			},
+			"trap_delay_timer": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set time to delay traps on init").AddIntegerRangeDescription(30, 240).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(30, 240),
+				},
+			},
+			"ipv4_dscp": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set IP DSCP (DiffServ CodePoint)").String,
+				Optional:            true,
+			},
+			"ipv6_dscp": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set IP DSCP (DiffServ CodePoint)").String,
+				Optional:            true,
+			},
+			"drop_unknown_user": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Silently drop unknown v3 user packets").String,
+				Optional:            true,
+			},
+			"drop_report_acl_ipv4": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Type of Access-list").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"drop_report_acl_ipv6": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Type of Access-list").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 			},
 			"groups": schema.ListNestedAttribute{
@@ -358,6 +761,110 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 128),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"v1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("group using the v1 security model").String,
+							Optional:            true,
+						},
+						"v1_read": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("specify a read view for this group").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"v1_write": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("specify a write view for this group").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"v1_context": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Attach a SNMP context").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"v1_notify": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("specify a notify view for the group").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"v1_ipv4": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Type of Access-list").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"v1_ipv6": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Type of Access-list").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"v2c": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("group using the v2c security model").String,
+							Optional:            true,
+						},
+						"v2c_read": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("specify a read view for this group").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"v2c_write": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("specify a write view for this group").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"v2c_context": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Attach a SNMP context").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"v2c_notify": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("specify a notify view for the group").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"v2c_ipv4": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Type of Access-list").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"v2c_ipv6": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Type of Access-list").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
@@ -416,59 +923,329 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 				},
 			},
-			"communities": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("The UNENCRYPTED (cleartext) community string").String,
+			"engine_id_local": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("engineID of the local agent").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 800),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"engine_id_remotes": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("engineID of the remote agent").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"community": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("The UNENCRYPTED (cleartext) community string").String,
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("engineID of the remote agent").String,
+							Required:            true,
+						},
+						"engine_id": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("engine ID octet string").String,
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 32),
-							},
-						},
-						"view": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Restrict this community to a named view").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.LengthBetween(1, 800),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
-						"ro": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Read-only community").String,
-							Optional:            true,
-						},
-						"rw": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Read-write community").String,
-							Optional:            true,
-						},
-						"sdrowner": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("SDR Owner permissions for MIB Objects").String,
-							Optional:            true,
-						},
-						"systemowner": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("System Owner permissions for MIB objects").String,
-							Optional:            true,
-						},
-						"ipv4": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Type of Access-list").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
-							},
-						},
-						"ipv6": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Type of Access-list").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+						"udp_port": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The remote notification host's UDP port number").AddIntegerRangeDescription(1, 65535).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
 							},
 						},
 					},
+				},
+			},
+			"users": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Name of the user").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"user_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of the user").String,
+							Required:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+							},
+						},
+						"group_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Group to which the user belongs").String,
+							Required:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"v1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("user using the v1 security model").String,
+							Optional:            true,
+						},
+						"v1_ipv4": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Type of Access-list").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"v1_ipv6": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Type of Access-list").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"v1_systemowner": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("System Owner permissions for MIB objects").String,
+							Optional:            true,
+						},
+						"v2c": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("user using the v2c security model").String,
+							Optional:            true,
+						},
+						"v2c_ipv4": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Type of Access-list").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"v2c_ipv6": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Type of Access-list").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"v2c_systemowner": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("System Owner permissions for MIB objects").String,
+							Optional:            true,
+						},
+						"v3": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("user using the v3 security model").String,
+							Optional:            true,
+						},
+						"v3_auth_md5_encryption_aes": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies an aes-128 ENCRYPTED authentication password").String,
+							Optional:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-zA-Z]+`), ""),
+							},
+						},
+						"v3_auth_md5_encryption_default": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies an default ENCRYPTED authentication password").String,
+							Optional:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+							},
+						},
+						"v3_auth_sha_encryption_aes": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies an aes-128 ENCRYPTED authentication password").String,
+							Optional:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-zA-Z]+`), ""),
+							},
+						},
+						"v3_auth_sha_encryption_default": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies an default ENCRYPTED authentication password").String,
+							Optional:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+							},
+						},
+						"v3_auth_sha_256_encryption_aes": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies an aes-128 ENCRYPTED authentication password").String,
+							Optional:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-zA-Z]+`), ""),
+							},
+						},
+						"v3_auth_sha_256_encryption_default": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies an default ENCRYPTED authentication password").String,
+							Optional:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+							},
+						},
+						"v3_auth_sha_512_encryption_aes": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies an aes-128 ENCRYPTED authentication password").String,
+							Optional:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-zA-Z]+`), ""),
+							},
+						},
+						"v3_auth_sha_512_encryption_default": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies an default ENCRYPTED authentication password").String,
+							Optional:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+							},
+						},
+						"v3_priv_aes_aes_128_encryption_default": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies an default ENCRYPTED authentication password").String,
+							Optional:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+							},
+						},
+						"v3_priv_aes_aes_128_encryption_aes": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies an aes-128 ENCRYPTED authentication password").String,
+							Optional:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-zA-Z]+`), ""),
+							},
+						},
+						"v3_priv_aes_aes_192_encryption_default": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies an default ENCRYPTED authentication password").String,
+							Optional:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+							},
+						},
+						"v3_priv_aes_aes_192_encryption_aes": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies an aes-128 ENCRYPTED authentication password").String,
+							Optional:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-zA-Z]+`), ""),
+							},
+						},
+						"v3_priv_aes_aes_256_encryption_default": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies an default ENCRYPTED authentication password").String,
+							Optional:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+							},
+						},
+						"v3_priv_aes_aes_256_encryption_aes": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies an aes-128 ENCRYPTED authentication password").String,
+							Optional:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-zA-Z]+`), ""),
+							},
+						},
+						"v3_ipv4": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Type of Access-list").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"v3_ipv6": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Type of Access-list").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"v3_systemowner": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("System Owner permissions for MIB objects").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"oid_poll_stats": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable OID poll stats oper CLI").String,
+				Optional:            true,
+			},
+			"timeouts_subagent": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Sub-Agent Request timeout").AddIntegerRangeDescription(1, 20).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 20),
+				},
+			},
+			"timeouts_duplicate": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Duplicate request feature timeout").AddIntegerRangeDescription(0, 20).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 20),
+				},
+			},
+			"timeouts_in_qdrop": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("incoming queue drop feature").AddIntegerRangeDescription(0, 20).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 20),
+				},
+			},
+			"timeouts_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("threshold incoming queue drop feature").AddIntegerRangeDescription(0, 100000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 100000),
+				},
+			},
+			"timeouts_pdu_stats": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SNMP pdu statistics timeout").AddIntegerRangeDescription(1, 10).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 10),
+				},
+			},
+			"logging_threshold_oid_processing": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure threshold to start logging slow OID requests processing").AddIntegerRangeDescription(0, 20000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 20000),
+				},
+			},
+			"logging_threshold_pdu_processing": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure threshold to start logging slow PDU requests processing").AddIntegerRangeDescription(0, 20000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 20000),
+				},
+			},
+			"inform_retries": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set retry count for informs").AddIntegerRangeDescription(0, 100).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 100),
+				},
+			},
+			"inform_timeout": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set timeout for informs").AddIntegerRangeDescription(1, 42949671).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 42949671),
+				},
+			},
+			"inform_pending": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set max number of informs to hold in queue").AddIntegerRangeDescription(1, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4294967295),
 				},
 			},
 		},

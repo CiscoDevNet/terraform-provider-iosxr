@@ -35,15 +35,68 @@ import (
 
 func TestAccIosxrRouterOSPFVRFAreaInterface(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "interface_name", "GigabitEthernet0/0/0/2"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "network_broadcast", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "network_non_broadcast", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "interface_name", "Loopback2"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "neighbors.0.address", "192.168.2.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "neighbors.0.database_filter_all_out", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "neighbors.0.priority", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "neighbors.0.poll_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "neighbors.0.cost", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "message_digest_keys.0.key_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "authentication", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "authentication_message_digest", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "authentication_keychain_name", "KEY1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "network_point_to_point", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "network_point_to_multipoint", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "cost", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "cost_fallback", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "cost_fallback_threshold", "100000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "cost_fallback_anomaly_delay_igp_metric_value", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "cost_fallback_anomaly_delay_te_metric_value", "600"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "hello_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "dead_interval", "40"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "priority", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "passive_enable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "retransmit_interval", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "transmit_delay", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "flood_reduction_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "demand_circuit_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "mtu_ignore_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "database_filter_all_out_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "passive_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "distribute_list_acl", "ACL_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "packet_size", "1400"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "bfd_fast_detect", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "bfd_fast_detect_strict_mode", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "bfd_minimum_interval", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "bfd_multiplier", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "security_ttl", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "security_ttl_hops", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "fast_reroute_per_link_exclude_interfaces.0.interface_name", "GigabitEthernet0/0/0/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "fast_reroute_per_link_lfa_candidate_interfaces.0.interface_name", "GigabitEthernet0/0/0/2"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "fast_reroute_per_link_use_candidate_only_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "fast_reroute_per_prefix", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "fast_reroute_per_prefix_exclude_interfaces.0.interface_name", "GigabitEthernet0/0/0/3"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "fast_reroute_per_prefix_lfa_candidate_interfaces.0.interface_name", "GigabitEthernet0/0/0/4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "fast_reroute_per_prefix_use_candidate_only_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "fast_reroute_per_prefix_tiebreaker_downstream_index", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "fast_reroute_per_prefix_tiebreaker_lc_disjoint_index", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_index", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "fast_reroute_per_prefix_tiebreaker_node_protecting_index", "40"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "fast_reroute_per_prefix_tiebreaker_primary_path_index", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "fast_reroute_per_prefix_tiebreaker_secondary_path_index", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "fast_reroute_per_prefix_tiebreaker_interface_disjoint_index", "70"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index", "80"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "loopback_stub_network_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "link_down_fast_detect", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "prefix_sid_index", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "prefix_sid_index_explicit_null", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "prefix_sid_index_n_flag_clear", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "prefix_sid_strict_spf_index", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "prefix_sid_strict_spf_index_explicit_null", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "prefix_sid_strict_spf_index_n_flag_clear", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "prefix_sid_algorithms.0.algorithm_number", "128"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "prefix_sid_algorithms.0.index", "400"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "prefix_sid_algorithms.0.index_explicit_null", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "prefix_sid_algorithms.0.index_n_flag_clear", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "advertise_prefix_route_policy", "ROUTE_POLICY_1"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -107,7 +160,24 @@ resource "iosxr_gnmi" "PreReq2" {
 	attributes = {
 		"area-id" = "0"
 	}
-	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]
+	depends_on = [iosxr_gnmi.PreReq1, ]
+}
+
+resource "iosxr_gnmi" "PreReq3" {
+	path = "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]/vrfs/vrf[vrf-name=VRF1]/areas/area[area-id=0]/interfaces/interface[interface-name=Loopback2]"
+	attributes = {
+		"interface-name" = "Loopback2"
+	}
+	depends_on = [iosxr_gnmi.PreReq2, ]
+}
+
+resource "iosxr_gnmi" "PreReq4" {
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
+	attributes = {
+		"route-policy-name" = "ROUTE_POLICY_1"
+		"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
+	}
+	depends_on = [iosxr_gnmi.PreReq3, ]
 }
 
 `
@@ -121,8 +191,9 @@ func testAccIosxrRouterOSPFVRFAreaInterfaceConfig_minimum() string {
 	config += `	process_name = "OSPF1"` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	area_id = "0"` + "\n"
-	config += `	interface_name = "GigabitEthernet0/0/0/2"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]` + "\n"
+	config += `	interface_name = "Loopback2"` + "\n"
+	config += `	mtu_ignore_enable = true` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, iosxr_gnmi.PreReq4, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -136,16 +207,85 @@ func testAccIosxrRouterOSPFVRFAreaInterfaceConfig_all() string {
 	config += `	process_name = "OSPF1"` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	area_id = "0"` + "\n"
-	config += `	interface_name = "GigabitEthernet0/0/0/2"` + "\n"
-	config += `	network_broadcast = false` + "\n"
-	config += `	network_non_broadcast = false` + "\n"
+	config += `	interface_name = "Loopback2"` + "\n"
+	config += `	neighbors = [{` + "\n"
+	config += `		address = "192.168.2.1"` + "\n"
+	config += `		database_filter_all_out = true` + "\n"
+	config += `		priority = 100` + "\n"
+	config += `		poll_interval = 10` + "\n"
+	config += `		cost = 100` + "\n"
+	config += `		}]` + "\n"
+	config += `	authentication_key_encrypted = "110A1016141D4B"` + "\n"
+	config += `	message_digest_keys = [{` + "\n"
+	config += `		key_id = 1` + "\n"
+	config += `		md5_encrypted = "01100F175804"` + "\n"
+	config += `		}]` + "\n"
+	config += `	authentication = true` + "\n"
+	config += `	authentication_message_digest = true` + "\n"
+	config += `	authentication_keychain_name = "KEY1"` + "\n"
 	config += `	network_point_to_point = true` + "\n"
-	config += `	network_point_to_multipoint = false` + "\n"
 	config += `	cost = 20` + "\n"
+	config += `	cost_fallback = 30` + "\n"
+	config += `	cost_fallback_threshold = 100000` + "\n"
+	config += `	cost_fallback_anomaly_delay_igp_metric_value = 500` + "\n"
+	config += `	cost_fallback_anomaly_delay_te_metric_value = 600` + "\n"
+	config += `	hello_interval = 10` + "\n"
+	config += `	dead_interval = 40` + "\n"
 	config += `	priority = 100` + "\n"
-	config += `	passive_enable = false` + "\n"
+	config += `	retransmit_interval = 1000` + "\n"
+	config += `	transmit_delay = 100` + "\n"
+	config += `	flood_reduction_enable = true` + "\n"
+	config += `	demand_circuit_enable = true` + "\n"
+	config += `	mtu_ignore_enable = true` + "\n"
+	config += `	database_filter_all_out_enable = true` + "\n"
 	config += `	passive_disable = true` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]` + "\n"
+	config += `	distribute_list_acl = "ACL_1"` + "\n"
+	config += `	packet_size = 1400` + "\n"
+	config += `	bfd_fast_detect = true` + "\n"
+	config += `	bfd_fast_detect_strict_mode = true` + "\n"
+	config += `	bfd_minimum_interval = 300` + "\n"
+	config += `	bfd_multiplier = 3` + "\n"
+	config += `	security_ttl = true` + "\n"
+	config += `	security_ttl_hops = 10` + "\n"
+	config += `	fast_reroute_per_link_exclude_interfaces = [{` + "\n"
+	config += `		interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `		}]` + "\n"
+	config += `	fast_reroute_per_link_lfa_candidate_interfaces = [{` + "\n"
+	config += `		interface_name = "GigabitEthernet0/0/0/2"` + "\n"
+	config += `		}]` + "\n"
+	config += `	fast_reroute_per_link_use_candidate_only_enable = true` + "\n"
+	config += `	fast_reroute_per_prefix = true` + "\n"
+	config += `	fast_reroute_per_prefix_exclude_interfaces = [{` + "\n"
+	config += `		interface_name = "GigabitEthernet0/0/0/3"` + "\n"
+	config += `		}]` + "\n"
+	config += `	fast_reroute_per_prefix_lfa_candidate_interfaces = [{` + "\n"
+	config += `		interface_name = "GigabitEthernet0/0/0/4"` + "\n"
+	config += `		}]` + "\n"
+	config += `	fast_reroute_per_prefix_use_candidate_only_enable = true` + "\n"
+	config += `	fast_reroute_per_prefix_tiebreaker_downstream_index = 10` + "\n"
+	config += `	fast_reroute_per_prefix_tiebreaker_lc_disjoint_index = 20` + "\n"
+	config += `	fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_index = 30` + "\n"
+	config += `	fast_reroute_per_prefix_tiebreaker_node_protecting_index = 40` + "\n"
+	config += `	fast_reroute_per_prefix_tiebreaker_primary_path_index = 50` + "\n"
+	config += `	fast_reroute_per_prefix_tiebreaker_secondary_path_index = 60` + "\n"
+	config += `	fast_reroute_per_prefix_tiebreaker_interface_disjoint_index = 70` + "\n"
+	config += `	fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index = 80` + "\n"
+	config += `	loopback_stub_network_enable = true` + "\n"
+	config += `	link_down_fast_detect = true` + "\n"
+	config += `	prefix_sid_index = 100` + "\n"
+	config += `	prefix_sid_index_explicit_null = true` + "\n"
+	config += `	prefix_sid_index_n_flag_clear = true` + "\n"
+	config += `	prefix_sid_strict_spf_index = 300` + "\n"
+	config += `	prefix_sid_strict_spf_index_explicit_null = true` + "\n"
+	config += `	prefix_sid_strict_spf_index_n_flag_clear = true` + "\n"
+	config += `	prefix_sid_algorithms = [{` + "\n"
+	config += `		algorithm_number = 128` + "\n"
+	config += `		index = 400` + "\n"
+	config += `		index_explicit_null = true` + "\n"
+	config += `		index_n_flag_clear = true` + "\n"
+	config += `		}]` + "\n"
+	config += `	advertise_prefix_route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, iosxr_gnmi.PreReq4, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

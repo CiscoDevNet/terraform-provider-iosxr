@@ -1,0 +1,66 @@
+---
+name: Performance Measurement Endpoint IPv6
+path: Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement/endpoint/ipv6s/ipv6[address=%s]/vrf[vrf-name=%s]
+doc_category: Performance Monitoring
+attributes:
+  - yang_name: address
+    id: true
+    example: "2001:db8::1"
+  - yang_name: vrf-name
+    id: true
+    example: VRF1
+  - yang_name: source-address/ipv6
+    tf_name: source_address_ipv6
+    delete_parent: true
+    example: "2001:1:1:1::100"
+  - yang_name: description
+    example: "PM Endpoint for testing"
+  - yang_name: delay-measurement
+    example: true
+  - yang_name: delay-measurement/delay-profile/name
+    tf_name: delay_measurement_profile_name
+    example: DELAY_PROFILE_1
+  - yang_name: segment-list/names/name
+    tf_name: segment_list_names
+    type: List
+    attributes:
+      - yang_name: list-name
+        id: true
+        example: SEG_LIST_1
+  - yang_name: liveness-detection
+    example: true
+    exclude_test: true
+  - yang_name: liveness-detection/liveness-profile/name
+    tf_name: liveness_detection_profile_name
+    example: LIVENESS_PROFILE_1
+    exclude_test: true
+  - yang_name: liveness-detection/collect-hbh
+    tf_name: liveness_detection_collect_hbh
+    example: true
+    exclude_test: true
+  - yang_name: segment-routing
+    example: true
+  - yang_name: segment-routing/traffic-eng/explicit/segment-list/names/name
+    tf_name: segment_routing_te_explicit_segment_lists
+    type: List
+    attributes:
+      - yang_name: list-name
+        id: true
+        example: SEG_LIST_SR_1
+      - yang_name: reverse-path/segment-list/name
+        tf_name: reverse_path_segment_list
+        example: SEG_LIST_REVERSE_1
+      - yang_name: insert-srh/sl-zero
+        tf_name: insert_srh_sl_zero
+        example: true
+  - yang_name: segment-routing/traffic-eng/explicit/reverse-path/segment-list/name
+    tf_name: segment_routing_te_explicit_reverse_path_list
+    example: SEG_LIST_GLOBAL_REVERSE
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]
+    attributes:
+      - name: vrf-name
+        value: VRF1
+  - path: Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement
+    dependencies: [0]

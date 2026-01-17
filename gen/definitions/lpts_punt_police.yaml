@@ -1,0 +1,93 @@
+---
+name: LPTS Punt Police
+path: Cisco-IOS-XR-um-lpts-punt-cfg:/lpts/punt/police
+doc_category: System
+test_tags: [NCS]
+attributes:
+  - yang_name: mcast/rate
+    tf_name: mcast_rate
+    include_example: true
+    example: 1000
+  - yang_name: bcast/rate
+    tf_name: bcast_rate
+    include_example: true
+    minimum_test_value: 1000
+    example: 1000
+  - yang_name: protocol/arp/rate
+    tf_name: protocol_arp_rate
+    include_example: true
+    example: 2000
+  - yang_name: protocol/cdp/rate
+    tf_name: protocol_cdp_rate
+    include_example: true
+    example: 2000
+  - yang_name: protocol/lacp/rate
+    tf_name: protocol_lacp_rate
+    include_example: true
+    example: 2000
+  - yang_name: protocol/lldp/rate
+    tf_name: protocol_lldp_rate
+    include_example: true
+    example: 2000
+  - yang_name: protocol/ssfp/rate
+    tf_name: protocol_ssfp_rate
+    include_example: true
+    example: 2000
+  - yang_name: protocol/ipv6-nd-proxy/rate
+    tf_name: protocol_ipv6_nd_proxy_rate
+    include_example: true
+    example: 2000
+  - yang_name: domains/domain
+    tf_name: domains
+    include_example: true
+    type: List
+    attributes:
+      - yang_name: domain-name
+        id: true
+        example: DOMAIN1
+      - yang_name: mcast/rate
+        tf_name: mcast_rate
+        example: 1500
+      - yang_name: bcast/rate
+        tf_name: bcast_rate
+        example: 1500
+      - yang_name: protocol/arp/rate
+        tf_name: protocol_arp_rate
+        example: 2500
+      - yang_name: protocol/cdp/rate
+        tf_name: protocol_cdp_rate
+        example: 2500
+      - yang_name: protocol/lacp/rate
+        tf_name: protocol_lacp_rate
+        example: 2500
+      - yang_name: protocol/lldp/rate
+        tf_name: protocol_lldp_rate
+        example: 2500
+      - yang_name: protocol/ssfp/rate
+        tf_name: protocol_ssfp_rate
+        example: 2500
+      - yang_name: protocol/ipv6-nd-proxy/rate
+        tf_name: protocol_ipv6_nd_proxy_rate
+        example: 2500
+  - yang_name: interfaces/interface
+    tf_name: interfaces
+    include_example: true
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: GigabitEthernet0/0/0/1
+      - yang_name: mcast/rate
+        tf_name: mcast_rate
+        example: 800
+      - yang_name: mcast/disabled
+        tf_name: mcast_disabled
+        exclude_test: true
+        example: true
+      - yang_name: bcast/rate
+        tf_name: bcast_rate
+        example: 800
+      - yang_name: bcast/disabled
+        tf_name: bcast_disabled
+        exclude_test: true
+        example: true

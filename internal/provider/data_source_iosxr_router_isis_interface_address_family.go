@@ -83,37 +83,253 @@ func (d *RouterISISInterfaceAddressFamilyDataSource) Schema(ctx context.Context,
 				MarkdownDescription: "saf-name",
 				Required:            true,
 			},
-			"fast_reroute_per_prefix": schema.BoolAttribute{
-				MarkdownDescription: "per-prefix",
+			"metric_maximum": schema.BoolAttribute{
+				MarkdownDescription: "Maximum wide metric. All routers will exclude this link from their SPF",
 				Computed:            true,
 			},
-			"fast_reroute_per_link": schema.BoolAttribute{
-				MarkdownDescription: "per-link",
+			"metric_default": schema.Int64Attribute{
+				MarkdownDescription: "Default metric: <1-63> for narrow, <1-16777214> for wide",
 				Computed:            true,
 			},
-			"fast_reroute_levels": schema.ListNestedAttribute{
-				MarkdownDescription: "enable",
+			"metric_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set metric for one level only",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"level_number": schema.Int64Attribute{
-							MarkdownDescription: "Configure FRR for one level only",
+							MarkdownDescription: "Set metric at this level only",
 							Computed:            true,
 						},
-						"per_prefix": schema.BoolAttribute{
-							MarkdownDescription: "per-prefix",
+						"metric_default": schema.Int64Attribute{
+							MarkdownDescription: "Default metric: <1-63> for narrow, <1-16777214> for wide",
 							Computed:            true,
 						},
-						"per_link": schema.BoolAttribute{
-							MarkdownDescription: "per-link",
+						"metric_maximum": schema.BoolAttribute{
+							MarkdownDescription: "Maximum wide metric. All routers will exclude this link from their SPF",
 							Computed:            true,
 						},
 					},
 				},
 			},
+			"te_metric_flex_algo": schema.Int64Attribute{
+				MarkdownDescription: "Configure a Flex-algo TE metric for the interface",
+				Computed:            true,
+			},
+			"te_metric_flex_algo_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set metric for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Set metric at this level only",
+							Computed:            true,
+						},
+						"flex_algo": schema.Int64Attribute{
+							MarkdownDescription: "Configure a Flex-algo TE metric for the interface",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"bandwidth_metric_flex_algo": schema.Int64Attribute{
+				MarkdownDescription: "Configure a Flex-algo bandwidth metric for the interface",
+				Computed:            true,
+			},
+			"bandwidth_metric_flex_algo_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set metric for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Set metric at this level only",
+							Computed:            true,
+						},
+						"flex_algo": schema.Int64Attribute{
+							MarkdownDescription: "Configure a Flex-algo bandwidth metric for the interface",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"generic_metric_flex_algos": schema.ListNestedAttribute{
+				MarkdownDescription: "Type of Generic metric",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"type": schema.Int64Attribute{
+							MarkdownDescription: "Generic metric type",
+							Computed:            true,
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: "Flex-algo generic metric value",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"generic_metric_flex_algo_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set metric for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Set metric at this level only",
+							Computed:            true,
+						},
+						"flex_algos_types": schema.ListNestedAttribute{
+							MarkdownDescription: "Type of Generic metric",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"type": schema.Int64Attribute{
+										MarkdownDescription: "Generic metric type",
+										Computed:            true,
+									},
+									"metric": schema.Int64Attribute{
+										MarkdownDescription: "Flex-algo generic metric value",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"mpls_ldp_sync": schema.BoolAttribute{
+				MarkdownDescription: "Configure LDP ISIS synchronization",
+				Computed:            true,
+			},
+			"mpls_ldp_sync_level": schema.Int64Attribute{
+				MarkdownDescription: "Set LDP synchronization for one level only",
+				Computed:            true,
+			},
 			"tag": schema.Int64Attribute{
 				MarkdownDescription: "Set interface tag",
 				Computed:            true,
+			},
+			"tag_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set the tag only at supplied level",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Set the tag only at this level",
+							Computed:            true,
+						},
+						"tag": schema.Int64Attribute{
+							MarkdownDescription: "Interface tag",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"prefix_sid_strict_spf_index_id": schema.Int64Attribute{
+				MarkdownDescription: "The Prefix Segment ID index",
+				Computed:            true,
+			},
+			"prefix_sid_strict_spf_index_php_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable Penultimate Hop Popping",
+				Computed:            true,
+			},
+			"prefix_sid_strict_spf_index_explicit_null": schema.BoolAttribute{
+				MarkdownDescription: "Upstream neighbor must replace prefix-sid with explicit null label",
+				Computed:            true,
+			},
+			"prefix_sid_strict_spf_index_n_flag_clear": schema.BoolAttribute{
+				MarkdownDescription: "Clear N-flag for the prefix-SID",
+				Computed:            true,
+			},
+			"prefix_sid_strict_spf_absolute_id": schema.Int64Attribute{
+				MarkdownDescription: "The Prefix Segment ID value",
+				Computed:            true,
+			},
+			"prefix_sid_strict_spf_absolute_php_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable Penultimate Hop Popping",
+				Computed:            true,
+			},
+			"prefix_sid_strict_spf_absolute_explicit_null": schema.BoolAttribute{
+				MarkdownDescription: "Upstream neighbor must replace prefix-sid with explicit null label",
+				Computed:            true,
+			},
+			"prefix_sid_strict_spf_absolute_n_flag_clear": schema.BoolAttribute{
+				MarkdownDescription: "Clear N-flag for the prefix-SID",
+				Computed:            true,
+			},
+			"prefix_sid_index_id": schema.Int64Attribute{
+				MarkdownDescription: "The Prefix Segment ID index",
+				Computed:            true,
+			},
+			"prefix_sid_index_php_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable Penultimate Hop Popping",
+				Computed:            true,
+			},
+			"prefix_sid_index_explicit_null": schema.BoolAttribute{
+				MarkdownDescription: "Upstream neighbor must replace prefix-sid with explicit null label",
+				Computed:            true,
+			},
+			"prefix_sid_index_n_flag_clear": schema.BoolAttribute{
+				MarkdownDescription: "Clear N-flag for the prefix-SID",
+				Computed:            true,
+			},
+			"prefix_sid_absolute_id": schema.Int64Attribute{
+				MarkdownDescription: "The Prefix Segment ID value",
+				Computed:            true,
+			},
+			"prefix_sid_absolute_php_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable Penultimate Hop Popping",
+				Computed:            true,
+			},
+			"prefix_sid_absolute_explicit_null": schema.BoolAttribute{
+				MarkdownDescription: "Upstream neighbor must replace prefix-sid with explicit null label",
+				Computed:            true,
+			},
+			"prefix_sid_absolute_n_flag_clear": schema.BoolAttribute{
+				MarkdownDescription: "Clear N-flag for the prefix-SID",
+				Computed:            true,
+			},
+			"prefix_sid_algorithms": schema.ListNestedAttribute{
+				MarkdownDescription: "Algorithm Specific Prefix SID Configuration",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"algorithm": schema.Int64Attribute{
+							MarkdownDescription: "Algorithm number",
+							Computed:            true,
+						},
+						"index_id": schema.Int64Attribute{
+							MarkdownDescription: "The Prefix Segment ID index",
+							Computed:            true,
+						},
+						"index_php_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable Penultimate Hop Popping",
+							Computed:            true,
+						},
+						"index_explicit_null": schema.BoolAttribute{
+							MarkdownDescription: "Upstream neighbor must replace prefix-sid with explicit null label",
+							Computed:            true,
+						},
+						"index_n_flag_clear": schema.BoolAttribute{
+							MarkdownDescription: "Clear N-flag for the prefix-SID",
+							Computed:            true,
+						},
+						"absolute_id": schema.Int64Attribute{
+							MarkdownDescription: "The Prefix Segment ID value",
+							Computed:            true,
+						},
+						"absolute_php_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable Penultimate Hop Popping",
+							Computed:            true,
+						},
+						"absolute_explicit_null": schema.BoolAttribute{
+							MarkdownDescription: "Upstream neighbor must replace prefix-sid with explicit null label",
+							Computed:            true,
+						},
+						"absolute_n_flag_clear": schema.BoolAttribute{
+							MarkdownDescription: "Clear N-flag for the prefix-SID",
+							Computed:            true,
+						},
+					},
+				},
 			},
 			"adjacency_sid_indices": schema.ListNestedAttribute{
 				MarkdownDescription: "Specify the index of Adjacency Segement ID",
@@ -147,6 +363,274 @@ func (d *RouterISISInterfaceAddressFamilyDataSource) Schema(ctx context.Context,
 					},
 				},
 			},
+			"fast_reroute_per_prefix": schema.BoolAttribute{
+				MarkdownDescription: "per-prefix",
+				Computed:            true,
+			},
+			"fast_reroute_per_link": schema.BoolAttribute{
+				MarkdownDescription: "per-link",
+				Computed:            true,
+			},
+			"fast_reroute_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "enable",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Configure FRR for one level only",
+							Computed:            true,
+						},
+						"per_prefix": schema.BoolAttribute{
+							MarkdownDescription: "per-prefix",
+							Computed:            true,
+						},
+						"per_link": schema.BoolAttribute{
+							MarkdownDescription: "per-link",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"fast_reroute_per_prefix_tiebreaker_default": schema.BoolAttribute{
+				MarkdownDescription: "Prefer default (link protecting) backup path",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_default_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Configure tiebreaker for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Level",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"fast_reroute_per_prefix_tiebreaker_node_protecting_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_node_protecting_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Configure tiebreaker for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Level",
+							Computed:            true,
+						},
+						"index": schema.Int64Attribute{
+							MarkdownDescription: "Set preference order among tiebreakers",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_srlg_disjoint_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Configure tiebreaker for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Level",
+							Computed:            true,
+						},
+						"index": schema.Int64Attribute{
+							MarkdownDescription: "Set preference order among tiebreakers",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"fast_reroute_per_prefix_tiebreaker_lc_disjoint_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_lc_disjoint_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Configure tiebreaker for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Level",
+							Computed:            true,
+						},
+						"index": schema.Int64Attribute{
+							MarkdownDescription: "Set preference order among tiebreakers",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"fast_reroute_per_prefix_remote_lfa_maximum_metric": schema.Int64Attribute{
+				MarkdownDescription: "Limit remote LFA node selection within the metric",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_remote_lfa_maximum_metric_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Enable remote LFA max metric for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Set remote LFA max metric value for this level",
+							Computed:            true,
+						},
+						"maximum_metric": schema.Int64Attribute{
+							MarkdownDescription: "Limit remote LFA node selection within the metric",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"fast_reroute_per_prefix_remote_lfa_tunnel_mpls_ldp": schema.BoolAttribute{
+				MarkdownDescription: "Use MPLS LDP tunnel to reach the remote LFA node",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_remote_lfa_tunnel_mpls_ldp_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Enable remote LFA for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Set remote LFA for this level",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"fast_reroute_per_prefix_ti_lfa": schema.BoolAttribute{
+				MarkdownDescription: "Enable TI LFA computation",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_ti_lfa_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Enable EPCFRR LFA for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Set EPCFRR LFA for this level",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"fast_reroute_per_prefix_exclude_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "Exclude an interface from computation",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: "exclude-interface-name",
+							Computed:            true,
+						},
+						"level": schema.Int64Attribute{
+							MarkdownDescription: "Exclude interface for one level only",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"fast_reroute_per_prefix_lfa_candidate_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "Include an interface to LFA candidate in computation",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: "lfa-interface-name",
+							Computed:            true,
+						},
+						"level": schema.Int64Attribute{
+							MarkdownDescription: "Include interface for one level only",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"fast_reroute_per_link_exclude_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "Exclude an interface from computation",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: "exclude-interface-name",
+							Computed:            true,
+						},
+						"level": schema.Int64Attribute{
+							MarkdownDescription: "Exclude interface for one level only",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"fast_reroute_per_link_lfa_candidate_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "Include an interface to LFA candidate in computation",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: "lfa-interface-name",
+							Computed:            true,
+						},
+						"level": schema.Int64Attribute{
+							MarkdownDescription: "Include interface for one level only",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"link_group_name": schema.StringAttribute{
+				MarkdownDescription: "Interface link group",
+				Computed:            true,
+			},
+			"link_group_level": schema.Int64Attribute{
+				MarkdownDescription: "Set the tag only at supplied level",
+				Computed:            true,
+			},
+			"weight": schema.Int64Attribute{
+				MarkdownDescription: "Configure weight for the interface",
+				Computed:            true,
+			},
+			"weight_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set weight for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Set weight at this level only",
+							Computed:            true,
+						},
+						"weight": schema.Int64Attribute{
+							MarkdownDescription: "Configure weight for the interface",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"auto_metric_proactive_protect_metric": schema.Int64Attribute{
+				MarkdownDescription: "set auto-metric proactive-protect mode",
+				Computed:            true,
+			},
+			"auto_metric_proactive_protect_metric_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "set auto-metric proactive-protect mode for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "set auto-metric proactive-protect mode for one level only",
+							Computed:            true,
+						},
+						"proactive_protect": schema.Int64Attribute{
+							MarkdownDescription: "set auto-metric proactive-protect mode",
+							Computed:            true,
+						},
+					},
+				},
+			},
 			"advertise_prefix_route_policy": schema.StringAttribute{
 				MarkdownDescription: "Filter routes based on a route policy",
 				Computed:            true,
@@ -162,34 +646,6 @@ func (d *RouterISISInterfaceAddressFamilyDataSource) Schema(ctx context.Context,
 						},
 						"route_policy": schema.StringAttribute{
 							MarkdownDescription: "Filter routes based on a route policy",
-							Computed:            true,
-						},
-					},
-				},
-			},
-			"metric_default": schema.Int64Attribute{
-				MarkdownDescription: "Default metric: <1-63> for narrow, <1-16777214> for wide",
-				Computed:            true,
-			},
-			"metric_maximum": schema.BoolAttribute{
-				MarkdownDescription: "Maximum wide metric. All routers will exclude this link from their SPF",
-				Computed:            true,
-			},
-			"metric_levels": schema.ListNestedAttribute{
-				MarkdownDescription: "Set metric for one level only",
-				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"level_number": schema.Int64Attribute{
-							MarkdownDescription: "Set metric at this level only",
-							Computed:            true,
-						},
-						"metric_default": schema.Int64Attribute{
-							MarkdownDescription: "Default metric: <1-63> for narrow, <1-16777214> for wide",
-							Computed:            true,
-						},
-						"metric_maximum": schema.BoolAttribute{
-							MarkdownDescription: "Maximum wide metric. All routers will exclude this link from their SPF",
 							Computed:            true,
 						},
 					},

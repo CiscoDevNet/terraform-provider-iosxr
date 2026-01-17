@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
@@ -33,42 +34,88 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type L2VPNPWClass struct {
-	Device                                                 types.String `tfsdk:"device"`
-	Id                                                     types.String `tfsdk:"id"`
-	DeleteMode                                             types.String `tfsdk:"delete_mode"`
-	Name                                                   types.String `tfsdk:"name"`
-	EncapsulationMpls                                      types.Bool   `tfsdk:"encapsulation_mpls"`
-	EncapsulationMplsTransportModeEthernet                 types.Bool   `tfsdk:"encapsulation_mpls_transport_mode_ethernet"`
-	EncapsulationMplsTransportModeVlan                     types.Bool   `tfsdk:"encapsulation_mpls_transport_mode_vlan"`
-	EncapsulationMplsTransportModePassthrough              types.Bool   `tfsdk:"encapsulation_mpls_transport_mode_passthrough"`
-	EncapsulationMplsLoadBalancingPwLabel                  types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_pw_label"`
-	EncapsulationMplsLoadBalancingFlowLabelTransmit        types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_transmit"`
-	EncapsulationMplsLoadBalancingFlowLabelTransmitStatic  types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_transmit_static"`
-	EncapsulationMplsLoadBalancingFlowLabelReceive         types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_receive"`
-	EncapsulationMplsLoadBalancingFlowLabelReceiveStatic   types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_receive_static"`
-	EncapsulationMplsLoadBalancingFlowLabelBoth            types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_both"`
-	EncapsulationMplsLoadBalancingFlowLabelBothStatic      types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_both_static"`
-	EncapsulationMplsLoadBalancingFlowLabelCodeOne7        types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_code_one7"`
-	EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_code_one7_disable"`
+	Device                                                      types.String `tfsdk:"device"`
+	Id                                                          types.String `tfsdk:"id"`
+	DeleteMode                                                  types.String `tfsdk:"delete_mode"`
+	Name                                                        types.String `tfsdk:"name"`
+	EncapsulationMpls                                           types.Bool   `tfsdk:"encapsulation_mpls"`
+	EncapsulationMplsProtocolLdp                                types.Bool   `tfsdk:"encapsulation_mpls_protocol_ldp"`
+	EncapsulationMplsControlWord                                types.Bool   `tfsdk:"encapsulation_mpls_control_word"`
+	EncapsulationMplsTransportModeEthernet                      types.Bool   `tfsdk:"encapsulation_mpls_transport_mode_ethernet"`
+	EncapsulationMplsTransportModeVlan                          types.Bool   `tfsdk:"encapsulation_mpls_transport_mode_vlan"`
+	EncapsulationMplsTransportModeVlanPassthrough               types.Bool   `tfsdk:"encapsulation_mpls_transport_mode_vlan_passthrough"`
+	EncapsulationMplsVccvVerificationTypeNone                   types.Bool   `tfsdk:"encapsulation_mpls_vccv_verification_type_none"`
+	EncapsulationMplsSequencingTransmit                         types.Bool   `tfsdk:"encapsulation_mpls_sequencing_transmit"`
+	EncapsulationMplsSequencingTransmitResync                   types.Int64  `tfsdk:"encapsulation_mpls_sequencing_transmit_resync"`
+	EncapsulationMplsSequencingReceive                          types.Bool   `tfsdk:"encapsulation_mpls_sequencing_receive"`
+	EncapsulationMplsSequencingReceiveResync                    types.Int64  `tfsdk:"encapsulation_mpls_sequencing_receive_resync"`
+	EncapsulationMplsSequencingBoth                             types.Bool   `tfsdk:"encapsulation_mpls_sequencing_both"`
+	EncapsulationMplsSequencingBothResync                       types.Int64  `tfsdk:"encapsulation_mpls_sequencing_both_resync"`
+	EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelNumber types.Int64  `tfsdk:"encapsulation_mpls_preferred_path_interface_tunnel_te_tunnel_number"`
+	EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelName   types.String `tfsdk:"encapsulation_mpls_preferred_path_interface_tunnel_te_tunnel_name"`
+	EncapsulationMplsPreferredPathInterfaceTunnelIp             types.Int64  `tfsdk:"encapsulation_mpls_preferred_path_interface_tunnel_ip"`
+	EncapsulationMplsPreferredPathInterfaceTunnelTp             types.Int64  `tfsdk:"encapsulation_mpls_preferred_path_interface_tunnel_tp"`
+	EncapsulationMplsPreferredPathSrTePolicy                    types.String `tfsdk:"encapsulation_mpls_preferred_path_sr_te_policy"`
+	EncapsulationMplsPreferredPathFallbackDisable               types.Bool   `tfsdk:"encapsulation_mpls_preferred_path_fallback_disable"`
+	EncapsulationMplsSwitchingTlvHide                           types.Bool   `tfsdk:"encapsulation_mpls_switching_tlv_hide"`
+	EncapsulationMplsTagRewriteIngressVlan                      types.Int64  `tfsdk:"encapsulation_mpls_tag_rewrite_ingress_vlan"`
+	EncapsulationMplsRedundancyOneWay                           types.Bool   `tfsdk:"encapsulation_mpls_redundancy_one_way"`
+	EncapsulationMplsRedundancyInitialDelay                     types.Int64  `tfsdk:"encapsulation_mpls_redundancy_initial_delay"`
+	EncapsulationMplsLoadBalancingPwLabel                       types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_pw_label"`
+	EncapsulationMplsLoadBalancingFlowLabelTransmit             types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_transmit"`
+	EncapsulationMplsLoadBalancingFlowLabelTransmitStatic       types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_transmit_static"`
+	EncapsulationMplsLoadBalancingFlowLabelReceive              types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_receive"`
+	EncapsulationMplsLoadBalancingFlowLabelReceiveStatic        types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_receive_static"`
+	EncapsulationMplsLoadBalancingFlowLabelBoth                 types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_both"`
+	EncapsulationMplsLoadBalancingFlowLabelBothStatic           types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_both_static"`
+	EncapsulationMplsLoadBalancingFlowLabelCode17               types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_code_17"`
+	EncapsulationMplsLoadBalancingFlowLabelCode17Disable        types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_code_17_disable"`
+	EncapsulationMplsIpv4Source                                 types.String `tfsdk:"encapsulation_mpls_ipv4_source"`
+	BackupDisableDelay                                          types.Int64  `tfsdk:"backup_disable_delay"`
+	BackupDisableNever                                          types.Bool   `tfsdk:"backup_disable_never"`
+	MacWithdraw                                                 types.Bool   `tfsdk:"mac_withdraw"`
 }
 
 type L2VPNPWClassData struct {
-	Device                                                 types.String `tfsdk:"device"`
-	Id                                                     types.String `tfsdk:"id"`
-	Name                                                   types.String `tfsdk:"name"`
-	EncapsulationMpls                                      types.Bool   `tfsdk:"encapsulation_mpls"`
-	EncapsulationMplsTransportModeEthernet                 types.Bool   `tfsdk:"encapsulation_mpls_transport_mode_ethernet"`
-	EncapsulationMplsTransportModeVlan                     types.Bool   `tfsdk:"encapsulation_mpls_transport_mode_vlan"`
-	EncapsulationMplsTransportModePassthrough              types.Bool   `tfsdk:"encapsulation_mpls_transport_mode_passthrough"`
-	EncapsulationMplsLoadBalancingPwLabel                  types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_pw_label"`
-	EncapsulationMplsLoadBalancingFlowLabelTransmit        types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_transmit"`
-	EncapsulationMplsLoadBalancingFlowLabelTransmitStatic  types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_transmit_static"`
-	EncapsulationMplsLoadBalancingFlowLabelReceive         types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_receive"`
-	EncapsulationMplsLoadBalancingFlowLabelReceiveStatic   types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_receive_static"`
-	EncapsulationMplsLoadBalancingFlowLabelBoth            types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_both"`
-	EncapsulationMplsLoadBalancingFlowLabelBothStatic      types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_both_static"`
-	EncapsulationMplsLoadBalancingFlowLabelCodeOne7        types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_code_one7"`
-	EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_code_one7_disable"`
+	Device                                                      types.String `tfsdk:"device"`
+	Id                                                          types.String `tfsdk:"id"`
+	Name                                                        types.String `tfsdk:"name"`
+	EncapsulationMpls                                           types.Bool   `tfsdk:"encapsulation_mpls"`
+	EncapsulationMplsProtocolLdp                                types.Bool   `tfsdk:"encapsulation_mpls_protocol_ldp"`
+	EncapsulationMplsControlWord                                types.Bool   `tfsdk:"encapsulation_mpls_control_word"`
+	EncapsulationMplsTransportModeEthernet                      types.Bool   `tfsdk:"encapsulation_mpls_transport_mode_ethernet"`
+	EncapsulationMplsTransportModeVlan                          types.Bool   `tfsdk:"encapsulation_mpls_transport_mode_vlan"`
+	EncapsulationMplsTransportModeVlanPassthrough               types.Bool   `tfsdk:"encapsulation_mpls_transport_mode_vlan_passthrough"`
+	EncapsulationMplsVccvVerificationTypeNone                   types.Bool   `tfsdk:"encapsulation_mpls_vccv_verification_type_none"`
+	EncapsulationMplsSequencingTransmit                         types.Bool   `tfsdk:"encapsulation_mpls_sequencing_transmit"`
+	EncapsulationMplsSequencingTransmitResync                   types.Int64  `tfsdk:"encapsulation_mpls_sequencing_transmit_resync"`
+	EncapsulationMplsSequencingReceive                          types.Bool   `tfsdk:"encapsulation_mpls_sequencing_receive"`
+	EncapsulationMplsSequencingReceiveResync                    types.Int64  `tfsdk:"encapsulation_mpls_sequencing_receive_resync"`
+	EncapsulationMplsSequencingBoth                             types.Bool   `tfsdk:"encapsulation_mpls_sequencing_both"`
+	EncapsulationMplsSequencingBothResync                       types.Int64  `tfsdk:"encapsulation_mpls_sequencing_both_resync"`
+	EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelNumber types.Int64  `tfsdk:"encapsulation_mpls_preferred_path_interface_tunnel_te_tunnel_number"`
+	EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelName   types.String `tfsdk:"encapsulation_mpls_preferred_path_interface_tunnel_te_tunnel_name"`
+	EncapsulationMplsPreferredPathInterfaceTunnelIp             types.Int64  `tfsdk:"encapsulation_mpls_preferred_path_interface_tunnel_ip"`
+	EncapsulationMplsPreferredPathInterfaceTunnelTp             types.Int64  `tfsdk:"encapsulation_mpls_preferred_path_interface_tunnel_tp"`
+	EncapsulationMplsPreferredPathSrTePolicy                    types.String `tfsdk:"encapsulation_mpls_preferred_path_sr_te_policy"`
+	EncapsulationMplsPreferredPathFallbackDisable               types.Bool   `tfsdk:"encapsulation_mpls_preferred_path_fallback_disable"`
+	EncapsulationMplsSwitchingTlvHide                           types.Bool   `tfsdk:"encapsulation_mpls_switching_tlv_hide"`
+	EncapsulationMplsTagRewriteIngressVlan                      types.Int64  `tfsdk:"encapsulation_mpls_tag_rewrite_ingress_vlan"`
+	EncapsulationMplsRedundancyOneWay                           types.Bool   `tfsdk:"encapsulation_mpls_redundancy_one_way"`
+	EncapsulationMplsRedundancyInitialDelay                     types.Int64  `tfsdk:"encapsulation_mpls_redundancy_initial_delay"`
+	EncapsulationMplsLoadBalancingPwLabel                       types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_pw_label"`
+	EncapsulationMplsLoadBalancingFlowLabelTransmit             types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_transmit"`
+	EncapsulationMplsLoadBalancingFlowLabelTransmitStatic       types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_transmit_static"`
+	EncapsulationMplsLoadBalancingFlowLabelReceive              types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_receive"`
+	EncapsulationMplsLoadBalancingFlowLabelReceiveStatic        types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_receive_static"`
+	EncapsulationMplsLoadBalancingFlowLabelBoth                 types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_both"`
+	EncapsulationMplsLoadBalancingFlowLabelBothStatic           types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_both_static"`
+	EncapsulationMplsLoadBalancingFlowLabelCode17               types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_code_17"`
+	EncapsulationMplsLoadBalancingFlowLabelCode17Disable        types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_code_17_disable"`
+	EncapsulationMplsIpv4Source                                 types.String `tfsdk:"encapsulation_mpls_ipv4_source"`
+	BackupDisableDelay                                          types.Int64  `tfsdk:"backup_disable_delay"`
+	BackupDisableNever                                          types.Bool   `tfsdk:"backup_disable_never"`
+	MacWithdraw                                                 types.Bool   `tfsdk:"mac_withdraw"`
 }
 
 // End of section. //template:end types
@@ -97,6 +144,16 @@ func (data L2VPNPWClass) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "encapsulation.mpls", map[string]string{})
 		}
 	}
+	if !data.EncapsulationMplsProtocolLdp.IsNull() && !data.EncapsulationMplsProtocolLdp.IsUnknown() {
+		if data.EncapsulationMplsProtocolLdp.ValueBool() {
+			body, _ = sjson.Set(body, "encapsulation.mpls.protocol.ldp", map[string]string{})
+		}
+	}
+	if !data.EncapsulationMplsControlWord.IsNull() && !data.EncapsulationMplsControlWord.IsUnknown() {
+		if data.EncapsulationMplsControlWord.ValueBool() {
+			body, _ = sjson.Set(body, "encapsulation.mpls.control-word", map[string]string{})
+		}
+	}
 	if !data.EncapsulationMplsTransportModeEthernet.IsNull() && !data.EncapsulationMplsTransportModeEthernet.IsUnknown() {
 		if data.EncapsulationMplsTransportModeEthernet.ValueBool() {
 			body, _ = sjson.Set(body, "encapsulation.mpls.transport-mode.ethernet", map[string]string{})
@@ -107,10 +164,75 @@ func (data L2VPNPWClass) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "encapsulation.mpls.transport-mode.vlan", map[string]string{})
 		}
 	}
-	if !data.EncapsulationMplsTransportModePassthrough.IsNull() && !data.EncapsulationMplsTransportModePassthrough.IsUnknown() {
-		if data.EncapsulationMplsTransportModePassthrough.ValueBool() {
+	if !data.EncapsulationMplsTransportModeVlanPassthrough.IsNull() && !data.EncapsulationMplsTransportModeVlanPassthrough.IsUnknown() {
+		if data.EncapsulationMplsTransportModeVlanPassthrough.ValueBool() {
 			body, _ = sjson.Set(body, "encapsulation.mpls.transport-mode.passthrough", map[string]string{})
 		}
+	}
+	if !data.EncapsulationMplsVccvVerificationTypeNone.IsNull() && !data.EncapsulationMplsVccvVerificationTypeNone.IsUnknown() {
+		if data.EncapsulationMplsVccvVerificationTypeNone.ValueBool() {
+			body, _ = sjson.Set(body, "encapsulation.mpls.vccv.verification-type.none", map[string]string{})
+		}
+	}
+	if !data.EncapsulationMplsSequencingTransmit.IsNull() && !data.EncapsulationMplsSequencingTransmit.IsUnknown() {
+		if data.EncapsulationMplsSequencingTransmit.ValueBool() {
+			body, _ = sjson.Set(body, "encapsulation.mpls.sequencing.transmit", map[string]string{})
+		}
+	}
+	if !data.EncapsulationMplsSequencingTransmitResync.IsNull() && !data.EncapsulationMplsSequencingTransmitResync.IsUnknown() {
+		body, _ = sjson.Set(body, "encapsulation.mpls.sequencing.transmit.resync", strconv.FormatInt(data.EncapsulationMplsSequencingTransmitResync.ValueInt64(), 10))
+	}
+	if !data.EncapsulationMplsSequencingReceive.IsNull() && !data.EncapsulationMplsSequencingReceive.IsUnknown() {
+		if data.EncapsulationMplsSequencingReceive.ValueBool() {
+			body, _ = sjson.Set(body, "encapsulation.mpls.sequencing.receive", map[string]string{})
+		}
+	}
+	if !data.EncapsulationMplsSequencingReceiveResync.IsNull() && !data.EncapsulationMplsSequencingReceiveResync.IsUnknown() {
+		body, _ = sjson.Set(body, "encapsulation.mpls.sequencing.receive.resync", strconv.FormatInt(data.EncapsulationMplsSequencingReceiveResync.ValueInt64(), 10))
+	}
+	if !data.EncapsulationMplsSequencingBoth.IsNull() && !data.EncapsulationMplsSequencingBoth.IsUnknown() {
+		if data.EncapsulationMplsSequencingBoth.ValueBool() {
+			body, _ = sjson.Set(body, "encapsulation.mpls.sequencing.both", map[string]string{})
+		}
+	}
+	if !data.EncapsulationMplsSequencingBothResync.IsNull() && !data.EncapsulationMplsSequencingBothResync.IsUnknown() {
+		body, _ = sjson.Set(body, "encapsulation.mpls.sequencing.both.resync", strconv.FormatInt(data.EncapsulationMplsSequencingBothResync.ValueInt64(), 10))
+	}
+	if !data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelNumber.IsNull() && !data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelNumber.IsUnknown() {
+		body, _ = sjson.Set(body, "encapsulation.mpls.preferred-path.interface.tunnel-te.tunnel-number", strconv.FormatInt(data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelNumber.ValueInt64(), 10))
+	}
+	if !data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelName.IsNull() && !data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelName.IsUnknown() {
+		body, _ = sjson.Set(body, "encapsulation.mpls.preferred-path.interface.tunnel-te.tunnel-name", data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelName.ValueString())
+	}
+	if !data.EncapsulationMplsPreferredPathInterfaceTunnelIp.IsNull() && !data.EncapsulationMplsPreferredPathInterfaceTunnelIp.IsUnknown() {
+		body, _ = sjson.Set(body, "encapsulation.mpls.preferred-path.interface.tunnel-ip", strconv.FormatInt(data.EncapsulationMplsPreferredPathInterfaceTunnelIp.ValueInt64(), 10))
+	}
+	if !data.EncapsulationMplsPreferredPathInterfaceTunnelTp.IsNull() && !data.EncapsulationMplsPreferredPathInterfaceTunnelTp.IsUnknown() {
+		body, _ = sjson.Set(body, "encapsulation.mpls.preferred-path.interface.tunnel-tp", strconv.FormatInt(data.EncapsulationMplsPreferredPathInterfaceTunnelTp.ValueInt64(), 10))
+	}
+	if !data.EncapsulationMplsPreferredPathSrTePolicy.IsNull() && !data.EncapsulationMplsPreferredPathSrTePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "encapsulation.mpls.preferred-path.sr-te.policy", data.EncapsulationMplsPreferredPathSrTePolicy.ValueString())
+	}
+	if !data.EncapsulationMplsPreferredPathFallbackDisable.IsNull() && !data.EncapsulationMplsPreferredPathFallbackDisable.IsUnknown() {
+		if data.EncapsulationMplsPreferredPathFallbackDisable.ValueBool() {
+			body, _ = sjson.Set(body, "encapsulation.mpls.preferred-path.fallback.disable", map[string]string{})
+		}
+	}
+	if !data.EncapsulationMplsSwitchingTlvHide.IsNull() && !data.EncapsulationMplsSwitchingTlvHide.IsUnknown() {
+		if data.EncapsulationMplsSwitchingTlvHide.ValueBool() {
+			body, _ = sjson.Set(body, "encapsulation.mpls.switching-tlv.hide", map[string]string{})
+		}
+	}
+	if !data.EncapsulationMplsTagRewriteIngressVlan.IsNull() && !data.EncapsulationMplsTagRewriteIngressVlan.IsUnknown() {
+		body, _ = sjson.Set(body, "encapsulation.mpls.tag-rewrite.ingress.vlan", strconv.FormatInt(data.EncapsulationMplsTagRewriteIngressVlan.ValueInt64(), 10))
+	}
+	if !data.EncapsulationMplsRedundancyOneWay.IsNull() && !data.EncapsulationMplsRedundancyOneWay.IsUnknown() {
+		if data.EncapsulationMplsRedundancyOneWay.ValueBool() {
+			body, _ = sjson.Set(body, "encapsulation.mpls.redundancy.one-way", map[string]string{})
+		}
+	}
+	if !data.EncapsulationMplsRedundancyInitialDelay.IsNull() && !data.EncapsulationMplsRedundancyInitialDelay.IsUnknown() {
+		body, _ = sjson.Set(body, "encapsulation.mpls.redundancy.initial-delay", strconv.FormatInt(data.EncapsulationMplsRedundancyInitialDelay.ValueInt64(), 10))
 	}
 	if !data.EncapsulationMplsLoadBalancingPwLabel.IsNull() && !data.EncapsulationMplsLoadBalancingPwLabel.IsUnknown() {
 		if data.EncapsulationMplsLoadBalancingPwLabel.ValueBool() {
@@ -147,14 +269,30 @@ func (data L2VPNPWClass) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "encapsulation.mpls.load-balancing.flow-label.both.static", map[string]string{})
 		}
 	}
-	if !data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7.IsUnknown() {
-		if data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7.ValueBool() {
+	if !data.EncapsulationMplsLoadBalancingFlowLabelCode17.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelCode17.IsUnknown() {
+		if data.EncapsulationMplsLoadBalancingFlowLabelCode17.ValueBool() {
 			body, _ = sjson.Set(body, "encapsulation.mpls.load-balancing.flow-label.code.one7", map[string]string{})
 		}
 	}
-	if !data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable.IsUnknown() {
-		if data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable.ValueBool() {
+	if !data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable.IsUnknown() {
+		if data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable.ValueBool() {
 			body, _ = sjson.Set(body, "encapsulation.mpls.load-balancing.flow-label.code.one7.disable", map[string]string{})
+		}
+	}
+	if !data.EncapsulationMplsIpv4Source.IsNull() && !data.EncapsulationMplsIpv4Source.IsUnknown() {
+		body, _ = sjson.Set(body, "encapsulation.mpls.ipv4.source", data.EncapsulationMplsIpv4Source.ValueString())
+	}
+	if !data.BackupDisableDelay.IsNull() && !data.BackupDisableDelay.IsUnknown() {
+		body, _ = sjson.Set(body, "backup.disable.delay", strconv.FormatInt(data.BackupDisableDelay.ValueInt64(), 10))
+	}
+	if !data.BackupDisableNever.IsNull() && !data.BackupDisableNever.IsUnknown() {
+		if data.BackupDisableNever.ValueBool() {
+			body, _ = sjson.Set(body, "backup.disable.never", map[string]string{})
+		}
+	}
+	if !data.MacWithdraw.IsNull() && !data.MacWithdraw.IsUnknown() {
+		if data.MacWithdraw.ValueBool() {
+			body, _ = sjson.Set(body, "mac-withdraw", map[string]string{})
 		}
 	}
 	return body
@@ -174,6 +312,24 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.EncapsulationMpls = types.BoolNull()
 	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.protocol.ldp"); !data.EncapsulationMplsProtocolLdp.IsNull() {
+		if value.Exists() {
+			data.EncapsulationMplsProtocolLdp = types.BoolValue(true)
+		} else {
+			data.EncapsulationMplsProtocolLdp = types.BoolValue(false)
+		}
+	} else {
+		data.EncapsulationMplsProtocolLdp = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.control-word"); !data.EncapsulationMplsControlWord.IsNull() {
+		if value.Exists() {
+			data.EncapsulationMplsControlWord = types.BoolValue(true)
+		} else {
+			data.EncapsulationMplsControlWord = types.BoolValue(false)
+		}
+	} else {
+		data.EncapsulationMplsControlWord = types.BoolNull()
+	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.transport-mode.ethernet"); !data.EncapsulationMplsTransportModeEthernet.IsNull() {
 		if value.Exists() {
 			data.EncapsulationMplsTransportModeEthernet = types.BoolValue(true)
@@ -192,14 +348,127 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.EncapsulationMplsTransportModeVlan = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.transport-mode.passthrough"); !data.EncapsulationMplsTransportModePassthrough.IsNull() {
+	if value := gjson.GetBytes(res, "encapsulation.mpls.transport-mode.passthrough"); !data.EncapsulationMplsTransportModeVlanPassthrough.IsNull() {
 		if value.Exists() {
-			data.EncapsulationMplsTransportModePassthrough = types.BoolValue(true)
+			data.EncapsulationMplsTransportModeVlanPassthrough = types.BoolValue(true)
 		} else {
-			data.EncapsulationMplsTransportModePassthrough = types.BoolValue(false)
+			data.EncapsulationMplsTransportModeVlanPassthrough = types.BoolValue(false)
 		}
 	} else {
-		data.EncapsulationMplsTransportModePassthrough = types.BoolNull()
+		data.EncapsulationMplsTransportModeVlanPassthrough = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.vccv.verification-type.none"); !data.EncapsulationMplsVccvVerificationTypeNone.IsNull() {
+		if value.Exists() {
+			data.EncapsulationMplsVccvVerificationTypeNone = types.BoolValue(true)
+		} else {
+			data.EncapsulationMplsVccvVerificationTypeNone = types.BoolValue(false)
+		}
+	} else {
+		data.EncapsulationMplsVccvVerificationTypeNone = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.transmit"); !data.EncapsulationMplsSequencingTransmit.IsNull() {
+		if value.Exists() {
+			data.EncapsulationMplsSequencingTransmit = types.BoolValue(true)
+		} else {
+			data.EncapsulationMplsSequencingTransmit = types.BoolValue(false)
+		}
+	} else {
+		data.EncapsulationMplsSequencingTransmit = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.transmit.resync"); value.Exists() && !data.EncapsulationMplsSequencingTransmitResync.IsNull() {
+		data.EncapsulationMplsSequencingTransmitResync = types.Int64Value(value.Int())
+	} else {
+		data.EncapsulationMplsSequencingTransmitResync = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.receive"); !data.EncapsulationMplsSequencingReceive.IsNull() {
+		if value.Exists() {
+			data.EncapsulationMplsSequencingReceive = types.BoolValue(true)
+		} else {
+			data.EncapsulationMplsSequencingReceive = types.BoolValue(false)
+		}
+	} else {
+		data.EncapsulationMplsSequencingReceive = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.receive.resync"); value.Exists() && !data.EncapsulationMplsSequencingReceiveResync.IsNull() {
+		data.EncapsulationMplsSequencingReceiveResync = types.Int64Value(value.Int())
+	} else {
+		data.EncapsulationMplsSequencingReceiveResync = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.both"); !data.EncapsulationMplsSequencingBoth.IsNull() {
+		if value.Exists() {
+			data.EncapsulationMplsSequencingBoth = types.BoolValue(true)
+		} else {
+			data.EncapsulationMplsSequencingBoth = types.BoolValue(false)
+		}
+	} else {
+		data.EncapsulationMplsSequencingBoth = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.both.resync"); value.Exists() && !data.EncapsulationMplsSequencingBothResync.IsNull() {
+		data.EncapsulationMplsSequencingBothResync = types.Int64Value(value.Int())
+	} else {
+		data.EncapsulationMplsSequencingBothResync = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.interface.tunnel-te.tunnel-number"); value.Exists() && !data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelNumber.IsNull() {
+		data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelNumber = types.Int64Value(value.Int())
+	} else {
+		data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelNumber = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.interface.tunnel-te.tunnel-name"); value.Exists() && !data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelName.IsNull() {
+		data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelName = types.StringValue(value.String())
+	} else {
+		data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelName = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.interface.tunnel-ip"); value.Exists() && !data.EncapsulationMplsPreferredPathInterfaceTunnelIp.IsNull() {
+		data.EncapsulationMplsPreferredPathInterfaceTunnelIp = types.Int64Value(value.Int())
+	} else {
+		data.EncapsulationMplsPreferredPathInterfaceTunnelIp = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.interface.tunnel-tp"); value.Exists() && !data.EncapsulationMplsPreferredPathInterfaceTunnelTp.IsNull() {
+		data.EncapsulationMplsPreferredPathInterfaceTunnelTp = types.Int64Value(value.Int())
+	} else {
+		data.EncapsulationMplsPreferredPathInterfaceTunnelTp = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.sr-te.policy"); value.Exists() && !data.EncapsulationMplsPreferredPathSrTePolicy.IsNull() {
+		data.EncapsulationMplsPreferredPathSrTePolicy = types.StringValue(value.String())
+	} else {
+		data.EncapsulationMplsPreferredPathSrTePolicy = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.fallback.disable"); !data.EncapsulationMplsPreferredPathFallbackDisable.IsNull() {
+		if value.Exists() {
+			data.EncapsulationMplsPreferredPathFallbackDisable = types.BoolValue(true)
+		} else {
+			data.EncapsulationMplsPreferredPathFallbackDisable = types.BoolValue(false)
+		}
+	} else {
+		data.EncapsulationMplsPreferredPathFallbackDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.switching-tlv.hide"); !data.EncapsulationMplsSwitchingTlvHide.IsNull() {
+		if value.Exists() {
+			data.EncapsulationMplsSwitchingTlvHide = types.BoolValue(true)
+		} else {
+			data.EncapsulationMplsSwitchingTlvHide = types.BoolValue(false)
+		}
+	} else {
+		data.EncapsulationMplsSwitchingTlvHide = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.tag-rewrite.ingress.vlan"); value.Exists() && !data.EncapsulationMplsTagRewriteIngressVlan.IsNull() {
+		data.EncapsulationMplsTagRewriteIngressVlan = types.Int64Value(value.Int())
+	} else {
+		data.EncapsulationMplsTagRewriteIngressVlan = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.redundancy.one-way"); !data.EncapsulationMplsRedundancyOneWay.IsNull() {
+		if value.Exists() {
+			data.EncapsulationMplsRedundancyOneWay = types.BoolValue(true)
+		} else {
+			data.EncapsulationMplsRedundancyOneWay = types.BoolValue(false)
+		}
+	} else {
+		data.EncapsulationMplsRedundancyOneWay = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.redundancy.initial-delay"); value.Exists() && !data.EncapsulationMplsRedundancyInitialDelay.IsNull() {
+		data.EncapsulationMplsRedundancyInitialDelay = types.Int64Value(value.Int())
+	} else {
+		data.EncapsulationMplsRedundancyInitialDelay = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.pw-label"); !data.EncapsulationMplsLoadBalancingPwLabel.IsNull() {
 		if value.Exists() {
@@ -264,23 +533,51 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.EncapsulationMplsLoadBalancingFlowLabelBothStatic = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.code.one7"); !data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7.IsNull() {
+	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.code.one7"); !data.EncapsulationMplsLoadBalancingFlowLabelCode17.IsNull() {
 		if value.Exists() {
-			data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7 = types.BoolValue(true)
+			data.EncapsulationMplsLoadBalancingFlowLabelCode17 = types.BoolValue(true)
 		} else {
-			data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7 = types.BoolValue(false)
+			data.EncapsulationMplsLoadBalancingFlowLabelCode17 = types.BoolValue(false)
 		}
 	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7 = types.BoolNull()
+		data.EncapsulationMplsLoadBalancingFlowLabelCode17 = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.code.one7.disable"); !data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable.IsNull() {
+	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.code.one7.disable"); !data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable.IsNull() {
 		if value.Exists() {
-			data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable = types.BoolValue(true)
+			data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable = types.BoolValue(true)
 		} else {
-			data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable = types.BoolValue(false)
+			data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable = types.BoolValue(false)
 		}
 	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable = types.BoolNull()
+		data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.ipv4.source"); value.Exists() && !data.EncapsulationMplsIpv4Source.IsNull() {
+		data.EncapsulationMplsIpv4Source = types.StringValue(value.String())
+	} else {
+		data.EncapsulationMplsIpv4Source = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "backup.disable.delay"); value.Exists() && !data.BackupDisableDelay.IsNull() {
+		data.BackupDisableDelay = types.Int64Value(value.Int())
+	} else {
+		data.BackupDisableDelay = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "backup.disable.never"); !data.BackupDisableNever.IsNull() {
+		if value.Exists() {
+			data.BackupDisableNever = types.BoolValue(true)
+		} else {
+			data.BackupDisableNever = types.BoolValue(false)
+		}
+	} else {
+		data.BackupDisableNever = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "mac-withdraw"); !data.MacWithdraw.IsNull() {
+		if value.Exists() {
+			data.MacWithdraw = types.BoolValue(true)
+		} else {
+			data.MacWithdraw = types.BoolValue(false)
+		}
+	} else {
+		data.MacWithdraw = types.BoolNull()
 	}
 }
 
@@ -294,6 +591,16 @@ func (data *L2VPNPWClass) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.EncapsulationMpls = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.protocol.ldp"); value.Exists() {
+		data.EncapsulationMplsProtocolLdp = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsProtocolLdp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.control-word"); value.Exists() {
+		data.EncapsulationMplsControlWord = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsControlWord = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.transport-mode.ethernet"); value.Exists() {
 		data.EncapsulationMplsTransportModeEthernet = types.BoolValue(true)
 	} else {
@@ -305,9 +612,74 @@ func (data *L2VPNPWClass) fromBody(ctx context.Context, res []byte) {
 		data.EncapsulationMplsTransportModeVlan = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.transport-mode.passthrough"); value.Exists() {
-		data.EncapsulationMplsTransportModePassthrough = types.BoolValue(true)
+		data.EncapsulationMplsTransportModeVlanPassthrough = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsTransportModePassthrough = types.BoolValue(false)
+		data.EncapsulationMplsTransportModeVlanPassthrough = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.vccv.verification-type.none"); value.Exists() {
+		data.EncapsulationMplsVccvVerificationTypeNone = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsVccvVerificationTypeNone = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.transmit"); value.Exists() {
+		data.EncapsulationMplsSequencingTransmit = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsSequencingTransmit = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.transmit.resync"); value.Exists() {
+		data.EncapsulationMplsSequencingTransmitResync = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.receive"); value.Exists() {
+		data.EncapsulationMplsSequencingReceive = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsSequencingReceive = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.receive.resync"); value.Exists() {
+		data.EncapsulationMplsSequencingReceiveResync = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.both"); value.Exists() {
+		data.EncapsulationMplsSequencingBoth = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsSequencingBoth = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.both.resync"); value.Exists() {
+		data.EncapsulationMplsSequencingBothResync = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.interface.tunnel-te.tunnel-number"); value.Exists() {
+		data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelNumber = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.interface.tunnel-te.tunnel-name"); value.Exists() {
+		data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelName = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.interface.tunnel-ip"); value.Exists() {
+		data.EncapsulationMplsPreferredPathInterfaceTunnelIp = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.interface.tunnel-tp"); value.Exists() {
+		data.EncapsulationMplsPreferredPathInterfaceTunnelTp = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.sr-te.policy"); value.Exists() {
+		data.EncapsulationMplsPreferredPathSrTePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.fallback.disable"); value.Exists() {
+		data.EncapsulationMplsPreferredPathFallbackDisable = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsPreferredPathFallbackDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.switching-tlv.hide"); value.Exists() {
+		data.EncapsulationMplsSwitchingTlvHide = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsSwitchingTlvHide = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.tag-rewrite.ingress.vlan"); value.Exists() {
+		data.EncapsulationMplsTagRewriteIngressVlan = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.redundancy.one-way"); value.Exists() {
+		data.EncapsulationMplsRedundancyOneWay = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsRedundancyOneWay = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.redundancy.initial-delay"); value.Exists() {
+		data.EncapsulationMplsRedundancyInitialDelay = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.pw-label"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingPwLabel = types.BoolValue(true)
@@ -345,14 +717,30 @@ func (data *L2VPNPWClass) fromBody(ctx context.Context, res []byte) {
 		data.EncapsulationMplsLoadBalancingFlowLabelBothStatic = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.code.one7"); value.Exists() {
-		data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7 = types.BoolValue(true)
+		data.EncapsulationMplsLoadBalancingFlowLabelCode17 = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7 = types.BoolValue(false)
+		data.EncapsulationMplsLoadBalancingFlowLabelCode17 = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.code.one7.disable"); value.Exists() {
-		data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable = types.BoolValue(true)
+		data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable = types.BoolValue(false)
+		data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.ipv4.source"); value.Exists() {
+		data.EncapsulationMplsIpv4Source = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "backup.disable.delay"); value.Exists() {
+		data.BackupDisableDelay = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "backup.disable.never"); value.Exists() {
+		data.BackupDisableNever = types.BoolValue(true)
+	} else {
+		data.BackupDisableNever = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mac-withdraw"); value.Exists() {
+		data.MacWithdraw = types.BoolValue(true)
+	} else {
+		data.MacWithdraw = types.BoolValue(false)
 	}
 }
 
@@ -366,6 +754,16 @@ func (data *L2VPNPWClassData) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.EncapsulationMpls = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.protocol.ldp"); value.Exists() {
+		data.EncapsulationMplsProtocolLdp = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsProtocolLdp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.control-word"); value.Exists() {
+		data.EncapsulationMplsControlWord = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsControlWord = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.transport-mode.ethernet"); value.Exists() {
 		data.EncapsulationMplsTransportModeEthernet = types.BoolValue(true)
 	} else {
@@ -377,9 +775,74 @@ func (data *L2VPNPWClassData) fromBody(ctx context.Context, res []byte) {
 		data.EncapsulationMplsTransportModeVlan = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.transport-mode.passthrough"); value.Exists() {
-		data.EncapsulationMplsTransportModePassthrough = types.BoolValue(true)
+		data.EncapsulationMplsTransportModeVlanPassthrough = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsTransportModePassthrough = types.BoolValue(false)
+		data.EncapsulationMplsTransportModeVlanPassthrough = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.vccv.verification-type.none"); value.Exists() {
+		data.EncapsulationMplsVccvVerificationTypeNone = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsVccvVerificationTypeNone = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.transmit"); value.Exists() {
+		data.EncapsulationMplsSequencingTransmit = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsSequencingTransmit = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.transmit.resync"); value.Exists() {
+		data.EncapsulationMplsSequencingTransmitResync = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.receive"); value.Exists() {
+		data.EncapsulationMplsSequencingReceive = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsSequencingReceive = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.receive.resync"); value.Exists() {
+		data.EncapsulationMplsSequencingReceiveResync = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.both"); value.Exists() {
+		data.EncapsulationMplsSequencingBoth = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsSequencingBoth = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.both.resync"); value.Exists() {
+		data.EncapsulationMplsSequencingBothResync = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.interface.tunnel-te.tunnel-number"); value.Exists() {
+		data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelNumber = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.interface.tunnel-te.tunnel-name"); value.Exists() {
+		data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelName = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.interface.tunnel-ip"); value.Exists() {
+		data.EncapsulationMplsPreferredPathInterfaceTunnelIp = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.interface.tunnel-tp"); value.Exists() {
+		data.EncapsulationMplsPreferredPathInterfaceTunnelTp = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.sr-te.policy"); value.Exists() {
+		data.EncapsulationMplsPreferredPathSrTePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.fallback.disable"); value.Exists() {
+		data.EncapsulationMplsPreferredPathFallbackDisable = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsPreferredPathFallbackDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.switching-tlv.hide"); value.Exists() {
+		data.EncapsulationMplsSwitchingTlvHide = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsSwitchingTlvHide = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.tag-rewrite.ingress.vlan"); value.Exists() {
+		data.EncapsulationMplsTagRewriteIngressVlan = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.redundancy.one-way"); value.Exists() {
+		data.EncapsulationMplsRedundancyOneWay = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsRedundancyOneWay = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.redundancy.initial-delay"); value.Exists() {
+		data.EncapsulationMplsRedundancyInitialDelay = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.pw-label"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingPwLabel = types.BoolValue(true)
@@ -417,14 +880,30 @@ func (data *L2VPNPWClassData) fromBody(ctx context.Context, res []byte) {
 		data.EncapsulationMplsLoadBalancingFlowLabelBothStatic = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.code.one7"); value.Exists() {
-		data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7 = types.BoolValue(true)
+		data.EncapsulationMplsLoadBalancingFlowLabelCode17 = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7 = types.BoolValue(false)
+		data.EncapsulationMplsLoadBalancingFlowLabelCode17 = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.code.one7.disable"); value.Exists() {
-		data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable = types.BoolValue(true)
+		data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable = types.BoolValue(false)
+		data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.ipv4.source"); value.Exists() {
+		data.EncapsulationMplsIpv4Source = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "backup.disable.delay"); value.Exists() {
+		data.BackupDisableDelay = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "backup.disable.never"); value.Exists() {
+		data.BackupDisableNever = types.BoolValue(true)
+	} else {
+		data.BackupDisableNever = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mac-withdraw"); value.Exists() {
+		data.MacWithdraw = types.BoolValue(true)
+	} else {
+		data.MacWithdraw = types.BoolValue(false)
 	}
 }
 
@@ -434,10 +913,22 @@ func (data *L2VPNPWClassData) fromBody(ctx context.Context, res []byte) {
 
 func (data *L2VPNPWClass) getDeletedItems(ctx context.Context, state L2VPNPWClass) []string {
 	deletedItems := make([]string, 0)
-	if !state.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable.IsNull() && data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable.IsNull() {
+	if !state.MacWithdraw.IsNull() && data.MacWithdraw.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mac-withdraw", state.getPath()))
+	}
+	if !state.BackupDisableNever.IsNull() && data.BackupDisableNever.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/backup/disable/never", state.getPath()))
+	}
+	if !state.BackupDisableDelay.IsNull() && data.BackupDisableDelay.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/backup/disable/delay", state.getPath()))
+	}
+	if !state.EncapsulationMplsIpv4Source.IsNull() && data.EncapsulationMplsIpv4Source.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/ipv4/source", state.getPath()))
+	}
+	if !state.EncapsulationMplsLoadBalancingFlowLabelCode17Disable.IsNull() && data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/code/one7/disable", state.getPath()))
 	}
-	if !state.EncapsulationMplsLoadBalancingFlowLabelCodeOne7.IsNull() && data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7.IsNull() {
+	if !state.EncapsulationMplsLoadBalancingFlowLabelCode17.IsNull() && data.EncapsulationMplsLoadBalancingFlowLabelCode17.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/code/one7", state.getPath()))
 	}
 	if !state.EncapsulationMplsLoadBalancingFlowLabelBothStatic.IsNull() && data.EncapsulationMplsLoadBalancingFlowLabelBothStatic.IsNull() {
@@ -461,7 +952,58 @@ func (data *L2VPNPWClass) getDeletedItems(ctx context.Context, state L2VPNPWClas
 	if !state.EncapsulationMplsLoadBalancingPwLabel.IsNull() && data.EncapsulationMplsLoadBalancingPwLabel.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/pw-label", state.getPath()))
 	}
-	if !state.EncapsulationMplsTransportModePassthrough.IsNull() && data.EncapsulationMplsTransportModePassthrough.IsNull() {
+	if !state.EncapsulationMplsRedundancyInitialDelay.IsNull() && data.EncapsulationMplsRedundancyInitialDelay.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/redundancy/initial-delay", state.getPath()))
+	}
+	if !state.EncapsulationMplsRedundancyOneWay.IsNull() && data.EncapsulationMplsRedundancyOneWay.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/redundancy/one-way", state.getPath()))
+	}
+	if !state.EncapsulationMplsTagRewriteIngressVlan.IsNull() && data.EncapsulationMplsTagRewriteIngressVlan.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/tag-rewrite/ingress/vlan", state.getPath()))
+	}
+	if !state.EncapsulationMplsSwitchingTlvHide.IsNull() && data.EncapsulationMplsSwitchingTlvHide.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/switching-tlv/hide", state.getPath()))
+	}
+	if !state.EncapsulationMplsPreferredPathFallbackDisable.IsNull() && data.EncapsulationMplsPreferredPathFallbackDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/preferred-path/fallback/disable", state.getPath()))
+	}
+	if !state.EncapsulationMplsPreferredPathSrTePolicy.IsNull() && data.EncapsulationMplsPreferredPathSrTePolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/preferred-path/sr-te/policy", state.getPath()))
+	}
+	if !state.EncapsulationMplsPreferredPathInterfaceTunnelTp.IsNull() && data.EncapsulationMplsPreferredPathInterfaceTunnelTp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/preferred-path/interface/tunnel-tp", state.getPath()))
+	}
+	if !state.EncapsulationMplsPreferredPathInterfaceTunnelIp.IsNull() && data.EncapsulationMplsPreferredPathInterfaceTunnelIp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/preferred-path/interface/tunnel-ip", state.getPath()))
+	}
+	if !state.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelName.IsNull() && data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelName.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/preferred-path/interface/tunnel-te/tunnel-name", state.getPath()))
+	}
+	if !state.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelNumber.IsNull() && data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelNumber.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/preferred-path/interface/tunnel-te/tunnel-number", state.getPath()))
+	}
+	if !state.EncapsulationMplsSequencingBothResync.IsNull() && data.EncapsulationMplsSequencingBothResync.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/sequencing/both/resync", state.getPath()))
+	}
+	if !state.EncapsulationMplsSequencingBoth.IsNull() && data.EncapsulationMplsSequencingBoth.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/sequencing/both", state.getPath()))
+	}
+	if !state.EncapsulationMplsSequencingReceiveResync.IsNull() && data.EncapsulationMplsSequencingReceiveResync.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/sequencing/receive/resync", state.getPath()))
+	}
+	if !state.EncapsulationMplsSequencingReceive.IsNull() && data.EncapsulationMplsSequencingReceive.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/sequencing/receive", state.getPath()))
+	}
+	if !state.EncapsulationMplsSequencingTransmitResync.IsNull() && data.EncapsulationMplsSequencingTransmitResync.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/sequencing/transmit/resync", state.getPath()))
+	}
+	if !state.EncapsulationMplsSequencingTransmit.IsNull() && data.EncapsulationMplsSequencingTransmit.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/sequencing/transmit", state.getPath()))
+	}
+	if !state.EncapsulationMplsVccvVerificationTypeNone.IsNull() && data.EncapsulationMplsVccvVerificationTypeNone.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/vccv/verification-type/none", state.getPath()))
+	}
+	if !state.EncapsulationMplsTransportModeVlanPassthrough.IsNull() && data.EncapsulationMplsTransportModeVlanPassthrough.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/transport-mode/passthrough", state.getPath()))
 	}
 	if !state.EncapsulationMplsTransportModeVlan.IsNull() && data.EncapsulationMplsTransportModeVlan.IsNull() {
@@ -469,6 +1011,12 @@ func (data *L2VPNPWClass) getDeletedItems(ctx context.Context, state L2VPNPWClas
 	}
 	if !state.EncapsulationMplsTransportModeEthernet.IsNull() && data.EncapsulationMplsTransportModeEthernet.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/transport-mode/ethernet", state.getPath()))
+	}
+	if !state.EncapsulationMplsControlWord.IsNull() && data.EncapsulationMplsControlWord.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/control-word", state.getPath()))
+	}
+	if !state.EncapsulationMplsProtocolLdp.IsNull() && data.EncapsulationMplsProtocolLdp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/protocol/ldp", state.getPath()))
 	}
 	if !state.EncapsulationMpls.IsNull() && data.EncapsulationMpls.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls", state.getPath()))
@@ -482,10 +1030,16 @@ func (data *L2VPNPWClass) getDeletedItems(ctx context.Context, state L2VPNPWClas
 
 func (data *L2VPNPWClass) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	if !data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable.ValueBool() {
+	if !data.MacWithdraw.IsNull() && !data.MacWithdraw.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mac-withdraw", data.getPath()))
+	}
+	if !data.BackupDisableNever.IsNull() && !data.BackupDisableNever.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/backup/disable/never", data.getPath()))
+	}
+	if !data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/code/one7/disable", data.getPath()))
 	}
-	if !data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7.ValueBool() {
+	if !data.EncapsulationMplsLoadBalancingFlowLabelCode17.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelCode17.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/code/one7", data.getPath()))
 	}
 	if !data.EncapsulationMplsLoadBalancingFlowLabelBothStatic.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelBothStatic.ValueBool() {
@@ -509,7 +1063,28 @@ func (data *L2VPNPWClass) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.EncapsulationMplsLoadBalancingPwLabel.IsNull() && !data.EncapsulationMplsLoadBalancingPwLabel.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/pw-label", data.getPath()))
 	}
-	if !data.EncapsulationMplsTransportModePassthrough.IsNull() && !data.EncapsulationMplsTransportModePassthrough.ValueBool() {
+	if !data.EncapsulationMplsRedundancyOneWay.IsNull() && !data.EncapsulationMplsRedundancyOneWay.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/redundancy/one-way", data.getPath()))
+	}
+	if !data.EncapsulationMplsSwitchingTlvHide.IsNull() && !data.EncapsulationMplsSwitchingTlvHide.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/switching-tlv/hide", data.getPath()))
+	}
+	if !data.EncapsulationMplsPreferredPathFallbackDisable.IsNull() && !data.EncapsulationMplsPreferredPathFallbackDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/preferred-path/fallback/disable", data.getPath()))
+	}
+	if !data.EncapsulationMplsSequencingBoth.IsNull() && !data.EncapsulationMplsSequencingBoth.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/sequencing/both", data.getPath()))
+	}
+	if !data.EncapsulationMplsSequencingReceive.IsNull() && !data.EncapsulationMplsSequencingReceive.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/sequencing/receive", data.getPath()))
+	}
+	if !data.EncapsulationMplsSequencingTransmit.IsNull() && !data.EncapsulationMplsSequencingTransmit.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/sequencing/transmit", data.getPath()))
+	}
+	if !data.EncapsulationMplsVccvVerificationTypeNone.IsNull() && !data.EncapsulationMplsVccvVerificationTypeNone.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/vccv/verification-type/none", data.getPath()))
+	}
+	if !data.EncapsulationMplsTransportModeVlanPassthrough.IsNull() && !data.EncapsulationMplsTransportModeVlanPassthrough.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/transport-mode/passthrough", data.getPath()))
 	}
 	if !data.EncapsulationMplsTransportModeVlan.IsNull() && !data.EncapsulationMplsTransportModeVlan.ValueBool() {
@@ -517,6 +1092,12 @@ func (data *L2VPNPWClass) getEmptyLeafsDelete(ctx context.Context) []string {
 	}
 	if !data.EncapsulationMplsTransportModeEthernet.IsNull() && !data.EncapsulationMplsTransportModeEthernet.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/transport-mode/ethernet", data.getPath()))
+	}
+	if !data.EncapsulationMplsControlWord.IsNull() && !data.EncapsulationMplsControlWord.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/control-word", data.getPath()))
+	}
+	if !data.EncapsulationMplsProtocolLdp.IsNull() && !data.EncapsulationMplsProtocolLdp.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/protocol/ldp", data.getPath()))
 	}
 	if !data.EncapsulationMpls.IsNull() && !data.EncapsulationMpls.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls", data.getPath()))
@@ -530,10 +1111,22 @@ func (data *L2VPNPWClass) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *L2VPNPWClass) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable.IsNull() {
+	if !data.MacWithdraw.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mac-withdraw", data.getPath()))
+	}
+	if !data.BackupDisableNever.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/backup/disable/never", data.getPath()))
+	}
+	if !data.BackupDisableDelay.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/backup/disable/delay", data.getPath()))
+	}
+	if !data.EncapsulationMplsIpv4Source.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/ipv4/source", data.getPath()))
+	}
+	if !data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/code/one7/disable", data.getPath()))
 	}
-	if !data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7.IsNull() {
+	if !data.EncapsulationMplsLoadBalancingFlowLabelCode17.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/code/one7", data.getPath()))
 	}
 	if !data.EncapsulationMplsLoadBalancingFlowLabelBothStatic.IsNull() {
@@ -557,7 +1150,58 @@ func (data *L2VPNPWClass) getDeletePaths(ctx context.Context) []string {
 	if !data.EncapsulationMplsLoadBalancingPwLabel.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/pw-label", data.getPath()))
 	}
-	if !data.EncapsulationMplsTransportModePassthrough.IsNull() {
+	if !data.EncapsulationMplsRedundancyInitialDelay.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/redundancy/initial-delay", data.getPath()))
+	}
+	if !data.EncapsulationMplsRedundancyOneWay.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/redundancy/one-way", data.getPath()))
+	}
+	if !data.EncapsulationMplsTagRewriteIngressVlan.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/tag-rewrite/ingress/vlan", data.getPath()))
+	}
+	if !data.EncapsulationMplsSwitchingTlvHide.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/switching-tlv/hide", data.getPath()))
+	}
+	if !data.EncapsulationMplsPreferredPathFallbackDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/preferred-path/fallback/disable", data.getPath()))
+	}
+	if !data.EncapsulationMplsPreferredPathSrTePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/preferred-path/sr-te/policy", data.getPath()))
+	}
+	if !data.EncapsulationMplsPreferredPathInterfaceTunnelTp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/preferred-path/interface/tunnel-tp", data.getPath()))
+	}
+	if !data.EncapsulationMplsPreferredPathInterfaceTunnelIp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/preferred-path/interface/tunnel-ip", data.getPath()))
+	}
+	if !data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelName.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/preferred-path/interface/tunnel-te/tunnel-name", data.getPath()))
+	}
+	if !data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelNumber.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/preferred-path/interface/tunnel-te/tunnel-number", data.getPath()))
+	}
+	if !data.EncapsulationMplsSequencingBothResync.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/sequencing/both/resync", data.getPath()))
+	}
+	if !data.EncapsulationMplsSequencingBoth.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/sequencing/both", data.getPath()))
+	}
+	if !data.EncapsulationMplsSequencingReceiveResync.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/sequencing/receive/resync", data.getPath()))
+	}
+	if !data.EncapsulationMplsSequencingReceive.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/sequencing/receive", data.getPath()))
+	}
+	if !data.EncapsulationMplsSequencingTransmitResync.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/sequencing/transmit/resync", data.getPath()))
+	}
+	if !data.EncapsulationMplsSequencingTransmit.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/sequencing/transmit", data.getPath()))
+	}
+	if !data.EncapsulationMplsVccvVerificationTypeNone.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/vccv/verification-type/none", data.getPath()))
+	}
+	if !data.EncapsulationMplsTransportModeVlanPassthrough.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/transport-mode/passthrough", data.getPath()))
 	}
 	if !data.EncapsulationMplsTransportModeVlan.IsNull() {
@@ -565,6 +1209,12 @@ func (data *L2VPNPWClass) getDeletePaths(ctx context.Context) []string {
 	}
 	if !data.EncapsulationMplsTransportModeEthernet.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/transport-mode/ethernet", data.getPath()))
+	}
+	if !data.EncapsulationMplsControlWord.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/control-word", data.getPath()))
+	}
+	if !data.EncapsulationMplsProtocolLdp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/protocol/ldp", data.getPath()))
 	}
 	if !data.EncapsulationMpls.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls", data.getPath()))

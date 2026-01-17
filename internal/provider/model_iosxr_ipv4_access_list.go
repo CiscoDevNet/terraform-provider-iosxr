@@ -52,15 +52,10 @@ type IPv4AccessListSequences struct {
 	Remark                          types.String `tfsdk:"remark"`
 	PermitProtocol                  types.String `tfsdk:"permit_protocol"`
 	PermitEq                        types.String `tfsdk:"permit_eq"`
-	PermitIgmpType                  types.String `tfsdk:"permit_igmp_type"`
-	PermitPrecedence                types.String `tfsdk:"permit_precedence"`
-	PermitFragmentType              types.String `tfsdk:"permit_fragment_type"`
-	PermitFragments                 types.Bool   `tfsdk:"permit_fragments"`
-	PermitCounter                   types.String `tfsdk:"permit_counter"`
-	PermitDefault                   types.Bool   `tfsdk:"permit_default"`
-	PermitCapture                   types.Bool   `tfsdk:"permit_capture"`
 	PermitRangeStartProtocol        types.String `tfsdk:"permit_range_start_protocol"`
 	PermitRangeEndProtocol          types.String `tfsdk:"permit_range_end_protocol"`
+	PermitPrecedence                types.String `tfsdk:"permit_precedence"`
+	PermitFragmentType              types.String `tfsdk:"permit_fragment_type"`
 	PermitSourceAddress             types.String `tfsdk:"permit_source_address"`
 	PermitSourceWildcardMask        types.String `tfsdk:"permit_source_wildcard_mask"`
 	PermitSourcePrefixLength        types.Int64  `tfsdk:"permit_source_prefix_length"`
@@ -90,6 +85,7 @@ type IPv4AccessListSequences struct {
 	PermitIcmpMessageTypeName       types.String `tfsdk:"permit_icmp_message_type_name"`
 	PermitIcmpMessageType           types.Int64  `tfsdk:"permit_icmp_message_type"`
 	PermitIcmpMessageCode           types.Int64  `tfsdk:"permit_icmp_message_code"`
+	PermitIgmpType                  types.String `tfsdk:"permit_igmp_type"`
 	PermitDscp                      types.String `tfsdk:"permit_dscp"`
 	PermitDscpEq                    types.String `tfsdk:"permit_dscp_eq"`
 	PermitDscpGt                    types.String `tfsdk:"permit_dscp_gt"`
@@ -115,11 +111,13 @@ type IPv4AccessListSequences struct {
 	PermitFragmentOffsetNeq         types.Int64  `tfsdk:"permit_fragment_offset_neq"`
 	PermitFragmentOffsetRangeStart  types.Int64  `tfsdk:"permit_fragment_offset_range_start"`
 	PermitFragmentOffsetRangeEnd    types.Int64  `tfsdk:"permit_fragment_offset_range_end"`
+	PermitFragments                 types.Bool   `tfsdk:"permit_fragments"`
 	PermitPoliceValue               types.Int64  `tfsdk:"permit_police_value"`
 	PermitPoliceUnit                types.String `tfsdk:"permit_police_unit"`
 	PermitPolicePeakRate            types.Int64  `tfsdk:"permit_police_peak_rate"`
 	PermitPolicePeakUnit            types.String `tfsdk:"permit_police_peak_unit"`
 	PermitPolicePriority            types.String `tfsdk:"permit_police_priority"`
+	PermitDefault                   types.Bool   `tfsdk:"permit_default"`
 	PermitNexthop1Ipv4              types.String `tfsdk:"permit_nexthop1_ipv4"`
 	PermitNexthop1Track             types.String `tfsdk:"permit_nexthop1_track"`
 	PermitNexthop1Vrf               types.String `tfsdk:"permit_nexthop1_vrf"`
@@ -129,12 +127,19 @@ type IPv4AccessListSequences struct {
 	PermitNexthop3Ipv4              types.String `tfsdk:"permit_nexthop3_ipv4"`
 	PermitNexthop3Track             types.String `tfsdk:"permit_nexthop3_track"`
 	PermitNexthop3Vrf               types.String `tfsdk:"permit_nexthop3_vrf"`
+	PermitCapture                   types.Bool   `tfsdk:"permit_capture"`
+	PermitCounter                   types.String `tfsdk:"permit_counter"`
 	PermitLog                       types.Bool   `tfsdk:"permit_log"`
 	PermitLogInput                  types.Bool   `tfsdk:"permit_log_input"`
 	PermitSetQosGroup               types.Int64  `tfsdk:"permit_set_qos_group"`
 	PermitSetTtl                    types.Int64  `tfsdk:"permit_set_ttl"`
-	DenyEq                          types.String `tfsdk:"deny_eq"`
 	DenyProtocol                    types.String `tfsdk:"deny_protocol"`
+	DenyEq                          types.String `tfsdk:"deny_eq"`
+	DenyPrecedence                  types.String `tfsdk:"deny_precedence"`
+	DenyFragmentType                types.String `tfsdk:"deny_fragment_type"`
+	DenyCounter                     types.String `tfsdk:"deny_counter"`
+	DenyRangeStartProtocol          types.String `tfsdk:"deny_range_start_protocol"`
+	DenyRangeEndProtocol            types.String `tfsdk:"deny_range_end_protocol"`
 	DenySourceAddress               types.String `tfsdk:"deny_source_address"`
 	DenySourceWildcardMask          types.String `tfsdk:"deny_source_wildcard_mask"`
 	DenySourcePrefixLength          types.Int64  `tfsdk:"deny_source_prefix_length"`
@@ -161,20 +166,10 @@ type IPv4AccessListSequences struct {
 	DenyDestinationPortNeq          types.String `tfsdk:"deny_destination_port_neq"`
 	DenyDestinationPortRangeStart   types.String `tfsdk:"deny_destination_port_range_start"`
 	DenyDestinationPortRangeEnd     types.String `tfsdk:"deny_destination_port_range_end"`
-	DenyIgmpType                    types.String `tfsdk:"deny_igmp_type"`
-	DenyPrecedence                  types.String `tfsdk:"deny_precedence"`
-	DenyFragmentType                types.String `tfsdk:"deny_fragment_type"`
-	DenyFragments                   types.Bool   `tfsdk:"deny_fragments"`
-	DenyCounter                     types.String `tfsdk:"deny_counter"`
-	DenyDefault                     types.Bool   `tfsdk:"deny_default"`
-	DenyCapture                     types.Bool   `tfsdk:"deny_capture"`
-	DenyIcmpOff                     types.Bool   `tfsdk:"deny_icmp_off"`
-	DenyIcmpOn                      types.Bool   `tfsdk:"deny_icmp_on"`
-	DenyRangeStartProtocol          types.String `tfsdk:"deny_range_start_protocol"`
-	DenyRangeEndProtocol            types.String `tfsdk:"deny_range_end_protocol"`
 	DenyIcmpMessageTypeName         types.String `tfsdk:"deny_icmp_message_type_name"`
 	DenyIcmpMessageType             types.Int64  `tfsdk:"deny_icmp_message_type"`
 	DenyIcmpMessageCode             types.Int64  `tfsdk:"deny_icmp_message_code"`
+	DenyIgmpType                    types.String `tfsdk:"deny_igmp_type"`
 	DenyDscp                        types.String `tfsdk:"deny_dscp"`
 	DenyDscpEq                      types.String `tfsdk:"deny_dscp_eq"`
 	DenyDscpGt                      types.String `tfsdk:"deny_dscp_gt"`
@@ -200,11 +195,13 @@ type IPv4AccessListSequences struct {
 	DenyFragmentOffsetNeq           types.Int64  `tfsdk:"deny_fragment_offset_neq"`
 	DenyFragmentOffsetRangeStart    types.Int64  `tfsdk:"deny_fragment_offset_range_start"`
 	DenyFragmentOffsetRangeEnd      types.Int64  `tfsdk:"deny_fragment_offset_range_end"`
+	DenyFragments                   types.Bool   `tfsdk:"deny_fragments"`
 	DenyPoliceValue                 types.Int64  `tfsdk:"deny_police_value"`
 	DenyPoliceUnit                  types.String `tfsdk:"deny_police_unit"`
 	DenyPolicePeakRate              types.Int64  `tfsdk:"deny_police_peak_rate"`
 	DenyPolicePeakUnit              types.String `tfsdk:"deny_police_peak_unit"`
 	DenyPolicePriority              types.String `tfsdk:"deny_police_priority"`
+	DenyDefault                     types.Bool   `tfsdk:"deny_default"`
 	DenyNexthop1Ipv4                types.String `tfsdk:"deny_nexthop1_ipv4"`
 	DenyNexthop1Track               types.String `tfsdk:"deny_nexthop1_track"`
 	DenyNexthop1Vrf                 types.String `tfsdk:"deny_nexthop1_vrf"`
@@ -214,10 +211,13 @@ type IPv4AccessListSequences struct {
 	DenyNexthop3Ipv4                types.String `tfsdk:"deny_nexthop3_ipv4"`
 	DenyNexthop3Track               types.String `tfsdk:"deny_nexthop3_track"`
 	DenyNexthop3Vrf                 types.String `tfsdk:"deny_nexthop3_vrf"`
+	DenyCapture                     types.Bool   `tfsdk:"deny_capture"`
 	DenyLog                         types.Bool   `tfsdk:"deny_log"`
 	DenyLogInput                    types.Bool   `tfsdk:"deny_log_input"`
 	DenySetQosGroup                 types.Int64  `tfsdk:"deny_set_qos_group"`
 	DenySetTtl                      types.Int64  `tfsdk:"deny_set_ttl"`
+	DenyIcmpOff                     types.Bool   `tfsdk:"deny_icmp_off"`
+	DenyIcmpOn                      types.Bool   `tfsdk:"deny_icmp_on"`
 }
 
 // End of section. //template:end types
@@ -256,38 +256,17 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 			if !item.PermitEq.IsNull() && !item.PermitEq.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.eq", item.PermitEq.ValueString())
 			}
-			if !item.PermitIgmpType.IsNull() && !item.PermitIgmpType.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.igmp-type", item.PermitIgmpType.ValueString())
+			if !item.PermitRangeStartProtocol.IsNull() && !item.PermitRangeStartProtocol.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.range.start-protocol", item.PermitRangeStartProtocol.ValueString())
+			}
+			if !item.PermitRangeEndProtocol.IsNull() && !item.PermitRangeEndProtocol.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.range.end-protocol", item.PermitRangeEndProtocol.ValueString())
 			}
 			if !item.PermitPrecedence.IsNull() && !item.PermitPrecedence.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.precedence", item.PermitPrecedence.ValueString())
 			}
 			if !item.PermitFragmentType.IsNull() && !item.PermitFragmentType.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.fragment-type", item.PermitFragmentType.ValueString())
-			}
-			if !item.PermitFragments.IsNull() && !item.PermitFragments.IsUnknown() {
-				if item.PermitFragments.ValueBool() {
-					body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.fragments", map[string]string{})
-				}
-			}
-			if !item.PermitCounter.IsNull() && !item.PermitCounter.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.counter", item.PermitCounter.ValueString())
-			}
-			if !item.PermitDefault.IsNull() && !item.PermitDefault.IsUnknown() {
-				if item.PermitDefault.ValueBool() {
-					body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.default", map[string]string{})
-				}
-			}
-			if !item.PermitCapture.IsNull() && !item.PermitCapture.IsUnknown() {
-				if item.PermitCapture.ValueBool() {
-					body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.capture", map[string]string{})
-				}
-			}
-			if !item.PermitRangeStartProtocol.IsNull() && !item.PermitRangeStartProtocol.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.range.start-protocol", item.PermitRangeStartProtocol.ValueString())
-			}
-			if !item.PermitRangeEndProtocol.IsNull() && !item.PermitRangeEndProtocol.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.range.end-protocol", item.PermitRangeEndProtocol.ValueString())
 			}
 			if !item.PermitSourceAddress.IsNull() && !item.PermitSourceAddress.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.source.address", item.PermitSourceAddress.ValueString())
@@ -380,6 +359,9 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 			if !item.PermitIcmpMessageCode.IsNull() && !item.PermitIcmpMessageCode.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.icmp.message-code", strconv.FormatInt(item.PermitIcmpMessageCode.ValueInt64(), 10))
 			}
+			if !item.PermitIgmpType.IsNull() && !item.PermitIgmpType.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.igmp-type", item.PermitIgmpType.ValueString())
+			}
 			if !item.PermitDscp.IsNull() && !item.PermitDscp.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.dscp.dscp-value", item.PermitDscp.ValueString())
 			}
@@ -455,6 +437,11 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 			if !item.PermitFragmentOffsetRangeEnd.IsNull() && !item.PermitFragmentOffsetRangeEnd.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.fragment-offset.range.end-value", strconv.FormatInt(item.PermitFragmentOffsetRangeEnd.ValueInt64(), 10))
 			}
+			if !item.PermitFragments.IsNull() && !item.PermitFragments.IsUnknown() {
+				if item.PermitFragments.ValueBool() {
+					body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.fragments", map[string]string{})
+				}
+			}
 			if !item.PermitPoliceValue.IsNull() && !item.PermitPoliceValue.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.police.value", strconv.FormatInt(item.PermitPoliceValue.ValueInt64(), 10))
 			}
@@ -469,6 +456,11 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 			}
 			if !item.PermitPolicePriority.IsNull() && !item.PermitPolicePriority.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.police.priority", item.PermitPolicePriority.ValueString())
+			}
+			if !item.PermitDefault.IsNull() && !item.PermitDefault.IsUnknown() {
+				if item.PermitDefault.ValueBool() {
+					body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.default", map[string]string{})
+				}
 			}
 			if !item.PermitNexthop1Ipv4.IsNull() && !item.PermitNexthop1Ipv4.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.nexthop1.ipv4", item.PermitNexthop1Ipv4.ValueString())
@@ -497,6 +489,14 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 			if !item.PermitNexthop3Vrf.IsNull() && !item.PermitNexthop3Vrf.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.nexthop3.vrf", item.PermitNexthop3Vrf.ValueString())
 			}
+			if !item.PermitCapture.IsNull() && !item.PermitCapture.IsUnknown() {
+				if item.PermitCapture.ValueBool() {
+					body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.capture", map[string]string{})
+				}
+			}
+			if !item.PermitCounter.IsNull() && !item.PermitCounter.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.counter", item.PermitCounter.ValueString())
+			}
 			if !item.PermitLog.IsNull() && !item.PermitLog.IsUnknown() {
 				if item.PermitLog.ValueBool() {
 					body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.log", map[string]string{})
@@ -513,11 +513,26 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 			if !item.PermitSetTtl.IsNull() && !item.PermitSetTtl.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.set.ttl", strconv.FormatInt(item.PermitSetTtl.ValueInt64(), 10))
 			}
+			if !item.DenyProtocol.IsNull() && !item.DenyProtocol.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.protocol", item.DenyProtocol.ValueString())
+			}
 			if !item.DenyEq.IsNull() && !item.DenyEq.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.eq", item.DenyEq.ValueString())
 			}
-			if !item.DenyProtocol.IsNull() && !item.DenyProtocol.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.protocol", item.DenyProtocol.ValueString())
+			if !item.DenyPrecedence.IsNull() && !item.DenyPrecedence.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.precedence", item.DenyPrecedence.ValueString())
+			}
+			if !item.DenyFragmentType.IsNull() && !item.DenyFragmentType.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.fragment-type", item.DenyFragmentType.ValueString())
+			}
+			if !item.DenyCounter.IsNull() && !item.DenyCounter.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.counter", item.DenyCounter.ValueString())
+			}
+			if !item.DenyRangeStartProtocol.IsNull() && !item.DenyRangeStartProtocol.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.range.start-protocol", item.DenyRangeStartProtocol.ValueString())
+			}
+			if !item.DenyRangeEndProtocol.IsNull() && !item.DenyRangeEndProtocol.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.range.end-protocol", item.DenyRangeEndProtocol.ValueString())
 			}
 			if !item.DenySourceAddress.IsNull() && !item.DenySourceAddress.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.source.address", item.DenySourceAddress.ValueString())
@@ -601,49 +616,6 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 			if !item.DenyDestinationPortRangeEnd.IsNull() && !item.DenyDestinationPortRangeEnd.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.destination.port.range.end-value", item.DenyDestinationPortRangeEnd.ValueString())
 			}
-			if !item.DenyIgmpType.IsNull() && !item.DenyIgmpType.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.igmp-type", item.DenyIgmpType.ValueString())
-			}
-			if !item.DenyPrecedence.IsNull() && !item.DenyPrecedence.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.precedence", item.DenyPrecedence.ValueString())
-			}
-			if !item.DenyFragmentType.IsNull() && !item.DenyFragmentType.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.fragment-type", item.DenyFragmentType.ValueString())
-			}
-			if !item.DenyFragments.IsNull() && !item.DenyFragments.IsUnknown() {
-				if item.DenyFragments.ValueBool() {
-					body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.fragments", map[string]string{})
-				}
-			}
-			if !item.DenyCounter.IsNull() && !item.DenyCounter.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.counter", item.DenyCounter.ValueString())
-			}
-			if !item.DenyDefault.IsNull() && !item.DenyDefault.IsUnknown() {
-				if item.DenyDefault.ValueBool() {
-					body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.default", map[string]string{})
-				}
-			}
-			if !item.DenyCapture.IsNull() && !item.DenyCapture.IsUnknown() {
-				if item.DenyCapture.ValueBool() {
-					body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.capture", map[string]string{})
-				}
-			}
-			if !item.DenyIcmpOff.IsNull() && !item.DenyIcmpOff.IsUnknown() {
-				if item.DenyIcmpOff.ValueBool() {
-					body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.icmp-off", map[string]string{})
-				}
-			}
-			if !item.DenyIcmpOn.IsNull() && !item.DenyIcmpOn.IsUnknown() {
-				if item.DenyIcmpOn.ValueBool() {
-					body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.icmp-on", map[string]string{})
-				}
-			}
-			if !item.DenyRangeStartProtocol.IsNull() && !item.DenyRangeStartProtocol.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.range.start-protocol", item.DenyRangeStartProtocol.ValueString())
-			}
-			if !item.DenyRangeEndProtocol.IsNull() && !item.DenyRangeEndProtocol.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.range.end-protocol", item.DenyRangeEndProtocol.ValueString())
-			}
 			if !item.DenyIcmpMessageTypeName.IsNull() && !item.DenyIcmpMessageTypeName.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.icmp.message-type-name", item.DenyIcmpMessageTypeName.ValueString())
 			}
@@ -652,6 +624,9 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 			}
 			if !item.DenyIcmpMessageCode.IsNull() && !item.DenyIcmpMessageCode.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.icmp.message-code", strconv.FormatInt(item.DenyIcmpMessageCode.ValueInt64(), 10))
+			}
+			if !item.DenyIgmpType.IsNull() && !item.DenyIgmpType.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.igmp-type", item.DenyIgmpType.ValueString())
 			}
 			if !item.DenyDscp.IsNull() && !item.DenyDscp.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.dscp.dscp-value", item.DenyDscp.ValueString())
@@ -728,6 +703,11 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 			if !item.DenyFragmentOffsetRangeEnd.IsNull() && !item.DenyFragmentOffsetRangeEnd.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.fragment-offset.range.end-value", strconv.FormatInt(item.DenyFragmentOffsetRangeEnd.ValueInt64(), 10))
 			}
+			if !item.DenyFragments.IsNull() && !item.DenyFragments.IsUnknown() {
+				if item.DenyFragments.ValueBool() {
+					body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.fragments", map[string]string{})
+				}
+			}
 			if !item.DenyPoliceValue.IsNull() && !item.DenyPoliceValue.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.police.value", strconv.FormatInt(item.DenyPoliceValue.ValueInt64(), 10))
 			}
@@ -742,6 +722,11 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 			}
 			if !item.DenyPolicePriority.IsNull() && !item.DenyPolicePriority.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.police.priority", item.DenyPolicePriority.ValueString())
+			}
+			if !item.DenyDefault.IsNull() && !item.DenyDefault.IsUnknown() {
+				if item.DenyDefault.ValueBool() {
+					body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.default", map[string]string{})
+				}
 			}
 			if !item.DenyNexthop1Ipv4.IsNull() && !item.DenyNexthop1Ipv4.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.nexthop1.ipv4", item.DenyNexthop1Ipv4.ValueString())
@@ -770,6 +755,11 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 			if !item.DenyNexthop3Vrf.IsNull() && !item.DenyNexthop3Vrf.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.nexthop3.vrf", item.DenyNexthop3Vrf.ValueString())
 			}
+			if !item.DenyCapture.IsNull() && !item.DenyCapture.IsUnknown() {
+				if item.DenyCapture.ValueBool() {
+					body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.capture", map[string]string{})
+				}
+			}
 			if !item.DenyLog.IsNull() && !item.DenyLog.IsUnknown() {
 				if item.DenyLog.ValueBool() {
 					body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.log", map[string]string{})
@@ -785,6 +775,16 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 			}
 			if !item.DenySetTtl.IsNull() && !item.DenySetTtl.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.set.ttl", strconv.FormatInt(item.DenySetTtl.ValueInt64(), 10))
+			}
+			if !item.DenyIcmpOff.IsNull() && !item.DenyIcmpOff.IsUnknown() {
+				if item.DenyIcmpOff.ValueBool() {
+					body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.icmp-off", map[string]string{})
+				}
+			}
+			if !item.DenyIcmpOn.IsNull() && !item.DenyIcmpOn.IsUnknown() {
+				if item.DenyIcmpOn.ValueBool() {
+					body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.icmp-on", map[string]string{})
+				}
 			}
 		}
 	}
@@ -839,10 +839,15 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].PermitEq = types.StringNull()
 		}
-		if value := r.Get("permit.igmp-type"); value.Exists() && !data.Sequences[i].PermitIgmpType.IsNull() {
-			data.Sequences[i].PermitIgmpType = types.StringValue(value.String())
+		if value := r.Get("permit.range.start-protocol"); value.Exists() && !data.Sequences[i].PermitRangeStartProtocol.IsNull() {
+			data.Sequences[i].PermitRangeStartProtocol = types.StringValue(value.String())
 		} else {
-			data.Sequences[i].PermitIgmpType = types.StringNull()
+			data.Sequences[i].PermitRangeStartProtocol = types.StringNull()
+		}
+		if value := r.Get("permit.range.end-protocol"); value.Exists() && !data.Sequences[i].PermitRangeEndProtocol.IsNull() {
+			data.Sequences[i].PermitRangeEndProtocol = types.StringValue(value.String())
+		} else {
+			data.Sequences[i].PermitRangeEndProtocol = types.StringNull()
 		}
 		if value := r.Get("permit.precedence"); value.Exists() && !data.Sequences[i].PermitPrecedence.IsNull() {
 			data.Sequences[i].PermitPrecedence = types.StringValue(value.String())
@@ -853,48 +858,6 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].PermitFragmentType = types.StringValue(value.String())
 		} else {
 			data.Sequences[i].PermitFragmentType = types.StringNull()
-		}
-		if value := r.Get("permit.fragments"); !data.Sequences[i].PermitFragments.IsNull() {
-			if value.Exists() {
-				data.Sequences[i].PermitFragments = types.BoolValue(true)
-			} else {
-				data.Sequences[i].PermitFragments = types.BoolValue(false)
-			}
-		} else {
-			data.Sequences[i].PermitFragments = types.BoolNull()
-		}
-		if value := r.Get("permit.counter"); value.Exists() && !data.Sequences[i].PermitCounter.IsNull() {
-			data.Sequences[i].PermitCounter = types.StringValue(value.String())
-		} else {
-			data.Sequences[i].PermitCounter = types.StringNull()
-		}
-		if value := r.Get("permit.default"); !data.Sequences[i].PermitDefault.IsNull() {
-			if value.Exists() {
-				data.Sequences[i].PermitDefault = types.BoolValue(true)
-			} else {
-				data.Sequences[i].PermitDefault = types.BoolValue(false)
-			}
-		} else {
-			data.Sequences[i].PermitDefault = types.BoolNull()
-		}
-		if value := r.Get("permit.capture"); !data.Sequences[i].PermitCapture.IsNull() {
-			if value.Exists() {
-				data.Sequences[i].PermitCapture = types.BoolValue(true)
-			} else {
-				data.Sequences[i].PermitCapture = types.BoolValue(false)
-			}
-		} else {
-			data.Sequences[i].PermitCapture = types.BoolNull()
-		}
-		if value := r.Get("permit.range.start-protocol"); value.Exists() && !data.Sequences[i].PermitRangeStartProtocol.IsNull() {
-			data.Sequences[i].PermitRangeStartProtocol = types.StringValue(value.String())
-		} else {
-			data.Sequences[i].PermitRangeStartProtocol = types.StringNull()
-		}
-		if value := r.Get("permit.range.end-protocol"); value.Exists() && !data.Sequences[i].PermitRangeEndProtocol.IsNull() {
-			data.Sequences[i].PermitRangeEndProtocol = types.StringValue(value.String())
-		} else {
-			data.Sequences[i].PermitRangeEndProtocol = types.StringNull()
 		}
 		if value := r.Get("permit.source.address"); value.Exists() && !data.Sequences[i].PermitSourceAddress.IsNull() {
 			data.Sequences[i].PermitSourceAddress = types.StringValue(value.String())
@@ -1049,6 +1012,11 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].PermitIcmpMessageCode = types.Int64Null()
 		}
+		if value := r.Get("permit.igmp-type"); value.Exists() && !data.Sequences[i].PermitIgmpType.IsNull() {
+			data.Sequences[i].PermitIgmpType = types.StringValue(value.String())
+		} else {
+			data.Sequences[i].PermitIgmpType = types.StringNull()
+		}
 		if value := r.Get("permit.dscp.dscp-value"); value.Exists() && !data.Sequences[i].PermitDscp.IsNull() {
 			data.Sequences[i].PermitDscp = types.StringValue(value.String())
 		} else {
@@ -1174,6 +1142,15 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].PermitFragmentOffsetRangeEnd = types.Int64Null()
 		}
+		if value := r.Get("permit.fragments"); !data.Sequences[i].PermitFragments.IsNull() {
+			if value.Exists() {
+				data.Sequences[i].PermitFragments = types.BoolValue(true)
+			} else {
+				data.Sequences[i].PermitFragments = types.BoolValue(false)
+			}
+		} else {
+			data.Sequences[i].PermitFragments = types.BoolNull()
+		}
 		if value := r.Get("permit.police.value"); value.Exists() && !data.Sequences[i].PermitPoliceValue.IsNull() {
 			data.Sequences[i].PermitPoliceValue = types.Int64Value(value.Int())
 		} else {
@@ -1198,6 +1175,15 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].PermitPolicePriority = types.StringValue(value.String())
 		} else {
 			data.Sequences[i].PermitPolicePriority = types.StringNull()
+		}
+		if value := r.Get("permit.default"); !data.Sequences[i].PermitDefault.IsNull() {
+			if value.Exists() {
+				data.Sequences[i].PermitDefault = types.BoolValue(true)
+			} else {
+				data.Sequences[i].PermitDefault = types.BoolValue(false)
+			}
+		} else {
+			data.Sequences[i].PermitDefault = types.BoolNull()
 		}
 		if value := r.Get("permit.nexthop1.ipv4"); value.Exists() && !data.Sequences[i].PermitNexthop1Ipv4.IsNull() {
 			data.Sequences[i].PermitNexthop1Ipv4 = types.StringValue(value.String())
@@ -1244,6 +1230,20 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].PermitNexthop3Vrf = types.StringNull()
 		}
+		if value := r.Get("permit.capture"); !data.Sequences[i].PermitCapture.IsNull() {
+			if value.Exists() {
+				data.Sequences[i].PermitCapture = types.BoolValue(true)
+			} else {
+				data.Sequences[i].PermitCapture = types.BoolValue(false)
+			}
+		} else {
+			data.Sequences[i].PermitCapture = types.BoolNull()
+		}
+		if value := r.Get("permit.counter"); value.Exists() && !data.Sequences[i].PermitCounter.IsNull() {
+			data.Sequences[i].PermitCounter = types.StringValue(value.String())
+		} else {
+			data.Sequences[i].PermitCounter = types.StringNull()
+		}
 		if value := r.Get("permit.log"); !data.Sequences[i].PermitLog.IsNull() {
 			if value.Exists() {
 				data.Sequences[i].PermitLog = types.BoolValue(true)
@@ -1272,15 +1272,40 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].PermitSetTtl = types.Int64Null()
 		}
+		if value := r.Get("deny.protocol"); value.Exists() && !data.Sequences[i].DenyProtocol.IsNull() {
+			data.Sequences[i].DenyProtocol = types.StringValue(value.String())
+		} else {
+			data.Sequences[i].DenyProtocol = types.StringNull()
+		}
 		if value := r.Get("deny.eq"); value.Exists() && !data.Sequences[i].DenyEq.IsNull() {
 			data.Sequences[i].DenyEq = types.StringValue(value.String())
 		} else {
 			data.Sequences[i].DenyEq = types.StringNull()
 		}
-		if value := r.Get("deny.protocol"); value.Exists() && !data.Sequences[i].DenyProtocol.IsNull() {
-			data.Sequences[i].DenyProtocol = types.StringValue(value.String())
+		if value := r.Get("deny.precedence"); value.Exists() && !data.Sequences[i].DenyPrecedence.IsNull() {
+			data.Sequences[i].DenyPrecedence = types.StringValue(value.String())
 		} else {
-			data.Sequences[i].DenyProtocol = types.StringNull()
+			data.Sequences[i].DenyPrecedence = types.StringNull()
+		}
+		if value := r.Get("deny.fragment-type"); value.Exists() && !data.Sequences[i].DenyFragmentType.IsNull() {
+			data.Sequences[i].DenyFragmentType = types.StringValue(value.String())
+		} else {
+			data.Sequences[i].DenyFragmentType = types.StringNull()
+		}
+		if value := r.Get("deny.counter"); value.Exists() && !data.Sequences[i].DenyCounter.IsNull() {
+			data.Sequences[i].DenyCounter = types.StringValue(value.String())
+		} else {
+			data.Sequences[i].DenyCounter = types.StringNull()
+		}
+		if value := r.Get("deny.range.start-protocol"); value.Exists() && !data.Sequences[i].DenyRangeStartProtocol.IsNull() {
+			data.Sequences[i].DenyRangeStartProtocol = types.StringValue(value.String())
+		} else {
+			data.Sequences[i].DenyRangeStartProtocol = types.StringNull()
+		}
+		if value := r.Get("deny.range.end-protocol"); value.Exists() && !data.Sequences[i].DenyRangeEndProtocol.IsNull() {
+			data.Sequences[i].DenyRangeEndProtocol = types.StringValue(value.String())
+		} else {
+			data.Sequences[i].DenyRangeEndProtocol = types.StringNull()
 		}
 		if value := r.Get("deny.source.address"); value.Exists() && !data.Sequences[i].DenySourceAddress.IsNull() {
 			data.Sequences[i].DenySourceAddress = types.StringValue(value.String())
@@ -1420,81 +1445,6 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].DenyDestinationPortRangeEnd = types.StringNull()
 		}
-		if value := r.Get("deny.igmp-type"); value.Exists() && !data.Sequences[i].DenyIgmpType.IsNull() {
-			data.Sequences[i].DenyIgmpType = types.StringValue(value.String())
-		} else {
-			data.Sequences[i].DenyIgmpType = types.StringNull()
-		}
-		if value := r.Get("deny.precedence"); value.Exists() && !data.Sequences[i].DenyPrecedence.IsNull() {
-			data.Sequences[i].DenyPrecedence = types.StringValue(value.String())
-		} else {
-			data.Sequences[i].DenyPrecedence = types.StringNull()
-		}
-		if value := r.Get("deny.fragment-type"); value.Exists() && !data.Sequences[i].DenyFragmentType.IsNull() {
-			data.Sequences[i].DenyFragmentType = types.StringValue(value.String())
-		} else {
-			data.Sequences[i].DenyFragmentType = types.StringNull()
-		}
-		if value := r.Get("deny.fragments"); !data.Sequences[i].DenyFragments.IsNull() {
-			if value.Exists() {
-				data.Sequences[i].DenyFragments = types.BoolValue(true)
-			} else {
-				data.Sequences[i].DenyFragments = types.BoolValue(false)
-			}
-		} else {
-			data.Sequences[i].DenyFragments = types.BoolNull()
-		}
-		if value := r.Get("deny.counter"); value.Exists() && !data.Sequences[i].DenyCounter.IsNull() {
-			data.Sequences[i].DenyCounter = types.StringValue(value.String())
-		} else {
-			data.Sequences[i].DenyCounter = types.StringNull()
-		}
-		if value := r.Get("deny.default"); !data.Sequences[i].DenyDefault.IsNull() {
-			if value.Exists() {
-				data.Sequences[i].DenyDefault = types.BoolValue(true)
-			} else {
-				data.Sequences[i].DenyDefault = types.BoolValue(false)
-			}
-		} else {
-			data.Sequences[i].DenyDefault = types.BoolNull()
-		}
-		if value := r.Get("deny.capture"); !data.Sequences[i].DenyCapture.IsNull() {
-			if value.Exists() {
-				data.Sequences[i].DenyCapture = types.BoolValue(true)
-			} else {
-				data.Sequences[i].DenyCapture = types.BoolValue(false)
-			}
-		} else {
-			data.Sequences[i].DenyCapture = types.BoolNull()
-		}
-		if value := r.Get("deny.icmp-off"); !data.Sequences[i].DenyIcmpOff.IsNull() {
-			if value.Exists() {
-				data.Sequences[i].DenyIcmpOff = types.BoolValue(true)
-			} else {
-				data.Sequences[i].DenyIcmpOff = types.BoolValue(false)
-			}
-		} else {
-			data.Sequences[i].DenyIcmpOff = types.BoolNull()
-		}
-		if value := r.Get("deny.icmp-on"); !data.Sequences[i].DenyIcmpOn.IsNull() {
-			if value.Exists() {
-				data.Sequences[i].DenyIcmpOn = types.BoolValue(true)
-			} else {
-				data.Sequences[i].DenyIcmpOn = types.BoolValue(false)
-			}
-		} else {
-			data.Sequences[i].DenyIcmpOn = types.BoolNull()
-		}
-		if value := r.Get("deny.range.start-protocol"); value.Exists() && !data.Sequences[i].DenyRangeStartProtocol.IsNull() {
-			data.Sequences[i].DenyRangeStartProtocol = types.StringValue(value.String())
-		} else {
-			data.Sequences[i].DenyRangeStartProtocol = types.StringNull()
-		}
-		if value := r.Get("deny.range.end-protocol"); value.Exists() && !data.Sequences[i].DenyRangeEndProtocol.IsNull() {
-			data.Sequences[i].DenyRangeEndProtocol = types.StringValue(value.String())
-		} else {
-			data.Sequences[i].DenyRangeEndProtocol = types.StringNull()
-		}
 		if value := r.Get("deny.icmp.message-type-name"); value.Exists() && !data.Sequences[i].DenyIcmpMessageTypeName.IsNull() {
 			data.Sequences[i].DenyIcmpMessageTypeName = types.StringValue(value.String())
 		} else {
@@ -1509,6 +1459,11 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].DenyIcmpMessageCode = types.Int64Value(value.Int())
 		} else {
 			data.Sequences[i].DenyIcmpMessageCode = types.Int64Null()
+		}
+		if value := r.Get("deny.igmp-type"); value.Exists() && !data.Sequences[i].DenyIgmpType.IsNull() {
+			data.Sequences[i].DenyIgmpType = types.StringValue(value.String())
+		} else {
+			data.Sequences[i].DenyIgmpType = types.StringNull()
 		}
 		if value := r.Get("deny.dscp.dscp-value"); value.Exists() && !data.Sequences[i].DenyDscp.IsNull() {
 			data.Sequences[i].DenyDscp = types.StringValue(value.String())
@@ -1635,6 +1590,15 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].DenyFragmentOffsetRangeEnd = types.Int64Null()
 		}
+		if value := r.Get("deny.fragments"); !data.Sequences[i].DenyFragments.IsNull() {
+			if value.Exists() {
+				data.Sequences[i].DenyFragments = types.BoolValue(true)
+			} else {
+				data.Sequences[i].DenyFragments = types.BoolValue(false)
+			}
+		} else {
+			data.Sequences[i].DenyFragments = types.BoolNull()
+		}
 		if value := r.Get("deny.police.value"); value.Exists() && !data.Sequences[i].DenyPoliceValue.IsNull() {
 			data.Sequences[i].DenyPoliceValue = types.Int64Value(value.Int())
 		} else {
@@ -1659,6 +1623,15 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].DenyPolicePriority = types.StringValue(value.String())
 		} else {
 			data.Sequences[i].DenyPolicePriority = types.StringNull()
+		}
+		if value := r.Get("deny.default"); !data.Sequences[i].DenyDefault.IsNull() {
+			if value.Exists() {
+				data.Sequences[i].DenyDefault = types.BoolValue(true)
+			} else {
+				data.Sequences[i].DenyDefault = types.BoolValue(false)
+			}
+		} else {
+			data.Sequences[i].DenyDefault = types.BoolNull()
 		}
 		if value := r.Get("deny.nexthop1.ipv4"); value.Exists() && !data.Sequences[i].DenyNexthop1Ipv4.IsNull() {
 			data.Sequences[i].DenyNexthop1Ipv4 = types.StringValue(value.String())
@@ -1705,6 +1678,15 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].DenyNexthop3Vrf = types.StringNull()
 		}
+		if value := r.Get("deny.capture"); !data.Sequences[i].DenyCapture.IsNull() {
+			if value.Exists() {
+				data.Sequences[i].DenyCapture = types.BoolValue(true)
+			} else {
+				data.Sequences[i].DenyCapture = types.BoolValue(false)
+			}
+		} else {
+			data.Sequences[i].DenyCapture = types.BoolNull()
+		}
 		if value := r.Get("deny.log"); !data.Sequences[i].DenyLog.IsNull() {
 			if value.Exists() {
 				data.Sequences[i].DenyLog = types.BoolValue(true)
@@ -1733,6 +1715,24 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].DenySetTtl = types.Int64Null()
 		}
+		if value := r.Get("deny.icmp-off"); !data.Sequences[i].DenyIcmpOff.IsNull() {
+			if value.Exists() {
+				data.Sequences[i].DenyIcmpOff = types.BoolValue(true)
+			} else {
+				data.Sequences[i].DenyIcmpOff = types.BoolValue(false)
+			}
+		} else {
+			data.Sequences[i].DenyIcmpOff = types.BoolNull()
+		}
+		if value := r.Get("deny.icmp-on"); !data.Sequences[i].DenyIcmpOn.IsNull() {
+			if value.Exists() {
+				data.Sequences[i].DenyIcmpOn = types.BoolValue(true)
+			} else {
+				data.Sequences[i].DenyIcmpOn = types.BoolValue(false)
+			}
+		} else {
+			data.Sequences[i].DenyIcmpOn = types.BoolNull()
+		}
 	}
 }
 
@@ -1757,38 +1757,17 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("permit.eq"); cValue.Exists() {
 				item.PermitEq = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("permit.igmp-type"); cValue.Exists() {
-				item.PermitIgmpType = types.StringValue(cValue.String())
+			if cValue := v.Get("permit.range.start-protocol"); cValue.Exists() {
+				item.PermitRangeStartProtocol = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.range.end-protocol"); cValue.Exists() {
+				item.PermitRangeEndProtocol = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("permit.precedence"); cValue.Exists() {
 				item.PermitPrecedence = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("permit.fragment-type"); cValue.Exists() {
 				item.PermitFragmentType = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("permit.fragments"); cValue.Exists() {
-				item.PermitFragments = types.BoolValue(true)
-			} else {
-				item.PermitFragments = types.BoolValue(false)
-			}
-			if cValue := v.Get("permit.counter"); cValue.Exists() {
-				item.PermitCounter = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("permit.default"); cValue.Exists() {
-				item.PermitDefault = types.BoolValue(true)
-			} else {
-				item.PermitDefault = types.BoolValue(false)
-			}
-			if cValue := v.Get("permit.capture"); cValue.Exists() {
-				item.PermitCapture = types.BoolValue(true)
-			} else {
-				item.PermitCapture = types.BoolValue(false)
-			}
-			if cValue := v.Get("permit.range.start-protocol"); cValue.Exists() {
-				item.PermitRangeStartProtocol = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("permit.range.end-protocol"); cValue.Exists() {
-				item.PermitRangeEndProtocol = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("permit.source.address"); cValue.Exists() {
 				item.PermitSourceAddress = types.StringValue(cValue.String())
@@ -1881,6 +1860,9 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("permit.icmp.message-code"); cValue.Exists() {
 				item.PermitIcmpMessageCode = types.Int64Value(cValue.Int())
 			}
+			if cValue := v.Get("permit.igmp-type"); cValue.Exists() {
+				item.PermitIgmpType = types.StringValue(cValue.String())
+			}
 			if cValue := v.Get("permit.dscp.dscp-value"); cValue.Exists() {
 				item.PermitDscp = types.StringValue(cValue.String())
 			}
@@ -1956,6 +1938,11 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("permit.fragment-offset.range.end-value"); cValue.Exists() {
 				item.PermitFragmentOffsetRangeEnd = types.Int64Value(cValue.Int())
 			}
+			if cValue := v.Get("permit.fragments"); cValue.Exists() {
+				item.PermitFragments = types.BoolValue(true)
+			} else {
+				item.PermitFragments = types.BoolValue(false)
+			}
 			if cValue := v.Get("permit.police.value"); cValue.Exists() {
 				item.PermitPoliceValue = types.Int64Value(cValue.Int())
 			}
@@ -1970,6 +1957,11 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("permit.police.priority"); cValue.Exists() {
 				item.PermitPolicePriority = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.default"); cValue.Exists() {
+				item.PermitDefault = types.BoolValue(true)
+			} else {
+				item.PermitDefault = types.BoolValue(false)
 			}
 			if cValue := v.Get("permit.nexthop1.ipv4"); cValue.Exists() {
 				item.PermitNexthop1Ipv4 = types.StringValue(cValue.String())
@@ -1998,6 +1990,14 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("permit.nexthop3.vrf"); cValue.Exists() {
 				item.PermitNexthop3Vrf = types.StringValue(cValue.String())
 			}
+			if cValue := v.Get("permit.capture"); cValue.Exists() {
+				item.PermitCapture = types.BoolValue(true)
+			} else {
+				item.PermitCapture = types.BoolValue(false)
+			}
+			if cValue := v.Get("permit.counter"); cValue.Exists() {
+				item.PermitCounter = types.StringValue(cValue.String())
+			}
 			if cValue := v.Get("permit.log"); cValue.Exists() {
 				item.PermitLog = types.BoolValue(true)
 			} else {
@@ -2014,11 +2014,26 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("permit.set.ttl"); cValue.Exists() {
 				item.PermitSetTtl = types.Int64Value(cValue.Int())
 			}
+			if cValue := v.Get("deny.protocol"); cValue.Exists() {
+				item.DenyProtocol = types.StringValue(cValue.String())
+			}
 			if cValue := v.Get("deny.eq"); cValue.Exists() {
 				item.DenyEq = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("deny.protocol"); cValue.Exists() {
-				item.DenyProtocol = types.StringValue(cValue.String())
+			if cValue := v.Get("deny.precedence"); cValue.Exists() {
+				item.DenyPrecedence = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.fragment-type"); cValue.Exists() {
+				item.DenyFragmentType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.counter"); cValue.Exists() {
+				item.DenyCounter = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.range.start-protocol"); cValue.Exists() {
+				item.DenyRangeStartProtocol = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.range.end-protocol"); cValue.Exists() {
+				item.DenyRangeEndProtocol = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("deny.source.address"); cValue.Exists() {
 				item.DenySourceAddress = types.StringValue(cValue.String())
@@ -2102,49 +2117,6 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("deny.destination.port.range.end-value"); cValue.Exists() {
 				item.DenyDestinationPortRangeEnd = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("deny.igmp-type"); cValue.Exists() {
-				item.DenyIgmpType = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("deny.precedence"); cValue.Exists() {
-				item.DenyPrecedence = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("deny.fragment-type"); cValue.Exists() {
-				item.DenyFragmentType = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("deny.fragments"); cValue.Exists() {
-				item.DenyFragments = types.BoolValue(true)
-			} else {
-				item.DenyFragments = types.BoolValue(false)
-			}
-			if cValue := v.Get("deny.counter"); cValue.Exists() {
-				item.DenyCounter = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("deny.default"); cValue.Exists() {
-				item.DenyDefault = types.BoolValue(true)
-			} else {
-				item.DenyDefault = types.BoolValue(false)
-			}
-			if cValue := v.Get("deny.capture"); cValue.Exists() {
-				item.DenyCapture = types.BoolValue(true)
-			} else {
-				item.DenyCapture = types.BoolValue(false)
-			}
-			if cValue := v.Get("deny.icmp-off"); cValue.Exists() {
-				item.DenyIcmpOff = types.BoolValue(true)
-			} else {
-				item.DenyIcmpOff = types.BoolValue(false)
-			}
-			if cValue := v.Get("deny.icmp-on"); cValue.Exists() {
-				item.DenyIcmpOn = types.BoolValue(true)
-			} else {
-				item.DenyIcmpOn = types.BoolValue(false)
-			}
-			if cValue := v.Get("deny.range.start-protocol"); cValue.Exists() {
-				item.DenyRangeStartProtocol = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("deny.range.end-protocol"); cValue.Exists() {
-				item.DenyRangeEndProtocol = types.StringValue(cValue.String())
-			}
 			if cValue := v.Get("deny.icmp.message-type-name"); cValue.Exists() {
 				item.DenyIcmpMessageTypeName = types.StringValue(cValue.String())
 			}
@@ -2153,6 +2125,9 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("deny.icmp.message-code"); cValue.Exists() {
 				item.DenyIcmpMessageCode = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.igmp-type"); cValue.Exists() {
+				item.DenyIgmpType = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("deny.dscp.dscp-value"); cValue.Exists() {
 				item.DenyDscp = types.StringValue(cValue.String())
@@ -2229,6 +2204,11 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("deny.fragment-offset.range.end-value"); cValue.Exists() {
 				item.DenyFragmentOffsetRangeEnd = types.Int64Value(cValue.Int())
 			}
+			if cValue := v.Get("deny.fragments"); cValue.Exists() {
+				item.DenyFragments = types.BoolValue(true)
+			} else {
+				item.DenyFragments = types.BoolValue(false)
+			}
 			if cValue := v.Get("deny.police.value"); cValue.Exists() {
 				item.DenyPoliceValue = types.Int64Value(cValue.Int())
 			}
@@ -2243,6 +2223,11 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("deny.police.priority"); cValue.Exists() {
 				item.DenyPolicePriority = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.default"); cValue.Exists() {
+				item.DenyDefault = types.BoolValue(true)
+			} else {
+				item.DenyDefault = types.BoolValue(false)
 			}
 			if cValue := v.Get("deny.nexthop1.ipv4"); cValue.Exists() {
 				item.DenyNexthop1Ipv4 = types.StringValue(cValue.String())
@@ -2271,6 +2256,11 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("deny.nexthop3.vrf"); cValue.Exists() {
 				item.DenyNexthop3Vrf = types.StringValue(cValue.String())
 			}
+			if cValue := v.Get("deny.capture"); cValue.Exists() {
+				item.DenyCapture = types.BoolValue(true)
+			} else {
+				item.DenyCapture = types.BoolValue(false)
+			}
 			if cValue := v.Get("deny.log"); cValue.Exists() {
 				item.DenyLog = types.BoolValue(true)
 			} else {
@@ -2286,6 +2276,16 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("deny.set.ttl"); cValue.Exists() {
 				item.DenySetTtl = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.icmp-off"); cValue.Exists() {
+				item.DenyIcmpOff = types.BoolValue(true)
+			} else {
+				item.DenyIcmpOff = types.BoolValue(false)
+			}
+			if cValue := v.Get("deny.icmp-on"); cValue.Exists() {
+				item.DenyIcmpOn = types.BoolValue(true)
+			} else {
+				item.DenyIcmpOn = types.BoolValue(false)
 			}
 			data.Sequences = append(data.Sequences, item)
 			return true
@@ -2314,38 +2314,17 @@ func (data *IPv4AccessListData) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("permit.eq"); cValue.Exists() {
 				item.PermitEq = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("permit.igmp-type"); cValue.Exists() {
-				item.PermitIgmpType = types.StringValue(cValue.String())
+			if cValue := v.Get("permit.range.start-protocol"); cValue.Exists() {
+				item.PermitRangeStartProtocol = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.range.end-protocol"); cValue.Exists() {
+				item.PermitRangeEndProtocol = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("permit.precedence"); cValue.Exists() {
 				item.PermitPrecedence = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("permit.fragment-type"); cValue.Exists() {
 				item.PermitFragmentType = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("permit.fragments"); cValue.Exists() {
-				item.PermitFragments = types.BoolValue(true)
-			} else {
-				item.PermitFragments = types.BoolValue(false)
-			}
-			if cValue := v.Get("permit.counter"); cValue.Exists() {
-				item.PermitCounter = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("permit.default"); cValue.Exists() {
-				item.PermitDefault = types.BoolValue(true)
-			} else {
-				item.PermitDefault = types.BoolValue(false)
-			}
-			if cValue := v.Get("permit.capture"); cValue.Exists() {
-				item.PermitCapture = types.BoolValue(true)
-			} else {
-				item.PermitCapture = types.BoolValue(false)
-			}
-			if cValue := v.Get("permit.range.start-protocol"); cValue.Exists() {
-				item.PermitRangeStartProtocol = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("permit.range.end-protocol"); cValue.Exists() {
-				item.PermitRangeEndProtocol = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("permit.source.address"); cValue.Exists() {
 				item.PermitSourceAddress = types.StringValue(cValue.String())
@@ -2438,6 +2417,9 @@ func (data *IPv4AccessListData) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("permit.icmp.message-code"); cValue.Exists() {
 				item.PermitIcmpMessageCode = types.Int64Value(cValue.Int())
 			}
+			if cValue := v.Get("permit.igmp-type"); cValue.Exists() {
+				item.PermitIgmpType = types.StringValue(cValue.String())
+			}
 			if cValue := v.Get("permit.dscp.dscp-value"); cValue.Exists() {
 				item.PermitDscp = types.StringValue(cValue.String())
 			}
@@ -2513,6 +2495,11 @@ func (data *IPv4AccessListData) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("permit.fragment-offset.range.end-value"); cValue.Exists() {
 				item.PermitFragmentOffsetRangeEnd = types.Int64Value(cValue.Int())
 			}
+			if cValue := v.Get("permit.fragments"); cValue.Exists() {
+				item.PermitFragments = types.BoolValue(true)
+			} else {
+				item.PermitFragments = types.BoolValue(false)
+			}
 			if cValue := v.Get("permit.police.value"); cValue.Exists() {
 				item.PermitPoliceValue = types.Int64Value(cValue.Int())
 			}
@@ -2527,6 +2514,11 @@ func (data *IPv4AccessListData) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("permit.police.priority"); cValue.Exists() {
 				item.PermitPolicePriority = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.default"); cValue.Exists() {
+				item.PermitDefault = types.BoolValue(true)
+			} else {
+				item.PermitDefault = types.BoolValue(false)
 			}
 			if cValue := v.Get("permit.nexthop1.ipv4"); cValue.Exists() {
 				item.PermitNexthop1Ipv4 = types.StringValue(cValue.String())
@@ -2555,6 +2547,14 @@ func (data *IPv4AccessListData) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("permit.nexthop3.vrf"); cValue.Exists() {
 				item.PermitNexthop3Vrf = types.StringValue(cValue.String())
 			}
+			if cValue := v.Get("permit.capture"); cValue.Exists() {
+				item.PermitCapture = types.BoolValue(true)
+			} else {
+				item.PermitCapture = types.BoolValue(false)
+			}
+			if cValue := v.Get("permit.counter"); cValue.Exists() {
+				item.PermitCounter = types.StringValue(cValue.String())
+			}
 			if cValue := v.Get("permit.log"); cValue.Exists() {
 				item.PermitLog = types.BoolValue(true)
 			} else {
@@ -2571,11 +2571,26 @@ func (data *IPv4AccessListData) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("permit.set.ttl"); cValue.Exists() {
 				item.PermitSetTtl = types.Int64Value(cValue.Int())
 			}
+			if cValue := v.Get("deny.protocol"); cValue.Exists() {
+				item.DenyProtocol = types.StringValue(cValue.String())
+			}
 			if cValue := v.Get("deny.eq"); cValue.Exists() {
 				item.DenyEq = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("deny.protocol"); cValue.Exists() {
-				item.DenyProtocol = types.StringValue(cValue.String())
+			if cValue := v.Get("deny.precedence"); cValue.Exists() {
+				item.DenyPrecedence = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.fragment-type"); cValue.Exists() {
+				item.DenyFragmentType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.counter"); cValue.Exists() {
+				item.DenyCounter = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.range.start-protocol"); cValue.Exists() {
+				item.DenyRangeStartProtocol = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.range.end-protocol"); cValue.Exists() {
+				item.DenyRangeEndProtocol = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("deny.source.address"); cValue.Exists() {
 				item.DenySourceAddress = types.StringValue(cValue.String())
@@ -2659,49 +2674,6 @@ func (data *IPv4AccessListData) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("deny.destination.port.range.end-value"); cValue.Exists() {
 				item.DenyDestinationPortRangeEnd = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("deny.igmp-type"); cValue.Exists() {
-				item.DenyIgmpType = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("deny.precedence"); cValue.Exists() {
-				item.DenyPrecedence = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("deny.fragment-type"); cValue.Exists() {
-				item.DenyFragmentType = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("deny.fragments"); cValue.Exists() {
-				item.DenyFragments = types.BoolValue(true)
-			} else {
-				item.DenyFragments = types.BoolValue(false)
-			}
-			if cValue := v.Get("deny.counter"); cValue.Exists() {
-				item.DenyCounter = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("deny.default"); cValue.Exists() {
-				item.DenyDefault = types.BoolValue(true)
-			} else {
-				item.DenyDefault = types.BoolValue(false)
-			}
-			if cValue := v.Get("deny.capture"); cValue.Exists() {
-				item.DenyCapture = types.BoolValue(true)
-			} else {
-				item.DenyCapture = types.BoolValue(false)
-			}
-			if cValue := v.Get("deny.icmp-off"); cValue.Exists() {
-				item.DenyIcmpOff = types.BoolValue(true)
-			} else {
-				item.DenyIcmpOff = types.BoolValue(false)
-			}
-			if cValue := v.Get("deny.icmp-on"); cValue.Exists() {
-				item.DenyIcmpOn = types.BoolValue(true)
-			} else {
-				item.DenyIcmpOn = types.BoolValue(false)
-			}
-			if cValue := v.Get("deny.range.start-protocol"); cValue.Exists() {
-				item.DenyRangeStartProtocol = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("deny.range.end-protocol"); cValue.Exists() {
-				item.DenyRangeEndProtocol = types.StringValue(cValue.String())
-			}
 			if cValue := v.Get("deny.icmp.message-type-name"); cValue.Exists() {
 				item.DenyIcmpMessageTypeName = types.StringValue(cValue.String())
 			}
@@ -2710,6 +2682,9 @@ func (data *IPv4AccessListData) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("deny.icmp.message-code"); cValue.Exists() {
 				item.DenyIcmpMessageCode = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.igmp-type"); cValue.Exists() {
+				item.DenyIgmpType = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("deny.dscp.dscp-value"); cValue.Exists() {
 				item.DenyDscp = types.StringValue(cValue.String())
@@ -2786,6 +2761,11 @@ func (data *IPv4AccessListData) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("deny.fragment-offset.range.end-value"); cValue.Exists() {
 				item.DenyFragmentOffsetRangeEnd = types.Int64Value(cValue.Int())
 			}
+			if cValue := v.Get("deny.fragments"); cValue.Exists() {
+				item.DenyFragments = types.BoolValue(true)
+			} else {
+				item.DenyFragments = types.BoolValue(false)
+			}
 			if cValue := v.Get("deny.police.value"); cValue.Exists() {
 				item.DenyPoliceValue = types.Int64Value(cValue.Int())
 			}
@@ -2800,6 +2780,11 @@ func (data *IPv4AccessListData) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("deny.police.priority"); cValue.Exists() {
 				item.DenyPolicePriority = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.default"); cValue.Exists() {
+				item.DenyDefault = types.BoolValue(true)
+			} else {
+				item.DenyDefault = types.BoolValue(false)
 			}
 			if cValue := v.Get("deny.nexthop1.ipv4"); cValue.Exists() {
 				item.DenyNexthop1Ipv4 = types.StringValue(cValue.String())
@@ -2828,6 +2813,11 @@ func (data *IPv4AccessListData) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("deny.nexthop3.vrf"); cValue.Exists() {
 				item.DenyNexthop3Vrf = types.StringValue(cValue.String())
 			}
+			if cValue := v.Get("deny.capture"); cValue.Exists() {
+				item.DenyCapture = types.BoolValue(true)
+			} else {
+				item.DenyCapture = types.BoolValue(false)
+			}
 			if cValue := v.Get("deny.log"); cValue.Exists() {
 				item.DenyLog = types.BoolValue(true)
 			} else {
@@ -2843,6 +2833,16 @@ func (data *IPv4AccessListData) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("deny.set.ttl"); cValue.Exists() {
 				item.DenySetTtl = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.icmp-off"); cValue.Exists() {
+				item.DenyIcmpOff = types.BoolValue(true)
+			} else {
+				item.DenyIcmpOff = types.BoolValue(false)
+			}
+			if cValue := v.Get("deny.icmp-on"); cValue.Exists() {
+				item.DenyIcmpOn = types.BoolValue(true)
+			} else {
+				item.DenyIcmpOn = types.BoolValue(false)
 			}
 			data.Sequences = append(data.Sequences, item)
 			return true
@@ -2879,6 +2879,12 @@ func (data *IPv4AccessList) getDeletedItems(ctx context.Context, state IPv4Acces
 				found = false
 			}
 			if found {
+				if !state.Sequences[i].DenyIcmpOn.IsNull() && data.Sequences[j].DenyIcmpOn.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/icmp-on", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyIcmpOff.IsNull() && data.Sequences[j].DenyIcmpOff.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/icmp-off", state.getPath(), keyString))
+				}
 				if !state.Sequences[i].DenySetTtl.IsNull() && data.Sequences[j].DenySetTtl.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/set/ttl", state.getPath(), keyString))
 				}
@@ -2890,6 +2896,9 @@ func (data *IPv4AccessList) getDeletedItems(ctx context.Context, state IPv4Acces
 				}
 				if !state.Sequences[i].DenyLog.IsNull() && data.Sequences[j].DenyLog.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/log", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyCapture.IsNull() && data.Sequences[j].DenyCapture.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/capture", state.getPath(), keyString))
 				}
 				if !state.Sequences[i].DenyNexthop3Vrf.IsNull() && data.Sequences[j].DenyNexthop3Vrf.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/nexthop3/vrf", state.getPath(), keyString))
@@ -2918,6 +2927,9 @@ func (data *IPv4AccessList) getDeletedItems(ctx context.Context, state IPv4Acces
 				if !state.Sequences[i].DenyNexthop1Ipv4.IsNull() && data.Sequences[j].DenyNexthop1Ipv4.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/nexthop1/ipv4", state.getPath(), keyString))
 				}
+				if !state.Sequences[i].DenyDefault.IsNull() && data.Sequences[j].DenyDefault.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/default", state.getPath(), keyString))
+				}
 				if !state.Sequences[i].DenyPolicePriority.IsNull() && data.Sequences[j].DenyPolicePriority.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/police/priority", state.getPath(), keyString))
 				}
@@ -2932,6 +2944,9 @@ func (data *IPv4AccessList) getDeletedItems(ctx context.Context, state IPv4Acces
 				}
 				if !state.Sequences[i].DenyPoliceValue.IsNull() && data.Sequences[j].DenyPoliceValue.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/police/value", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyFragments.IsNull() && data.Sequences[j].DenyFragments.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/fragments", state.getPath(), keyString))
 				}
 				if !state.Sequences[i].DenyFragmentOffsetRangeEnd.IsNull() && data.Sequences[j].DenyFragmentOffsetRangeEnd.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/fragment-offset/range/end-value", state.getPath(), keyString))
@@ -3008,6 +3023,9 @@ func (data *IPv4AccessList) getDeletedItems(ctx context.Context, state IPv4Acces
 				if !state.Sequences[i].DenyDscp.IsNull() && data.Sequences[j].DenyDscp.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/dscp/dscp-value", state.getPath(), keyString))
 				}
+				if !state.Sequences[i].DenyIgmpType.IsNull() && data.Sequences[j].DenyIgmpType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/igmp-type", state.getPath(), keyString))
+				}
 				if !state.Sequences[i].DenyIcmpMessageCode.IsNull() && data.Sequences[j].DenyIcmpMessageCode.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/icmp/message-code", state.getPath(), keyString))
 				}
@@ -3016,39 +3034,6 @@ func (data *IPv4AccessList) getDeletedItems(ctx context.Context, state IPv4Acces
 				}
 				if !state.Sequences[i].DenyIcmpMessageTypeName.IsNull() && data.Sequences[j].DenyIcmpMessageTypeName.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/icmp/message-type-name", state.getPath(), keyString))
-				}
-				if !state.Sequences[i].DenyRangeEndProtocol.IsNull() && data.Sequences[j].DenyRangeEndProtocol.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/range/end-protocol", state.getPath(), keyString))
-				}
-				if !state.Sequences[i].DenyRangeStartProtocol.IsNull() && data.Sequences[j].DenyRangeStartProtocol.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/range/start-protocol", state.getPath(), keyString))
-				}
-				if !state.Sequences[i].DenyIcmpOn.IsNull() && data.Sequences[j].DenyIcmpOn.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/icmp-on", state.getPath(), keyString))
-				}
-				if !state.Sequences[i].DenyIcmpOff.IsNull() && data.Sequences[j].DenyIcmpOff.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/icmp-off", state.getPath(), keyString))
-				}
-				if !state.Sequences[i].DenyCapture.IsNull() && data.Sequences[j].DenyCapture.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/capture", state.getPath(), keyString))
-				}
-				if !state.Sequences[i].DenyDefault.IsNull() && data.Sequences[j].DenyDefault.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/default", state.getPath(), keyString))
-				}
-				if !state.Sequences[i].DenyCounter.IsNull() && data.Sequences[j].DenyCounter.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/counter", state.getPath(), keyString))
-				}
-				if !state.Sequences[i].DenyFragments.IsNull() && data.Sequences[j].DenyFragments.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/fragments", state.getPath(), keyString))
-				}
-				if !state.Sequences[i].DenyFragmentType.IsNull() && data.Sequences[j].DenyFragmentType.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/fragment-type", state.getPath(), keyString))
-				}
-				if !state.Sequences[i].DenyPrecedence.IsNull() && data.Sequences[j].DenyPrecedence.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/precedence", state.getPath(), keyString))
-				}
-				if !state.Sequences[i].DenyIgmpType.IsNull() && data.Sequences[j].DenyIgmpType.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/igmp-type", state.getPath(), keyString))
 				}
 				if !state.Sequences[i].DenyDestinationPortRangeEnd.IsNull() && data.Sequences[j].DenyDestinationPortRangeEnd.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/destination/port/range/end-value", state.getPath(), keyString))
@@ -3128,11 +3113,26 @@ func (data *IPv4AccessList) getDeletedItems(ctx context.Context, state IPv4Acces
 				if !state.Sequences[i].DenySourceAddress.IsNull() && data.Sequences[j].DenySourceAddress.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/source/address", state.getPath(), keyString))
 				}
-				if !state.Sequences[i].DenyProtocol.IsNull() && data.Sequences[j].DenyProtocol.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/protocol", state.getPath(), keyString))
+				if !state.Sequences[i].DenyRangeEndProtocol.IsNull() && data.Sequences[j].DenyRangeEndProtocol.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/range/end-protocol", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyRangeStartProtocol.IsNull() && data.Sequences[j].DenyRangeStartProtocol.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/range/start-protocol", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyCounter.IsNull() && data.Sequences[j].DenyCounter.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/counter", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyFragmentType.IsNull() && data.Sequences[j].DenyFragmentType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/fragment-type", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyPrecedence.IsNull() && data.Sequences[j].DenyPrecedence.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/precedence", state.getPath(), keyString))
 				}
 				if !state.Sequences[i].DenyEq.IsNull() && data.Sequences[j].DenyEq.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/eq", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyProtocol.IsNull() && data.Sequences[j].DenyProtocol.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/protocol", state.getPath(), keyString))
 				}
 				if !state.Sequences[i].PermitSetTtl.IsNull() && data.Sequences[j].PermitSetTtl.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/set/ttl", state.getPath(), keyString))
@@ -3145,6 +3145,12 @@ func (data *IPv4AccessList) getDeletedItems(ctx context.Context, state IPv4Acces
 				}
 				if !state.Sequences[i].PermitLog.IsNull() && data.Sequences[j].PermitLog.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/log", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitCounter.IsNull() && data.Sequences[j].PermitCounter.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/counter", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitCapture.IsNull() && data.Sequences[j].PermitCapture.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/capture", state.getPath(), keyString))
 				}
 				if !state.Sequences[i].PermitNexthop3Vrf.IsNull() && data.Sequences[j].PermitNexthop3Vrf.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/nexthop3/vrf", state.getPath(), keyString))
@@ -3173,6 +3179,9 @@ func (data *IPv4AccessList) getDeletedItems(ctx context.Context, state IPv4Acces
 				if !state.Sequences[i].PermitNexthop1Ipv4.IsNull() && data.Sequences[j].PermitNexthop1Ipv4.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/nexthop1/ipv4", state.getPath(), keyString))
 				}
+				if !state.Sequences[i].PermitDefault.IsNull() && data.Sequences[j].PermitDefault.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/default", state.getPath(), keyString))
+				}
 				if !state.Sequences[i].PermitPolicePriority.IsNull() && data.Sequences[j].PermitPolicePriority.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/police/priority", state.getPath(), keyString))
 				}
@@ -3187,6 +3196,9 @@ func (data *IPv4AccessList) getDeletedItems(ctx context.Context, state IPv4Acces
 				}
 				if !state.Sequences[i].PermitPoliceValue.IsNull() && data.Sequences[j].PermitPoliceValue.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/police/value", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitFragments.IsNull() && data.Sequences[j].PermitFragments.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/fragments", state.getPath(), keyString))
 				}
 				if !state.Sequences[i].PermitFragmentOffsetRangeEnd.IsNull() && data.Sequences[j].PermitFragmentOffsetRangeEnd.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/fragment-offset/range/end-value", state.getPath(), keyString))
@@ -3262,6 +3274,9 @@ func (data *IPv4AccessList) getDeletedItems(ctx context.Context, state IPv4Acces
 				}
 				if !state.Sequences[i].PermitDscp.IsNull() && data.Sequences[j].PermitDscp.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/dscp/dscp-value", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitIgmpType.IsNull() && data.Sequences[j].PermitIgmpType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/igmp-type", state.getPath(), keyString))
 				}
 				if !state.Sequences[i].PermitIcmpMessageCode.IsNull() && data.Sequences[j].PermitIcmpMessageCode.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/icmp/message-code", state.getPath(), keyString))
@@ -3350,32 +3365,17 @@ func (data *IPv4AccessList) getDeletedItems(ctx context.Context, state IPv4Acces
 				if !state.Sequences[i].PermitSourceAddress.IsNull() && data.Sequences[j].PermitSourceAddress.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/source/address", state.getPath(), keyString))
 				}
-				if !state.Sequences[i].PermitRangeEndProtocol.IsNull() && data.Sequences[j].PermitRangeEndProtocol.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/range/end-protocol", state.getPath(), keyString))
-				}
-				if !state.Sequences[i].PermitRangeStartProtocol.IsNull() && data.Sequences[j].PermitRangeStartProtocol.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/range/start-protocol", state.getPath(), keyString))
-				}
-				if !state.Sequences[i].PermitCapture.IsNull() && data.Sequences[j].PermitCapture.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/capture", state.getPath(), keyString))
-				}
-				if !state.Sequences[i].PermitDefault.IsNull() && data.Sequences[j].PermitDefault.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/default", state.getPath(), keyString))
-				}
-				if !state.Sequences[i].PermitCounter.IsNull() && data.Sequences[j].PermitCounter.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/counter", state.getPath(), keyString))
-				}
-				if !state.Sequences[i].PermitFragments.IsNull() && data.Sequences[j].PermitFragments.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/fragments", state.getPath(), keyString))
-				}
 				if !state.Sequences[i].PermitFragmentType.IsNull() && data.Sequences[j].PermitFragmentType.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/fragment-type", state.getPath(), keyString))
 				}
 				if !state.Sequences[i].PermitPrecedence.IsNull() && data.Sequences[j].PermitPrecedence.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/precedence", state.getPath(), keyString))
 				}
-				if !state.Sequences[i].PermitIgmpType.IsNull() && data.Sequences[j].PermitIgmpType.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/igmp-type", state.getPath(), keyString))
+				if !state.Sequences[i].PermitRangeEndProtocol.IsNull() && data.Sequences[j].PermitRangeEndProtocol.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/range/end-protocol", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitRangeStartProtocol.IsNull() && data.Sequences[j].PermitRangeStartProtocol.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/range/start-protocol", state.getPath(), keyString))
 				}
 				if !state.Sequences[i].PermitEq.IsNull() && data.Sequences[j].PermitEq.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/eq", state.getPath(), keyString))
@@ -3409,17 +3409,17 @@ func (data *IPv4AccessList) getEmptyLeafsDelete(ctx context.Context) []string {
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		if !data.Sequences[i].DenyLogInput.IsNull() && !data.Sequences[i].DenyLogInput.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/deny/log-input", data.getPath(), keyString))
-		}
-		if !data.Sequences[i].DenyLog.IsNull() && !data.Sequences[i].DenyLog.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/deny/log", data.getPath(), keyString))
-		}
 		if !data.Sequences[i].DenyIcmpOn.IsNull() && !data.Sequences[i].DenyIcmpOn.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/deny/icmp-on", data.getPath(), keyString))
 		}
 		if !data.Sequences[i].DenyIcmpOff.IsNull() && !data.Sequences[i].DenyIcmpOff.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/deny/icmp-off", data.getPath(), keyString))
+		}
+		if !data.Sequences[i].DenyLogInput.IsNull() && !data.Sequences[i].DenyLogInput.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/deny/log-input", data.getPath(), keyString))
+		}
+		if !data.Sequences[i].DenyLog.IsNull() && !data.Sequences[i].DenyLog.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/deny/log", data.getPath(), keyString))
 		}
 		if !data.Sequences[i].DenyCapture.IsNull() && !data.Sequences[i].DenyCapture.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/deny/capture", data.getPath(), keyString))
@@ -3442,12 +3442,6 @@ func (data *IPv4AccessList) getEmptyLeafsDelete(ctx context.Context) []string {
 		if !data.Sequences[i].PermitLog.IsNull() && !data.Sequences[i].PermitLog.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/permit/log", data.getPath(), keyString))
 		}
-		if !data.Sequences[i].PermitDestinationAny.IsNull() && !data.Sequences[i].PermitDestinationAny.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/any", data.getPath(), keyString))
-		}
-		if !data.Sequences[i].PermitSourceAny.IsNull() && !data.Sequences[i].PermitSourceAny.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/permit/source/any", data.getPath(), keyString))
-		}
 		if !data.Sequences[i].PermitCapture.IsNull() && !data.Sequences[i].PermitCapture.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/permit/capture", data.getPath(), keyString))
 		}
@@ -3456,6 +3450,12 @@ func (data *IPv4AccessList) getEmptyLeafsDelete(ctx context.Context) []string {
 		}
 		if !data.Sequences[i].PermitFragments.IsNull() && !data.Sequences[i].PermitFragments.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/permit/fragments", data.getPath(), keyString))
+		}
+		if !data.Sequences[i].PermitDestinationAny.IsNull() && !data.Sequences[i].PermitDestinationAny.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/any", data.getPath(), keyString))
+		}
+		if !data.Sequences[i].PermitSourceAny.IsNull() && !data.Sequences[i].PermitSourceAny.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/permit/source/any", data.getPath(), keyString))
 		}
 	}
 	return emptyLeafsDelete

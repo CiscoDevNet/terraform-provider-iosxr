@@ -35,9 +35,38 @@ data "iosxr_router_bgp_neighbor_address_family" "example" {
 
 ### Read-Only
 
+- `accept_own` (Boolean) Handle self-originated routes with Accept-Own community
+- `accept_own_inheritance_disable` (Boolean) Prevent item being inherited from a parent group
+- `additional_paths_receive` (Boolean) Additional paths Send capability
+- `additional_paths_receive_disable` (Boolean) Prevent additional-paths receive from being inherited from the parent
+- `additional_paths_send` (Boolean) Additional paths Send capability
+- `additional_paths_send_disable` (Boolean) Prevent additional-paths receive from being inherited from the parent
+- `advertise_l2vpn_evpn_re_originated` (Boolean) Advertise Re-orignated routes only
+- `advertise_l2vpn_evpn_re_originated_stitching_rt` (Boolean) Advertise re-originated routes with stitching Route-Targets
 - `advertise_vpnv4_unicast` (Boolean) Enable advertise vpnv4 unicast
 - `advertise_vpnv4_unicast_re_originated` (Boolean) Advertise re-orignated and local routes only
 - `advertise_vpnv4_unicast_re_originated_stitching_rt` (Boolean) Advertise re-originated and local routes with stitching Route-Targets
+- `advertise_vpnv6_unicast` (Boolean) Enable advertise vpnv6 unicast
+- `advertise_vpnv6_unicast_re_originated` (Boolean) Advertise Re-orignated routes only
+- `advertise_vpnv6_unicast_re_originated_stitching_rt` (Boolean) Advertise re-originated routes with stitching Route-Targets
+- `aigp` (Boolean) Enable AIGP
+- `aigp_disable` (Boolean) Disable AIGP
+- `aigp_send_cost_community_disable` (Boolean) Disable aigp send cost-community
+- `aigp_send_cost_community_id` (Number) Cost community ID
+- `aigp_send_cost_community_id_poi_igp_cost` (Boolean) Cost community is used after IGP distance to next hop
+- `aigp_send_cost_community_id_poi_igp_cost_transitive` (Boolean) Enable transitive cost community
+- `aigp_send_cost_community_id_poi_pre_bestpath` (Boolean) Cost community is first step in best path calculation
+- `aigp_send_cost_community_id_poi_pre_bestpath_transitive` (Boolean) Enable transitive cost community
+- `aigp_send_med` (Boolean) Send AIGP value in MED
+- `aigp_send_med_disable` (Boolean) Disable aigp send med
+- `allowas_in` (Number) Number of occurrences of AS number
+- `allowconfedas_in` (Number) Number of occurrences of Confederation AS number
+- `as_override` (Boolean) Override matching AS-number while sending update
+- `as_override_inheritance_disable` (Boolean) Prevent as-override from being inherited from the parent
+- `bestpath_origin_as_allow_invalid` (Boolean) BGP bestpath selection will allow 'invalid' origin-AS
+- `capability_orf_prefix` (String) Capability to RECEIVE the ORF from this neighbor
+- `cluster_id_allow_equal` (Boolean) Accept routes with first cluster-id in list is same as the router's cluster id
+- `cluster_id_allow_equal_disable` (Boolean) Prevent the configuration from being inherited.
 - `default_originate` (Boolean) Originate default route to this neighbor
 - `default_originate_inheritance_disable` (Boolean) Prevent default-originate being inherited from a parent group
 - `default_originate_route_policy` (String) Route policy to specify criteria to originate default
@@ -52,13 +81,48 @@ data "iosxr_router_bgp_neighbor_address_family" "example" {
 - `maximum_prefix_restart` (Number) Restart time interval
 - `maximum_prefix_threshold` (Number) Threshold value (%) at which to generate a warning msg
 - `maximum_prefix_warning_only` (Boolean) Only give warning message when limit is exceeded
+- `multipath` (Boolean) Paths from this neighbor is eligible for multipath
 - `next_hop_self` (Boolean) Disable the next hop calculation for this neighbor
 - `next_hop_self_inheritance_disable` (Boolean) Prevent next-hop-self from being inherited from the parent
+- `next_hop_unchanged` (Boolean) Do not overwrite next hop before advertising to eBGP peers
+- `next_hop_unchanged_inheritance_disable` (Boolean) Prevent next-hop-unchanged from being inherited from the parent
+- `next_hop_unchanged_multipath` (Boolean) Do not overwrite nexthop before advertising multipaths
+- `orf_route_policy` (String) Route policy to specify ORF and inbound filter
+- `origin_as_validation_disable` (Boolean) Disable RPKI origin-AS validation
+- `remove_private_as` (Boolean) Remove private AS number from outbound updates
+- `remove_private_as_entire_aspath` (Boolean) remove only if all ASes in the path are private
+- `remove_private_as_inbound` (Boolean) Remove private AS number from inbound updates
+- `remove_private_as_inbound_entire_aspath` (Boolean) remove only if all ASes in the path are private
+- `remove_private_as_inbound_inheritance_disable` (Boolean) Prevent remove-private-AS from being inherited from the parent
+- `remove_private_as_internal` (Boolean) remove only if all ASes in the path are private
+- `replace_private_as` (Boolean) Replace private AS number from outbound updates
+- `replace_private_as_internal` (Boolean) remove only if all ASes in the path are private
 - `route_policy_in` (String) Apply route policy to inbound routes
 - `route_policy_out` (String) Apply route policy to outbound routes
 - `route_reflector_client` (Boolean) Configure a neighbor as Route Reflector client
 - `route_reflector_client_inheritance_disable` (Boolean) Prevent route-reflector-client from being inherited from the parent
+- `segment_routing_srv6_prefix_sid_type4` (Boolean) Enable prefix sid version 4 encoding
 - `send_community_ebgp` (Boolean) Send community attribute to this external neighbor
 - `send_community_ebgp_inheritance_disable` (Boolean) Prevent send-community-ebgp from being inherited from the parent
+- `send_community_gshut_ebgp` (Boolean) Allow the g-shut community to be sent to this external neighbor
+- `send_community_gshut_ebgp_inheritance_disable` (Boolean) Prevent send-community-gshut-ebgp from being inherited from the parent
+- `send_extended_community_ebgp` (Boolean) Send extended community attribute to this external neighbor
+- `send_extended_community_ebgp_inheritance_disable` (Boolean) Prevent send-extended-community-ebgp from being inherited from parent
+- `send_multicast_attributes` (Boolean) Send multicast attributes to this neighbor
+- `send_multicast_attributes_disable` (Boolean) Disable send multicast attribute
+- `site_of_origin_four_byte_as_index` (Number) ASN4:index (hex or decimal format)
+- `site_of_origin_four_byte_as_number` (String) 4-byte AS number in asplain format
+- `site_of_origin_ipv4_address` (String) IPv4 address
+- `site_of_origin_ipv4_address_index` (Number) IPv4Address:index (hex or decimal format)
+- `site_of_origin_two_byte_as_index` (Number) ASN2:index (hex or decimal format)
+- `site_of_origin_two_byte_as_number` (String) 2-byte AS number
+- `slow_peer_dynamic` (Boolean) Configure this neighbor as dynamic slow-peer
+- `slow_peer_dynamic_disable` (Boolean) Disable dynamic slow-peer
+- `slow_peer_dynamic_threshold` (Number) Threshold (in seconds) to detect this neighbor as slow-peer
+- `slow_peer_static` (Boolean) Configure this neighbor as static slow-peer
 - `soft_reconfiguration_inbound` (Boolean) Allow inbound soft reconfiguration for this neighbor
 - `soft_reconfiguration_inbound_always` (Boolean) Always use soft reconfig, even if route refresh is supported
+- `update_out_originator_loopcheck` (Boolean) Loop check for same originator which sent the route
+- `update_out_originator_loopcheck_disable` (Boolean) Disable originator loop check
+- `use_af_group` (String) Inherit configuration for this address-family from an af-group
+- `weight` (Number) Set default weight for routes from this neighbor

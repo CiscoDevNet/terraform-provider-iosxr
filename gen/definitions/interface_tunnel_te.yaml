@@ -1,0 +1,582 @@
+---
+name: Interface Tunnel TE
+path: Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=tunnel-te%s]
+doc_category: Interface
+no_delete_attributes: true
+attributes:
+  - tf_name: name
+    description: tunnel-te interface ID
+    type: String
+    id: true
+    no_augment_config: true
+    example: "100"
+  - yang_name: shutdown
+    minimum_test_value: false
+    example: false
+  - yang_name: logging/events/link-status
+    tf_name: logging_events_link_status
+    example: true
+  - yang_name: bandwidth
+    example: 1000000
+  - yang_name: description
+    example: My Interface Description
+  - yang_name: Cisco-IOS-XR-um-statistics-cfg:load-interval
+    minimum_test_value: 30
+    example: 30
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/address
+    tf_name: ipv4_address
+    optional: true
+    delete_parent: true
+    example: "192.168.1.1"
+    exclude_test: true
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/netmask
+    tf_name: ipv4_netmask
+    optional: true
+    delete_parent: true
+    example: "255.255.255.0"
+    exclude_test: true
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered
+    tf_name: ipv4_unnumbered
+    example: Loopback0
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable
+    tf_name: ipv4_forwarding_enable
+    exclude_test: true
+    example: true
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:ttl-propagate/disable
+    tf_name: ipv4_ttl_propagate_disable
+    exclude_test: true
+    example: true
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:enable
+    tf_name: ipv6_enable
+    exclude_test: true
+    example: true
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:ttl-propagate/disable
+    tf_name: ipv6_ttl_propagate_disable
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-if-mpls-cfg:mpls/mtu
+    tf_name: mpls_mtu
+    example: 1400
+  # affinity
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:affinity/affinity-attribute-value
+    tf_name: affinity_value
+    example: "11"
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:affinity/mask
+    tf_name: affinity_mask
+    example: "ff"
+  # autoroute
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce
+    tf_name: autoroute_announce
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/metric/absolute
+    tf_name: autoroute_announce_metric_absolute
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 10
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/metric/relative
+    tf_name: autoroute_announce_metric_relative
+    optional: true
+    delete_parent: true
+    example: 10
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/metric/constant-metric
+    tf_name: autoroute_announce_metric
+    optional: true
+    delete_parent: true
+    example: 10000
+    exclude_test: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/include-ipv6
+    tf_name: autoroute_announce_include_ipv6
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/exclude-traffic/segment-routing
+    tf_name: autoroute_announce_exclude_traffic_segment_routing
+    example: true
+    exclude_test: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:autoroute/destinations/destination
+    tf_name: autoroute_destinations
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.5
+  # backup-bw
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/pool-type
+    tf_name: backup_bw_pool_type
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: global-pool
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/class-type
+    tf_name: backup_bw_class_type
+    optional: true
+    delete_parent: true
+    example: "1"
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/bandwidth
+    tf_name: backup_bw_value
+    optional: true
+    delete_parent: true
+    example: 10000
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/unlimited
+    tf_name: backup_bw_unlimited
+    optional: true
+    delete_parent: true
+    example: true
+    exclude_test: true
+  # signalled-bandwidth
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/bandwidth
+    tf_name: signalled_bandwidth
+    optional: true
+    delete_parent: true
+    example: 10000
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/class-type
+    tf_name: signalled_bandwidth_class_type
+    optional: true
+    example: 1
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/sub-pool
+    tf_name: signalled_bandwidth_sub_pool
+    example: true
+    exclude_test: true
+  # fast-reroute
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute
+    tf_name: fast_reroute
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute/protect/node
+    tf_name: fast_reroute_protect_node
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute/protect/bandwidth
+    tf_name: fast_reroute_protect_bandwidth
+    example: true
+  # forward class
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:forward-class
+    tf_name: forward_class
+    test_tags: [XRD, NCS, C8000]
+    exclude_test: true
+    example: 1
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency
+    tf_name: forwarding_adjacency
+    test_tags: [XRD, NCS, C8000]
+    example: true
+    exclude_test: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency/holdtime
+    tf_name: forwarding_adjacency_holdtime
+    test_tags: [XRD, NCS, C8000]
+    example: 2000
+    exclude_test: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency/include-ipv6
+    tf_name: forwarding_adjacency_include_ipv6
+    test_tags: [XRD, NCS, C8000]
+    example: true
+    exclude_test: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:load-share
+    tf_name: load_share
+    example: 1000
+  # logging
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/state
+    tf_name: logging_events_lsp_state
+    type: Bool
+    type_yang_bool: presence
+    no_augment_config: true
+    description: "Enable interface LSP UP/DOWN change alarms"
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/reoptimize
+    tf_name: logging_events_lsp_reoptimize
+    type: Bool
+    type_yang_bool: presence
+    no_augment_config: true
+    description: "Enable interface LSP REOPT change alarms"
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/reoptimize-attempts
+    tf_name: logging_events_lsp_reoptimize_attempts
+    type: Bool
+    type_yang_bool: presence
+    no_augment_config: true
+    description: "Enable interface LSP REOPT attempts change alarms"
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/bw-change
+    tf_name: logging_events_lsp_bw_change
+    type: Bool
+    type_yang_bool: presence
+    no_augment_config: true
+    description: "Enable interface LSP BANDWIDTH change alarms"
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/reroute
+    tf_name: logging_events_lsp_reroute
+    type: Bool
+    type_yang_bool: presence
+    no_augment_config: true
+    description: "Enable interface LSP REROUTE change alarms"
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/record-route
+    tf_name: logging_events_lsp_record_route
+    type: Bool
+    type_yang_bool: presence
+    no_augment_config: true
+    description: "Enable interface LSP RECORD-ROUTE change alarms"
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/switchover
+    tf_name: logging_events_lsp_switchover
+    type: Bool
+    type_yang_bool: presence
+    no_augment_config: true
+    description: "Enable interface LSP SWITCHOVER change alarms"
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/insufficient-bandwidth
+    tf_name: logging_events_lsp_insufficient_bw
+    type: Bool
+    type_yang_bool: presence
+    no_augment_config: true
+    description: "Enable interface LSP INSUFFICIENT-BANDWIDTH change alarms"
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:logging/events/pcalc-failure
+    tf_name: logging_events_pcalc_failure
+    type: Bool
+    type_yang_bool: presence
+    no_augment_config: true
+    description: "Enable interface LSP PCALC-FAILURE change alarms"
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:logging/events/bfd-status
+    tf_name: logging_events_bfd_status
+    type: Bool
+    type_yang_bool: presence
+    no_augment_config: true
+    description: "Enable interface LSP BFD-STATUS change alarms"
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:logging/events/all
+    tf_name: logging_events_all
+    type: Bool
+    type_yang_bool: presence
+    no_augment_config: true
+    description: "Enable all logging for this tunnel"
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:signalled-name
+    tf_name: signalled_name
+    example: "Tunnel-TE-100"
+  # path options
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option
+    tf_name: path_options
+    type: List
+    attributes:
+      - yang_name: preference
+        id: true
+        example: 10
+      - yang_name: dynamic
+        example: true
+      - yang_name: explicit/identifier
+        tf_name: explicit_path_id
+        optional: true
+        delete_parent: true
+        example: 100
+        exclude_test: true
+      - yang_name: explicit/name
+        tf_name: explicit_path_name
+        optional: true
+        delete_parent: true
+        example: EXPLICIT-PATH-1
+        exclude_test: true
+      - yang_name: explicit/verbatim
+        tf_name: explicit_path_verbatim
+        example: true
+        exclude_test: true
+      - yang_name: ospf/instance-name
+        tf_name: ospf_instance
+        optional: true
+        delete_parent: true
+        example: OSPF1
+        exclude_test: true
+      - yang_name: ospf/area/decimal
+        tf_name: ospf_area_id
+        example: 0
+        exclude_test: true
+      - yang_name: ospf/area/ip-address
+        tf_name: ospf_area_ip_format
+        example: 0.0.0.0
+        exclude_test: true
+      - yang_name: isis/instance-name
+        tf_name: isis_instance
+        optional: true
+        delete_parent: true
+        example: ISIS-1
+      - yang_name: isis/level
+        tf_name: isis_level
+        example: 2
+      - yang_name: attribute-set/attribute-set-name
+        tf_name: attribute_set
+        example: ATTR-1
+        exclude_test: true
+      - yang_name: protected-by/index
+        tf_name: protected_by_index
+        optional: true
+        delete_parent: true
+        example: 20
+      - yang_name: protected-by/index-secondary
+        tf_name: protected_by_index_secondary
+        example: 30
+      - yang_name: lockdown
+        example: true
+      - yang_name: lockdown/sticky
+        tf_name: lockdown_sticky
+        example: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:priority/setup-priority
+    tf_name: priority_setup
+    optional: true
+    delete_parent: true
+    example: 7
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:priority/hold-priority
+    tf_name: priority_hold
+    optional: true
+    delete_parent: true
+    example: 7
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:record-route
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:binding-sid/mpls/label
+    tf_name: binding_sid_mpls_label
+    optional: true
+    delete_parent: true
+    example: 4000
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:policy-class/tunnel-policy-class-values/tunnel-policy-class-value
+    tf_name: policy_classes
+    type: StringList
+    no_augment_config: true
+    description: "Tunnel policy class values (1-7 or default)"
+    example: "1"
+  # auto-bw
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/bw-limit/min
+    tf_name: auto_bw_limit_min
+    optional: true
+    delete_parent: true
+    example: 1000
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/bw-limit/max
+    tf_name: auto_bw_limit_max
+    optional: true
+    delete_parent: true
+    example: 100000
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/collect-bw-only
+    tf_name: auto_bw_collect_only
+    example: true
+    exclude_test: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/adjustment-threshold/threshold
+    tf_name: auto_bw_adjustment_threshold_percent
+    optional: true
+    delete_parent: true
+    example: 80
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/adjustment-threshold/min
+    tf_name: auto_bw_adjustment_threshold_min
+    optional: true
+    delete_parent: true
+    example: 100
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/overflow/threshold
+    tf_name: auto_bw_overflow_threshold
+    optional: true
+    delete_parent: true
+    example: 80
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/overflow/min
+    tf_name: auto_bw_overflow_min
+    optional: true
+    delete_parent: true
+    example: 20
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/overflow/limit
+    tf_name: auto_bw_overflow_limit
+    optional: true
+    delete_parent: true
+    example: 3
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/underflow/threshold
+    tf_name: auto_bw_underflow_threshold
+    optional: true
+    delete_parent: true
+    example: 10
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/underflow/min
+    tf_name: auto_bw_underflow_min
+    optional: true
+    delete_parent: true
+    example: 10
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/underflow/limit
+    tf_name: auto_bw_underflow_limit
+    optional: true
+    delete_parent: true
+    example: 5
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/resignal/last-bandwidth/time-out
+    tf_name: auto_bw_resignal_last_bandwidth_timeout
+    example: 1000
+  # path-protection
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:path-protection
+    tf_name: path_protection
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:path-protection/srlg-diverse
+    tf_name: path_protection_srlg_diverse
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:path-protection/protection-mode/non-revertive
+    tf_name: path_protection_non_revertive
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:soft-preemption
+    example: true
+    exclude_test: true
+  # path-selection
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:path-selection/metric/igp
+    tf_name: path_selection_metric_igp
+    optional: true
+    delete_parent: true
+    example: true
+    exclude_test: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:path-selection/metric/te
+    tf_name: path_selection_metric_te
+    optional: true
+    delete_parent: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:path-selection/metric/delay
+    tf_name: path_selection_metric_delay
+    optional: true
+    delete_parent: true
+    example: true
+    exclude_test: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:path-selection/tiebreaker/min-fill
+    tf_name: path_selection_tiebreaker_min_fill
+    optional: true
+    delete_parent: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:path-selection/tiebreaker/max-fill
+    tf_name: path_selection_tiebreaker_max_fill
+    optional: true
+    delete_parent: true
+    example: true
+    exclude_test: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:path-selection/tiebreaker/random
+    tf_name: path_selection_tiebreaker_random
+    optional: true
+    delete_parent: true
+    example: true
+    exclude_test: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:path-selection/hop-limit
+    tf_name: path_selection_hop_limit
+    example: 10
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:path-selection/cost-limit
+    tf_name: path_selection_cost_limit
+    example: 1000
+    exclude_test: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:path-selection/delay-limit
+    tf_name: path_selection_delay_limit
+    example: 20000
+    exclude_test: true
+  # bidirectional
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/id/association-id
+    tf_name: bidirectional_association_id
+    optional: true
+    delete_parent: true
+    example: 10
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/id/source-address
+    tf_name: bidirectional_association_source_address
+    optional: true
+    delete_parent: true
+    example: 192.168.1.1
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/id/global-id
+    tf_name: bidirectional_association_global_id
+    delete_parent: true
+    example: 10
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed
+    tf_name: bidirectional_association_corouted
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/fault-oam
+    tf_name: bidirectional_association_co_routed_fault_oam
+    example: true
+    exclude_test: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/wrap-protection
+    tf_name: bidirectional_association_co_routed_wrap_protection
+    example: true
+    exclude_test: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/signaling/protection-object/disable
+    tf_name: bidirectional_association_co_routed_signaling_protection_object_disable
+    example: true
+    exclude_test: true
+  # bfd
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:bfd/fast-detect
+    tf_name: bfd_fast_detect
+    type: Bool
+    type_yang_bool: presence
+    no_augment_config: true
+    optional: true
+    delete_parent: true
+    description: "Enable BFD fast detection"
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:bfd/fast-detect/sbfd
+    tf_name: bfd_sbfd
+    type: Bool
+    type_yang_bool: presence
+    no_augment_config: true
+    description: "Enable Seamless BFD"
+    example: true
+    exclude_test: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:bfd/minimum-interval
+    tf_name: bfd_minimum_interval
+    type: Int64
+    no_augment_config: true
+    optional: true
+    min_int: 3
+    max_int: 30000
+    description: "BFD hello interval in milliseconds"
+    example: 100
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:bfd/multiplier
+    tf_name: bfd_multiplier
+    type: Int64
+    no_augment_config: true
+    min_int: 3
+    max_int: 10
+    description: "BFD detect multiplier"
+    example: 3
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:bfd/bringup-timeout
+    tf_name: bfd_bringup_timeout
+    type: Int64
+    no_augment_config: true
+    min_int: 10
+    max_int: 3600
+    description: "Timeout before BFD session bring up is aborted (seconds)"
+    example: 120
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:bfd/lsp-ping/interval
+    tf_name: bfd_lsp_ping_interval
+    type: Int64
+    no_augment_config: true
+    min_int: 60
+    max_int: 3600
+    description: "Periodic LSP ping interval in seconds"
+    example: 240
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:bfd/lsp-ping/disable
+    tf_name: bfd_lsp_ping_disable
+    type: Bool
+    type_yang_bool: presence
+    no_augment_config: true
+    description: "Disable periodic LSP ping"
+    example: true
+    exclude_test: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:bfd/dampening/initial-wait
+    tf_name: bfd_dampening_initial_wait
+    type: Int64
+    no_augment_config: true
+    min_int: 1
+    max_int: 518400000
+    description: "Initial delay before bringing up tunnel (milliseconds)"
+    example: 8000
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:bfd/dampening/maximum-wait
+    tf_name: bfd_dampening_maximum_wait
+    type: Int64
+    no_augment_config: true
+    min_int: 1
+    max_int: 518400000
+    description: "Maximum delay before bringing up tunnel (milliseconds)"
+    example: 30000
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:bfd/dampening/secondary-wait
+    tf_name: bfd_dampening_secondary_wait
+    type: Int64
+    no_augment_config: true
+    min_int: 1
+    max_int: 518400000
+    description: "Secondary delay before bringing up tunnel (milliseconds)"
+    example: 16000
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:bfd/encap-mode/gal
+    tf_name: bfd_encap_gal
+    type: Bool
+    type_yang_bool: presence
+    no_augment_config: true
+    description: "Use GAL encapsulation mode for BFD"
+    example: true
+    exclude_test: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:destination
+    example: 192.168.1.2

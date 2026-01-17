@@ -28,5 +28,6 @@ data "iosxr_ipv6_access_list_options" "example" {
 
 - `icmp_off` (Boolean) Do not generate the ICMP message
 - `id` (String) The path of the retrieved object.
+- `log_update_disable` (Boolean) Adding leaf to disable log-update in logging buffer
 - `log_update_rate` (Number) Set access-list logging rate (num. logs per second)
 - `log_update_threshold` (Number) Set access-list logging threshold

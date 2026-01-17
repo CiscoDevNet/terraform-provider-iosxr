@@ -35,18 +35,33 @@ import (
 
 func TestAccIosxrL2VPNPWClass(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "name", "PWC1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "name", "PW-CLASS1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_transport_mode_ethernet", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_transport_mode_vlan", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_transport_mode_passthrough", "false"))
-	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_load_balancing_pw_label", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_protocol_ldp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_control_word", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_transport_mode_vlan", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_vccv_verification_type_none", "true"))
+	if os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_sequencing_both", "true"))
 	}
+	if os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_sequencing_both_resync", "10"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_preferred_path_sr_te_policy", "sr-policy-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_preferred_path_fallback_disable", "true"))
+	if os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_switching_tlv_hide", "true"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_tag_rewrite_ingress_vlan", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_redundancy_one_way", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_redundancy_initial_delay", "60"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_load_balancing_flow_label_both", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_load_balancing_flow_label_both_static", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_load_balancing_flow_label_code_one7", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_load_balancing_flow_label_code_one7_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_load_balancing_flow_label_code_17", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_load_balancing_flow_label_code_17_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_ipv4_source", "1.2.3.4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "backup_disable_delay", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "mac_withdraw", "true"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -101,7 +116,7 @@ resource "iosxr_gnmi" "PreReq0" {
 
 func testAccIosxrL2VPNPWClassConfig_minimum() string {
 	config := `resource "iosxr_l2vpn_pw_class" "test" {` + "\n"
-	config += `	name = "PWC1"` + "\n"
+	config += `	name = "PW-CLASS1"` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
@@ -113,18 +128,33 @@ func testAccIosxrL2VPNPWClassConfig_minimum() string {
 
 func testAccIosxrL2VPNPWClassConfig_all() string {
 	config := `resource "iosxr_l2vpn_pw_class" "test" {` + "\n"
-	config += `	name = "PWC1"` + "\n"
+	config += `	name = "PW-CLASS1"` + "\n"
 	config += `	encapsulation_mpls = true` + "\n"
-	config += `	encapsulation_mpls_transport_mode_ethernet = true` + "\n"
-	config += `	encapsulation_mpls_transport_mode_vlan = false` + "\n"
-	config += `	encapsulation_mpls_transport_mode_passthrough = false` + "\n"
-	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
-		config += `	encapsulation_mpls_load_balancing_pw_label = true` + "\n"
+	config += `	encapsulation_mpls_protocol_ldp = true` + "\n"
+	config += `	encapsulation_mpls_control_word = true` + "\n"
+	config += `	encapsulation_mpls_transport_mode_vlan = true` + "\n"
+	config += `	encapsulation_mpls_vccv_verification_type_none = true` + "\n"
+	if os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
+		config += `	encapsulation_mpls_sequencing_both = true` + "\n"
 	}
+	if os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
+		config += `	encapsulation_mpls_sequencing_both_resync = 10` + "\n"
+	}
+	config += `	encapsulation_mpls_preferred_path_sr_te_policy = "sr-policy-1"` + "\n"
+	config += `	encapsulation_mpls_preferred_path_fallback_disable = true` + "\n"
+	if os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
+		config += `	encapsulation_mpls_switching_tlv_hide = true` + "\n"
+	}
+	config += `	encapsulation_mpls_tag_rewrite_ingress_vlan = 100` + "\n"
+	config += `	encapsulation_mpls_redundancy_one_way = true` + "\n"
+	config += `	encapsulation_mpls_redundancy_initial_delay = 60` + "\n"
 	config += `	encapsulation_mpls_load_balancing_flow_label_both = true` + "\n"
 	config += `	encapsulation_mpls_load_balancing_flow_label_both_static = true` + "\n"
-	config += `	encapsulation_mpls_load_balancing_flow_label_code_one7 = true` + "\n"
-	config += `	encapsulation_mpls_load_balancing_flow_label_code_one7_disable = true` + "\n"
+	config += `	encapsulation_mpls_load_balancing_flow_label_code_17 = true` + "\n"
+	config += `	encapsulation_mpls_load_balancing_flow_label_code_17_disable = true` + "\n"
+	config += `	encapsulation_mpls_ipv4_source = "1.2.3.4"` + "\n"
+	config += `	backup_disable_delay = 10` + "\n"
+	config += `	mac_withdraw = true` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config

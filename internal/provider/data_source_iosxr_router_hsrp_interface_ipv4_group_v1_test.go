@@ -34,19 +34,19 @@ func TestAccDataSourceIosxrRouterHSRPInterfaceIPv4GroupV1(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v1.test", "address", "22.22.1.1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v1.test", "address_learn", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v1.test", "priority", "124"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v1.test", "mac_address", "00:01:00:02:00:02"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v1.test", "name", "NAME11"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v1.test", "preempt_delay", "3200"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v1.test", "timers_msec", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v1.test", "timers_msec_holdtime", "300"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v1.test", "bfd_fast_detect_peer_ipv4", "44.44.4.4"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v1.test", "bfd_fast_detect_peer_interface", "GigabitEthernet0/0/0/1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v1.test", "secondary_ipv4_addresses.0.address", "2.2.2.2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v1.test", "priority", "124"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v1.test", "preempt_delay", "3200"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v1.test", "track_interfaces.0.track_name", "GigabitEthernet0/0/0/1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v1.test", "track_interfaces.0.priority_decrement", "166"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v1.test", "track_objects.0.object_name", "OBJECT1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v1.test", "track_objects.0.priority_decrement", "177"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v1.test", "timers_msec", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v1.test", "timers_msec_holdtime", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v1.test", "mac_address", "00:01:00:02:00:02"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v1.test", "name", "NAME11"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v1.test", "bfd_fast_detect_peer_ipv4", "44.44.4.4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v1.test", "bfd_fast_detect_peer_interface", "GigabitEthernet0/0/0/1"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -83,17 +83,11 @@ func testAccDataSourceIosxrRouterHSRPInterfaceIPv4GroupV1Config() string {
 	config += `	group_id = 123` + "\n"
 	config += `	address = "22.22.1.1"` + "\n"
 	config += `	address_learn = false` + "\n"
-	config += `	priority = 124` + "\n"
-	config += `	mac_address = "00:01:00:02:00:02"` + "\n"
-	config += `	name = "NAME11"` + "\n"
-	config += `	preempt_delay = 3200` + "\n"
-	config += `	timers_msec = 100` + "\n"
-	config += `	timers_msec_holdtime = 300` + "\n"
-	config += `	bfd_fast_detect_peer_ipv4 = "44.44.4.4"` + "\n"
-	config += `	bfd_fast_detect_peer_interface = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	secondary_ipv4_addresses = [{` + "\n"
 	config += `		address = "2.2.2.2"` + "\n"
 	config += `	}]` + "\n"
+	config += `	priority = 124` + "\n"
+	config += `	preempt_delay = 3200` + "\n"
 	config += `	track_interfaces = [{` + "\n"
 	config += `		track_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `		priority_decrement = 166` + "\n"
@@ -102,6 +96,12 @@ func testAccDataSourceIosxrRouterHSRPInterfaceIPv4GroupV1Config() string {
 	config += `		object_name = "OBJECT1"` + "\n"
 	config += `		priority_decrement = 177` + "\n"
 	config += `	}]` + "\n"
+	config += `	timers_msec = 100` + "\n"
+	config += `	timers_msec_holdtime = 300` + "\n"
+	config += `	mac_address = "00:01:00:02:00:02"` + "\n"
+	config += `	name = "NAME11"` + "\n"
+	config += `	bfd_fast_detect_peer_ipv4 = "44.44.4.4"` + "\n"
+	config += `	bfd_fast_detect_peer_interface = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 

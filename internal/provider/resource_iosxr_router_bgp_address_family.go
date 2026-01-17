@@ -97,47 +97,103 @@ func (r *RouterBGPAddressFamilyResource) Schema(ctx context.Context, req resourc
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"additional_paths_send": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Additional paths Send capability").String,
+			"vrf_all_segment_routing_srv6_locator": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify locator").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"vrf_all_segment_routing_srv6_usid_allocation_wide_local_id_block": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Wide LIB allocation").String,
 				Optional:            true,
 			},
-			"additional_paths_receive": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Additional paths Receive capability").String,
+			"vrf_all_segment_routing_srv6_alloc_mode_per_ce": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set SRv6 per CE SID  mode").String,
 				Optional:            true,
 			},
-			"additional_paths_selection_route_policy": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Route-policy for additional paths selection").String,
+			"vrf_all_segment_routing_srv6_alloc_mode_per_vrf": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set SRv6 per VRF SID  mode").String,
+				Optional:            true,
+			},
+			"vrf_all_segment_routing_srv6_alloc_mode_per_vrf_46": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set SRv6 per VRF 46 SID  mode").String,
+				Optional:            true,
+			},
+			"vrf_all_source_rt_import_policy": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Source import route-targets from import-policy").String,
+				Optional:            true,
+			},
+			"vrf_all_label_mode_per_ce": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set per CE label mode").String,
+				Optional:            true,
+			},
+			"vrf_all_label_mode_per_vrf": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set per VRF label mode").String,
+				Optional:            true,
+			},
+			"vrf_all_label_mode_per_vrf_46": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set per VRF 46 label mode").String,
+				Optional:            true,
+			},
+			"vrf_all_label_mode_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("route policy name").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 255),
 				},
 			},
-			"additional_paths_selection_disable": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Disable additional paths selection").String,
+			"vrf_all_rnh_install_extcomm": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Install remote nexthop in extended community and opaque format").String,
 				Optional:            true,
 			},
-			"allocate_label_all": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Allocate labels for all prefixes").String,
+			"vrf_all_rnh_install_extcomm_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Install remote nexthop in extended community format only").String,
 				Optional:            true,
 			},
-			"allocate_label_all_unlabeled_path": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Allocate label for unlabeled paths too").String,
-				Optional:            true,
-			},
-			"allocate_label_route_policy": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Allocate label route policy").String,
+			"vrf_all_table_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure policy for installation of routes to RIB").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 255),
 				},
 			},
-			"allocate_label_route_policy_unlabeled_path": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Allocate label for unlabeled paths too").String,
+			"domain_distinguisher_as": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("4 octet ASN").AddIntegerRangeDescription(1, 4294967295).String,
 				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4294967295),
+				},
 			},
-			"advertise_best_external": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Advertise best-external path").String,
+			"domain_distinguisher_router_id": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("4 octet router-id").String,
 				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+				},
+			},
+			"distance_bgp_external_route": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Distance for routes external to the AS").AddIntegerRangeDescription(1, 20000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 20000),
+				},
+			},
+			"distance_bgp_internal_route": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Distance for routes internal to the AS").AddIntegerRangeDescription(1, 20000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 20000),
+				},
+			},
+			"distance_bgp_local_route": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Distance for local routes").AddIntegerRangeDescription(1, 20000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 20000),
+				},
 			},
 			"maximum_paths_ebgp_multipath": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Number of paths (limit includes backup path)").AddIntegerRangeDescription(2, 1024).String,
@@ -209,50 +265,99 @@ func (r *RouterBGPAddressFamilyResource) Schema(ctx context.Context, req resourc
 				MarkdownDescription: helpers.NewAttributeDescription("Disable multipath unique nexthop check").String,
 				Optional:            true,
 			},
-			"nexthop_trigger_delay_critical": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("For critical notification").AddIntegerRangeDescription(0, 4294967295).String,
+			"import_from_bridge_domain": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Import IP hosts from EVPN bridge-domain").String,
+				Optional:            true,
+			},
+			"additional_paths_send": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Additional paths Send capability").String,
+				Optional:            true,
+			},
+			"additional_paths_receive": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Additional paths Receive capability").String,
+				Optional:            true,
+			},
+			"additional_paths_advertise_limit": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Limit the number of paths to be advertised (default 32)").AddIntegerRangeDescription(1, 20000).String,
 				Optional:            true,
 				Validators: []validator.Int64{
-					int64validator.Between(0, 4294967295),
+					int64validator.Between(1, 20000),
 				},
 			},
-			"nexthop_trigger_delay_non_critical": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("For non-critical notification").AddIntegerRangeDescription(0, 4294967295).String,
-				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(0, 4294967295),
-				},
-			},
-			"label_mode_per_prefix": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Set per perfix label mode").String,
-				Optional:            true,
-			},
-			"label_mode_per_ce": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Set per CE label mode").String,
-				Optional:            true,
-			},
-			"label_mode_per_vrf": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Set per VRF label mode").String,
-				Optional:            true,
-			},
-			"label_mode_per_vrf_46": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Set per VRF 46 label mode").String,
-				Optional:            true,
-			},
-			"label_mode_route_policy": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Use a route policy to select prefixes for label allocation mode").String,
+			"additional_paths_selection_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Route-policy for additional paths selection").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 255),
 				},
 			},
-			"label_mode_per_nexthop_received_label": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Set label mode per nexthop and received label").String,
+			"additional_paths_selection_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable additional paths selection").String,
 				Optional:            true,
 			},
-			"label_mode_per_nexthop_received_label_allocate_secondary_label": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Allocate secondary label to avoid label oscillation insymmetric PIC deployments").String,
+			"permanent_network_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Route policy to read the prefixes from").String,
 				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"advertise_best_external": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Advertise best-external path").String,
+				Optional:            true,
+			},
+			"advertise_best_external_labeled_unicast": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Limit best-external to Labeled-Unicast address family").String,
+				Optional:            true,
+			},
+			"advertise_best_external_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Do not advertise best-external path").String,
+				Optional:            true,
+			},
+			"advertise_local_labeled_route_safi_unicast": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Advertisement of routes with local-label via Unicast SAFI").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"advertise_epe_bgp_labeled_unicast": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Limit epe-bgplu to Labeled-Unicast address family").String,
+				Optional:            true,
+			},
+			"networks": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify a network to announce via BGP").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPaddress").String,
+							Required:            true,
+						},
+						"prefix": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IP address prefix").AddIntegerRangeDescription(0, 128).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 128),
+							},
+						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route-policy to modify the attributes").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 255),
+							},
+						},
+						"backdoor": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify a BGP backdoor route").String,
+							Optional:            true,
+						},
+						"multipath": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable installation of multiple paths from RIB").String,
+							Optional:            true,
+						},
+					},
+				},
 			},
 			"aggregate_addresses": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Configure BGP aggregate entries").String,
@@ -303,40 +408,6 @@ func (r *RouterBGPAddressFamilyResource) Schema(ctx context.Context, req resourc
 							Validators: []validator.Int64{
 								int64validator.Between(0, 4294967295),
 							},
-						},
-					},
-				},
-			},
-			"networks": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify a network to announce via BGP").String,
-				Optional:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"address": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("IPaddress").String,
-							Required:            true,
-						},
-						"prefix": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("IP address prefix").AddIntegerRangeDescription(0, 128).String,
-							Required:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(0, 128),
-							},
-						},
-						"route_policy": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Route-policy to modify the attributes").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 255),
-							},
-						},
-						"backdoor": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specify a BGP backdoor route").String,
-							Optional:            true,
-						},
-						"multipath": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Enable installation of multiple paths from RIB").String,
-							Optional:            true,
 						},
 					},
 				},
@@ -825,6 +896,410 @@ func (r *RouterBGPAddressFamilyResource) Schema(ctx context.Context, req resourc
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"table_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure policy for installation of routes to RIB").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"retain_local_label": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Delay the release of the local label as configured").AddIntegerRangeDescription(3, 60).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(3, 60),
+				},
+			},
+			"retain_route_target_all": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Accept received updates containing at least one route target").String,
+				Optional:            true,
+			},
+			"retain_route_target_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Accept received updates accepted by the specified policy").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"allocate_label_all": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allocate labels for all prefixes").String,
+				Optional:            true,
+			},
+			"allocate_label_all_unlabeled_path": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allocate label for unlabeled paths too").String,
+				Optional:            true,
+			},
+			"allocate_label_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allocate label route policy").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"allocate_label_route_policy_unlabeled_path": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allocate label for unlabeled paths too").String,
+				Optional:            true,
+			},
+			"label_mode_per_prefix": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set per perfix label mode").String,
+				Optional:            true,
+			},
+			"label_mode_per_ce": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set per CE label mode").String,
+				Optional:            true,
+			},
+			"label_mode_per_vrf": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set per VRF label mode").String,
+				Optional:            true,
+			},
+			"label_mode_per_vrf_46": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set per VRF 46 label mode").String,
+				Optional:            true,
+			},
+			"label_mode_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use a route policy to select prefixes for label allocation mode").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"label_mode_per_nexthop_received_label": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set label mode per nexthop and received label").String,
+				Optional:            true,
+			},
+			"label_mode_per_nexthop_received_label_allocate_secondary_label": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allocate secondary label to avoid label oscillation insymmetric PIC deployments").String,
+				Optional:            true,
+			},
+			"rnh_install_extcomm": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Install remote nexthop in extended community and opaque format").String,
+				Optional:            true,
+			},
+			"rnh_install_extcomm_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Install remote nexthop in extended community format only").String,
+				Optional:            true,
+			},
+			"prefix_ecmp_delay": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Interval(ms)").AddIntegerRangeDescription(10, 60000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(10, 60000),
+				},
+			},
+			"prefix_ecmp_delay_oor_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Delay only when platform resource usage is above threshold").AddIntegerRangeDescription(10, 90).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(10, 90),
+				},
+			},
+			"bgp_origin_as_validation_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable RPKI origin-AS validation").String,
+				Optional:            true,
+			},
+			"bgp_origin_as_validation_signal_ibgp": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Signal origin-AS validity towards iBGP peers").String,
+				Optional:            true,
+			},
+			"bgp_bestpath_origin_as_use_validity": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("BGP bestpath selection will use origin-AS validity").String,
+				Optional:            true,
+			},
+			"bgp_bestpath_origin_as_allow_invalid": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("BGP bestpath selection will allow 'invalid' origin-AS").String,
+				Optional:            true,
+			},
+			"bgp_scan_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure background scanner interval for this address-family").AddIntegerRangeDescription(5, 3600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(5, 3600),
+				},
+			},
+			"bgp_attribute_download": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure attribute download for this address-family").String,
+				Optional:            true,
+			},
+			"bgp_import_delay_seconds": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Delay, seconds part").AddIntegerRangeDescription(0, 10).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 10),
+				},
+			},
+			"bgp_import_delay_milliseconds": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Delay, milliseconds part").AddIntegerRangeDescription(0, 999).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 999),
+				},
+			},
+			"bgp_label_delay_seconds": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Delay, seconds part").AddIntegerRangeDescription(0, 10).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 10),
+				},
+			},
+			"bgp_label_delay_milliseconds": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Delay, milliseconds part").AddIntegerRangeDescription(0, 999).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 999),
+				},
+			},
+			"bgp_client_to_client_reflection_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable").String,
+				Optional:            true,
+			},
+			"bgp_client_to_client_reflection_cluster_ids_32bit_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ID of Cluster for which reflection is to be disabled").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"cluster_as": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route-Reflector Cluster-id as 32 bit quantity").AddIntegerRangeDescription(1, 4294967295).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
+							},
+						},
+						"disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable").String,
+							Required:            true,
+						},
+					},
+				},
+			},
+			"bgp_client_to_client_reflection_cluster_ids_ip_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ID of Cluster for which reflection is to be disabled").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"cluster_ip": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route-Reflector Cluster-id in IP address format").String,
+							Required:            true,
+						},
+						"disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable").String,
+							Required:            true,
+						},
+					},
+				},
+			},
+			"bgp_dampening_decay_half_life": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Half-life time for the penalty").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"bgp_dampening_reuse_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Value to start reusing a route").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"bgp_dampening_suppress_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Value to start suppressing a route").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"bgp_dampening_max_suppress_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum duration to suppress a stable route").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"bgp_dampening_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Route policy to specify criteria for dampening").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"event_prefix_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Policy for per-prefix tracing").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"dynamic_med_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Update generation delay (in minutes) after a MED change").AddIntegerRangeDescription(0, 10).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 10),
+				},
+			},
+			"weight_reset_on_import": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Reset weight of paths on import").String,
+				Optional:            true,
+			},
+			"nexthop_trigger_delay_critical": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("For critical notification").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"nexthop_trigger_delay_non_critical": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("For non-critical notification").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"nexthop_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Policy to filter out nexthop notification").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"nexthop_resolution_prefix_length_minimum_ipv4": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 Prefix-length value").AddIntegerRangeDescription(0, 32).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 32),
+				},
+			},
+			"nexthop_resolution_prefix_length_minimum_ipv6": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv6 prefix-length value").AddIntegerRangeDescription(0, 128).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 128),
+				},
+			},
+			"update_limit_sub_group_ebgp": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Update limit for eBGP sub-groups").AddIntegerRangeDescription(1, 512).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 512),
+				},
+			},
+			"update_limit_sub_group_ibgp": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Update limit for iBGP sub-groups").AddIntegerRangeDescription(1, 512).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 512),
+				},
+			},
+			"update_limit_address_family": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Update limit for address-family").AddIntegerRangeDescription(4, 2048).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(4, 2048),
+				},
+			},
+			"update_wait_install": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Wait for route install").String,
+				Optional:            true,
+			},
+			"update_wait_install_delay_startup": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure a delay for the startup phase").AddIntegerRangeDescription(1, 600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 600),
+				},
+			},
+			"as_path_loopcheck_out_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable").String,
+				Optional:            true,
+			},
+			"inter_as_install": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Install remote mvpn routes in default vrf").String,
+				Optional:            true,
+			},
+			"global_table_multicast": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable global table multicast").String,
+				Optional:            true,
+			},
+			"segmented_multicast": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable segmented multicast").String,
+				Optional:            true,
+			},
+			"label_security_asbr_rpf": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("RPF Label Security for Option-B").String,
+				Optional:            true,
+			},
+			"epe_backup_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable the EPE backup under current AFI").String,
+				Optional:            true,
+			},
+			"default_martian_check_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable").String,
+				Optional:            true,
+			},
+			"export_to_vrf_allow_backup": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow Export of backup path").String,
+				Optional:            true,
+			},
+			"export_to_vrf_allow_best_external": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow Export of best-external").String,
+				Optional:            true,
+			},
+			"segment_routing_prefix_sid_map": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Retrieve prefix id mapping from SRMS").String,
+				Optional:            true,
+			},
+			"segment_routing_srv6_locator": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify locator").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"segment_routing_srv6_usid_allocation_wide_local_id_block": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Wide LIB allocation").String,
+				Optional:            true,
+			},
+			"segment_routing_srv6_alloc_mode_per_ce": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set SRv6 per CE SID mode").String,
+				Optional:            true,
+			},
+			"segment_routing_srv6_alloc_mode_per_vrf": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set SRv6 per VRF SID mode").String,
+				Optional:            true,
+			},
+			"segment_routing_srv6_alloc_mode_per_vrf_46": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set SRv6 per VRF 46 SID mode").String,
+				Optional:            true,
+			},
+			"segment_routing_srv6_alloc_mode_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use a route policy to determine the SID allocation mode and locator (if provided) for given prefix").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"peer_set_ids": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("configuration for a single EPE Peer Set").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"peer_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Identifier for Each Peer-set SID we are going to create").AddIntegerRangeDescription(1, 255).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 255),
+							},
+						},
+						"peer_sid_index": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Segment Index value to assign. This will be off SRLB range").AddIntegerRangeDescription(0, 1033575).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 1033575),
+							},
+						},
+					},
 				},
 			},
 		},

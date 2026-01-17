@@ -35,13 +35,22 @@ data "iosxr_router_isis_address_family" "example" {
 
 ### Read-Only
 
+- `adjacency_check_disable` (Boolean) Disable adjacency-checking
 - `advertise_link_attributes` (Boolean) Advertise additional link attributes
 - `advertise_passive_only` (Boolean) Advertise prefixes of passive interfaces only
+- `attached_bit_receive_ignore` (Boolean) Ignore the attached bit in received LSPs
+- `attached_bit_send` (String) Modify how we set the attached bit
 - `default_information_originate` (Boolean) Distribute a default route
+- `default_information_originate_route_policy` (String) text
+- `distance` (Number) Configure IS-IS administrative distances
+- `distance_sources` (Attributes List) Route source for this distance (see [below for nested schema](#nestedatt--distance_sources))
+- `distribute_list_prefix_list_in` (String) Filter routes based on a prefix list
+- `distribute_list_route_policy_in` (String) Filter routes based on a route policy
 - `fast_reroute_delay_interval` (Number) Delay before running FRR computation
 - `fast_reroute_per_link_priority_limit` (String) Limit backup computation upto the prefix priority
 - `fast_reroute_per_link_priority_limit_levels` (Attributes List) Set priority-limit for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_link_priority_limit_levels))
 - `fast_reroute_per_link_use_candidate_only` (Boolean) Exclude all interfaces from computation
+- `fast_reroute_per_link_use_candidate_only_levels` (Attributes List) Exclude all interfaces for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_link_use_candidate_only_levels))
 - `fast_reroute_per_prefix_load_sharing_disable` (Boolean) Disable load sharing
 - `fast_reroute_per_prefix_load_sharing_disable_levels` (Attributes List) Disable load sharing for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_load_sharing_disable_levels))
 - `fast_reroute_per_prefix_priority_limit` (String) Limit backup computation upto the prefix priority
@@ -59,8 +68,11 @@ data "iosxr_router_isis_address_family" "example" {
 - `fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index` (Number) Set preference order among tiebreakers
 - `fast_reroute_per_prefix_use_candidate_only` (Boolean) Exclude all interfaces from computation
 - `id` (String) The path of the retrieved object.
+- `maximum_paths` (Number) Maximum number of active parallel paths per route
 - `maximum_redistributed_prefixes` (Number) Maximum number of redistributed prefixes
 - `maximum_redistributed_prefixes_levels` (Attributes List) Set maximum redistributed prefixes for one level only (see [below for nested schema](#nestedatt--maximum_redistributed_prefixes_levels))
+- `metric` (Number) Configure default metric
+- `metric_levels` (Attributes List) Set metric for one level only (see [below for nested schema](#nestedatt--metric_levels))
 - `metric_style_levels` (Attributes List) Set metric-style for one level only (see [below for nested schema](#nestedatt--metric_style_levels))
 - `metric_style_narrow` (Boolean) Use old style of TLVs with narrow metric
 - `metric_style_narrow_transition` (Boolean) Accept both styles of TLVs during transition
@@ -72,16 +84,59 @@ data "iosxr_router_isis_address_family" "example" {
 - `microloop_avoidance_rib_update_delay` (Number) Delay in milliseconds
 - `microloop_avoidance_segment_routing_route_policy` (String) Provide Uloop protection based on a route policy
 - `mpls_ldp_auto_config` (Boolean) Enable LDP IGP interface auto-configuration
+- `mpls_traffic_eng_igp_intact` (Boolean) Install both TE and non-TE nexthops in the RIB.
 - `mpls_traffic_eng_level_1` (Boolean) Enable mpls traffic-eng at level 1
 - `mpls_traffic_eng_level_1_2` (Boolean) Enable mpls traffic-eng at both level 1 and 2
 - `mpls_traffic_eng_level_2_only` (Boolean) Enable mpls traffic-eng at level 2
+- `mpls_traffic_eng_multicast_intact` (Boolean) Install non-TE nexthops in the RIB for use by multicast
 - `mpls_traffic_eng_router_id_interface_name` (String) interface-name
 - `mpls_traffic_eng_router_id_ipv4_address` (String) ipv4-address
+- `mpls_traffic_eng_tunnel_anycast_prefer_igp_cost` (Boolean) Prefer anycast prefix with lowest IGP cost
+- `mpls_traffic_eng_tunnel_metric` (Number) Default metric for forwarding-adjacency tunnels
+- `mpls_traffic_eng_tunnel_metric_levels` (Attributes List) Set metric for one level only (see [below for nested schema](#nestedatt--mpls_traffic_eng_tunnel_metric_levels))
+- `mpls_traffic_eng_tunnel_preferred` (Boolean) Prefer TE tunnels over equal-cost physical paths
+- `mpls_traffic_eng_tunnel_restricted` (Boolean) Use only primary tunnel for destination IP address
+- `partition_detect` (Boolean) Detect area or domain partition
+- `partition_detect_external_address_tracks` (Attributes List) Track ABR or ASBR reachability (see [below for nested schema](#nestedatt--partition_detect_external_address_tracks))
+- `partition_detect_tracks` (Attributes List) Track ABR or ASBR reachability (see [below for nested schema](#nestedatt--partition_detect_tracks))
+- `prefix_unreachable` (Boolean) Prefix Unreachablity
+- `prefix_unreachable_adv_lifetime` (Number) Lifetime of the prefix-unreachable advertisements
+- `prefix_unreachable_adv_maximum` (Number) Maximum number of prefix-unreachable advertisements
+- `prefix_unreachable_adv_metric` (Number) Metric of the prefix-unreachable advertisements
+- `prefix_unreachable_rx_process_enable` (Boolean) Enable processing of received prefix-unreachable advertisements
+- `propagate_levels` (Attributes List) Propagate routes between IS-IS levels (see [below for nested schema](#nestedatt--propagate_levels))
+- `redistribute_bgp` (Attributes List) Border Gateway Protocol (BGP) (see [below for nested schema](#nestedatt--redistribute_bgp))
+- `redistribute_connected` (Boolean) Connected routes
+- `redistribute_connected_level` (String) Redistribute routes into both levels
+- `redistribute_connected_metric` (Number) Metric for redistributed routes
+- `redistribute_connected_metric_type` (String) IS-IS metric type for redistributed routes
+- `redistribute_connected_route_policy` (String) Route policy reference
 - `redistribute_isis` (Attributes List) Redistribute ISIS routes (see [below for nested schema](#nestedatt--redistribute_isis))
+- `redistribute_ospf` (Attributes List) Open Shortest Path First (OSPF) (see [below for nested schema](#nestedatt--redistribute_ospf))
+- `redistribute_static` (Boolean) Static routes
+- `redistribute_static_level` (String) Redistribute routes into both levels
+- `redistribute_static_metric` (Number) Metric for redistributed routes
+- `redistribute_static_metric_type` (String) IS-IS metric type for redistributed routes
+- `redistribute_static_route_policy` (String) Route policy reference
+- `route_source_first_hop` (Boolean) Use the IP address of the first-hop
 - `router_id_interface_name` (String) Router ID Interface
 - `router_id_ip_address` (String) Router ID address
+- `segment_routing_bundle_member_adj_sid` (Boolean) Enable per bundle member adjacency SID
+- `segment_routing_labeled_only` (Boolean) Only install SR labeled paths
+- `segment_routing_mpls_connected_prefix_sid_map` (Boolean) Enter connected prefix sid map submode
+- `segment_routing_mpls_connected_prefix_sid_map_addresses` (Attributes List) Specify prefix associated with this Prefix Segement ID (see [below for nested schema](#nestedatt--segment_routing_mpls_connected_prefix_sid_map_addresses))
+- `segment_routing_mpls_connected_prefix_sid_map_flex_algo_addresses` (Attributes List) Specify prefix associated with this Prefix Segement ID (see [below for nested schema](#nestedatt--segment_routing_mpls_connected_prefix_sid_map_flex_algo_addresses))
+- `segment_routing_mpls_connected_prefix_sid_map_strict_spf_addresses` (Attributes List) Specify prefix associated with this Prefix Segement ID (see [below for nested schema](#nestedatt--segment_routing_mpls_connected_prefix_sid_map_strict_spf_addresses))
 - `segment_routing_mpls_enable` (Boolean) Enable Segment Routing using MPLS encapsulation
+- `segment_routing_mpls_prefix_sid_map_advertise_local` (Boolean) Advertise active local prefix-SID mappings
+- `segment_routing_mpls_prefix_sid_map_advertise_local_domain_wide` (Boolean) Domain wide prefix-SID mappings
+- `segment_routing_mpls_prefix_sid_map_receive` (Boolean) Use remote mapping server advertisements
+- `segment_routing_mpls_prefix_sid_map_receive_disable` (Boolean) disable
 - `segment_routing_mpls_sr_prefer` (Boolean) Prefer segment routing labels over LDP labels
+- `segment_routing_mpls_unlabeled_protection_disable` (Boolean) Disable TI-LFA and microloop protection
+- `segment_routing_mpls_unlabeled_protection_prefix_list` (String) Enable TI-LFA and microloop protection based on a prefix list
+- `segment_routing_mpls_unlabeled_protection_route_policy` (String) Enable TI-LFA and microloop protection based on a route policy
+- `segment_routing_protected_adjacency_sid_delay` (Number) Protected Adjacency SID deletion delay (seconds)
 - `segment_routing_srv6_locators` (Attributes List) Enter SRv6 Locator submode (see [below for nested schema](#nestedatt--segment_routing_srv6_locators))
 - `spf_interval_ietf` (Boolean) Use RFC 8405 backoff algorithm
 - `spf_interval_ietf_holddown_interval` (Number) Holddown interval for running a route calculation [10000]
@@ -102,6 +157,18 @@ data "iosxr_router_isis_address_family" "example" {
 - `spf_prefix_priority_medium_levels` (Attributes List) Specify medium priority prefixes (see [below for nested schema](#nestedatt--spf_prefix_priority_medium_levels))
 - `spf_prefix_priority_medium_prefix_list_name` (String) Prefix-list name
 - `spf_prefix_priority_medium_tag` (Number) Specify a tag to indicate priority
+- `summary_prefixes` (Attributes List) Summary prefix (see [below for nested schema](#nestedatt--summary_prefixes))
+
+<a id="nestedatt--distance_sources"></a>
+### Nested Schema for `distance_sources`
+
+Read-Only:
+
+- `address` (String) IP address
+- `distance` (Number) Administrative distance
+- `prefix` (Number) IP address prefix
+- `route_filter` (String) Prefix-list or access-list to filter routes for this distance
+
 
 <a id="nestedatt--fast_reroute_per_link_priority_limit_levels"></a>
 ### Nested Schema for `fast_reroute_per_link_priority_limit_levels`
@@ -110,6 +177,14 @@ Read-Only:
 
 - `level_number` (Number) Level
 - `priority_limit` (String) Limit backup computation upto the prefix priority
+
+
+<a id="nestedatt--fast_reroute_per_link_use_candidate_only_levels"></a>
+### Nested Schema for `fast_reroute_per_link_use_candidate_only_levels`
+
+Read-Only:
+
+- `level_number` (Number) Level
 
 
 <a id="nestedatt--fast_reroute_per_prefix_load_sharing_disable_levels"></a>
@@ -155,6 +230,15 @@ Read-Only:
 - `maximum_redistributed_prefixes` (Number) Maximum number of redistributed prefixes
 
 
+<a id="nestedatt--metric_levels"></a>
+### Nested Schema for `metric_levels`
+
+Read-Only:
+
+- `level_number` (Number) Set metric for one level only
+- `metric` (Number) Configure default metric
+
+
 <a id="nestedatt--metric_style_levels"></a>
 ### Nested Schema for `metric_style_levels`
 
@@ -168,6 +252,56 @@ Read-Only:
 - `wide_transition` (Boolean) Accept both styles of TLVs during transition
 
 
+<a id="nestedatt--mpls_traffic_eng_tunnel_metric_levels"></a>
+### Nested Schema for `mpls_traffic_eng_tunnel_metric_levels`
+
+Read-Only:
+
+- `level_number` (Number) Set metric at this level only
+- `metric` (Number) Default metric for forwarding-adjacency tunnels
+
+
+<a id="nestedatt--partition_detect_external_address_tracks"></a>
+### Nested Schema for `partition_detect_external_address_tracks`
+
+Read-Only:
+
+- `address` (String) IPaddress
+- `external_address` (String) External ASBR address to track
+
+
+<a id="nestedatt--partition_detect_tracks"></a>
+### Nested Schema for `partition_detect_tracks`
+
+Read-Only:
+
+- `address` (String) IPaddress
+- `ipv4` (Boolean) Ipv4 Track
+- `ipv6` (Boolean) Ipv6 Track
+
+
+<a id="nestedatt--propagate_levels"></a>
+### Nested Schema for `propagate_levels`
+
+Read-Only:
+
+- `destination_level` (Number) Destination level
+- `route_policy` (String) Propagate only specified routes
+- `source_level` (Number) Source level
+
+
+<a id="nestedatt--redistribute_bgp"></a>
+### Nested Schema for `redistribute_bgp`
+
+Read-Only:
+
+- `as_number` (String) as-number
+- `level` (String) Redistribute routes into both levels
+- `metric` (Number) Metric for redistributed routes
+- `metric_type` (String) IS-IS metric type for redistributed routes
+- `route_policy` (String) Route policy reference
+
+
 <a id="nestedatt--redistribute_isis"></a>
 ### Nested Schema for `redistribute_isis`
 
@@ -179,6 +313,72 @@ Read-Only:
 - `metric` (Number) Metric for redistributed routes
 - `metric_type` (String) IS-IS metric type for redistributed routes
 - `route_policy` (String) Route policy reference
+
+
+<a id="nestedatt--redistribute_ospf"></a>
+### Nested Schema for `redistribute_ospf`
+
+Read-Only:
+
+- `instance_id` (String) OSPF process ID
+- `level` (String) Redistribute routes into both levels
+- `match_external` (Boolean) Redistribute OSPF external routes
+- `match_internal` (Boolean) Redistribute OSPF internal routes
+- `metric` (Number) Metric for redistributed routes
+- `metric_type` (String) IS-IS metric type for redistributed routes
+- `route_policy` (String) Route policy reference
+
+
+<a id="nestedatt--segment_routing_mpls_connected_prefix_sid_map_addresses"></a>
+### Nested Schema for `segment_routing_mpls_connected_prefix_sid_map_addresses`
+
+Read-Only:
+
+- `absolute_explicit_null` (Boolean) Upstream neighbor must replace prefix-sid with explicit null label
+- `absolute_id` (Number) The Prefix Segment ID value
+- `absolute_interface` (String) Specify the interface associated with the prefix sid
+- `absolute_php_disable` (Boolean) Disable Penultimate Hop Popping
+- `index_explicit_null` (Boolean) Upstream neighbor must replace prefix-sid with explicit null label
+- `index_id` (Number) The Prefix Segment ID index
+- `index_interface` (String) Specify the interface associated with the prefix sid
+- `index_php_disable` (Boolean) Disable Penultimate Hop Popping
+- `ip_address` (String) IP address
+- `prefix` (Number) IP address prefix
+
+
+<a id="nestedatt--segment_routing_mpls_connected_prefix_sid_map_flex_algo_addresses"></a>
+### Nested Schema for `segment_routing_mpls_connected_prefix_sid_map_flex_algo_addresses`
+
+Read-Only:
+
+- `absolute_explicit_null` (Boolean) Upstream neighbor must replace prefix-sid with explicit null label
+- `absolute_id` (Number) The Prefix Segment ID value
+- `absolute_interface` (String) Specify the interface associated with the prefix sid
+- `absolute_php_disable` (Boolean) Disable Penultimate Hop Popping
+- `flex_algo` (Number) Specify the custom flex-algo algorithm to use
+- `index_explicit_null` (Boolean) Upstream neighbor must replace prefix-sid with explicit null label
+- `index_id` (Number) The Prefix Segment ID index
+- `index_interface` (String) Specify the interface associated with the prefix sid
+- `index_php_disable` (Boolean) Disable Penultimate Hop Popping
+- `ip_address` (String) IP address
+- `prefix` (Number) IP address prefix
+
+
+<a id="nestedatt--segment_routing_mpls_connected_prefix_sid_map_strict_spf_addresses"></a>
+### Nested Schema for `segment_routing_mpls_connected_prefix_sid_map_strict_spf_addresses`
+
+Read-Only:
+
+- `absolute_explicit_null` (Boolean) Upstream neighbor must replace prefix-sid with explicit null label
+- `absolute_id` (Number) The Prefix Segment ID value
+- `absolute_interface` (String) Specify the interface associated with the prefix sid
+- `absolute_php_disable` (Boolean) Disable Penultimate Hop Popping
+- `index_explicit_null` (Boolean) Upstream neighbor must replace prefix-sid with explicit null label
+- `index_id` (Number) The Prefix Segment ID index
+- `index_interface` (String) Specify the interface associated with the prefix sid
+- `index_php_disable` (Boolean) Disable Penultimate Hop Popping
+- `ip_address` (String) IP address
+- `prefix` (Number) IP address prefix
 
 
 <a id="nestedatt--segment_routing_srv6_locators"></a>
@@ -257,3 +457,20 @@ Read-Only:
 - `level_number` (Number) Level
 - `prefix_list_name` (String) Prefix-list name
 - `tag` (Number) Specify a tag to indicate priority
+
+
+<a id="nestedatt--summary_prefixes"></a>
+### Nested Schema for `summary_prefixes`
+
+Read-Only:
+
+- `address` (String) IP address
+- `adv_unreachable` (Boolean) Advertise unreachable summary components
+- `algorithm` (Number) Flex Algorithm number
+- `explicit` (Boolean) Strict flex-algo locator summarization mode
+- `level` (Number) Summarize routes in one level only
+- `partition_repair` (Boolean) React to area or domain partition - deaggregate by default
+- `prefix` (Number) IP address prefix
+- `tag` (Number) Set a tag
+- `unreachable_tag` (Number) The tag value of the summary component
+- `unreachable_tag_exclude_prefixes` (Boolean) Exclude unreachability advertisement for prefixes with a tag

@@ -15,20 +15,34 @@ This resource can manage the Logging VRF configuration.
 ```terraform
 resource "iosxr_logging_vrf" "example" {
   vrf_name = "default"
+  hostnames = [
+    {
+      name                    = "server.cisco.com"
+      severity                = "info"
+      port                    = 514
+      operator                = "equals"
+      facility                = "local0"
+      hostname_source_address = "1.1.1.2"
+    }
+  ]
   host_ipv4_addresses = [
     {
-      ipv4_address = "1.1.1.1"
-      severity     = "info"
-      port         = 514
-      operator     = "equals"
+      ipv4_address        = "1.1.1.1"
+      severity            = "info"
+      port                = 514
+      operator            = "equals"
+      facility            = "local0"
+      ipv4_source_address = "1.1.1.2"
     }
   ]
   host_ipv6_addresses = [
     {
-      ipv6_address = "2001::1"
-      severity     = "info"
-      port         = 514
-      operator     = "equals-or-higher"
+      ipv6_address        = "2001:db8::1"
+      severity            = "info"
+      port                = 514
+      operator            = "equals-or-higher"
+      facility            = "local0"
+      ipv6_source_address = "2001:db8::2"
     }
   ]
 }
@@ -48,6 +62,7 @@ resource "iosxr_logging_vrf" "example" {
 - `device` (String) A device name from the provider configuration.
 - `host_ipv4_addresses` (Attributes List) IPV4 address of the logging host (see [below for nested schema](#nestedatt--host_ipv4_addresses))
 - `host_ipv6_addresses` (Attributes List) IPV6 address of the logging host (see [below for nested schema](#nestedatt--host_ipv6_addresses))
+- `hostnames` (Attributes List) Name of the logging host (see [below for nested schema](#nestedatt--hostnames))
 
 ### Read-Only
 
@@ -62,6 +77,9 @@ Required:
 
 Optional:
 
+- `facility` (String) Modify message logging facilities
+  - Choices: `all`, `audit`, `auth`, `authpriv`, `console`, `daemon`, `kern`, `local0`, `local1`, `local2`, `local3`, `local4`, `local5`, `local6`, `local7`, `mail`, `ntp`, `syslog`, `user`
+- `ipv4_source_address` (String) IPV4 source address of the logging host
 - `operator` (String) Set severity operator of  messages for particular remote host/vrf
   - Choices: `equals`, `equals-or-higher`, `not-equals`
 - `port` (Number) Set UDP port for this remote host/vrf
@@ -79,6 +97,29 @@ Required:
 
 Optional:
 
+- `facility` (String) Modify message logging facilities
+  - Choices: `all`, `audit`, `auth`, `authpriv`, `console`, `daemon`, `kern`, `local0`, `local1`, `local2`, `local3`, `local4`, `local5`, `local6`, `local7`, `mail`, `ntp`, `syslog`, `user`
+- `ipv6_source_address` (String) IPV6 source address of the logging host
+- `operator` (String) Set severity operator of  messages for particular remote host/vrf
+  - Choices: `equals`, `equals-or-higher`, `not-equals`
+- `port` (Number) Set UDP port for this remote host/vrf
+  - Range: `0`-`65535`
+- `severity` (String) Set severity of  messages for particular remote host/vrf
+  - Choices: `alerts`, `critical`, `debugging`, `emergencies`, `error`, `info`, `notifications`, `warning`
+
+
+<a id="nestedatt--hostnames"></a>
+### Nested Schema for `hostnames`
+
+Required:
+
+- `name` (String) Name of the logging host
+
+Optional:
+
+- `facility` (String) Modify message logging facilities
+  - Choices: `all`, `audit`, `auth`, `authpriv`, `console`, `daemon`, `kern`, `local0`, `local1`, `local2`, `local3`, `local4`, `local5`, `local6`, `local7`, `mail`, `ntp`, `syslog`, `user`
+- `hostname_source_address` (String) hostname source address
 - `operator` (String) Set severity operator of  messages for particular remote host/vrf
   - Choices: `equals`, `equals-or-higher`, `not-equals`
 - `port` (Number) Set UDP port for this remote host/vrf

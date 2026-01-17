@@ -1,0 +1,1226 @@
+---
+name: Control Plane
+path: Cisco-IOS-XR-um-control-plane-cfg:/control-plane
+doc_category: Management
+attributes:
+    # inband/interfaces/interface
+  - yang_name: management-plane/inband/interfaces/interface
+    tf_name: mgmt_inband_interfaces
+    type: List
+    minimum_test_value: '["GigabitEthernet0/0/0/0"]'
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: GigabitEthernet0/0/0/0
+      - yang_name: allow/ssh
+        tf_name: ssh
+        example: true
+      - yang_name: allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+        tf_name: ssh_ipv4_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.0
+          - yang_name: length
+            id: true
+            example: 24
+      - yang_name: allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address
+        tf_name: ssh_ipv4_hosts
+        type: List
+        minimum_test_value: '["192.168.1.1"]'
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.1
+      - yang_name: allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix
+        tf_name: ssh_ipv6_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8:1:1::"
+          - yang_name: length
+            id: true
+            example: 64
+      - yang_name: allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address
+        tf_name: ssh_ipv6_hosts
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8:1:1::1"
+      - yang_name: allow/telnet
+        tf_name: telnet
+        example: true
+      - yang_name: allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+        tf_name: telnet_ipv4_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.0
+          - yang_name: length
+            id: true
+            example: 24
+      - yang_name: allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address
+        tf_name: telnet_ipv4_hosts
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.1
+      - yang_name: allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix
+        tf_name: telnet_ipv6_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8:1:1::"
+          - yang_name: length
+            id: true
+            example: 64
+      - yang_name: allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address
+        tf_name: telnet_ipv6_hosts
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8:1:1::1"
+      - yang_name: allow/snmp
+        tf_name: snmp
+        example: true
+      - yang_name: allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+        tf_name: snmp_ipv4_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.0
+          - yang_name: length
+            id: true
+            example: 24
+      - yang_name: allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address
+        tf_name: snmp_ipv4_hosts
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.1
+      - yang_name: allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix
+        tf_name: snmp_ipv6_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8:1:1::"
+          - yang_name: length
+            id: true
+            example: 64
+      - yang_name: allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address
+        tf_name: snmp_ipv6_hosts
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8:1:1::1"
+      - yang_name: allow/tftp
+        tf_name: tftp
+        example: true
+      - yang_name: allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+        tf_name: tftp_ipv4_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.0
+          - yang_name: length
+            id: true
+            example: 24
+      - yang_name: allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address
+        tf_name: tftp_ipv4_hosts
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.1
+      - yang_name: allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix
+        tf_name: tftp_ipv6_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8:1:1::"
+          - yang_name: length
+            id: true
+            example: 64
+      - yang_name: allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address
+        tf_name: tftp_ipv6_hosts
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8:1:1::1"
+      - yang_name: allow/http
+        tf_name: http
+        example: true
+      - yang_name: allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+        tf_name: http_ipv4_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.0
+          - yang_name: length
+            id: true
+            example: 24
+      - yang_name: allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address
+        tf_name: http_ipv4_hosts
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.1
+      - yang_name: allow/xr-xml
+        tf_name: xml
+        example: true
+      - yang_name: allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+        tf_name: xml_ipv4_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.0
+          - yang_name: length
+            id: true
+            example: 24
+      - yang_name: allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address
+        tf_name: xml_ipv4_hosts
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.1
+      - yang_name: allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix
+        tf_name: xml_ipv6_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8:1:1::"
+          - yang_name: length
+            id: true
+            example: 64
+      - yang_name: allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address
+        tf_name: xml_ipv6_hosts
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8:1:1::1"
+      - yang_name: allow/netconf
+        tf_name: netconf
+        example: true
+      - yang_name: allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+        tf_name: netconf_ipv4_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.0
+          - yang_name: length
+            id: true
+            example: 24
+      - yang_name: allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address
+        tf_name: netconf_ipv4_hosts
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.1
+      - yang_name: allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix
+        tf_name: netconf_ipv6_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8:1:1::"
+          - yang_name: length
+            id: true
+            example: 64
+      - yang_name: allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address
+        tf_name: netconf_ipv6_hosts
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8:1:1::1"
+      - yang_name: allow/all
+        tf_name: allow_all
+        example: true
+      - yang_name: allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+        tf_name: allow_all_ipv4_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.0
+          - yang_name: length
+            id: true
+            example: 24
+      - yang_name: allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address
+        tf_name: allow_all_ipv4_hosts
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.1
+      - yang_name: allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix
+        tf_name: allow_all_ipv6_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8:1:1::"
+          - yang_name: length
+            id: true
+            example: 64
+      - yang_name: allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address
+        tf_name: allow_all_ipv6_hosts
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8:1:1::1"
+    # inband/interfaces/all
+  - yang_name: management-plane/inband/interfaces/all/allow/ssh
+    tf_name: mgmt_inband_all_ssh
+    example: true
+    exclude_test: true
+  - yang_name: management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+    tf_name: mgmt_inband_all_ssh_ipv4_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.0
+      - yang_name: length
+        id: true
+        example: 24
+  - yang_name: management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address
+    tf_name: mgmt_inband_all_ssh_ipv4_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.1
+  - yang_name: management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix
+    tf_name: mgmt_inband_all_ssh_ipv6_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::"
+      - yang_name: length
+        id: true
+        example: 64
+  - yang_name: management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address
+    tf_name: mgmt_inband_all_ssh_ipv6_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::1"
+  - yang_name: management-plane/inband/interfaces/all/allow/telnet
+    tf_name: mgmt_inband_all_telnet
+    example: true
+    exclude_test: true
+  - yang_name: management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+    tf_name: mgmt_inband_all_telnet_ipv4_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.0
+      - yang_name: length
+        id: true
+        example: 24
+  - yang_name: management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address
+    tf_name: mgmt_inband_all_telnet_ipv4_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.1
+  - yang_name: management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix
+    tf_name: mgmt_inband_all_telnet_ipv6_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::"
+      - yang_name: length
+        id: true
+        example: 64
+  - yang_name: management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address
+    tf_name: mgmt_inband_all_telnet_ipv6_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::1"
+  - yang_name: management-plane/inband/interfaces/all/allow/snmp
+    tf_name: mgmt_inband_all_snmp
+    example: true
+    exclude_test: true
+  - yang_name: management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+    tf_name: mgmt_inband_all_snmp_ipv4_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.0
+      - yang_name: length
+        id: true
+        example: 24
+  - yang_name: management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address
+    tf_name: mgmt_inband_all_snmp_ipv4_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.1
+  - yang_name: management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix
+    tf_name: mgmt_inband_all_snmp_ipv6_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::"
+      - yang_name: length
+        id: true
+        example: 64
+  - yang_name: management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address
+    tf_name: mgmt_inband_all_snmp_ipv6_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::1"
+  - yang_name: management-plane/inband/interfaces/all/allow/tftp
+    tf_name: mgmt_inband_all_tftp
+    example: true
+    exclude_test: true
+  - yang_name: management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+    tf_name: mgmt_inband_all_tftp_ipv4_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.0
+      - yang_name: length
+        id: true
+        example: 24
+  - yang_name: management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address
+    tf_name: mgmt_inband_all_tftp_ipv4_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.1
+  - yang_name: management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix
+    tf_name: mgmt_inband_all_tftp_ipv6_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::"
+      - yang_name: length
+        id: true
+        example: 64
+  - yang_name: management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address
+    tf_name: mgmt_inband_all_tftp_ipv6_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::1"
+  - yang_name: management-plane/inband/interfaces/all/allow/http
+    tf_name: mgmt_inband_all_http
+    example: true
+    exclude_test: true
+  - yang_name: management-plane/inband/interfaces/all/allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+    tf_name: mgmt_inband_all_http_ipv4_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.0
+      - yang_name: length
+        id: true
+        example: 24
+  - yang_name: management-plane/inband/interfaces/all/allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address
+    tf_name: mgmt_inband_all_http_ipv4_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.1
+  - yang_name: management-plane/inband/interfaces/all/allow/xr-xml
+    tf_name: mgmt_inband_all_xml
+    example: true
+    exclude_test: true
+  - yang_name: management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+    tf_name: mgmt_inband_all_xml_ipv4_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.0
+      - yang_name: length
+        id: true
+        example: 24
+  - yang_name: management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address
+    tf_name: mgmt_inband_all_xml_ipv4_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.1
+  - yang_name: management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix
+    tf_name: mgmt_inband_all_xml_ipv6_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::"
+      - yang_name: length
+        id: true
+        example: 64
+  - yang_name: management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address
+    tf_name: mgmt_inband_all_xml_ipv6_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::1"
+  - yang_name: management-plane/inband/interfaces/all/allow/netconf
+    tf_name: mgmt_inband_all_netconf
+    example: true
+    exclude_test: true
+  - yang_name: management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+    tf_name: mgmt_inband_all_netconf_ipv4_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.0
+      - yang_name: length
+        id: true
+        example: 24
+  - yang_name: management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address
+    tf_name: mgmt_inband_all_netconf_ipv4_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.1
+  - yang_name: management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix
+    tf_name: mgmt_inband_all_netconf_ipv6_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::"
+      - yang_name: length
+        id: true
+        example: 64
+  - yang_name: management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address
+    tf_name: mgmt_inband_all_netconf_ipv6_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::1"
+  - yang_name: management-plane/inband/interfaces/all/allow/all
+    tf_name: mgmt_inband_all_allow_all
+    example: true
+    exclude_test: true
+  - yang_name: management-plane/inband/interfaces/all/allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+    tf_name: mgmt_inband_all_allow_all_ipv4_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.0
+      - yang_name: length
+        id: true
+        example: 24
+  - yang_name: management-plane/inband/interfaces/all/allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address
+    tf_name: mgmt_inband_all_allow_all_ipv4_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.1
+  - yang_name: management-plane/inband/interfaces/all/allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix
+    tf_name: mgmt_inband_all_allow_all_ipv6_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::"
+      - yang_name: length
+        id: true
+        example: 64
+  - yang_name: management-plane/inband/interfaces/all/allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address
+    tf_name: mgmt_inband_all_allow_all_ipv6_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::1"
+    # out-of-band/interfaces/interface
+  - yang_name: management-plane/out-of-band/interfaces/interface
+    tf_name: mgmt_oob_interfaces
+    type: List
+    minimum_test_value: '["GigabitEthernet0/0/0/1"]'
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: GigabitEthernet0/0/0/1
+      - yang_name: allow/ssh
+        tf_name: ssh
+        example: true
+      - yang_name: allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+        tf_name: ssh_ipv4_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.0
+          - yang_name: length
+            id: true
+            example: 24
+      - yang_name: allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address
+        tf_name: ssh_ipv4_hosts
+        type: List
+        minimum_test_value: '["192.168.1.1"]'
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.1
+      - yang_name: allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix
+        tf_name: ssh_ipv6_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8:1:1::"
+          - yang_name: length
+            id: true
+            example: 64
+      - yang_name: allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address
+        tf_name: ssh_ipv6_hosts
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8:1:1::1"
+      - yang_name: allow/telnet
+        tf_name: telnet
+        example: true
+      - yang_name: allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+        tf_name: telnet_ipv4_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.0
+          - yang_name: length
+            id: true
+            example: 24
+      - yang_name: allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address
+        tf_name: telnet_ipv4_hosts
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.1
+      - yang_name: allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix
+        tf_name: telnet_ipv6_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8:1:1::"
+          - yang_name: length
+            id: true
+            example: 64
+      - yang_name: allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address
+        tf_name: telnet_ipv6_hosts
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8:1:1::1"
+      - yang_name: allow/snmp
+        tf_name: snmp
+        example: true
+      - yang_name: allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+        tf_name: snmp_ipv4_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.0
+          - yang_name: length
+            id: true
+            example: 24
+      - yang_name: allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address
+        tf_name: snmp_ipv4_hosts
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.1
+      - yang_name: allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix
+        tf_name: snmp_ipv6_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8:1:1::"
+          - yang_name: length
+            id: true
+            example: 64
+      - yang_name: allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address
+        tf_name: snmp_ipv6_hosts
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8:1:1::1"
+      - yang_name: allow/tftp
+        tf_name: tftp
+        example: true
+      - yang_name: allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+        tf_name: tftp_ipv4_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.0
+          - yang_name: length
+            id: true
+            example: 24
+      - yang_name: allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address
+        tf_name: tftp_ipv4_hosts
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.1
+      - yang_name: allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix
+        tf_name: tftp_ipv6_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8:1:1::"
+          - yang_name: length
+            id: true
+            example: 64
+      - yang_name: allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address
+        tf_name: tftp_ipv6_hosts
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8:1:1::1"
+      - yang_name: allow/http
+        tf_name: http
+        example: true
+      - yang_name: allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+        tf_name: http_ipv4_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.0
+          - yang_name: length
+            id: true
+            example: 24
+      - yang_name: allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address
+        tf_name: http_ipv4_hosts
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.1
+      - yang_name: allow/xr-xml
+        tf_name: xml
+        example: true
+      - yang_name: allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+        tf_name: xml_ipv4_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.0
+          - yang_name: length
+            id: true
+            example: 24
+      - yang_name: allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address
+        tf_name: xml_ipv4_hosts
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.1
+      - yang_name: allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix
+        tf_name: xml_ipv6_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8:1:1::"
+          - yang_name: length
+            id: true
+            example: 64
+      - yang_name: allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address
+        tf_name: xml_ipv6_hosts
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8:1:1::1"
+      - yang_name: allow/netconf
+        tf_name: netconf
+        example: true
+      - yang_name: allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+        tf_name: netconf_ipv4_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.0
+          - yang_name: length
+            id: true
+            example: 24
+      - yang_name: allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address
+        tf_name: netconf_ipv4_hosts
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.1
+      - yang_name: allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix
+        tf_name: netconf_ipv6_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8:1:1::"
+          - yang_name: length
+            id: true
+            example: 64
+      - yang_name: allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address
+        tf_name: netconf_ipv6_hosts
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8:1:1::1"
+      - yang_name: allow/all
+        tf_name: allow_all
+        example: true
+      - yang_name: allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+        tf_name: allow_all_ipv4_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.0
+          - yang_name: length
+            id: true
+            example: 24
+      - yang_name: allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address
+        tf_name: allow_all_ipv4_hosts
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 192.168.1.1
+      - yang_name: allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix
+        tf_name: allow_all_ipv6_prefixes
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8:1:1::"
+          - yang_name: length
+            id: true
+            example: 64
+      - yang_name: allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address
+        tf_name: allow_all_ipv6_hosts
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8:1:1::1"
+  - yang_name: management-plane/out-of-band/vrf
+    tf_name: mgmt_oob_vrf
+    example: VRF1
+  - yang_name: management-plane/out-of-band/enable-inband-behavior
+    tf_name: mgmt_oob_inband_behavior
+    exclude_test: true
+    example: true
+    # out-of-band/interfaces/all
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/ssh
+    tf_name: mgmt_oob_all_ssh
+    example: true
+    exclude_test: true
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+    tf_name: mgmt_oob_all_ssh_ipv4_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.0
+      - yang_name: length
+        id: true
+        example: 24
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address
+    tf_name: mgmt_oob_all_ssh_ipv4_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.1
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix
+    tf_name: mgmt_oob_all_ssh_ipv6_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::"
+      - yang_name: length
+        id: true
+        example: 64
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address
+    tf_name: mgmt_oob_all_ssh_ipv6_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::1"
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/telnet
+    tf_name: mgmt_oob_all_telnet
+    example: true
+    exclude_test: true
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+    tf_name: mgmt_oob_all_telnet_ipv4_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.0
+      - yang_name: length
+        id: true
+        example: 24
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address
+    tf_name: mgmt_oob_all_telnet_ipv4_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.1
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix
+    tf_name: mgmt_oob_all_telnet_ipv6_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::"
+      - yang_name: length
+        id: true
+        example: 64
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address
+    tf_name: mgmt_oob_all_telnet_ipv6_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::1"
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/snmp
+    tf_name: mgmt_oob_all_snmp
+    example: true
+    exclude_test: true
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+    tf_name: mgmt_oob_all_snmp_ipv4_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.0
+      - yang_name: length
+        id: true
+        example: 24
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address
+    tf_name: mgmt_oob_all_snmp_ipv4_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.1
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix
+    tf_name: mgmt_oob_all_snmp_ipv6_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::"
+      - yang_name: length
+        id: true
+        example: 64
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address
+    tf_name: mgmt_oob_all_snmp_ipv6_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::1"
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/tftp
+    tf_name: mgmt_oob_all_tftp
+    example: true
+    exclude_test: true
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+    tf_name: mgmt_oob_all_tftp_ipv4_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.0
+      - yang_name: length
+        id: true
+        example: 24
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address
+    tf_name: mgmt_oob_all_tftp_ipv4_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.1
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix
+    tf_name: mgmt_oob_all_tftp_ipv6_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::"
+      - yang_name: length
+        id: true
+        example: 64
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address
+    tf_name: mgmt_oob_all_tftp_ipv6_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::1"
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/http
+    tf_name: mgmt_oob_all_http
+    example: true
+    exclude_test: true
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+    tf_name: mgmt_oob_all_http_ipv4_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.0
+      - yang_name: length
+        id: true
+        example: 24
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address
+    tf_name: mgmt_oob_all_http_ipv4_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.1
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/xr-xml
+    tf_name: mgmt_oob_all_xml
+    example: true
+    exclude_test: true
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+    tf_name: mgmt_oob_all_xml_ipv4_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.0
+      - yang_name: length
+        id: true
+        example: 24
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address
+    tf_name: mgmt_oob_all_xml_ipv4_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.1
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix
+    tf_name: mgmt_oob_all_xml_ipv6_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::"
+      - yang_name: length
+        id: true
+        example: 64
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address
+    tf_name: mgmt_oob_all_xml_ipv6_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::1"
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/netconf
+    tf_name: mgmt_oob_all_netconf
+    example: true
+    exclude_test: true
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+    tf_name: mgmt_oob_all_netconf_ipv4_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.0
+      - yang_name: length
+        id: true
+        example: 24
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address
+    tf_name: mgmt_oob_all_netconf_ipv4_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.1
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix
+    tf_name: mgmt_oob_all_netconf_ipv6_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::"
+      - yang_name: length
+        id: true
+        example: 64
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address
+    tf_name: mgmt_oob_all_netconf_ipv6_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::1"
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/all
+    tf_name: mgmt_oob_all_allow_all
+    example: true
+    exclude_test: true
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
+    tf_name: mgmt_oob_all_allow_all_ipv4_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.0
+      - yang_name: length
+        id: true
+        example: 24
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address
+    tf_name: mgmt_oob_all_allow_all_ipv4_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 192.168.1.1
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix
+    tf_name: mgmt_oob_all_allow_all_ipv6_prefixes
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::"
+      - yang_name: length
+        id: true
+        example: 64
+  - yang_name: management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address
+    tf_name: mgmt_oob_all_allow_all_ipv6_hosts
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::1"

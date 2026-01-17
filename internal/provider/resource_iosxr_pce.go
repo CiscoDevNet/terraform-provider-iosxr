@@ -27,6 +27,7 @@ import (
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -112,11 +113,729 @@ func (r *PCEResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					},
 				},
 			},
-			"peer_filter_ipv4_access_list": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Access-list for IPv4 peer filtering").String,
+			"state_sync_ipv6s": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv6 address").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv6 address").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+							},
+						},
+					},
+				},
+			},
+			"tcp_buffer_size": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Size of buffer in bytes").AddIntegerRangeDescription(204800, 1024000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(204800, 1024000),
+				},
+			},
+			"password_encrypted": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify unencrypted password").String,
+				Optional:            true,
+				Sensitive:           true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"tcp_ao_keychain_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure global AO keychain based authentication").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"tcp_ao_include_tcp_options": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Include other TCP options in the header").String,
+				Optional:            true,
+			},
+			"tcp_ao_accept_ao_mismatch_connection": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Accept new connection even if Authentication Option mismatched").String,
+				Optional:            true,
+			},
+			"disjoint_path_maximum_attempts": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum number of attempts during disjoint path computation (default: 1000)").AddIntegerRangeDescription(1, 100000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 100000),
+				},
+			},
+			"disjoint_path_group_ids": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Group ID").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"group_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Group ID").AddIntegerRangeDescription(1, 65535).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
+							},
+						},
+						"link_disjoint": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable Link Disjointness").String,
+							Optional:            true,
+						},
+						"link_disjoint_strict": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable Fallback").String,
+							Optional:            true,
+						},
+						"link_disjoint_lsp_one_pcc_address_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("ipv4", "ipv6"),
+							},
+						},
+						"link_disjoint_lsp_one_pcc_ip_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IP address of PCC").String,
+							Required:            true,
+						},
+						"link_disjoint_lsp_one_pcc_lsp_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of label switched path").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 800),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"link_disjoint_lsp_one_pcc_shortest_path": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set LSP to follow shortest-path").String,
+							Optional:            true,
+						},
+						"link_disjoint_lsp_one_pcc_exclude_srlg": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Exclude SRLG").AddIntegerRangeDescription(1, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
+							},
+						},
+						"link_disjoint_lsp_two_pcc_address_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("ipv4", "ipv6"),
+							},
+						},
+						"link_disjoint_lsp_two_pcc_ip_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IP address of PCC").String,
+							Required:            true,
+						},
+						"link_disjoint_lsp_two_pcc_lsp_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of label switched path").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 800),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"link_disjoint_lsp_two_pcc_exclude_srlg": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Exclude SRLG").AddIntegerRangeDescription(1, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
+							},
+						},
+						"link_disjoint_sub_ids": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Sub ID").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"sub_id": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Sub ID").AddIntegerRangeDescription(1, 65535).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65535),
+										},
+									},
+									"strict": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Disable Fallback").String,
+										Optional:            true,
+									},
+									"lsp_one_pcc_address_type": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("ipv4", "ipv6"),
+										},
+									},
+									"lsp_one_pcc_ip_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP address of PCC").String,
+										Required:            true,
+									},
+									"lsp_one_pcc_lsp_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Name of label switched path").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 800),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+										},
+									},
+									"lsp_one_pcc_shortest_path": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Set LSP to follow shortest-path").String,
+										Optional:            true,
+									},
+									"lsp_one_pcc_exclude_srlg": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Exclude SRLG").AddIntegerRangeDescription(1, 4294967295).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 4294967295),
+										},
+									},
+									"lsp_two_pcc_address_type": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("ipv4", "ipv6"),
+										},
+									},
+									"lsp_two_pcc_ip_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP address of PCC").String,
+										Required:            true,
+									},
+									"lsp_two_pcc_lsp_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Name of label switched path").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 800),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+										},
+									},
+									"lsp_two_pcc_exclude_srlg": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Exclude SRLG").AddIntegerRangeDescription(1, 4294967295).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 4294967295),
+										},
+									},
+								},
+							},
+						},
+						"node_disjoint": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable Node Disjointness").String,
+							Optional:            true,
+						},
+						"node_disjoint_strict": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable Fallback").String,
+							Optional:            true,
+						},
+						"node_disjoint_lsp_one_pcc_address_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("ipv4", "ipv6"),
+							},
+						},
+						"node_disjoint_lsp_one_pcc_ip_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IP address of PCC").String,
+							Required:            true,
+						},
+						"node_disjoint_lsp_one_pcc_lsp_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of label switched path").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 800),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"node_disjoint_lsp_one_pcc_shortest_path": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set LSP to follow shortest-path").String,
+							Optional:            true,
+						},
+						"node_disjoint_lsp_one_pcc_exclude_srlg": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Exclude SRLG").AddIntegerRangeDescription(1, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
+							},
+						},
+						"node_disjoint_lsp_two_pcc_address_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("ipv4", "ipv6"),
+							},
+						},
+						"node_disjoint_lsp_two_pcc_ip_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IP address of PCC").String,
+							Required:            true,
+						},
+						"node_disjoint_lsp_two_pcc_lsp_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of label switched path").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 800),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"node_disjoint_lsp_two_pcc_exclude_srlg": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Exclude SRLG").AddIntegerRangeDescription(1, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
+							},
+						},
+						"node_disjoint_sub_ids": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Sub ID").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"sub_id": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Sub ID").AddIntegerRangeDescription(1, 65535).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65535),
+										},
+									},
+									"strict": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Disable Fallback").String,
+										Optional:            true,
+									},
+									"lsp_one_pcc_address_type": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("ipv4", "ipv6"),
+										},
+									},
+									"lsp_one_pcc_ip_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP address of PCC").String,
+										Required:            true,
+									},
+									"lsp_one_pcc_lsp_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Name of label switched path").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 800),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+										},
+									},
+									"lsp_one_pcc_shortest_path": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Set LSP to follow shortest-path").String,
+										Optional:            true,
+									},
+									"lsp_one_pcc_exclude_srlg": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Exclude SRLG").AddIntegerRangeDescription(1, 4294967295).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 4294967295),
+										},
+									},
+									"lsp_two_pcc_address_type": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("ipv4", "ipv6"),
+										},
+									},
+									"lsp_two_pcc_ip_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP address of PCC").String,
+										Required:            true,
+									},
+									"lsp_two_pcc_lsp_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Name of label switched path").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 800),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+										},
+									},
+									"lsp_two_pcc_exclude_srlg": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Exclude SRLG").AddIntegerRangeDescription(1, 4294967295).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 4294967295),
+										},
+									},
+								},
+							},
+						},
+						"srlg_disjoint": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable SRLG Disjointness").String,
+							Optional:            true,
+						},
+						"srlg_disjoint_strict": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable Fallback").String,
+							Optional:            true,
+						},
+						"srlg_disjoint_lsp_one_pcc_address_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("ipv4", "ipv6"),
+							},
+						},
+						"srlg_disjoint_lsp_one_pcc_ip_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IP address of PCC").String,
+							Required:            true,
+						},
+						"srlg_disjoint_lsp_one_pcc_lsp_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of label switched path").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 800),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"srlg_disjoint_lsp_one_pcc_shortest_path": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set LSP to follow shortest-path").String,
+							Optional:            true,
+						},
+						"srlg_disjoint_lsp_one_pcc_exclude_srlg": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Exclude SRLG").AddIntegerRangeDescription(1, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
+							},
+						},
+						"srlg_disjoint_lsp_two_pcc_address_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("ipv4", "ipv6"),
+							},
+						},
+						"srlg_disjoint_lsp_two_pcc_ip_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IP address of PCC").String,
+							Required:            true,
+						},
+						"srlg_disjoint_lsp_two_pcc_lsp_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of label switched path").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 800),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"srlg_disjoint_lsp_two_pcc_exclude_srlg": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Exclude SRLG").AddIntegerRangeDescription(1, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
+							},
+						},
+						"srlg_disjoint_sub_ids": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Sub ID").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"sub_id": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Sub ID").AddIntegerRangeDescription(1, 65535).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65535),
+										},
+									},
+									"strict": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Disable Fallback").String,
+										Optional:            true,
+									},
+									"lsp_one_pcc_address_type": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("ipv4", "ipv6"),
+										},
+									},
+									"lsp_one_pcc_ip_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP address of PCC").String,
+										Required:            true,
+									},
+									"lsp_one_pcc_lsp_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Name of label switched path").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 800),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+										},
+									},
+									"lsp_one_pcc_shortest_path": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Set LSP to follow shortest-path").String,
+										Optional:            true,
+									},
+									"lsp_one_pcc_exclude_srlg": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Exclude SRLG").AddIntegerRangeDescription(1, 4294967295).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 4294967295),
+										},
+									},
+									"lsp_two_pcc_address_type": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("ipv4", "ipv6"),
+										},
+									},
+									"lsp_two_pcc_ip_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP address of PCC").String,
+										Required:            true,
+									},
+									"lsp_two_pcc_lsp_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Name of label switched path").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 800),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+										},
+									},
+									"lsp_two_pcc_exclude_srlg": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Exclude SRLG").AddIntegerRangeDescription(1, 4294967295).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 4294967295),
+										},
+									},
+								},
+							},
+						},
+						"srlg_node_disjoint": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable SRLG Node Disjointness").String,
+							Optional:            true,
+						},
+						"srlg_node_disjoint_strict": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable Fallback").String,
+							Optional:            true,
+						},
+						"srlg_node_disjoint_lsp_one_pcc_address_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("ipv4", "ipv6"),
+							},
+						},
+						"srlg_node_disjoint_lsp_one_pcc_ip_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IP address of PCC").String,
+							Required:            true,
+						},
+						"srlg_node_disjoint_lsp_one_pcc_lsp_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of label switched path").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 800),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"srlg_node_disjoint_lsp_one_pcc_shortest_path": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set LSP to follow shortest-path").String,
+							Optional:            true,
+						},
+						"srlg_node_disjoint_lsp_one_pcc_exclude_srlg": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Exclude SRLG").AddIntegerRangeDescription(1, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
+							},
+						},
+						"srlg_node_disjoint_lsp_two_pcc_address_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("ipv4", "ipv6"),
+							},
+						},
+						"srlg_node_disjoint_lsp_two_pcc_ip_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IP address of PCC").String,
+							Required:            true,
+						},
+						"srlg_node_disjoint_lsp_two_pcc_lsp_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of label switched path").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 800),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"srlg_node_disjoint_lsp_two_pcc_exclude_srlg": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Exclude SRLG").AddIntegerRangeDescription(1, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
+							},
+						},
+						"srlg_node_disjoint_sub_ids": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Sub ID").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"sub_id": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Sub ID").AddIntegerRangeDescription(1, 65535).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65535),
+										},
+									},
+									"strict": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Disable Fallback").String,
+										Optional:            true,
+									},
+									"lsp_one_pcc_address_type": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("ipv4", "ipv6"),
+										},
+									},
+									"lsp_one_pcc_ip_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP address of PCC").String,
+										Required:            true,
+									},
+									"lsp_one_pcc_lsp_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Name of label switched path").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 800),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+										},
+									},
+									"lsp_one_pcc_shortest_path": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Set LSP to follow shortest-path").String,
+										Optional:            true,
+									},
+									"lsp_one_pcc_exclude_srlg": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Exclude SRLG").AddIntegerRangeDescription(1, 4294967295).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 4294967295),
+										},
+									},
+									"lsp_two_pcc_address_type": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Address type").AddStringEnumDescription("ipv4", "ipv6").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("ipv4", "ipv6"),
+										},
+									},
+									"lsp_two_pcc_ip_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP address of PCC").String,
+										Required:            true,
+									},
+									"lsp_two_pcc_lsp_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Name of label switched path").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 800),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+										},
+									},
+									"lsp_two_pcc_exclude_srlg": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Exclude SRLG").AddIntegerRangeDescription(1, 4294967295).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 4294967295),
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"peer_ipv4s": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 address family").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4 address family").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+						"password_encrypted": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify unencrypted password").String,
+							Optional:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"tcp_ao_keychain_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure AO keychain based authentication").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"tcp_ao_include_tcp_options": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Include other TCP options in the header").String,
+							Optional:            true,
+						},
+						"tcp_ao_accept_ao_mismatch_connection": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Accept new connection even if Authentication Option mismatched").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"peer_ipv6s": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv6 address family").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv6 address family").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+							},
+						},
+						"password_encrypted": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify unencrypted password").String,
+							Optional:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"tcp_ao_keychain_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure AO keychain based authentication").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"tcp_ao_include_tcp_options": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Include other TCP options in the header").String,
+							Optional:            true,
+						},
+						"tcp_ao_accept_ao_mismatch_connection": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Accept new connection even if Authentication Option mismatched").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"netconf_ssh_user": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify SSH username that will be used to log on to routers").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 800),
+				},
+			},
+			"netconf_ssh_password_encrypted": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify unencrypted password").String,
+				Optional:            true,
+				Sensitive:           true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
 					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 			},
@@ -130,6 +849,14 @@ func (r *PCEResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
 					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+				},
+			},
+			"api_vrf": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("VRF for northbound API and PCE sibling connections.").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 33),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 			},
 			"api_users": schema.ListNestedAttribute{
@@ -147,6 +874,7 @@ func (r *PCEResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 						"password_encrypted": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Specify unencrypted password").String,
 							Optional:            true,
+							Sensitive:           true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 1024),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
@@ -154,6 +882,641 @@ func (r *PCEResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 						},
 					},
 				},
+			},
+			"api_ipv4_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("NB-API server IPv4 address").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+				},
+			},
+			"api_ipv6_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("NB-API server IPv6 address").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+				},
+			},
+			"timers_reoptimization": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Topology reoptimization interval").AddIntegerRangeDescription(600, 86400).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(600, 86400),
+				},
+			},
+			"timers_keepalive": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Keepalive interval").AddIntegerRangeDescription(0, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 255),
+				},
+			},
+			"timers_minimum_peer_keepalive": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Minimum acceptable peer proposed keepalive interval").AddIntegerRangeDescription(0, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 255),
+				},
+			},
+			"timers_peer_zombie": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Keep LSP peer in zombie state after disconnect").AddIntegerRangeDescription(0, 3600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 3600),
+				},
+			},
+			"timers_init_verify_restart": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Timer to wait for topology convergence after topology starts populating for restart case").AddIntegerRangeDescription(10, 10000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(10, 10000),
+				},
+			},
+			"timers_init_verify_switchover": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Timer to wait for topology convergence after topology starts populating for switchover case").AddIntegerRangeDescription(10, 10000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(10, 10000),
+				},
+			},
+			"timers_init_verify_startup": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Timer to wait for topology convergence after topology starts populating for startup case").AddIntegerRangeDescription(10, 10000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(10, 10000),
+				},
+			},
+			"backoff_ratio": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Backoff common ratio").AddIntegerRangeDescription(0, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 255),
+				},
+			},
+			"backoff_difference": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Backoff common difference").AddIntegerRangeDescription(0, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 255),
+				},
+			},
+			"backoff_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Backoff threshold").AddIntegerRangeDescription(0, 3600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 3600),
+				},
+			},
+			"logging_no_path": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("logging no-path messages").String,
+				Optional:            true,
+			},
+			"logging_fallback": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("logging fallback messages").String,
+				Optional:            true,
+			},
+			"logging_pcep_pcerr_received": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("logging of received PCErr messages").String,
+				Optional:            true,
+			},
+			"logging_pcep_api_send_queue_congestion_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("disable messages").String,
+				Optional:            true,
+			},
+			"logging_pcep_disjointness_status": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("logging of disjointness status related messages").String,
+				Optional:            true,
+			},
+			"segment_routing_strict_sid_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use strict sids only").String,
+				Optional:            true,
+			},
+			"srte_affinity_bitmaps": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"affinity_color_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+							},
+						},
+						"affinity_bit_position": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Affinity attribute bit position").AddIntegerRangeDescription(0, 255).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 255),
+							},
+						},
+					},
+				},
+			},
+			"srte_segment_lists": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Segment-list name").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"segment_list_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Segment-list name").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 128),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"indexes": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Next entry index").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"index_number": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Next entry index").AddIntegerRangeDescription(1, 65535).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65535),
+										},
+									},
+									"mpls_label": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("MPLS label configuration").AddIntegerRangeDescription(0, 1048575).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 1048575),
+										},
+									},
+									"mpls_adjacency": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Specify hop address").String,
+										Optional:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"srte_ipv4_peers": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 address of the PCEP peer").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4 address of the PCEP peer").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+						"policies": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of SR-TE Policy").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"policy_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Name of SR-TE Policy").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 128),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+										},
+									},
+									"candidate_paths_append_sid_mpls": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("MPLS label").AddIntegerRangeDescription(1, 1048575).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 1048575),
+										},
+									},
+									"candidate_paths_preferences": schema.ListNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Policy path-option preference entry").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"preference_id": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Policy path-option preference entry").AddIntegerRangeDescription(1, 65535).String,
+													Required:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(1, 65535),
+													},
+												},
+												"dynamic_mpls": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("MPLS path type").String,
+													Optional:            true,
+												},
+												"dynamic_metric_type_te": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("TE metric type").String,
+													Optional:            true,
+												},
+												"dynamic_metric_type_igp": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("IGP metric type").String,
+													Optional:            true,
+												},
+												"dynamic_metric_type_latency": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Latency metric type").String,
+													Optional:            true,
+												},
+												"dynamic_metric_type_hopcount": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Hopcount metric type").String,
+													Optional:            true,
+												},
+												"dynamic_metric_sid_limit": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("SID limit").AddIntegerRangeDescription(1, 255).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(1, 255),
+													},
+												},
+												"explicit_segment_list_names": schema.ListNestedAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Identifying name for Segment-list").String,
+													Optional:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"segment_list_name": schema.StringAttribute{
+																MarkdownDescription: helpers.NewAttributeDescription("Identifying name for Segment-list").String,
+																Required:            true,
+															},
+														},
+													},
+												},
+												"constraints_segments_sid_algorithm": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Prefix-SID algorithm").AddIntegerRangeDescription(128, 255).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(128, 255),
+													},
+												},
+												"constraints_segments_protection_protected_preferred": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Protected adj-SID preferred (default)").String,
+													Optional:            true,
+												},
+												"constraints_segments_protection_protected_only": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Protected adj-SID only").String,
+													Optional:            true,
+												},
+												"constraints_segments_protection_unprotected_only": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Unprotected adj-SID only").String,
+													Optional:            true,
+												},
+												"constraints_segments_protection_unprotected_preferred": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Unprotected adj-SID preferred").String,
+													Optional:            true,
+												},
+											},
+										},
+									},
+									"candidate_paths_affinity_include_any_colors": schema.ListNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"affinity_color_name": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.LengthBetween(1, 32),
+													},
+												},
+											},
+										},
+									},
+									"candidate_paths_affinity_include_all_colors": schema.ListNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"affinity_color_name": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.LengthBetween(1, 32),
+													},
+												},
+											},
+										},
+									},
+									"candidate_paths_affinity_exclude_colors": schema.ListNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"affinity_color_name": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.LengthBetween(1, 32),
+													},
+												},
+											},
+										},
+									},
+									"color": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Specify color for policy").AddIntegerRangeDescription(1, 4294967295).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 4294967295),
+										},
+									},
+									"end_point_ipv4": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IPv4 address").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+										},
+									},
+									"binding_sid_mpls": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("MPLS label").AddIntegerRangeDescription(16, 1048575).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(16, 1048575),
+										},
+									},
+									"shutdown": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Policy admin-shutdown").String,
+										Optional:            true,
+									},
+									"profile_id": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Policy configuration profile that the PCC should apply to this policy").AddIntegerRangeDescription(1, 65535).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65535),
+										},
+									},
+									"path_selection_protected": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Use local protected if possible").String,
+										Optional:            true,
+									},
+									"path_selection_unprotected": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Force use of unprotected adjacency SIDs").String,
+										Optional:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"srte_cspf_anycast_sid_inclusion": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable Anycast SID Inclusion for all policies").String,
+				Optional:            true,
+			},
+			"srte_cspf_sr_native": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable SR native algorithm").String,
+				Optional:            true,
+			},
+			"srte_cspf_sr_native_force": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Must use this algorithm for all path computations").String,
+				Optional:            true,
+			},
+			"srte_p2mp_endpoint_sets": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Endpoint-set configuration").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"endpoint_set_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Endpoint-set configuration").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 128),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"ipv4s": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify the address AFI").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Specify the address AFI").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"srte_p2mp_policies": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Policy configuration").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"policy_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Policy configuration").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 128),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"color": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify color for policy").AddIntegerRangeDescription(1, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
+							},
+						},
+						"endpoint_set": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Policy endpoint-set").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 128),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"source_ipv4": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4 address").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+						"shutdown": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Policy admin-shutdown").String,
+							Optional:            true,
+						},
+						"fast_reroute_lfa": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("LFA Fast Re-route").String,
+							Optional:            true,
+						},
+						"treesid_mpls": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("MPLS label").AddIntegerRangeDescription(16, 1048575).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(16, 1048575),
+							},
+						},
+						"candidate_paths_constraints_affinity_include_any_colors": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"affinity_color_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 32),
+										},
+									},
+								},
+							},
+						},
+						"candidate_paths_constraints_affinity_include_all_colors": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"affinity_color_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 32),
+										},
+									},
+								},
+							},
+						},
+						"candidate_paths_constraints_affinity_exclude_colors": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"affinity_color_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Affinity color name").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 32),
+										},
+									},
+								},
+							},
+						},
+						"candidate_paths_preferences": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Policy path preference entry").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"preference_id": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Policy path preference entry").AddIntegerRangeDescription(100, 100).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(100, 100),
+										},
+									},
+									"dynamic": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Dynamically computed path").String,
+										Optional:            true,
+									},
+									"dynamic_metric_type_te": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("TE metric type").String,
+										Optional:            true,
+									},
+									"dynamic_metric_type_igp": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IGP metric type").String,
+										Optional:            true,
+									},
+									"dynamic_metric_type_latency": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Latency metric type").String,
+										Optional:            true,
+									},
+									"dynamic_metric_type_hopcount": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Use the least number of hops for path computation").String,
+										Optional:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"srte_p2mp_timers_reoptimization": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("How often to reoptimize all P2MP paths.").AddIntegerRangeDescription(60, 3600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(60, 3600),
+				},
+			},
+			"srte_p2mp_timers_cleanup": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Delay before node is excluded from P2MP path computation after PCEP connection with it goes away").AddIntegerRangeDescription(1, 86400).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 86400),
+				},
+			},
+			"srte_p2mp_label_range_min": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Minimum value of label range").AddIntegerRangeDescription(16, 1048575).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(16, 1048575),
+				},
+			},
+			"srte_p2mp_label_range_max": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum value of label range").AddIntegerRangeDescription(16, 1048575).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(16, 1048575),
+				},
+			},
+			"srte_p2mp_multipath_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable load balancing of SR P2MP across ECMP paths").String,
+				Optional:            true,
+			},
+			"srte_p2mp_fast_reroute_lfa": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("LFA Fast Re-route").String,
+				Optional:            true,
+			},
+			"srte_p2mp_frr_node_set_from_ipv4s": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify the address AFI").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify the address AFI").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+					},
+				},
+			},
+			"srte_p2mp_frr_node_set_to_ipv4s": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify the address AFI").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify the address AFI").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+					},
+				},
+			},
+			"peer_filter_ipv4_access_list": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Access-list for IPv4 peer filtering").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 800),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"hierarchical_underlay_enable_all": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use all available tunnels as underlay").String,
+				Optional:            true,
 			},
 		},
 	}

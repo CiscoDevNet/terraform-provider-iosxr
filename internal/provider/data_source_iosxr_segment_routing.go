@@ -67,20 +67,20 @@ func (d *SegmentRoutingDataSource) Schema(ctx context.Context, req datasource.Sc
 				MarkdownDescription: "The path of the retrieved object.",
 				Computed:            true,
 			},
-			"global_block_lower_bound": schema.Int64Attribute{
-				MarkdownDescription: "SRGB Lower Bound",
-				Computed:            true,
-			},
-			"global_block_upper_bound": schema.Int64Attribute{
-				MarkdownDescription: "SRGB Upper Bound",
-				Computed:            true,
-			},
 			"local_block_lower_bound": schema.Int64Attribute{
 				MarkdownDescription: "SRLB Lower Bound",
 				Computed:            true,
 			},
 			"local_block_upper_bound": schema.Int64Attribute{
 				MarkdownDescription: "SRLB Upper Bound",
+				Computed:            true,
+			},
+			"global_block_lower_bound": schema.Int64Attribute{
+				MarkdownDescription: "SRGB Lower Bound",
+				Computed:            true,
+			},
+			"global_block_upper_bound": schema.Int64Attribute{
+				MarkdownDescription: "SRGB Upper Bound",
 				Computed:            true,
 			},
 			"enable": schema.BoolAttribute{

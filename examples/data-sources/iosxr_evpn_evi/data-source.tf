@@ -1,3 +1,3 @@
 data "iosxr_evpn_evi" "example" {
-  vpn_id = 1234
+  vpn_id = 101
 }

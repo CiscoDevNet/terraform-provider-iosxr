@@ -215,6 +215,10 @@ func (r *BFDResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					stringvalidator.OneOf("inherit", "logical"),
 				},
 			},
+			"ipv6_checksum_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable BFD checksum").String,
+				Optional:            true,
+			},
 			"interfaces": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Configure BFD on an interface").String,
 				Optional:            true,
@@ -277,10 +281,6 @@ func (r *BFDResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 						},
 					},
 				},
-			},
-			"ipv6_checksum_disable": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Disable BFD checksum").String,
-				Optional:            true,
 			},
 		},
 	}

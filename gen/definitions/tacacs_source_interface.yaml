@@ -1,0 +1,28 @@
+---
+name: TACACS Source Interface
+path: Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:tacacs
+doc_category: AAA
+no_delete_attributes: true
+test_tags: [AAA]
+attributes:
+  - yang_name: source-interface
+    tf_name: source_interface
+    example: MgmtEth0/RP0/CPU0/0
+    minimum_test_value: '"MgmtEth0/RP0/CPU0/0"'
+  - yang_name: vrfs/vrf
+    tf_name: source_interfaces
+    type: List
+    attributes:
+      - yang_name: vrf-name
+        tf_name: vrf
+        id: true
+        example: VRF1
+      - yang_name: source-interface
+        tf_name: interface
+        example: MgmtEth0/RP0/CPU0/0
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]
+    attributes:
+      - name: vrf-name
+        value: VRF1

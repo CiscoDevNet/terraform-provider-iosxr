@@ -35,7 +35,7 @@ func TestAccDataSourceIosxrRouterVRRPInterfaceIPv4(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv4.test", "address", "1.1.1.1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv4.test", "priority", "250"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv4.test", "name", "TEST"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv4.test", "text_authentication", "password"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv4.test", "unicast_peer", "1.1.1.2"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv4.test", "secondary_addresses.0.address", "2.2.2.2"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv4.test", "timer_advertisement_seconds", "123"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv4.test", "timer_force", "false"))
@@ -93,6 +93,7 @@ func testAccDataSourceIosxrRouterVRRPInterfaceIPv4Config() string {
 	config += `	priority = 250` + "\n"
 	config += `	name = "TEST"` + "\n"
 	config += `	text_authentication = "password"` + "\n"
+	config += `	unicast_peer = "1.1.1.2"` + "\n"
 	config += `	secondary_addresses = [{` + "\n"
 	config += `		address = "2.2.2.2"` + "\n"
 	config += `	}]` + "\n"

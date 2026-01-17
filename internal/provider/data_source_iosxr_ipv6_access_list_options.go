@@ -75,6 +75,10 @@ func (d *IPv6AccessListOptionsDataSource) Schema(ctx context.Context, req dataso
 				MarkdownDescription: "Set access-list logging rate (num. logs per second)",
 				Computed:            true,
 			},
+			"log_update_disable": schema.BoolAttribute{
+				MarkdownDescription: "Adding leaf to disable log-update in logging buffer",
+				Computed:            true,
+			},
 			"icmp_off": schema.BoolAttribute{
 				MarkdownDescription: "Do not generate the ICMP message",
 				Computed:            true,

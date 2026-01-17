@@ -31,10 +31,27 @@ data "iosxr_evpn_interface" "example" {
 
 ### Read-Only
 
+- `access_signal_bundle_down` (Boolean) Signal Bundle Down
 - `core_isolation_group` (Number) Core isolation group
-- `ethernet_segment_identifier_type_zero_esi` (String) ESI value
+- `ethernet_segment_bgp_rt` (String) Set ES-Import Route Target
+- `ethernet_segment_convergence_mac_mobility` (Boolean) MAC-Mobility triggered reconvergence
+- `ethernet_segment_convergence_nexthop_tracking` (Boolean) Enable EVPN procedures to be influenced by BGP nexthop reachability
+- `ethernet_segment_convergence_reroute` (Boolean) Redirect unicast traffic to backup peer
+- `ethernet_segment_esi_zero` (String) ESI value
+- `ethernet_segment_force_single_homed` (Boolean) Ethernet segment is to remain single-home
 - `ethernet_segment_load_balancing_mode_all_active` (Boolean) All-Active load balancing
 - `ethernet_segment_load_balancing_mode_port_active` (Boolean) Port-Active load balancing
 - `ethernet_segment_load_balancing_mode_single_active` (Boolean) Single-Active load balancing
 - `ethernet_segment_load_balancing_mode_single_flow_active` (Boolean) Single-Flow-Active load balancing
+- `ethernet_segment_service_carving_hrw` (Boolean) HRW mode of carving services
+- `ethernet_segment_service_carving_manual_primary` (String) Primary services list
+- `ethernet_segment_service_carving_manual_secondary` (String) Secondary services list
+- `ethernet_segment_service_carving_multicast_hrw_g` (Boolean) HRW *,g mode
+- `ethernet_segment_service_carving_multicast_hrw_s_g` (Boolean) HRW s,g mode
+- `ethernet_segment_service_carving_preference_based_access_driven` (Boolean) Access-Driven DF Election
+- `ethernet_segment_service_carving_preference_based_weight` (Number) Preference value
 - `id` (String) The path of the retrieved object.
+- `timers_ac_debounce` (Number) Interface-specific AC Debounce timer
+- `timers_carving` (Number) Interface-specific carving timer
+- `timers_peering` (Number) Interface-specific peering timer
+- `timers_recovery` (Number) Interface-specific recovery timer

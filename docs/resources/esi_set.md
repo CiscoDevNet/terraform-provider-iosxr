@@ -24,7 +24,7 @@ resource "iosxr_esi_set" "example" {
 
 ### Required
 
-- `rpl` (String) Esi Set
+- `rpl` (String) Configures an ESI set
 - `set_name` (String) Set name
 
 ### Optional

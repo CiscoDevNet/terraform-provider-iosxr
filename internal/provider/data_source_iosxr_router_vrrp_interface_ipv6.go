@@ -103,6 +103,10 @@ func (d *RouterVRRPInterfaceIPv6DataSource) Schema(ctx context.Context, req data
 				MarkdownDescription: "Configure VRRP Session name",
 				Computed:            true,
 			},
+			"unicast_peer": schema.StringAttribute{
+				MarkdownDescription: "Enable Unicast (Multicast will be disabled) of VRRP to a Peer",
+				Computed:            true,
+			},
 			"timer_advertisement_seconds": schema.Int64Attribute{
 				MarkdownDescription: "Advertisement time in seconds",
 				Computed:            true,

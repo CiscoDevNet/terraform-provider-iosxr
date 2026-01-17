@@ -35,13 +35,51 @@ func TestAccDataSourceIosxrL2VPN(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "description", "My L2VPN Description"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "router_id", "1.2.3.4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "redundancy_iccp_groups.0.group_number", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "redundancy_iccp_groups.0.interfaces.0.interface_name", "Bundle-Ether20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "redundancy_iccp_groups.0.interfaces.0.primary_vlan", "10-15"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "redundancy_iccp_groups.0.interfaces.0.secondary_vlan", "20-25"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "redundancy_iccp_groups.0.interfaces.0.mac_flush_stp_tcn", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "redundancy_iccp_groups.0.interfaces.0.recovery_delay", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "redundancy_iccp_groups.0.multi_homing_node_id", "1"))
+	if os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "flexible_xconnect_service_vlan_unaware.0.service_name", "XC-1"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "flexible_xconnect_service_vlan_unaware.0.interfaces.0.interface_name", "GigabitEthernet0/0/0/1.100"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "flexible_xconnect_service_vlan_unaware.0.neighbor_evpn_evis.0.vpn_id", "100"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "flexible_xconnect_service_vlan_unaware.0.neighbor_evpn_evis.0.remote_ac_id", "1000"))
+	}
+	if os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "flexible_xconnect_service_vlan_aware_evis.0.vpn_id", "200"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "flexible_xconnect_service_vlan_aware_evis.0.interfaces.0.interface_name", "GigabitEthernet0/0/0/2.200"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "ignore_mtu_mismatch", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "ignore_mtu_mismatch_ad", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "pw_status_disable", "true"))
 	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "load_balancing_flow_src_dst_mac", "false"))
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "load_balancing_flow_src_dst_ip", "true"))
 	}
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "xconnect_groups.0.group_name", "P2P"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "capability_high_mode", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "pw_oam_refresh_transmit", "20"))
+	if os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "tcn_propagation", "true"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "pw_grouping", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "neighbors_all_ldp_flap", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "mac_limit_threshold", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "logging_pseudowire", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "logging_bridge_domain", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "logging_vfi", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "logging_nsr", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "logging_pwhe_replication_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "autodiscovery_bgp_signaling_protocol_bgp_mtu_mismatch_ignore", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "pw_routing_global_id", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "pw_routing_bgp_rd_four_byte_as_number", "65536"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "pw_routing_bgp_rd_four_byte_as_assigned_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "snmp_mib_interface_format_external", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "snmp_mib_pseudowire_statistics", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -67,15 +105,65 @@ func testAccDataSourceIosxrL2VPNConfig() string {
 	config += `	delete_mode = "attributes"` + "\n"
 	config += `	description = "My L2VPN Description"` + "\n"
 	config += `	router_id = "1.2.3.4"` + "\n"
+	config += `	redundancy_iccp_groups = [{` + "\n"
+	config += `		group_number = 100` + "\n"
+	config += `		interfaces = [{` + "\n"
+	config += `			interface_name = "Bundle-Ether20"` + "\n"
+	config += `			primary_vlan = "10-15"` + "\n"
+	config += `			secondary_vlan = "20-25"` + "\n"
+	config += `			mac_flush_stp_tcn = true` + "\n"
+	config += `			recovery_delay = 60` + "\n"
+	config += `		}]` + "\n"
+	config += `		multi_homing_node_id = 1` + "\n"
+	config += `	}]` + "\n"
+	if os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
+		config += `	flexible_xconnect_service_vlan_unaware = [{` + "\n"
+		config += `		service_name = "XC-1"` + "\n"
+		config += `		interfaces = [{` + "\n"
+		config += `			interface_name = "GigabitEthernet0/0/0/1.100"` + "\n"
+		config += `		}]` + "\n"
+		config += `		neighbor_evpn_evis = [{` + "\n"
+		config += `			vpn_id = 100` + "\n"
+		config += `			remote_ac_id = 1000` + "\n"
+		config += `		}]` + "\n"
+		config += `	}]` + "\n"
+	}
+	if os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
+		config += `	flexible_xconnect_service_vlan_aware_evis = [{` + "\n"
+		config += `		vpn_id = 200` + "\n"
+		config += `		interfaces = [{` + "\n"
+		config += `			interface_name = "GigabitEthernet0/0/0/2.200"` + "\n"
+		config += `		}]` + "\n"
+		config += `	}]` + "\n"
+	}
+	config += `	ignore_mtu_mismatch = true` + "\n"
+	config += `	ignore_mtu_mismatch_ad = true` + "\n"
+	config += `	pw_status_disable = true` + "\n"
 	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
 		config += `	load_balancing_flow_src_dst_mac = false` + "\n"
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
 		config += `	load_balancing_flow_src_dst_ip = true` + "\n"
 	}
-	config += `	xconnect_groups = [{` + "\n"
-	config += `		group_name = "P2P"` + "\n"
-	config += `	}]` + "\n"
+	config += `	capability_high_mode = true` + "\n"
+	config += `	pw_oam_refresh_transmit = 20` + "\n"
+	if os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
+		config += `	tcn_propagation = true` + "\n"
+	}
+	config += `	pw_grouping = true` + "\n"
+	config += `	neighbors_all_ldp_flap = true` + "\n"
+	config += `	mac_limit_threshold = 50` + "\n"
+	config += `	logging_pseudowire = true` + "\n"
+	config += `	logging_bridge_domain = true` + "\n"
+	config += `	logging_vfi = true` + "\n"
+	config += `	logging_nsr = true` + "\n"
+	config += `	logging_pwhe_replication_disable = true` + "\n"
+	config += `	autodiscovery_bgp_signaling_protocol_bgp_mtu_mismatch_ignore = true` + "\n"
+	config += `	pw_routing_global_id = 100` + "\n"
+	config += `	pw_routing_bgp_rd_four_byte_as_number = 65536` + "\n"
+	config += `	pw_routing_bgp_rd_four_byte_as_assigned_number = 1` + "\n"
+	config += `	snmp_mib_interface_format_external = true` + "\n"
+	config += `	snmp_mib_pseudowire_statistics = true` + "\n"
 	config += `}` + "\n"
 
 	config += `

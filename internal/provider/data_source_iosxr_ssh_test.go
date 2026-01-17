@@ -36,14 +36,58 @@ func TestAccDataSourceIosxrSSH(t *testing.T) {
 		t.Skip("skipping test, set environment variable SSH")
 	}
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_dscp", "48"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_logging", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_rate_limit", "60"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_session_limit", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_v2", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "timeout", "60"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_vrfs.0.vrf_name", "VRF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_vrfs.0.ipv4_access_list", "ACL1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_vrfs.0.ipv6_access_list", "ACL2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_v2", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_rate_limit", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_disable_hmac_sha2_512", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_disable_hmac_sha1", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_disable_hmac_sha2_256", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_enable_cipher_aes_cbc", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_enable_cipher_3des_cbc", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_session_limit", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_logging", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_dscp", "48"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_netconf_port", "830"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_netconf_vrfs.0.vrf_name", "VRF2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_netconf_vrfs.0.ipv4_access_list", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_netconf_vrfs.0.ipv6_access_list", "ACL2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_netconf_xml", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_rekey_time", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_rekey_volume", "2048"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_algorithms_key_exchanges.0", "ecdh-sha2-nistp521"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_algorithms_host_key_ecdsa_nistp256", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_algorithms_host_key_ecdsa_nistp384", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_algorithms_host_key_ecdsa_nistp521", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_algorithms_host_key_rsa", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_algorithms_host_key_dsa", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_algorithms_host_key_x509v3_ssh_rsa", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_algorithms_host_key_ed25519", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_algorithms_host_key_rsa_sha512", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_algorithms_host_key_rsa_sha256", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_algorithms_host_key_ssh_rsa", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_algorithms_ciphers.0", "aes128-ctr"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_max_auth_limit", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_tcp_window_scale", "7"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_port_forwarding_local", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_port", "5522"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_usernames.0.username", "cisco"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "client_source_interface", "Loopback100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "client_vrf", "MGMT"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "client_dscp", "16"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "client_rekey_time", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "client_rekey_volume", "2048"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "client_disable_hmac_sha1", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "client_disable_hmac_sha2_512", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "client_disable_hmac_sha2_256", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "client_enable_cipher_aes_cbc", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "client_enable_cipher_3des_cbc", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "client_algorithms_key_exchanges.0", "ecdh-sha2-nistp521"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "client_algorithms_ciphers.0", "aes128-ctr"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "client_tcp_window_scale", "7"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "client_v2", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -66,17 +110,65 @@ func TestAccDataSourceIosxrSSH(t *testing.T) {
 
 func testAccDataSourceIosxrSSHConfig() string {
 	config := `resource "iosxr_ssh" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	server_dscp = 48` + "\n"
-	config += `	server_logging = true` + "\n"
-	config += `	server_rate_limit = 60` + "\n"
-	config += `	server_session_limit = 10` + "\n"
-	config += `	server_v2 = true` + "\n"
+	config += `	timeout = 60` + "\n"
 	config += `	server_vrfs = [{` + "\n"
 	config += `		vrf_name = "VRF1"` + "\n"
 	config += `		ipv4_access_list = "ACL1"` + "\n"
 	config += `		ipv6_access_list = "ACL2"` + "\n"
 	config += `	}]` + "\n"
+	config += `	server_v2 = true` + "\n"
+	config += `	server_rate_limit = 60` + "\n"
+	config += `	server_disable_hmac_sha2_512 = false` + "\n"
+	config += `	server_disable_hmac_sha1 = true` + "\n"
+	config += `	server_disable_hmac_sha2_256 = false` + "\n"
+	config += `	server_enable_cipher_aes_cbc = true` + "\n"
+	config += `	server_enable_cipher_3des_cbc = true` + "\n"
+	config += `	server_session_limit = 10` + "\n"
+	config += `	server_logging = true` + "\n"
+	config += `	server_dscp = 48` + "\n"
+	config += `	server_netconf_port = 830` + "\n"
+	config += `	server_netconf_vrfs = [{` + "\n"
+	config += `		vrf_name = "VRF2"` + "\n"
+	config += `		ipv4_access_list = "ACL1"` + "\n"
+	config += `		ipv6_access_list = "ACL2"` + "\n"
+	config += `	}]` + "\n"
+	config += `	server_netconf_xml = true` + "\n"
+	config += `	server_rekey_time = 60` + "\n"
+	config += `	server_rekey_volume = 2048` + "\n"
+	config += `	server_algorithms_key_exchanges = ["ecdh-sha2-nistp521"]` + "\n"
+	config += `	server_algorithms_host_key_ecdsa_nistp256 = true` + "\n"
+	config += `	server_algorithms_host_key_ecdsa_nistp384 = true` + "\n"
+	config += `	server_algorithms_host_key_ecdsa_nistp521 = true` + "\n"
+	config += `	server_algorithms_host_key_rsa = true` + "\n"
+	config += `	server_algorithms_host_key_dsa = true` + "\n"
+	config += `	server_algorithms_host_key_x509v3_ssh_rsa = true` + "\n"
+	config += `	server_algorithms_host_key_ed25519 = true` + "\n"
+	config += `	server_algorithms_host_key_rsa_sha512 = true` + "\n"
+	config += `	server_algorithms_host_key_rsa_sha256 = true` + "\n"
+	config += `	server_algorithms_host_key_ssh_rsa = true` + "\n"
+	config += `	server_algorithms_ciphers = ["aes128-ctr"]` + "\n"
+	config += `	server_max_auth_limit = 10` + "\n"
+	config += `	server_tcp_window_scale = 7` + "\n"
+	config += `	server_port_forwarding_local = true` + "\n"
+	config += `	server_port = 5522` + "\n"
+	config += `	server_usernames = [{` + "\n"
+	config += `		username = "cisco"` + "\n"
+	config += `		keystring = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCv60WjxoM39LgPDbiW7ne3gu18q0NIVv0RE6rDLNal1quXZ6k5I9nV0WbPSqJLRm4Q2aHEGQ3NG2dJ5ZZ3xYDOm5X9JtMSjLFCJhSHVnGz6w+s8zPKiLmBjBD4VmxBKGMj0C/4LlZJ1F3yJfPTCzDwIMAMF8fJBJ8PqFKfvMTMqLkBfjB7xhXIx5N3jAZJdmxPkzdPPLnqLOKUjGKHRgmLWbynKZwRkjqvNJPQd3pf9Yb/HGqhWLvXc0z2xGlqODBhC3vLg0tlSKFpSdcJqj6eZLmKQ5BLHhZkJHDVdKzKNw5r0dBbLqFzF7nHiJ3uD+fUgPNzKOc7vF/TzLmNDlWr"` + "\n"
+	config += `	}]` + "\n"
+	config += `	client_source_interface = "Loopback100"` + "\n"
+	config += `	client_vrf = "MGMT"` + "\n"
+	config += `	client_dscp = 16` + "\n"
+	config += `	client_rekey_time = 60` + "\n"
+	config += `	client_rekey_volume = 2048` + "\n"
+	config += `	client_disable_hmac_sha1 = true` + "\n"
+	config += `	client_disable_hmac_sha2_512 = false` + "\n"
+	config += `	client_disable_hmac_sha2_256 = false` + "\n"
+	config += `	client_enable_cipher_aes_cbc = true` + "\n"
+	config += `	client_enable_cipher_3des_cbc = true` + "\n"
+	config += `	client_algorithms_key_exchanges = ["ecdh-sha2-nistp521"]` + "\n"
+	config += `	client_algorithms_ciphers = ["aes128-ctr"]` + "\n"
+	config += `	client_tcp_window_scale = 7` + "\n"
+	config += `	client_v2 = true` + "\n"
 	config += `}` + "\n"
 
 	config += `

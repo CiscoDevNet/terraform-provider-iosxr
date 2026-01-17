@@ -37,14 +37,63 @@ func TestAccIosxrRouterISISInterfaceAddressFamily(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "af_name", "ipv4"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "saf_name", "unicast"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "metric_default", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "metric_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "metric_levels.0.metric_default", "600"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "te_metric_flex_algo", "128"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "te_metric_flex_algo_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "te_metric_flex_algo_levels.0.flex_algo", "128"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "bandwidth_metric_flex_algo", "129"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "bandwidth_metric_flex_algo_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "bandwidth_metric_flex_algo_levels.0.flex_algo", "129"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "generic_metric_flex_algos.0.type", "130"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "generic_metric_flex_algos.0.metric", "5000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "generic_metric_flex_algo_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "generic_metric_flex_algo_levels.0.flex_algos_types.0.type", "130"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "generic_metric_flex_algo_levels.0.flex_algos_types.0.metric", "5000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "mpls_ldp_sync", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "mpls_ldp_sync_level", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "tag", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "tag_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "tag_levels.0.tag", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_levels.0.level_number", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_levels.0.per_prefix", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "tag", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_tiebreaker_node_protecting_index", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_tiebreaker_node_protecting_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_tiebreaker_node_protecting_levels.0.index", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_tiebreaker_srlg_disjoint_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_tiebreaker_srlg_disjoint_levels.0.index", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_tiebreaker_lc_disjoint_index", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_tiebreaker_lc_disjoint_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_tiebreaker_lc_disjoint_levels.0.index", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_remote_lfa_maximum_metric", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_remote_lfa_maximum_metric_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_remote_lfa_maximum_metric_levels.0.maximum_metric", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_remote_lfa_tunnel_mpls_ldp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_remote_lfa_tunnel_mpls_ldp_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_ti_lfa", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_ti_lfa_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_exclude_interfaces.0.interface_name", "GigabitEthernet0/0/0/2"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_exclude_interfaces.0.level", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_lfa_candidate_interfaces.0.interface_name", "GigabitEthernet0/0/0/3"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_lfa_candidate_interfaces.0.level", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_link_exclude_interfaces.0.interface_name", "GigabitEthernet0/0/0/2"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_link_exclude_interfaces.0.level", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_link_lfa_candidate_interfaces.0.interface_name", "GigabitEthernet0/0/0/3"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_link_lfa_candidate_interfaces.0.level", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "link_group_name", "LINK_GROUP_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "link_group_level", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "weight", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "weight_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "weight_levels.0.weight", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "auto_metric_proactive_protect_metric", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "auto_metric_proactive_protect_metric_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "auto_metric_proactive_protect_metric_levels.0.proactive_protect", "500"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "advertise_prefix_route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "advertise_prefix_route_policy_levels.0.level_number", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "advertise_prefix_route_policy_levels.0.route_policy", "ROUTE_POLICY_2"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "metric_default", "500"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -102,6 +151,7 @@ resource "iosxr_gnmi" "PreReq1" {
 		"route-policy-name" = "ROUTE_POLICY_2"
 		"rpl-route-policy" = "route-policy ROUTE_POLICY_2\n  pass\nend-policy\n"
 	}
+	depends_on = [iosxr_gnmi.PreReq0, ]
 }
 
 resource "iosxr_gnmi" "PreReq2" {
@@ -109,14 +159,32 @@ resource "iosxr_gnmi" "PreReq2" {
 	attributes = {
 		"process-id" = "P1"
 	}
+	depends_on = [iosxr_gnmi.PreReq1, ]
 }
 
 resource "iosxr_gnmi" "PreReq3" {
+	path = "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/address-families/address-family[af-name=ipv4][saf-name=unicast]"
+	attributes = {
+		"af-name" = "ipv4"
+		"saf-name" = "unicast"
+	}
+	depends_on = [iosxr_gnmi.PreReq2, ]
+}
+
+resource "iosxr_gnmi" "PreReq4" {
+	path = "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/address-families/address-family[af-name=ipv4][saf-name=unicast]"
+	attributes = {
+		"segment-routing/mpls/enable" = "<NULL>"
+	}
+	depends_on = [iosxr_gnmi.PreReq3, ]
+}
+
+resource "iosxr_gnmi" "PreReq5" {
 	path = "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]"
 	attributes = {
 		"interface-name" = "GigabitEthernet0/0/0/1"
 	}
-	depends_on = [iosxr_gnmi.PreReq2, ]
+	depends_on = [iosxr_gnmi.PreReq4, ]
 }
 
 `
@@ -131,7 +199,7 @@ func testAccIosxrRouterISISInterfaceAddressFamilyConfig_minimum() string {
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	af_name = "ipv4"` + "\n"
 	config += `	saf_name = "unicast"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, iosxr_gnmi.PreReq4, iosxr_gnmi.PreReq5, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -146,19 +214,106 @@ func testAccIosxrRouterISISInterfaceAddressFamilyConfig_all() string {
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	af_name = "ipv4"` + "\n"
 	config += `	saf_name = "unicast"` + "\n"
+	config += `	metric_default = 500` + "\n"
+	config += `	metric_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		metric_default = 600` + "\n"
+	config += `		}]` + "\n"
+	config += `	te_metric_flex_algo = 128` + "\n"
+	config += `	te_metric_flex_algo_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		flex_algo = 128` + "\n"
+	config += `		}]` + "\n"
+	config += `	bandwidth_metric_flex_algo = 129` + "\n"
+	config += `	bandwidth_metric_flex_algo_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		flex_algo = 129` + "\n"
+	config += `		}]` + "\n"
+	config += `	generic_metric_flex_algos = [{` + "\n"
+	config += `		type = 130` + "\n"
+	config += `		metric = 5000` + "\n"
+	config += `		}]` + "\n"
+	config += `	generic_metric_flex_algo_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		flex_algos_types = [{` + "\n"
+	config += `			type = 130` + "\n"
+	config += `			metric = 5000` + "\n"
+	config += `		}]` + "\n"
+	config += `		}]` + "\n"
+	config += `	mpls_ldp_sync = true` + "\n"
+	config += `	mpls_ldp_sync_level = 1` + "\n"
+	config += `	tag = 100` + "\n"
+	config += `	tag_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		tag = 100` + "\n"
+	config += `		}]` + "\n"
 	config += `	fast_reroute_per_prefix = true` + "\n"
 	config += `	fast_reroute_levels = [{` + "\n"
 	config += `		level_number = 1` + "\n"
 	config += `		per_prefix = true` + "\n"
 	config += `		}]` + "\n"
-	config += `	tag = 100` + "\n"
+	config += `	fast_reroute_per_prefix_tiebreaker_node_protecting_index = 10` + "\n"
+	config += `	fast_reroute_per_prefix_tiebreaker_node_protecting_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		index = 10` + "\n"
+	config += `		}]` + "\n"
+	config += `	fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index = 20` + "\n"
+	config += `	fast_reroute_per_prefix_tiebreaker_srlg_disjoint_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		index = 20` + "\n"
+	config += `		}]` + "\n"
+	config += `	fast_reroute_per_prefix_tiebreaker_lc_disjoint_index = 30` + "\n"
+	config += `	fast_reroute_per_prefix_tiebreaker_lc_disjoint_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		index = 30` + "\n"
+	config += `		}]` + "\n"
+	config += `	fast_reroute_per_prefix_remote_lfa_maximum_metric = 100` + "\n"
+	config += `	fast_reroute_per_prefix_remote_lfa_maximum_metric_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		maximum_metric = 100` + "\n"
+	config += `		}]` + "\n"
+	config += `	fast_reroute_per_prefix_remote_lfa_tunnel_mpls_ldp = true` + "\n"
+	config += `	fast_reroute_per_prefix_remote_lfa_tunnel_mpls_ldp_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		}]` + "\n"
+	config += `	fast_reroute_per_prefix_ti_lfa = true` + "\n"
+	config += `	fast_reroute_per_prefix_ti_lfa_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		}]` + "\n"
+	config += `	fast_reroute_per_prefix_exclude_interfaces = [{` + "\n"
+	config += `		interface_name = "GigabitEthernet0/0/0/2"` + "\n"
+	config += `		level = 1` + "\n"
+	config += `		}]` + "\n"
+	config += `	fast_reroute_per_prefix_lfa_candidate_interfaces = [{` + "\n"
+	config += `		interface_name = "GigabitEthernet0/0/0/3"` + "\n"
+	config += `		level = 1` + "\n"
+	config += `		}]` + "\n"
+	config += `	fast_reroute_per_link_exclude_interfaces = [{` + "\n"
+	config += `		interface_name = "GigabitEthernet0/0/0/2"` + "\n"
+	config += `		level = 1` + "\n"
+	config += `		}]` + "\n"
+	config += `	fast_reroute_per_link_lfa_candidate_interfaces = [{` + "\n"
+	config += `		interface_name = "GigabitEthernet0/0/0/3"` + "\n"
+	config += `		level = 1` + "\n"
+	config += `		}]` + "\n"
+	config += `	link_group_name = "LINK_GROUP_1"` + "\n"
+	config += `	link_group_level = 1` + "\n"
+	config += `	weight = 500` + "\n"
+	config += `	weight_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		weight = 500` + "\n"
+	config += `		}]` + "\n"
+	config += `	auto_metric_proactive_protect_metric = 500` + "\n"
+	config += `	auto_metric_proactive_protect_metric_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		proactive_protect = 500` + "\n"
+	config += `		}]` + "\n"
 	config += `	advertise_prefix_route_policy = "ROUTE_POLICY_1"` + "\n"
 	config += `	advertise_prefix_route_policy_levels = [{` + "\n"
 	config += `		level_number = 1` + "\n"
 	config += `		route_policy = "ROUTE_POLICY_2"` + "\n"
 	config += `		}]` + "\n"
-	config += `	metric_default = 500` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, iosxr_gnmi.PreReq4, iosxr_gnmi.PreReq5, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

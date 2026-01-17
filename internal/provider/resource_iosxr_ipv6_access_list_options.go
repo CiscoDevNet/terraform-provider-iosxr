@@ -93,6 +93,10 @@ func (r *IPv6AccessListOptionsResource) Schema(ctx context.Context, req resource
 					int64validator.Between(1, 1000),
 				},
 			},
+			"log_update_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Adding leaf to disable log-update in logging buffer").String,
+				Optional:            true,
+			},
 			"icmp_off": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Do not generate the ICMP message").String,
 				Optional:            true,

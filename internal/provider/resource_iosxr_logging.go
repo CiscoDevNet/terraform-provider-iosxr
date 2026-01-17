@@ -80,30 +80,15 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 					stringvalidator.OneOf("all", "attributes"),
 				},
 			},
-			"ipv4_dscp": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Set IP DSCP (DiffServ CodePoint)").String,
-				Optional:            true,
-			},
-			"trap": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Set trap logging").AddStringEnumDescription("alerts", "critical", "debugging", "disable", "emergencies", "errors", "informational", "notifications", "warning").String,
+			"console": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set console logging").AddStringEnumDescription("alerts", "critical", "debugging", "disable", "emergencies", "errors", "informational", "notifications", "warning").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("alerts", "critical", "debugging", "disable", "emergencies", "errors", "informational", "notifications", "warning"),
 				},
 			},
-			"events_display_location": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Include alarm source location in message text").String,
-				Optional:            true,
-			},
-			"events_level": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Log all events with equal or higher (lower level) severity").AddStringEnumDescription("alerts", "critical", "emergencies", "errors", "informational", "notifications", "warnings").String,
-				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("alerts", "critical", "emergencies", "errors", "informational", "notifications", "warnings"),
-				},
-			},
-			"console": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Set console logging").AddStringEnumDescription("alerts", "critical", "debugging", "disable", "emergencies", "errors", "informational", "notifications", "warning").String,
+			"trap": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set trap logging").AddStringEnumDescription("alerts", "critical", "debugging", "disable", "emergencies", "errors", "informational", "notifications", "warning").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("alerts", "critical", "debugging", "disable", "emergencies", "errors", "informational", "notifications", "warning"),
@@ -116,7 +101,147 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 					stringvalidator.OneOf("alerts", "critical", "debugging", "disable", "emergencies", "errors", "informational", "notifications", "warning"),
 				},
 			},
-			"buffered_logging_buffer_size": schema.Int64Attribute{
+			"console_facility": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Console message logging facilities").AddStringEnumDescription("all").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("all"),
+				},
+			},
+			"monitor_discriminator_match1": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set match discriminator 1").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"monitor_discriminator_match2": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set match discriminator 2").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"monitor_discriminator_match3": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set match discriminator 3").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"monitor_discriminator_nomatch1": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set no-match discriminator 1").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"monitor_discriminator_nomatch2": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set no-match discriminator 2").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"monitor_discriminator_nomatch3": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set no-match discriminator 3").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"archive_disk0": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use disk0 as the archive device").String,
+				Optional:            true,
+			},
+			"archive_disk1": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use disk1 as the archive device").String,
+				Optional:            true,
+			},
+			"archive_harddisk": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use harddisk as the archive device").String,
+				Optional:            true,
+			},
+			"archive_frequency_daily": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Collect log in files on a daily basis").String,
+				Optional:            true,
+			},
+			"archive_frequency_weekly": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Collect log in files on a weekly basis").String,
+				Optional:            true,
+			},
+			"archive_filesize": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The maximum file size for a single log file.").AddIntegerRangeDescription(1, 2047).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 2047),
+				},
+			},
+			"archive_size": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The total size of the archive").AddIntegerRangeDescription(1, 2047).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 2047),
+				},
+			},
+			"archive_length": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The maximum no of weeks of log to maintain").AddIntegerRangeDescription(1, 256).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 256),
+				},
+			},
+			"archive_severity": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The minimum severity of log messages to archive").AddStringEnumDescription("alerts", "critical", "debugging", "emergencies", "errors", "informational", "notifications", "warnings").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("alerts", "critical", "debugging", "emergencies", "errors", "informational", "notifications", "warnings"),
+				},
+			},
+			"archive_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The size threshold at which a syslog is generated").AddIntegerRangeDescription(1, 99).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 99),
+				},
+			},
+			"ipv4_dscp": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set IP DSCP (DiffServ CodePoint)").String,
+				Optional:            true,
+			},
+			"ipv4_precedence": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set precedence").String,
+				Optional:            true,
+			},
+			"ipv6_dscp": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set IP DSCP (DiffServ CodePoint)").String,
+				Optional:            true,
+			},
+			"ipv6_precedence": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set precedence").String,
+				Optional:            true,
+			},
+			"facility_level": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("configure this node").AddStringEnumDescription("all", "audit", "auth", "authpriv", "console", "daemon", "kern", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7", "mail", "ntp", "syslog", "user").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("all", "audit", "auth", "authpriv", "console", "daemon", "kern", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7", "mail", "ntp", "syslog", "user"),
+				},
+			},
+			"buffered_entries_count": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Number of syslog entries in buffer").AddIntegerRangeDescription(2545, 151699).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(2545, 151699),
+				},
+			},
+			"buffered_size": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Logging buffer size").AddIntegerRangeDescription(307200, 125000000).String,
 				Optional:            true,
 				Validators: []validator.Int64{
@@ -130,11 +255,166 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 					stringvalidator.OneOf("alerts", "critical", "debugging", "emergencies", "errors", "informational", "notifications", "warnings"),
 				},
 			},
-			"facility_level": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("configure this node").AddStringEnumDescription("all", "audit", "auth", "authpriv", "console", "daemon", "kern", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7", "mail", "ntp", "syslog", "user").String,
+			"buffered_discriminator_match1": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set match discriminator 1").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("all", "audit", "auth", "authpriv", "console", "daemon", "kern", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7", "mail", "ntp", "syslog", "user"),
+					stringvalidator.LengthBetween(1, 32),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"buffered_discriminator_match2": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set match discriminator 2").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"buffered_discriminator_match3": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set match discriminator 3").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"buffered_discriminator_nomatch1": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set no-match discriminator 1").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"buffered_discriminator_nomatch2": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set no-match discriminator 2").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"buffered_discriminator_nomatch3": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set no-match discriminator 3").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"container_all": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enables log collection from all containers").String,
+				Optional:            true,
+			},
+			"container_fetch_timestamp": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Fetch logs with container timestamp for all containers").String,
+				Optional:            true,
+			},
+			"file": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set file logging").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"file_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set file logging").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 256),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"path": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set file path ").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 256),
+							},
+						},
+						"maxfilesize": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set max file size").AddIntegerRangeDescription(1, 2097152).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 2097152),
+							},
+						},
+						"severity": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set severity level").AddStringEnumDescription("alerts", "critical", "debugging", "emergencies", "error", "info", "notifications", "warning").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("alerts", "critical", "debugging", "emergencies", "error", "info", "notifications", "warning"),
+							},
+						},
+						"local_accounting_send_to_remote_facility_level": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("configure this node").AddStringEnumDescription("auth", "cron", "daemon", "kern", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7", "lpr", "mail", "news", "sys10", "sys11", "sys12", "sys13", "sys14", "sys9", "syslog", "user", "uucp").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("auth", "cron", "daemon", "kern", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7", "lpr", "mail", "news", "sys10", "sys11", "sys12", "sys13", "sys14", "sys9", "syslog", "user", "uucp"),
+							},
+						},
+						"discriminator_match1": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set match discriminator 1").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"discriminator_match2": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set match discriminator 2").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"discriminator_match3": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set match discriminator 3").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"discriminator_nomatch1": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set no-match discriminator 1").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"discriminator_nomatch2": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set no-match discriminator 2").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"discriminator_nomatch3": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set no-match discriminator 3").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+					},
+				},
+			},
+			"history": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set history logging").AddStringEnumDescription("alerts", "critical", "debugging", "disable", "emergencies", "errors", "informational", "notifications", "warnings").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("alerts", "critical", "debugging", "disable", "emergencies", "errors", "informational", "notifications", "warnings"),
+				},
+			},
+			"history_size": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Logging history size").AddIntegerRangeDescription(1, 500).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 500),
 				},
 			},
 			"hostnameprefix": schema.StringAttribute{
@@ -145,9 +425,164 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 			},
+			"localfilesize": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set size of the local log file").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"source_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify interface for source address in logging transactions").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify interface for source address in logging transactions").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+							},
+						},
+						"vrfs": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set VRF option").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Set VRF option").String,
+										Required:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 			"suppress_duplicates": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Suppress consecutive duplicate messages").String,
 				Optional:            true,
+			},
+			"format_rfc5424": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable to send the syslog message rfc5424 format ").String,
+				Optional:            true,
+			},
+			"format_bsd": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable to send the syslog message as BSD format ").String,
+				Optional:            true,
+			},
+			"yang": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set yang logging parameters").AddStringEnumDescription("alerts", "critical", "debugging", "emergencies", "errors", "informational", "notifications", "warnings").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("alerts", "critical", "debugging", "emergencies", "errors", "informational", "notifications", "warnings"),
+				},
+			},
+			"suppress_rules": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure a specified suppression rule").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"rule_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Rule name").String,
+							Required:            true,
+						},
+						"alarms": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify alarm: Category/Group/Code combos").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"message_category": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Message category of the suppressed message").String,
+										Required:            true,
+									},
+									"group_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Group name of suppressed message").String,
+										Required:            true,
+									},
+									"message_code": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Message code of suppressed message").String,
+										Required:            true,
+									},
+								},
+							},
+						},
+						"all_alarms": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify all alarms").String,
+							Optional:            true,
+						},
+						"apply_all_of_router": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Apply the rule to all of the router").String,
+							Optional:            true,
+						},
+						"apply_source_locations": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Apply the rule to specified location").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"location_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Location name").String,
+										Required:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"events_buffer_size": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set size of the local event buffer").AddIntegerRangeDescription(1024, 1024000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1024, 1024000),
+				},
+			},
+			"filter_matches": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription(" Configure match string to filter").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"match": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription(" Configure match string to filter").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+							},
+						},
+					},
+				},
+			},
+			"events_display_location": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Include alarm source location in message text").String,
+				Optional:            true,
+			},
+			"events_level": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Log all events with equal or higher (lower level) severity").AddStringEnumDescription("alerts", "critical", "emergencies", "errors", "informational", "notifications", "warnings").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("alerts", "critical", "emergencies", "errors", "informational", "notifications", "warnings"),
+				},
+			},
+			"events_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure threshold (%) for capacity alarm").AddIntegerRangeDescription(10, 100).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(10, 100),
+				},
+			},
+			"events_precfg_suppression": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Suppress events from a card/VM till its configuration is complete").AddStringEnumDescription("enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable"),
+				},
+			},
+			"events_precfg_suppression_timeout": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Timeout (in minutes) for pre-config events suppression (default 15)").AddIntegerRangeDescription(1, 60).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 60),
+				},
 			},
 		},
 	}

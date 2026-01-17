@@ -159,6 +159,10 @@ func (d *BFDDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "Coexistence for BoB and BLB",
 				Computed:            true,
 			},
+			"ipv6_checksum_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable BFD checksum",
+				Computed:            true,
+			},
 			"interfaces": schema.ListNestedAttribute{
 				MarkdownDescription: "Configure BFD on an interface",
 				Computed:            true,
@@ -202,10 +206,6 @@ func (d *BFDDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 						},
 					},
 				},
-			},
-			"ipv6_checksum_disable": schema.BoolAttribute{
-				MarkdownDescription: "Disable BFD checksum",
-				Computed:            true,
 			},
 		},
 	}

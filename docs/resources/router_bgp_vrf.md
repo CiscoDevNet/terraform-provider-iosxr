@@ -14,40 +14,121 @@ This resource can manage the Router BGP VRF configuration.
 
 ```terraform
 resource "iosxr_router_bgp_vrf" "example" {
-  as_number                               = "65001"
-  vrf_name                                = "VRF1"
+  as_number = "65001"
+  vrf_name  = "VRF1"
+  mpls_activate_interfaces = [
+    {
+      interface_name = "GigabitEthernet0/0/0/1"
+    }
+  ]
   default_information_originate           = true
   default_metric                          = 125
-  rd_auto                                 = true
+  socket_receive_buffer_size              = 1024
+  socket_receive_buffer_size_read         = 1024
+  socket_send_buffer_size                 = 4096
+  socket_send_buffer_size_write           = 4096
+  nexthop_mpls_forwarding_ibgp            = true
+  nexthop_resolution_allow_default        = true
   timers_bgp_keepalive_interval           = 0
   timers_bgp_keepalive_zero               = true
   timers_bgp_keepalive_zero_holdtime_zero = true
+  bgp_redistribute_internal               = true
   bgp_router_id                           = "22.22.22.22"
+  bgp_unsafe_ebgp_policy                  = true
+  bgp_auto_policy_soft_reset_disable      = true
+  bgp_bestpath_cost_community_ignore      = true
+  bgp_bestpath_compare_routerid           = true
+  bgp_bestpath_aigp_ignore                = true
+  bgp_bestpath_igp_metric_ignore          = true
+  bgp_bestpath_med_missing_as_worst       = true
+  bgp_bestpath_as_path_ignore             = true
+  bgp_bestpath_as_path_multipath_relax    = true
+  bgp_bestpath_origin_as_use_validity     = true
+  bgp_bestpath_origin_as_allow_invalid    = true
+  bgp_bestpath_sr_policy_prefer           = true
+  bgp_default_local_preference            = 200
+  bgp_enforce_first_as_disable            = true
+  bgp_fast_external_fallover_disable      = true
+  bgp_log_neighbor_changes_disable        = true
+  bgp_log_message_disable                 = true
+  bgp_multipath_use_cluster_list_length   = true
+  bgp_origin_as_validation_signal_ibgp    = true
   bfd_minimum_interval                    = 10
   bfd_multiplier                          = 4
+  rd_auto                                 = true
   neighbors = [
     {
-      address                                           = "10.1.1.2"
-      remote_as                                         = "65002"
-      description                                       = "My Neighbor Description"
-      use_neighbor_group                                = "GROUP1"
-      advertisement_interval_seconds                    = 10
-      ignore_connected_check                            = true
-      ebgp_multihop_maximum_hop_count                   = 10
-      bfd_minimum_interval                              = 10
-      bfd_multiplier                                    = 4
-      bfd_fast_detect                                   = true
-      bfd_fast_detect_strict_mode                       = false
-      local_as                                          = "10"
-      local_as_no_prepend_replace_as_dual_as            = true
-      password                                          = "12341C2713181F13253920"
-      password_inheritance_disable                      = false
-      shutdown                                          = false
-      timers_keepalive_interval                         = 0
-      timers_keepalive_zero                             = true
-      timers_keepalive_zero_minimum_acceptable_holdtime = 30
-      update_source                                     = "GigabitEthernet0/0/0/1"
-      ttl_security                                      = false
+      address                             = "10.1.1.2"
+      evpn_link_bandwidth                 = true
+      evpn_link_bandwidth_per_path_number = 100
+      remote_as                           = "65002"
+      maximum_peers                       = 1000
+      as_path_loopcheck_out               = "enable"
+      advertisement_interval_seconds      = 10
+      description                         = "My Neighbor Description"
+      ignore_connected_check              = true
+      ebgp_multihop_maximum_hop_count     = 10
+      ebgp_multihop_mpls                  = true
+      tcp_mss_value                       = 1460
+      tcp_mtu_discovery                   = true
+      bmp_activate_servers = [
+        {
+          server_number = 1
+        }
+      ]
+      bfd_minimum_interval                                           = 10
+      bfd_multiplier                                                 = 4
+      bfd_fast_detect                                                = true
+      bfd_fast_detect_strict_mode_negotiate_override                 = true
+      local_as                                                       = "10"
+      local_as_no_prepend_replace_as_dual_as                         = true
+      password                                                       = "12341C2713181F13253920"
+      password_inheritance_disable                                   = false
+      receive_buffer_size                                            = 1024
+      receive_buffer_size_read                                       = 1024
+      send_buffer_size                                               = 4096
+      send_buffer_size_write                                         = 4096
+      fast_fallover                                                  = true
+      shutdown                                                       = false
+      timers_keepalive_interval                                      = 0
+      timers_keepalive_zero                                          = true
+      timers_keepalive_zero_minimum_acceptable_holdtime              = 30
+      local_address                                                  = "192.168.1.1"
+      log_neighbor_changes_detail                                    = true
+      log_message_in_size                                            = 256
+      log_message_out_size                                           = 256
+      update_source                                                  = "GigabitEthernet0/0/0/1"
+      dmz_link_bandwidth                                             = true
+      ebgp_recv_extcommunity_dmz                                     = true
+      ebgp_send_extcommunity_dmz_cumulative                          = true
+      ttl_security                                                   = false
+      session_open_mode                                              = "passive-only"
+      dscp                                                           = "ef"
+      capability_additional_paths_send                               = true
+      capability_additional_paths_receive                            = true
+      capability_suppress_all                                        = true
+      capability_suppress_extended_nexthop_encoding                  = true
+      capability_suppress_four_byte_as                               = true
+      enforce_first_as                                               = "enable"
+      idle_watch_time                                                = 240
+      allowas_in                                                     = 3
+      dampening                                                      = "enable"
+      as_override                                                    = "enable"
+      default_policy_action_in                                       = "reject"
+      default_policy_action_out                                      = "reject"
+      send_extended_community_ebgp                                   = true
+      bestpath_origin_as_allow_invalid                               = true
+      update_in_filtering_message_buffers                            = 10
+      update_in_filtering_message_buffers_type                       = "non-circular"
+      update_in_filtering_logging_disable                            = true
+      update_in_filtering_attribute_filter_group                     = "GROUP1"
+      update_in_labeled_unicast_equivalent                           = true
+      update_in_error_handling_treat_as_withdraw                     = "enable"
+      graceful_maintenance_activate                                  = true
+      graceful_maintenance_local_preference                          = 200
+      graceful_maintenance_as_prepends_number                        = 3
+      graceful_maintenance_bandwidth_aware_percentage_threshold      = 75
+      graceful_maintenance_bandwidth_aware_percentage_threshold_high = 80
     }
   ]
 }
@@ -67,14 +148,43 @@ resource "iosxr_router_bgp_vrf" "example" {
   - Range: `3`-`30000`
 - `bfd_multiplier` (Number) Detect multiplier
   - Range: `2`-`16`
+- `bgp_auto_policy_soft_reset_disable` (Boolean) Disable automatic soft peer reset on policy reconfiguration
+- `bgp_bestpath_aigp_ignore` (Boolean) Ignore AIGP attribute
+- `bgp_bestpath_as_path_ignore` (Boolean) Ignore as-path length
+- `bgp_bestpath_as_path_multipath_relax` (Boolean) Relax as-path check for multipath selection
+- `bgp_bestpath_compare_routerid` (Boolean) Compare router-id for identical EBGP paths
+- `bgp_bestpath_cost_community_ignore` (Boolean) Ignore cost-community comparison
+- `bgp_bestpath_igp_metric_ignore` (Boolean) Ignore IGP metric during path comparison
+- `bgp_bestpath_med_always` (Boolean) Allow comparing MED from different neighbors
+- `bgp_bestpath_med_missing_as_worst` (Boolean) Treat missing MED as the least preferred one
+- `bgp_bestpath_origin_as_allow_invalid` (Boolean) BGP bestpath selection will allow 'invalid' origin-AS
+- `bgp_bestpath_origin_as_use_validity` (Boolean) BGP bestpath selection will use origin-AS validity
+- `bgp_bestpath_sr_policy_force` (Boolean) Consider only paths over SR Policy for bestpath selection, eBGP no-color ineligible
+- `bgp_bestpath_sr_policy_prefer` (Boolean) Consider only paths over SR Policy for bestpath selection, eBGP no-color eligible
+- `bgp_default_local_preference` (Number) Local preference
+  - Range: `0`-`4294967295`
+- `bgp_enforce_first_as_disable` (Boolean) Disable
+- `bgp_fast_external_fallover_disable` (Boolean) Disable
+- `bgp_log_message_disable` (Boolean) Disable inbound and outbound message logging for all neighbors under the vrf
+- `bgp_log_neighbor_changes_disable` (Boolean) Disable logging
+- `bgp_multipath_use_cluster_list_length` (Boolean) Use Cluster-List Length in BGP Multipath consideration
+- `bgp_origin_as_validation_signal_ibgp` (Boolean) Signal origin-AS validity towards iBGP peers
+- `bgp_origin_as_validation_time` (Number) Prefix validation time (in seconds)
+  - Range: `5`-`60`
+- `bgp_origin_as_validation_time_off` (Boolean) No automatic prefix validation after an RPKI update
+- `bgp_redistribute_internal` (Boolean) Allow redistribution of iBGP into IGPs (dangerous)
 - `bgp_router_id` (String) Configure Router-id
+- `bgp_unsafe_ebgp_policy` (Boolean) Make eBGP neighbors with no policy pass all routes
 - `default_information_originate` (Boolean) Distribute a default route
 - `default_metric` (Number) default redistributed metric
   - Range: `1`-`4294967295`
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
+- `mpls_activate_interfaces` (Attributes List) Interface to enable mpls (see [below for nested schema](#nestedatt--mpls_activate_interfaces))
 - `neighbors` (Attributes List) Specify a neighbor router (see [below for nested schema](#nestedatt--neighbors))
+- `nexthop_mpls_forwarding_ibgp` (Boolean) Enable mpls forwarding path for ibgp learnt nexthops
+- `nexthop_resolution_allow_default` (Boolean) Enable nexthops resolution using default route
 - `rd_auto` (Boolean) Automatic route distinguisher
 - `rd_four_byte_as_index` (Number) ASN4:index (hex or decimal format)
   - Range: `0`-`65535`
@@ -85,6 +195,14 @@ resource "iosxr_router_bgp_vrf" "example" {
 - `rd_two_byte_as_index` (Number) ASN2:index (hex or decimal format)
   - Range: `0`-`4294967295`
 - `rd_two_byte_as_number` (String) 2-byte AS number
+- `socket_receive_buffer_size` (Number) Receive socket buffer size in bytes
+  - Range: `512`-`131072`
+- `socket_receive_buffer_size_read` (Number) BGP Read buffer size in bytes
+  - Range: `512`-`131072`
+- `socket_send_buffer_size` (Number) Send socket buffer size in bytes
+  - Range: `4096`-`131072`
+- `socket_send_buffer_size_write` (Number) BGP Write buffer size in bytes
+  - Range: `4096`-`131072`
 - `timers_bgp_holdtime` (Number) Holdtime
   - Range: `3`-`65535`
 - `timers_bgp_holdtime_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
@@ -100,6 +218,14 @@ resource "iosxr_router_bgp_vrf" "example" {
 
 - `id` (String) The path of the object.
 
+<a id="nestedatt--mpls_activate_interfaces"></a>
+### Nested Schema for `mpls_activate_interfaces`
+
+Required:
+
+- `interface_name` (String) Select an interface to configure
+
+
 <a id="nestedatt--neighbors"></a>
 ### Nested Schema for `neighbors`
 
@@ -113,26 +239,149 @@ Optional:
   - Range: `0`-`999`
 - `advertisement_interval_seconds` (Number) time in seconds
   - Range: `0`-`600`
+- `allowas_in` (Number) Number of occurrences of AS number
+  - Range: `1`-`10`
+- `ao_inheritance_disable` (Boolean) Prevent keychain from being inherited from parent
+- `ao_key_chain_accept_mismatch` (Boolean) Accept new connection even if AO mismatched
+- `ao_key_chain_include_tcp_options` (String) Include/Exclude other TCP options in the header
+  - Choices: `disable`, `enable`
+- `ao_key_chain_name` (String) Name of the key chain - maximum 32 characters
+- `as_override` (String) (Deprecated in 7.11.1) Override matching AS-number while sending update
+  - Choices: `disable`, `enable`
+- `as_path_loopcheck_out` (String) For outbound updates
+  - Choices: `disable`, `enable`
+- `bestpath_origin_as_allow_invalid` (Boolean) BGP bestpath selection will allow 'invalid' origin-AS
 - `bfd_fast_detect` (Boolean) Enable Fast detection
 - `bfd_fast_detect_disable` (Boolean) Prevent bfd settings from being inherited from the parent
 - `bfd_fast_detect_strict_mode` (Boolean) (Deprecated) Hold down neighbor session until BFD is up (based on IOS-XR proprietary mechanism)
+- `bfd_fast_detect_strict_mode_negotiate` (Boolean) Hold down neighbor session until BFD is up (based on strict-mode capability negotiation)
+- `bfd_fast_detect_strict_mode_negotiate_override` (Boolean) Do not bring up neighbor session until BFD up even if strict-mode capability is not received
 - `bfd_minimum_interval` (Number) Hello interval
   - Range: `3`-`30000`
 - `bfd_multiplier` (Number) Detect multiplier
   - Range: `2`-`16`
+- `bmp_activate_servers` (Attributes List) Enable BMP connection to particular server (see [below for nested schema](#nestedatt--neighbors--bmp_activate_servers))
+- `capability_additional_paths_receive` (Boolean) Additional paths Receive capability
+- `capability_additional_paths_receive_disable` (Boolean) Do not advertise additional paths Receive capability
+- `capability_additional_paths_send` (Boolean) Additional paths Send capability
+- `capability_additional_paths_send_disable` (Boolean) Do not advertise additional paths Send capability
+- `capability_suppress_all` (Boolean) All capabilities
+- `capability_suppress_all_inheritance_disable` (Boolean) Do not inherit this configuration from parent group
+- `capability_suppress_extended_nexthop_encoding` (Boolean) Extended-nexthop-encoding capabilities (IETF RFC 5549)
+- `capability_suppress_extended_nexthop_encoding_inheritance_disable` (Boolean) Do not inherit this configuration from parent group
+- `capability_suppress_four_byte_as` (Boolean) 4-byte-as capability
+- `capability_suppress_four_byte_as_inheritance_disable` (Boolean) Prevent capability suppress 4-type-as being inherited from the parent
+- `cluster_id_32bit_format` (Number) Route-Reflector Cluster-id as 32 bit quantity
+  - Range: `1`-`4294967295`
+- `cluster_id_ip_format` (String) Route-Reflector Cluster-id in IP address format
+- `dampening` (String) (Deprecated in 7.11.1) Enable route-flap-damping
+  - Choices: `disable`, `enable`
+- `default_policy_action_in` (String) Default action if route does not satisfy inbound route-policy
+  - Choices: `accept`, `reject`
+- `default_policy_action_out` (String) Default action if route does not satisfy outbound route-policy
+  - Choices: `accept`, `reject`
 - `description` (String) Neighbor specific description
+- `dmz_link_bandwidth` (Boolean) Propagate the DMZ link bandwidth
+- `dmz_link_bandwidth_inheritance_disable` (Boolean) Prevent dmz-link-bandwidth from being inherited from the parent
+- `dscp` (String) Set IP DSCP (DiffServ CodePoint)
 - `ebgp_multihop_maximum_hop_count` (Number) maximum hop count
   - Range: `1`-`255`
+- `ebgp_multihop_mpls` (Boolean) Disable BGP MPLS forwarding
+- `ebgp_recv_extcommunity_dmz` (Boolean) Receive extcommunity dmz link bandwidth from ebgp neighbor
+- `ebgp_recv_extcommunity_dmz_inheritance_disable` (Boolean) Prevent ebgp-send-community-dmz from being inherited from parent
+- `ebgp_send_extcommunity_dmz` (Boolean) Send extended community dmz link bandwidth to ebgp neighbor
+- `ebgp_send_extcommunity_dmz_cumulative` (Boolean) Send cumulative community dmz link bandwidth of all multipaths to ebgp neighbor
+- `ebgp_send_extcommunity_dmz_inheritance_disable` (Boolean) Prevent ebgp-send-extcommunity-dmz from being inherited from parent
+- `egress_engineering` (Boolean) Enable egress peer engineering for this neighbor
+- `egress_engineering_inheritance_disable` (Boolean) Do not inherit egress-engineering from the parent
+- `enforce_first_as` (String) enforce-first-as
+  - Choices: `disable`, `enable`
+- `evpn_link_bandwidth` (Boolean) Propagate the EVPN link bandwidth
+- `evpn_link_bandwidth_inheritance_disable` (Boolean) Prevent evpn-link-bandwidth from being inherited from the parent
+- `evpn_link_bandwidth_per_path_number` (Number) Unit per-path
+  - Range: `1`-`65535`
+- `fast_fallover` (Boolean) Force neighbor to be directly connected. Bring neighbor down if its interface goes down
+- `fast_fallover_inheritance_disable` (Boolean) Prevent this neighbor from inheriting this config from a group it is in
+- `graceful_maintenance_activate` (Boolean) Routes will be announced with the graceful maintenance attributes while activated either here or under router bgp configuration. While activated, all routes to this neighbor will be announced with the attributes configured here and all routes from this neighbor will be announced to other neighbors with the graceful maintenance attributes configured under those neighbors. The g-shut community will be announced regardless of the other attributes configured here. To allow the g-shut community to be announced to ebgp neighbors, the send-community-gshut-ebgp configuration is also required. Note: changes to the attributes will not take effect while activated.
+- `graceful_maintenance_activate_inheritance_disable` (Boolean) Prevent activate from being inherited from the parent
+- `graceful_maintenance_as_prepends_inheritance_disable` (Boolean) Prevent AS prepends from being inherited from the parent
+- `graceful_maintenance_as_prepends_number` (Number) Range of number of AS prepends
+  - Range: `0`-`6`
+- `graceful_maintenance_bandwidth_aware_bandwidth_threshold` (Number) Low threshold of effective bandwidth (in kbps) to enter/exit graceful-maintenance
+  - Range: `1`-`4294967295`
+- `graceful_maintenance_bandwidth_aware_bandwidth_threshold_high` (Number) Optional High threshold of effective bandwidth (in kbps) to exit graceful-maintenance
+  - Range: `1`-`4294967295`
+- `graceful_maintenance_bandwidth_aware_inheritance_disable` (Boolean) Prevent bandwidth-aware from being inherited from the parent
+- `graceful_maintenance_bandwidth_aware_percentage_threshold` (Number) Low threshold of effective bandwidth (in kbps) to enter/exit graceful-maintenance
+  - Range: `1`-`100`
+- `graceful_maintenance_bandwidth_aware_percentage_threshold_high` (Number) Optional High threshold of effective bandwidth (in kbps) to exit graceful-maintenance
+  - Range: `1`-`100`
+- `graceful_maintenance_local_preference` (Number) Range of values for Local Preference
+  - Range: `0`-`4294967295`
+- `graceful_maintenance_local_preference_inheritance_disable` (Boolean) Prevent local preference from being inherited from the parent
+- `graceful_restart` (Boolean) Enable graceful restart support for this neighbor
+- `graceful_restart_disable` (Boolean) Disable graceful restart support for this neighbor
+- `graceful_restart_helper_only` (Boolean) Enable graceful restart in helper-mode only.Forwarding state will not retained in local restart. Peer's routes will ne retained when peer restarts
+- `graceful_restart_helper_only_inheritance_disable` (Boolean) Prevent GR helper-mode cfg from being inherited from the parent
+- `graceful_restart_restart_time` (Number) Restart time advertised to the neighbor
+  - Range: `1`-`4095`
+- `graceful_restart_stalepath_time` (Number) Maximum time to wait for restart of GR capable peer
+  - Range: `0`-`4095`
+- `idle_watch_time` (Number) Maximum time to wait for deletion of IDLE state dynamic peer
+  - Range: `30`-`1800`
 - `ignore_connected_check` (Boolean) Bypass the directly connected nexthop check for single-hop eBGP peering
+- `keychain_inheritance_disable` (Boolean) Prevent keychain from being inherited from parent
+- `keychain_name` (String) Name of the key chain - maximum 32 characters
+- `local_address` (String) IP address
+- `local_address_inheritance_disable` (Boolean) Prevent local address from being inherited from parent
+- `local_address_subnet_mask` (Number) IP address prefix
+  - Range: `0`-`128`
+- `local_address_subnet_prefix` (String) IPaddress
 - `local_as` (String) AS number
 - `local_as_inheritance_disable` (Boolean) Prevent local AS from being inherited from parent
 - `local_as_no_prepend` (Boolean) Do not prepend local AS to announcements from this neighbor
 - `local_as_no_prepend_replace_as` (Boolean) Prepend only local AS to announcements to this neighbor
 - `local_as_no_prepend_replace_as_dual_as` (Boolean) Dual-AS mode
-- `password` (String) Specifies an ENCRYPTED password will follow
+- `log_message_in_disable` (Boolean) disable
+- `log_message_in_inheritance_disable` (Boolean) Prevents the log state changes from being inherited from the parent
+- `log_message_in_size` (Number) Range for message log buffer size
+  - Range: `1`-`500`
+- `log_message_out_disable` (Boolean) disable
+- `log_message_out_inheritance_disable` (Boolean) Prevents the log state changes from being inherited from the parent
+- `log_message_out_size` (Number) Range for message log buffer size
+  - Range: `1`-`500`
+- `log_neighbor_changes_detail` (Boolean) detail
+- `log_neighbor_changes_disable` (Boolean) disable
+- `log_neighbor_changes_inheritance_disable` (Boolean) Prevents the log state changes from being inherited from the parent
+- `maximum_peers` (Number) Maximum dynamic neighbors
+  - Range: `1`-`4095`
+- `origin_as_validation_disable` (Boolean) Disable RPKI origin-AS validation
+- `password` (String, Sensitive) Specifies an ENCRYPTED password will follow
 - `password_inheritance_disable` (Boolean) Prevent password from being inherited from parent
+- `peer_sets` (Attributes List) Assign this neighbor to a peer-set used for egress peer engineering (see [below for nested schema](#nestedatt--neighbors--peer_sets))
+- `precedence` (String) Set precedence
+- `receive_buffer_size` (Number) Receive socket buffer size in bytes
+  - Range: `512`-`131072`
+- `receive_buffer_size_read` (Number) BGP Read buffer size in bytes
+  - Range: `512`-`131072`
 - `remote_as` (String) Set remote AS
+- `remote_as_list` (String) Remote as-list configuration
+- `send_buffer_size` (Number) Send socket buffer size in bytes
+  - Range: `4096`-`131072`
+- `send_buffer_size_write` (Number) BGP Write buffer size in bytes
+  - Range: `4096`-`131072`
+- `send_extended_community_ebgp` (Boolean) Send extended community attribute to this external neighbor
+- `send_extended_community_ebgp_inheritance_disable` (Boolean) Prevent send-extended-community-ebgp from being inherited from parent
+- `session_open_mode` (String) Establish BGP session using this TCP open mode
+  - Choices: `active-only`, `both`, `passive-only`
 - `shutdown` (Boolean) Administratively shut down this neighbor
+- `tcp_ip_only_preferred` (Boolean) Prefer to send BGP control plane traffic on IP
+- `tcp_ip_only_preferred_inheritance_disable` (Boolean) Do not inherit this configuration from parent group
+- `tcp_mss_inheritance_disable` (Boolean) Prevent tcp mss from being inherited from the parent
+- `tcp_mss_value` (Number) TCP initial maximum segment size
+  - Range: `68`-`10000`
+- `tcp_mtu_discovery` (Boolean) Enable Path MTU discovery on TCP session
+- `tcp_mtu_discovery_inheritance_disable` (Boolean) Prevent TCP MTU cfg from being inherited from the parent
 - `timers_holdtime` (Number) Holdtime
   - Range: `3`-`65535`
 - `timers_holdtime_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
@@ -144,8 +393,39 @@ Optional:
 - `timers_keepalive_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
   - Range: `3`-`65535`
 - `ttl_security` (Boolean) Enable EBGP TTL security
+- `ttl_security_inheritance_disable` (Boolean) Prevent ttl-security from being inherited from the parent
+- `update_in_error_handling_avoid_reset` (String) Avoid neighbor reset during inbound update message error handling
+  - Choices: `disable`, `enable`
+- `update_in_error_handling_treat_as_withdraw` (String) (Deprecated in 7.11.1) Treat NLRIs as withdraws during inbound update message error handling
+  - Choices: `disable`, `enable`
+- `update_in_filtering_attribute_filter_group` (String) Attribute-filter group configuration
+- `update_in_filtering_logging_disable` (Boolean) Disable update filtering syslog message
+- `update_in_filtering_message_buffers` (Number) Number of buffers to store filtered update messages (resizing does not take effect after filtering action has started)
+  - Range: `0`-`25`
+- `update_in_filtering_message_buffers_type` (String) buffer-list
+  - Choices: `buffers-number-enable`, `non-circular`
+- `update_in_labeled_unicast_equivalent` (Boolean) IPv4/IPv6 labeled-unicast inbound updates (paths) treated equivalent to unicast updates (paths)
+- `update_in_labeled_unicast_equivalent_inheritance_disable` (Boolean) Do not inherit this configuration from parent group
 - `update_source` (String) Source of routing updates
 - `use_neighbor_group` (String) Inherit configuration from a neighbor-group
+- `use_session_group` (String) Inherit address-family independent config from a session-group
+
+<a id="nestedatt--neighbors--bmp_activate_servers"></a>
+### Nested Schema for `neighbors.bmp_activate_servers`
+
+Required:
+
+- `server_number` (Number) Enable BMP connection to particular server
+  - Range: `1`-`8`
+
+
+<a id="nestedatt--neighbors--peer_sets"></a>
+### Nested Schema for `neighbors.peer_sets`
+
+Required:
+
+- `peer` (Number) Identity value of peer-set
+  - Range: `1`-`255`
 
 ## Import
 

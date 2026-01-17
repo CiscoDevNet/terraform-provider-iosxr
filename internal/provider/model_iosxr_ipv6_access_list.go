@@ -55,7 +55,6 @@ type IPv6AccessListSequences struct {
 	PermitPrecedence                types.String `tfsdk:"permit_precedence"`
 	PermitFragmentType              types.String `tfsdk:"permit_fragment_type"`
 	PermitCounter                   types.String `tfsdk:"permit_counter"`
-	PermitCapture                   types.Bool   `tfsdk:"permit_capture"`
 	PermitRangeStartProtocol        types.String `tfsdk:"permit_range_start_protocol"`
 	PermitRangeEndProtocol          types.String `tfsdk:"permit_range_end_protocol"`
 	PermitSourceAddress             types.String `tfsdk:"permit_source_address"`
@@ -120,6 +119,7 @@ type IPv6AccessListSequences struct {
 	PermitNexthop3Ipv6              types.String `tfsdk:"permit_nexthop3_ipv6"`
 	PermitNexthop3Track             types.String `tfsdk:"permit_nexthop3_track"`
 	PermitNexthop3Vrf               types.String `tfsdk:"permit_nexthop3_vrf"`
+	PermitCapture                   types.Bool   `tfsdk:"permit_capture"`
 	PermitLog                       types.Bool   `tfsdk:"permit_log"`
 	PermitLogInput                  types.Bool   `tfsdk:"permit_log_input"`
 	PermitSetQosGroup               types.Int64  `tfsdk:"permit_set_qos_group"`
@@ -129,9 +129,6 @@ type IPv6AccessListSequences struct {
 	DenyPrecedence                  types.String `tfsdk:"deny_precedence"`
 	DenyFragmentType                types.String `tfsdk:"deny_fragment_type"`
 	DenyCounter                     types.String `tfsdk:"deny_counter"`
-	DenyCapture                     types.Bool   `tfsdk:"deny_capture"`
-	DenyIcmpOff                     types.Bool   `tfsdk:"deny_icmp_off"`
-	DenyIcmpOn                      types.Bool   `tfsdk:"deny_icmp_on"`
 	DenyRangeStartProtocol          types.String `tfsdk:"deny_range_start_protocol"`
 	DenyRangeEndProtocol            types.String `tfsdk:"deny_range_end_protocol"`
 	DenySourceAddress               types.String `tfsdk:"deny_source_address"`
@@ -187,10 +184,13 @@ type IPv6AccessListSequences struct {
 	DenyPolicePeakRate              types.Int64  `tfsdk:"deny_police_peak_rate"`
 	DenyPolicePeakUnit              types.String `tfsdk:"deny_police_peak_unit"`
 	DenyPolicePriority              types.String `tfsdk:"deny_police_priority"`
+	DenyCapture                     types.Bool   `tfsdk:"deny_capture"`
 	DenyLog                         types.Bool   `tfsdk:"deny_log"`
 	DenyLogInput                    types.Bool   `tfsdk:"deny_log_input"`
 	DenySetQosGroup                 types.Int64  `tfsdk:"deny_set_qos_group"`
 	DenySetTtl                      types.Int64  `tfsdk:"deny_set_ttl"`
+	DenyIcmpOff                     types.Bool   `tfsdk:"deny_icmp_off"`
+	DenyIcmpOn                      types.Bool   `tfsdk:"deny_icmp_on"`
 }
 
 // End of section. //template:end types
@@ -237,11 +237,6 @@ func (data IPv6AccessList) toBody(ctx context.Context) string {
 			}
 			if !item.PermitCounter.IsNull() && !item.PermitCounter.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.counter", item.PermitCounter.ValueString())
-			}
-			if !item.PermitCapture.IsNull() && !item.PermitCapture.IsUnknown() {
-				if item.PermitCapture.ValueBool() {
-					body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.capture", map[string]string{})
-				}
 			}
 			if !item.PermitRangeStartProtocol.IsNull() && !item.PermitRangeStartProtocol.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.range.start-protocol", item.PermitRangeStartProtocol.ValueString())
@@ -439,6 +434,11 @@ func (data IPv6AccessList) toBody(ctx context.Context) string {
 			if !item.PermitNexthop3Vrf.IsNull() && !item.PermitNexthop3Vrf.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.nexthop3.vrf", item.PermitNexthop3Vrf.ValueString())
 			}
+			if !item.PermitCapture.IsNull() && !item.PermitCapture.IsUnknown() {
+				if item.PermitCapture.ValueBool() {
+					body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.capture", map[string]string{})
+				}
+			}
 			if !item.PermitLog.IsNull() && !item.PermitLog.IsUnknown() {
 				if item.PermitLog.ValueBool() {
 					body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.log", map[string]string{})
@@ -469,21 +469,6 @@ func (data IPv6AccessList) toBody(ctx context.Context) string {
 			}
 			if !item.DenyCounter.IsNull() && !item.DenyCounter.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.counter", item.DenyCounter.ValueString())
-			}
-			if !item.DenyCapture.IsNull() && !item.DenyCapture.IsUnknown() {
-				if item.DenyCapture.ValueBool() {
-					body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.capture", map[string]string{})
-				}
-			}
-			if !item.DenyIcmpOff.IsNull() && !item.DenyIcmpOff.IsUnknown() {
-				if item.DenyIcmpOff.ValueBool() {
-					body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.icmp-off", map[string]string{})
-				}
-			}
-			if !item.DenyIcmpOn.IsNull() && !item.DenyIcmpOn.IsUnknown() {
-				if item.DenyIcmpOn.ValueBool() {
-					body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.icmp-on", map[string]string{})
-				}
 			}
 			if !item.DenyRangeStartProtocol.IsNull() && !item.DenyRangeStartProtocol.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.range.start-protocol", item.DenyRangeStartProtocol.ValueString())
@@ -654,6 +639,11 @@ func (data IPv6AccessList) toBody(ctx context.Context) string {
 			if !item.DenyPolicePriority.IsNull() && !item.DenyPolicePriority.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.police.priority", item.DenyPolicePriority.ValueString())
 			}
+			if !item.DenyCapture.IsNull() && !item.DenyCapture.IsUnknown() {
+				if item.DenyCapture.ValueBool() {
+					body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.capture", map[string]string{})
+				}
+			}
 			if !item.DenyLog.IsNull() && !item.DenyLog.IsUnknown() {
 				if item.DenyLog.ValueBool() {
 					body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.log", map[string]string{})
@@ -669,6 +659,16 @@ func (data IPv6AccessList) toBody(ctx context.Context) string {
 			}
 			if !item.DenySetTtl.IsNull() && !item.DenySetTtl.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.set.ttl", strconv.FormatInt(item.DenySetTtl.ValueInt64(), 10))
+			}
+			if !item.DenyIcmpOff.IsNull() && !item.DenyIcmpOff.IsUnknown() {
+				if item.DenyIcmpOff.ValueBool() {
+					body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.icmp-off", map[string]string{})
+				}
+			}
+			if !item.DenyIcmpOn.IsNull() && !item.DenyIcmpOn.IsUnknown() {
+				if item.DenyIcmpOn.ValueBool() {
+					body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.icmp-on", map[string]string{})
+				}
 			}
 		}
 	}
@@ -737,15 +737,6 @@ func (data *IPv6AccessList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].PermitCounter = types.StringValue(value.String())
 		} else {
 			data.Sequences[i].PermitCounter = types.StringNull()
-		}
-		if value := r.Get("permit.capture"); !data.Sequences[i].PermitCapture.IsNull() {
-			if value.Exists() {
-				data.Sequences[i].PermitCapture = types.BoolValue(true)
-			} else {
-				data.Sequences[i].PermitCapture = types.BoolValue(false)
-			}
-		} else {
-			data.Sequences[i].PermitCapture = types.BoolNull()
 		}
 		if value := r.Get("permit.range.start-protocol"); value.Exists() && !data.Sequences[i].PermitRangeStartProtocol.IsNull() {
 			data.Sequences[i].PermitRangeStartProtocol = types.StringValue(value.String())
@@ -1075,6 +1066,15 @@ func (data *IPv6AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].PermitNexthop3Vrf = types.StringNull()
 		}
+		if value := r.Get("permit.capture"); !data.Sequences[i].PermitCapture.IsNull() {
+			if value.Exists() {
+				data.Sequences[i].PermitCapture = types.BoolValue(true)
+			} else {
+				data.Sequences[i].PermitCapture = types.BoolValue(false)
+			}
+		} else {
+			data.Sequences[i].PermitCapture = types.BoolNull()
+		}
 		if value := r.Get("permit.log"); !data.Sequences[i].PermitLog.IsNull() {
 			if value.Exists() {
 				data.Sequences[i].PermitLog = types.BoolValue(true)
@@ -1127,33 +1127,6 @@ func (data *IPv6AccessList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].DenyCounter = types.StringValue(value.String())
 		} else {
 			data.Sequences[i].DenyCounter = types.StringNull()
-		}
-		if value := r.Get("deny.capture"); !data.Sequences[i].DenyCapture.IsNull() {
-			if value.Exists() {
-				data.Sequences[i].DenyCapture = types.BoolValue(true)
-			} else {
-				data.Sequences[i].DenyCapture = types.BoolValue(false)
-			}
-		} else {
-			data.Sequences[i].DenyCapture = types.BoolNull()
-		}
-		if value := r.Get("deny.icmp-off"); !data.Sequences[i].DenyIcmpOff.IsNull() {
-			if value.Exists() {
-				data.Sequences[i].DenyIcmpOff = types.BoolValue(true)
-			} else {
-				data.Sequences[i].DenyIcmpOff = types.BoolValue(false)
-			}
-		} else {
-			data.Sequences[i].DenyIcmpOff = types.BoolNull()
-		}
-		if value := r.Get("deny.icmp-on"); !data.Sequences[i].DenyIcmpOn.IsNull() {
-			if value.Exists() {
-				data.Sequences[i].DenyIcmpOn = types.BoolValue(true)
-			} else {
-				data.Sequences[i].DenyIcmpOn = types.BoolValue(false)
-			}
-		} else {
-			data.Sequences[i].DenyIcmpOn = types.BoolNull()
 		}
 		if value := r.Get("deny.range.start-protocol"); value.Exists() && !data.Sequences[i].DenyRangeStartProtocol.IsNull() {
 			data.Sequences[i].DenyRangeStartProtocol = types.StringValue(value.String())
@@ -1438,6 +1411,15 @@ func (data *IPv6AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].DenyPolicePriority = types.StringNull()
 		}
+		if value := r.Get("deny.capture"); !data.Sequences[i].DenyCapture.IsNull() {
+			if value.Exists() {
+				data.Sequences[i].DenyCapture = types.BoolValue(true)
+			} else {
+				data.Sequences[i].DenyCapture = types.BoolValue(false)
+			}
+		} else {
+			data.Sequences[i].DenyCapture = types.BoolNull()
+		}
 		if value := r.Get("deny.log"); !data.Sequences[i].DenyLog.IsNull() {
 			if value.Exists() {
 				data.Sequences[i].DenyLog = types.BoolValue(true)
@@ -1465,6 +1447,24 @@ func (data *IPv6AccessList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].DenySetTtl = types.Int64Value(value.Int())
 		} else {
 			data.Sequences[i].DenySetTtl = types.Int64Null()
+		}
+		if value := r.Get("deny.icmp-off"); !data.Sequences[i].DenyIcmpOff.IsNull() {
+			if value.Exists() {
+				data.Sequences[i].DenyIcmpOff = types.BoolValue(true)
+			} else {
+				data.Sequences[i].DenyIcmpOff = types.BoolValue(false)
+			}
+		} else {
+			data.Sequences[i].DenyIcmpOff = types.BoolNull()
+		}
+		if value := r.Get("deny.icmp-on"); !data.Sequences[i].DenyIcmpOn.IsNull() {
+			if value.Exists() {
+				data.Sequences[i].DenyIcmpOn = types.BoolValue(true)
+			} else {
+				data.Sequences[i].DenyIcmpOn = types.BoolValue(false)
+			}
+		} else {
+			data.Sequences[i].DenyIcmpOn = types.BoolNull()
 		}
 	}
 }
@@ -1498,11 +1498,6 @@ func (data *IPv6AccessList) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("permit.counter"); cValue.Exists() {
 				item.PermitCounter = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("permit.capture"); cValue.Exists() {
-				item.PermitCapture = types.BoolValue(true)
-			} else {
-				item.PermitCapture = types.BoolValue(false)
 			}
 			if cValue := v.Get("permit.range.start-protocol"); cValue.Exists() {
 				item.PermitRangeStartProtocol = types.StringValue(cValue.String())
@@ -1700,6 +1695,11 @@ func (data *IPv6AccessList) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("permit.nexthop3.vrf"); cValue.Exists() {
 				item.PermitNexthop3Vrf = types.StringValue(cValue.String())
 			}
+			if cValue := v.Get("permit.capture"); cValue.Exists() {
+				item.PermitCapture = types.BoolValue(true)
+			} else {
+				item.PermitCapture = types.BoolValue(false)
+			}
 			if cValue := v.Get("permit.log"); cValue.Exists() {
 				item.PermitLog = types.BoolValue(true)
 			} else {
@@ -1730,21 +1730,6 @@ func (data *IPv6AccessList) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("deny.counter"); cValue.Exists() {
 				item.DenyCounter = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("deny.capture"); cValue.Exists() {
-				item.DenyCapture = types.BoolValue(true)
-			} else {
-				item.DenyCapture = types.BoolValue(false)
-			}
-			if cValue := v.Get("deny.icmp-off"); cValue.Exists() {
-				item.DenyIcmpOff = types.BoolValue(true)
-			} else {
-				item.DenyIcmpOff = types.BoolValue(false)
-			}
-			if cValue := v.Get("deny.icmp-on"); cValue.Exists() {
-				item.DenyIcmpOn = types.BoolValue(true)
-			} else {
-				item.DenyIcmpOn = types.BoolValue(false)
 			}
 			if cValue := v.Get("deny.range.start-protocol"); cValue.Exists() {
 				item.DenyRangeStartProtocol = types.StringValue(cValue.String())
@@ -1915,6 +1900,11 @@ func (data *IPv6AccessList) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("deny.police.priority"); cValue.Exists() {
 				item.DenyPolicePriority = types.StringValue(cValue.String())
 			}
+			if cValue := v.Get("deny.capture"); cValue.Exists() {
+				item.DenyCapture = types.BoolValue(true)
+			} else {
+				item.DenyCapture = types.BoolValue(false)
+			}
 			if cValue := v.Get("deny.log"); cValue.Exists() {
 				item.DenyLog = types.BoolValue(true)
 			} else {
@@ -1930,6 +1920,16 @@ func (data *IPv6AccessList) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("deny.set.ttl"); cValue.Exists() {
 				item.DenySetTtl = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.icmp-off"); cValue.Exists() {
+				item.DenyIcmpOff = types.BoolValue(true)
+			} else {
+				item.DenyIcmpOff = types.BoolValue(false)
+			}
+			if cValue := v.Get("deny.icmp-on"); cValue.Exists() {
+				item.DenyIcmpOn = types.BoolValue(true)
+			} else {
+				item.DenyIcmpOn = types.BoolValue(false)
 			}
 			data.Sequences = append(data.Sequences, item)
 			return true
@@ -1967,11 +1967,6 @@ func (data *IPv6AccessListData) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("permit.counter"); cValue.Exists() {
 				item.PermitCounter = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("permit.capture"); cValue.Exists() {
-				item.PermitCapture = types.BoolValue(true)
-			} else {
-				item.PermitCapture = types.BoolValue(false)
-			}
 			if cValue := v.Get("permit.range.start-protocol"); cValue.Exists() {
 				item.PermitRangeStartProtocol = types.StringValue(cValue.String())
 			}
@@ -2168,6 +2163,11 @@ func (data *IPv6AccessListData) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("permit.nexthop3.vrf"); cValue.Exists() {
 				item.PermitNexthop3Vrf = types.StringValue(cValue.String())
 			}
+			if cValue := v.Get("permit.capture"); cValue.Exists() {
+				item.PermitCapture = types.BoolValue(true)
+			} else {
+				item.PermitCapture = types.BoolValue(false)
+			}
 			if cValue := v.Get("permit.log"); cValue.Exists() {
 				item.PermitLog = types.BoolValue(true)
 			} else {
@@ -2198,21 +2198,6 @@ func (data *IPv6AccessListData) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("deny.counter"); cValue.Exists() {
 				item.DenyCounter = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("deny.capture"); cValue.Exists() {
-				item.DenyCapture = types.BoolValue(true)
-			} else {
-				item.DenyCapture = types.BoolValue(false)
-			}
-			if cValue := v.Get("deny.icmp-off"); cValue.Exists() {
-				item.DenyIcmpOff = types.BoolValue(true)
-			} else {
-				item.DenyIcmpOff = types.BoolValue(false)
-			}
-			if cValue := v.Get("deny.icmp-on"); cValue.Exists() {
-				item.DenyIcmpOn = types.BoolValue(true)
-			} else {
-				item.DenyIcmpOn = types.BoolValue(false)
 			}
 			if cValue := v.Get("deny.range.start-protocol"); cValue.Exists() {
 				item.DenyRangeStartProtocol = types.StringValue(cValue.String())
@@ -2383,6 +2368,11 @@ func (data *IPv6AccessListData) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("deny.police.priority"); cValue.Exists() {
 				item.DenyPolicePriority = types.StringValue(cValue.String())
 			}
+			if cValue := v.Get("deny.capture"); cValue.Exists() {
+				item.DenyCapture = types.BoolValue(true)
+			} else {
+				item.DenyCapture = types.BoolValue(false)
+			}
 			if cValue := v.Get("deny.log"); cValue.Exists() {
 				item.DenyLog = types.BoolValue(true)
 			} else {
@@ -2398,6 +2388,16 @@ func (data *IPv6AccessListData) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("deny.set.ttl"); cValue.Exists() {
 				item.DenySetTtl = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.icmp-off"); cValue.Exists() {
+				item.DenyIcmpOff = types.BoolValue(true)
+			} else {
+				item.DenyIcmpOff = types.BoolValue(false)
+			}
+			if cValue := v.Get("deny.icmp-on"); cValue.Exists() {
+				item.DenyIcmpOn = types.BoolValue(true)
+			} else {
+				item.DenyIcmpOn = types.BoolValue(false)
 			}
 			data.Sequences = append(data.Sequences, item)
 			return true
@@ -2434,6 +2434,12 @@ func (data *IPv6AccessList) getDeletedItems(ctx context.Context, state IPv6Acces
 				found = false
 			}
 			if found {
+				if !state.Sequences[i].DenyIcmpOn.IsNull() && data.Sequences[j].DenyIcmpOn.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/icmp-on", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyIcmpOff.IsNull() && data.Sequences[j].DenyIcmpOff.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/icmp-off", state.getPath(), keyString))
+				}
 				if !state.Sequences[i].DenySetTtl.IsNull() && data.Sequences[j].DenySetTtl.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/set/ttl", state.getPath(), keyString))
 				}
@@ -2445,6 +2451,9 @@ func (data *IPv6AccessList) getDeletedItems(ctx context.Context, state IPv6Acces
 				}
 				if !state.Sequences[i].DenyLog.IsNull() && data.Sequences[j].DenyLog.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/log", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyCapture.IsNull() && data.Sequences[j].DenyCapture.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/capture", state.getPath(), keyString))
 				}
 				if !state.Sequences[i].DenyPolicePriority.IsNull() && data.Sequences[j].DenyPolicePriority.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/police/priority", state.getPath(), keyString))
@@ -2611,15 +2620,6 @@ func (data *IPv6AccessList) getDeletedItems(ctx context.Context, state IPv6Acces
 				if !state.Sequences[i].DenyRangeStartProtocol.IsNull() && data.Sequences[j].DenyRangeStartProtocol.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/range/start-protocol", state.getPath(), keyString))
 				}
-				if !state.Sequences[i].DenyIcmpOn.IsNull() && data.Sequences[j].DenyIcmpOn.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/icmp-on", state.getPath(), keyString))
-				}
-				if !state.Sequences[i].DenyIcmpOff.IsNull() && data.Sequences[j].DenyIcmpOff.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/icmp-off", state.getPath(), keyString))
-				}
-				if !state.Sequences[i].DenyCapture.IsNull() && data.Sequences[j].DenyCapture.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/capture", state.getPath(), keyString))
-				}
 				if !state.Sequences[i].DenyCounter.IsNull() && data.Sequences[j].DenyCounter.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/counter", state.getPath(), keyString))
 				}
@@ -2646,6 +2646,9 @@ func (data *IPv6AccessList) getDeletedItems(ctx context.Context, state IPv6Acces
 				}
 				if !state.Sequences[i].PermitLog.IsNull() && data.Sequences[j].PermitLog.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/log", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitCapture.IsNull() && data.Sequences[j].PermitCapture.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/capture", state.getPath(), keyString))
 				}
 				if !state.Sequences[i].PermitNexthop3Vrf.IsNull() && data.Sequences[j].PermitNexthop3Vrf.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/nexthop3/vrf", state.getPath(), keyString))
@@ -2839,9 +2842,6 @@ func (data *IPv6AccessList) getDeletedItems(ctx context.Context, state IPv6Acces
 				if !state.Sequences[i].PermitRangeStartProtocol.IsNull() && data.Sequences[j].PermitRangeStartProtocol.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/range/start-protocol", state.getPath(), keyString))
 				}
-				if !state.Sequences[i].PermitCapture.IsNull() && data.Sequences[j].PermitCapture.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/capture", state.getPath(), keyString))
-				}
 				if !state.Sequences[i].PermitCounter.IsNull() && data.Sequences[j].PermitCounter.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/counter", state.getPath(), keyString))
 				}
@@ -2883,11 +2883,20 @@ func (data *IPv6AccessList) getEmptyLeafsDelete(ctx context.Context) []string {
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
+		if !data.Sequences[i].DenyIcmpOn.IsNull() && !data.Sequences[i].DenyIcmpOn.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/deny/icmp-on", data.getPath(), keyString))
+		}
+		if !data.Sequences[i].DenyIcmpOff.IsNull() && !data.Sequences[i].DenyIcmpOff.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/deny/icmp-off", data.getPath(), keyString))
+		}
 		if !data.Sequences[i].DenyLogInput.IsNull() && !data.Sequences[i].DenyLogInput.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/deny/log-input", data.getPath(), keyString))
 		}
 		if !data.Sequences[i].DenyLog.IsNull() && !data.Sequences[i].DenyLog.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/deny/log", data.getPath(), keyString))
+		}
+		if !data.Sequences[i].DenyCapture.IsNull() && !data.Sequences[i].DenyCapture.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/deny/capture", data.getPath(), keyString))
 		}
 		if !data.Sequences[i].DenyDestinationAny.IsNull() && !data.Sequences[i].DenyDestinationAny.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/deny/destination/any", data.getPath(), keyString))
@@ -2895,29 +2904,20 @@ func (data *IPv6AccessList) getEmptyLeafsDelete(ctx context.Context) []string {
 		if !data.Sequences[i].DenySourceAny.IsNull() && !data.Sequences[i].DenySourceAny.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/deny/source/any", data.getPath(), keyString))
 		}
-		if !data.Sequences[i].DenyIcmpOn.IsNull() && !data.Sequences[i].DenyIcmpOn.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/deny/icmp-on", data.getPath(), keyString))
-		}
-		if !data.Sequences[i].DenyIcmpOff.IsNull() && !data.Sequences[i].DenyIcmpOff.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/deny/icmp-off", data.getPath(), keyString))
-		}
-		if !data.Sequences[i].DenyCapture.IsNull() && !data.Sequences[i].DenyCapture.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/deny/capture", data.getPath(), keyString))
-		}
 		if !data.Sequences[i].PermitLogInput.IsNull() && !data.Sequences[i].PermitLogInput.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/permit/log-input", data.getPath(), keyString))
 		}
 		if !data.Sequences[i].PermitLog.IsNull() && !data.Sequences[i].PermitLog.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/permit/log", data.getPath(), keyString))
 		}
+		if !data.Sequences[i].PermitCapture.IsNull() && !data.Sequences[i].PermitCapture.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/permit/capture", data.getPath(), keyString))
+		}
 		if !data.Sequences[i].PermitDestinationAny.IsNull() && !data.Sequences[i].PermitDestinationAny.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/permit/destination/any", data.getPath(), keyString))
 		}
 		if !data.Sequences[i].PermitSourceAny.IsNull() && !data.Sequences[i].PermitSourceAny.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/permit/source/any", data.getPath(), keyString))
-		}
-		if !data.Sequences[i].PermitCapture.IsNull() && !data.Sequences[i].PermitCapture.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sequences/sequence%v/permit/capture", data.getPath(), keyString))
 		}
 	}
 	return emptyLeafsDelete

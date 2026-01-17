@@ -3,106 +3,378 @@ name: Segment Routing TE
 path: Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering
 doc_category: Segment Routing
 attributes:
+  - yang_name: te-latency
+    example: true
+  - yang_name: global-policy-max-install-standby-c-paths
+    tf_name: max_install_standby_paths
+    example: 2
+  - yang_name: kshortest-paths
+    tf_name: kshortest_paths
+    example: 120
+  - yang_name: separate-next-hop
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: true
+  - yang_name: maximum-sid-depth
+    tf_name: maximum_sid_depth
+    example: 6
+  - yang_name: effective-metric-global/effective-metric-admin-distance/effective-metric-admin-distance-metric-types/effective-metric-admin-distance-metric-type
+    tf_name: effective_metric_admin_distance_metric_types
+    type: List
+    attributes:
+      - yang_name: metric-type
+        id: true
+        example: igp
+      - yang_name: admin-distance
+        example: 40
+  - yang_name: effective-metric-global/effective-metric-admin-distance/flex-algo-metric-types/flex-algo-metric-type
+    tf_name: effective_metric_admin_distance_flex_algo_metric_types
+    type: List
+    attributes:
+      - yang_name: flex-algo-metric-type
+        tf_name: metric_type
+        id: true
+        example: 0
+      - yang_name: admin-distance
+        example: 40
+  - yang_name: steering/labeled-services/disable-on-demand-policies
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: true
+  - yang_name: steering/labeled-services/disable-all-policies
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: true
+  - yang_name: steering/labeled-services/disable-pcep-policies
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: true
+  - yang_name: steering/labeled-services/disable-local-policies
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: true
+  - yang_name: steering/labeled-services/disable-bgp-sr-te-policies
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: true
+  - yang_name: segment-lists/segment-lists-srv6/segment-lists-srv6-topology-check
+    tf_name: segment_lists_srv6_topology_check
+    example: true
+  - yang_name: segment-lists/segment-lists-srv6/segment-lists-srv6-format-type
+    tf_name: segment_lists_srv6_sid_format
+    example: micro-sid
+  - yang_name: segment-lists/explicit-segments/explicit-segment
+    tf_name: segment_lists_srv6_explicit_segments
+    type: List
+    attributes:
+      - yang_name: path-name
+        id: true
+        example: SEG-1
+      - yang_name: segment-list-srv6/srv6-segments/srv6-segment
+        tf_name: srv6_segments
+        type: List
+        attributes:
+          - yang_name: index
+            id: true
+            example: 1
+          - yang_name: address
+            example: fcbb:bb00:100::1
+          - yang_name: hop-type
+            default_value: srv6sid
+            example: srv6sid
+      - yang_name: segment-list-srv6/segment-list-srv6-topology-check
+        tf_name: srv6_topology_check
+        example: true
+  - yang_name: segments/segment
+    tf_name: segment_lists_sr_mpls_explicit_segments
+    type: List
+    attributes:
+      - yang_name: path-name
+        id: true
+        example: SR-MPLS-1
+      - yang_name: segments/segment
+        tf_name: sr_mpls_segments
+        type: List
+        attributes:
+          - yang_name: segment-index
+            tf_name: index
+            id: true
+            example: 1
+          - yang_name: segment-type
+            tf_name: type
+            example: mpls-label
+          - yang_name: address
+            example: 192.168.1.2
+          - yang_name: mpls-label
+            example: 16200
+          - yang_name: adjacency-address
+            exclude_test: true
+            example: 192.168.253.1
+          - yang_name: address-type
+            example: 2
+          - yang_name: interface-identifier
+            exclude_test: true
+            example: 100
+          - yang_name: prefix-length
+            exclude_test: true
+            example: 32
+          - yang_name: validate-flag
+            exclude_test: true
+            example: 1
   - yang_name: logging/pcep-peer-status
+    minimum_test_value: true
     example: true
   - yang_name: logging/policy-status
     example: true
-  - yang_name: pcc/report-all
-    example: true
-  - yang_name: pcc/source-address
-    example: 88.88.88.8
-  - yang_name: pcc/delegation-timeout
-    example: 10
-  - yang_name: pcc/dead-timer-interval
-    tf_name: pcc_dead_timer
+  - yang_name: cspf-global/cspf-cache-size
+    tf_name: cspf_cache_size
+    example: 1000
+  - yang_name: timers/candidate-path-cleanup-delay
     example: 60
-  - yang_name: pcc/initiated-state-interval
-    tf_name: pcc_initiated_state
+  - yang_name: timers/initial-verify-restart
+    example: 60
+  - yang_name: timers/initial-verify-switchover
+    example: 120
+  - yang_name: timers/initial-verify-startup
+    example: 60
+  - yang_name: timers/delete-delay
+    example: 60
+  - yang_name: timers/cleanup-delay
+    example: 60
+  - yang_name: timers/install-delay
+    example: 60
+  - yang_name: timers/periodic-reoptimization
+    example: 120
+  - yang_name: resources/resource
+    tf_name: resource_lists
+    type: List
+    attributes:
+      - yang_name: path-name
+        id: true
+        example: RESOURCE-1
+      - yang_name: resources/resource
+        tf_name: resources
+        type: List
+        attributes:
+          - yang_name: resource-index
+            tf_name: index
+            id: true
+            example: 1
+          - yang_name: resource-type
+            tf_name: type
+            example: ipv4-address
+          - yang_name: address
+            example: 192.168.1.2
+  - yang_name: distribute-link-state
+    example: true
+  - yang_name: distribute-link-state/throttle
     example: 15
-  - yang_name: pcc/initiated-orphan-interval
-    tf_name: pcc_initiated_orphan
-    example: 10
+  - yang_name: distribute-link-state/report-candidate-path-inactive
+    example: true
+  - yang_name: bfd-global/bfd-timers/bringup-timer
+    tf_name: bfd_timers_session_bringup
+    example: 120
+  - yang_name: binding-sid-rules/explicit/rule
+    tf_name: binding_sid_rules_explicit
+    optional: true
+    delete_parent: true
+    example: enforce-srlb
+  - yang_name: binding-sid-rules/dynamic-binding-sid-rules/dynamic-binding-sid-rule
+    tf_name: binding_sid_rules_dynamic
+    optional: true
+    delete_parent: true
+    example: disable
+  - yang_name: srte-interfaces/srte-interface
+    tf_name: interfaces
+    type: List
+    attributes:
+      - yang_name: srte-interface-name
+        tf_name: interface_name
+        id: true
+        example: GigabitEthernet0/0/0/1
+      - yang_name: interface-affinities/interface-affinity
+        tf_name: affinities
+        type: List
+        attributes:
+          - yang_name: affinity-name
+            id: true
+            example: AFFINITY-1
+      - yang_name: interface-metric
+        tf_name: metric
+        example: 1000
   - yang_name: pcc/pce-peers/pce-peer
-    tf_name: pce_peers
+    tf_name: pce_peers_ipv4
     type: List
     attributes:
       - yang_name: pce-address
         id: true
-        example: 66.66.66.6
+        example: 192.168.1.2
+      - yang_name: password
+        tf_name: password_encrypted
+        sensitive: true
+        write_only: true
+        example: 14141B180F0B6A
+      - yang_name: pce-group
+        example: PCE-1
       - yang_name: precedence
-        example: 122
-  - yang_name: on-demand-colors/on-demand-color
-    tf_name: on_demand_colors
+        example: 110
+      - yang_name: authentication-option/keychain
+        tf_name: tcp_ao_keychain
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: KEY-1
+      - yang_name: authentication-option/include-tcp-options
+        tf_name: tcp_ao_include_tcp_options
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+  - yang_name: pcc/pce-peer-v6s/pce-peer-v6
+    tf_name: pce_peers_ipv6
     type: List
-    test_tags: [NCS, XRV9K]
     attributes:
-      - yang_name: on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-anycast
-        tf_name: dynamic_anycast_sid_inclusion
-        example: true
-      - yang_name: on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-metric/metric-type
-        tf_name: dynamic_metric_type
-        example: te
-      - yang_name: color
+      - yang_name: pce-address
         id: true
-        example: 266
-      - yang_name: srv6/enable
-        example: true
+        example: 2001:db8:1::1
+      - yang_name: password
+        tf_name: password_encrypted
+        sensitive: true
+        write_only: true
         exclude_test: true
-      - yang_name: srv6/locator/locator-name
-        tf_name: srv6_locator_name
-        example: LOC11
-      - yang_name: srv6/locator/behavior
-        example: ub6-insert-reduced
-      - yang_name: srv6/locator/binding-sid-type
-        example: srv6-dynamic
-      - yang_name: source-address/source-address
-        tf_name: source_address
-        example: fccc:0:213::1
-      - yang_name: source-address/ip-address-type
-        tf_name: source_address_type
-        example: end-point-type-ipv6
-      - yang_name: effective-metric/enable
+        example: 14141B180F0B6A
+      - yang_name: pce-group
+        example: PCE-1
+      - yang_name: precedence
+        example: 120
+      - yang_name: authentication-option/keychain
+        tf_name: tcp_ao_keychain
+        optional: true
+        delete_parent: true
+        example: KEY-2
+      - yang_name: authentication-option/include-tcp-options
+        tf_name: tcp_ao_include_tcp_options
+        optional: true
+        delete_parent: true
         example: true
-        exclude_test: true
-      - yang_name: effective-metric/metric-value-type/metric-value
-        tf_name: effective_metric_value
-        example: 4444
-      - yang_name: effective-metric/metric-value-type/metric-type
-        tf_name: effective_metric_type
-        example: igp
-      - yang_name: constraint/segments/protection-type
-        example: protected-only
-      - yang_name: constraint/segments/sid-algorithm
-        example: 128
-  - yang_name: policies/policy
-    tf_name: policies
+  - yang_name: pcc/profiles/profile
+    tf_name: pcc_profiles
     type: List
-    test_tags: [NCS, XRV9K]
     attributes:
-      - yang_name: policy-name
+      - yang_name: profile-id
         id: true
-        example: POLICY1
-      - yang_name: srv6/enable
+        example: 10
+      - yang_name: steering/invalidation-drop
         example: true
-        exclude_test: true
-      - yang_name: srv6/locator/locator-name
-        tf_name: srv6_locator_name
-        example: Locator11
-      - yang_name: srv6/locator/binding-sid-type
-        example: srv6-dynamic
-      - yang_name: srv6/locator/behavior
-        example: ub6-insert-reduced
-      - yang_name: source-address/source-address
-        tf_name: source_address
-        example: fccc:0:103::1
-      - yang_name: source-address/ip-address-type
+      - yang_name: profile-auto-route/include-all
+        tf_name: auto_route_include_all_ipv4
+        example: true
+      - yang_name: profile-auto-route/include-ipv6-all
+        tf_name: auto_route_include_all_ipv6
+        example: true
+      - yang_name: profile-auto-route/force-sr-include
+        tf_name: auto_route_force_sr_include
+        example: true
+      - yang_name: profile-auto-route/forward-class
+        tf_name: auto_route_forward_class
+        example: 1
+      - yang_name: profile-auto-route/auto-route-metric/autoroute-metric-type
+        tf_name: auto_route_metric_type
+        example: relative
+      - yang_name: profile-auto-route/auto-route-metric/metric-relative-value
+        tf_name: auto_route_metric_relative_value
+        example: -10
+      - yang_name: profile-auto-route/auto-route-metric/metric-constant-value
+        tf_name: auto_route_metric_constant_value
+        example: 100
+  - yang_name: pcc/pcc-centric
+    tf_name: pcc_redundancy_pcc_centric
+    example: true
+  - yang_name: pcc/pce-centric
+    tf_name: pcc_redundancy_pce_centric
+    exclude_test: true
+    example: true
+  - yang_name: pcc/dead-timer-interval
+    tf_name: pcc_dead_timer
+    example: 60
+  - yang_name: pcc/keepalive-timer-interval
+    tf_name: pcc_keepalive_timer
+    example: 60
+  - yang_name: pcc/initiated-state-interval
+    tf_name: pcc_initiated_state
+    example: 120
+  - yang_name: pcc/initiated-orphan-interval
+    tf_name: pcc_initiated_orphan
+    example: 120
+  - yang_name: pcc/delegation-timeout
+    example: 120
+  - yang_name: pcc/report-all
+    example: true
+  - yang_name: pcc/source-address
+    tf_name: pcc_source_address_ipv4
+    example: 192.168.1.1
+  - yang_name: pcc/ipv6-source-address
+    tf_name: pcc_source_address_ipv6
+    example: 2001:db8:1::1
+  - yang_name: trace-counts/trace-count
+    tf_name: traces
+    type: List
+    attributes:
+      - yang_name: buffer-name
+        id: true
+        example: bsid
+      - yang_name: trace-count
+        example: 1000
+  - yang_name: path/disable-algorithm-check/strict-spf/areas/area
+    tf_name: path_disable_algo_checks_strict_spf_areas
+    type: List
+    attributes:
+      - yang_name: area-id
+        id: true
+        example: 1
+      - yang_name: protocol
+        id: true
+        example: ospf
+  - yang_name: path/disable-algorithm-check/strict-spf/all
+    tf_name: path_disable_algo_checks_strict_spf_all_areas
+    example: true
+  - yang_name: affinity-maps/affinity-map
+    tf_name: affinity_maps
+    type: List
+    attributes:
+      - yang_name: affinity-name
+        id: true
+        example: AFFINITY-1
+      - yang_name: bit-position
+        example: 1
+  - yang_name: candidate-path-types/candidate-path-type
+    tf_name: candidate_paths
+    type: List
+    attributes:
+      - yang_name: candidate-path-type
+        tf_name: path_type
+        id: true
+        example: candidate-path-type-bgp-srte
+      - yang_name: candidate-path-type-all-or-candidate-path-type-local-or-candidate-path-type-bgp-odn-or-candidate-path-type-bgp-srte-or-candidate-path-type-pcep/enable
+        tf_name: source_address_selection
+        default_value: true
+        example: true
+      - yang_name: candidate-path-type-all-or-candidate-path-type-local-or-candidate-path-type-bgp-odn-or-candidate-path-type-bgp-srte-or-candidate-path-type-pcep/source-address/ip-address-type
         tf_name: source_address_type
-        example: end-point-type-ipv6
-      - yang_name: policy-color-endpoint/color
-        example: 65534
-      - yang_name: policy-color-endpoint/end-point-type
-        tf_name: policy_color_endpoint_type
-        example: end-point-type-ipv6
-      - yang_name: policy-color-endpoint/end-point-address
-        tf_name: policy_color_endpoint_address
-        example: fccc:0:215::1
+        example: end-point-type-ipv4
+      - yang_name: candidate-path-type-all-or-candidate-path-type-local-or-candidate-path-type-bgp-odn-or-candidate-path-type-bgp-srte-or-candidate-path-type-pcep/source-address/source-address
+        tf_name: source_address
+        example: 192.168.1.1
+  - yang_name: srv6/locator/locator-name
+    tf_name: srv6_locator
+    delete_parent: true
+    example: LOC1
+  - yang_name: srv6/locator/binding-sid-type
+    delete_parent: true
+    example: srv6-dynamic
+  - yang_name: srv6/locator/behavior
+    delete_parent: true
+    example: ub6-insert-reduced
+    #example: ub6-encaps-reduced
+  - yang_name: srv6/maximum-sid-depth
+    example: 6

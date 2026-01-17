@@ -35,24 +35,33 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type SNMPServerVRFHost struct {
-	Device             types.String                          `tfsdk:"device"`
-	Id                 types.String                          `tfsdk:"id"`
-	DeleteMode         types.String                          `tfsdk:"delete_mode"`
-	VrfName            types.String                          `tfsdk:"vrf_name"`
-	Address            types.String                          `tfsdk:"address"`
-	UnencryptedStrings []SNMPServerVRFHostUnencryptedStrings `tfsdk:"unencrypted_strings"`
+	Device                    types.String                                 `tfsdk:"device"`
+	Id                        types.String                                 `tfsdk:"id"`
+	DeleteMode                types.String                                 `tfsdk:"delete_mode"`
+	VrfName                   types.String                                 `tfsdk:"vrf_name"`
+	Address                   types.String                                 `tfsdk:"address"`
+	TrapsUnencryptedStrings   []SNMPServerVRFHostTrapsUnencryptedStrings   `tfsdk:"traps_unencrypted_strings"`
+	InformsUnencryptedStrings []SNMPServerVRFHostInformsUnencryptedStrings `tfsdk:"informs_unencrypted_strings"`
 }
 
 type SNMPServerVRFHostData struct {
-	Device             types.String                          `tfsdk:"device"`
-	Id                 types.String                          `tfsdk:"id"`
-	VrfName            types.String                          `tfsdk:"vrf_name"`
-	Address            types.String                          `tfsdk:"address"`
-	UnencryptedStrings []SNMPServerVRFHostUnencryptedStrings `tfsdk:"unencrypted_strings"`
+	Device                    types.String                                 `tfsdk:"device"`
+	Id                        types.String                                 `tfsdk:"id"`
+	VrfName                   types.String                                 `tfsdk:"vrf_name"`
+	Address                   types.String                                 `tfsdk:"address"`
+	TrapsUnencryptedStrings   []SNMPServerVRFHostTrapsUnencryptedStrings   `tfsdk:"traps_unencrypted_strings"`
+	InformsUnencryptedStrings []SNMPServerVRFHostInformsUnencryptedStrings `tfsdk:"informs_unencrypted_strings"`
 }
-type SNMPServerVRFHostUnencryptedStrings struct {
+type SNMPServerVRFHostTrapsUnencryptedStrings struct {
 	CommunityString        types.String `tfsdk:"community_string"`
 	UdpPort                types.String `tfsdk:"udp_port"`
+	VersionV2c             types.Bool   `tfsdk:"version_v2c"`
+	VersionV3SecurityLevel types.String `tfsdk:"version_v3_security_level"`
+}
+type SNMPServerVRFHostInformsUnencryptedStrings struct {
+	CommunityString        types.String `tfsdk:"community_string"`
+	UdpPort                types.String `tfsdk:"udp_port"`
+	VersionV2c             types.Bool   `tfsdk:"version_v2c"`
 	VersionV3SecurityLevel types.String `tfsdk:"version_v3_security_level"`
 }
 
@@ -77,17 +86,41 @@ func (data SNMPServerVRFHost) toBody(ctx context.Context) string {
 	if !data.Address.IsNull() && !data.Address.IsUnknown() {
 		body, _ = sjson.Set(body, "address", data.Address.ValueString())
 	}
-	if len(data.UnencryptedStrings) > 0 {
+	if len(data.TrapsUnencryptedStrings) > 0 {
 		body, _ = sjson.Set(body, "traps.unencrypted.unencrypted-string", []interface{}{})
-		for index, item := range data.UnencryptedStrings {
+		for index, item := range data.TrapsUnencryptedStrings {
 			if !item.CommunityString.IsNull() && !item.CommunityString.IsUnknown() {
 				body, _ = sjson.Set(body, "traps.unencrypted.unencrypted-string"+"."+strconv.Itoa(index)+"."+"community-string", item.CommunityString.ValueString())
 			}
 			if !item.UdpPort.IsNull() && !item.UdpPort.IsUnknown() {
 				body, _ = sjson.Set(body, "traps.unencrypted.unencrypted-string"+"."+strconv.Itoa(index)+"."+"udp-port", item.UdpPort.ValueString())
 			}
+			if !item.VersionV2c.IsNull() && !item.VersionV2c.IsUnknown() {
+				if item.VersionV2c.ValueBool() {
+					body, _ = sjson.Set(body, "traps.unencrypted.unencrypted-string"+"."+strconv.Itoa(index)+"."+"version.v2c", map[string]string{})
+				}
+			}
 			if !item.VersionV3SecurityLevel.IsNull() && !item.VersionV3SecurityLevel.IsUnknown() {
 				body, _ = sjson.Set(body, "traps.unencrypted.unencrypted-string"+"."+strconv.Itoa(index)+"."+"version.v3.security-level", item.VersionV3SecurityLevel.ValueString())
+			}
+		}
+	}
+	if len(data.InformsUnencryptedStrings) > 0 {
+		body, _ = sjson.Set(body, "informs.unencrypted.unencrypted-string", []interface{}{})
+		for index, item := range data.InformsUnencryptedStrings {
+			if !item.CommunityString.IsNull() && !item.CommunityString.IsUnknown() {
+				body, _ = sjson.Set(body, "informs.unencrypted.unencrypted-string"+"."+strconv.Itoa(index)+"."+"community-string", item.CommunityString.ValueString())
+			}
+			if !item.UdpPort.IsNull() && !item.UdpPort.IsUnknown() {
+				body, _ = sjson.Set(body, "informs.unencrypted.unencrypted-string"+"."+strconv.Itoa(index)+"."+"udp-port", item.UdpPort.ValueString())
+			}
+			if !item.VersionV2c.IsNull() && !item.VersionV2c.IsUnknown() {
+				if item.VersionV2c.ValueBool() {
+					body, _ = sjson.Set(body, "informs.unencrypted.unencrypted-string"+"."+strconv.Itoa(index)+"."+"version.v2c", map[string]string{})
+				}
+			}
+			if !item.VersionV3SecurityLevel.IsNull() && !item.VersionV3SecurityLevel.IsUnknown() {
+				body, _ = sjson.Set(body, "informs.unencrypted.unencrypted-string"+"."+strconv.Itoa(index)+"."+"version.v3.security-level", item.VersionV3SecurityLevel.ValueString())
 			}
 		}
 	}
@@ -99,9 +132,9 @@ func (data SNMPServerVRFHost) toBody(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *SNMPServerVRFHost) updateFromBody(ctx context.Context, res []byte) {
-	for i := range data.UnencryptedStrings {
+	for i := range data.TrapsUnencryptedStrings {
 		keys := [...]string{"community-string"}
-		keyValues := [...]string{data.UnencryptedStrings[i].CommunityString.ValueString()}
+		keyValues := [...]string{data.TrapsUnencryptedStrings[i].CommunityString.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "traps.unencrypted.unencrypted-string").ForEach(
@@ -122,20 +155,67 @@ func (data *SNMPServerVRFHost) updateFromBody(ctx context.Context, res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("community-string"); value.Exists() && !data.UnencryptedStrings[i].CommunityString.IsNull() {
-			data.UnencryptedStrings[i].CommunityString = types.StringValue(value.String())
+		if value := r.Get("udp-port"); value.Exists() && !data.TrapsUnencryptedStrings[i].UdpPort.IsNull() {
+			data.TrapsUnencryptedStrings[i].UdpPort = types.StringValue(value.String())
 		} else {
-			data.UnencryptedStrings[i].CommunityString = types.StringNull()
+			data.TrapsUnencryptedStrings[i].UdpPort = types.StringNull()
 		}
-		if value := r.Get("udp-port"); value.Exists() && !data.UnencryptedStrings[i].UdpPort.IsNull() {
-			data.UnencryptedStrings[i].UdpPort = types.StringValue(value.String())
+		if value := r.Get("version.v2c"); !data.TrapsUnencryptedStrings[i].VersionV2c.IsNull() {
+			if value.Exists() {
+				data.TrapsUnencryptedStrings[i].VersionV2c = types.BoolValue(true)
+			} else {
+				data.TrapsUnencryptedStrings[i].VersionV2c = types.BoolValue(false)
+			}
 		} else {
-			data.UnencryptedStrings[i].UdpPort = types.StringNull()
+			data.TrapsUnencryptedStrings[i].VersionV2c = types.BoolNull()
 		}
-		if value := r.Get("version.v3.security-level"); value.Exists() && !data.UnencryptedStrings[i].VersionV3SecurityLevel.IsNull() {
-			data.UnencryptedStrings[i].VersionV3SecurityLevel = types.StringValue(value.String())
+		if value := r.Get("version.v3.security-level"); value.Exists() && !data.TrapsUnencryptedStrings[i].VersionV3SecurityLevel.IsNull() {
+			data.TrapsUnencryptedStrings[i].VersionV3SecurityLevel = types.StringValue(value.String())
 		} else {
-			data.UnencryptedStrings[i].VersionV3SecurityLevel = types.StringNull()
+			data.TrapsUnencryptedStrings[i].VersionV3SecurityLevel = types.StringNull()
+		}
+	}
+	for i := range data.InformsUnencryptedStrings {
+		keys := [...]string{"community-string"}
+		keyValues := [...]string{data.InformsUnencryptedStrings[i].CommunityString.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "informs.unencrypted.unencrypted-string").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("udp-port"); value.Exists() && !data.InformsUnencryptedStrings[i].UdpPort.IsNull() {
+			data.InformsUnencryptedStrings[i].UdpPort = types.StringValue(value.String())
+		} else {
+			data.InformsUnencryptedStrings[i].UdpPort = types.StringNull()
+		}
+		if value := r.Get("version.v2c"); !data.InformsUnencryptedStrings[i].VersionV2c.IsNull() {
+			if value.Exists() {
+				data.InformsUnencryptedStrings[i].VersionV2c = types.BoolValue(true)
+			} else {
+				data.InformsUnencryptedStrings[i].VersionV2c = types.BoolValue(false)
+			}
+		} else {
+			data.InformsUnencryptedStrings[i].VersionV2c = types.BoolNull()
+		}
+		if value := r.Get("version.v3.security-level"); value.Exists() && !data.InformsUnencryptedStrings[i].VersionV3SecurityLevel.IsNull() {
+			data.InformsUnencryptedStrings[i].VersionV3SecurityLevel = types.StringValue(value.String())
+		} else {
+			data.InformsUnencryptedStrings[i].VersionV3SecurityLevel = types.StringNull()
 		}
 	}
 }
@@ -146,19 +226,40 @@ func (data *SNMPServerVRFHost) updateFromBody(ctx context.Context, res []byte) {
 
 func (data *SNMPServerVRFHost) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "traps.unencrypted.unencrypted-string"); value.Exists() {
-		data.UnencryptedStrings = make([]SNMPServerVRFHostUnencryptedStrings, 0)
+		data.TrapsUnencryptedStrings = make([]SNMPServerVRFHostTrapsUnencryptedStrings, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := SNMPServerVRFHostUnencryptedStrings{}
-			if cValue := v.Get("community-string"); cValue.Exists() {
-				item.CommunityString = types.StringValue(cValue.String())
-			}
+			item := SNMPServerVRFHostTrapsUnencryptedStrings{}
 			if cValue := v.Get("udp-port"); cValue.Exists() {
 				item.UdpPort = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("version.v2c"); cValue.Exists() {
+				item.VersionV2c = types.BoolValue(true)
+			} else {
+				item.VersionV2c = types.BoolValue(false)
 			}
 			if cValue := v.Get("version.v3.security-level"); cValue.Exists() {
 				item.VersionV3SecurityLevel = types.StringValue(cValue.String())
 			}
-			data.UnencryptedStrings = append(data.UnencryptedStrings, item)
+			data.TrapsUnencryptedStrings = append(data.TrapsUnencryptedStrings, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "informs.unencrypted.unencrypted-string"); value.Exists() {
+		data.InformsUnencryptedStrings = make([]SNMPServerVRFHostInformsUnencryptedStrings, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := SNMPServerVRFHostInformsUnencryptedStrings{}
+			if cValue := v.Get("udp-port"); cValue.Exists() {
+				item.UdpPort = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("version.v2c"); cValue.Exists() {
+				item.VersionV2c = types.BoolValue(true)
+			} else {
+				item.VersionV2c = types.BoolValue(false)
+			}
+			if cValue := v.Get("version.v3.security-level"); cValue.Exists() {
+				item.VersionV3SecurityLevel = types.StringValue(cValue.String())
+			}
+			data.InformsUnencryptedStrings = append(data.InformsUnencryptedStrings, item)
 			return true
 		})
 	}
@@ -170,19 +271,40 @@ func (data *SNMPServerVRFHost) fromBody(ctx context.Context, res []byte) {
 
 func (data *SNMPServerVRFHostData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "traps.unencrypted.unencrypted-string"); value.Exists() {
-		data.UnencryptedStrings = make([]SNMPServerVRFHostUnencryptedStrings, 0)
+		data.TrapsUnencryptedStrings = make([]SNMPServerVRFHostTrapsUnencryptedStrings, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := SNMPServerVRFHostUnencryptedStrings{}
-			if cValue := v.Get("community-string"); cValue.Exists() {
-				item.CommunityString = types.StringValue(cValue.String())
-			}
+			item := SNMPServerVRFHostTrapsUnencryptedStrings{}
 			if cValue := v.Get("udp-port"); cValue.Exists() {
 				item.UdpPort = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("version.v2c"); cValue.Exists() {
+				item.VersionV2c = types.BoolValue(true)
+			} else {
+				item.VersionV2c = types.BoolValue(false)
 			}
 			if cValue := v.Get("version.v3.security-level"); cValue.Exists() {
 				item.VersionV3SecurityLevel = types.StringValue(cValue.String())
 			}
-			data.UnencryptedStrings = append(data.UnencryptedStrings, item)
+			data.TrapsUnencryptedStrings = append(data.TrapsUnencryptedStrings, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "informs.unencrypted.unencrypted-string"); value.Exists() {
+		data.InformsUnencryptedStrings = make([]SNMPServerVRFHostInformsUnencryptedStrings, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := SNMPServerVRFHostInformsUnencryptedStrings{}
+			if cValue := v.Get("udp-port"); cValue.Exists() {
+				item.UdpPort = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("version.v2c"); cValue.Exists() {
+				item.VersionV2c = types.BoolValue(true)
+			} else {
+				item.VersionV2c = types.BoolValue(false)
+			}
+			if cValue := v.Get("version.v3.security-level"); cValue.Exists() {
+				item.VersionV3SecurityLevel = types.StringValue(cValue.String())
+			}
+			data.InformsUnencryptedStrings = append(data.InformsUnencryptedStrings, item)
 			return true
 		})
 	}
@@ -194,16 +316,16 @@ func (data *SNMPServerVRFHostData) fromBody(ctx context.Context, res []byte) {
 
 func (data *SNMPServerVRFHost) getDeletedItems(ctx context.Context, state SNMPServerVRFHost) []string {
 	deletedItems := make([]string, 0)
-	for i := range state.UnencryptedStrings {
+	for i := range state.InformsUnencryptedStrings {
 		keys := [...]string{"community-string"}
-		stateKeyValues := [...]string{state.UnencryptedStrings[i].CommunityString.ValueString()}
+		stateKeyValues := [...]string{state.InformsUnencryptedStrings[i].CommunityString.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.UnencryptedStrings[i].CommunityString.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.InformsUnencryptedStrings[i].CommunityString.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -211,16 +333,58 @@ func (data *SNMPServerVRFHost) getDeletedItems(ctx context.Context, state SNMPSe
 		}
 
 		found := false
-		for j := range data.UnencryptedStrings {
+		for j := range data.InformsUnencryptedStrings {
 			found = true
-			if state.UnencryptedStrings[i].CommunityString.ValueString() != data.UnencryptedStrings[j].CommunityString.ValueString() {
+			if state.InformsUnencryptedStrings[i].CommunityString.ValueString() != data.InformsUnencryptedStrings[j].CommunityString.ValueString() {
 				found = false
 			}
 			if found {
-				if !state.UnencryptedStrings[i].VersionV3SecurityLevel.IsNull() && data.UnencryptedStrings[j].VersionV3SecurityLevel.IsNull() {
+				if !state.InformsUnencryptedStrings[i].VersionV3SecurityLevel.IsNull() && data.InformsUnencryptedStrings[j].VersionV3SecurityLevel.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/informs/unencrypted/unencrypted-string%v/version/v3/security-level", state.getPath(), keyString))
+				}
+				if !state.InformsUnencryptedStrings[i].VersionV2c.IsNull() && data.InformsUnencryptedStrings[j].VersionV2c.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/informs/unencrypted/unencrypted-string%v/version/v2c", state.getPath(), keyString))
+				}
+				if !state.InformsUnencryptedStrings[i].UdpPort.IsNull() && data.InformsUnencryptedStrings[j].UdpPort.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/informs/unencrypted/unencrypted-string%v/udp-port", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/informs/unencrypted/unencrypted-string%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.TrapsUnencryptedStrings {
+		keys := [...]string{"community-string"}
+		stateKeyValues := [...]string{state.TrapsUnencryptedStrings[i].CommunityString.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.TrapsUnencryptedStrings[i].CommunityString.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.TrapsUnencryptedStrings {
+			found = true
+			if state.TrapsUnencryptedStrings[i].CommunityString.ValueString() != data.TrapsUnencryptedStrings[j].CommunityString.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.TrapsUnencryptedStrings[i].VersionV3SecurityLevel.IsNull() && data.TrapsUnencryptedStrings[j].VersionV3SecurityLevel.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/unencrypted/unencrypted-string%v/version/v3/security-level", state.getPath(), keyString))
 				}
-				if !state.UnencryptedStrings[i].UdpPort.IsNull() && data.UnencryptedStrings[j].UdpPort.IsNull() {
+				if !state.TrapsUnencryptedStrings[i].VersionV2c.IsNull() && data.TrapsUnencryptedStrings[j].VersionV2c.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/unencrypted/unencrypted-string%v/version/v2c", state.getPath(), keyString))
+				}
+				if !state.TrapsUnencryptedStrings[i].UdpPort.IsNull() && data.TrapsUnencryptedStrings[j].UdpPort.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/unencrypted/unencrypted-string%v/udp-port", state.getPath(), keyString))
 				}
 				break
@@ -239,12 +403,26 @@ func (data *SNMPServerVRFHost) getDeletedItems(ctx context.Context, state SNMPSe
 
 func (data *SNMPServerVRFHost) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	for i := range data.UnencryptedStrings {
+	for i := range data.InformsUnencryptedStrings {
 		keys := [...]string{"community-string"}
-		keyValues := [...]string{data.UnencryptedStrings[i].CommunityString.ValueString()}
+		keyValues := [...]string{data.InformsUnencryptedStrings[i].CommunityString.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.InformsUnencryptedStrings[i].VersionV2c.IsNull() && !data.InformsUnencryptedStrings[i].VersionV2c.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/informs/unencrypted/unencrypted-string%v/version/v2c", data.getPath(), keyString))
+		}
+	}
+	for i := range data.TrapsUnencryptedStrings {
+		keys := [...]string{"community-string"}
+		keyValues := [...]string{data.TrapsUnencryptedStrings[i].CommunityString.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.TrapsUnencryptedStrings[i].VersionV2c.IsNull() && !data.TrapsUnencryptedStrings[i].VersionV2c.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/unencrypted/unencrypted-string%v/version/v2c", data.getPath(), keyString))
 		}
 	}
 	return emptyLeafsDelete
@@ -256,9 +434,19 @@ func (data *SNMPServerVRFHost) getEmptyLeafsDelete(ctx context.Context) []string
 
 func (data *SNMPServerVRFHost) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	for i := range data.UnencryptedStrings {
+	for i := range data.InformsUnencryptedStrings {
 		keys := [...]string{"community-string"}
-		keyValues := [...]string{data.UnencryptedStrings[i].CommunityString.ValueString()}
+		keyValues := [...]string{data.InformsUnencryptedStrings[i].CommunityString.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/informs/unencrypted/unencrypted-string%v", data.getPath(), keyString))
+	}
+	for i := range data.TrapsUnencryptedStrings {
+		keys := [...]string{"community-string"}
+		keyValues := [...]string{data.TrapsUnencryptedStrings[i].CommunityString.ValueString()}
 
 		keyString := ""
 		for ki := range keys {

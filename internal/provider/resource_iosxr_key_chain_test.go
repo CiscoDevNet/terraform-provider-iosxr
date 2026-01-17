@@ -36,23 +36,48 @@ import (
 func TestAccIosxrKeyChain(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "name", "KEY11"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "accept_tolerance_value", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "macsec_keys.0.ckn", "01"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "macsec_keys.0.key_string_cryptographic_algorithm", "aes-256-cmac"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "macsec_keys.0.lifetime_start_time_hour", "11"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "macsec_keys.0.lifetime_start_time_minute", "52"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "macsec_keys.0.lifetime_start_time_second", "55"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "macsec_keys.0.lifetime_start_time_month", "january"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "macsec_keys.0.lifetime_start_time_day_of_month", "21"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "macsec_keys.0.lifetime_start_time_year", "2023"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "macsec_keys.0.lifetime_end_time_hour", "11"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "macsec_keys.0.lifetime_end_time_minute", "52"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "macsec_keys.0.lifetime_end_time_second", "55"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "macsec_keys.0.lifetime_end_time_month", "january"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "macsec_keys.0.lifetime_end_time_day_of_month", "21"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "macsec_keys.0.lifetime_end_time_year", "2026"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.key_name", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.key_string_password", "00071A150754"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.cryptographic_algorithm", "hmac-md5"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.accept_lifetime_start_time_hour", "11"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.accept_lifetime_start_time_minute", "52"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.accept_lifetime_start_time_second", "55"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.accept_lifetime_start_time_day_of_month", "21"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.accept_lifetime_start_time_month", "january"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.accept_lifetime_start_time_day_of_month", "21"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.accept_lifetime_start_time_year", "2023"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.accept_lifetime_infinite", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.accept_lifetime_end_time_hour", "11"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.accept_lifetime_end_time_minute", "52"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.accept_lifetime_end_time_second", "55"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.accept_lifetime_end_time_month", "january"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.accept_lifetime_end_time_day_of_month", "21"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.accept_lifetime_end_time_year", "2026"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.send_lifetime_start_time_hour", "8"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.send_lifetime_start_time_minute", "36"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.send_lifetime_start_time_second", "22"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.send_lifetime_start_time_day_of_month", "15"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.send_lifetime_start_time_month", "january"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.send_lifetime_start_time_day_of_month", "15"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.send_lifetime_start_time_year", "2023"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.send_lifetime_infinite", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.send_lifetime_end_time_hour", "8"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.send_lifetime_end_time_minute", "36"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.send_lifetime_end_time_second", "22"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.send_lifetime_end_time_month", "january"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.send_lifetime_end_time_day_of_month", "15"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.send_lifetime_end_time_year", "2026"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_key_chain.test", "timezone_local", "true"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -111,25 +136,54 @@ func testAccIosxrKeyChainConfig_minimum() string {
 func testAccIosxrKeyChainConfig_all() string {
 	config := `resource "iosxr_key_chain" "test" {` + "\n"
 	config += `	name = "KEY11"` + "\n"
+	config += `	accept_tolerance_value = 1000` + "\n"
+	config += `	macsec_keys = [{` + "\n"
+	config += `		ckn = "01"` + "\n"
+	config += `		key_string_password = "115949554642595C577A7F747D63637244574E535806580851040D531C465C0851020204055A0957540903554657520A5C575770151F08480746115A08552F7A22"` + "\n"
+	config += `		key_string_cryptographic_algorithm = "aes-256-cmac"` + "\n"
+	config += `		lifetime_start_time_hour = 11` + "\n"
+	config += `		lifetime_start_time_minute = 52` + "\n"
+	config += `		lifetime_start_time_second = 55` + "\n"
+	config += `		lifetime_start_time_month = "january"` + "\n"
+	config += `		lifetime_start_time_day_of_month = 21` + "\n"
+	config += `		lifetime_start_time_year = 2023` + "\n"
+	config += `		lifetime_end_time_hour = 11` + "\n"
+	config += `		lifetime_end_time_minute = 52` + "\n"
+	config += `		lifetime_end_time_second = 55` + "\n"
+	config += `		lifetime_end_time_month = "january"` + "\n"
+	config += `		lifetime_end_time_day_of_month = 21` + "\n"
+	config += `		lifetime_end_time_year = 2026` + "\n"
+	config += `		}]` + "\n"
 	config += `	keys = [{` + "\n"
 	config += `		key_name = "1"` + "\n"
-	config += `		key_string_password = "00071A150754"` + "\n"
+	config += `		key_string_password6 = "00071A150754"` + "\n"
 	config += `		cryptographic_algorithm = "hmac-md5"` + "\n"
 	config += `		accept_lifetime_start_time_hour = 11` + "\n"
 	config += `		accept_lifetime_start_time_minute = 52` + "\n"
 	config += `		accept_lifetime_start_time_second = 55` + "\n"
-	config += `		accept_lifetime_start_time_day_of_month = 21` + "\n"
 	config += `		accept_lifetime_start_time_month = "january"` + "\n"
+	config += `		accept_lifetime_start_time_day_of_month = 21` + "\n"
 	config += `		accept_lifetime_start_time_year = 2023` + "\n"
-	config += `		accept_lifetime_infinite = true` + "\n"
+	config += `		accept_lifetime_end_time_hour = 11` + "\n"
+	config += `		accept_lifetime_end_time_minute = 52` + "\n"
+	config += `		accept_lifetime_end_time_second = 55` + "\n"
+	config += `		accept_lifetime_end_time_month = "january"` + "\n"
+	config += `		accept_lifetime_end_time_day_of_month = 21` + "\n"
+	config += `		accept_lifetime_end_time_year = 2026` + "\n"
 	config += `		send_lifetime_start_time_hour = 8` + "\n"
 	config += `		send_lifetime_start_time_minute = 36` + "\n"
 	config += `		send_lifetime_start_time_second = 22` + "\n"
-	config += `		send_lifetime_start_time_day_of_month = 15` + "\n"
 	config += `		send_lifetime_start_time_month = "january"` + "\n"
+	config += `		send_lifetime_start_time_day_of_month = 15` + "\n"
 	config += `		send_lifetime_start_time_year = 2023` + "\n"
-	config += `		send_lifetime_infinite = true` + "\n"
+	config += `		send_lifetime_end_time_hour = 8` + "\n"
+	config += `		send_lifetime_end_time_minute = 36` + "\n"
+	config += `		send_lifetime_end_time_second = 22` + "\n"
+	config += `		send_lifetime_end_time_month = "january"` + "\n"
+	config += `		send_lifetime_end_time_day_of_month = 15` + "\n"
+	config += `		send_lifetime_end_time_year = 2026` + "\n"
 	config += `		}]` + "\n"
+	config += `	timezone_local = true` + "\n"
 	config += `}` + "\n"
 	return config
 }

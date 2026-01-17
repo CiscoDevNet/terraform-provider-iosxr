@@ -34,6 +34,9 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 
 func TestAccIosxrCDP(t *testing.T) {
+	if os.Getenv("XRV9K") == "" && os.Getenv("XRD") == "" && os.Getenv("NCS") == "" {
+		t.Skip("skipping test, set environment variable XRV9K or XRD or NCS")
+	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_cdp.test", "enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_cdp.test", "holdtime", "12"))

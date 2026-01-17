@@ -45,6 +45,7 @@ type RouterVRRPInterfaceIPv4 struct {
 	Priority                       types.Int64                                 `tfsdk:"priority"`
 	Name                           types.String                                `tfsdk:"name"`
 	TextAuthentication             types.String                                `tfsdk:"text_authentication"`
+	UnicastPeer                    types.String                                `tfsdk:"unicast_peer"`
 	SecondaryAddresses             []RouterVRRPInterfaceIPv4SecondaryAddresses `tfsdk:"secondary_addresses"`
 	TimerAdvertisementSeconds      types.Int64                                 `tfsdk:"timer_advertisement_seconds"`
 	TimerAdvertisementMilliseconds types.Int64                                 `tfsdk:"timer_advertisement_milliseconds"`
@@ -67,6 +68,7 @@ type RouterVRRPInterfaceIPv4Data struct {
 	Priority                       types.Int64                                 `tfsdk:"priority"`
 	Name                           types.String                                `tfsdk:"name"`
 	TextAuthentication             types.String                                `tfsdk:"text_authentication"`
+	UnicastPeer                    types.String                                `tfsdk:"unicast_peer"`
 	SecondaryAddresses             []RouterVRRPInterfaceIPv4SecondaryAddresses `tfsdk:"secondary_addresses"`
 	TimerAdvertisementSeconds      types.Int64                                 `tfsdk:"timer_advertisement_seconds"`
 	TimerAdvertisementMilliseconds types.Int64                                 `tfsdk:"timer_advertisement_milliseconds"`
@@ -125,6 +127,9 @@ func (data RouterVRRPInterfaceIPv4) toBody(ctx context.Context) string {
 	}
 	if !data.TextAuthentication.IsNull() && !data.TextAuthentication.IsUnknown() {
 		body, _ = sjson.Set(body, "text-authentication", data.TextAuthentication.ValueString())
+	}
+	if !data.UnicastPeer.IsNull() && !data.UnicastPeer.IsUnknown() {
+		body, _ = sjson.Set(body, "unicast-peer", data.UnicastPeer.ValueString())
 	}
 	if !data.TimerAdvertisementSeconds.IsNull() && !data.TimerAdvertisementSeconds.IsUnknown() {
 		body, _ = sjson.Set(body, "timer.advertisement-time-in-seconds", strconv.FormatInt(data.TimerAdvertisementSeconds.ValueInt64(), 10))
@@ -206,10 +211,10 @@ func (data *RouterVRRPInterfaceIPv4) updateFromBody(ctx context.Context, res []b
 	} else {
 		data.Name = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "text-authentication"); value.Exists() && !data.TextAuthentication.IsNull() {
-		data.TextAuthentication = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "unicast-peer"); value.Exists() && !data.UnicastPeer.IsNull() {
+		data.UnicastPeer = types.StringValue(value.String())
 	} else {
-		data.TextAuthentication = types.StringNull()
+		data.UnicastPeer = types.StringNull()
 	}
 	for i := range data.SecondaryAddresses {
 		keys := [...]string{"address"}
@@ -371,8 +376,8 @@ func (data *RouterVRRPInterfaceIPv4) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "name"); value.Exists() {
 		data.Name = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "text-authentication"); value.Exists() {
-		data.TextAuthentication = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "unicast-peer"); value.Exists() {
+		data.UnicastPeer = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "secondary-addresses.secondary-address"); value.Exists() {
 		data.SecondaryAddresses = make([]RouterVRRPInterfaceIPv4SecondaryAddresses, 0)
@@ -456,8 +461,8 @@ func (data *RouterVRRPInterfaceIPv4Data) fromBody(ctx context.Context, res []byt
 	if value := gjson.GetBytes(res, "name"); value.Exists() {
 		data.Name = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "text-authentication"); value.Exists() {
-		data.TextAuthentication = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "unicast-peer"); value.Exists() {
+		data.UnicastPeer = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "secondary-addresses.secondary-address"); value.Exists() {
 		data.SecondaryAddresses = make([]RouterVRRPInterfaceIPv4SecondaryAddresses, 0)
@@ -650,6 +655,9 @@ func (data *RouterVRRPInterfaceIPv4) getDeletedItems(ctx context.Context, state 
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/secondary-addresses/secondary-address%v", state.getPath(), keyString))
 		}
 	}
+	if !state.UnicastPeer.IsNull() && data.UnicastPeer.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/unicast-peer", state.getPath()))
+	}
 	if !state.TextAuthentication.IsNull() && data.TextAuthentication.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/text-authentication", state.getPath()))
 	}
@@ -763,6 +771,9 @@ func (data *RouterVRRPInterfaceIPv4) getDeletePaths(ctx context.Context) []strin
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/secondary-addresses/secondary-address%v", data.getPath(), keyString))
+	}
+	if !data.UnicastPeer.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/unicast-peer", data.getPath()))
 	}
 	if !data.TextAuthentication.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/text-authentication", data.getPath()))

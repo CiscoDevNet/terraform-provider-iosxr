@@ -75,6 +75,78 @@ func (d *EVPNSegmentRoutingSRv6EVIDataSource) Schema(ctx context.Context, req da
 				MarkdownDescription: "Description for this EVPN Instance",
 				Computed:            true,
 			},
+			"bgp_rd_two_byte_as_number": schema.Int64Attribute{
+				MarkdownDescription: "Two Byte AS Number",
+				Computed:            true,
+			},
+			"bgp_rd_two_byte_as_index": schema.Int64Attribute{
+				MarkdownDescription: "AS:nn (hex or decimal format)",
+				Computed:            true,
+			},
+			"bgp_rd_four_byte_as_number": schema.Int64Attribute{
+				MarkdownDescription: "Four Byte AS number",
+				Computed:            true,
+			},
+			"bgp_rd_four_byte_as_index": schema.Int64Attribute{
+				MarkdownDescription: "AS:nn (hex or decimal format)",
+				Computed:            true,
+			},
+			"bgp_rd_ipv4_address": schema.StringAttribute{
+				MarkdownDescription: "IP address",
+				Computed:            true,
+			},
+			"bgp_rd_ipv4_address_index": schema.Int64Attribute{
+				MarkdownDescription: "IP-address:nn (hex or decimal format)",
+				Computed:            true,
+			},
+			"bgp_route_target_two_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: "Two Byte AS Number Route Target",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"as_number": schema.Int64Attribute{
+							MarkdownDescription: "Two Byte AS Number",
+							Computed:            true,
+						},
+						"assigned_number": schema.Int64Attribute{
+							MarkdownDescription: "AS:nn (hex or decimal format)",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"bgp_route_target_four_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: "Four Byte AS number Route Target",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"as_number": schema.Int64Attribute{
+							MarkdownDescription: "Four Byte AS number",
+							Computed:            true,
+						},
+						"assigned_number": schema.Int64Attribute{
+							MarkdownDescription: "AS:nn (hex or decimal format)",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"bgp_route_target_ipv4_address_format": schema.ListNestedAttribute{
+				MarkdownDescription: "IP address",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"ipv4_address": schema.StringAttribute{
+							MarkdownDescription: "IP address",
+							Computed:            true,
+						},
+						"assigned_number": schema.Int64Attribute{
+							MarkdownDescription: "IP-address:nn (hex or decimal format)",
+							Computed:            true,
+						},
+					},
+				},
+			},
 			"bgp_route_target_import_two_byte_as_format": schema.ListNestedAttribute{
 				MarkdownDescription: "Two Byte AS Number Route Target",
 				Computed:            true,
@@ -171,8 +243,84 @@ func (d *EVPNSegmentRoutingSRv6EVIDataSource) Schema(ctx context.Context, req da
 					},
 				},
 			},
+			"bgp_table_policy": schema.StringAttribute{
+				MarkdownDescription: "Configure policy for installation of forwarding data to L2FIB",
+				Computed:            true,
+			},
+			"bgp_implicit_import_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable BGP implicit import",
+				Computed:            true,
+			},
+			"bgp_route_policy_import": schema.StringAttribute{
+				MarkdownDescription: "Import route policy",
+				Computed:            true,
+			},
+			"bgp_route_policy_export": schema.StringAttribute{
+				MarkdownDescription: "Export route policy",
+				Computed:            true,
+			},
+			"preferred_nexthop_lowest_ip": schema.BoolAttribute{
+				MarkdownDescription: "Lowest nexthop IP is active",
+				Computed:            true,
+			},
+			"preferred_nexthop_highest_ip": schema.BoolAttribute{
+				MarkdownDescription: "Highest nexthop IP is active",
+				Computed:            true,
+			},
+			"preferred_nexthop_modulo": schema.BoolAttribute{
+				MarkdownDescription: "EVI modulo of nexthops cardinality is active",
+				Computed:            true,
+			},
 			"advertise_mac": schema.BoolAttribute{
 				MarkdownDescription: "Configure EVPN Instance MAC advertisement",
+				Computed:            true,
+			},
+			"advertise_mac_bvi_mac": schema.BoolAttribute{
+				MarkdownDescription: "Advertise local MAC and BVI MAC routes",
+				Computed:            true,
+			},
+			"unknown_unicast_suppression": schema.BoolAttribute{
+				MarkdownDescription: "Enabling unknown unicast suppression",
+				Computed:            true,
+			},
+			"ignore_mtu_mismatch": schema.BoolAttribute{
+				MarkdownDescription: "Ignore mismatch of local and remote MTUs",
+				Computed:            true,
+			},
+			"ignore_mtu_mismatch_disable_deprecated": schema.BoolAttribute{
+				MarkdownDescription: "Disables ingoring mismatch of local and remote MTUs (deprecated)",
+				Computed:            true,
+			},
+			"enforce_mtu_match": schema.BoolAttribute{
+				MarkdownDescription: "Enforce matching of local and remote MTUs",
+				Computed:            true,
+			},
+			"transmit_mtu_zero": schema.BoolAttribute{
+				MarkdownDescription: "Transmit MTU zero to remote instead of actual local MTU",
+				Computed:            true,
+			},
+			"transmit_mtu_zero_disable_deprecated": schema.BoolAttribute{
+				MarkdownDescription: "Disables transmitting MTU zero to remote instead of actual local MTU (deprecated)",
+				Computed:            true,
+			},
+			"transmit_l2_mtu": schema.BoolAttribute{
+				MarkdownDescription: "Transmit L2 MTU of attachment circuit",
+				Computed:            true,
+			},
+			"re_origination_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable route re-origination",
+				Computed:            true,
+			},
+			"etree": schema.BoolAttribute{
+				MarkdownDescription: "Configure EVPN Instance E-Tree",
+				Computed:            true,
+			},
+			"etree_rt_leaf": schema.BoolAttribute{
+				MarkdownDescription: "Designate EVPN Instance as EVPN E-Tree Route-Target Leaf Site",
+				Computed:            true,
+			},
+			"bvi_coupled_mode": schema.BoolAttribute{
+				MarkdownDescription: "Couples BVI state to the core EVPN Instance state",
 				Computed:            true,
 			},
 			"locators": schema.ListNestedAttribute{

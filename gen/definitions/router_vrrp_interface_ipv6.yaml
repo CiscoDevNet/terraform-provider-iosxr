@@ -18,16 +18,18 @@ attributes:
         example: "2001:db8::1"
   - yang_name: address/linklocal/linklocal-address
     tf_name: address_linklocal
-    example: 2::2
-    exclude_test: true
+    example: fe80::2
+    minimum_test_value: '"fe80::2"'
   - yang_name: address/linklocal/autoconfig
     tf_name: address_linklocal_autoconfig
-    minimum_test_value: true
     example: true
+    exclude_test: true
   - yang_name: priority
     example: 250
   - yang_name: name
     example: TEST2
+  - yang_name: unicast-peer
+    example: fe80::3
   - yang_name: timer/advertisement-time-in-seconds
     tf_name: timer_advertisement_seconds
     example: 10

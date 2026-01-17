@@ -7,6 +7,147 @@ description: |-
 
 # Changelog
 
+## 0.7.0
+
+- BREAKING CHANGE: Decompose `iosxr_interface` into individual interface type resource and data source
+  - Interface types:
+      `iosxr_interface_ethernet` `iosxr_interface_ethernet_subinterface` `iosxr_interface_bundle_ether` `iosxr_interface_bundle_ether_subinterface` `iosxr_interface_bvi` `iosxr_interface_loopback` `iosxr_interface_tunnel_ip` `iosxr_interface_tunnel_te`
+- BREAKING CHANGE: Consolidate `iosxr_logging_source_interface` into `iosxr_logging` resource and data source
+- BREAKING CHANGE: Consolidate `iosxr_evpn_group` into `iosxr_evpn` resource and data source
+- BREAKING CHANGE: Consolidate `iosxr_segment_routing_te_policy_candidate_path` into `iosxr_segment_routing_te_policy` resource and data source
+- BREAKING CHANGE: Consolidate `iosxr_snmp_server_view` into `iosxr_snmp_server` resource and data source
+- BREAKING CHANGE: Consolidate `iosxr_l2vpn_xconnect_group_p2p` into `iosxr_l2vpn_xconnect_group` resource and data source
+- BREAKING CHANGE: Consolidate `iosxr_l2vpn_bridge_group` into `iosxr_l2vpn_bridge_group_bridge_domain` resource and data source
+- BREAKING CHANGE: Decompose `iosxr_segment_routing_te` on-demand-colors into `iosxr_segment_routing_te_on_demand_color` resource and data source
+- BREAKING CHANGE: Decompose `iosxr_mpls_ldp` into `iosxr_mpls_ldp`, `iosxr_mpls_ldp_address_family`, `iosxr_mpls_ldp_interface`, `iosxr_mpls_ldp_mldp`, `iosxr_mpls_ldp_vrf` resource and data source
+- BREAKING CHANGE: Rename `fast_reroute_per_prefix_tiebreaker_node_protecting` to `fast_reroute_per_prefix_tiebreaker_node_protecting_index` in `iosxr_router_ospf_area_interface` resource and data source
+- BREAKING CHANGE: Rename `fast_reroute_per_prefix_tiebreaker_srlg_disjoint` to `fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index` in `iosxr_router_ospf_area_interface` resource and data source
+- BREAKING CHANGE: Rename `fast_reroute_per_prefix_ti_lfa` to `fast_reroute_per_prefix_ti_lfa_enable` in `iosxr_router_ospf_area_interface` resource and data source
+- BREAKING CHANGE: Rename `dampening_decay_half_life_value` to `dampening_decay_half_life` in `iosxr_interface` resource and data source
+- BREAKING CHANGE: Rename `local_as_replace_as` to `local_as_no_prepend_replace_as` in `iosxr_router_bgp_neighbor_group` resource and data source
+- BREAKING CHANGE: Rename `local_as_dual_as` to `local_as_no_prepend_replace_as_dual_as` in `iosxr_router_bgp_neighbor_group` resource and data source
+- BREAKING CHANGE: Rename `buffered_logging_buffer_size` to `buffered_size` in `iosxr_logging` resource and data source
+- BREAKING CHANGE: Rename `encapsulation_mpls_load_balancing_flow_label_code_one7` to `encapsulation_mpls_load_balancing_flow_label_code_17` in `iosxr_l2vpn_pw_class` resource and data source
+- BREAKING CHANGE: Rename `encapsulation_mpls_load_balancing_flow_label_code_one7_disable` to `encapsulation_mpls_load_balancing_flow_label_code_17_disable` in `iosxr_l2vpn_pw_class` resource and data source
+- BREAKING CHANGE: Rename `encapsulation_mpls_transport_mode_passthrough` to `encapsulation_mpls_transport_mode_vlan_passthrough` in `iosxr_l2vpn_pw_class` resource and data source
+- BREAKING CHANGE: Rename `bgp_rd` attributes for consistency with other definitions in `iosxr_evpn_evi` resource and data source
+- BREAKING CHANGE: Rename `pcc_source_address` to `pcc_source_address_ipv4` in `iosxr_segment_routing_te` resource and data source
+- BREAKING CHANGE: Rename `pce_peers` to `pce_peers_ipv4` in `iosxr_segment_routing_te` resource and data source
+- BREAKING CHANGE: Rename `unencrypted_strings` to `traps_unencrypted_strings` in `iosxr_snmp_server_vrf_host` resource and data source
+- BREAKING CHANGE: Rename `hello_keychain_send_only` to `keychain_send_only` in `iosxr_router_isis_interface` resource and data source
+- BREAKING CHANGE: Rename `hello_keychain_name` to `keychain_name` in `iosxr_router_isis_interface` resource and data source
+- BREAKING CHANGE: Rename `hello_password_hmac_md5_send_only` to `hmac_md5_send_only` in `iosxr_router_isis_interface` resource and data source
+- BREAKING CHANGE: Rename `hello_password_hmac_md5_encrypted` to `hmac_md5_encrypted` in `iosxr_router_isis_interface` resource and data source
+- BREAKING CHANGE: Rename `hello_password_text_send_only` to `text_send_only` in `iosxr_router_isis_interface` resource and data source
+- BREAKING CHANGE: Rename `hello_password_text_encrypted` to `text_encrypted` in `iosxr_router_isis_interface` resource and data source
+- BREAKING CHANGE: Rename `rpl-tag-set` to `rpl` in `iosxr_tag_set` resource and data source
+- BREAKING CHANGE: Rename `lsp_password_levels` to `lsp_password_accept_levels` in `iosxr_router_isis` resource and data source
+
+- Add many new attributes across all resources and data sources
+- Add `iosxr_ethernet_sla` resource and data source
+- Add `iosxr_ethernet_cfm` resource and data source
+- Add `iosxr_cef_load_balancing_8000` resource and data source
+- Add `iosxr_generic_interface_list` resource and data source
+- Add `iosxr_srlg` resource and data source
+- Add `iosxr_evpn_route_sync_stitching_evi` resource and data source
+- Add `iosxr_evpn_route_sync_evi` resource and data source
+- Add `iosxr_evpn_stitching_vni` resource and data source
+- Add `iosxr_evpn_vni` resource and data source
+- Add `iosxr_evpn_segment_routing_srv6_stitching_evi` resource and data source
+- Add `iosxr_evpn_stitching_evi` resource and data source
+- Add `iosxr_router_bgp_session_group` resource and data source
+- Add `iosxr_router_bgp_af_group` resource and data source
+- Add `iosxr_bmp_server` resource and data source
+- Add `iosxr_hw_module_profile_8000` resource and data source
+- Add `iosxr_rsvp` resource and data source
+- Add `iosxr_rsvp_interface` resource and data source
+- Add `iosxr_class_map_traffic` resource and data source
+- Add `iosxr_policy_map_pbr` resource and data source
+- Add `iosxr_aaa` resource and data source
+- Add `iosxr_aaa_authentication` resource and data source
+- Add `iosxr_aaa_authorization` resource and data source
+- Add `iosxr_aaa_accounting` resource and data source
+- Add `iosxr_radius_source_interface` resource and data source
+- Add `iosxr_radius_server` resource and data source
+- Add `iosxr_tacacs_source_interface` resource and data source
+- Add `iosxr_tacacs_server` resource and data source
+- Add `iosxr_segment_routing_te_on_demand_color` resource and data source
+- Add `iosxr_router_ospf_vrf_area` resource and data source
+- Add `iosxr_router_ospf_area` resource and data source
+- Add `iosxr_controller_optics` resource and data source
+- Add `iosxr_etag_set` resource and data source
+- Add `iosxr_policy_global_set` resource and data source
+- Add `iosxr_ospf_area_set` resource and data source
+- Add `iosxr_mac_set` resource and data source
+- Add `iosxr_large_community_set` resource and data source
+- Add `iosxr_extcommunity_seg_nh_set` resource and data source
+- Add `iosxr_extcommunity_evpn_link_bandwidth_set` resource and data source
+- Add `iosxr_extcommunity_bandwidth_set` resource and data source
+- Add `iosxr_frequency_synchronization` resource and data source
+- Add `iosxr_ptp` resource and data source
+- Add `iosxr_ptp_profile` resource and data source
+- Add `iosxr_macsec` resource and data source
+- Add `iosxr_macsec_policy` resource and data source
+- Add `iosxr_crypto` resource and data source
+- Add `iosxr_hw_module_profile` resource and data source
+- Add `iosxr_lpts_punt_police` resource and data source
+- Add `iosxr_monitor_session` resource and data source
+- Add `iosxr_icmp` resource and data source
+- Add `iosxr_ipsa_responder` resource and data source
+- Add `iosxr_vty_pool` resource and data source
+- Add `iosxr_telemetry_model_driven` resource and data source
+- Add `iosxr_l2vpn_bridge_group_bridge_domain_neighbor` resource and data source
+- Add `iosxr_l2vpn_bridge_group_bridge_access_vfi` resource and data source
+- Add `iosxr_l2vpn_bridge_group_bridge_domain_vfi` resource and data source
+- Add `iosxr_control_plane` resource and data source
+- Add `iosxr_segment_routing_mapping` resource and data source
+- Add `iosxr_call_home` resource and data source
+- Add `iosxr_tcp` resource and data source
+- Add `iosxr_line_console` resource and data source
+- Add `iosxr_line_default` resource and data source
+- Add `iosxr_line_template` resource and data source
+- Add `iosxr_track` resource and data source
+- Add `iosxr_ipsla_responder` resource and data source
+- Add `iosxr_ipsla` resource and data source
+- Add `iosxr_router_mld` resource and data source
+- Add `iosxr_router_mld_interface` resource and data source
+- Add `iosxr_router_mld_vrf` resource and data source
+- Add `iosxr_router_mld_vrf_inteface` resource and data source
+- Add `iosxr_router_igmp` resource and data source
+- Add `iosxr_router_igmp_interface` resource and data source
+- Add `iosxr_router_igmp_vrf` resource and data source
+- Add `iosxr_router_igmp_vrf_inteface` resource and data source
+- Add `iosxr_router_pim_ipv4` resource and data source
+- Add `iosxr_router_pim_ipv6` resource and data source
+- Add `iosxr_router_pim_vrf_ipv4` resource and data source
+- Add `iosxr_router_pim_vrf_ipv6` resource and data source
+- Add `iosxr_ftp` resource and data source
+- Add `iosxr_tftp_server` resource and data source
+- Add `iosxr_tftp_client` resource and data source
+- Add `iosxr_cli_alias` resource and data source
+- Add `iosxr_linux_networking` resource and data source
+- Add `iosxr_cef` resource and data source
+- Add `iosxr_cef_pbts_forward_class` resource and data source
+- Add `iosxr_hw_module_shutdown` resource and data source
+- Add `iosxr_performance_measurement` resource and data source
+- Add `iosxr_performance_measurement_interface` resource and data source
+- Add `iosxr_performance_measurement_delay_profile` resource and data source
+- Add `iosxr_performance_measurement_liveness_profile` resource and data source
+- Add `iosxr_performance_measurement_endpoint_ipv6` resource and data source
+- Add `iosxr_performance_measurement_endpoint_ipv4` resource and data source
+- Add `iosxr_xml_agent` resource and data source
+- Add `iosxr_netconf_agent_tty` resource and data source
+- Add `iosxr_netconf_yang_agent` resource and data source
+- Add `iosxr_tpa` resource and data source
+- Add `iosxr_cli` resource
+- Make `maximum_prefix_limit` attribute of `iosxr_bgp_neighbor_address_family` resource optional
+- Make `maximum_prefix_threshold` attribute of `iosxr_bgp_neighbor_address_family` resource optional
+- Change `iosxr_ssh` default `delete_mode` to attributes
+- Fix xpath for `prefix_list_name` attribute in `spf_prefix_priority_medium_levels` list for `iosxr_router_isis_address_family` resource and data source
+- Fix xpath for `prefix_list_name` attribute in `spf_prefix_priority_high_levels` list for `iosxr_router_isis_address_family` resource and data source
+- Fix xpath for `metric_default` attribute in `metric_levels` list for `iosxr_router_isis_interface_address_family` resource and data source
+- Fix xpath for `metric_maximum` attribute in `metric_levels` list for `iosxr_router_isis_interface_address_family` resource and data source
+
 ## 0.6.0
 
 - Major changes to existing datasources/resources for compatability with IOS-XR Version 24.4.2

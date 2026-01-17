@@ -3,7 +3,7 @@ name: Flow Monitor Map
 path: Cisco-IOS-XR-um-flow-cfg:/flow/monitor-map/monitor-maps/monitor-map[monitor-map-name=%s]
 no_delete_attributes: true
 doc_category: Flow
-test_tags: [NCS]
+test_tags: [NCS, C8000]
 attributes:
   - yang_name: monitor-map-name
     tf_name: name

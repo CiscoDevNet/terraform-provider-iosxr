@@ -67,6 +67,178 @@ func (d *SegmentRoutingTEDataSource) Schema(ctx context.Context, req datasource.
 				MarkdownDescription: "The path of the retrieved object.",
 				Computed:            true,
 			},
+			"te_latency": schema.BoolAttribute{
+				MarkdownDescription: "Use TE-latency algorithm",
+				Computed:            true,
+			},
+			"max_install_standby_paths": schema.Int64Attribute{
+				MarkdownDescription: "Allow additional candidate paths to warm up non forwarding LSPs",
+				Computed:            true,
+			},
+			"kshortest_paths": schema.Int64Attribute{
+				MarkdownDescription: "Maximum number of attempted paths for cumulative bounds (default 100)",
+				Computed:            true,
+			},
+			"separate_next_hop": schema.BoolAttribute{
+				MarkdownDescription: "Use Next Hop Separation in Forwarding",
+				Computed:            true,
+			},
+			"maximum_sid_depth": schema.Int64Attribute{
+				MarkdownDescription: "Maximum SID Depth Configuration",
+				Computed:            true,
+			},
+			"effective_metric_admin_distance_metric_types": schema.ListNestedAttribute{
+				MarkdownDescription: "Administrative distance advertised for this metric type",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"metric_type": schema.StringAttribute{
+							MarkdownDescription: "MetricType",
+							Computed:            true,
+						},
+						"admin_distance": schema.Int64Attribute{
+							MarkdownDescription: "AdminDistance",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"effective_metric_admin_distance_flex_algo_metric_types": schema.ListNestedAttribute{
+				MarkdownDescription: "Administrative distance advertised for this metric type",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"metric_type": schema.Int64Attribute{
+							MarkdownDescription: "FlexAlgoMetricType",
+							Computed:            true,
+						},
+						"admin_distance": schema.Int64Attribute{
+							MarkdownDescription: "AdminDistance",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"steering_labeled_services_disable_on_demand_policies": schema.BoolAttribute{
+				MarkdownDescription: "Disable steering for labeled services for on-demand policies",
+				Computed:            true,
+			},
+			"steering_labeled_services_disable_all_policies": schema.BoolAttribute{
+				MarkdownDescription: "Disable steering for labeled services for all policies",
+				Computed:            true,
+			},
+			"steering_labeled_services_disable_pcep_policies": schema.BoolAttribute{
+				MarkdownDescription: "Disable steering for labeled services for PCE initiated policies",
+				Computed:            true,
+			},
+			"steering_labeled_services_disable_local_policies": schema.BoolAttribute{
+				MarkdownDescription: "Disable steering for labeled services for local policies",
+				Computed:            true,
+			},
+			"steering_labeled_services_disable_bgp_sr_te_policies": schema.BoolAttribute{
+				MarkdownDescription: "Disable steering for labeled services for BGP-SRTE policies",
+				Computed:            true,
+			},
+			"segment_lists_srv6_topology_check": schema.BoolAttribute{
+				MarkdownDescription: "Enable topology check for all SRv6 segment-lists",
+				Computed:            true,
+			},
+			"segment_lists_srv6_sid_format": schema.StringAttribute{
+				MarkdownDescription: "Segment-lists configuration",
+				Computed:            true,
+			},
+			"segment_lists_srv6_explicit_segments": schema.ListNestedAttribute{
+				MarkdownDescription: "Segment-list configuration",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"path_name": schema.StringAttribute{
+							MarkdownDescription: "Segment-list name",
+							Computed:            true,
+						},
+						"srv6_segments": schema.ListNestedAttribute{
+							MarkdownDescription: "SRv6 segment configuration for the given index",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"index": schema.Int64Attribute{
+										MarkdownDescription: "Segment index",
+										Computed:            true,
+									},
+									"address": schema.StringAttribute{
+										MarkdownDescription: "IPv6 Address",
+										Computed:            true,
+									},
+									"hop_type": schema.StringAttribute{
+										MarkdownDescription: "SRv6 hop type",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"srv6_topology_check": schema.BoolAttribute{
+							MarkdownDescription: "Enable Topology check for the given SRv6 segment-list",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"segment_lists_sr_mpls_explicit_segments": schema.ListNestedAttribute{
+				MarkdownDescription: "Segment-list configuration",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"path_name": schema.StringAttribute{
+							MarkdownDescription: "Segment-list name",
+							Computed:            true,
+						},
+						"sr_mpls_segments": schema.ListNestedAttribute{
+							MarkdownDescription: "Configure Segment/hop at the index",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"index": schema.Int64Attribute{
+										MarkdownDescription: "Segment index",
+										Computed:            true,
+									},
+									"type": schema.StringAttribute{
+										MarkdownDescription: "Segment/hop type",
+										Computed:            true,
+									},
+									"address": schema.StringAttribute{
+										MarkdownDescription: "IP Address",
+										Computed:            true,
+									},
+									"mpls_label": schema.Int64Attribute{
+										MarkdownDescription: "MPLS Label",
+										Computed:            true,
+									},
+									"adjacency_address": schema.StringAttribute{
+										MarkdownDescription: "IP Adjacency Address",
+										Computed:            true,
+									},
+									"address_type": schema.Int64Attribute{
+										MarkdownDescription: "IP address types",
+										Computed:            true,
+									},
+									"interface_identifier": schema.Int64Attribute{
+										MarkdownDescription: "Interface Identifier",
+										Computed:            true,
+									},
+									"prefix_length": schema.Int64Attribute{
+										MarkdownDescription: "Prefix Length",
+										Computed:            true,
+									},
+									"validate_flag": schema.Int64Attribute{
+										MarkdownDescription: "Validate No Validate",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 			"logging_pcep_peer_status": schema.BoolAttribute{
 				MarkdownDescription: "Enable logging for pcep peer status",
 				Computed:            true,
@@ -75,20 +247,250 @@ func (d *SegmentRoutingTEDataSource) Schema(ctx context.Context, req datasource.
 				MarkdownDescription: "Enable logging for policy status",
 				Computed:            true,
 			},
-			"pcc_report_all": schema.BoolAttribute{
-				MarkdownDescription: "Report all local SR policies to connected PCEP peers",
+			"cspf_cache_size": schema.Int64Attribute{
+				MarkdownDescription: "Configure maximum size of the CSPF cache size in MiB",
 				Computed:            true,
 			},
-			"pcc_source_address": schema.StringAttribute{
-				MarkdownDescription: "Local source IP address to use on PCEP sessions",
+			"timers_candidate_path_cleanup_delay": schema.Int64Attribute{
+				MarkdownDescription: "Delay before cleaning up candidate paths",
 				Computed:            true,
 			},
-			"pcc_delegation_timeout": schema.Int64Attribute{
-				MarkdownDescription: "Maximum time delegated SR-TE policies can remain up without an active connection to a PCE",
+			"timers_initial_verify_restart": schema.Int64Attribute{
+				MarkdownDescription: "Timer to wait for topology convergence after topology starts populating for restart case",
+				Computed:            true,
+			},
+			"timers_initial_verify_switchover": schema.Int64Attribute{
+				MarkdownDescription: "Timer to wait for topology convergence after topology starts populating for switchover case",
+				Computed:            true,
+			},
+			"timers_initial_verify_startup": schema.Int64Attribute{
+				MarkdownDescription: "Timer to wait for topology convergence after topology starts populating for startup case",
+				Computed:            true,
+			},
+			"timers_delete_delay": schema.Int64Attribute{
+				MarkdownDescription: "Delete delay value in seconds",
+				Computed:            true,
+			},
+			"timers_cleanup_delay": schema.Int64Attribute{
+				MarkdownDescription: "Delay before cleaning up previous path",
+				Computed:            true,
+			},
+			"timers_install_delay": schema.Int64Attribute{
+				MarkdownDescription: "Delay before switching to a reoptimized path",
+				Computed:            true,
+			},
+			"timers_periodic_reoptimization": schema.Int64Attribute{
+				MarkdownDescription: "How often to perform periodic reoptimization of policies",
+				Computed:            true,
+			},
+			"resource_lists": schema.ListNestedAttribute{
+				MarkdownDescription: "Resource-list configuration",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"path_name": schema.StringAttribute{
+							MarkdownDescription: "Resource-list name",
+							Computed:            true,
+						},
+						"resources": schema.ListNestedAttribute{
+							MarkdownDescription: "Configure Resource at the index",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"index": schema.Int64Attribute{
+										MarkdownDescription: "Resource index",
+										Computed:            true,
+									},
+									"type": schema.StringAttribute{
+										MarkdownDescription: "Resource type",
+										Computed:            true,
+									},
+									"address": schema.StringAttribute{
+										MarkdownDescription: "IPv4 Address",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"distribute_link_state": schema.BoolAttribute{
+				MarkdownDescription: "Distribute policy information to BGP link-state",
+				Computed:            true,
+			},
+			"distribute_link_state_throttle": schema.Int64Attribute{
+				MarkdownDescription: "Set throttle update in seconds (default: 0 seconds)",
+				Computed:            true,
+			},
+			"distribute_link_state_report_candidate_path_inactive": schema.BoolAttribute{
+				MarkdownDescription: "Enable reporting of inactive candidate paths",
+				Computed:            true,
+			},
+			"bfd_timers_session_bringup": schema.Int64Attribute{
+				MarkdownDescription: "How long to wait for new BFD session to come up",
+				Computed:            true,
+			},
+			"binding_sid_rules_explicit": schema.StringAttribute{
+				MarkdownDescription: "Binding sid explicit rule",
+				Computed:            true,
+			},
+			"binding_sid_rules_dynamic": schema.StringAttribute{
+				MarkdownDescription: "Binding SID dynamic rule. Applicable for SR-MPLS and SRv6 policies",
+				Computed:            true,
+			},
+			"interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "SR-TE interface",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: "SR-TE Interface name",
+							Computed:            true,
+						},
+						"affinities": schema.ListNestedAttribute{
+							MarkdownDescription: "Set user defined interface attribute flags",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"affinity_name": schema.StringAttribute{
+										MarkdownDescription: "Interface affinity names",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: "Interface TE metric configuration",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"pce_peers_ipv4": schema.ListNestedAttribute{
+				MarkdownDescription: "PCE peer",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"pce_address": schema.StringAttribute{
+							MarkdownDescription: "Remote PCE address",
+							Computed:            true,
+						},
+						"password_encrypted": schema.StringAttribute{
+							MarkdownDescription: "PCC Peer MD5 Password",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"pce_group": schema.StringAttribute{
+							MarkdownDescription: "Name of the PCE group - maximum 16 characters",
+							Computed:            true,
+						},
+						"precedence": schema.Int64Attribute{
+							MarkdownDescription: "Precedence value of this PCE",
+							Computed:            true,
+						},
+						"tcp_ao_keychain": schema.StringAttribute{
+							MarkdownDescription: "Name of the keychain",
+							Computed:            true,
+						},
+						"tcp_ao_include_tcp_options": schema.BoolAttribute{
+							MarkdownDescription: "Include other TCP options in the header",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"pce_peers_ipv6": schema.ListNestedAttribute{
+				MarkdownDescription: "PCE peer",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"pce_address": schema.StringAttribute{
+							MarkdownDescription: "Remote PCE address",
+							Computed:            true,
+						},
+						"password_encrypted": schema.StringAttribute{
+							MarkdownDescription: "PCC Peer MD5 Password",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"pce_group": schema.StringAttribute{
+							MarkdownDescription: "Name of the PCE group - maximum 16 characters",
+							Computed:            true,
+						},
+						"precedence": schema.Int64Attribute{
+							MarkdownDescription: "Precedence value of this PCE",
+							Computed:            true,
+						},
+						"tcp_ao_keychain": schema.StringAttribute{
+							MarkdownDescription: "Name of the keychain",
+							Computed:            true,
+						},
+						"tcp_ao_include_tcp_options": schema.BoolAttribute{
+							MarkdownDescription: "Include other TCP options in the header",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"pcc_profiles": schema.ListNestedAttribute{
+				MarkdownDescription: "Path profile configuration",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"profile_id": schema.Int64Attribute{
+							MarkdownDescription: "Profile unique identifier",
+							Computed:            true,
+						},
+						"steering_invalidation_drop": schema.BoolAttribute{
+							MarkdownDescription: "Enable path invalidation drop",
+							Computed:            true,
+						},
+						"auto_route_include_all_ipv4": schema.BoolAttribute{
+							MarkdownDescription: "Include all IPv4 prefixes to autoroute",
+							Computed:            true,
+						},
+						"auto_route_include_all_ipv6": schema.BoolAttribute{
+							MarkdownDescription: "Include all eligible IPv6 prefixes",
+							Computed:            true,
+						},
+						"auto_route_force_sr_include": schema.BoolAttribute{
+							MarkdownDescription: "Force SR traffic over autoroute policy",
+							Computed:            true,
+						},
+						"auto_route_forward_class": schema.Int64Attribute{
+							MarkdownDescription: "Forward class associated with the policy",
+							Computed:            true,
+						},
+						"auto_route_metric_type": schema.StringAttribute{
+							MarkdownDescription: "Metric type",
+							Computed:            true,
+						},
+						"auto_route_metric_relative_value": schema.Int64Attribute{
+							MarkdownDescription: "Autoroute relative metric",
+							Computed:            true,
+						},
+						"auto_route_metric_constant_value": schema.Int64Attribute{
+							MarkdownDescription: "Autoroute constant metric",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"pcc_redundancy_pcc_centric": schema.BoolAttribute{
+				MarkdownDescription: "Enable PCC centric model, where PCC only allows the lowest precedence PCE to initiate policies. THIS COMMAND IS DEPRECATED",
+				Computed:            true,
+			},
+			"pcc_redundancy_pce_centric": schema.BoolAttribute{
+				MarkdownDescription: "Enable PCE centric model",
 				Computed:            true,
 			},
 			"pcc_dead_timer": schema.Int64Attribute{
 				MarkdownDescription: "Amount of time after which the peer can declare this session down, if no PCEP message has been received",
+				Computed:            true,
+			},
+			"pcc_keepalive_timer": schema.Int64Attribute{
+				MarkdownDescription: "Maximum time between two consecutive PCEP messages sent by this node",
 				Computed:            true,
 			},
 			"pcc_initiated_state": schema.Int64Attribute{
@@ -99,133 +501,113 @@ func (d *SegmentRoutingTEDataSource) Schema(ctx context.Context, req datasource.
 				MarkdownDescription: "Amount of time that PCE initiated policy remains delegated to a peer that has gone down",
 				Computed:            true,
 			},
-			"pce_peers": schema.ListNestedAttribute{
-				MarkdownDescription: "PCE peer",
+			"pcc_delegation_timeout": schema.Int64Attribute{
+				MarkdownDescription: "Maximum time delegated SR-TE policies can remain up without an active connection to a PCE",
+				Computed:            true,
+			},
+			"pcc_report_all": schema.BoolAttribute{
+				MarkdownDescription: "Report all local SR policies to connected PCEP peers",
+				Computed:            true,
+			},
+			"pcc_source_address_ipv4": schema.StringAttribute{
+				MarkdownDescription: "Local source IP address to use on PCEP sessions",
+				Computed:            true,
+			},
+			"pcc_source_address_ipv6": schema.StringAttribute{
+				MarkdownDescription: "Local source IP address to use on PCEP sessions",
+				Computed:            true,
+			},
+			"traces": schema.ListNestedAttribute{
+				MarkdownDescription: "Trace count for provided buffer",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"pce_address": schema.StringAttribute{
-							MarkdownDescription: "Remote PCE address",
+						"buffer_name": schema.StringAttribute{
+							MarkdownDescription: "Buffer name",
 							Computed:            true,
 						},
-						"precedence": schema.Int64Attribute{
-							MarkdownDescription: "Precedence value of this PCE",
+						"trace_count": schema.Int64Attribute{
+							MarkdownDescription: "Trace count",
 							Computed:            true,
 						},
 					},
 				},
 			},
-			"on_demand_colors": schema.ListNestedAttribute{
-				MarkdownDescription: "On-demand color configuration",
+			"path_disable_algo_checks_strict_spf_areas": schema.ListNestedAttribute{
+				MarkdownDescription: "IGP area",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"dynamic_anycast_sid_inclusion": schema.BoolAttribute{
-							MarkdownDescription: "Anycast Prefix SID Inclusion. Applicable for SR-MPLS and SRv6 policies",
+						"area_id": schema.Int64Attribute{
+							MarkdownDescription: "Area identifier",
 							Computed:            true,
 						},
-						"dynamic_metric_type": schema.StringAttribute{
-							MarkdownDescription: "Metric Type",
+						"protocol": schema.StringAttribute{
+							MarkdownDescription: "IGP protocol",
 							Computed:            true,
 						},
-						"color": schema.Int64Attribute{
-							MarkdownDescription: "Color",
+					},
+				},
+			},
+			"path_disable_algo_checks_strict_spf_all_areas": schema.BoolAttribute{
+				MarkdownDescription: "Disable check for all IGP areas",
+				Computed:            true,
+			},
+			"affinity_maps": schema.ListNestedAttribute{
+				MarkdownDescription: "Affinity-map entry",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"affinity_name": schema.StringAttribute{
+							MarkdownDescription: "Affinity-map bit-position",
 							Computed:            true,
 						},
-						"srv6_enable": schema.BoolAttribute{
+						"bit_position": schema.Int64Attribute{
+							MarkdownDescription: "Affinity-map bit-position",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"candidate_paths": schema.ListNestedAttribute{
+				MarkdownDescription: "Configurations for candidate paths of specific type.",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"path_type": schema.StringAttribute{
+							MarkdownDescription: "Candidate-path type",
+							Computed:            true,
+						},
+						"source_address_selection": schema.BoolAttribute{
 							MarkdownDescription: "True only",
-							Computed:            true,
-						},
-						"srv6_locator_name": schema.StringAttribute{
-							MarkdownDescription: "SRv6 locator name",
-							Computed:            true,
-						},
-						"srv6_locator_behavior": schema.StringAttribute{
-							MarkdownDescription: "SRv6 USID Behavior",
-							Computed:            true,
-						},
-						"srv6_locator_binding_sid_type": schema.StringAttribute{
-							MarkdownDescription: "Binding Segment ID type",
-							Computed:            true,
-						},
-						"source_address": schema.StringAttribute{
-							MarkdownDescription: "Source address",
 							Computed:            true,
 						},
 						"source_address_type": schema.StringAttribute{
 							MarkdownDescription: "IP address type",
 							Computed:            true,
 						},
-						"effective_metric_enable": schema.BoolAttribute{
-							MarkdownDescription: "True only",
-							Computed:            true,
-						},
-						"effective_metric_value": schema.Int64Attribute{
-							MarkdownDescription: "Integer value of metric",
-							Computed:            true,
-						},
-						"effective_metric_type": schema.StringAttribute{
-							MarkdownDescription: "Metric type, advertised to other protocols",
-							Computed:            true,
-						},
-						"constraint_segments_protection_type": schema.StringAttribute{
-							MarkdownDescription: "Protection Type",
-							Computed:            true,
-						},
-						"constraint_segments_sid_algorithm": schema.Int64Attribute{
-							MarkdownDescription: "'0' for regular SIDs, '1' for strict-spf SIDs, '128' - '255' for flexible algorithm SIDs",
+						"source_address": schema.StringAttribute{
+							MarkdownDescription: "Source address",
 							Computed:            true,
 						},
 					},
 				},
 			},
-			"policies": schema.ListNestedAttribute{
-				MarkdownDescription: "Policy configuration",
+			"srv6_locator": schema.StringAttribute{
+				MarkdownDescription: "SRv6 locator name",
 				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"policy_name": schema.StringAttribute{
-							MarkdownDescription: "Policy name",
-							Computed:            true,
-						},
-						"srv6_enable": schema.BoolAttribute{
-							MarkdownDescription: "True only",
-							Computed:            true,
-						},
-						"srv6_locator_name": schema.StringAttribute{
-							MarkdownDescription: "SRv6 locator name",
-							Computed:            true,
-						},
-						"srv6_locator_binding_sid_type": schema.StringAttribute{
-							MarkdownDescription: "Binding Segment ID type",
-							Computed:            true,
-						},
-						"srv6_locator_behavior": schema.StringAttribute{
-							MarkdownDescription: "SRv6 USID Behavior",
-							Computed:            true,
-						},
-						"source_address": schema.StringAttribute{
-							MarkdownDescription: "Source address",
-							Computed:            true,
-						},
-						"source_address_type": schema.StringAttribute{
-							MarkdownDescription: "IP address type",
-							Computed:            true,
-						},
-						"policy_color_endpoint_color": schema.Int64Attribute{
-							MarkdownDescription: "Color",
-							Computed:            true,
-						},
-						"policy_color_endpoint_type": schema.StringAttribute{
-							MarkdownDescription: "End point type",
-							Computed:            true,
-						},
-						"policy_color_endpoint_address": schema.StringAttribute{
-							MarkdownDescription: "End point address",
-							Computed:            true,
-						},
-					},
-				},
+			},
+			"srv6_locator_binding_sid_type": schema.StringAttribute{
+				MarkdownDescription: "Binding Segment ID type",
+				Computed:            true,
+			},
+			"srv6_locator_behavior": schema.StringAttribute{
+				MarkdownDescription: "SRv6 USID Behavior",
+				Computed:            true,
+			},
+			"srv6_maximum_sid_depth": schema.Int64Attribute{
+				MarkdownDescription: "SRv6 Maximum SID Depth Configuration",
+				Computed:            true,
 			},
 		},
 	}

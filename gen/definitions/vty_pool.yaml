@@ -1,0 +1,53 @@
+---
+name: VTY Pool
+path: Cisco-IOS-XR-um-vty-pool-cfg:/vty-pool
+doc_category: System
+attributes:
+  - yang_name: default/first-vty-number
+    tf_name: default_first_vty
+    optional: true
+    delete_parent: true
+    minimum_test_value: 0
+    example: 0
+  - yang_name: default/last-vty-number
+    tf_name: default_last_vty
+    optional: true
+    delete_parent: true
+    minimum_test_value: 10
+    example: 10
+  - yang_name: default/line-template
+    tf_name: default_line_template
+    delete_parent: true
+    minimum_test_value: '"default"'
+    example: default
+  - yang_name: eem/first-vty-number
+    tf_name: eem_first_vty
+    optional: true
+    delete_parent: true
+    example: 100
+  - yang_name: eem/last-vty-number
+    tf_name: eem_last_vty
+    optional: true
+    delete_parent: true
+    example: 105
+  - yang_name: eem/line-template
+    tf_name: eem_line_template
+    delete_parent: true
+    example: "EEM_TEMPLATE"
+  - yang_name: pools/pool
+    tf_name: pools
+    type: List
+    attributes:
+      - yang_name: pool-name
+        id: true
+        example: "USER_POOL"
+      - yang_name: first-vty-number
+        tf_name: first_vty
+        optional: true
+        example: 20
+      - yang_name: last-vty-number
+        tf_name: last_vty
+        optional: true
+        example: 30
+      - yang_name: line-template
+        example: "USER_TEMPLATE"

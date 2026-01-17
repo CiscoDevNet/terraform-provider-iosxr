@@ -36,20 +36,194 @@ import (
 func TestAccIosxrPCE(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "address_ipv4", "77.77.77.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "address_ipv6", "2001:db8::1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "state_sync_ipv4s.0.address", "100.100.100.11"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "peer_filter_ipv4_access_list", "Accesslist1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "state_sync_ipv6s.0.address", "2001:db8::2"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "tcp_buffer_size", "256000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "tcp_ao_keychain_name", "KEY_CHAIN_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "tcp_ao_include_tcp_options", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "tcp_ao_accept_ao_mismatch_connection", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_maximum_attempts", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.group_id", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.link_disjoint", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.link_disjoint_strict", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.link_disjoint_lsp_one_pcc_address_type", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.link_disjoint_lsp_one_pcc_ip_address", "100.100.100.10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.link_disjoint_lsp_one_pcc_lsp_name", "LSP_10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.link_disjoint_lsp_one_pcc_shortest_path", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.link_disjoint_lsp_one_pcc_exclude_srlg", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.link_disjoint_lsp_two_pcc_address_type", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.link_disjoint_lsp_two_pcc_ip_address", "100.100.100.11"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.link_disjoint_lsp_two_pcc_lsp_name", "LSP_11"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.link_disjoint_lsp_two_pcc_exclude_srlg", "11"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.link_disjoint_sub_ids.0.sub_id", "12"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.link_disjoint_sub_ids.0.strict", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.link_disjoint_sub_ids.0.lsp_one_pcc_address_type", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.link_disjoint_sub_ids.0.lsp_one_pcc_ip_address", "100.100.100.12"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.link_disjoint_sub_ids.0.lsp_one_pcc_lsp_name", "LSP_12"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.link_disjoint_sub_ids.0.lsp_one_pcc_shortest_path", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.link_disjoint_sub_ids.0.lsp_one_pcc_exclude_srlg", "12"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.link_disjoint_sub_ids.0.lsp_two_pcc_address_type", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.link_disjoint_sub_ids.0.lsp_two_pcc_ip_address", "200.200.200.13"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.link_disjoint_sub_ids.0.lsp_two_pcc_lsp_name", "LSP_13"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.link_disjoint_sub_ids.0.lsp_two_pcc_exclude_srlg", "13"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.node_disjoint", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.node_disjoint_strict", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.node_disjoint_lsp_one_pcc_address_type", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.node_disjoint_lsp_one_pcc_ip_address", "100.100.100.14"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.node_disjoint_lsp_one_pcc_lsp_name", "LSP_14"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.node_disjoint_lsp_one_pcc_shortest_path", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.node_disjoint_lsp_one_pcc_exclude_srlg", "14"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.node_disjoint_lsp_two_pcc_address_type", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.node_disjoint_lsp_two_pcc_ip_address", "100.100.100.15"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.node_disjoint_lsp_two_pcc_lsp_name", "LSP_15"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.node_disjoint_lsp_two_pcc_exclude_srlg", "15"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.node_disjoint_sub_ids.0.sub_id", "16"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.node_disjoint_sub_ids.0.strict", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.node_disjoint_sub_ids.0.lsp_one_pcc_address_type", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.node_disjoint_sub_ids.0.lsp_one_pcc_ip_address", "100.100.100.16"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.node_disjoint_sub_ids.0.lsp_one_pcc_lsp_name", "LSP_16"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.node_disjoint_sub_ids.0.lsp_one_pcc_shortest_path", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.node_disjoint_sub_ids.0.lsp_one_pcc_exclude_srlg", "16"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.node_disjoint_sub_ids.0.lsp_two_pcc_address_type", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.node_disjoint_sub_ids.0.lsp_two_pcc_ip_address", "100.100.100.17"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.node_disjoint_sub_ids.0.lsp_two_pcc_lsp_name", "LSP_17"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.node_disjoint_sub_ids.0.lsp_two_pcc_exclude_srlg", "17"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_disjoint", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_disjoint_strict", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_disjoint_lsp_one_pcc_address_type", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_disjoint_lsp_one_pcc_ip_address", "100.100.100.18"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_disjoint_lsp_one_pcc_lsp_name", "LSP_18"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_disjoint_lsp_one_pcc_shortest_path", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_disjoint_lsp_one_pcc_exclude_srlg", "18"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_disjoint_lsp_two_pcc_address_type", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_disjoint_lsp_two_pcc_ip_address", "100.100.100.19"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_disjoint_lsp_two_pcc_lsp_name", "LSP_19"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_disjoint_lsp_two_pcc_exclude_srlg", "19"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_disjoint_sub_ids.0.sub_id", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_disjoint_sub_ids.0.strict", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_disjoint_sub_ids.0.lsp_one_pcc_address_type", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_disjoint_sub_ids.0.lsp_one_pcc_ip_address", "100.100.100.20"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_disjoint_sub_ids.0.lsp_one_pcc_lsp_name", "LSP_20"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_disjoint_sub_ids.0.lsp_one_pcc_shortest_path", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_disjoint_sub_ids.0.lsp_one_pcc_exclude_srlg", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_disjoint_sub_ids.0.lsp_two_pcc_address_type", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_disjoint_sub_ids.0.lsp_two_pcc_ip_address", "100.100.100.21"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_disjoint_sub_ids.0.lsp_two_pcc_lsp_name", "LSP_21"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_disjoint_sub_ids.0.lsp_two_pcc_exclude_srlg", "21"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_node_disjoint", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_node_disjoint_strict", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_node_disjoint_lsp_one_pcc_address_type", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_node_disjoint_lsp_one_pcc_ip_address", "100.100.100.22"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_node_disjoint_lsp_one_pcc_lsp_name", "LSP_22"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_node_disjoint_lsp_one_pcc_shortest_path", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_node_disjoint_lsp_one_pcc_exclude_srlg", "22"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_node_disjoint_lsp_two_pcc_address_type", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_node_disjoint_lsp_two_pcc_ip_address", "100.100.100.23"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_node_disjoint_lsp_two_pcc_lsp_name", "LSP_23"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_node_disjoint_lsp_two_pcc_exclude_srlg", "23"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_node_disjoint_sub_ids.0.sub_id", "24"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_node_disjoint_sub_ids.0.strict", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_node_disjoint_sub_ids.0.lsp_one_pcc_address_type", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_node_disjoint_sub_ids.0.lsp_one_pcc_ip_address", "100.100.100.24"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_node_disjoint_sub_ids.0.lsp_one_pcc_lsp_name", "LSP_24"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_node_disjoint_sub_ids.0.lsp_one_pcc_shortest_path", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_node_disjoint_sub_ids.0.lsp_one_pcc_exclude_srlg", "24"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_node_disjoint_sub_ids.0.lsp_two_pcc_address_type", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_node_disjoint_sub_ids.0.lsp_two_pcc_ip_address", "100.100.100.25"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_node_disjoint_sub_ids.0.lsp_two_pcc_lsp_name", "LSP_25"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "disjoint_path_group_ids.0.srlg_node_disjoint_sub_ids.0.lsp_two_pcc_exclude_srlg", "25"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "peer_ipv4s.0.address", "200.200.200.10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "peer_ipv4s.0.tcp_ao_keychain_name", "KEY_CHAIN_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "peer_ipv4s.0.tcp_ao_include_tcp_options", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "peer_ipv4s.0.tcp_ao_accept_ao_mismatch_connection", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "peer_ipv6s.0.address", "2001:db8::10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "peer_ipv6s.0.tcp_ao_keychain_name", "KEY_CHAIN_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "peer_ipv6s.0.tcp_ao_include_tcp_options", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "peer_ipv6s.0.tcp_ao_accept_ao_mismatch_connection", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "netconf_ssh_user", "netconf-user"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "api_authentication_digest", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "api_sibling_ipv4", "100.100.100.2"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "api_vrf", "VRF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "api_users.0.user_name", "rest-user"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "api_users.0.password_encrypted", "00141215174C04140B"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "api_ipv4_address", "100.100.100.3"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "api_ipv6_address", "2001:db8::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "timers_reoptimization", "600"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "timers_keepalive", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "timers_minimum_peer_keepalive", "40"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "timers_peer_zombie", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "timers_init_verify_restart", "80"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "timers_init_verify_switchover", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "timers_init_verify_startup", "360"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "backoff_ratio", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "backoff_difference", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "backoff_threshold", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "logging_no_path", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "logging_fallback", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "logging_pcep_pcerr_received", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "logging_pcep_api_send_queue_congestion_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "logging_pcep_disjointness_status", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "segment_routing_strict_sid_only", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_affinity_bitmaps.0.affinity_color_name", "COLOR_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_affinity_bitmaps.0.affinity_bit_position", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_segment_lists.0.segment_list_name", "SEGMENT_LIST_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_segment_lists.0.indexes.0.index_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_segment_lists.0.indexes.0.mpls_label", "16100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.address", "100.100.100.26"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.policy_name", "PEER_POLICY1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.candidate_paths_append_sid_mpls", "16100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.candidate_paths_preferences.0.preference_id", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.candidate_paths_preferences.0.dynamic_mpls", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.candidate_paths_preferences.0.dynamic_metric_type_latency", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.candidate_paths_preferences.0.dynamic_metric_sid_limit", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.candidate_paths_preferences.0.explicit_segment_list_names.0.segment_list_name", "SEGMENT_LIST_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.candidate_paths_preferences.0.constraints_segments_sid_algorithm", "128"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.candidate_paths_preferences.0.constraints_segments_protection_protected_preferred", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.candidate_paths_affinity_include_any_colors.0.affinity_color_name", "COLOR_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.candidate_paths_affinity_include_all_colors.0.affinity_color_name", "COLOR_2"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.candidate_paths_affinity_exclude_colors.0.affinity_color_name", "COLOR_3"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.color", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.end_point_ipv4", "100.100.100.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.binding_sid_mpls", "24200"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.shutdown", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.profile_id", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_ipv4_peers.0.policies.0.path_selection_protected", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_cspf_anycast_sid_inclusion", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_cspf_sr_native", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_cspf_sr_native_force", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_endpoint_sets.0.endpoint_set_name", "ENDPOINT_SET_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_endpoint_sets.0.ipv4s.0.address", "100.100.100.30"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_policies.0.policy_name", "P2MP_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_policies.0.color", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_policies.0.endpoint_set", "ENDPOINT_SET_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_policies.0.source_ipv4", "100.100.100.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_policies.0.shutdown", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_policies.0.fast_reroute_lfa", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_policies.0.treesid_mpls", "24200"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_policies.0.candidate_paths_constraints_affinity_include_any_colors.0.affinity_color_name", "COLOR_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_policies.0.candidate_paths_constraints_affinity_include_all_colors.0.affinity_color_name", "COLOR_2"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_policies.0.candidate_paths_constraints_affinity_exclude_colors.0.affinity_color_name", "COLOR_3"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_policies.0.candidate_paths_preferences.0.preference_id", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_policies.0.candidate_paths_preferences.0.dynamic", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_policies.0.candidate_paths_preferences.0.dynamic_metric_type_latency", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_timers_reoptimization", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_timers_cleanup", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_label_range_min", "16000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_label_range_max", "17000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_multipath_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_fast_reroute_lfa", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_frr_node_set_from_ipv4s.0.address", "100.100.100.31"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "srte_p2mp_frr_node_set_to_ipv4s.0.address", "100.100.100.32"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "peer_filter_ipv4_access_list", "ACL_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "hierarchical_underlay_enable_all", "true"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrPCEConfig_minimum(),
+			Config: testAccIosxrPCEPrerequisitesConfig + testAccIosxrPCEConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrPCEConfig_all(),
+		Config: testAccIosxrPCEPrerequisitesConfig + testAccIosxrPCEConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -79,6 +253,27 @@ func iosxrPCEImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccIosxrPCEPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-key-chain-cfg:/key/chains/chain[key-chain-name=KEY_CHAIN_1]"
+	attributes = {
+		"key-chain-name" = "KEY_CHAIN_1"
+	}
+	lists = [
+		{
+			name = "keys/key"
+			key = "key-name"
+			items = [
+				{
+					"key-name" = "1"
+					"key-string/password" = "00071A150754"
+				},
+			]
+		},
+	]
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
@@ -86,6 +281,8 @@ func iosxrPCEImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 
 func testAccIosxrPCEConfig_minimum() string {
 	config := `resource "iosxr_pce" "test" {` + "\n"
+	config += `	tcp_buffer_size = 256000` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -97,16 +294,247 @@ func testAccIosxrPCEConfig_minimum() string {
 func testAccIosxrPCEConfig_all() string {
 	config := `resource "iosxr_pce" "test" {` + "\n"
 	config += `	address_ipv4 = "77.77.77.1"` + "\n"
+	config += `	address_ipv6 = "2001:db8::1"` + "\n"
 	config += `	state_sync_ipv4s = [{` + "\n"
 	config += `		address = "100.100.100.11"` + "\n"
 	config += `		}]` + "\n"
-	config += `	peer_filter_ipv4_access_list = "Accesslist1"` + "\n"
+	config += `	state_sync_ipv6s = [{` + "\n"
+	config += `		address = "2001:db8::2"` + "\n"
+	config += `		}]` + "\n"
+	config += `	tcp_buffer_size = 256000` + "\n"
+	config += `	tcp_ao_keychain_name = "KEY_CHAIN_1"` + "\n"
+	config += `	tcp_ao_include_tcp_options = true` + "\n"
+	config += `	tcp_ao_accept_ao_mismatch_connection = true` + "\n"
+	config += `	disjoint_path_maximum_attempts = 5` + "\n"
+	config += `	disjoint_path_group_ids = [{` + "\n"
+	config += `		group_id = 10` + "\n"
+	config += `		link_disjoint = true` + "\n"
+	config += `		link_disjoint_strict = true` + "\n"
+	config += `		link_disjoint_lsp_one_pcc_address_type = "ipv4"` + "\n"
+	config += `		link_disjoint_lsp_one_pcc_ip_address = "100.100.100.10"` + "\n"
+	config += `		link_disjoint_lsp_one_pcc_lsp_name = "LSP_10"` + "\n"
+	config += `		link_disjoint_lsp_one_pcc_shortest_path = true` + "\n"
+	config += `		link_disjoint_lsp_one_pcc_exclude_srlg = 10` + "\n"
+	config += `		link_disjoint_lsp_two_pcc_address_type = "ipv4"` + "\n"
+	config += `		link_disjoint_lsp_two_pcc_ip_address = "100.100.100.11"` + "\n"
+	config += `		link_disjoint_lsp_two_pcc_lsp_name = "LSP_11"` + "\n"
+	config += `		link_disjoint_lsp_two_pcc_exclude_srlg = 11` + "\n"
+	config += `		link_disjoint_sub_ids = [{` + "\n"
+	config += `			sub_id = 12` + "\n"
+	config += `			strict = true` + "\n"
+	config += `			lsp_one_pcc_address_type = "ipv4"` + "\n"
+	config += `			lsp_one_pcc_ip_address = "100.100.100.12"` + "\n"
+	config += `			lsp_one_pcc_lsp_name = "LSP_12"` + "\n"
+	config += `			lsp_one_pcc_shortest_path = true` + "\n"
+	config += `			lsp_one_pcc_exclude_srlg = 12` + "\n"
+	config += `			lsp_two_pcc_address_type = "ipv4"` + "\n"
+	config += `			lsp_two_pcc_ip_address = "200.200.200.13"` + "\n"
+	config += `			lsp_two_pcc_lsp_name = "LSP_13"` + "\n"
+	config += `			lsp_two_pcc_exclude_srlg = 13` + "\n"
+	config += `		}]` + "\n"
+	config += `		node_disjoint = true` + "\n"
+	config += `		node_disjoint_strict = true` + "\n"
+	config += `		node_disjoint_lsp_one_pcc_address_type = "ipv4"` + "\n"
+	config += `		node_disjoint_lsp_one_pcc_ip_address = "100.100.100.14"` + "\n"
+	config += `		node_disjoint_lsp_one_pcc_lsp_name = "LSP_14"` + "\n"
+	config += `		node_disjoint_lsp_one_pcc_shortest_path = true` + "\n"
+	config += `		node_disjoint_lsp_one_pcc_exclude_srlg = 14` + "\n"
+	config += `		node_disjoint_lsp_two_pcc_address_type = "ipv4"` + "\n"
+	config += `		node_disjoint_lsp_two_pcc_ip_address = "100.100.100.15"` + "\n"
+	config += `		node_disjoint_lsp_two_pcc_lsp_name = "LSP_15"` + "\n"
+	config += `		node_disjoint_lsp_two_pcc_exclude_srlg = 15` + "\n"
+	config += `		node_disjoint_sub_ids = [{` + "\n"
+	config += `			sub_id = 16` + "\n"
+	config += `			strict = true` + "\n"
+	config += `			lsp_one_pcc_address_type = "ipv4"` + "\n"
+	config += `			lsp_one_pcc_ip_address = "100.100.100.16"` + "\n"
+	config += `			lsp_one_pcc_lsp_name = "LSP_16"` + "\n"
+	config += `			lsp_one_pcc_shortest_path = true` + "\n"
+	config += `			lsp_one_pcc_exclude_srlg = 16` + "\n"
+	config += `			lsp_two_pcc_address_type = "ipv4"` + "\n"
+	config += `			lsp_two_pcc_ip_address = "100.100.100.17"` + "\n"
+	config += `			lsp_two_pcc_lsp_name = "LSP_17"` + "\n"
+	config += `			lsp_two_pcc_exclude_srlg = 17` + "\n"
+	config += `		}]` + "\n"
+	config += `		srlg_disjoint = true` + "\n"
+	config += `		srlg_disjoint_strict = true` + "\n"
+	config += `		srlg_disjoint_lsp_one_pcc_address_type = "ipv4"` + "\n"
+	config += `		srlg_disjoint_lsp_one_pcc_ip_address = "100.100.100.18"` + "\n"
+	config += `		srlg_disjoint_lsp_one_pcc_lsp_name = "LSP_18"` + "\n"
+	config += `		srlg_disjoint_lsp_one_pcc_shortest_path = true` + "\n"
+	config += `		srlg_disjoint_lsp_one_pcc_exclude_srlg = 18` + "\n"
+	config += `		srlg_disjoint_lsp_two_pcc_address_type = "ipv4"` + "\n"
+	config += `		srlg_disjoint_lsp_two_pcc_ip_address = "100.100.100.19"` + "\n"
+	config += `		srlg_disjoint_lsp_two_pcc_lsp_name = "LSP_19"` + "\n"
+	config += `		srlg_disjoint_lsp_two_pcc_exclude_srlg = 19` + "\n"
+	config += `		srlg_disjoint_sub_ids = [{` + "\n"
+	config += `			sub_id = 20` + "\n"
+	config += `			strict = true` + "\n"
+	config += `			lsp_one_pcc_address_type = "ipv4"` + "\n"
+	config += `			lsp_one_pcc_ip_address = "100.100.100.20"` + "\n"
+	config += `			lsp_one_pcc_lsp_name = "LSP_20"` + "\n"
+	config += `			lsp_one_pcc_shortest_path = true` + "\n"
+	config += `			lsp_one_pcc_exclude_srlg = 20` + "\n"
+	config += `			lsp_two_pcc_address_type = "ipv4"` + "\n"
+	config += `			lsp_two_pcc_ip_address = "100.100.100.21"` + "\n"
+	config += `			lsp_two_pcc_lsp_name = "LSP_21"` + "\n"
+	config += `			lsp_two_pcc_exclude_srlg = 21` + "\n"
+	config += `		}]` + "\n"
+	config += `		srlg_node_disjoint = true` + "\n"
+	config += `		srlg_node_disjoint_strict = true` + "\n"
+	config += `		srlg_node_disjoint_lsp_one_pcc_address_type = "ipv4"` + "\n"
+	config += `		srlg_node_disjoint_lsp_one_pcc_ip_address = "100.100.100.22"` + "\n"
+	config += `		srlg_node_disjoint_lsp_one_pcc_lsp_name = "LSP_22"` + "\n"
+	config += `		srlg_node_disjoint_lsp_one_pcc_shortest_path = true` + "\n"
+	config += `		srlg_node_disjoint_lsp_one_pcc_exclude_srlg = 22` + "\n"
+	config += `		srlg_node_disjoint_lsp_two_pcc_address_type = "ipv4"` + "\n"
+	config += `		srlg_node_disjoint_lsp_two_pcc_ip_address = "100.100.100.23"` + "\n"
+	config += `		srlg_node_disjoint_lsp_two_pcc_lsp_name = "LSP_23"` + "\n"
+	config += `		srlg_node_disjoint_lsp_two_pcc_exclude_srlg = 23` + "\n"
+	config += `		srlg_node_disjoint_sub_ids = [{` + "\n"
+	config += `			sub_id = 24` + "\n"
+	config += `			strict = true` + "\n"
+	config += `			lsp_one_pcc_address_type = "ipv4"` + "\n"
+	config += `			lsp_one_pcc_ip_address = "100.100.100.24"` + "\n"
+	config += `			lsp_one_pcc_lsp_name = "LSP_24"` + "\n"
+	config += `			lsp_one_pcc_shortest_path = true` + "\n"
+	config += `			lsp_one_pcc_exclude_srlg = 24` + "\n"
+	config += `			lsp_two_pcc_address_type = "ipv4"` + "\n"
+	config += `			lsp_two_pcc_ip_address = "100.100.100.25"` + "\n"
+	config += `			lsp_two_pcc_lsp_name = "LSP_25"` + "\n"
+	config += `			lsp_two_pcc_exclude_srlg = 25` + "\n"
+	config += `		}]` + "\n"
+	config += `		}]` + "\n"
+	config += `	peer_ipv4s = [{` + "\n"
+	config += `		address = "200.200.200.10"` + "\n"
+	config += `		tcp_ao_keychain_name = "KEY_CHAIN_1"` + "\n"
+	config += `		tcp_ao_include_tcp_options = true` + "\n"
+	config += `		tcp_ao_accept_ao_mismatch_connection = true` + "\n"
+	config += `		}]` + "\n"
+	config += `	peer_ipv6s = [{` + "\n"
+	config += `		address = "2001:db8::10"` + "\n"
+	config += `		tcp_ao_keychain_name = "KEY_CHAIN_1"` + "\n"
+	config += `		tcp_ao_include_tcp_options = true` + "\n"
+	config += `		tcp_ao_accept_ao_mismatch_connection = true` + "\n"
+	config += `		}]` + "\n"
+	config += `	netconf_ssh_user = "netconf-user"` + "\n"
+	config += `	netconf_ssh_password_encrypted = "00071A150754"` + "\n"
 	config += `	api_authentication_digest = true` + "\n"
 	config += `	api_sibling_ipv4 = "100.100.100.2"` + "\n"
+	config += `	api_vrf = "VRF1"` + "\n"
 	config += `	api_users = [{` + "\n"
 	config += `		user_name = "rest-user"` + "\n"
 	config += `		password_encrypted = "00141215174C04140B"` + "\n"
 	config += `		}]` + "\n"
+	config += `	api_ipv4_address = "100.100.100.3"` + "\n"
+	config += `	api_ipv6_address = "2001:db8::1"` + "\n"
+	config += `	timers_reoptimization = 600` + "\n"
+	config += `	timers_keepalive = 60` + "\n"
+	config += `	timers_minimum_peer_keepalive = 40` + "\n"
+	config += `	timers_peer_zombie = 120` + "\n"
+	config += `	timers_init_verify_restart = 80` + "\n"
+	config += `	timers_init_verify_switchover = 120` + "\n"
+	config += `	timers_init_verify_startup = 360` + "\n"
+	config += `	backoff_ratio = 10` + "\n"
+	config += `	backoff_difference = 10` + "\n"
+	config += `	backoff_threshold = 10` + "\n"
+	config += `	logging_no_path = true` + "\n"
+	config += `	logging_fallback = true` + "\n"
+	config += `	logging_pcep_pcerr_received = true` + "\n"
+	config += `	logging_pcep_api_send_queue_congestion_disable = true` + "\n"
+	config += `	logging_pcep_disjointness_status = true` + "\n"
+	config += `	segment_routing_strict_sid_only = true` + "\n"
+	config += `	srte_affinity_bitmaps = [{` + "\n"
+	config += `		affinity_color_name = "COLOR_1"` + "\n"
+	config += `		affinity_bit_position = 1` + "\n"
+	config += `		}]` + "\n"
+	config += `	srte_segment_lists = [{` + "\n"
+	config += `		segment_list_name = "SEGMENT_LIST_1"` + "\n"
+	config += `		indexes = [{` + "\n"
+	config += `			index_number = 1` + "\n"
+	config += `			mpls_label = 16100` + "\n"
+	config += `		}]` + "\n"
+	config += `		}]` + "\n"
+	config += `	srte_ipv4_peers = [{` + "\n"
+	config += `		address = "100.100.100.26"` + "\n"
+	config += `		policies = [{` + "\n"
+	config += `			policy_name = "PEER_POLICY1"` + "\n"
+	config += `			candidate_paths_append_sid_mpls = 16100` + "\n"
+	config += `			candidate_paths_preferences = [{` + "\n"
+	config += `				preference_id = 100` + "\n"
+	config += `				dynamic_mpls = true` + "\n"
+	config += `				dynamic_metric_type_latency = true` + "\n"
+	config += `				dynamic_metric_sid_limit = 5` + "\n"
+	config += `				explicit_segment_list_names = [{` + "\n"
+	config += `					segment_list_name = "SEGMENT_LIST_1"` + "\n"
+	config += `				}]` + "\n"
+	config += `				constraints_segments_sid_algorithm = 128` + "\n"
+	config += `				constraints_segments_protection_protected_preferred = true` + "\n"
+	config += `			}]` + "\n"
+	config += `			candidate_paths_affinity_include_any_colors = [{` + "\n"
+	config += `				affinity_color_name = "COLOR_1"` + "\n"
+	config += `			}]` + "\n"
+	config += `			candidate_paths_affinity_include_all_colors = [{` + "\n"
+	config += `				affinity_color_name = "COLOR_2"` + "\n"
+	config += `			}]` + "\n"
+	config += `			candidate_paths_affinity_exclude_colors = [{` + "\n"
+	config += `				affinity_color_name = "COLOR_3"` + "\n"
+	config += `			}]` + "\n"
+	config += `			color = 100` + "\n"
+	config += `			end_point_ipv4 = "100.100.100.1"` + "\n"
+	config += `			binding_sid_mpls = 24200` + "\n"
+	config += `			shutdown = false` + "\n"
+	config += `			profile_id = 5` + "\n"
+	config += `			path_selection_protected = true` + "\n"
+	config += `		}]` + "\n"
+	config += `		}]` + "\n"
+	config += `	srte_cspf_anycast_sid_inclusion = true` + "\n"
+	config += `	srte_cspf_sr_native = true` + "\n"
+	config += `	srte_cspf_sr_native_force = true` + "\n"
+	config += `	srte_p2mp_endpoint_sets = [{` + "\n"
+	config += `		endpoint_set_name = "ENDPOINT_SET_1"` + "\n"
+	config += `		ipv4s = [{` + "\n"
+	config += `			address = "100.100.100.30"` + "\n"
+	config += `		}]` + "\n"
+	config += `		}]` + "\n"
+	config += `	srte_p2mp_policies = [{` + "\n"
+	config += `		policy_name = "P2MP_POLICY_1"` + "\n"
+	config += `		color = 200` + "\n"
+	config += `		endpoint_set = "ENDPOINT_SET_1"` + "\n"
+	config += `		source_ipv4 = "100.100.100.1"` + "\n"
+	config += `		shutdown = false` + "\n"
+	config += `		fast_reroute_lfa = true` + "\n"
+	config += `		treesid_mpls = 24200` + "\n"
+	config += `		candidate_paths_constraints_affinity_include_any_colors = [{` + "\n"
+	config += `			affinity_color_name = "COLOR_1"` + "\n"
+	config += `		}]` + "\n"
+	config += `		candidate_paths_constraints_affinity_include_all_colors = [{` + "\n"
+	config += `			affinity_color_name = "COLOR_2"` + "\n"
+	config += `		}]` + "\n"
+	config += `		candidate_paths_constraints_affinity_exclude_colors = [{` + "\n"
+	config += `			affinity_color_name = "COLOR_3"` + "\n"
+	config += `		}]` + "\n"
+	config += `		candidate_paths_preferences = [{` + "\n"
+	config += `			preference_id = 100` + "\n"
+	config += `			dynamic = true` + "\n"
+	config += `			dynamic_metric_type_latency = true` + "\n"
+	config += `		}]` + "\n"
+	config += `		}]` + "\n"
+	config += `	srte_p2mp_timers_reoptimization = 300` + "\n"
+	config += `	srte_p2mp_timers_cleanup = 60` + "\n"
+	config += `	srte_p2mp_label_range_min = 16000` + "\n"
+	config += `	srte_p2mp_label_range_max = 17000` + "\n"
+	config += `	srte_p2mp_multipath_disable = true` + "\n"
+	config += `	srte_p2mp_fast_reroute_lfa = true` + "\n"
+	config += `	srte_p2mp_frr_node_set_from_ipv4s = [{` + "\n"
+	config += `		address = "100.100.100.31"` + "\n"
+	config += `		}]` + "\n"
+	config += `	srte_p2mp_frr_node_set_to_ipv4s = [{` + "\n"
+	config += `		address = "100.100.100.32"` + "\n"
+	config += `		}]` + "\n"
+	config += `	peer_filter_ipv4_access_list = "ACL_1"` + "\n"
+	config += `	hierarchical_underlay_enable_all = true` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -26,25 +26,67 @@ data "iosxr_snmp_server" "example" {
 
 ### Read-Only
 
+- `chassis_id` (String) String to uniquely identify this chassis
 - `communities` (Attributes List) The UNENCRYPTED (cleartext) community string (see [below for nested schema](#nestedatt--communities))
 - `contact` (String) Text for mib Object sysContact
+- `drop_report_acl_ipv4` (String) Type of Access-list
+- `drop_report_acl_ipv6` (String) Type of Access-list
+- `drop_unknown_user` (Boolean) Silently drop unknown v3 user packets
+- `engine_id_local` (String) engineID of the local agent
+- `engine_id_remotes` (Attributes List) engineID of the remote agent (see [below for nested schema](#nestedatt--engine_id_remotes))
 - `groups` (Attributes List) Name of the group (see [below for nested schema](#nestedatt--groups))
+- `hosts` (Attributes List) Specify hosts to receive SNMP notifications (see [below for nested schema](#nestedatt--hosts))
 - `id` (String) The path of the retrieved object.
+- `inform_pending` (Number) Set max number of informs to hold in queue
+- `inform_retries` (Number) Set retry count for informs
+- `inform_timeout` (Number) Set timeout for informs
+- `ipv4_dscp` (String) Set IP DSCP (DiffServ CodePoint)
+- `ipv6_dscp` (String) Set IP DSCP (DiffServ CodePoint)
 - `location` (String) Text for mib Object sysLocation
+- `logging_threshold_oid_processing` (Number) Configure threshold to start logging slow OID requests processing
+- `logging_threshold_pdu_processing` (Number) Configure threshold to start logging slow PDU requests processing
+- `oid_poll_stats` (Boolean) Enable OID poll stats oper CLI
+- `overload_control` (Number) Set overload-control params for handling incoming messages in critical processing mode
+- `overload_throttle_rate` (Number) Overload throttle rate for incoming queue (default 500 msec)
+- `packetsize` (Number) Largest SNMP packet size
+- `queue_length` (Number) Message queue length for each TRAP host
+- `throttle_time` (Number) Set throttle time for handling incoming messages
+- `timeouts_duplicate` (Number) Duplicate request feature timeout
+- `timeouts_in_qdrop` (Number) incoming queue drop feature
+- `timeouts_pdu_stats` (Number) SNMP pdu statistics timeout
+- `timeouts_subagent` (Number) Sub-Agent Request timeout
+- `timeouts_threshold` (Number) threshold incoming queue drop feature
+- `trap_authentication_vrf_disable` (Boolean) Disable authentication traps for packets on a vrf
+- `trap_delay_timer` (Number) Set time to delay traps on init
 - `trap_source` (String) Assign an interface for the source address of all traps
+- `trap_source_ipv4` (String) IPv4 address of the interface
+- `trap_source_ipv6` (String) IPv6 address of the interface
+- `trap_source_port` (Number) Change the source port of all traps (default 161).
+- `trap_throttle_time` (Number) Set throttle time for handling more traps
+- `trap_timeout` (Number) Set timeout for TRAP message retransmissions
+- `traps_alarm` (Boolean) Enable SNMP Cisco alarm traps
 - `traps_bfd` (Boolean) Enable BFD traps
 - `traps_bgp_cbgp_two_enable` (Boolean) Enable CISCO-BGP4-MIB v2 traps
 - `traps_bgp_cbgp_two_updown` (Boolean) Enable CISCO-BGP4-MIB v2 up/down traps
 - `traps_bgp_enable_cisco_bgp4_mib` (Boolean) Enable CISCO-BGP4-MIB v2 up/down traps
 - `traps_bgp_enable_updown` (Boolean) Enable BGP4-MIB and CISCO-BGP4-MIB traps
 - `traps_bridgemib` (Boolean) Enable SNMP Trap for Bridge MIB
+- `traps_cfm` (Boolean) Enable traps for 802.1ag Connectivity Fault Management
+- `traps_cisco_entity_ext` (Boolean) Enable SNMP entity traps
 - `traps_config` (Boolean) Enable SNMP config traps
 - `traps_copy_complete` (Boolean) Enable CISCO-CONFIG-COPY-MIB ccCopyCompletion traps
 - `traps_entity` (Boolean) Enable SNMP entity traps
 - `traps_entity_redundancy_all` (Boolean) Enable all CISCO-ENTITY-REDUNDANCY-MIB traps
+- `traps_entity_redundancy_status` (Boolean) Enable status change traps
+- `traps_entity_redundancy_switchover` (Boolean) Enable switchover traps
 - `traps_entity_state_operstatus` (Boolean) Enable entity oper status enable notification
+- `traps_entity_state_switchover` (Boolean) Enable entity state switchover notifications
 - `traps_ethernet_oam_events` (Boolean) Enable all OAM event traps
+- `traps_flash_insertion` (Boolean) Enable ciscoFlashDeviceInsertedNotif
+- `traps_flash_removal` (Boolean) Enable ciscoFlashDeviceRemovedNotif
 - `traps_fru_ctrl` (Boolean) Enable SNMP entity FRU control traps
+- `traps_hsrp` (Boolean) Enable SNMP hsrp traps
+- `traps_ipsla` (Boolean) Enable SNMP RTTMON-MIB IPSLA traps
 - `traps_isis_adjacency_change` (Boolean) isisAdjacencyChange
 - `traps_isis_all` (Boolean) Enable all IS-IS traps
 - `traps_isis_area_mismatch` (Boolean) isisAreaMismatch
@@ -65,23 +107,61 @@ data "iosxr_snmp_server" "example" {
 - `traps_isis_sequence_number_skip` (Boolean) isisSequenceNumberSkip
 - `traps_isis_version_skew` (Boolean) isisVersionSkew
 - `traps_l2vpn_all` (Boolean) Enable all L2VPN traps
+- `traps_l2vpn_cisco` (Boolean) Cisco format including extra varbinds (default IETF)
 - `traps_l2vpn_vc_down` (Boolean) Enable VC down traps
 - `traps_l2vpn_vc_up` (Boolean) Enable VC up traps
+- `traps_mpls_l3vpn_all` (Boolean) Enable all MPLS L3VPN traps
+- `traps_mpls_l3vpn_max_threshold_cleared` (Boolean) Enable max-threshold cleared traps
+- `traps_mpls_l3vpn_max_threshold_exceeded` (Boolean) Enable max-threshold exceeded traps
+- `traps_mpls_l3vpn_max_threshold_reissue_notif_time` (Number) Time interval (secs) for re-issuing max-threshold notification
+- `traps_mpls_l3vpn_mid_threshold_exceeded` (Boolean) Enable mid-threshold exceeded traps
+- `traps_mpls_l3vpn_vrf_down` (Boolean) Enable VRF down traps
+- `traps_mpls_l3vpn_vrf_up` (Boolean) Enable VRF up traps
+- `traps_mpls_ldp_down` (Boolean) Enable MPLS LDP session down traps
+- `traps_mpls_ldp_threshold` (Boolean) Enable MPLS LDP threshold traps
+- `traps_mpls_ldp_up` (Boolean) Enable MPLS LDP session up traps
+- `traps_mpls_traffic_eng_cisco` (Boolean) MPLS TE tunnel traps in Cisco format (default ietf)
+- `traps_mpls_traffic_eng_cisco_ext_bringup_fail` (Boolean) Enable MPLS TE tunnel bringup-fail trap
+- `traps_mpls_traffic_eng_cisco_ext_insuff_bw` (Boolean) Enable MPLS TE tunnel insufficient bandwidth trap
+- `traps_mpls_traffic_eng_cisco_ext_preempt` (Boolean) Enable MPLS TE tunnel preempt trap
+- `traps_mpls_traffic_eng_cisco_ext_reroute_pending` (Boolean) Enable MPLS TE tunnel reroute-pending trap
+- `traps_mpls_traffic_eng_cisco_ext_reroute_pending_clear` (Boolean) Enable MPLS TE tunnel reroute-pending clear trap
+- `traps_mpls_traffic_eng_down` (Boolean) Enable MPLS TE tunnel down traps
+- `traps_mpls_traffic_eng_p2mp_down` (Boolean) Enable MPLS TE P2MP tunnel destination down traps
+- `traps_mpls_traffic_eng_p2mp_up` (Boolean) Enable MPLS TE P2MP tunnel destination up traps
+- `traps_mpls_traffic_eng_reoptimize` (Boolean) Enable MPLS TE tunnel reoptimize traps
+- `traps_mpls_traffic_eng_reroute` (Boolean) Enable MPLS TE tunnel reroute traps
+- `traps_mpls_traffic_eng_up` (Boolean) Enable MPLS TE tunnel up traps
 - `traps_ntp` (Boolean) Enable SNMP Cisco Ntp traps
+- `traps_pim_interface_state_change` (Boolean) Enable interface state change trap
+- `traps_pim_invalid_message_received` (Boolean) Enable invalid message received trap
+- `traps_pim_neighbor_change` (Boolean) Enable neighbor change trap
+- `traps_pim_rp_mapping_change` (Boolean) Enable rp mapping change trap
 - `traps_power` (Boolean) Enable SNMP entity power traps
 - `traps_rf` (Boolean) Enable SNMP RF-MIB traps
 - `traps_sensor` (Boolean) Enable SNMP entity sensor traps
+- `traps_snmp_all` (Boolean) Enable all traps
+- `traps_snmp_authentication` (Boolean) Enable SNMPv2-MIB authenticationFailure trap
+- `traps_snmp_coldstart` (Boolean) Enable SNMPv2-MIB coldStart trap
 - `traps_snmp_linkdown` (Boolean) Enable SNMPv2-MIB linDownp traps
 - `traps_snmp_linkup` (Boolean) Enable SNMPv2-MIB linkUp traps
+- `traps_snmp_warmstart` (Boolean) Enable SNMPv2-MIB warmStart trap
+- `traps_syslog` (Boolean) Enable SNMP syslog traps
 - `traps_system` (Boolean) Enable SNMP SYSTEMMIB-MIB traps
+- `traps_vpls_all` (Boolean) Enable all VPLS traps
+- `traps_vpls_full_clear` (Boolean) Enable VPLS Full Clear traps
+- `traps_vpls_full_raise` (Boolean) Enable VPLS Full Raise traps
+- `traps_vpls_status` (Boolean) Enable VPLS Status traps
+- `traps_vrrp_events` (Boolean) Enable all VRRP event traps
 - `users` (Attributes List) Name of the user (see [below for nested schema](#nestedatt--users))
+- `views` (Attributes List) Name of the view (see [below for nested schema](#nestedatt--views))
 
 <a id="nestedatt--communities"></a>
 ### Nested Schema for `communities`
 
 Read-Only:
 
-- `community` (String) The UNENCRYPTED (cleartext) community string
+- `community` (String, Sensitive) The UNENCRYPTED (cleartext) community string
 - `ipv4` (String) Type of Access-list
 - `ipv6` (String) Type of Access-list
 - `ro` (Boolean) Read-only community
@@ -91,12 +171,36 @@ Read-Only:
 - `view` (String) Restrict this community to a named view
 
 
+<a id="nestedatt--engine_id_remotes"></a>
+### Nested Schema for `engine_id_remotes`
+
+Read-Only:
+
+- `address` (String) engineID of the remote agent
+- `engine_id` (String) engine ID octet string
+- `udp_port` (Number) The remote notification host's UDP port number
+
+
 <a id="nestedatt--groups"></a>
 ### Nested Schema for `groups`
 
 Read-Only:
 
 - `group_name` (String) Name of the group
+- `v1` (Boolean) group using the v1 security model
+- `v1_context` (String) Attach a SNMP context
+- `v1_ipv4` (String) Type of Access-list
+- `v1_ipv6` (String) Type of Access-list
+- `v1_notify` (String) specify a notify view for the group
+- `v1_read` (String) specify a read view for this group
+- `v1_write` (String) specify a write view for this group
+- `v2c` (Boolean) group using the v2c security model
+- `v2c_context` (String) Attach a SNMP context
+- `v2c_ipv4` (String) Type of Access-list
+- `v2c_ipv6` (String) Type of Access-list
+- `v2c_notify` (String) specify a notify view for the group
+- `v2c_read` (String) specify a read view for this group
+- `v2c_write` (String) specify a write view for this group
 - `v3_context` (String) Attach a SNMP context
 - `v3_ipv4` (String) Type of Access-list
 - `v3_ipv6` (String) Type of Access-list
@@ -106,18 +210,86 @@ Read-Only:
 - `v3_write` (String) specify a write view for this group
 
 
+<a id="nestedatt--hosts"></a>
+### Nested Schema for `hosts`
+
+Read-Only:
+
+- `address` (String) Specify hosts to receive SNMP notifications
+- `informs_unencrypted_strings` (Attributes List) The UNENCRYPTED (cleartext) community string (see [below for nested schema](#nestedatt--hosts--informs_unencrypted_strings))
+- `traps_unencrypted_strings` (Attributes List) The UNENCRYPTED (cleartext) community string (see [below for nested schema](#nestedatt--hosts--traps_unencrypted_strings))
+
+<a id="nestedatt--hosts--informs_unencrypted_strings"></a>
+### Nested Schema for `hosts.informs_unencrypted_strings`
+
+Read-Only:
+
+- `community_string` (String, Sensitive) The UNENCRYPTED (cleartext) community string
+- `udp_port` (Number) udp port to which notifications should be sent
+- `version_v2c` (Boolean) Use 2c for SNMPv2c
+- `version_v3_security_level` (String) Security level
+
+
+<a id="nestedatt--hosts--traps_unencrypted_strings"></a>
+### Nested Schema for `hosts.traps_unencrypted_strings`
+
+Read-Only:
+
+- `community_string` (String, Sensitive) The UNENCRYPTED (cleartext) community string
+- `udp_port` (Number) udp port to which notifications should be sent
+- `version_v2c` (Boolean) Use 2c for SNMPv2c
+- `version_v3_security_level` (String) Security level
+
+
+
 <a id="nestedatt--users"></a>
 ### Nested Schema for `users`
 
 Read-Only:
 
-- `group_name` (String) Group to which the user belongs
-- `user_name` (String) Name of the user
-- `v3_auth_md5_encryption_aes` (String) Specifies an aes-128 ENCRYPTED authentication password
-- `v3_auth_md5_encryption_default` (String) Specifies an default ENCRYPTED authentication password
-- `v3_auth_sha_encryption_aes` (String) Specifies an aes-128 ENCRYPTED authentication password
-- `v3_auth_sha_encryption_default` (String) Specifies an default ENCRYPTED authentication password
+- `group_name` (String, Sensitive) Group to which the user belongs
+- `user_name` (String, Sensitive) Name of the user
+- `v1` (Boolean) user using the v1 security model
+- `v1_ipv4` (String) Type of Access-list
+- `v1_ipv6` (String) Type of Access-list
+- `v1_systemowner` (Boolean) System Owner permissions for MIB objects
+- `v2c` (Boolean) user using the v2c security model
+- `v2c_ipv4` (String) Type of Access-list
+- `v2c_ipv6` (String) Type of Access-list
+- `v2c_systemowner` (Boolean) System Owner permissions for MIB objects
+- `v3` (Boolean) user using the v3 security model
+- `v3_auth_md5_encryption_aes` (String, Sensitive) Specifies an aes-128 ENCRYPTED authentication password
+- `v3_auth_md5_encryption_default` (String, Sensitive) Specifies an default ENCRYPTED authentication password
+- `v3_auth_sha_256_encryption_aes` (String, Sensitive) Specifies an aes-128 ENCRYPTED authentication password
+- `v3_auth_sha_256_encryption_default` (String, Sensitive) Specifies an default ENCRYPTED authentication password
+- `v3_auth_sha_512_encryption_aes` (String, Sensitive) Specifies an aes-128 ENCRYPTED authentication password
+- `v3_auth_sha_512_encryption_default` (String, Sensitive) Specifies an default ENCRYPTED authentication password
+- `v3_auth_sha_encryption_aes` (String, Sensitive) Specifies an aes-128 ENCRYPTED authentication password
+- `v3_auth_sha_encryption_default` (String, Sensitive) Specifies an default ENCRYPTED authentication password
 - `v3_ipv4` (String) Type of Access-list
-- `v3_priv_aes_aes_128_encryption_aes` (String) Specifies an aes-128 ENCRYPTED authentication password
-- `v3_priv_aes_aes_128_encryption_default` (String) Specifies an default ENCRYPTED authentication password
+- `v3_ipv6` (String) Type of Access-list
+- `v3_priv_aes_aes_128_encryption_aes` (String, Sensitive) Specifies an aes-128 ENCRYPTED authentication password
+- `v3_priv_aes_aes_128_encryption_default` (String, Sensitive) Specifies an default ENCRYPTED authentication password
+- `v3_priv_aes_aes_192_encryption_aes` (String, Sensitive) Specifies an aes-128 ENCRYPTED authentication password
+- `v3_priv_aes_aes_192_encryption_default` (String, Sensitive) Specifies an default ENCRYPTED authentication password
+- `v3_priv_aes_aes_256_encryption_aes` (String, Sensitive) Specifies an aes-128 ENCRYPTED authentication password
+- `v3_priv_aes_aes_256_encryption_default` (String, Sensitive) Specifies an default ENCRYPTED authentication password
 - `v3_systemowner` (Boolean) System Owner permissions for MIB objects
+
+
+<a id="nestedatt--views"></a>
+### Nested Schema for `views`
+
+Read-Only:
+
+- `mib_view_families` (Attributes List) MIB view family (see [below for nested schema](#nestedatt--views--mib_view_families))
+- `view_name` (String) Name of the view
+
+<a id="nestedatt--views--mib_view_families"></a>
+### Nested Schema for `views.mib_view_families`
+
+Read-Only:
+
+- `excluded` (Boolean) MIB family is excluded from the view
+- `included` (Boolean) MIB family is included in the view
+- `name` (String) MIB view family name

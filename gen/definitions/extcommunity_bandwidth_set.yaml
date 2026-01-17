@@ -1,0 +1,12 @@
+---
+name: Extcommunity Bandwidth Set
+path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/extended-community-bandwidth-sets/extended-community-bandwidth-set[set-name=%s]
+no_delete_attributes: true
+doc_category: Route Policy
+attributes:
+  - yang_name: set-name
+    example: BANDWIDTH1
+  - yang_name: rpl-extended-community-bandwidth-set
+    tf_name: rpl
+    description: "Configures an extended community bandwidth set"
+    example: "extcommunity-set bandwidth BANDWIDTH1\\n  1234:5678,\\n  1234:8765\\nend-set\\n"

@@ -8,60 +8,395 @@ attributes:
   - yang_name: area-id
     example: 0
   - yang_name: interface-name
-    example: GigabitEthernet0/0/0/1
+    example: Loopback1
+  - yang_name: affinity/flex-algo/affinity-attributes/affinity-attribute
+    tf_name: affinity_flex_algos
+    type: List
+    attributes:
+      - yang_name: affinity-attribute-name
+        tf_name: affinity_name
+        id: true
+        example: "AFFINITY-1"
+  - yang_name: neighbors/neighbor
+    tf_name: neighbors
+    type: List
+    attributes:
+      - yang_name: neighbor-address
+        tf_name: address
+        id: true
+        example: 192.168.2.1
+      - yang_name: database-filter/all/out
+        example: true
+      - yang_name: priority
+        example: 100
+      - yang_name: poll-interval
+        example: 10
+      - yang_name: cost
+        example: 100
+  - yang_name: authentication-key/encrypted
+    tf_name: authentication_key_encrypted
+    sensitive: true
+    write_only: true
+    example: "110A1016141D4B"
+  - yang_name: message-digest-keys/message-digest-key
+    tf_name: message_digest_keys
+    type: List
+    attributes:
+      - yang_name: message-digest-key-id
+        tf_name: key_id
+        id: true
+        example: 1
+      - yang_name: md5/encrypted
+        tf_name: md5_encrypted
+        sensitive: true
+        write_only: true
+        example: "01100F175804"
+  - yang_name: authentication
+    example: true
+  - yang_name: authentication/message-digest
+    example: true
+  - yang_name: authentication/keychain-name
+    example: "KEY1"
+  - yang_name: authentication/null
+    exclude_test: true
+    example: true
   - yang_name: network/broadcast
-    exclude_example: true
-    example: false
+    exclude_test: true
+    example: true
   - yang_name: network/non-broadcast
-    exclude_example: true
-    example: false
+    exclude_test: true
+    example: true
   - yang_name: network/point-to-point
     example: true
   - yang_name: network/point-to-multipoint
-    exclude_example: true
-    example: false
+    exclude_test: true
+    example: true
+  - yang_name: mpls/ldp/sync
+    exclude_test: true
+    example: true
+  - yang_name: mpls/ldp/sync/disable
+    exclude_test: true
+    example: true
   - yang_name: cost
     example: 20
+  - yang_name: cost-fallback/cost
+    tf_name: cost_fallback
+    example: 30
+  - yang_name: cost-fallback/threshold
+    example: 100000
+  - yang_name: cost-fallback/anomaly/delay/igp-metric/increment
+    exclude_test: true
+    example: 100
+  - yang_name: cost-fallback/anomaly/delay/igp-metric/multiplier
+    exclude_test: true
+    example: 2
+  - yang_name: cost-fallback/anomaly/delay/igp-metric/value
+    example: 500
+  - yang_name: cost-fallback/anomaly/delay/igp-metric/disable
+    exclude_test: true
+    example: true
+  - yang_name: cost-fallback/anomaly/delay/te-metric/increment
+    exclude_test: true
+    example: 200
+  - yang_name: cost-fallback/anomaly/delay/te-metric/multiplier
+    exclude_test: true
+    example: 3
+  - yang_name: cost-fallback/anomaly/delay/te-metric/value
+    example: 600
+  - yang_name: cost-fallback/anomaly/delay/te-metric/disable
+    exclude_test: true
+    example: true
+  - yang_name: hello-interval
+    example: 10
+  - yang_name: dead-interval
+    example: 40
   - yang_name: priority
     example: 100
+  - yang_name: retransmit-interval
+    example: 1000
+  - yang_name: transmit-delay
+    example: 100
+  - yang_name: flood-reduction/enable
+    example: true
+  - yang_name: flood-reduction/disable
+    exclude_test: true
+    example: false
+  - yang_name: demand-circuit/enable
+    example: true
+  - yang_name: demand-circuit/disable
+    exclude_test: true
+    example: false
+  - yang_name: mtu-ignore/enable
+    minimum_test_value: true
+    example: true
+  - yang_name: mtu-ignore/disable
+    exclude_test: true
+    example: false
+  - yang_name: database-filter/all/out/enable
+    example: true
+  - yang_name: database-filter/all/out/disable
+    exclude_test: true
+    example: false
   - yang_name: passive/enable
-    exclude_example: true
+    exclude_test: true
     example: false
   - yang_name: passive/disable
     example: true
-  - yang_name: fast-reroute/per-prefix/ti-lfa/enable
-    tf_name: fast_reroute_per_prefix_ti_lfa
+  - yang_name: distribute-list/access-list
+    tf_name: distribute_list_acl
+    example: "ACL_1"
+  - yang_name: distribute-list/route-policy
+    exclude_test: true
+    example: "ROUTE_POLICY_1"
+  - yang_name: packet-size
+    example: 1400
+  - yang_name: bfd/fast-detect
     example: true
-  - yang_name: fast-reroute/per-prefix/tiebreaker/srlg-disjoint/index
-    tf_name: fast_reroute_per_prefix_tiebreaker_srlg_disjoint
-    example: 22
+  - yang_name: bfd/fast-detect/strict-mode
+    example: true
+  - yang_name: bfd/fast-detect/disable
+    exclude_test: true
+    example: true
+  - yang_name: bfd/minimum-interval
+    example: 300
+  - yang_name: bfd/multiplier
+    example: 3
+  - yang_name: security/ttl
+    example: true
+  - yang_name: security/ttl/hops
+    example: 10
+  - yang_name: security/ttl/disable
+    exclude_test: true
+    example: true
+  - yang_name: prefix-suppression/enable
+    tf_name: prefix_suppression
+    exclude_test: true
+    example: true
+  - yang_name: prefix-suppression/disable
+    exclude_test: true
+    example: true
+  - yang_name: prefix-suppression/secondary-address/enable
+    tf_name: prefix_suppression_secondary_address
+    exclude_test: true
+    example: true
+  - yang_name: prefix-suppression/secondary-address/disable
+    exclude_test: true
+    example: true
+  - yang_name: fast-reroute/disable
+    exclude_test: true
+    example: true
+  # fast-reroute/per-link
+  - yang_name: fast-reroute/per-link/enable
+    tf_name: fast_reroute_per_link
+    exclude_test: true
+    example: true
+  - yang_name: fast-reroute/per-link/exclude/interfaces/interface
+    tf_name: fast_reroute_per_link_exclude_interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: GigabitEthernet0/0/0/1
+  - yang_name: fast-reroute/per-link/lfa-candidate/interfaces/interface
+    tf_name: fast_reroute_per_link_lfa_candidate_interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: GigabitEthernet0/0/0/2
+  - yang_name: fast-reroute/per-link/use-candidate-only/enable
+    tf_name: fast_reroute_per_link_use_candidate_only_enable
+    example: true
+  - yang_name: fast-reroute/per-link/use-candidate-only/disable
+    tf_name: fast_reroute_per_link_use_candidate_only_disable
+    exclude_test: true
+    example: true
+  # fast-reroute/per-prefix
+  - yang_name: fast-reroute/per-prefix/enable
+    tf_name: fast_reroute_per_prefix
+    example: true
+  - yang_name: fast-reroute/per-prefix/exclude/interfaces/interface
+    tf_name: fast_reroute_per_prefix_exclude_interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: GigabitEthernet0/0/0/3
+  - yang_name: fast-reroute/per-prefix/lfa-candidate/interfaces/interface
+    tf_name: fast_reroute_per_prefix_lfa_candidate_interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: GigabitEthernet0/0/0/4
+  - yang_name: fast-reroute/per-prefix/use-candidate-only/enable
+    tf_name: fast_reroute_per_prefix_use_candidate_only_enable
+    example: true
+  - yang_name: fast-reroute/per-prefix/use-candidate-only/disable
+    tf_name: fast_reroute_per_prefix_use_candidate_only_disable
+    exclude_test: true
+    example: true
+  - yang_name: fast-reroute/per-prefix/remote-lfa/tunnel/mpls-ldp
+    tf_name: fast_reroute_per_prefix_remote_lfa_tunnel_mpls_ldp
+    example: true
+  - yang_name: fast-reroute/per-prefix/remote-lfa/disable
+    tf_name: fast_reroute_per_prefix_remote_lfa_disable
+    exclude_test: true
+    example: true
+  - yang_name: fast-reroute/per-prefix/remote-lfa/maximum-cost
+    tf_name: fast_reroute_per_prefix_remote_lfa_maximum_cost
+    example: 500
+  - yang_name: fast-reroute/per-prefix/ti-lfa/enable
+    tf_name: fast_reroute_per_prefix_ti_lfa_enable
+    example: true
+  - yang_name: fast-reroute/per-prefix/ti-lfa/disable
+    tf_name: fast_reroute_per_prefix_ti_lfa_disable
+    exclude_test: true
+    example: true
+  - yang_name: fast-reroute/per-prefix/tiebreaker/downstream/index
+    tf_name: fast_reroute_per_prefix_tiebreaker_downstream_index
+    example: 10
+  - yang_name: fast-reroute/per-prefix/tiebreaker/downstream/disable
+    tf_name: fast_reroute_per_prefix_tiebreaker_downstream_disable
+    example: true
+    exclude_test: true
+  - yang_name: fast-reroute/per-prefix/tiebreaker/lc-disjoint/index
+    tf_name: fast_reroute_per_prefix_tiebreaker_lc_disjoint_index
+    example: 20
+  - yang_name: fast-reroute/per-prefix/tiebreaker/lc-disjoint/disable
+    tf_name: fast_reroute_per_prefix_tiebreaker_lc_disjoint_disable
+    example: true
+    exclude_test: true
+  - yang_name: fast-reroute/per-prefix/tiebreaker/lowest-backup-metric/index
+    tf_name: fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_index
+    example: 30
+  - yang_name: fast-reroute/per-prefix/tiebreaker/lowest-backup-metric/disable
+    tf_name: fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_disable
+    example: true
+    exclude_test: true
   - yang_name: fast-reroute/per-prefix/tiebreaker/node-protecting/index
-    tf_name: fast_reroute_per_prefix_tiebreaker_node_protecting
-    example: 33
-  - yang_name: prefix-sid/strict-spf/index/sid-index
-    tf_name: prefix_sid_strict_spf_index
-    example: 3000
+    tf_name: fast_reroute_per_prefix_tiebreaker_node_protecting_index
+    example: 40
+  - yang_name: fast-reroute/per-prefix/tiebreaker/node-protecting/disable
+    tf_name: fast_reroute_per_prefix_tiebreaker_node_protecting_disable
+    example: true
+    exclude_test: true
+  - yang_name: fast-reroute/per-prefix/tiebreaker/primary-path/index
+    tf_name: fast_reroute_per_prefix_tiebreaker_primary_path_index
+    example: 50
+  - yang_name: fast-reroute/per-prefix/tiebreaker/primary-path/disable
+    tf_name: fast_reroute_per_prefix_tiebreaker_primary_path_disable
+    example: true
+    exclude_test: true
+  - yang_name: fast-reroute/per-prefix/tiebreaker/secondary-path/index
+    tf_name: fast_reroute_per_prefix_tiebreaker_secondary_path_index
+    example: 60
+  - yang_name: fast-reroute/per-prefix/tiebreaker/secondary-path/disable
+    tf_name: fast_reroute_per_prefix_tiebreaker_secondary_path_disable
+    example: true
+    exclude_test: true
+  - yang_name: fast-reroute/per-prefix/tiebreaker/interface-disjoint/index
+    tf_name: fast_reroute_per_prefix_tiebreaker_interface_disjoint_index
+    example: 70
+  - yang_name: fast-reroute/per-prefix/tiebreaker/interface-disjoint/disable
+    tf_name: fast_reroute_per_prefix_tiebreaker_interface_disjoint_disable
+    example: true
+    exclude_test: true
+  - yang_name: fast-reroute/per-prefix/tiebreaker/srlg-disjoint/index
+    tf_name: fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index
+    example: 80
+  - yang_name: fast-reroute/per-prefix/tiebreaker/srlg-disjoint/disable
+    tf_name: fast_reroute_per_prefix_tiebreaker_srlg_disjoint_disable
+    example: true
+    exclude_test: true
+  - yang_name: loopback/stub-network/enable
+    example: true
+  - yang_name: loopback/stub-network/disable
+    exclude_test: true
+    example: false
+  - yang_name: link-down/fast-detect
+    example: true
+  # prefix-sid/index
+  - yang_name: prefix-sid/index/sid-index
+    tf_name: prefix_sid_index
+    optional: true
+    delete_parent: true
+    example: 100
+  - yang_name: prefix-sid/index/explicit-null
+    tf_name: prefix_sid_index_explicit_null
+    delete_parent: true
+    example: true
+  - yang_name: prefix-sid/index/n-flag-clear
+    tf_name: prefix_sid_index_n_flag_clear
+    delete_parent: true
+    example: true
+  # prefix-sid/absolute
+  - yang_name: prefix-sid/absolute/sid-label
+    tf_name: prefix_sid_absolute
     optional: true
     delete_parent: true
     exclude_test: true
+    example: 16100
+  - yang_name: prefix-sid/absolute/explicit-null
+    tf_name: prefix_sid_absolute_explicit_null
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: prefix-sid/absolute/n-flag-clear
+    tf_name: prefix_sid_absolute_n_flag_clear
+    delete_parent: true
+    exclude_test: true
+    example: true
+  # prefix-sid/strict-spf/index
+  - yang_name: prefix-sid/strict-spf/index/sid-index
+    tf_name: prefix_sid_strict_spf_index
+    optional: true
+    delete_parent: true
+    example: 300
+  - yang_name: prefix-sid/strict-spf/index/explicit-null
+    tf_name: prefix_sid_strict_spf_index_explicit_null
+    delete_parent: true
+    example: true
+  - yang_name: prefix-sid/strict-spf/index/n-flag-clear
+    tf_name: prefix_sid_strict_spf_index_n_flag_clear
+    delete_parent: true
+    example: true
+  # prefix-sid/strict-spf/absolute
+  - yang_name: prefix-sid/strict-spf/absolute/sid-label
+    tf_name: prefix_sid_strict_spf_absolute
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 16300
+  - yang_name: prefix-sid/strict-spf/absolute/explicit-null
+    tf_name: prefix_sid_strict_spf_absolute_explicit_null
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: prefix-sid/strict-spf/absolute/n-flag-clear
+    tf_name: prefix_sid_strict_spf_absolute_n_flag_clear
+    delete_parent: true
+    exclude_test: true
+    example: true
   - yang_name: prefix-sid/algorithms/algorithm
     tf_name: prefix_sid_algorithms
     type: List
-    exclude_test: true
     attributes:
       - yang_name: algorithm-number
         id: true
-        example: 233
+        example: 128
       - yang_name: index/sid-index
+        tf_name: index
         optional: true
-        example: 1048
+        example: 400
       - yang_name: index/explicit-null
-        example: false
+        example: true
       - yang_name: index/n-flag-clear
-        example: false
+        example: true
       - yang_name: absolute/sid-label
+        tf_name: absolute
         optional: true
-        example: 17000
+        example: 16400
         exclude_test: true
       - yang_name: absolute/explicit-null
         example: true
@@ -69,6 +404,48 @@ attributes:
       - yang_name: absolute/n-flag-clear
         example: true
         exclude_test: true
+  - yang_name: segment-routing/forwarding/mpls
+    exclude_test: true
+    example: true
+  - yang_name: segment-routing/forwarding/disable
+    exclude_test: true
+    example: true
+  - yang_name: adjacency-sid/indexes/index
+    tf_name: adjacency_sid_indexes
+    exclude_test: true
+    type: List
+    attributes:
+      - yang_name: sid-index
+        id: true
+        example: 500
+      - yang_name: protected
+        example: true
+      - yang_name: neighbor-address
+        example: 192.168.2.1
+  - yang_name: adjacency-sid/absolutes/absolute
+    tf_name: adjacency_sid_absolutes
+    exclude_test: true
+    type: List
+    attributes:
+      - yang_name: sid-value
+        id: true
+        example: 16500
+      - yang_name: protected
+        example: true
+      - yang_name: neighbor-address
+        example: 192.168.2.2
+  - yang_name: weight
+    exclude_test: true
+    example: 1000
+  - yang_name: advertise/prefix/route-policy
+    example: "ROUTE_POLICY_1"
+  - yang_name: delay/normalize/interval
+    delete_parent: true
+    exclude_test: true
+    example: 2000
+  - yang_name: delay/normalize/offset
+    exclude_test: true
+    example: 0
 
 test_prerequisites:
   - path: Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]
@@ -80,3 +457,15 @@ test_prerequisites:
       - name: area-id
         value: 0
     dependencies: [0]
+  - path: Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]/areas/area[area-id=0]/interfaces/interface[interface-name=Loopback1]
+    attributes:
+      - name: interface-name
+        value: Loopback1
+    dependencies: [1]
+  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]
+    attributes:
+      - name: route-policy-name
+        value: ROUTE_POLICY_1
+      - name: rpl-route-policy
+        value: "route-policy ROUTE_POLICY_1\\n  pass\\nend-policy\\n"
+    dependencies: [2]

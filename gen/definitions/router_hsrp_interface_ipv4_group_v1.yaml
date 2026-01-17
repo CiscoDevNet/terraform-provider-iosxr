@@ -13,32 +13,6 @@ attributes:
     example: 22.22.1.1
   - yang_name: address/learn
     example: false
-  - yang_name: priority
-    example: 124
-  - yang_name: mac-address
-    example: 00:01:00:02:00:02
-  - yang_name: name
-    example: NAME11
-  - yang_name: preempt/delay
-    example: 3200
-  - yang_name: timers/msec
-    tf_name: timers_msec
-    example: 100
-  - yang_name: timers/msec2
-    tf_name: timers_msec_holdtime
-    example: 300
-  - yang_name: timers/hold-time
-    tf_name: timers_seconds
-    example: 10
-    exclude_test: true
-  - yang_name: timers/hold-time2
-    tf_name: timers_seconds_holdtime
-    example: 30
-    exclude_test: true
-  - yang_name: bfd/fast-detect/peer/ipv4
-    example: 44.44.4.4
-  - yang_name: bfd/fast-detect/peer/interface
-    example: GigabitEthernet0/0/0/1
   - yang_name: address/secondary-ipv4-addresses/secondary-ipv4-address
     tf_name: secondary_ipv4_addresses
     type: List
@@ -46,6 +20,10 @@ attributes:
       - yang_name: address
         id: true
         example: 2.2.2.2
+  - yang_name: priority
+    example: 124
+  - yang_name: preempt/delay
+    example: 3200
   - yang_name: track-interfaces/track-interface
     tf_name: track_interfaces
     type: List
@@ -64,6 +42,28 @@ attributes:
         example: OBJECT1
       - yang_name: priority-decrement
         example: 177
+  - yang_name: timers/msec
+    tf_name: timers_msec
+    example: 100
+  - yang_name: timers/msec2
+    tf_name: timers_msec_holdtime
+    example: 300
+  - yang_name: timers/hold-time
+    tf_name: timers_seconds
+    example: 10
+    exclude_test: true
+  - yang_name: timers/hold-time2
+    tf_name: timers_seconds_holdtime
+    example: 30
+    exclude_test: true
+  - yang_name: mac-address
+    example: 00:01:00:02:00:02
+  - yang_name: name
+    example: NAME11
+  - yang_name: bfd/fast-detect/peer/ipv4
+    example: 44.44.4.4
+  - yang_name: bfd/fast-detect/peer/interface
+    example: GigabitEthernet0/0/0/1
 
 test_prerequisites:
   - path: Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]

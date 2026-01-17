@@ -33,41 +33,293 @@ data "iosxr_router_ospf_vrf" "example" {
 
 ### Read-Only
 
-- `areas` (Attributes List) Enter the OSPF area configuration submode (see [below for nested schema](#nestedatt--areas))
+- `address_family_ipv4_unicast` (Boolean) unicast topology
+- `adjacency_stagger_disable` (Boolean) Disable stagger OSPF adjacency bring up
+- `adjacency_stagger_initial_neighbors` (Number) Initial number of neighbors to bring up per area (default 2)
+- `adjacency_stagger_simultaneous_neighbors` (Number) Maximum simultaneous neighbors to bring up (default 64)
+- `authentication` (Boolean) Enable authentication
+- `authentication_key_encrypted` (String, Sensitive) Specifies an ENCRYPTED password (key) will follow
+- `authentication_keychain_name` (String) Specify keychain name
+- `authentication_message_digest` (Boolean) Use message-digest authentication
+- `authentication_null` (Boolean) Use no authentication
 - `auto_cost_disable` (Boolean) Assign OSPF cost based on interface type
 - `auto_cost_reference_bandwidth` (Number) Specify reference bandwidth for OSPF cost computations
 - `bfd_fast_detect` (Boolean) Enable Fast detection
+- `bfd_fast_detect_strict_mode` (Boolean) Hold down neighbor session until BFD session is up
 - `bfd_minimum_interval` (Number) Minimum interval
 - `bfd_multiplier` (Number) Detect multiplier
+- `capability_lls_disable` (Boolean) Disable Link Local Signalling capability
+- `capability_opaque_disable` (Boolean) Disable Opaque LSA capability
+- `capability_type7_prefer` (Boolean) Prefer type7 externals over type5
+- `cost` (Number) Interface cost
+- `cost_fallback_anomaly_delay_igp_metric_increment` (Number) Increment the IGP cost by the specified value
+- `cost_fallback_anomaly_delay_igp_metric_multiplier` (Number) Multiply the IGP cost by the specified value
+- `cost_fallback_anomaly_delay_igp_metric_value` (Number) Set the IGP cost to the specified value
+- `cost_fallback_anomaly_delay_te_metric_increment` (Number) Increment the TE metric by the specified value
+- `cost_fallback_anomaly_delay_te_metric_multiplier` (Number) Multiply the TE metric by the specified value
+- `cost_fallback_anomaly_delay_te_metric_value` (Number) Set the TE cost to the specified value
+- `database_filter_all_out_disable` (Boolean) Disable filtering
+- `database_filter_all_out_enable` (Boolean) Enable filtering
 - `dead_interval` (Number) Seconds
 - `default_information_originate` (Boolean) Distribute a default route
 - `default_information_originate_always` (Boolean) Always advertise default route
+- `default_information_originate_metric` (Number) OSPF default metric
 - `default_information_originate_metric_type` (Number) OSPF metric type for default routes
+- `default_information_originate_route_policy` (String) Apply route-policy to default-information origination
+- `default_metric` (Number) Default metric
+- `delay_normalize_interval` (Number) Normalization interval
+- `delay_normalize_offset` (Number) Normalization offset
+- `demand_circuit_disable` (Boolean) Disable OSPF demand circuit
+- `demand_circuit_enable` (Boolean) Enable OSPF demand circuit
+- `disable_dn_bit_check` (Boolean) Disable DN bit check
+- `distance_ospf_external` (Number) External type 5 and type 7 routes
+- `distance_ospf_inter_area` (Number) Inter-area routes
+- `distance_ospf_intra_area` (Number) Intra-area routes
+- `distance_sources` (Attributes List) source address (see [below for nested schema](#nestedatt--distance_sources))
+- `distribute_list_in_acl` (String) In-bound access-list name
+- `distribute_list_in_route_policy` (String) Route Policy to filter OSPF prefixes
+- `distribute_list_out_acl` (String) access-list name
+- `distribute_list_out_bgp_acl` (String) access-list name
+- `distribute_list_out_bgp_as` (String) bgp as-number
+- `distribute_list_out_connected_acl` (String) access-list name
+- `distribute_list_out_ospf_acl` (String) access-list name
+- `distribute_list_out_ospf_instance_name` (String) Open Shortest Path First (OSPF)
+- `distribute_list_out_static_acl` (String) access-list name
+- `domain_id_secondaries` (Attributes List) OSPF domain ID type in Hex format (see [below for nested schema](#nestedatt--domain_id_secondaries))
+- `domain_id_type` (String) Primary OSPF domain ID type in Hex format
+- `domain_id_value` (String) OSPF domain ID value in Hex format
+- `domain_tag` (Number) OSPF domain tag
+- `exchange_timer` (Number) Time in minutes after which interface will be brought down if adjacency is stuck in exchange/loading
+- `exchange_timer_hold_time` (Number) Time in minutes after which interface will be brought up to recover adjacencies
+- `exchange_timer_recovery_count` (Number) Number of times recovery will be attempted before the interface is made permanently down
+- `external_out_disable` (Boolean) Disable advertisement of intra-area routes as external
+- `external_out_enable` (Boolean) Enable advertisement of intra-area routes as external
+- `fast_reroute_disable` (Boolean) Disable IP Fast Reroute
+- `fast_reroute_per_link` (Boolean) Enable per-link Computation
+- `fast_reroute_per_link_exclude_interfaces` (Attributes List) Exclude an interface from Per-link LFA (see [below for nested schema](#nestedatt--fast_reroute_per_link_exclude_interfaces))
+- `fast_reroute_per_link_lfa_candidate_interfaces` (Attributes List) Include an interface to LFA candidate in computation (see [below for nested schema](#nestedatt--fast_reroute_per_link_lfa_candidate_interfaces))
+- `fast_reroute_per_link_priority_limit_critical` (Boolean) Compute for critical priority prefixes only
+- `fast_reroute_per_link_priority_limit_high` (Boolean) Compute for critical & high priority prefixes
+- `fast_reroute_per_link_priority_limit_medium` (Boolean) Compute for critical, high & medium priority prefixes
+- `fast_reroute_per_link_use_candidate_only_disable` (Boolean) Disable backup selection from candidate-list only
+- `fast_reroute_per_link_use_candidate_only_enable` (Boolean) Enable backup selection from candidate-list only
+- `fast_reroute_per_prefix` (Boolean) Enable per-prefix Computation
+- `fast_reroute_per_prefix_exclude_interfaces` (Attributes List) Exclude an interface from Per-prefix LFA (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_exclude_interfaces))
+- `fast_reroute_per_prefix_lfa_candidate_interfaces` (Attributes List) Include an interface to LFA candidate in computation (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_lfa_candidate_interfaces))
+- `fast_reroute_per_prefix_load_sharing_disable` (Boolean) Disable load sharing
+- `fast_reroute_per_prefix_priority_limit_critical` (Boolean) Compute for critical priority prefixes only
+- `fast_reroute_per_prefix_priority_limit_high` (Boolean) Compute for critical & high priority prefixes
+- `fast_reroute_per_prefix_priority_limit_medium` (Boolean) Compute for critical, high & medium priority prefixes
+- `fast_reroute_per_prefix_tiebreaker_downstream_disable` (Boolean) Disable tiebreaker
+- `fast_reroute_per_prefix_tiebreaker_downstream_index` (Number) Set preference order among tiebreakers
+- `fast_reroute_per_prefix_tiebreaker_interface_disjoint_disable` (Boolean) Disable tiebreaker
+- `fast_reroute_per_prefix_tiebreaker_interface_disjoint_index` (Number) Set preference order among tiebreakers
+- `fast_reroute_per_prefix_tiebreaker_lc_disjoint_disable` (Boolean) Disable tiebreaker
+- `fast_reroute_per_prefix_tiebreaker_lc_disjoint_index` (Number) Set preference order among tiebreakers
+- `fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_disable` (Boolean) Disable tiebreaker
+- `fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_index` (Number) Set preference order among tiebreakers
+- `fast_reroute_per_prefix_tiebreaker_node_protecting_disable` (Boolean) Disable tiebreaker
+- `fast_reroute_per_prefix_tiebreaker_node_protecting_index` (Number) Set preference order among tiebreakers
+- `fast_reroute_per_prefix_tiebreaker_primary_path_disable` (Boolean) Disable tiebreaker
+- `fast_reroute_per_prefix_tiebreaker_primary_path_index` (Number) Set preference order among tiebreakers
+- `fast_reroute_per_prefix_tiebreaker_secondary_path_disable` (Boolean) Disable tiebreaker
+- `fast_reroute_per_prefix_tiebreaker_secondary_path_index` (Number) Set preference order among tiebreakers
+- `fast_reroute_per_prefix_tiebreaker_srlg_disjoint_disable` (Boolean) Disable tiebreaker
+- `fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index` (Number) Set preference order among tiebreakers
+- `fast_reroute_per_prefix_use_candidate_only_disable` (Boolean) Disable backup selection from candidate-list only
+- `fast_reroute_per_prefix_use_candidate_only_enable` (Boolean) Enable backup selection from candidate-list only
+- `flood_reduction_disable` (Boolean) Disable OSPF Flood Reduction
+- `flood_reduction_enable` (Boolean) Enable OSPF Flood Reduction
 - `hello_interval` (Number) Time between HELLO packets
 - `id` (String) The path of the retrieved object.
+- `ignore_lsa_mospf` (Boolean) MOSPF Type 6 LSA
+- `link_down_fast_detect` (Boolean) Enable fast or early detection of link-down events
+- `log_adjacency_changes_detail` (Boolean) Log all state changes
+- `log_adjacency_changes_disable` (Boolean) Disable logging
+- `loopback_stub_network_disable` (Boolean) Disable advertising loopback as a stub network
+- `loopback_stub_network_enable` (Boolean) Enable advertising loopback as a stub network
+- `max_external_lsa` (Number) Maximum number of External LSAs per ASBR
+- `max_external_lsa_suppress_neighbor` (Boolean) Suppress the neighbor when limit is crossed
+- `max_external_lsa_threshold` (Number) Threshold value (%) at which to generate a warning msg
+- `max_external_lsa_warning_only` (Boolean) Only give warning message when limit is exceeded
+- `max_lsa` (Number) Maximum number of LSAs OSPF process will receive
+- `max_lsa_ignore_count` (Number) maximum number of times adjacencies can be suppressed
+- `max_lsa_ignore_time` (Number) time during which all adjacencies are suppressed
+- `max_lsa_reset_time` (Number) time after which ignore-count is reset to zero
+- `max_lsa_threshold` (Number) Threshold value (%) at which to generate a warning msg
+- `max_lsa_warning_only` (Boolean) Only give warning message when limit is exceeded
+- `max_metric_router_lsa` (Boolean) Maximum metric in self-originated router-LSAs
+- `max_metric_router_lsa_external_lsa` (Boolean) Override external-lsa metric with max-metric value
+- `max_metric_router_lsa_external_lsa_metric` (Number) Override external-lsa metric with max-metric value
+- `max_metric_router_lsa_include_stub` (Boolean) Set maximum metric for stub links in router-LSAs
+- `max_metric_router_lsa_on_proc_restart_external_lsa` (Boolean) Override external-lsa metric with max-metric value
+- `max_metric_router_lsa_on_proc_restart_external_lsa_metric` (Number) Override external-lsa metric with max-metric value
+- `max_metric_router_lsa_on_proc_restart_include_stub` (Boolean) Set maximum metric for stub links in router-LSAs
+- `max_metric_router_lsa_on_proc_restart_summary_lsa` (Boolean) Overriding metric in summary-LSAs (default 16711680)
+- `max_metric_router_lsa_on_proc_restart_summary_lsa_metric` (Number) Overriding metric in summary-LSAs (default 16711680)
+- `max_metric_router_lsa_on_proc_restart_time` (Number) Time in seconds to originate router-LSA with max-metric
+- `max_metric_router_lsa_on_proc_restart_wait_for_bgp` (Boolean) Let BGP decide when to originate router-LSA with normal metric
+- `max_metric_router_lsa_on_startup_external_lsa` (Boolean) Override external-lsa metric with max-metric value
+- `max_metric_router_lsa_on_startup_external_lsa_metric` (Number) Override external-lsa metric with max-metric value
+- `max_metric_router_lsa_on_startup_include_stub` (Boolean) Set maximum metric for stub links in router-LSAs
+- `max_metric_router_lsa_on_startup_summary_lsa` (Boolean) Overriding metric in summary-LSAs (default 16711680)
+- `max_metric_router_lsa_on_startup_summary_lsa_metric` (Number) Overriding metric in summary-LSAs (default 16711680)
+- `max_metric_router_lsa_on_startup_time` (Number) Time in seconds to originate router-LSA with max-metric
+- `max_metric_router_lsa_on_startup_wait_for_bgp` (Boolean) Let BGP decide when to originate router-LSA with normal metric
+- `max_metric_router_lsa_on_switchover_external_lsa` (Boolean) Override external-lsa metric with max-metric value
+- `max_metric_router_lsa_on_switchover_external_lsa_metric` (Number) Override external-lsa metric with max-metric value
+- `max_metric_router_lsa_on_switchover_include_stub` (Boolean) Set maximum metric for stub links in router-LSAs
+- `max_metric_router_lsa_on_switchover_summary_lsa` (Boolean) Overriding metric in summary-LSAs (default 16711680)
+- `max_metric_router_lsa_on_switchover_summary_lsa_metric` (Number) Overriding metric in summary-LSAs (default 16711680)
+- `max_metric_router_lsa_on_switchover_time` (Number) Time in seconds to originate router-LSA with max-metric
+- `max_metric_router_lsa_on_switchover_wait_for_bgp` (Boolean) Let BGP decide when to originate router-LSA with normal metric
+- `max_metric_router_lsa_summary_lsa` (Boolean) Overriding metric in summary-LSAs (default 16711680)
+- `max_metric_router_lsa_summary_lsa_metric` (Number) Overriding metric in summary-LSAs (default 16711680)
+- `maximum_interfaces` (Number) Limit number of interfaces
+- `maximum_paths` (Number) Limit number of paths
+- `maximum_redistributed_prefixes` (Number) Limit number of redistributed prefixes
+- `maximum_redistributed_prefixes_threshold` (Number) Threshold value (%) at which to generate a warning msg
+- `maximum_redistributed_prefixes_warning_only` (Boolean) Only give warning messsage when limit is exceeded
+- `message_digest_keys` (Attributes List) Message digest authentication password (key) (see [below for nested schema](#nestedatt--message_digest_keys))
+- `microloop_avoidance` (Boolean) Avoid microloops
+- `microloop_avoidance_protected` (Boolean) Avoid microloops for protected prefixes only
+- `microloop_avoidance_rib_update_delay` (Number) Delay to introduce between SPF and RIB update
+- `microloop_avoidance_segment_routing` (Boolean) Enable segment routing microloop avoidance
 - `mpls_ldp_sync` (Boolean) Enable LDP IGP synchronization
 - `mtu_ignore_disable` (Boolean) Disable ignoring the MTU in DBD packets
 - `mtu_ignore_enable` (Boolean) Ignores the MTU in DBD packets
+- `network_broadcast` (Boolean) Specify OSPF broadcast multi-access network
+- `network_non_broadcast` (Boolean) Specify OSPF NBMA network
+- `network_point_to_multipoint` (Boolean) Specify OSPF point-to-multipoint network
+- `network_point_to_point` (Boolean) Specify OSPF point-to-point network
+- `nsf_cisco` (Boolean) Enable Cisco Non Stop Forwarding
+- `nsf_cisco_enforce_global` (Boolean) For the whole OSPF process
+- `nsf_flush_delay_time` (Number) Maximum time allowed for external route learning (seconds)
+- `nsf_ietf` (Boolean) Enable ietf graceful restart
+- `nsf_ietf_helper_disable` (Boolean) router's helper support disabled
+- `nsf_ietf_strict_lsa_checking` (Boolean) terminate graceful restart helper mode if lsa changed
+- `nsf_interval` (Number) Minimum interval between NSF restarts (seconds)
+- `nsf_lifetime` (Number) Maximum route lifetime following restart (seconds)
+- `packet_size` (Number) Customize size of OSPF packets upto MTU
 - `passive_disable` (Boolean) Disable passive
 - `passive_enable` (Boolean) Enable passive
+- `prefix_suppression` (Boolean) Enable primary address suppression
+- `prefix_suppression_secondary_address` (Boolean) Enable secondary address suppression
 - `priority` (Number) Router priority
+- `queue_dispatch_flush_lsa` (Number) Number of LSAs flushed
+- `queue_dispatch_incoming` (Number) Number of continuous incoming events processed
+- `queue_dispatch_rate_limited_lsa` (Number) Number of rate-limited LSAs processed
+- `queue_dispatch_spf_lsa_limit` (Number) Number of summary or external LSAs processed per run
+- `queue_limit_high` (Number) High watermark for incoming high priority events (hello)
+- `queue_limit_low` (Number) High watermark for incoming low priority events (DBD/LSUpd/Req)
+- `queue_limit_medium` (Number) High watermark for incoming medium priority events (LSA ACK)
 - `redistribute_bgp` (Attributes List) Redistribute BGP routes (see [below for nested schema](#nestedatt--redistribute_bgp))
 - `redistribute_connected` (Boolean) Redistribute connected routes
+- `redistribute_connected_lsa_type_summary` (Boolean) LSA type 3
+- `redistribute_connected_metric` (Number) OSPF default metric
 - `redistribute_connected_metric_type` (String) OSPF exterior metric type for redistributed routes
+- `redistribute_connected_metric_use_rib_metric` (Boolean) Use metric from RIB
+- `redistribute_connected_nssa_only` (Boolean) Redistribute to NSSA areas only
+- `redistribute_connected_route_policy` (String) Apply route-policy to redistribution
 - `redistribute_connected_tag` (Number) Set tag for routes redistributed into OSPF
 - `redistribute_isis` (Attributes List) Redistribute ISIS routes (see [below for nested schema](#nestedatt--redistribute_isis))
 - `redistribute_ospf` (Attributes List) Redistribute OSPF routes (see [below for nested schema](#nestedatt--redistribute_ospf))
 - `redistribute_static` (Boolean) Redistribute static routes
+- `redistribute_static_lsa_type_summary` (Boolean) LSA type 3
+- `redistribute_static_metric` (Number) OSPF default metric
 - `redistribute_static_metric_type` (String) OSPF exterior metric type for redistributed routes
+- `redistribute_static_metric_use_rib_metric` (Boolean) Use metric from RIB
+- `redistribute_static_nssa_only` (Boolean) Redistribute to NSSA areas only
+- `redistribute_static_route_policy` (String) Apply route-policy to redistribution
 - `redistribute_static_tag` (Number) Set tag for routes redistributed into OSPF
+- `retransmit_interval` (Number) Time between retransmitting lost link state advertisements
 - `router_id` (String) configure this node
+- `security_ttl` (Boolean) Enable ttl security
+- `security_ttl_hops` (Number) IP hops
+- `snmp_context` (String) Specified SNMP context for OSPF instance
+- `snmp_trap` (Boolean) Enable SNMP trap for OSPF instance
+- `spf_prefix_priority_route_policy` (String) Specify the route-policy to prioritize route install
+- `summary_in_disable` (Boolean) Disable advertisement of external prefixes as inter-area
+- `summary_in_enable` (Boolean) Enable advertisement of external prefixes as inter-area
+- `summary_prefixes` (Attributes List) Configure IP address summaries (see [below for nested schema](#nestedatt--summary_prefixes))
+- `timers_lsa_group_pacing` (Number) OSPF LSA group pacing timer
+- `timers_lsa_min_arrival` (Number) OSPF MinLSArrival timer
+- `timers_lsa_refresh` (Number) OSPF LSA refresh interval
+- `timers_pacing_flood` (Number) OSPF flood pacing timer
+- `timers_throttle_fast_reroute` (Number) Fast-reroute throttle timer
+- `timers_throttle_lsa_all_initial_delay` (Number) For all types of OSPF LSAs
+- `timers_throttle_lsa_all_maximum_delay` (Number) Maximum delay between originating the same LSA in milliseconds
+- `timers_throttle_lsa_all_minimum_delay` (Number) Minimum delay between originating the same LSA in milliseconds
+- `timers_throttle_spf_initial_delay` (Number) OSPF SPF throttle timers
+- `timers_throttle_spf_maximum_delay` (Number) Maximum wait time in milliseconds for SPF calculations
+- `timers_throttle_spf_second_delay` (Number) Delay between first and second SPF calculation in milliseconds
+- `transmit_delay` (Number) Estimated time needed to send link-state update packet
+- `ucmp` (Boolean) Enable ucmp
+- `ucmp_delay_interval` (Number) Interval between SPF and start of the UCMP calculation
+- `ucmp_exclude_interfaces` (Attributes List) Exclude an interface during UCMP computation (see [below for nested schema](#nestedatt--ucmp_exclude_interfaces))
+- `ucmp_prefix_list` (String) Filter prefixes for which UCMP path are calculated
+- `ucmp_variance` (Number) Set the Variance for UCMP path metric
+- `weight` (Number) Interface weight
 
-<a id="nestedatt--areas"></a>
-### Nested Schema for `areas`
+<a id="nestedatt--distance_sources"></a>
+### Nested Schema for `distance_sources`
 
 Read-Only:
 
-- `area_id` (String) Enter the OSPF area configuration submode
+- `acl` (String) Access Control List name
+- `address` (String) IP Source address
+- `distance` (Number) Administrative distance
+- `wildcard` (String) IP wild card bits -- inverted mask
+
+
+<a id="nestedatt--domain_id_secondaries"></a>
+### Nested Schema for `domain_id_secondaries`
+
+Read-Only:
+
+- `type` (String) OSPF domain ID type in Hex format
+- `value` (String) OSPF domain ID value in Hex format
+
+
+<a id="nestedatt--fast_reroute_per_link_exclude_interfaces"></a>
+### Nested Schema for `fast_reroute_per_link_exclude_interfaces`
+
+Read-Only:
+
+- `interface_name` (String) Exclude an interface from Per-link LFA
+
+
+<a id="nestedatt--fast_reroute_per_link_lfa_candidate_interfaces"></a>
+### Nested Schema for `fast_reroute_per_link_lfa_candidate_interfaces`
+
+Read-Only:
+
+- `interface_name` (String) Include an interface to LFA candidate in computation
+
+
+<a id="nestedatt--fast_reroute_per_prefix_exclude_interfaces"></a>
+### Nested Schema for `fast_reroute_per_prefix_exclude_interfaces`
+
+Read-Only:
+
+- `interface_name` (String) Exclude an interface from Per-prefix LFA
+
+
+<a id="nestedatt--fast_reroute_per_prefix_lfa_candidate_interfaces"></a>
+### Nested Schema for `fast_reroute_per_prefix_lfa_candidate_interfaces`
+
+Read-Only:
+
+- `interface_name` (String) Include an interface to LFA candidate in computation
+
+
+<a id="nestedatt--message_digest_keys"></a>
+### Nested Schema for `message_digest_keys`
+
+Read-Only:
+
+- `key_id` (Number) Message digest authentication password (key)
+- `md5_encrypted` (String, Sensitive) Specifies an ENCRYPTED password (key) will follow
 
 
 <a id="nestedatt--redistribute_bgp"></a>
@@ -76,7 +328,13 @@ Read-Only:
 Read-Only:
 
 - `as_number` (String) bgp as-number
+- `lsa_type_summary` (Boolean) LSA type 3
+- `metric` (Number) OSPF default metric
 - `metric_type` (String) OSPF exterior metric type for redistributed routes
+- `metric_use_rib_metric` (Boolean) Use metric from RIB
+- `nssa_only` (Boolean) Redistribute to NSSA areas only
+- `preserve_med` (Boolean) Preserve med of BGP routes
+- `route_policy` (String) Apply route-policy to redistribution
 - `tag` (Number) Set tag for routes redistributed into OSPF
 
 
@@ -89,7 +347,12 @@ Read-Only:
 - `level_1` (Boolean) IS-IS level-1 routes only
 - `level_1_2` (Boolean) IS-IS level-1 and level-2 routes
 - `level_2` (Boolean) IS-IS level-2 routes only
+- `lsa_type_summary` (Boolean) LSA type 3
+- `metric` (Number) OSPF default metric
 - `metric_type` (String) OSPF exterior metric type for redistributed routes
+- `metric_use_rib_metric` (Boolean) Use metric from RIB
+- `nssa_only` (Boolean) Redistribute to NSSA areas only
+- `route_policy` (String) Apply route-policy to redistribution
 - `tag` (Number) Set tag for routes redistributed into OSPF
 
 
@@ -99,8 +362,36 @@ Read-Only:
 Read-Only:
 
 - `instance_name` (String) Open Shortest Path First (OSPF)
+- `lsa_type_summary` (Boolean) LSA type 3
 - `match_external` (Boolean) Redistribute OSPF external routes
+- `match_external_one` (Boolean) Redistribute external type 1 routes
+- `match_external_two` (Boolean) Redistribute external type 2 routes
 - `match_internal` (Boolean) Redistribute OSPF internal routes
 - `match_nssa_external` (Boolean) Redistribute OSPF NSSA external routes
+- `match_nssa_external_one` (Boolean) Redistribute NSSA external type 1 routes
+- `match_nssa_external_two` (Boolean) Redistribute NSSA external type 2 routes
+- `metric` (Number) OSPF default metric
 - `metric_type` (String) OSPF exterior metric type for redistributed routes
+- `metric_use_rib_metric` (Boolean) Use metric from RIB
+- `nssa_only` (Boolean) Redistribute to NSSA areas only
+- `route_policy` (String) Apply route-policy to redistribution
 - `tag` (Number) Set tag for routes redistributed into OSPF
+
+
+<a id="nestedatt--summary_prefixes"></a>
+### Nested Schema for `summary_prefixes`
+
+Read-Only:
+
+- `address` (String) IP summary prefix address
+- `mask` (String) IP smmary address mask
+- `not_advertise` (Boolean) Suppress routes that match the specified prefix/mask pair
+- `tag` (Number) Set tag
+
+
+<a id="nestedatt--ucmp_exclude_interfaces"></a>
+### Nested Schema for `ucmp_exclude_interfaces`
+
+Read-Only:
+
+- `interface_name` (String) Exclude an interface during UCMP computation

@@ -91,6 +91,22 @@ func (r *MPLSOAMResource) Schema(ctx context.Context, req resource.SchemaRequest
 				MarkdownDescription: helpers.NewAttributeDescription("Use Reverse LSP as the control channel").String,
 				Optional:            true,
 			},
+			"oam_echo_revision_one": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("draft-ietf-mpls-lsp-ping-03 (initial)").String,
+				Optional:            true,
+			},
+			"oam_echo_revision_two": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("draft-ietf-mpls-lsp-ping-03 (rev 1)").String,
+				Optional:            true,
+			},
+			"oam_echo_revision_three": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("draft-ietf-mpls-lsp-ping-03 (rev 2)").String,
+				Optional:            true,
+			},
+			"oam_echo_revision_four": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("draft-ietf-mpls-lsp-ping-09 (initial)").String,
+				Optional:            true,
+			},
 			"oam_dpm_pps": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("DPM packets per second rate - default is 50pps").AddIntegerRangeDescription(1, 250).String,
 				Optional:            true,
@@ -104,6 +120,10 @@ func (r *MPLSOAMResource) Schema(ctx context.Context, req resource.SchemaRequest
 				Validators: []validator.Int64{
 					int64validator.Between(1, 3600),
 				},
+			},
+			"oam_dpm_downstream_ecmp_faults": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Report downstream mismatches").String,
+				Optional:            true,
 			},
 		},
 	}

@@ -36,23 +36,40 @@ import (
 func TestAccIosxrRouterBGPNeighborAddressFamily(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "af_name", "vpnv4-unicast"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "route_reflector_client", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "route_reflector_client_inheritance_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "advertise_vpnv4_unicast", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "advertise_vpnv4_unicast_re_originated", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "advertise_vpnv4_unicast_re_originated_stitching_rt", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "next_hop_self", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "next_hop_self_inheritance_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "encapsulation_type", "srv6"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "route_policy_in", "ROUTE_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "route_policy_out", "ROUTE_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "soft_reconfiguration_inbound", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "soft_reconfiguration_inbound_always", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "weight", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "multipath", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "additional_paths_send", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "additional_paths_receive", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "default_originate", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "default_originate_route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "maximum_prefix_limit", "1248576"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "maximum_prefix_threshold", "80"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "maximum_prefix_warning_only", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "default_originate", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "default_originate_route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "next_hop_self", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "route_policy_in", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "route_policy_out", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "cluster_id_allow_equal", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "route_reflector_client", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "soft_reconfiguration_inbound_always", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "update_out_originator_loopcheck", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "advertise_vpnv4_unicast", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "advertise_vpnv4_unicast_re_originated", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "advertise_vpnv4_unicast_re_originated_stitching_rt", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "advertise_vpnv6_unicast", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "advertise_vpnv6_unicast_re_originated", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "advertise_vpnv6_unicast_re_originated_stitching_rt", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "segment_routing_srv6_prefix_sid_type4", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "allowas_in", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "allowconfedas_in", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "as_override", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "aigp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "aigp_send_med", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "aigp_send_cost_community_id", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "aigp_send_cost_community_id_poi_igp_cost_transitive", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "accept_own", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "slow_peer_dynamic", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "slow_peer_dynamic_threshold", "260"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -124,6 +141,24 @@ resource "iosxr_gnmi" "PreReq0" {
 }
 
 resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
+	attributes = {
+		"as-number" = "65001"
+	}
+	lists = [
+		{
+			name = "address-families/address-family"
+			key = "af-name"
+			items = [
+				{
+					"af-name" = "vpnv6-unicast"
+				},
+			]
+		},
+	]
+}
+
+resource "iosxr_gnmi" "PreReq2" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
 	attributes = {
 		"route-policy-name" = "ROUTE_POLICY_1"
@@ -142,9 +177,7 @@ func testAccIosxrRouterBGPNeighborAddressFamilyConfig_minimum() string {
 	config += `	as_number = "65001"` + "\n"
 	config += `	address = "10.1.1.2"` + "\n"
 	config += `	af_name = "vpnv4-unicast"` + "\n"
-	config += `	maximum_prefix_limit = 1248576` + "\n"
-	config += `	maximum_prefix_threshold = 80` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -158,24 +191,41 @@ func testAccIosxrRouterBGPNeighborAddressFamilyConfig_all() string {
 	config += `	as_number = "65001"` + "\n"
 	config += `	address = "10.1.1.2"` + "\n"
 	config += `	af_name = "vpnv4-unicast"` + "\n"
-	config += `	route_reflector_client = true` + "\n"
-	config += `	route_reflector_client_inheritance_disable = true` + "\n"
-	config += `	advertise_vpnv4_unicast = true` + "\n"
-	config += `	advertise_vpnv4_unicast_re_originated = true` + "\n"
-	config += `	advertise_vpnv4_unicast_re_originated_stitching_rt = true` + "\n"
-	config += `	next_hop_self = true` + "\n"
-	config += `	next_hop_self_inheritance_disable = true` + "\n"
 	config += `	encapsulation_type = "srv6"` + "\n"
-	config += `	route_policy_in = "ROUTE_POLICY_1"` + "\n"
-	config += `	route_policy_out = "ROUTE_POLICY_1"` + "\n"
-	config += `	soft_reconfiguration_inbound = true` + "\n"
-	config += `	soft_reconfiguration_inbound_always = true` + "\n"
+	config += `	weight = 100` + "\n"
+	config += `	multipath = true` + "\n"
+	config += `	additional_paths_send = true` + "\n"
+	config += `	additional_paths_receive = true` + "\n"
+	config += `	default_originate = true` + "\n"
+	config += `	default_originate_route_policy = "ROUTE_POLICY_1"` + "\n"
 	config += `	maximum_prefix_limit = 1248576` + "\n"
 	config += `	maximum_prefix_threshold = 80` + "\n"
 	config += `	maximum_prefix_warning_only = true` + "\n"
-	config += `	default_originate = true` + "\n"
-	config += `	default_originate_route_policy = "ROUTE_POLICY_1"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	next_hop_self = true` + "\n"
+	config += `	route_policy_in = "ROUTE_POLICY_1"` + "\n"
+	config += `	route_policy_out = "ROUTE_POLICY_1"` + "\n"
+	config += `	cluster_id_allow_equal = true` + "\n"
+	config += `	route_reflector_client = true` + "\n"
+	config += `	soft_reconfiguration_inbound_always = true` + "\n"
+	config += `	update_out_originator_loopcheck = true` + "\n"
+	config += `	advertise_vpnv4_unicast = true` + "\n"
+	config += `	advertise_vpnv4_unicast_re_originated = true` + "\n"
+	config += `	advertise_vpnv4_unicast_re_originated_stitching_rt = true` + "\n"
+	config += `	advertise_vpnv6_unicast = true` + "\n"
+	config += `	advertise_vpnv6_unicast_re_originated = true` + "\n"
+	config += `	advertise_vpnv6_unicast_re_originated_stitching_rt = true` + "\n"
+	config += `	segment_routing_srv6_prefix_sid_type4 = true` + "\n"
+	config += `	allowas_in = 3` + "\n"
+	config += `	allowconfedas_in = 5` + "\n"
+	config += `	as_override = true` + "\n"
+	config += `	aigp = true` + "\n"
+	config += `	aigp_send_med = true` + "\n"
+	config += `	aigp_send_cost_community_id = 5` + "\n"
+	config += `	aigp_send_cost_community_id_poi_igp_cost_transitive = true` + "\n"
+	config += `	accept_own = true` + "\n"
+	config += `	slow_peer_dynamic = true` + "\n"
+	config += `	slow_peer_dynamic_threshold = 260` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

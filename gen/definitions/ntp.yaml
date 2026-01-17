@@ -2,7 +2,7 @@
 name: NTP
 path: Cisco-IOS-XR-um-ntp-cfg:/ntp
 test_tags: [NCS, XRV9K, C8000]
-doc_category: System
+doc_category: Management
 attributes:
   - yang_name: ipv4/dscp
     exclude_test: true
@@ -64,36 +64,9 @@ attributes:
         id: true
         example: 10
       - yang_name: md5/encrypted
+        sensitive: true
+        write_only: true
         example: 1212000E43
-  - yang_name: broadcastdelay
-    example: 10
-  - yang_name: max-associations
-    example: 10
-    exclude_test: true
-  - yang_name: trusted-keys/trusted-key
-    tf_name: trusted_keys
-    type: List
-    attributes:
-      - yang_name: key-number
-        id: true
-        example: 8
-  - yang_name: update-calendar
-    example: true
-  - yang_name: log-internal-sync
-    example: true
-  - yang_name: source/interface-name
-    example: BVI1
-  - yang_name: source/vrfs/vrf
-    tf_name: source_vrfs
-    type: List
-    attributes:
-      - yang_name: vrf-name
-        id: true
-        example: source_vrf
-      - yang_name: interface-name
-        example: BVI1
-  - yang_name: passive
-    example: true
   - yang_name: cmac-authentication-keys/cmac-authentication-key
     tf_name: cmac_authentication_keys
     type: List
@@ -102,6 +75,8 @@ attributes:
         id: true
         example: 2
       - yang_name: cmac/encrypted
+        sensitive: true
+        write_only: true
         example: 135445415F59527D737D78626771475240
   - yang_name: hmac-sha1-authentication-keys/hmac-sha1-authentication-key
     tf_name: hmac_sha1_authentication_keys
@@ -111,6 +86,8 @@ attributes:
         id: true
         example: 3
       - yang_name: hmac-sha1/encrypted
+        sensitive: true
+        write_only: true
         example: 101F5B4A5142445C545D7A7A767B676074
   - yang_name: hmac-sha2-authentication-keys/hmac-sha2-authentication-key
     tf_name: hmac_sha2_authentication_keys
@@ -120,24 +97,63 @@ attributes:
         id: true
         example: 4
       - yang_name: hmac-sha2/encrypted
+        sensitive: true
+        write_only: true
         example: 091D1C5A4D5041455355547B79777C6663
+  - yang_name: broadcastdelay
+    example: 10
+  - yang_name: drift/aging/time
+    example: 10
+  - yang_name: drift/file/bootflash
+    tf_name: drift_file_bootflash
+    exclude_test: true
+    example: true
+  - yang_name: drift/file/compactflash
+    tf_name: drift_file_compactflash
+    exclude_test: true
+    example: true
+  - yang_name: drift/file/usb
+    tf_name: drift_file_usb
+    exclude_test: true
+    example: true
+  - yang_name: drift/file/disk0
+    tf_name: drift_file_disk0
+    delete_parent: true
+    example: true
+  - yang_name: drift/file/disk1
+    tf_name: drift_file_disk1
+    exclude_test: true
+    example: true
+  - yang_name: drift/file/disk2
+    tf_name: drift_file_disk2
+    exclude_test: true
+    example: true
+  - yang_name: drift/file/harddisk
+    tf_name: drift_file_harddisk
+    exclude_test: true
+    example: true
+  - yang_name: drift/file/file-name
+    tf_name: drift_filename
+    optional: true
+    delete_parent: true
+    example: drift.txt
   - yang_name: interfaces/interface
     tf_name: interfaces
     type: List
-    exclude_test: true
     attributes:
       - yang_name: interface-name
         id: true
         example: Bundle-Ether1
+      - yang_name: broadcast-client
+        example: true
       - yang_name: broadcast/destination
         example: 1.2.3.4
-        exclude_test: true
       - yang_name: broadcast/key
         example: 1
-        exclude_test: true
       - yang_name: broadcast/version
         example: 2
       - yang_name: disable
+        exclude_test: true
         example: true
   - yang_name: interfaces/vrfs/vrf
     tf_name: interface_vrfs
@@ -146,14 +162,14 @@ attributes:
     attributes:
       - yang_name: vrf-name
         id: true
-        example: ntp_vrf
+        example: VRF1
       - yang_name: interface
         tf_name: interfaces
         type: List
         attributes:
           - yang_name: interface-name
             id: true
-            example: GigabitEthernet0/0/0/1
+            example: Bundle-Ether2
           - yang_name: broadcast-client
             example: true
           - yang_name: broadcast/destination
@@ -163,6 +179,7 @@ attributes:
           - yang_name: broadcast/version
             example: 2
           - yang_name: disable
+            exclude_test: true
             example: true
   - yang_name: primary/stratum-number
     example: 1
@@ -171,6 +188,8 @@ attributes:
     tf_name: primary_reference_clock
     example: true
     exclude_test: true
+  - yang_name: max-associations
+    example: 10
   - yang_name: peer-server/ipv4/ipv4-peer-server
     tf_name: ipv4_peers_servers
     type: List
@@ -200,7 +219,6 @@ attributes:
   - yang_name: peer-server/ipv6/ipv6-peer-server
     tf_name: ipv6_peers_servers
     type: List
-    exclude_test: true
     attributes:
       - yang_name: address
         id: true
@@ -226,10 +244,35 @@ attributes:
         example: GigabitEthernet0/0/0/1
       - yang_name: ipv6-address
         example: 2001::1
+  - yang_name: peer-server/hostname/hostname-peer-server
+    tf_name: hostname_peers_servers
+    type: List
+    attributes:
+      - yang_name: fqdn-hostname
+        id: true
+        example: ntp.cisco.com
+      - yang_name: type
+        id: true
+        example: peer
+      - yang_name: version
+        example: 2
+      - yang_name: key
+        example: 1
+      - yang_name: minpoll
+        example: 4
+      - yang_name: maxpoll
+        example: 5
+      - yang_name: prefer
+        example: true
+      - yang_name: burst
+        example: true
+      - yang_name: iburst
+        example: true
+      - yang_name: source
+        example: GigabitEthernet0/0/0/1
   - yang_name: peer-server/vrfs/vrf
     tf_name: peers_servers_vrfs
     type: List
-    exclude_test: true
     attributes:
       - yang_name: vrf-name
         id: true
@@ -288,6 +331,56 @@ attributes:
             example: GigabitEthernet0/0/0/1
           - yang_name: ipv6-address
             example: 2001::1
+      - yang_name: hostname/hostname-peer-server
+        tf_name: hostname_peers_servers
+        type: List
+        attributes:
+          - yang_name: fqdn-hostname
+            id: true
+            example: ntp.cisco.com
+          - yang_name: type
+            id: true
+            example: peer
+          - yang_name: version
+            example: 2
+          - yang_name: key
+            example: 1
+          - yang_name: minpoll
+            example: 4
+          - yang_name: maxpoll
+            example: 5
+          - yang_name: prefer
+            example: true
+          - yang_name: burst
+            example: true
+          - yang_name: iburst
+            example: true
+          - yang_name: source
+            example: GigabitEthernet0/0/0/1
+  - yang_name: trusted-keys/trusted-key
+    tf_name: trusted_keys
+    type: List
+    attributes:
+      - yang_name: key-number
+        id: true
+        example: 8
+  - yang_name: update-calendar
+    example: true
+  - yang_name: log-internal-sync
+    example: true
+  - yang_name: passive
+    example: true
+  - yang_name: source/interface-name
+    example: BVI1
+  - yang_name: source/vrfs/vrf
+    tf_name: source_vrfs
+    type: List
+    attributes:
+      - yang_name: vrf-name
+        id: true
+        example: source_vrf
+      - yang_name: interface-name
+        example: BVI1
   - yang_name: admin-plane/version
     example: 1
     exclude_test: true

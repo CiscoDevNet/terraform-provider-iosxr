@@ -1,0 +1,261 @@
+---
+name: Ethernet CFM
+path: Cisco-IOS-XR-um-ethernet-cfm-cfg:/cfm
+doc_category: L2VPN
+test_tags: [NCS, C8000]
+attributes:
+  - yang_name: traceroute/cache/hold-time
+    tf_name: traceroute_cache_hold_time
+    example: 60
+  - yang_name: traceroute/cache/size
+    tf_name: traceroute_cache_size
+    minimum_test_value: 3000
+    example: 3000
+  - yang_name: domains/domain
+    tf_name: domains
+    type: List
+    attributes:
+      - yang_name: domain-name
+        id: true
+        example: DOMAIN1
+      - yang_name: level
+        example: 5
+      - yang_name: id/dns
+        tf_name: id_dns
+        exclude_test: true
+        example: example.com
+      - yang_name: id/mac-address
+        tf_name: id_mac_address
+        example: 00:11:22:33:44:55
+      - yang_name: id/mac-address-two-octet-integer
+        tf_name: id_mac_address_integer
+        example: 100
+      - yang_name: id/null
+        tf_name: id_null
+        exclude_test: true
+        example: true
+      - yang_name: id/string
+        tf_name: id_string
+        exclude_test: true
+        example: "CFM-1"
+      - yang_name: services/service
+        tf_name: services
+        type: List
+        attributes:
+          - yang_name: service-name
+            id: true
+            example: SERVICE1
+          - yang_name: bridge/group
+            tf_name: bridge_group
+            optional: true
+            exclude_test: true
+            example: BG1
+          - yang_name: bridge/bridge-domain
+            tf_name: bridge_domain
+            optional: true
+            exclude_test: true
+            example: BD1
+          - yang_name: down-meps
+            exclude_test: true
+            example: true
+          - yang_name: flexible-xconnect/vlan-aware/evi
+            tf_name: flexible_xconnect_vlan_aware_evi
+            exclude_test: true
+            example: 100
+          - yang_name: flexible-xconnect/vlan-unaware/cross-connect-name
+            tf_name: flexible_xconnect_vlan_unaware_name
+            exclude_test: true
+            example: XC1
+          - yang_name: xconnect/mp2mp/group
+            tf_name: xconnect_mp2mp_group
+            optional: true
+            exclude_test: true
+            example: XC-GROUP1
+          - yang_name: xconnect/mp2mp/cross-connect-name
+            tf_name: xconnect_mp2mp_name
+            optional: true
+            exclude_test: true
+            example: XC-MP2MP1
+          - yang_name: xconnect/mp2mp/ce-id
+            tf_name: xconnect_mp2mp_ce_id
+            optional: true
+            exclude_test: true
+            example: 100
+          - yang_name: xconnect/mp2mp/remote-ce-id
+            tf_name: xconnect_mp2mp_remote_ce_id
+            optional: true
+            exclude_test: true
+            example: 200
+          - yang_name: xconnect/p2p/group
+            tf_name: xconnect_p2p_group_name
+            optional: true
+            example: XC-GROUP1
+          - yang_name: xconnect/p2p/cross-connect-name
+            tf_name: xconnect_p2p_xc_name
+            optional: true
+            example: XC-P2P1
+          - yang_name: id/icc-based/icc
+            tf_name: id_icc_based_icc
+            optional: true
+            example: ICC1
+          - yang_name: id/icc-based/umc
+            tf_name: id_icc_based_umc
+            optional: true
+            example: UMC1
+          - yang_name: id/vlanid
+            tf_name: id_vlan_id
+            exclude_test: true
+            example: 100
+          - yang_name: id/number
+            tf_name: id_number
+            exclude_test: true
+            example: 500
+          - yang_name: id/string
+            tf_name: id_string
+            exclude_test: true
+            example: "ID-STRING"
+          - yang_name: id/vpn-id/vpn-oui
+            tf_name: id_vpn_id_oui
+            optional: true
+            exclude_test: true
+            example: 100
+          - yang_name: id/vpn-id/vpn-index
+            tf_name: id_vpn_id_index
+            optional: true
+            exclude_test: true
+            example: 1000
+          - yang_name: tags
+            test_tags: [NCS]
+            include_example: true
+            example: 1
+          - yang_name: mip/auto-create/all
+            tf_name: mip_auto_create_all
+            exclude_test: true
+            example: true
+          - yang_name: mip/auto-create/lower-mep-only
+            tf_name: mip_auto_create_lower_mep_only
+            example: true
+          - yang_name: mip/auto-create/ccm-learning
+            tf_name: mip_auto_create_ccm_learning
+            example: true
+          - yang_name: efd
+            exclude_test: true
+            example: true
+          - yang_name: efd/protection-switching
+            tf_name: efd_protection_switching
+            exclude_test: true
+            example: true
+          - yang_name: continuity-check/interval/interval-time
+            tf_name: continuity_check_interval
+            example: 1s
+          - yang_name: continuity-check/interval/loss-threshold
+            tf_name: continuity_check_interval_loss_threshold
+            example: 5
+          - yang_name: continuity-check/archive/hold-time
+            tf_name: continuity_check_archive_hold_time
+            example: 60
+          - yang_name: continuity-check/loss/auto-traceroute
+            tf_name: continuity_check_loss_auto_traceroute
+            example: true
+          - yang_name: maximum-meps
+            example: 100
+          - yang_name: ais/transmission/interval
+            tf_name: ais_transmission_interval
+            example: 1s
+          - yang_name: ais/transmission/cos
+            tf_name: ais_transmission_cos
+            example: 5
+          - yang_name: log/continuity-check/mep/changes
+            tf_name: log_continuity_check_mep_changes
+            example: true
+          - yang_name: log/continuity-check/errors
+            tf_name: log_continuity_check_errors
+            example: true
+          - yang_name: log/crosscheck/errors
+            tf_name: log_crosscheck_errors
+            example: true
+          - yang_name: log/ais
+            tf_name: log_ais
+            example: true
+          - yang_name: log/csf
+            tf_name: log_csf
+            example: true
+          - yang_name: log/efd
+            tf_name: log_efd
+            exclude_test: true
+            example: true
+          - yang_name: mep/crosscheck/mep-ids/mep-id
+            tf_name: mep_crosschecks
+            type: List
+            attributes:
+              - yang_name: mep-id
+                id: true
+                example: 5
+              - yang_name: mac-address
+                example: 00:11:22:33:44:55
+          - yang_name: mep/crosscheck/auto
+            tf_name: mep_crosscheck_auto
+            example: true
+          - yang_name: report/defects/none
+            tf_name: report_defects_none
+            exclude_test: true
+            example: true
+          - yang_name: report/defects/all
+            tf_name: report_defects_all
+            exclude_test: true
+            example: true
+          - yang_name: report/defects/ieee/xcon
+            tf_name: report_defects_ieee_xcon
+            exclude_test: true
+            example: true
+          - yang_name: report/defects/ieee/error-xcon
+            tf_name: report_defects_ieee_error_xcon
+            exclude_test: true
+            example: true
+          - yang_name: report/defects/ieee/remote-error-xcon
+            tf_name: report_defects_ieee_remote_error_xcon
+            exclude_test: true
+            example: true
+          - yang_name: report/defects/ieee/mac-remote-error-xcon
+            tf_name: report_defects_ieee_mac_remote_error_xcon
+            exclude_test: true
+            example: true
+          - yang_name: report/defects/wrong-maid
+            tf_name: report_defects_wrong_maid
+            exclude_test: true
+            example: true
+          - yang_name: report/defects/wrong-level
+            tf_name: report_defects_wrong_level
+            exclude_test: true
+            example: true
+          - yang_name: report/defects/our-mac
+            tf_name: report_defects_our_mac
+            exclude_test: true
+            example: true
+          - yang_name: report/defects/our-mepid
+            tf_name: report_defects_our_mepid
+            exclude_test: true
+            example: true
+          - yang_name: report/defects/wrong-interval
+            tf_name: report_defects_wrong_interval
+            exclude_test: true
+            example: true
+          - yang_name: report/defects/missing
+            tf_name: report_defects_missing
+            exclude_test: true
+            example: true
+          - yang_name: report/defects/peer-port-down
+            tf_name: report_defects_peer_port_down
+            exclude_test: true
+            example: true
+          - yang_name: report/defects/rdi
+            tf_name: report_defects_rdi
+            exclude_test: true
+            example: true
+          # Missing in device UM. DDTS to be filed.
+          # - yang_name: csf/cos
+          #   tf_name: csf_cos
+          #   example: 5
+          # - yang_name: csf/interval
+          #   tf_name: csf_interval
+          #   example: 1m

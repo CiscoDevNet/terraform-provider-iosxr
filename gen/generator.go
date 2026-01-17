@@ -125,8 +125,10 @@ type YamlConfigAttribute struct {
 	Mandatory         bool                  `yaml:"mandatory"`
 	Optional          bool                  `yaml:"optional"`
 	WriteOnly         bool                  `yaml:"write_only"`
+	Sensitive         bool                  `yaml:"sensitive"`
 	ExcludeTest       bool                  `yaml:"exclude_test"`
 	ExcludeExample    bool                  `yaml:"exclude_example"`
+	IncludeExample    bool                  `yaml:"include_example"`
 	Description       string                `yaml:"description"`
 	Example           string                `yaml:"example"`
 	EnumValues        []string              `yaml:"enum_values"`
@@ -200,10 +202,17 @@ func ToGoName(s string) string {
 
 // Templating helper function to convert YANG name to GO name
 func ToJsonPath(yangPath, xPath string) string {
+	path := yangPath
 	if xPath != "" {
-		return strings.ReplaceAll(xPath, "/", ".")
+		path = xPath
 	}
-	return strings.ReplaceAll(yangPath, "/", ".")
+
+	// Split by /, escape dots in each segment, then join with .
+	parts := strings.Split(path, "/")
+	for i, part := range parts {
+		parts[i] = strings.ReplaceAll(part, ".", "\\\\.")
+	}
+	return strings.Join(parts, ".")
 }
 
 // Templating helper function to convert string to camel case
@@ -427,7 +436,7 @@ func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 		if leaf.ListAttr != nil {
 			if contains([]string{"string", "union", "leafref"}, leaf.Type.Kind.String()) {
 				attr.Type = "StringList"
-			} else if contains([]string{"uint8", "uint16", "uint32", "uint64"}, leaf.Type.Kind.String()) {
+			} else if contains([]string{"int8", "int16", "int32", "int64", "uint8", "uint16", "uint32", "uint64"}, leaf.Type.Kind.String()) {
 				attr.Type = "Int64List"
 			} else {
 				panic(fmt.Sprintf("Unknown leaf-list type, attribute: %s, type: %s", attr.YangName, leaf.Type.Kind.String()))
@@ -447,16 +456,23 @@ func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 			if len(leaf.Type.Pattern) > 0 {
 				attr.StringPatterns = leaf.Type.Pattern
 			}
-		} else if contains([]string{"uint8", "uint16", "uint32", "uint64"}, leaf.Type.Kind.String()) {
+		} else if contains([]string{"int8", "int16", "int32", "int64", "uint8", "uint16", "uint32", "uint64"}, leaf.Type.Kind.String()) {
 			attr.Type = "Int64"
 			if leaf.Type.Range != nil {
-				attr.MinInt = int64(leaf.Type.Range[0].Min.Value)
+				if attr.MinInt == 0 {
+					attr.MinInt = int64(leaf.Type.Range[0].Min.Value)
+					if leaf.Type.Range[0].Min.Negative {
+						attr.MinInt = -attr.MinInt
+					}
+				}
 				max := leaf.Type.Range[0].Max.Value
 				// hack to not introduce unsigned types
 				if max > math.MaxInt64 {
 					max = math.MaxInt64
 				}
-				attr.MaxInt = int64(max)
+				if attr.MaxInt == 0 {
+					attr.MaxInt = int64(max)
+				}
 			}
 		} else if contains([]string{"boolean", "empty"}, leaf.Type.Kind.String()) {
 			if leaf.Type.Kind.String() == "boolean" {
@@ -518,6 +534,10 @@ func augmentConfig(config *YamlConfig, modelPaths []string) {
 		return
 	}
 
+	// Print definition/model info
+	fmt.Printf("Processing definition: %s\n", config.Name)
+	//fmt.Printf("Resolving yang model: %s ==> Resolved: %s\n", module, e.Name)
+
 	p := path[len(module)+1:]
 	e = resolvePath(e, p)
 
@@ -542,6 +562,15 @@ func augmentConfig(config *YamlConfig, modelPaths []string) {
 							continue
 						}
 						parseAttribute(ell, &config.Attributes[ia].Attributes[iaa].Attributes[iaaa])
+						if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Type == "List" {
+							elll := resolvePath(ell, config.Attributes[ia].Attributes[iaa].Attributes[iaaa].YangName)
+							for iaaaa := range config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes {
+								if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].NoAugmentConfig {
+									continue
+								}
+								parseAttribute(elll, &config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa])
+							}
+						}
 					}
 				}
 			}

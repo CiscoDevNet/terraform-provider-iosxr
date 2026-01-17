@@ -14,10 +14,57 @@ This resource can manage the Router ISIS Interface Address Family configuration.
 
 ```terraform
 resource "iosxr_router_isis_interface_address_family" "example" {
-  process_id              = "P1"
-  interface_name          = "GigabitEthernet0/0/0/1"
-  af_name                 = "ipv4"
-  saf_name                = "unicast"
+  process_id     = "P1"
+  interface_name = "GigabitEthernet0/0/0/1"
+  af_name        = "ipv4"
+  saf_name       = "unicast"
+  metric_default = 500
+  metric_levels = [
+    {
+      level_number   = 1
+      metric_default = 600
+    }
+  ]
+  te_metric_flex_algo = 128
+  te_metric_flex_algo_levels = [
+    {
+      level_number = 1
+      flex_algo    = 128
+    }
+  ]
+  bandwidth_metric_flex_algo = 129
+  bandwidth_metric_flex_algo_levels = [
+    {
+      level_number = 1
+      flex_algo    = 129
+    }
+  ]
+  generic_metric_flex_algos = [
+    {
+      type   = 130
+      metric = 5000
+    }
+  ]
+  generic_metric_flex_algo_levels = [
+    {
+      level_number = 1
+      flex_algos_types = [
+        {
+          type   = 130
+          metric = 5000
+        }
+      ]
+    }
+  ]
+  mpls_ldp_sync       = true
+  mpls_ldp_sync_level = 1
+  tag                 = 100
+  tag_levels = [
+    {
+      level_number = 1
+      tag          = 100
+    }
+  ]
   fast_reroute_per_prefix = true
   fast_reroute_levels = [
     {
@@ -25,7 +72,86 @@ resource "iosxr_router_isis_interface_address_family" "example" {
       per_prefix   = true
     }
   ]
-  tag                           = 100
+  fast_reroute_per_prefix_tiebreaker_node_protecting_index = 10
+  fast_reroute_per_prefix_tiebreaker_node_protecting_levels = [
+    {
+      level_number = 1
+      index        = 10
+    }
+  ]
+  fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index = 20
+  fast_reroute_per_prefix_tiebreaker_srlg_disjoint_levels = [
+    {
+      level_number = 1
+      index        = 20
+    }
+  ]
+  fast_reroute_per_prefix_tiebreaker_lc_disjoint_index = 30
+  fast_reroute_per_prefix_tiebreaker_lc_disjoint_levels = [
+    {
+      level_number = 1
+      index        = 30
+    }
+  ]
+  fast_reroute_per_prefix_remote_lfa_maximum_metric = 100
+  fast_reroute_per_prefix_remote_lfa_maximum_metric_levels = [
+    {
+      level_number   = 1
+      maximum_metric = 100
+    }
+  ]
+  fast_reroute_per_prefix_remote_lfa_tunnel_mpls_ldp = true
+  fast_reroute_per_prefix_remote_lfa_tunnel_mpls_ldp_levels = [
+    {
+      level_number = 1
+    }
+  ]
+  fast_reroute_per_prefix_ti_lfa = true
+  fast_reroute_per_prefix_ti_lfa_levels = [
+    {
+      level_number = 1
+    }
+  ]
+  fast_reroute_per_prefix_exclude_interfaces = [
+    {
+      interface_name = "GigabitEthernet0/0/0/2"
+      level          = 1
+    }
+  ]
+  fast_reroute_per_prefix_lfa_candidate_interfaces = [
+    {
+      interface_name = "GigabitEthernet0/0/0/3"
+      level          = 1
+    }
+  ]
+  fast_reroute_per_link_exclude_interfaces = [
+    {
+      interface_name = "GigabitEthernet0/0/0/2"
+      level          = 1
+    }
+  ]
+  fast_reroute_per_link_lfa_candidate_interfaces = [
+    {
+      interface_name = "GigabitEthernet0/0/0/3"
+      level          = 1
+    }
+  ]
+  link_group_name  = "LINK_GROUP_1"
+  link_group_level = 1
+  weight           = 500
+  weight_levels = [
+    {
+      level_number = 1
+      weight       = 500
+    }
+  ]
+  auto_metric_proactive_protect_metric = 500
+  auto_metric_proactive_protect_metric_levels = [
+    {
+      level_number      = 1
+      proactive_protect = 500
+    }
+  ]
   advertise_prefix_route_policy = "ROUTE_POLICY_1"
   advertise_prefix_route_policy_levels = [
     {
@@ -33,7 +159,6 @@ resource "iosxr_router_isis_interface_address_family" "example" {
       route_policy = "ROUTE_POLICY_2"
     }
   ]
-  metric_default = 500
 }
 ```
 
@@ -55,18 +180,82 @@ resource "iosxr_router_isis_interface_address_family" "example" {
 - `adjacency_sid_indices` (Attributes List) Specify the index of Adjacency Segement ID (see [below for nested schema](#nestedatt--adjacency_sid_indices))
 - `advertise_prefix_route_policy` (String) Filter routes based on a route policy
 - `advertise_prefix_route_policy_levels` (Attributes List) Set advertisement for one level only (see [below for nested schema](#nestedatt--advertise_prefix_route_policy_levels))
+- `auto_metric_proactive_protect_metric` (Number) set auto-metric proactive-protect mode
+  - Range: `1`-`16777214`
+- `auto_metric_proactive_protect_metric_levels` (Attributes List) set auto-metric proactive-protect mode for one level only (see [below for nested schema](#nestedatt--auto_metric_proactive_protect_metric_levels))
+- `bandwidth_metric_flex_algo` (Number) Configure a Flex-algo bandwidth metric for the interface
+  - Range: `1`-`16777214`
+- `bandwidth_metric_flex_algo_levels` (Attributes List) Set metric for one level only (see [below for nested schema](#nestedatt--bandwidth_metric_flex_algo_levels))
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 - `fast_reroute_levels` (Attributes List) enable (see [below for nested schema](#nestedatt--fast_reroute_levels))
 - `fast_reroute_per_link` (Boolean) per-link
+- `fast_reroute_per_link_exclude_interfaces` (Attributes List) Exclude an interface from computation (see [below for nested schema](#nestedatt--fast_reroute_per_link_exclude_interfaces))
+- `fast_reroute_per_link_lfa_candidate_interfaces` (Attributes List) Include an interface to LFA candidate in computation (see [below for nested schema](#nestedatt--fast_reroute_per_link_lfa_candidate_interfaces))
 - `fast_reroute_per_prefix` (Boolean) per-prefix
+- `fast_reroute_per_prefix_exclude_interfaces` (Attributes List) Exclude an interface from computation (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_exclude_interfaces))
+- `fast_reroute_per_prefix_lfa_candidate_interfaces` (Attributes List) Include an interface to LFA candidate in computation (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_lfa_candidate_interfaces))
+- `fast_reroute_per_prefix_remote_lfa_maximum_metric` (Number) Limit remote LFA node selection within the metric
+  - Range: `1`-`16777215`
+- `fast_reroute_per_prefix_remote_lfa_maximum_metric_levels` (Attributes List) Enable remote LFA max metric for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_remote_lfa_maximum_metric_levels))
+- `fast_reroute_per_prefix_remote_lfa_tunnel_mpls_ldp` (Boolean) Use MPLS LDP tunnel to reach the remote LFA node
+- `fast_reroute_per_prefix_remote_lfa_tunnel_mpls_ldp_levels` (Attributes List) Enable remote LFA for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_remote_lfa_tunnel_mpls_ldp_levels))
+- `fast_reroute_per_prefix_ti_lfa` (Boolean) Enable TI LFA computation
+- `fast_reroute_per_prefix_ti_lfa_levels` (Attributes List) Enable EPCFRR LFA for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_ti_lfa_levels))
+- `fast_reroute_per_prefix_tiebreaker_default` (Boolean) Prefer default (link protecting) backup path
+- `fast_reroute_per_prefix_tiebreaker_default_levels` (Attributes List) Configure tiebreaker for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_tiebreaker_default_levels))
+- `fast_reroute_per_prefix_tiebreaker_lc_disjoint_index` (Number) Set preference order among tiebreakers
+  - Range: `1`-`255`
+- `fast_reroute_per_prefix_tiebreaker_lc_disjoint_levels` (Attributes List) Configure tiebreaker for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_tiebreaker_lc_disjoint_levels))
+- `fast_reroute_per_prefix_tiebreaker_node_protecting_index` (Number) Set preference order among tiebreakers
+  - Range: `1`-`255`
+- `fast_reroute_per_prefix_tiebreaker_node_protecting_levels` (Attributes List) Configure tiebreaker for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_tiebreaker_node_protecting_levels))
+- `fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index` (Number) Set preference order among tiebreakers
+  - Range: `1`-`255`
+- `fast_reroute_per_prefix_tiebreaker_srlg_disjoint_levels` (Attributes List) Configure tiebreaker for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_tiebreaker_srlg_disjoint_levels))
+- `generic_metric_flex_algo_levels` (Attributes List) Set metric for one level only (see [below for nested schema](#nestedatt--generic_metric_flex_algo_levels))
+- `generic_metric_flex_algos` (Attributes List) Type of Generic metric (see [below for nested schema](#nestedatt--generic_metric_flex_algos))
+- `link_group_level` (Number) Set the tag only at supplied level
+  - Range: `1`-`2`
+- `link_group_name` (String) Interface link group
 - `metric_default` (Number) Default metric: <1-63> for narrow, <1-16777214> for wide
   - Range: `1`-`16777214`
 - `metric_levels` (Attributes List) Set metric for one level only (see [below for nested schema](#nestedatt--metric_levels))
 - `metric_maximum` (Boolean) Maximum wide metric. All routers will exclude this link from their SPF
+- `mpls_ldp_sync` (Boolean) Configure LDP ISIS synchronization
+- `mpls_ldp_sync_level` (Number) Set LDP synchronization for one level only
+  - Range: `1`-`2`
+- `prefix_sid_absolute_explicit_null` (Boolean) Upstream neighbor must replace prefix-sid with explicit null label
+- `prefix_sid_absolute_id` (Number) The Prefix Segment ID value
+  - Range: `16000`-`1048575`
+- `prefix_sid_absolute_n_flag_clear` (Boolean) Clear N-flag for the prefix-SID
+- `prefix_sid_absolute_php_disable` (Boolean) Disable Penultimate Hop Popping
+- `prefix_sid_algorithms` (Attributes List) Algorithm Specific Prefix SID Configuration (see [below for nested schema](#nestedatt--prefix_sid_algorithms))
+- `prefix_sid_index_explicit_null` (Boolean) Upstream neighbor must replace prefix-sid with explicit null label
+- `prefix_sid_index_id` (Number) The Prefix Segment ID index
+  - Range: `0`-`1048575`
+- `prefix_sid_index_n_flag_clear` (Boolean) Clear N-flag for the prefix-SID
+- `prefix_sid_index_php_disable` (Boolean) Disable Penultimate Hop Popping
+- `prefix_sid_strict_spf_absolute_explicit_null` (Boolean) Upstream neighbor must replace prefix-sid with explicit null label
+- `prefix_sid_strict_spf_absolute_id` (Number) The Prefix Segment ID value
+  - Range: `16000`-`1048575`
+- `prefix_sid_strict_spf_absolute_n_flag_clear` (Boolean) Clear N-flag for the prefix-SID
+- `prefix_sid_strict_spf_absolute_php_disable` (Boolean) Disable Penultimate Hop Popping
+- `prefix_sid_strict_spf_index_explicit_null` (Boolean) Upstream neighbor must replace prefix-sid with explicit null label
+- `prefix_sid_strict_spf_index_id` (Number) The Prefix Segment ID index
+  - Range: `0`-`1048575`
+- `prefix_sid_strict_spf_index_n_flag_clear` (Boolean) Clear N-flag for the prefix-SID
+- `prefix_sid_strict_spf_index_php_disable` (Boolean) Disable Penultimate Hop Popping
 - `tag` (Number) Set interface tag
   - Range: `1`-`4294967295`
+- `tag_levels` (Attributes List) Set the tag only at supplied level (see [below for nested schema](#nestedatt--tag_levels))
+- `te_metric_flex_algo` (Number) Configure a Flex-algo TE metric for the interface
+  - Range: `1`-`16777214`
+- `te_metric_flex_algo_levels` (Attributes List) Set metric for one level only (see [below for nested schema](#nestedatt--te_metric_flex_algo_levels))
+- `weight` (Number) Configure weight for the interface
+  - Range: `1`-`16777214`
+- `weight_levels` (Attributes List) Set weight for one level only (see [below for nested schema](#nestedatt--weight_levels))
 
 ### Read-Only
 
@@ -111,6 +300,28 @@ Optional:
 - `route_policy` (String) Filter routes based on a route policy
 
 
+<a id="nestedatt--auto_metric_proactive_protect_metric_levels"></a>
+### Nested Schema for `auto_metric_proactive_protect_metric_levels`
+
+Required:
+
+- `level_number` (Number) set auto-metric proactive-protect mode for one level only
+  - Range: `1`-`2`
+- `proactive_protect` (Number) set auto-metric proactive-protect mode
+  - Range: `1`-`16777214`
+
+
+<a id="nestedatt--bandwidth_metric_flex_algo_levels"></a>
+### Nested Schema for `bandwidth_metric_flex_algo_levels`
+
+Required:
+
+- `flex_algo` (Number) Configure a Flex-algo bandwidth metric for the interface
+  - Range: `1`-`16777214`
+- `level_number` (Number) Set metric at this level only
+  - Range: `1`-`2`
+
+
 <a id="nestedatt--fast_reroute_levels"></a>
 ### Nested Schema for `fast_reroute_levels`
 
@@ -123,6 +334,164 @@ Optional:
 
 - `per_link` (Boolean) per-link
 - `per_prefix` (Boolean) per-prefix
+
+
+<a id="nestedatt--fast_reroute_per_link_exclude_interfaces"></a>
+### Nested Schema for `fast_reroute_per_link_exclude_interfaces`
+
+Required:
+
+- `interface_name` (String) exclude-interface-name
+
+Optional:
+
+- `level` (Number) Exclude interface for one level only
+  - Range: `1`-`2`
+
+
+<a id="nestedatt--fast_reroute_per_link_lfa_candidate_interfaces"></a>
+### Nested Schema for `fast_reroute_per_link_lfa_candidate_interfaces`
+
+Required:
+
+- `interface_name` (String) lfa-interface-name
+
+Optional:
+
+- `level` (Number) Include interface for one level only
+  - Range: `1`-`2`
+
+
+<a id="nestedatt--fast_reroute_per_prefix_exclude_interfaces"></a>
+### Nested Schema for `fast_reroute_per_prefix_exclude_interfaces`
+
+Required:
+
+- `interface_name` (String) exclude-interface-name
+
+Optional:
+
+- `level` (Number) Exclude interface for one level only
+  - Range: `1`-`2`
+
+
+<a id="nestedatt--fast_reroute_per_prefix_lfa_candidate_interfaces"></a>
+### Nested Schema for `fast_reroute_per_prefix_lfa_candidate_interfaces`
+
+Required:
+
+- `interface_name` (String) lfa-interface-name
+
+Optional:
+
+- `level` (Number) Include interface for one level only
+  - Range: `1`-`2`
+
+
+<a id="nestedatt--fast_reroute_per_prefix_remote_lfa_maximum_metric_levels"></a>
+### Nested Schema for `fast_reroute_per_prefix_remote_lfa_maximum_metric_levels`
+
+Required:
+
+- `level_number` (Number) Set remote LFA max metric value for this level
+  - Range: `1`-`2`
+- `maximum_metric` (Number) Limit remote LFA node selection within the metric
+  - Range: `1`-`16777215`
+
+
+<a id="nestedatt--fast_reroute_per_prefix_remote_lfa_tunnel_mpls_ldp_levels"></a>
+### Nested Schema for `fast_reroute_per_prefix_remote_lfa_tunnel_mpls_ldp_levels`
+
+Required:
+
+- `level_number` (Number) Set remote LFA for this level
+  - Range: `1`-`2`
+
+
+<a id="nestedatt--fast_reroute_per_prefix_ti_lfa_levels"></a>
+### Nested Schema for `fast_reroute_per_prefix_ti_lfa_levels`
+
+Required:
+
+- `level_number` (Number) Set EPCFRR LFA for this level
+  - Range: `1`-`2`
+
+
+<a id="nestedatt--fast_reroute_per_prefix_tiebreaker_default_levels"></a>
+### Nested Schema for `fast_reroute_per_prefix_tiebreaker_default_levels`
+
+Required:
+
+- `level_number` (Number) Level
+  - Range: `1`-`2`
+
+
+<a id="nestedatt--fast_reroute_per_prefix_tiebreaker_lc_disjoint_levels"></a>
+### Nested Schema for `fast_reroute_per_prefix_tiebreaker_lc_disjoint_levels`
+
+Required:
+
+- `index` (Number) Set preference order among tiebreakers
+  - Range: `1`-`255`
+- `level_number` (Number) Level
+  - Range: `1`-`2`
+
+
+<a id="nestedatt--fast_reroute_per_prefix_tiebreaker_node_protecting_levels"></a>
+### Nested Schema for `fast_reroute_per_prefix_tiebreaker_node_protecting_levels`
+
+Required:
+
+- `index` (Number) Set preference order among tiebreakers
+  - Range: `1`-`255`
+- `level_number` (Number) Level
+  - Range: `1`-`2`
+
+
+<a id="nestedatt--fast_reroute_per_prefix_tiebreaker_srlg_disjoint_levels"></a>
+### Nested Schema for `fast_reroute_per_prefix_tiebreaker_srlg_disjoint_levels`
+
+Required:
+
+- `index` (Number) Set preference order among tiebreakers
+  - Range: `1`-`255`
+- `level_number` (Number) Level
+  - Range: `1`-`2`
+
+
+<a id="nestedatt--generic_metric_flex_algo_levels"></a>
+### Nested Schema for `generic_metric_flex_algo_levels`
+
+Required:
+
+- `level_number` (Number) Set metric at this level only
+  - Range: `1`-`2`
+
+Optional:
+
+- `flex_algos_types` (Attributes List) Type of Generic metric (see [below for nested schema](#nestedatt--generic_metric_flex_algo_levels--flex_algos_types))
+
+<a id="nestedatt--generic_metric_flex_algo_levels--flex_algos_types"></a>
+### Nested Schema for `generic_metric_flex_algo_levels.flex_algos_types`
+
+Required:
+
+- `metric` (Number) Flex-algo generic metric value
+  - Range: `1`-`16777214`
+- `type` (Number) Generic metric type
+  - Range: `128`-`255`
+
+
+
+<a id="nestedatt--generic_metric_flex_algos"></a>
+### Nested Schema for `generic_metric_flex_algos`
+
+Required:
+
+- `metric` (Number) Flex-algo generic metric value
+  - Range: `1`-`16777214`
+- `type` (Number) Generic metric type
+  - Range: `128`-`255`
 
 
 <a id="nestedatt--metric_levels"></a>
@@ -138,6 +507,61 @@ Optional:
 - `metric_default` (Number) Default metric: <1-63> for narrow, <1-16777214> for wide
   - Range: `1`-`16777214`
 - `metric_maximum` (Boolean) Maximum wide metric. All routers will exclude this link from their SPF
+
+
+<a id="nestedatt--prefix_sid_algorithms"></a>
+### Nested Schema for `prefix_sid_algorithms`
+
+Required:
+
+- `algorithm` (Number) Algorithm number
+  - Range: `128`-`255`
+
+Optional:
+
+- `absolute_explicit_null` (Boolean) Upstream neighbor must replace prefix-sid with explicit null label
+- `absolute_id` (Number) The Prefix Segment ID value
+  - Range: `16000`-`1048575`
+- `absolute_n_flag_clear` (Boolean) Clear N-flag for the prefix-SID
+- `absolute_php_disable` (Boolean) Disable Penultimate Hop Popping
+- `index_explicit_null` (Boolean) Upstream neighbor must replace prefix-sid with explicit null label
+- `index_id` (Number) The Prefix Segment ID index
+  - Range: `0`-`1048575`
+- `index_n_flag_clear` (Boolean) Clear N-flag for the prefix-SID
+- `index_php_disable` (Boolean) Disable Penultimate Hop Popping
+
+
+<a id="nestedatt--tag_levels"></a>
+### Nested Schema for `tag_levels`
+
+Required:
+
+- `level_number` (Number) Set the tag only at this level
+  - Range: `1`-`2`
+- `tag` (Number) Interface tag
+  - Range: `1`-`4294967295`
+
+
+<a id="nestedatt--te_metric_flex_algo_levels"></a>
+### Nested Schema for `te_metric_flex_algo_levels`
+
+Required:
+
+- `flex_algo` (Number) Configure a Flex-algo TE metric for the interface
+  - Range: `1`-`16777214`
+- `level_number` (Number) Set metric at this level only
+  - Range: `1`-`2`
+
+
+<a id="nestedatt--weight_levels"></a>
+### Nested Schema for `weight_levels`
+
+Required:
+
+- `level_number` (Number) Set weight at this level only
+  - Range: `1`-`2`
+- `weight` (Number) Configure weight for the interface
+  - Range: `1`-`16777214`
 
 ## Import
 

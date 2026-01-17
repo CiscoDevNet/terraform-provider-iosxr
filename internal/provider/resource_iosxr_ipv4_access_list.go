@@ -110,8 +110,12 @@ func (r *IPv4AccessListResource) Schema(ctx context.Context, req resource.Schema
 							MarkdownDescription: helpers.NewAttributeDescription("Match only packets with exact protocol numbers").String,
 							Optional:            true,
 						},
-						"permit_igmp_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Match on IGMP message").String,
+						"permit_range_start_protocol": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("An IPv4 Protocol").String,
+							Optional:            true,
+						},
+						"permit_range_end_protocol": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("An IPv4 Protocol").String,
 							Optional:            true,
 						},
 						"permit_precedence": schema.StringAttribute{
@@ -124,33 +128,6 @@ func (r *IPv4AccessListResource) Schema(ctx context.Context, req resource.Schema
 							Validators: []validator.String{
 								stringvalidator.OneOf("dont-fragment", "dont-fragment first-fragment", "dont-fragment is-fragment", "dont-fragment last-fragment", "first-fragment", "is-fragment", "last-fragment"),
 							},
-						},
-						"permit_fragments": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Check non-initial fragments").String,
-							Optional:            true,
-						},
-						"permit_counter": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("counter for this ACE").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 64),
-							},
-						},
-						"permit_default": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Use specified default nexthop on match against this entry").String,
-							Optional:            true,
-						},
-						"permit_capture": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Capture matched packet").String,
-							Optional:            true,
-						},
-						"permit_range_start_protocol": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("An IPv4 Protocol").String,
-							Optional:            true,
-						},
-						"permit_range_end_protocol": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("An IPv4 Protocol").String,
-							Optional:            true,
 						},
 						"permit_source_address": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Source IP address").String,
@@ -317,6 +294,10 @@ func (r *IPv4AccessListResource) Schema(ctx context.Context, req resource.Schema
 								int64validator.Between(0, 255),
 							},
 						},
+						"permit_igmp_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Match on IGMP message").String,
+							Optional:            true,
+						},
 						"permit_dscp": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Match packets with given DSCP value(s)").String,
 							Optional:            true,
@@ -471,6 +452,10 @@ func (r *IPv4AccessListResource) Schema(ctx context.Context, req resource.Schema
 								int64validator.Between(0, 8191),
 							},
 						},
+						"permit_fragments": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Check non-initial fragments").String,
+							Optional:            true,
+						},
 						"permit_police_value": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Police value").AddIntegerRangeDescription(0, 4294967295).String,
 							Optional:            true,
@@ -505,6 +490,10 @@ func (r *IPv4AccessListResource) Schema(ctx context.Context, req resource.Schema
 							Validators: []validator.String{
 								stringvalidator.OneOf("critical", "high", "low", "medium"),
 							},
+						},
+						"permit_default": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use specified default nexthop on match against this entry").String,
+							Optional:            true,
 						},
 						"permit_nexthop1_ipv4": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("nexthop1 ipv4 address").String,
@@ -569,6 +558,17 @@ func (r *IPv4AccessListResource) Schema(ctx context.Context, req resource.Schema
 								stringvalidator.LengthBetween(1, 32),
 							},
 						},
+						"permit_capture": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Capture matched packet").String,
+							Optional:            true,
+						},
+						"permit_counter": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("counter for this ACE").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 64),
+							},
+						},
 						"permit_log": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Log matches against this entry").String,
 							Optional:            true,
@@ -591,11 +591,37 @@ func (r *IPv4AccessListResource) Schema(ctx context.Context, req resource.Schema
 								int64validator.Between(0, 255),
 							},
 						},
+						"deny_protocol": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("An IPv4 Protocol").String,
+							Optional:            true,
+						},
 						"deny_eq": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Match only packets with exact protocol numbers").String,
 							Optional:            true,
 						},
-						"deny_protocol": schema.StringAttribute{
+						"deny_precedence": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Match packets with given precedence").String,
+							Optional:            true,
+						},
+						"deny_fragment_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Fragment type for a packet").AddStringEnumDescription("dont-fragment", "dont-fragment first-fragment", "dont-fragment is-fragment", "dont-fragment last-fragment", "first-fragment", "is-fragment", "last-fragment").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("dont-fragment", "dont-fragment first-fragment", "dont-fragment is-fragment", "dont-fragment last-fragment", "first-fragment", "is-fragment", "last-fragment"),
+							},
+						},
+						"deny_counter": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("counter for this ACE").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 64),
+							},
+						},
+						"deny_range_start_protocol": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("An IPv4 Protocol").String,
+							Optional:            true,
+						},
+						"deny_range_end_protocol": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("An IPv4 Protocol").String,
 							Optional:            true,
 						},
@@ -743,56 +769,6 @@ func (r *IPv4AccessListResource) Schema(ctx context.Context, req resource.Schema
 							MarkdownDescription: helpers.NewAttributeDescription("Port number").String,
 							Optional:            true,
 						},
-						"deny_igmp_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Match on IGMP message").String,
-							Optional:            true,
-						},
-						"deny_precedence": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Match packets with given precedence").String,
-							Optional:            true,
-						},
-						"deny_fragment_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Fragment type for a packet").AddStringEnumDescription("dont-fragment", "dont-fragment first-fragment", "dont-fragment is-fragment", "dont-fragment last-fragment", "first-fragment", "is-fragment", "last-fragment").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.OneOf("dont-fragment", "dont-fragment first-fragment", "dont-fragment is-fragment", "dont-fragment last-fragment", "first-fragment", "is-fragment", "last-fragment"),
-							},
-						},
-						"deny_fragments": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Check non-initial fragments").String,
-							Optional:            true,
-						},
-						"deny_counter": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("counter for this ACE").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 64),
-							},
-						},
-						"deny_default": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Use specified default nexthop on match against this entry").String,
-							Optional:            true,
-						},
-						"deny_capture": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Capture matched packet").String,
-							Optional:            true,
-						},
-						"deny_icmp_off": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Do not generate the ICMP message").String,
-							Optional:            true,
-						},
-						"deny_icmp_on": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Generate the ICMP message").String,
-							Optional:            true,
-						},
-						"deny_range_start_protocol": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("An IPv4 Protocol").String,
-							Optional:            true,
-						},
-						"deny_range_end_protocol": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("An IPv4 Protocol").String,
-							Optional:            true,
-						},
 						"deny_icmp_message_type_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("ICMP message type").AddStringEnumDescription("AdministrativelyProhibited", "AlternateAddress", "ConversionError", "DODHostProhibited", "DODNetProhibited", "Echo", "EchoReply", "GeneralParameterProblem", "HostIsolated", "HostPrecedenceUnreachable", "HostRedirect", "HostTOSRedirect", "HostTOSUnreachable", "HostUnknown", "HostUnreachable", "InformationReply", "InformationRequest", "MaskReply", "MaskRequest", "MobileRedirect", "NetTOSRedirect", "NetTOSUnreachable", "NetworkRedirect", "NetworkUnknown", "NetworkUnreachable", "NoRoomForOption", "OptionMissing", "PacketTooBig", "ParameterProblem", "PortUnreachable", "PrecedenceUnreachable", "ProtocolUnreachable", "ReassemblyTimeout", "Redirect", "RouterAdvertisement", "RouterSolicitation", "SourceQuench", "SourceRouteFailed", "TTLExceeded", "TimeExceeded", "TimestampReply", "TimestampRequest", "Traceroute", "Unreachable").String,
 							Optional:            true,
@@ -813,6 +789,10 @@ func (r *IPv4AccessListResource) Schema(ctx context.Context, req resource.Schema
 							Validators: []validator.Int64{
 								int64validator.Between(0, 255),
 							},
+						},
+						"deny_igmp_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Match on IGMP message").String,
+							Optional:            true,
 						},
 						"deny_dscp": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Match packets with given DSCP value(s)").String,
@@ -968,6 +948,10 @@ func (r *IPv4AccessListResource) Schema(ctx context.Context, req resource.Schema
 								int64validator.Between(0, 8191),
 							},
 						},
+						"deny_fragments": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Check non-initial fragments").String,
+							Optional:            true,
+						},
 						"deny_police_value": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Police value").AddIntegerRangeDescription(0, 4294967295).String,
 							Optional:            true,
@@ -1002,6 +986,10 @@ func (r *IPv4AccessListResource) Schema(ctx context.Context, req resource.Schema
 							Validators: []validator.String{
 								stringvalidator.OneOf("critical", "high", "low", "medium"),
 							},
+						},
+						"deny_default": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use specified default nexthop on match against this entry").String,
+							Optional:            true,
 						},
 						"deny_nexthop1_ipv4": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("nexthop1 ipv4 address").String,
@@ -1066,6 +1054,10 @@ func (r *IPv4AccessListResource) Schema(ctx context.Context, req resource.Schema
 								stringvalidator.LengthBetween(1, 32),
 							},
 						},
+						"deny_capture": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Capture matched packet").String,
+							Optional:            true,
+						},
 						"deny_log": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Log matches against this entry").String,
 							Optional:            true,
@@ -1087,6 +1079,14 @@ func (r *IPv4AccessListResource) Schema(ctx context.Context, req resource.Schema
 							Validators: []validator.Int64{
 								int64validator.Between(0, 255),
 							},
+						},
+						"deny_icmp_off": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Do not generate the ICMP message").String,
+							Optional:            true,
+						},
+						"deny_icmp_on": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Generate the ICMP message").String,
+							Optional:            true,
 						},
 					},
 				},

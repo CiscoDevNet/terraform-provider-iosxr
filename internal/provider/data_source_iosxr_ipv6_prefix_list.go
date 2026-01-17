@@ -92,6 +92,10 @@ func (d *IPv6PrefixListDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "IPv6 address prefix",
 							Computed:            true,
 						},
+						"zone": schema.StringAttribute{
+							MarkdownDescription: "IPv6 zone if entered with IPv6 address",
+							Computed:            true,
+						},
 						"mask": schema.Int64Attribute{
 							MarkdownDescription: "Mask length of IPv6 address",
 							Computed:            true,

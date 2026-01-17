@@ -2,12 +2,17 @@
 name: L2VPN Bridge Group Bridge Domain
 path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=%s]/bridge-domains/bridge-domain[bridge-domain-name=%s]
 doc_category: L2VPN
+test_tags: [XRD, NCS, C8000]
 attributes:
   - yang_name: group-name
     tf_name: bridge_group_name
     example: BG123
   - yang_name: bridge-domain-name
     example: BD123
+  - yang_name: mtu
+    example: 1500
+  - yang_name: description
+    example: "Bridge domain description"
   - yang_name: evis/evi
     tf_name: evis
     type: List
@@ -15,44 +20,6 @@ attributes:
       - yang_name: vpn-id
         id: true
         example: 1234
-  - yang_name: vnis/vni
-    tf_name: vnis
-    type: List
-    attributes:
-      - yang_name: vni-id
-        id: true
-        example: 1234
-  - yang_name: mtu
-    example: 1500
-    exclude_test: true
-  - yang_name: storm-control/broadcast/pps
-    example: 100
-    exclude_test: true
-  - yang_name: storm-control/broadcast/kbps
-    example: 1024
-    exclude_test: true
-  - yang_name: storm-control/multicast/pps
-    example: 100
-    exclude_test: true
-  - yang_name: storm-control/multicast/kbps
-    example: 1024
-    exclude_test: true
-  - yang_name: storm-control/unknown-unicast/pps
-    example: 100
-    exclude_test: true
-  - yang_name: storm-control/unknown-unicast/kbps
-    example: 1024
-    exclude_test: true
-  - yang_name: interfaces/interface
-    tf_name: interfaces
-    type: List
-    exclude_test: true
-    attributes:
-      - yang_name: interface-name
-        id: true
-        example: Bundle-Ether11.1234
-      - yang_name: split-horizon/group
-        example: true
   - yang_name: segment-routing-srv6-evis/evi
     tf_name: srv6_evis
     type: List
@@ -61,6 +28,399 @@ attributes:
       - yang_name: vpn-id
         id: true
         example: 32
+  - yang_name: vnis/vni
+    tf_name: vnis
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: vni-id
+        id: true
+        example: 1234
+  - yang_name: coupled-mode
+    example: true
+  - yang_name: transport-mode/vlan/passthrough
+    example: true
+  - yang_name: flooding/disable
+    example: true
+  - yang_name: dynamic-arp-inspection
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: dynamic-arp-inspection/logging
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: dynamic-arp-inspection/address-validation/src-mac
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: dynamic-arp-inspection/address-validation/dst-mac
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: dynamic-arp-inspection/address-validation/ipv4
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: ip-source-guard
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: ip-source-guard/logging
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: igmp/snooping/profile
+    test_tags: [NCS]
+    include_example: true
+    example: PROFILE_1
+  - yang_name: igmp/snooping/disable
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: mld/snooping/profile
+    example: PROFILE_2
+  - yang_name: storm-control/broadcast/pps
+    test_tags: [NCS]
+    example: 100
+    exclude_test: true
+  - yang_name: storm-control/broadcast/kbps
+    test_tags: [NCS]
+    example: 1024
+    exclude_test: true
+  - yang_name: storm-control/multicast/pps
+    test_tags: [NCS]
+    example: 100
+    exclude_test: true
+  - yang_name: storm-control/multicast/kbps
+    test_tags: [NCS]
+    example: 1024
+    exclude_test: true
+  - yang_name: storm-control/unknown-unicast/pps
+    test_tags: [NCS]
+    example: 100
+    exclude_test: true
+  - yang_name: storm-control/unknown-unicast/kbps
+    test_tags: [NCS]
+    example: 1024
+    exclude_test: true
+  - yang_name: multicast-source/ipv4
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: multicast-source/ipv6
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: multicast-source/ipv4-ipv6
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: interfaces/interface
+    tf_name: interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: Bundle-Ether11.1234
+      - yang_name: dynamic-arp-inspection/logging
+        test_tags: [NCS]
+        exclude_test: true
+        example: true
+      - yang_name: dynamic-arp-inspection/logging/disable
+        test_tags: [NCS]
+        include_example: true
+        example: true
+      - yang_name: dynamic-arp-inspection/disable
+        test_tags: [NCS]
+        exclude_test: true
+        example: true
+      - yang_name: dynamic-arp-inspection/address-validation/src-mac
+        test_tags: [NCS]
+        exclude_test: true
+        example: true
+      - yang_name: dynamic-arp-inspection/address-validation/src-mac/disable
+        test_tags: [NCS]
+        include_example: true
+        example: true
+      - yang_name: dynamic-arp-inspection/address-validation/dst-mac
+        test_tags: [NCS]
+        exclude_test: true
+        example: true
+      - yang_name: dynamic-arp-inspection/address-validation/dst-mac/disable
+        test_tags: [NCS]
+        include_example: true
+        example: true
+      - yang_name: dynamic-arp-inspection/address-validation/ipv4
+        test_tags: [NCS]
+        exclude_test: true
+        example: true
+      - yang_name: dynamic-arp-inspection/address-validation/ipv4/disable
+        test_tags: [NCS]
+        include_example: true
+        example: true
+      - yang_name: flooding/disable
+        test_tags: [NCS]
+        include_example: true
+        example: true
+      - yang_name: igmp/snooping/profile
+        test_tags: [NCS]
+        include_example: true
+        example: PROFILE_1
+      - yang_name: ip-source-guard
+        test_tags: [NCS]
+        include_example: true
+        example: true
+      - yang_name: ip-source-guard/disable
+        test_tags: [NCS]
+        exclude_test: true
+        example: true
+      - yang_name: ip-source-guard/logging
+        test_tags: [NCS]
+        include_example: true
+        example: true
+      - yang_name: ip-source-guard/logging/disable
+        test_tags: [NCS]
+        exclude_test: true
+        example: true
+      - yang_name: mac/aging/time
+        example: 300
+      - yang_name: mac/aging/type/absolute
+        exclude_test: true
+        example: true
+      - yang_name: mac/aging/type/inactivity
+        example: true
+      - yang_name: mac/learning
+        example: true
+      - yang_name: mac/learning/disable
+        exclude_test: true
+        example: true
+      - yang_name: mac/limit/maximum
+        test_tags: [NCS]
+        include_example: true
+        example: 1000
+      - yang_name: mac/limit/action/flood
+        test_tags: [NCS]
+        exclude_test: true
+        example: true
+      - yang_name: mac/limit/action/no-flood
+        test_tags: [NCS]
+        include_example: true
+        example: true
+      - yang_name: mac/limit/action/shutdown
+        test_tags: [NCS]
+        exclude_test: true
+        example: true
+      - yang_name: mac/limit/action/none
+        test_tags: [NCS]
+        exclude_test: true
+        example: true
+      - yang_name: mac/limit/notification/trap
+        test_tags: [NCS]
+        exclude_test: true
+        example: true
+      - yang_name: mac/limit/notification/both
+        test_tags: [NCS]
+        include_example: true
+        example: true
+      - yang_name: mac/limit/notification/none
+        test_tags: [NCS]
+        exclude_test: true
+        example: true
+      - yang_name: mac/limit/notification/syslog
+        test_tags: [NCS]
+        exclude_test: true
+        example: true
+      - yang_name: mac/port-down/flush/disable
+        example: true
+      - yang_name: mac/secure
+        test_tags: [NCS]
+        include_example: true
+        example: true
+      - yang_name: mac/secure/logging
+        test_tags: [NCS]
+        exclude_test: true
+        example: true
+      - yang_name: mac/secure/logging/disable
+        test_tags: [NCS]
+        include_example: true
+        example: true
+      - yang_name: mac/secure/action/none
+        test_tags: [NCS]
+        exclude_test: true
+        example: true
+      - yang_name: mac/secure/action/shutdown
+        test_tags: [NCS]
+        include_example: true
+        example: true
+      - yang_name: mac/secure/action/restrict
+        test_tags: [NCS]
+        exclude_test: true
+        example: true
+      - yang_name: mac/secure/disable
+        test_tags: [NCS]
+        exclude_test: true
+        example: true
+      - yang_name: mac/secure/shutdown-recovery-timeout/recovery-timer-in-second
+        tf_name: mac_secure_shutdown_recovery_timeout
+        test_tags: [NCS]
+        include_example: true
+        example: 300
+      - yang_name: mac/secure/shutdown-recovery-timeout/disable
+        test_tags: [NCS]
+        exclude_test: true
+        example: true
+      - yang_name: mld/snooping/profile
+        example: PROFILE_2
+      - yang_name: storm-control/broadcast/pps
+        test_tags: [NCS]
+        example: 100
+        exclude_test: true
+      - yang_name: storm-control/broadcast/kbps
+        test_tags: [NCS]
+        example: 1024
+        exclude_test: true
+      - yang_name: storm-control/multicast/pps
+        test_tags: [NCS]
+        example: 100
+        exclude_test: true
+      - yang_name: storm-control/multicast/kbps
+        test_tags: [NCS]
+        example: 1024
+        exclude_test: true
+      - yang_name: storm-control/unknown-unicast/pps
+        test_tags: [NCS]
+        example: 100
+        exclude_test: true
+      - yang_name: storm-control/unknown-unicast/kbps
+        test_tags: [NCS]
+        example: 1024
+        exclude_test: true
+      - yang_name: split-horizon/group
+        example: true
+      - yang_name: static-mac-addresses/static-mac-address
+        tf_name: static_mac_addresses
+        type: List
+        attributes:
+          - yang_name: mac-address
+            id: true
+            example: aa:bb:cc:dd:ee:ff
+  - yang_name: routed/interface
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: BVI10
+      - yang_name: split-horizon/group/core
+        example: true
+  - yang_name: shutdown
+    example: false
+  - yang_name: mac/aging/time
+    example: 300
+  - yang_name: mac/aging/type/absolute
+    example: true
+  - yang_name: mac/static-addresses/static-address
+    tf_name: mac_static_addresses
+    exclude_test: true
+    type: List
+    attributes:
+      - yang_name: mac-address
+        id: true
+        example: aa:bb:cc:dd:ee:03
+      - yang_name: drop
+        example: true
+  - yang_name: mac/learning/disable
+    example: true
+  - yang_name: mac/withdraw/disable
+    example: true
+  - yang_name: mac/withdraw/access-pw/disable
+    example: true
+  - yang_name: mac/withdraw/relay
+    example: true
+  - yang_name: mac/withdraw/state-down
+    example: true
+  - yang_name: mac/withdraw/optimize
+    exclude_test: true
+    example: true
+  - yang_name: mac/limit/maximum
+    test_tags: [NCS]
+    include_example: true
+    example: 1000
+  - yang_name: mac/limit/action/flood
+    exclude_test: true
+    example: true
+  - yang_name: mac/limit/action/no-flood
+    exclude_test: true
+    example: true
+  - yang_name: mac/limit/action/shutdown
+    example: true
+  - yang_name: mac/limit/notification/trap
+    exclude_test: true
+    example: true
+  - yang_name: mac/limit/notification/both
+    example: true
+  - yang_name: mac/limit/notification/none
+    exclude_test: true
+    example: true
+  - yang_name: mac/port-down/flush/disable
+    example: true
+  - yang_name: mac/secure
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: mac/secure/logging
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: mac/secure/threshold
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: mac/secure/action/none
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: mac/secure/action/shutdown
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: mac/secure/shutdown-recovery-timeout
+    test_tags: [NCS]
+    include_example: true
+    example: 60
+  - yang_name: neighbors/evpn/evi
+    type: List
+    attributes:
+      - yang_name: vpn-id
+        id: true
+        example: 300
+      - yang_name: target
+        id: true
+        example: 400
+  - yang_name: efp-visibility
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: etree
+    example: true
+  - yang_name: etree/leaf
+    example: true
+  - yang_name: member/vnis/vni
+    type: List
+    attributes:
+      - yang_name: vni-id
+        id: true
+        example: 1234
+      - yang_name: static-mac-addresses/static-mac-address
+        tf_name: static_mac_addresses
+        type: List
+        attributes:
+          - yang_name: mac-address
+            id: true
+            example: aa:bb:cc:dd:ee:04
+          - yang_name: next-hop
+            example: 10.1.1.3
 
 test_prerequisites:
   - path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn

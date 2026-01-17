@@ -14,26 +14,38 @@ This resource can manage the Router BGP VRF Address Family configuration.
 
 ```terraform
 resource "iosxr_router_bgp_vrf_address_family" "example" {
-  as_number                                     = "65001"
-  vrf_name                                      = "VRF3"
-  af_name                                       = "ipv4-unicast"
-  additional_paths_send                         = true
-  additional_paths_receive                      = true
-  additional_paths_selection_route_policy       = "ADDITIONAL_PATHS_POLICY"
-  allocate_label_all                            = true
-  allocate_label_all_unlabeled_path             = true
-  advertise_best_external                       = true
-  maximum_paths_ebgp_multipath                  = 10
-  maximum_paths_ebgp_selective                  = true
-  maximum_paths_ebgp_route_policy               = "MULTIPATH_POLICY"
-  maximum_paths_ibgp_multipath                  = 10
-  maximum_paths_ibgp_unequal_cost               = true
-  maximum_paths_ibgp_unequal_cost_deterministic = true
-  maximum_paths_ibgp_selective                  = true
-  maximum_paths_ibgp_route_policy               = "MULTIPATH_POLICY"
-  label_mode_per_prefix                         = true
-  segment_routing_srv6_locator                  = "LocAlgo11"
-  segment_routing_srv6_alloc_mode_per_vrf       = true
+  as_number                                                = "65001"
+  vrf_name                                                 = "VRF2"
+  af_name                                                  = "ipv4-unicast"
+  segment_routing_srv6_locator                             = "locator101"
+  segment_routing_srv6_usid_allocation_wide_local_id_block = true
+  segment_routing_srv6_alloc_mode_per_vrf                  = true
+  distance_bgp_external_route                              = 200
+  distance_bgp_internal_route                              = 195
+  distance_bgp_local_route                                 = 190
+  bgp_attribute_download                                   = true
+  allow_vpn_default_originate                              = true
+  maximum_paths_ebgp_multipath                             = 10
+  maximum_paths_ebgp_selective                             = true
+  maximum_paths_ebgp_route_policy                          = "ROUTE_POLICY_1"
+  maximum_paths_ibgp_multipath                             = 10
+  maximum_paths_ibgp_unequal_cost                          = true
+  maximum_paths_ibgp_unequal_cost_deterministic            = true
+  maximum_paths_ibgp_selective                             = true
+  maximum_paths_ibgp_route_policy                          = "ROUTE_POLICY_1"
+  additional_paths_send                                    = true
+  additional_paths_receive                                 = true
+  additional_paths_advertise_limit                         = 40
+  additional_paths_selection_route_policy                  = "ROUTE_POLICY_1"
+  advertise_best_external                                  = true
+  advertise_local_labeled_route_safi_unicast               = "disable"
+  networks = [
+    {
+      address      = "10.1.0.0"
+      prefix       = 16
+      route_policy = "ROUTE_POLICY_1"
+    }
+  ]
   aggregate_addresses = [
     {
       address       = "10.0.0.0"
@@ -46,20 +58,13 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
       set_tag       = 100
     }
   ]
-  networks = [
-    {
-      address      = "10.1.0.0"
-      prefix       = 16
-      route_policy = "ROUTE_POLICY_1"
-    }
-  ]
   redistribute_ospf = [
     {
       router_tag                              = "OSPF1"
       match_internal_external_nssa_external_2 = true
       metric                                  = 100
       multipath                               = true
-      route_policy                            = "REDISTRIBUTE_POLICY"
+      route_policy                            = "ROUTE_POLICY_1"
     }
   ]
   redistribute_eigrp = [
@@ -68,7 +73,7 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
       match_internal_external = true
       metric                  = 100
       multipath               = true
-      route_policy            = "REDISTRIBUTE_POLICY"
+      route_policy            = "ROUTE_POLICY_1"
     }
   ]
   redistribute_isis = [
@@ -77,21 +82,36 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
       level_1_level_2_level_1_inter_area = true
       metric                             = 100
       multipath                          = true
-      route_policy                       = "REDISTRIBUTE_POLICY"
+      route_policy                       = "ROUTE_POLICY_1"
     }
   ]
-  redistribute_connected              = true
-  redistribute_connected_metric       = 100
-  redistribute_connected_multipath    = true
-  redistribute_connected_route_policy = "REDISTRIBUTE_POLICY"
-  redistribute_static                 = true
-  redistribute_static_metric          = 100
-  redistribute_static_multipath       = true
-  redistribute_static_route_policy    = "REDISTRIBUTE_POLICY"
-  redistribute_rip                    = true
-  redistribute_rip_metric             = 100
-  redistribute_rip_multipath          = true
-  redistribute_rip_route_policy       = "REDISTRIBUTE_POLICY"
+  redistribute_connected               = true
+  redistribute_connected_metric        = 100
+  redistribute_connected_multipath     = true
+  redistribute_connected_route_policy  = "ROUTE_POLICY_1"
+  redistribute_static                  = true
+  redistribute_static_metric           = 100
+  redistribute_static_multipath        = true
+  redistribute_static_route_policy     = "ROUTE_POLICY_1"
+  redistribute_rip                     = true
+  redistribute_rip_metric              = 100
+  redistribute_rip_multipath           = true
+  redistribute_rip_route_policy        = "ROUTE_POLICY_1"
+  table_policy                         = "ROUTE_POLICY_1"
+  label_mode_per_prefix                = true
+  bgp_origin_as_validation_enable      = true
+  bgp_origin_as_validation_signal_ibgp = true
+  bgp_bestpath_origin_as_use_validity  = true
+  bgp_bestpath_origin_as_allow_invalid = true
+  bgp_dampening_decay_half_life        = 30
+  bgp_dampening_reuse_threshold        = 40
+  bgp_dampening_suppress_threshold     = 50
+  bgp_dampening_max_suppress_time      = 30
+  dynamic_med_interval                 = 5
+  weight_reset_on_import               = true
+  nexthop_route_policy                 = "ROUTE_POLICY_1"
+  as_path_loopcheck_out_disable        = true
+  mvpn_single_forwarder_selection      = "highest-ip-address"
 }
 ```
 
@@ -107,6 +127,8 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
 
 ### Optional
 
+- `additional_paths_advertise_limit` (Number) Limit the number of paths to be advertised (default 32)
+  - Range: `1`-`20000`
 - `additional_paths_receive` (Boolean) Additional paths Receive capability
 - `additional_paths_receive_disable` (Boolean) Do not advertise additional paths Receive capability
 - `additional_paths_selection_disable` (Boolean) Disable additional paths selection
@@ -114,14 +136,50 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
 - `additional_paths_send` (Boolean) Additional paths Send capability
 - `additional_paths_send_disable` (Boolean) Do not advertise additional paths Send capability
 - `advertise_best_external` (Boolean) Advertise best-external path
+- `advertise_best_external_disable` (Boolean) Do not advertise best-external path
+- `advertise_best_external_labeled_unicast` (Boolean) Limit best-external to Labeled-Unicast address family
+- `advertise_epe_bgp_labeled_unicast` (Boolean) Limit epe-bgplu to Labeled-Unicast address family
+- `advertise_local_labeled_route_safi_unicast` (String) Advertisement of routes with local-label via Unicast SAFI
+  - Choices: `disable`, `enable`
 - `aggregate_addresses` (Attributes List) Configure BGP aggregate entries (see [below for nested schema](#nestedatt--aggregate_addresses))
 - `allocate_label_all` (Boolean) Allocate labels for all prefixes
 - `allocate_label_all_unlabeled_path` (Boolean) Allocate label for unlabeled paths too
 - `allocate_label_route_policy_name` (String) Allocate label route policy
 - `allocate_label_route_policy_unlabeled_path` (Boolean) Allocate label for unlabeled paths too
+- `allow_vpn_default_originate` (Boolean) Originate default route to VPN neighbor
+- `as_path_loopcheck_out_disable` (Boolean) Disable
+- `bgp_attribute_download` (Boolean) Configure attribute download for this address-family
+- `bgp_bestpath_origin_as_allow_invalid` (Boolean) BGP bestpath selection will allow 'invalid' origin-AS
+- `bgp_bestpath_origin_as_use_validity` (Boolean) BGP bestpath selection will use origin-AS validity
+- `bgp_dampening_decay_half_life` (Number) Half-life time for the penalty
+  - Range: `1`-`255`
+- `bgp_dampening_max_suppress_time` (Number) Maximum duration to suppress a stable route
+  - Range: `0`-`4294967295`
+- `bgp_dampening_reuse_threshold` (Number) Value to start reusing a route
+  - Range: `1`-`255`
+- `bgp_dampening_route_policy` (String) Route policy to specify criteria for dampening
+- `bgp_dampening_suppress_threshold` (Number) Value to start suppressing a route
+  - Range: `1`-`255`
+- `bgp_origin_as_validation_enable` (Boolean) Enable RPKI origin-AS validation
+- `bgp_origin_as_validation_signal_ibgp` (Boolean) Signal origin-AS validity towards iBGP peers
+- `default_martian_check_disable` (Boolean) Disable
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
+- `distance_bgp_external_route` (Number) Distance for routes external to the AS
+  - Range: `1`-`20000`
+- `distance_bgp_internal_route` (Number) Distance for routes internal to the AS
+  - Range: `1`-`20000`
+- `distance_bgp_local_route` (Number) Distance for local routes
+  - Range: `1`-`20000`
+- `domain_distinguisher_as` (Number) 4 octet ASN
+  - Range: `1`-`4294967295`
+- `domain_distinguisher_router_id` (String) 4 octet router-id
+- `dynamic_med_interval` (Number) Update generation delay (in minutes) after a MED change
+  - Range: `0`-`10`
+- `global_table_multicast` (Boolean) Enable global table multicast
+- `import_from_bridge_domain` (Boolean) Import IP hosts from EVPN bridge-domain
+- `inter_as_install` (Boolean) Install remote mvpn routes in default vrf
 - `label_mode_per_ce` (Boolean) Set per CE label mode
 - `label_mode_per_nexthop_received_label` (Boolean) Set label mode per nexthop and received label
 - `label_mode_per_nexthop_received_label_allocate_secondary_label` (Boolean) Allocate secondary label to avoid label oscillation insymmetric PIC deployments
@@ -129,6 +187,7 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
 - `label_mode_per_vrf` (Boolean) Set per VRF label mode
 - `label_mode_per_vrf_46` (Boolean) Set per VRF 46 label mode
 - `label_mode_route_policy` (String) Use a route policy to select prefixes for label allocation mode
+- `label_security_asbr_rpf` (Boolean) RPF Label Security for Option-B
 - `maximum_paths_ebgp_multipath` (Number) Number of paths (limit includes backup path)
   - Range: `2`-`128`
 - `maximum_paths_ebgp_route_policy` (String) Route policy to specify ORF and inbound filter
@@ -145,7 +204,13 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
 - `maximum_paths_ibgp_unequal_cost` (Boolean) Allow multipaths to have different BGP nexthop IGP metrics
 - `maximum_paths_ibgp_unequal_cost_deterministic` (Boolean) Deterministic Multipath selection primarily on IGP metric order
 - `maximum_paths_unique_nexthop_check_disable` (Boolean) Disable multipath unique nexthop check
+- `mvpn_single_forwarder_selection` (String) Enable single forwarder selection
+  - Choices: `all`, `highest-ip-address`
 - `networks` (Attributes List) Specify a network to announce via BGP (see [below for nested schema](#nestedatt--networks))
+- `nexthop_route_policy` (String) Policy to filter out nexthop notification
+- `option_b_asbr_only` (Boolean) Enable the ASBR router for option-B label exchange.This option makes the router an Option B ASBR for EVPN.Its assumed no DCI configs are present
+- `originator_pe_id` (String) Set and send originator PE ID.
+- `permanent_network_route_policy` (String) Route policy to read the prefixes from
 - `redistribute_connected` (Boolean) Redistribute connected routes
 - `redistribute_connected_metric` (Number) Metric for redistributed routes
   - Range: `0`-`4294967295`
@@ -170,6 +235,10 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
 - `segment_routing_srv6_alloc_mode_per_vrf_46` (Boolean) Set SRv6 per VRF 46 SID mode
 - `segment_routing_srv6_alloc_mode_route_policy` (String) Use a route policy to determine the SID allocation mode and locator (if provided) for given prefix
 - `segment_routing_srv6_locator` (String) Specify locator
+- `segment_routing_srv6_usid_allocation_wide_local_id_block` (Boolean) Wide LIB allocation
+- `segmented_multicast` (Boolean) Enable segmented multicast
+- `table_policy` (String) Configure policy for installation of routes to RIB
+- `weight_reset_on_import` (Boolean) Reset weight of paths on import
 
 ### Read-Only
 

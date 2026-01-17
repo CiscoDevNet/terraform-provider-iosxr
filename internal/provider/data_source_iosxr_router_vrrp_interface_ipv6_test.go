@@ -33,9 +33,10 @@ import (
 func TestAccDataSourceIosxrRouterVRRPInterfaceIPv6(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv6.test", "global_addresses.0.address", "2001:db8::1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv6.test", "address_linklocal_autoconfig", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv6.test", "address_linklocal", "fe80::2"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv6.test", "priority", "250"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv6.test", "name", "TEST2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv6.test", "unicast_peer", "fe80::3"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv6.test", "timer_advertisement_seconds", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv6.test", "timer_force", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv6.test", "preempt_disable", "false"))
@@ -90,9 +91,10 @@ func testAccDataSourceIosxrRouterVRRPInterfaceIPv6Config() string {
 	config += `	global_addresses = [{` + "\n"
 	config += `		address = "2001:db8::1"` + "\n"
 	config += `	}]` + "\n"
-	config += `	address_linklocal_autoconfig = true` + "\n"
+	config += `	address_linklocal = "fe80::2"` + "\n"
 	config += `	priority = 250` + "\n"
 	config += `	name = "TEST2"` + "\n"
+	config += `	unicast_peer = "fe80::3"` + "\n"
 	config += `	timer_advertisement_seconds = 10` + "\n"
 	config += `	timer_force = true` + "\n"
 	config += `	preempt_disable = false` + "\n"

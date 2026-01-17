@@ -24,32 +24,17 @@ attributes:
       - yang_name: permit/eq
         example: 122
         exclude_test: true
-      - yang_name: permit/igmp-type
-        example: 0
+      - yang_name: permit/range/start-protocol
+        example: eigrp
+        exclude_test: true
+      - yang_name: permit/range/end-protocol
+        example: gre
         exclude_test: true
       - yang_name: permit/precedence
         example: 7
         exclude_test: true
       - yang_name: permit/fragment-type
         example: first-fragment
-        exclude_test: true
-      - yang_name: permit/fragments
-        example: true
-        exclude_test: true
-      - yang_name: permit/counter
-        example: COUNTER
-        exclude_test: true
-      - yang_name: permit/default
-        example: true
-        exclude_test: true
-      - yang_name: permit/capture
-        example: true
-        exclude_test: true
-      - yang_name: permit/range/start-protocol
-        example: eigrp
-        exclude_test: true
-      - yang_name: permit/range/end-protocol
-        example: gre
         exclude_test: true
       - yang_name: permit/source/address
         minimum_test_value: '"18.0.0.0"'
@@ -139,6 +124,9 @@ attributes:
       - yang_name: permit/icmp/message-code
         example: 255
         exclude_test: true
+      - yang_name: permit/igmp-type
+        example: 0
+        exclude_test: true
       - yang_name: permit/dscp/dscp-value
         tf_name: permit_dscp
         example: cs1
@@ -221,6 +209,9 @@ attributes:
         tf_name: permit_fragment_offset_range_end
         example: 200
         exclude_test: true
+      - yang_name: permit/fragments
+        example: true
+        exclude_test: true
       - yang_name: permit/police/value
         example: 42949
         exclude_test: true
@@ -235,6 +226,9 @@ attributes:
         exclude_test: true
       - yang_name: permit/police/priority
         example: critical
+        exclude_test: true
+      - yang_name: permit/default
+        example: true
         exclude_test: true
       - yang_name: permit/nexthop1/ipv4
         example: 1.2.3.4
@@ -261,6 +255,12 @@ attributes:
       - yang_name: permit/nexthop3/vrf
         example: 29
         exclude_test: true
+      - yang_name: permit/capture
+        example: true
+        exclude_test: true
+      - yang_name: permit/counter
+        example: COUNTER
+        exclude_test: true
       - yang_name: permit/log
         example: true
       - yang_name: permit/log-input
@@ -272,12 +272,26 @@ attributes:
       - yang_name: permit/set/ttl
         example: 255
         exclude_test: true
-
+      - yang_name: deny/protocol
+        example: tcp
+        exclude_test: true
       - yang_name: deny/eq
         example: 123
         exclude_test: true
-      - yang_name: deny/protocol
-        example: tcp
+      - yang_name: deny/precedence
+        example: 7
+        exclude_test: true
+      - yang_name: deny/fragment-type
+        example: first-fragment
+        exclude_test: true
+      - yang_name: deny/counter
+        example: COUNTER
+        exclude_test: true
+      - yang_name: deny/range/start-protocol
+        example: gre
+        exclude_test: true
+      - yang_name: deny/range/end-protocol
+        example: gre
         exclude_test: true
       - yang_name: deny/source/address
         example: 20.0.0.0
@@ -361,39 +375,6 @@ attributes:
         tf_name: deny_destination_port_range_end
         example: 200
         exclude_test: true
-      - yang_name: deny/igmp-type
-        example: trace
-        exclude_test: true
-      - yang_name: deny/precedence
-        example: 7
-        exclude_test: true
-      - yang_name: deny/fragment-type
-        example: first-fragment
-        exclude_test: true
-      - yang_name: deny/fragments
-        example: true
-        exclude_test: true
-      - yang_name: deny/counter
-        example: COUNTER
-        exclude_test: true
-      - yang_name: deny/default
-        example: true
-        exclude_test: true
-      - yang_name: deny/capture
-        example: true
-        exclude_test: true
-      - yang_name: deny/icmp-off
-        example: true
-        exclude_test: true
-      - yang_name: deny/icmp-on
-        example: true
-        exclude_test: true
-      - yang_name: deny/range/start-protocol
-        example: gre
-        exclude_test: true
-      - yang_name: deny/range/end-protocol
-        example: gre
-        exclude_test: true
       - yang_name: deny/icmp/message-type-name
         example: AdministrativelyProhibited
         exclude_test: true
@@ -402,6 +383,9 @@ attributes:
         exclude_test: true
       - yang_name: deny/icmp/message-code
         example: 255
+        exclude_test: true
+      - yang_name: deny/igmp-type
+        example: trace
         exclude_test: true
       - yang_name: deny/dscp/dscp-value
         tf_name: deny_dscp
@@ -487,6 +471,9 @@ attributes:
         tf_name: deny_fragment_offset_range_end
         example: 100
         exclude_test: true
+      - yang_name: deny/fragments
+        example: true
+        exclude_test: true
       - yang_name: deny/police/value
         example: 42949
         exclude_test: true
@@ -501,6 +488,9 @@ attributes:
         exclude_test: true
       - yang_name: deny/police/priority
         example: critical
+        exclude_test: true
+      - yang_name: deny/default
+        example: true
         exclude_test: true
       - yang_name: deny/nexthop1/ipv4
         example: 11.11.11.11
@@ -529,6 +519,9 @@ attributes:
       - yang_name: deny/nexthop3/vrf
         example: 29
         exclude_test: true
+      - yang_name: deny/capture
+        example: true
+        exclude_test: true
       - yang_name: deny/log
         example: true
         exclude_test: true
@@ -540,4 +533,10 @@ attributes:
         exclude_test: true
       - yang_name: deny/set/ttl
         example: 255
+        exclude_test: true
+      - yang_name: deny/icmp-off
+        example: true
+        exclude_test: true
+      - yang_name: deny/icmp-on
+        example: true
         exclude_test: true

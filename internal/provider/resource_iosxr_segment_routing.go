@@ -31,6 +31,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -79,20 +80,6 @@ func (r *SegmentRoutingResource) Schema(ctx context.Context, req resource.Schema
 					stringvalidator.OneOf("all", "attributes"),
 				},
 			},
-			"global_block_lower_bound": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("SRGB Lower Bound").AddIntegerRangeDescription(16000, 1048574).String,
-				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(16000, 1048574),
-				},
-			},
-			"global_block_upper_bound": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("SRGB Upper Bound").AddIntegerRangeDescription(16001, 1048575).String,
-				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(16001, 1048575),
-				},
-			},
 			"local_block_lower_bound": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("SRLB Lower Bound").AddIntegerRangeDescription(15000, 1048574).String,
 				Optional:            true,
@@ -107,9 +94,25 @@ func (r *SegmentRoutingResource) Schema(ctx context.Context, req resource.Schema
 					int64validator.Between(15001, 1048575),
 				},
 			},
-			"enable": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("enable SR").String,
+			"global_block_lower_bound": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SRGB Lower Bound").AddIntegerRangeDescription(16000, 1048574).String,
 				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(16000, 1048574),
+				},
+			},
+			"global_block_upper_bound": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SRGB Upper Bound").AddIntegerRangeDescription(16001, 1048575).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(16001, 1048575),
+				},
+			},
+			"enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("enable SR").AddDefaultValueDescription("true").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             booldefault.StaticBool(true),
 			},
 		},
 	}

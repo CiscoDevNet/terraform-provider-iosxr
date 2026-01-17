@@ -14,14 +14,101 @@ This resource can manage the Router OSPF VRF Area Interface configuration.
 
 ```terraform
 resource "iosxr_router_ospf_vrf_area_interface" "example" {
-  process_name           = "OSPF1"
-  vrf_name               = "VRF1"
-  area_id                = "0"
-  interface_name         = "GigabitEthernet0/0/0/2"
-  network_point_to_point = true
-  cost                   = 20
-  priority               = 100
-  passive_disable        = true
+  process_name   = "OSPF1"
+  vrf_name       = "VRF1"
+  area_id        = "0"
+  interface_name = "Loopback2"
+  neighbors = [
+    {
+      address                 = "192.168.2.1"
+      database_filter_all_out = true
+      priority                = 100
+      poll_interval           = 10
+      cost                    = 100
+    }
+  ]
+  authentication_key_encrypted = "110A1016141D4B"
+  message_digest_keys = [
+    {
+      key_id        = 1
+      md5_encrypted = "01100F175804"
+    }
+  ]
+  authentication                               = true
+  authentication_message_digest                = true
+  authentication_keychain_name                 = "KEY1"
+  network_point_to_point                       = true
+  cost                                         = 20
+  cost_fallback                                = 30
+  cost_fallback_threshold                      = 100000
+  cost_fallback_anomaly_delay_igp_metric_value = 500
+  cost_fallback_anomaly_delay_te_metric_value  = 600
+  hello_interval                               = 10
+  dead_interval                                = 40
+  priority                                     = 100
+  retransmit_interval                          = 1000
+  transmit_delay                               = 100
+  flood_reduction_enable                       = true
+  demand_circuit_enable                        = true
+  mtu_ignore_enable                            = true
+  database_filter_all_out_enable               = true
+  passive_disable                              = true
+  distribute_list_acl                          = "ACL_1"
+  packet_size                                  = 1400
+  bfd_fast_detect                              = true
+  bfd_fast_detect_strict_mode                  = true
+  bfd_minimum_interval                         = 300
+  bfd_multiplier                               = 3
+  security_ttl                                 = true
+  security_ttl_hops                            = 10
+  fast_reroute_per_link_exclude_interfaces = [
+    {
+      interface_name = "GigabitEthernet0/0/0/1"
+    }
+  ]
+  fast_reroute_per_link_lfa_candidate_interfaces = [
+    {
+      interface_name = "GigabitEthernet0/0/0/2"
+    }
+  ]
+  fast_reroute_per_link_use_candidate_only_enable = true
+  fast_reroute_per_prefix                         = true
+  fast_reroute_per_prefix_exclude_interfaces = [
+    {
+      interface_name = "GigabitEthernet0/0/0/3"
+    }
+  ]
+  fast_reroute_per_prefix_lfa_candidate_interfaces = [
+    {
+      interface_name = "GigabitEthernet0/0/0/4"
+    }
+  ]
+  fast_reroute_per_prefix_use_candidate_only_enable             = true
+  fast_reroute_per_prefix_tiebreaker_downstream_index           = 10
+  fast_reroute_per_prefix_tiebreaker_lc_disjoint_index          = 20
+  fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_index = 30
+  fast_reroute_per_prefix_tiebreaker_node_protecting_index      = 40
+  fast_reroute_per_prefix_tiebreaker_primary_path_index         = 50
+  fast_reroute_per_prefix_tiebreaker_secondary_path_index       = 60
+  fast_reroute_per_prefix_tiebreaker_interface_disjoint_index   = 70
+  fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index        = 80
+  loopback_stub_network_enable                                  = true
+  link_down_fast_detect                                         = true
+  prefix_sid_index                                              = 100
+  prefix_sid_index_explicit_null                                = true
+  prefix_sid_index_n_flag_clear                                 = true
+  prefix_sid_strict_spf_index                                   = 300
+  prefix_sid_strict_spf_index_explicit_null                     = true
+  prefix_sid_strict_spf_index_n_flag_clear                      = true
+  prefix_sid_algorithms = [
+    {
+      algorithm_number    = 128
+      index               = 400
+      index_explicit_null = true
+      index_n_flag_clear  = true
+    }
+  ]
+  advertise_prefix_route_policy = "ROUTE_POLICY_1"
 }
 ```
 
@@ -37,23 +124,256 @@ resource "iosxr_router_ospf_vrf_area_interface" "example" {
 
 ### Optional
 
+- `adjacency_sid_absolutes` (Attributes List) SID value (see [below for nested schema](#nestedatt--adjacency_sid_absolutes))
+- `adjacency_sid_indexes` (Attributes List) SID Index (see [below for nested schema](#nestedatt--adjacency_sid_indexes))
+- `advertise_prefix_route_policy` (String) Specify the route-policy for conditional advertising
+- `authentication` (Boolean) Enable authentication
+- `authentication_key_encrypted` (String, Sensitive) Specifies an ENCRYPTED password (key) will follow
+- `authentication_keychain_name` (String) Specify keychain name
+- `authentication_message_digest` (Boolean) Use message-digest authentication
+- `authentication_null` (Boolean) Use no authentication
+- `bfd_fast_detect` (Boolean) Enable Fast detection
+- `bfd_fast_detect_disable` (Boolean) Prevent bfd settings from being inherited from the parent
+- `bfd_fast_detect_strict_mode` (Boolean) Hold down neighbor session until BFD session is up
+- `bfd_minimum_interval` (Number) Minimum interval
+  - Range: `3`-`30000`
+- `bfd_multiplier` (Number) Detect multiplier
+  - Range: `2`-`50`
 - `cost` (Number) Interface cost
   - Range: `1`-`65535`
+- `cost_fallback` (Number) Cost when cumulative bandwidth goes below the theshold
+  - Range: `1`-`65535`
+- `cost_fallback_anomaly_delay_igp_metric_disable` (Boolean) Disable igp-metric
+- `cost_fallback_anomaly_delay_igp_metric_increment` (Number) Increment the IGP cost by the specified value
+  - Range: `1`-`65534`
+- `cost_fallback_anomaly_delay_igp_metric_multiplier` (Number) Multiply the IGP cost by the specified value
+  - Range: `1`-`255`
+- `cost_fallback_anomaly_delay_igp_metric_value` (Number) Set the IGP cost to the specified value
+  - Range: `1`-`65535`
+- `cost_fallback_anomaly_delay_te_metric_disable` (Boolean) Disable te-metric
+- `cost_fallback_anomaly_delay_te_metric_increment` (Number) Increment the TE metric by the specified value
+  - Range: `1`-`4294967294`
+- `cost_fallback_anomaly_delay_te_metric_multiplier` (Number) Multiply the TE metric by the specified value
+  - Range: `1`-`255`
+- `cost_fallback_anomaly_delay_te_metric_value` (Number) Set the TE cost to the specified value
+  - Range: `1`-`4294967295`
+- `cost_fallback_threshold` (Number) Threshold bandwidth when cost-fallback is applied
+  - Range: `1`-`4294967`
+- `database_filter_all_out_disable` (Boolean) Disable filtering
+- `database_filter_all_out_enable` (Boolean) Enable filtering
+- `dead_interval` (Number) Seconds
+  - Range: `1`-`65535`
+- `delay_normalize_interval` (Number) Normalization interval
+  - Range: `1`-`16777215`
+- `delay_normalize_offset` (Number) Normalization offset
+  - Range: `0`-`16777215`
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
+- `demand_circuit_disable` (Boolean) Disable demand circuits
+- `demand_circuit_enable` (Boolean) Enable demand circuits
 - `device` (String) A device name from the provider configuration.
+- `distribute_list_acl` (String) In-bound access-list name.
+- `distribute_list_route_policy` (String) Route Policy to filter OSPF prefixes
+- `fast_reroute_disable` (Boolean) Disable IP Fast Reroute
+- `fast_reroute_per_link` (Boolean) Enable per-link Computation
+- `fast_reroute_per_link_exclude_interfaces` (Attributes List) Exclude an interface from Per-link LFA (see [below for nested schema](#nestedatt--fast_reroute_per_link_exclude_interfaces))
+- `fast_reroute_per_link_lfa_candidate_interfaces` (Attributes List) Include an interface to LFA candidate in computation (see [below for nested schema](#nestedatt--fast_reroute_per_link_lfa_candidate_interfaces))
+- `fast_reroute_per_link_use_candidate_only_disable` (Boolean) Disable backup selection from candidate-list only
+- `fast_reroute_per_link_use_candidate_only_enable` (Boolean) Enable backup selection from candidate-list only
+- `fast_reroute_per_prefix` (Boolean) Enable per-prefix Computation
+- `fast_reroute_per_prefix_exclude_interfaces` (Attributes List) Exclude an interface from Per-prefix LFA (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_exclude_interfaces))
+- `fast_reroute_per_prefix_lfa_candidate_interfaces` (Attributes List) Include an interface to LFA candidate in computation (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_lfa_candidate_interfaces))
+- `fast_reroute_per_prefix_tiebreaker_downstream_disable` (Boolean) Disable tiebreaker
+- `fast_reroute_per_prefix_tiebreaker_downstream_index` (Number) Set preference order among tiebreakers
+  - Range: `1`-`255`
+- `fast_reroute_per_prefix_tiebreaker_interface_disjoint_disable` (Boolean) Disable tiebreaker
+- `fast_reroute_per_prefix_tiebreaker_interface_disjoint_index` (Number) Set preference order among tiebreakers
+  - Range: `1`-`255`
+- `fast_reroute_per_prefix_tiebreaker_lc_disjoint_disable` (Boolean) Disable tiebreaker
+- `fast_reroute_per_prefix_tiebreaker_lc_disjoint_index` (Number) Set preference order among tiebreakers
+  - Range: `1`-`255`
+- `fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_disable` (Boolean) Disable tiebreaker
+- `fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_index` (Number) Set preference order among tiebreakers
+  - Range: `1`-`255`
+- `fast_reroute_per_prefix_tiebreaker_node_protecting_disable` (Boolean) Disable tiebreaker
+- `fast_reroute_per_prefix_tiebreaker_node_protecting_index` (Number) Set preference order among tiebreakers
+  - Range: `1`-`255`
+- `fast_reroute_per_prefix_tiebreaker_primary_path_disable` (Boolean) Disable tiebreaker
+- `fast_reroute_per_prefix_tiebreaker_primary_path_index` (Number) Set preference order among tiebreakers
+  - Range: `1`-`255`
+- `fast_reroute_per_prefix_tiebreaker_secondary_path_disable` (Boolean) Disable tiebreaker
+- `fast_reroute_per_prefix_tiebreaker_secondary_path_index` (Number) Set preference order among tiebreakers
+  - Range: `1`-`255`
+- `fast_reroute_per_prefix_tiebreaker_srlg_disjoint_disable` (Boolean) Disable tiebreaker
+- `fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index` (Number) Set preference order among tiebreakers
+  - Range: `1`-`255`
+- `fast_reroute_per_prefix_use_candidate_only_disable` (Boolean) Disable backup selection from candidate-list only
+- `fast_reroute_per_prefix_use_candidate_only_enable` (Boolean) Enable backup selection from candidate-list only
+- `flood_reduction_disable` (Boolean) Disable flooding reduction
+- `flood_reduction_enable` (Boolean) Enable flooding reduction
+- `hello_interval` (Number) Time between HELLO packets
+  - Range: `1`-`65535`
+- `link_down_fast_detect` (Boolean) Enable fast or early detection of link-down events
+- `loopback_stub_network_disable` (Boolean) Disable advertising loopback as a stub network
+- `loopback_stub_network_enable` (Boolean) Enable advertising loopback as a stub network
+- `message_digest_keys` (Attributes List) Message digest authentication password (key) (see [below for nested schema](#nestedatt--message_digest_keys))
+- `mpls_ldp_sync` (Boolean) Enable LDP IGP synchronization on interfaces
+- `mpls_ldp_sync_disable` (Boolean) Disable MPLS LDP sync
+- `mtu_ignore_disable` (Boolean) Disable ignoring of MTU in DBD packets
+- `mtu_ignore_enable` (Boolean) Ignores the MTU in DBD packets
+- `neighbors` (Attributes List) Specify a neighbor router (see [below for nested schema](#nestedatt--neighbors))
 - `network_broadcast` (Boolean) Specify OSPF broadcast multi-access network
 - `network_non_broadcast` (Boolean) Specify OSPF NBMA network
 - `network_point_to_multipoint` (Boolean) Specify OSPF point-to-multipoint network
 - `network_point_to_point` (Boolean) Specify OSPF point-to-point network
+- `packet_size` (Number) Customize size of OSPF packets upto MTU
+  - Range: `576`-`10000`
 - `passive_disable` (Boolean) Disable passive
 - `passive_enable` (Boolean) Enable passive
+- `prefix_sid_absolute` (Number) SID value
+  - Range: `16000`-`1048575`
+- `prefix_sid_absolute_explicit_null` (Boolean) Force penultimate hop to send explicit-null label
+- `prefix_sid_absolute_n_flag_clear` (Boolean) Not a node SID (e.g. for anycast SID use)
+- `prefix_sid_algorithms` (Attributes List) Algorithm Specific Prefix SID Configuration (see [below for nested schema](#nestedatt--prefix_sid_algorithms))
+- `prefix_sid_index` (Number) SID Index
+  - Range: `0`-`1048575`
+- `prefix_sid_index_explicit_null` (Boolean) Force penultimate hop to send explicit-null label
+- `prefix_sid_index_n_flag_clear` (Boolean) Not a node SID (e.g. for anycast SID use)
+- `prefix_sid_strict_spf_absolute` (Number) SID value
+  - Range: `16000`-`1048575`
+- `prefix_sid_strict_spf_absolute_explicit_null` (Boolean) Force penultimate hop to send explicit-null label
+- `prefix_sid_strict_spf_absolute_n_flag_clear` (Boolean) Not a node SID (e.g. for anycast SID use)
+- `prefix_sid_strict_spf_index` (Number) SID Index
+  - Range: `0`-`1048575`
+- `prefix_sid_strict_spf_index_explicit_null` (Boolean) Force penultimate hop to send explicit-null label
+- `prefix_sid_strict_spf_index_n_flag_clear` (Boolean) Not a node SID (e.g. for anycast SID use)
+- `prefix_suppression` (Boolean) Enable primary address suppression
+- `prefix_suppression_disable` (Boolean) Disable primary address suppression
+- `prefix_suppression_secondary_address` (Boolean) Enable secondary address suppression
+- `prefix_suppression_secondary_address_disable` (Boolean) Disable secondary address suppression
 - `priority` (Number) Router priority
   - Range: `0`-`255`
+- `retransmit_interval` (Number) Time between retransmitting lost link state advertisements
+  - Range: `1`-`65535`
+- `security_ttl` (Boolean) Enable ttl security
+- `security_ttl_disable` (Boolean) Disable TTL security
+- `security_ttl_hops` (Number) IP hops
+  - Range: `1`-`254`
+- `transmit_delay` (Number) Estimated time needed to send link-state update packet
+  - Range: `1`-`65535`
+- `weight` (Number) Interface weight
+  - Range: `1`-`16777214`
 
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--adjacency_sid_absolutes"></a>
+### Nested Schema for `adjacency_sid_absolutes`
+
+Required:
+
+- `sid_label` (Number) SID value
+  - Range: `15000`-`1048575`
+
+Optional:
+
+- `neighbor_address` (String) Provide Neighbor IP address associated with this SID
+- `protected` (Boolean) Protect the static adjacency SID
+
+
+<a id="nestedatt--adjacency_sid_indexes"></a>
+### Nested Schema for `adjacency_sid_indexes`
+
+Required:
+
+- `sid_index` (Number) SID Index
+  - Range: `0`-`1048575`
+
+Optional:
+
+- `neighbor_address` (String) Provide Neighbor IP address associated with this SID
+- `protected` (Boolean) Protect the static adjacency SID
+
+
+<a id="nestedatt--fast_reroute_per_link_exclude_interfaces"></a>
+### Nested Schema for `fast_reroute_per_link_exclude_interfaces`
+
+Required:
+
+- `interface_name` (String) Exclude an interface from Per-link LFA
+
+
+<a id="nestedatt--fast_reroute_per_link_lfa_candidate_interfaces"></a>
+### Nested Schema for `fast_reroute_per_link_lfa_candidate_interfaces`
+
+Required:
+
+- `interface_name` (String) Include an interface to LFA candidate in computation
+
+
+<a id="nestedatt--fast_reroute_per_prefix_exclude_interfaces"></a>
+### Nested Schema for `fast_reroute_per_prefix_exclude_interfaces`
+
+Required:
+
+- `interface_name` (String) Exclude an interface from Per-prefix LFA
+
+
+<a id="nestedatt--fast_reroute_per_prefix_lfa_candidate_interfaces"></a>
+### Nested Schema for `fast_reroute_per_prefix_lfa_candidate_interfaces`
+
+Required:
+
+- `interface_name` (String) Include an interface to LFA candidate in computation
+
+
+<a id="nestedatt--message_digest_keys"></a>
+### Nested Schema for `message_digest_keys`
+
+Required:
+
+- `key_id` (Number) Message digest authentication password (key)
+  - Range: `1`-`255`
+- `md5_encrypted` (String, Sensitive) Specifies an ENCRYPTED password (key) will follow
+
+
+<a id="nestedatt--neighbors"></a>
+### Nested Schema for `neighbors`
+
+Required:
+
+- `address` (String) Specify a neighbor router
+
+Optional:
+
+- `cost` (Number) OSPF cost for point-to-multipoint neighbor
+  - Range: `1`-`65535`
+- `database_filter_all_out` (Boolean) Outgoing LSA
+- `poll_interval` (Number) OSPF dead-router polling interval
+  - Range: `0`-`65535`
+- `priority` (Number) OSPF priority of non-broadcast neighbor
+  - Range: `0`-`255`
+
+
+<a id="nestedatt--prefix_sid_algorithms"></a>
+### Nested Schema for `prefix_sid_algorithms`
+
+Required:
+
+- `algorithm_number` (Number) Algorithm Specific Prefix SID Configuration
+  - Range: `128`-`255`
+
+Optional:
+
+- `absolute` (Number) SID value
+  - Range: `16000`-`1048575`
+- `absolute_explicit_null` (Boolean) Force penultimate hop to send explicit-null label
+- `absolute_n_flag_clear` (Boolean) Not a node SID (e.g. for anycast SID use)
+- `index` (Number) SID Index
+  - Range: `0`-`1048575`
+- `index_explicit_null` (Boolean) Force penultimate hop to send explicit-null label
+- `index_n_flag_clear` (Boolean) Not a node SID (e.g. for anycast SID use)
 
 ## Import
 

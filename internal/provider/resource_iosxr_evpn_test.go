@@ -35,14 +35,61 @@ import (
 
 func TestAccIosxrEVPN(t *testing.T) {
 	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "bgp_rd_ipv4_address", "192.168.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "bgp_rd_ipv4_address_index", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "timers_recovery", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "timers_peering", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "timers_carving", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "timers_ac_debounce", "2000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "timers_backup_replacement_delay", "3000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "timers_mac_postpone", "240"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "load_balancing_flow_label_static", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "source_interface", "Loopback0"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "interfaces.0.interface_name", "GigabitEthernet0/0/0/1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "interfaces.0.ethernet_segment_enable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "interfaces.0.ethernet_segment_esi_zero", "01.02.03.04.05.06.07.08.09"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "cost_out", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "startup_cost_in", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "staggered_bringup_timer", "3000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "logging_df_election", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "ethernet_segment_type_one_auto_generation_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "groups.0.group_id", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "groups.0.core_interfaces.0.interface_name", "GigabitEthernet0/0/0/2"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "srv6", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "srv6_locators.0.locator_name", "LOC1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "srv6_locators.0.usid_allocation_wide_local_id_block", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "srv6_usid_allocation_wide_local_id_block", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "ignore_mtu_mismatch", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "transmit_mtu_zero", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "host_ipv4_duplicate_detection_move_count", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "host_ipv4_duplicate_detection_move_interval", "360"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "host_ipv4_duplicate_detection_freeze_time", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "host_ipv4_duplicate_detection_retry_count", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "host_ipv4_duplicate_detection_reset_freeze_count_interval", "48"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "host_ipv6_duplicate_detection_move_count", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "host_ipv6_duplicate_detection_move_interval", "360"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "host_ipv6_duplicate_detection_freeze_time", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "host_ipv6_duplicate_detection_retry_count", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "host_ipv6_duplicate_detection_reset_freeze_count_interval", "48"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "virtual_neighbors.0.address", "192.168.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "virtual_neighbors.0.pw_id", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "virtual_neighbors.0.timers_peering", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "virtual_neighbors.0.timers_recovery", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "virtual_neighbors.0.timers_carving", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "virtual_neighbors.0.timers_ac_debounce", "2000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "virtual_neighbors.0.ethernet_segment_esi_zero", "01.01.01.01.01.01.01.01.01"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "virtual_neighbors.0.ethernet_segment_service_carving_manual_primary", "100-101,103"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "virtual_neighbors.0.ethernet_segment_service_carving_manual_secondary", "200-201,203"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "virtual_neighbors.0.ethernet_segment_service_carving_multicast_hrw_s_g", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "virtual_neighbors.0.ethernet_segment_bgp_rt", "01:01:01:01:01:01"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "virtual_vfis.0.vfi_name", "VFI1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "virtual_vfis.0.timers_peering", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "virtual_vfis.0.timers_recovery", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "virtual_vfis.0.timers_carving", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "virtual_vfis.0.timers_ac_debounce", "2000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "virtual_vfis.0.ethernet_segment_esi_zero", "01.01.01.01.02.02.02.02.02"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "virtual_vfis.0.ethernet_segment_service_carving_manual_primary", "100-101,103"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "virtual_vfis.0.ethernet_segment_service_carving_manual_secondary", "200-201,203"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "virtual_vfis.0.ethernet_segment_bgp_rt", "01:01:01:01:01:02"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "virtual_access_evi_ethernet_segment_esi_zero", "01.01.01.01.01.01.01.01.03"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "virtual_access_evi_ethernet_segment_bgp_rt", "01:01:01:01:01:03"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -106,11 +153,26 @@ func testAccIosxrEVPNConfig_minimum() string {
 
 func testAccIosxrEVPNConfig_all() string {
 	config := `resource "iosxr_evpn" "test" {` + "\n"
+	config += `	bgp_rd_ipv4_address = "192.168.1.1"` + "\n"
+	config += `	bgp_rd_ipv4_address_index = 100` + "\n"
+	config += `	timers_recovery = 120` + "\n"
+	config += `	timers_peering = 60` + "\n"
+	config += `	timers_carving = 5` + "\n"
+	config += `	timers_ac_debounce = 2000` + "\n"
+	config += `	timers_backup_replacement_delay = 3000` + "\n"
+	config += `	timers_mac_postpone = 240` + "\n"
+	config += `	load_balancing_flow_label_static = true` + "\n"
 	config += `	source_interface = "Loopback0"` + "\n"
-	config += `	interfaces = [{` + "\n"
-	config += `		interface_name = "GigabitEthernet0/0/0/1"` + "\n"
-	config += `		ethernet_segment_enable = true` + "\n"
-	config += `		ethernet_segment_esi_zero = "01.02.03.04.05.06.07.08.09"` + "\n"
+	config += `	cost_out = true` + "\n"
+	config += `	startup_cost_in = 60` + "\n"
+	config += `	staggered_bringup_timer = 3000` + "\n"
+	config += `	logging_df_election = true` + "\n"
+	config += `	ethernet_segment_type_one_auto_generation_disable = true` + "\n"
+	config += `	groups = [{` + "\n"
+	config += `		group_id = 10` + "\n"
+	config += `		core_interfaces = [{` + "\n"
+	config += `			interface_name = "GigabitEthernet0/0/0/2"` + "\n"
+	config += `		}]` + "\n"
 	config += `		}]` + "\n"
 	config += `	srv6 = true` + "\n"
 	config += `	srv6_locators = [{` + "\n"
@@ -118,6 +180,44 @@ func testAccIosxrEVPNConfig_all() string {
 	config += `		usid_allocation_wide_local_id_block = true` + "\n"
 	config += `		}]` + "\n"
 	config += `	srv6_usid_allocation_wide_local_id_block = true` + "\n"
+	config += `	ignore_mtu_mismatch = true` + "\n"
+	config += `	transmit_mtu_zero = true` + "\n"
+	config += `	host_ipv4_duplicate_detection_move_count = 10` + "\n"
+	config += `	host_ipv4_duplicate_detection_move_interval = 360` + "\n"
+	config += `	host_ipv4_duplicate_detection_freeze_time = 120` + "\n"
+	config += `	host_ipv4_duplicate_detection_retry_count = "5"` + "\n"
+	config += `	host_ipv4_duplicate_detection_reset_freeze_count_interval = 48` + "\n"
+	config += `	host_ipv6_duplicate_detection_move_count = 10` + "\n"
+	config += `	host_ipv6_duplicate_detection_move_interval = 360` + "\n"
+	config += `	host_ipv6_duplicate_detection_freeze_time = 120` + "\n"
+	config += `	host_ipv6_duplicate_detection_retry_count = "5"` + "\n"
+	config += `	host_ipv6_duplicate_detection_reset_freeze_count_interval = 48` + "\n"
+	config += `	virtual_neighbors = [{` + "\n"
+	config += `		address = "192.168.1.1"` + "\n"
+	config += `		pw_id = 100` + "\n"
+	config += `		timers_peering = 60` + "\n"
+	config += `		timers_recovery = 120` + "\n"
+	config += `		timers_carving = 5` + "\n"
+	config += `		timers_ac_debounce = 2000` + "\n"
+	config += `		ethernet_segment_esi_zero = "01.01.01.01.01.01.01.01.01"` + "\n"
+	config += `		ethernet_segment_service_carving_manual_primary = "100-101,103"` + "\n"
+	config += `		ethernet_segment_service_carving_manual_secondary = "200-201,203"` + "\n"
+	config += `		ethernet_segment_service_carving_multicast_hrw_s_g = true` + "\n"
+	config += `		ethernet_segment_bgp_rt = "01:01:01:01:01:01"` + "\n"
+	config += `		}]` + "\n"
+	config += `	virtual_vfis = [{` + "\n"
+	config += `		vfi_name = "VFI1"` + "\n"
+	config += `		timers_peering = 60` + "\n"
+	config += `		timers_recovery = 120` + "\n"
+	config += `		timers_carving = 5` + "\n"
+	config += `		timers_ac_debounce = 2000` + "\n"
+	config += `		ethernet_segment_esi_zero = "01.01.01.01.02.02.02.02.02"` + "\n"
+	config += `		ethernet_segment_service_carving_manual_primary = "100-101,103"` + "\n"
+	config += `		ethernet_segment_service_carving_manual_secondary = "200-201,203"` + "\n"
+	config += `		ethernet_segment_bgp_rt = "01:01:01:01:01:02"` + "\n"
+	config += `		}]` + "\n"
+	config += `	virtual_access_evi_ethernet_segment_esi_zero = "01.01.01.01.01.01.01.01.03"` + "\n"
+	config += `	virtual_access_evi_ethernet_segment_bgp_rt = "01:01:01:01:01:03"` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config

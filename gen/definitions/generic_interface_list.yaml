@@ -1,0 +1,17 @@
+---
+name: Generic Interface List
+path: Cisco-IOS-XR-um-l2vpn-cfg:/generic-interface-lists/generic-interface-list[generic-interface-list-name=%s]
+doc_category: L2VPN
+test_tags: [XRD, C8000]
+attributes:
+  - yang_name: generic-interface-list-name
+    tf_name: list_name
+    id: true
+    example: INTF-LIST1
+  - yang_name: interfaces/interface
+    tf_name: interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: Bundle-Ether101

@@ -75,24 +75,85 @@ func (d *SNMPServerDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Text for mib Object sysContact",
 				Computed:            true,
 			},
-			"traps_rf": schema.BoolAttribute{
-				MarkdownDescription: "Enable SNMP RF-MIB traps",
+			"chassis_id": schema.StringAttribute{
+				MarkdownDescription: "String to uniquely identify this chassis",
 				Computed:            true,
 			},
-			"traps_bfd": schema.BoolAttribute{
-				MarkdownDescription: "Enable BFD traps",
+			"packetsize": schema.Int64Attribute{
+				MarkdownDescription: "Largest SNMP packet size",
 				Computed:            true,
 			},
-			"traps_ntp": schema.BoolAttribute{
-				MarkdownDescription: "Enable SNMP Cisco Ntp traps",
+			"trap_timeout": schema.Int64Attribute{
+				MarkdownDescription: "Set timeout for TRAP message retransmissions",
 				Computed:            true,
 			},
-			"traps_ethernet_oam_events": schema.BoolAttribute{
-				MarkdownDescription: "Enable all OAM event traps",
+			"queue_length": schema.Int64Attribute{
+				MarkdownDescription: "Message queue length for each TRAP host",
 				Computed:            true,
 			},
-			"traps_copy_complete": schema.BoolAttribute{
-				MarkdownDescription: "Enable CISCO-CONFIG-COPY-MIB ccCopyCompletion traps",
+			"throttle_time": schema.Int64Attribute{
+				MarkdownDescription: "Set throttle time for handling incoming messages",
+				Computed:            true,
+			},
+			"overload_control": schema.Int64Attribute{
+				MarkdownDescription: "Set overload-control params for handling incoming messages in critical processing mode",
+				Computed:            true,
+			},
+			"overload_throttle_rate": schema.Int64Attribute{
+				MarkdownDescription: "Overload throttle rate for incoming queue (default 500 msec)",
+				Computed:            true,
+			},
+			"communities": schema.ListNestedAttribute{
+				MarkdownDescription: "The UNENCRYPTED (cleartext) community string",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"community": schema.StringAttribute{
+							MarkdownDescription: "The UNENCRYPTED (cleartext) community string",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"view": schema.StringAttribute{
+							MarkdownDescription: "Restrict this community to a named view",
+							Computed:            true,
+						},
+						"ro": schema.BoolAttribute{
+							MarkdownDescription: "Read-only community",
+							Computed:            true,
+						},
+						"rw": schema.BoolAttribute{
+							MarkdownDescription: "Read-write community",
+							Computed:            true,
+						},
+						"sdrowner": schema.BoolAttribute{
+							MarkdownDescription: "SDR Owner permissions for MIB Objects",
+							Computed:            true,
+						},
+						"systemowner": schema.BoolAttribute{
+							MarkdownDescription: "System Owner permissions for MIB objects",
+							Computed:            true,
+						},
+						"ipv4": schema.StringAttribute{
+							MarkdownDescription: "Type of Access-list",
+							Computed:            true,
+						},
+						"ipv6": schema.StringAttribute{
+							MarkdownDescription: "Type of Access-list",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"traps_snmp_authentication": schema.BoolAttribute{
+				MarkdownDescription: "Enable SNMPv2-MIB authenticationFailure trap",
+				Computed:            true,
+			},
+			"traps_snmp_coldstart": schema.BoolAttribute{
+				MarkdownDescription: "Enable SNMPv2-MIB coldStart trap",
+				Computed:            true,
+			},
+			"traps_snmp_warmstart": schema.BoolAttribute{
+				MarkdownDescription: "Enable SNMPv2-MIB warmStart trap",
 				Computed:            true,
 			},
 			"traps_snmp_linkup": schema.BoolAttribute{
@@ -103,36 +164,8 @@ func (d *SNMPServerDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Enable SNMPv2-MIB linDownp traps",
 				Computed:            true,
 			},
-			"traps_power": schema.BoolAttribute{
-				MarkdownDescription: "Enable SNMP entity power traps",
-				Computed:            true,
-			},
-			"traps_config": schema.BoolAttribute{
-				MarkdownDescription: "Enable SNMP config traps",
-				Computed:            true,
-			},
-			"traps_entity": schema.BoolAttribute{
-				MarkdownDescription: "Enable SNMP entity traps",
-				Computed:            true,
-			},
-			"traps_system": schema.BoolAttribute{
-				MarkdownDescription: "Enable SNMP SYSTEMMIB-MIB traps",
-				Computed:            true,
-			},
-			"traps_bridgemib": schema.BoolAttribute{
-				MarkdownDescription: "Enable SNMP Trap for Bridge MIB",
-				Computed:            true,
-			},
-			"traps_entity_state_operstatus": schema.BoolAttribute{
-				MarkdownDescription: "Enable entity oper status enable notification",
-				Computed:            true,
-			},
-			"traps_entity_redundancy_all": schema.BoolAttribute{
-				MarkdownDescription: "Enable all CISCO-ENTITY-REDUNDANCY-MIB traps",
-				Computed:            true,
-			},
-			"trap_source": schema.StringAttribute{
-				MarkdownDescription: "Assign an interface for the source address of all traps",
+			"traps_snmp_all": schema.BoolAttribute{
+				MarkdownDescription: "Enable all traps",
 				Computed:            true,
 			},
 			"traps_l2vpn_all": schema.BoolAttribute{
@@ -147,12 +180,148 @@ func (d *SNMPServerDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Enable VC down traps",
 				Computed:            true,
 			},
+			"traps_l2vpn_cisco": schema.BoolAttribute{
+				MarkdownDescription: "Cisco format including extra varbinds (default IETF)",
+				Computed:            true,
+			},
+			"traps_vpls_all": schema.BoolAttribute{
+				MarkdownDescription: "Enable all VPLS traps",
+				Computed:            true,
+			},
+			"traps_vpls_status": schema.BoolAttribute{
+				MarkdownDescription: "Enable VPLS Status traps",
+				Computed:            true,
+			},
+			"traps_vpls_full_raise": schema.BoolAttribute{
+				MarkdownDescription: "Enable VPLS Full Raise traps",
+				Computed:            true,
+			},
+			"traps_vpls_full_clear": schema.BoolAttribute{
+				MarkdownDescription: "Enable VPLS Full Clear traps",
+				Computed:            true,
+			},
+			"traps_bfd": schema.BoolAttribute{
+				MarkdownDescription: "Enable BFD traps",
+				Computed:            true,
+			},
+			"traps_config": schema.BoolAttribute{
+				MarkdownDescription: "Enable SNMP config traps",
+				Computed:            true,
+			},
+			"traps_cfm": schema.BoolAttribute{
+				MarkdownDescription: "Enable traps for 802.1ag Connectivity Fault Management",
+				Computed:            true,
+			},
+			"traps_ethernet_oam_events": schema.BoolAttribute{
+				MarkdownDescription: "Enable all OAM event traps",
+				Computed:            true,
+			},
+			"traps_rf": schema.BoolAttribute{
+				MarkdownDescription: "Enable SNMP RF-MIB traps",
+				Computed:            true,
+			},
 			"traps_sensor": schema.BoolAttribute{
 				MarkdownDescription: "Enable SNMP entity sensor traps",
 				Computed:            true,
 			},
-			"traps_fru_ctrl": schema.BoolAttribute{
-				MarkdownDescription: "Enable SNMP entity FRU control traps",
+			"traps_mpls_l3vpn_all": schema.BoolAttribute{
+				MarkdownDescription: "Enable all MPLS L3VPN traps",
+				Computed:            true,
+			},
+			"traps_mpls_l3vpn_vrf_up": schema.BoolAttribute{
+				MarkdownDescription: "Enable VRF up traps",
+				Computed:            true,
+			},
+			"traps_mpls_l3vpn_vrf_down": schema.BoolAttribute{
+				MarkdownDescription: "Enable VRF down traps",
+				Computed:            true,
+			},
+			"traps_mpls_l3vpn_mid_threshold_exceeded": schema.BoolAttribute{
+				MarkdownDescription: "Enable mid-threshold exceeded traps",
+				Computed:            true,
+			},
+			"traps_mpls_l3vpn_max_threshold_exceeded": schema.BoolAttribute{
+				MarkdownDescription: "Enable max-threshold exceeded traps",
+				Computed:            true,
+			},
+			"traps_mpls_l3vpn_max_threshold_cleared": schema.BoolAttribute{
+				MarkdownDescription: "Enable max-threshold cleared traps",
+				Computed:            true,
+			},
+			"traps_mpls_l3vpn_max_threshold_reissue_notif_time": schema.Int64Attribute{
+				MarkdownDescription: "Time interval (secs) for re-issuing max-threshold notification",
+				Computed:            true,
+			},
+			"traps_mpls_traffic_eng_cisco": schema.BoolAttribute{
+				MarkdownDescription: "MPLS TE tunnel traps in Cisco format (default ietf)",
+				Computed:            true,
+			},
+			"traps_mpls_traffic_eng_cisco_ext_bringup_fail": schema.BoolAttribute{
+				MarkdownDescription: "Enable MPLS TE tunnel bringup-fail trap",
+				Computed:            true,
+			},
+			"traps_mpls_traffic_eng_cisco_ext_insuff_bw": schema.BoolAttribute{
+				MarkdownDescription: "Enable MPLS TE tunnel insufficient bandwidth trap",
+				Computed:            true,
+			},
+			"traps_mpls_traffic_eng_cisco_ext_preempt": schema.BoolAttribute{
+				MarkdownDescription: "Enable MPLS TE tunnel preempt trap",
+				Computed:            true,
+			},
+			"traps_mpls_traffic_eng_cisco_ext_reroute_pending": schema.BoolAttribute{
+				MarkdownDescription: "Enable MPLS TE tunnel reroute-pending trap",
+				Computed:            true,
+			},
+			"traps_mpls_traffic_eng_cisco_ext_reroute_pending_clear": schema.BoolAttribute{
+				MarkdownDescription: "Enable MPLS TE tunnel reroute-pending clear trap",
+				Computed:            true,
+			},
+			"traps_mpls_traffic_eng_down": schema.BoolAttribute{
+				MarkdownDescription: "Enable MPLS TE tunnel down traps",
+				Computed:            true,
+			},
+			"traps_mpls_traffic_eng_p2mp_down": schema.BoolAttribute{
+				MarkdownDescription: "Enable MPLS TE P2MP tunnel destination down traps",
+				Computed:            true,
+			},
+			"traps_mpls_traffic_eng_p2mp_up": schema.BoolAttribute{
+				MarkdownDescription: "Enable MPLS TE P2MP tunnel destination up traps",
+				Computed:            true,
+			},
+			"traps_mpls_traffic_eng_reoptimize": schema.BoolAttribute{
+				MarkdownDescription: "Enable MPLS TE tunnel reoptimize traps",
+				Computed:            true,
+			},
+			"traps_mpls_traffic_eng_reroute": schema.BoolAttribute{
+				MarkdownDescription: "Enable MPLS TE tunnel reroute traps",
+				Computed:            true,
+			},
+			"traps_mpls_traffic_eng_up": schema.BoolAttribute{
+				MarkdownDescription: "Enable MPLS TE tunnel up traps",
+				Computed:            true,
+			},
+			"traps_ntp": schema.BoolAttribute{
+				MarkdownDescription: "Enable SNMP Cisco Ntp traps",
+				Computed:            true,
+			},
+			"traps_bgp_cbgp_two_enable": schema.BoolAttribute{
+				MarkdownDescription: "Enable CISCO-BGP4-MIB v2 traps",
+				Computed:            true,
+			},
+			"traps_bgp_cbgp_two_updown": schema.BoolAttribute{
+				MarkdownDescription: "Enable CISCO-BGP4-MIB v2 up/down traps",
+				Computed:            true,
+			},
+			"traps_bgp_enable_updown": schema.BoolAttribute{
+				MarkdownDescription: "Enable BGP4-MIB and CISCO-BGP4-MIB traps",
+				Computed:            true,
+			},
+			"traps_bgp_enable_cisco_bgp4_mib": schema.BoolAttribute{
+				MarkdownDescription: "Enable CISCO-BGP4-MIB v2 up/down traps",
+				Computed:            true,
+			},
+			"traps_hsrp": schema.BoolAttribute{
+				MarkdownDescription: "Enable SNMP hsrp traps",
 				Computed:            true,
 			},
 			"traps_isis_all": schema.BoolAttribute{
@@ -231,69 +400,247 @@ func (d *SNMPServerDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "isisLSPErrorDetected",
 				Computed:            true,
 			},
-			"traps_bgp_cbgp_two_enable": schema.BoolAttribute{
-				MarkdownDescription: "Enable CISCO-BGP4-MIB v2 traps",
+			"traps_vrrp_events": schema.BoolAttribute{
+				MarkdownDescription: "Enable all VRRP event traps",
 				Computed:            true,
 			},
-			"traps_bgp_cbgp_two_updown": schema.BoolAttribute{
-				MarkdownDescription: "Enable CISCO-BGP4-MIB v2 up/down traps",
+			"traps_alarm": schema.BoolAttribute{
+				MarkdownDescription: "Enable SNMP Cisco alarm traps",
 				Computed:            true,
 			},
-			"traps_bgp_enable_updown": schema.BoolAttribute{
-				MarkdownDescription: "Enable BGP4-MIB and CISCO-BGP4-MIB traps",
+			"traps_bridgemib": schema.BoolAttribute{
+				MarkdownDescription: "Enable SNMP Trap for Bridge MIB",
 				Computed:            true,
 			},
-			"traps_bgp_enable_cisco_bgp4_mib": schema.BoolAttribute{
-				MarkdownDescription: "Enable CISCO-BGP4-MIB v2 up/down traps",
+			"traps_copy_complete": schema.BoolAttribute{
+				MarkdownDescription: "Enable CISCO-CONFIG-COPY-MIB ccCopyCompletion traps",
 				Computed:            true,
 			},
-			"users": schema.ListNestedAttribute{
-				MarkdownDescription: "Name of the user",
+			"traps_entity": schema.BoolAttribute{
+				MarkdownDescription: "Enable SNMP entity traps",
+				Computed:            true,
+			},
+			"traps_cisco_entity_ext": schema.BoolAttribute{
+				MarkdownDescription: "Enable SNMP entity traps",
+				Computed:            true,
+			},
+			"traps_entity_redundancy_all": schema.BoolAttribute{
+				MarkdownDescription: "Enable all CISCO-ENTITY-REDUNDANCY-MIB traps",
+				Computed:            true,
+			},
+			"traps_entity_redundancy_switchover": schema.BoolAttribute{
+				MarkdownDescription: "Enable switchover traps",
+				Computed:            true,
+			},
+			"traps_entity_redundancy_status": schema.BoolAttribute{
+				MarkdownDescription: "Enable status change traps",
+				Computed:            true,
+			},
+			"traps_entity_state_switchover": schema.BoolAttribute{
+				MarkdownDescription: "Enable entity state switchover notifications",
+				Computed:            true,
+			},
+			"traps_entity_state_operstatus": schema.BoolAttribute{
+				MarkdownDescription: "Enable entity oper status enable notification",
+				Computed:            true,
+			},
+			"traps_flash_insertion": schema.BoolAttribute{
+				MarkdownDescription: "Enable ciscoFlashDeviceInsertedNotif",
+				Computed:            true,
+			},
+			"traps_flash_removal": schema.BoolAttribute{
+				MarkdownDescription: "Enable ciscoFlashDeviceRemovedNotif",
+				Computed:            true,
+			},
+			"traps_fru_ctrl": schema.BoolAttribute{
+				MarkdownDescription: "Enable SNMP entity FRU control traps",
+				Computed:            true,
+			},
+			"traps_ipsla": schema.BoolAttribute{
+				MarkdownDescription: "Enable SNMP RTTMON-MIB IPSLA traps",
+				Computed:            true,
+			},
+			"traps_mpls_ldp_down": schema.BoolAttribute{
+				MarkdownDescription: "Enable MPLS LDP session down traps",
+				Computed:            true,
+			},
+			"traps_mpls_ldp_up": schema.BoolAttribute{
+				MarkdownDescription: "Enable MPLS LDP session up traps",
+				Computed:            true,
+			},
+			"traps_mpls_ldp_threshold": schema.BoolAttribute{
+				MarkdownDescription: "Enable MPLS LDP threshold traps",
+				Computed:            true,
+			},
+			"traps_pim_neighbor_change": schema.BoolAttribute{
+				MarkdownDescription: "Enable neighbor change trap",
+				Computed:            true,
+			},
+			"traps_pim_interface_state_change": schema.BoolAttribute{
+				MarkdownDescription: "Enable interface state change trap",
+				Computed:            true,
+			},
+			"traps_pim_invalid_message_received": schema.BoolAttribute{
+				MarkdownDescription: "Enable invalid message received trap",
+				Computed:            true,
+			},
+			"traps_pim_rp_mapping_change": schema.BoolAttribute{
+				MarkdownDescription: "Enable rp mapping change trap",
+				Computed:            true,
+			},
+			"traps_power": schema.BoolAttribute{
+				MarkdownDescription: "Enable SNMP entity power traps",
+				Computed:            true,
+			},
+			"traps_syslog": schema.BoolAttribute{
+				MarkdownDescription: "Enable SNMP syslog traps",
+				Computed:            true,
+			},
+			"traps_system": schema.BoolAttribute{
+				MarkdownDescription: "Enable SNMP SYSTEMMIB-MIB traps",
+				Computed:            true,
+			},
+			"hosts": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify hosts to receive SNMP notifications",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"user_name": schema.StringAttribute{
-							MarkdownDescription: "Name of the user",
+						"address": schema.StringAttribute{
+							MarkdownDescription: "Specify hosts to receive SNMP notifications",
 							Computed:            true,
 						},
-						"group_name": schema.StringAttribute{
-							MarkdownDescription: "Group to which the user belongs",
+						"traps_unencrypted_strings": schema.ListNestedAttribute{
+							MarkdownDescription: "The UNENCRYPTED (cleartext) community string",
 							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"community_string": schema.StringAttribute{
+										MarkdownDescription: "The UNENCRYPTED (cleartext) community string",
+										Computed:            true,
+										Sensitive:           true,
+									},
+									"udp_port": schema.Int64Attribute{
+										MarkdownDescription: "udp port to which notifications should be sent",
+										Computed:            true,
+									},
+									"version_v2c": schema.BoolAttribute{
+										MarkdownDescription: "Use 2c for SNMPv2c",
+										Computed:            true,
+									},
+									"version_v3_security_level": schema.StringAttribute{
+										MarkdownDescription: "Security level",
+										Computed:            true,
+									},
+								},
+							},
 						},
-						"v3_auth_md5_encryption_aes": schema.StringAttribute{
-							MarkdownDescription: "Specifies an aes-128 ENCRYPTED authentication password",
+						"informs_unencrypted_strings": schema.ListNestedAttribute{
+							MarkdownDescription: "The UNENCRYPTED (cleartext) community string",
 							Computed:            true,
-						},
-						"v3_auth_md5_encryption_default": schema.StringAttribute{
-							MarkdownDescription: "Specifies an default ENCRYPTED authentication password",
-							Computed:            true,
-						},
-						"v3_auth_sha_encryption_aes": schema.StringAttribute{
-							MarkdownDescription: "Specifies an aes-128 ENCRYPTED authentication password",
-							Computed:            true,
-						},
-						"v3_auth_sha_encryption_default": schema.StringAttribute{
-							MarkdownDescription: "Specifies an default ENCRYPTED authentication password",
-							Computed:            true,
-						},
-						"v3_priv_aes_aes_128_encryption_default": schema.StringAttribute{
-							MarkdownDescription: "Specifies an default ENCRYPTED authentication password",
-							Computed:            true,
-						},
-						"v3_priv_aes_aes_128_encryption_aes": schema.StringAttribute{
-							MarkdownDescription: "Specifies an aes-128 ENCRYPTED authentication password",
-							Computed:            true,
-						},
-						"v3_ipv4": schema.StringAttribute{
-							MarkdownDescription: "Type of Access-list",
-							Computed:            true,
-						},
-						"v3_systemowner": schema.BoolAttribute{
-							MarkdownDescription: "System Owner permissions for MIB objects",
-							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"community_string": schema.StringAttribute{
+										MarkdownDescription: "The UNENCRYPTED (cleartext) community string",
+										Computed:            true,
+										Sensitive:           true,
+									},
+									"udp_port": schema.Int64Attribute{
+										MarkdownDescription: "udp port to which notifications should be sent",
+										Computed:            true,
+									},
+									"version_v2c": schema.BoolAttribute{
+										MarkdownDescription: "Use 2c for SNMPv2c",
+										Computed:            true,
+									},
+									"version_v3_security_level": schema.StringAttribute{
+										MarkdownDescription: "Security level",
+										Computed:            true,
+									},
+								},
+							},
 						},
 					},
 				},
+			},
+			"views": schema.ListNestedAttribute{
+				MarkdownDescription: "Name of the view",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"view_name": schema.StringAttribute{
+							MarkdownDescription: "Name of the view",
+							Computed:            true,
+						},
+						"mib_view_families": schema.ListNestedAttribute{
+							MarkdownDescription: "MIB view family",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"name": schema.StringAttribute{
+										MarkdownDescription: "MIB view family name",
+										Computed:            true,
+									},
+									"included": schema.BoolAttribute{
+										MarkdownDescription: "MIB family is included in the view",
+										Computed:            true,
+									},
+									"excluded": schema.BoolAttribute{
+										MarkdownDescription: "MIB family is excluded from the view",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"trap_source": schema.StringAttribute{
+				MarkdownDescription: "Assign an interface for the source address of all traps",
+				Computed:            true,
+			},
+			"trap_source_ipv4": schema.StringAttribute{
+				MarkdownDescription: "IPv4 address of the interface",
+				Computed:            true,
+			},
+			"trap_source_ipv6": schema.StringAttribute{
+				MarkdownDescription: "IPv6 address of the interface",
+				Computed:            true,
+			},
+			"trap_source_port": schema.Int64Attribute{
+				MarkdownDescription: "Change the source port of all traps (default 161).",
+				Computed:            true,
+			},
+			"trap_throttle_time": schema.Int64Attribute{
+				MarkdownDescription: "Set throttle time for handling more traps",
+				Computed:            true,
+			},
+			"trap_authentication_vrf_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable authentication traps for packets on a vrf",
+				Computed:            true,
+			},
+			"trap_delay_timer": schema.Int64Attribute{
+				MarkdownDescription: "Set time to delay traps on init",
+				Computed:            true,
+			},
+			"ipv4_dscp": schema.StringAttribute{
+				MarkdownDescription: "Set IP DSCP (DiffServ CodePoint)",
+				Computed:            true,
+			},
+			"ipv6_dscp": schema.StringAttribute{
+				MarkdownDescription: "Set IP DSCP (DiffServ CodePoint)",
+				Computed:            true,
+			},
+			"drop_unknown_user": schema.BoolAttribute{
+				MarkdownDescription: "Silently drop unknown v3 user packets",
+				Computed:            true,
+			},
+			"drop_report_acl_ipv4": schema.StringAttribute{
+				MarkdownDescription: "Type of Access-list",
+				Computed:            true,
+			},
+			"drop_report_acl_ipv6": schema.StringAttribute{
+				MarkdownDescription: "Type of Access-list",
+				Computed:            true,
 			},
 			"groups": schema.ListNestedAttribute{
 				MarkdownDescription: "Name of the group",
@@ -302,6 +649,62 @@ func (d *SNMPServerDataSource) Schema(ctx context.Context, req datasource.Schema
 					Attributes: map[string]schema.Attribute{
 						"group_name": schema.StringAttribute{
 							MarkdownDescription: "Name of the group",
+							Computed:            true,
+						},
+						"v1": schema.BoolAttribute{
+							MarkdownDescription: "group using the v1 security model",
+							Computed:            true,
+						},
+						"v1_read": schema.StringAttribute{
+							MarkdownDescription: "specify a read view for this group",
+							Computed:            true,
+						},
+						"v1_write": schema.StringAttribute{
+							MarkdownDescription: "specify a write view for this group",
+							Computed:            true,
+						},
+						"v1_context": schema.StringAttribute{
+							MarkdownDescription: "Attach a SNMP context",
+							Computed:            true,
+						},
+						"v1_notify": schema.StringAttribute{
+							MarkdownDescription: "specify a notify view for the group",
+							Computed:            true,
+						},
+						"v1_ipv4": schema.StringAttribute{
+							MarkdownDescription: "Type of Access-list",
+							Computed:            true,
+						},
+						"v1_ipv6": schema.StringAttribute{
+							MarkdownDescription: "Type of Access-list",
+							Computed:            true,
+						},
+						"v2c": schema.BoolAttribute{
+							MarkdownDescription: "group using the v2c security model",
+							Computed:            true,
+						},
+						"v2c_read": schema.StringAttribute{
+							MarkdownDescription: "specify a read view for this group",
+							Computed:            true,
+						},
+						"v2c_write": schema.StringAttribute{
+							MarkdownDescription: "specify a write view for this group",
+							Computed:            true,
+						},
+						"v2c_context": schema.StringAttribute{
+							MarkdownDescription: "Attach a SNMP context",
+							Computed:            true,
+						},
+						"v2c_notify": schema.StringAttribute{
+							MarkdownDescription: "specify a notify view for the group",
+							Computed:            true,
+						},
+						"v2c_ipv4": schema.StringAttribute{
+							MarkdownDescription: "Type of Access-list",
+							Computed:            true,
+						},
+						"v2c_ipv6": schema.StringAttribute{
+							MarkdownDescription: "Type of Access-list",
 							Computed:            true,
 						},
 						"v3_priv": schema.BoolAttribute{
@@ -335,45 +738,209 @@ func (d *SNMPServerDataSource) Schema(ctx context.Context, req datasource.Schema
 					},
 				},
 			},
-			"communities": schema.ListNestedAttribute{
-				MarkdownDescription: "The UNENCRYPTED (cleartext) community string",
+			"engine_id_local": schema.StringAttribute{
+				MarkdownDescription: "engineID of the local agent",
+				Computed:            true,
+			},
+			"engine_id_remotes": schema.ListNestedAttribute{
+				MarkdownDescription: "engineID of the remote agent",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"community": schema.StringAttribute{
-							MarkdownDescription: "The UNENCRYPTED (cleartext) community string",
+						"address": schema.StringAttribute{
+							MarkdownDescription: "engineID of the remote agent",
 							Computed:            true,
 						},
-						"view": schema.StringAttribute{
-							MarkdownDescription: "Restrict this community to a named view",
+						"engine_id": schema.StringAttribute{
+							MarkdownDescription: "engine ID octet string",
 							Computed:            true,
 						},
-						"ro": schema.BoolAttribute{
-							MarkdownDescription: "Read-only community",
-							Computed:            true,
-						},
-						"rw": schema.BoolAttribute{
-							MarkdownDescription: "Read-write community",
-							Computed:            true,
-						},
-						"sdrowner": schema.BoolAttribute{
-							MarkdownDescription: "SDR Owner permissions for MIB Objects",
-							Computed:            true,
-						},
-						"systemowner": schema.BoolAttribute{
-							MarkdownDescription: "System Owner permissions for MIB objects",
-							Computed:            true,
-						},
-						"ipv4": schema.StringAttribute{
-							MarkdownDescription: "Type of Access-list",
-							Computed:            true,
-						},
-						"ipv6": schema.StringAttribute{
-							MarkdownDescription: "Type of Access-list",
+						"udp_port": schema.Int64Attribute{
+							MarkdownDescription: "The remote notification host's UDP port number",
 							Computed:            true,
 						},
 					},
 				},
+			},
+			"users": schema.ListNestedAttribute{
+				MarkdownDescription: "Name of the user",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"user_name": schema.StringAttribute{
+							MarkdownDescription: "Name of the user",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"group_name": schema.StringAttribute{
+							MarkdownDescription: "Group to which the user belongs",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"v1": schema.BoolAttribute{
+							MarkdownDescription: "user using the v1 security model",
+							Computed:            true,
+						},
+						"v1_ipv4": schema.StringAttribute{
+							MarkdownDescription: "Type of Access-list",
+							Computed:            true,
+						},
+						"v1_ipv6": schema.StringAttribute{
+							MarkdownDescription: "Type of Access-list",
+							Computed:            true,
+						},
+						"v1_systemowner": schema.BoolAttribute{
+							MarkdownDescription: "System Owner permissions for MIB objects",
+							Computed:            true,
+						},
+						"v2c": schema.BoolAttribute{
+							MarkdownDescription: "user using the v2c security model",
+							Computed:            true,
+						},
+						"v2c_ipv4": schema.StringAttribute{
+							MarkdownDescription: "Type of Access-list",
+							Computed:            true,
+						},
+						"v2c_ipv6": schema.StringAttribute{
+							MarkdownDescription: "Type of Access-list",
+							Computed:            true,
+						},
+						"v2c_systemowner": schema.BoolAttribute{
+							MarkdownDescription: "System Owner permissions for MIB objects",
+							Computed:            true,
+						},
+						"v3": schema.BoolAttribute{
+							MarkdownDescription: "user using the v3 security model",
+							Computed:            true,
+						},
+						"v3_auth_md5_encryption_aes": schema.StringAttribute{
+							MarkdownDescription: "Specifies an aes-128 ENCRYPTED authentication password",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"v3_auth_md5_encryption_default": schema.StringAttribute{
+							MarkdownDescription: "Specifies an default ENCRYPTED authentication password",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"v3_auth_sha_encryption_aes": schema.StringAttribute{
+							MarkdownDescription: "Specifies an aes-128 ENCRYPTED authentication password",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"v3_auth_sha_encryption_default": schema.StringAttribute{
+							MarkdownDescription: "Specifies an default ENCRYPTED authentication password",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"v3_auth_sha_256_encryption_aes": schema.StringAttribute{
+							MarkdownDescription: "Specifies an aes-128 ENCRYPTED authentication password",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"v3_auth_sha_256_encryption_default": schema.StringAttribute{
+							MarkdownDescription: "Specifies an default ENCRYPTED authentication password",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"v3_auth_sha_512_encryption_aes": schema.StringAttribute{
+							MarkdownDescription: "Specifies an aes-128 ENCRYPTED authentication password",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"v3_auth_sha_512_encryption_default": schema.StringAttribute{
+							MarkdownDescription: "Specifies an default ENCRYPTED authentication password",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"v3_priv_aes_aes_128_encryption_default": schema.StringAttribute{
+							MarkdownDescription: "Specifies an default ENCRYPTED authentication password",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"v3_priv_aes_aes_128_encryption_aes": schema.StringAttribute{
+							MarkdownDescription: "Specifies an aes-128 ENCRYPTED authentication password",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"v3_priv_aes_aes_192_encryption_default": schema.StringAttribute{
+							MarkdownDescription: "Specifies an default ENCRYPTED authentication password",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"v3_priv_aes_aes_192_encryption_aes": schema.StringAttribute{
+							MarkdownDescription: "Specifies an aes-128 ENCRYPTED authentication password",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"v3_priv_aes_aes_256_encryption_default": schema.StringAttribute{
+							MarkdownDescription: "Specifies an default ENCRYPTED authentication password",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"v3_priv_aes_aes_256_encryption_aes": schema.StringAttribute{
+							MarkdownDescription: "Specifies an aes-128 ENCRYPTED authentication password",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"v3_ipv4": schema.StringAttribute{
+							MarkdownDescription: "Type of Access-list",
+							Computed:            true,
+						},
+						"v3_ipv6": schema.StringAttribute{
+							MarkdownDescription: "Type of Access-list",
+							Computed:            true,
+						},
+						"v3_systemowner": schema.BoolAttribute{
+							MarkdownDescription: "System Owner permissions for MIB objects",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"oid_poll_stats": schema.BoolAttribute{
+				MarkdownDescription: "Enable OID poll stats oper CLI",
+				Computed:            true,
+			},
+			"timeouts_subagent": schema.Int64Attribute{
+				MarkdownDescription: "Sub-Agent Request timeout",
+				Computed:            true,
+			},
+			"timeouts_duplicate": schema.Int64Attribute{
+				MarkdownDescription: "Duplicate request feature timeout",
+				Computed:            true,
+			},
+			"timeouts_in_qdrop": schema.Int64Attribute{
+				MarkdownDescription: "incoming queue drop feature",
+				Computed:            true,
+			},
+			"timeouts_threshold": schema.Int64Attribute{
+				MarkdownDescription: "threshold incoming queue drop feature",
+				Computed:            true,
+			},
+			"timeouts_pdu_stats": schema.Int64Attribute{
+				MarkdownDescription: "SNMP pdu statistics timeout",
+				Computed:            true,
+			},
+			"logging_threshold_oid_processing": schema.Int64Attribute{
+				MarkdownDescription: "Configure threshold to start logging slow OID requests processing",
+				Computed:            true,
+			},
+			"logging_threshold_pdu_processing": schema.Int64Attribute{
+				MarkdownDescription: "Configure threshold to start logging slow PDU requests processing",
+				Computed:            true,
+			},
+			"inform_retries": schema.Int64Attribute{
+				MarkdownDescription: "Set retry count for informs",
+				Computed:            true,
+			},
+			"inform_timeout": schema.Int64Attribute{
+				MarkdownDescription: "Set timeout for informs",
+				Computed:            true,
+			},
+			"inform_pending": schema.Int64Attribute{
+				MarkdownDescription: "Set max number of informs to hold in queue",
+				Computed:            true,
 			},
 		},
 	}

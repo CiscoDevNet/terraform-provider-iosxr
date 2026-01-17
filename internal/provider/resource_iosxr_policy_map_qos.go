@@ -103,16 +103,230 @@ func (r *PolicyMapQoSResource) Schema(ctx context.Context, req resource.SchemaRe
 								stringvalidator.OneOf("qos", "traffic"),
 							},
 						},
-						"set_mpls_experimental_topmost": schema.Int64Attribute{
+						"bandwidth_value": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Value of bandwidth for this class").String,
+							Optional:            true,
+						},
+						"bandwidth_unit": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Unit of bandwidth for this class").AddStringEnumDescription("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent"),
+							},
+						},
+						"bandwidth_remaining_value": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Bandwidth value").String,
+							Optional:            true,
+						},
+						"bandwidth_remaining_unit": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Bandwidth value unit").AddStringEnumDescription("percent", "ratio").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("percent", "ratio"),
+							},
+						},
+						"police_rate_value": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Committed Information Rate").String,
+							Optional:            true,
+						},
+						"police_rate_unit": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Rate unit").AddStringEnumDescription("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent", "pps").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent", "pps"),
+							},
+						},
+						"police_burst_value": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Burst size (BC)").AddIntegerRangeDescription(1, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
+							},
+						},
+						"police_burst_unit": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Burst size unit").AddStringEnumDescription("bytes", "gbytes", "kbytes", "mbytes", "ms", "packets", "us").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("bytes", "gbytes", "kbytes", "mbytes", "ms", "packets", "us"),
+							},
+						},
+						"police_peak_rate_value": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Peak Information Rate").String,
+							Optional:            true,
+						},
+						"police_peak_rate_unit": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Unit of Peak Information Rate").AddStringEnumDescription("bps", "cellsps", "gbps", "kbps", "mbps", "percent", "pps").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("bps", "cellsps", "gbps", "kbps", "mbps", "percent", "pps"),
+							},
+						},
+						"police_peak_burst_value": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Exess burst size (BC)").AddIntegerRangeDescription(1, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
+							},
+						},
+						"police_peak_burst_unit": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Burst size unit").AddStringEnumDescription("bytes", "gbytes", "kbytes", "mbytes", "ms", "packets", "us").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("bytes", "gbytes", "kbytes", "mbytes", "ms", "packets", "us"),
+							},
+						},
+						"police_conform_action_transmit": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Transmit packet").String,
+							Optional:            true,
+						},
+						"police_conform_action_drop": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Drop packet").String,
+							Optional:            true,
+						},
+						"police_conform_action_set_cos": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Sets the specific IEEE 802.1Q Layer 2 CoS value of an outgoing packet. This command should be used by a router if a user wants to mark a packet that is being sent to a switch. Switches can leverage Layer 2 header information, including a CoS value marking. Packets entering an interface cannot be set with a CoS value.").AddIntegerRangeDescription(0, 7).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 7),
+							},
+						},
+						"police_conform_action_set_discard_class": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Sets the discard class on IPv4 or MPLS packets. The discard-class can be used only in service policies that are attached in the ingress policy.").AddIntegerRangeDescription(0, 7).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 7),
+							},
+						},
+						"police_conform_action_set_dscp": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set IP DSCP (DiffServ CodePoint)").String,
+							Optional:            true,
+						},
+						"police_conform_action_set_mpls_experimental_imposition": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Sets the experimental value of the MPLS packet imposition labels. Imposition can be used only in service policies that are attached in the ingress policy").AddIntegerRangeDescription(0, 7).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 7),
+							},
+						},
+						"police_conform_action_set_mpls_experimental_topmost": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Sets the experimental value of the MPLS packet top-most labels.").AddIntegerRangeDescription(0, 7).String,
 							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 7),
 							},
 						},
-						"set_dscp": schema.StringAttribute{
+						"police_conform_action_set_precedence": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set IP Precedence").String,
+							Optional:            true,
+						},
+						"police_conform_action_set_qos_group": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Sets the QoS group identifiers on IPv4 or MPLS packets. The set qos-group is supported only on an ingress policy.").AddIntegerRangeDescription(0, 512).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 512),
+							},
+						},
+						"police_exceed_action_transmit": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Transmit packet").String,
+							Optional:            true,
+						},
+						"police_exceed_action_drop": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Drop packet").String,
+							Optional:            true,
+						},
+						"police_exceed_action_set_cos": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Sets the specific IEEE 802.1Q Layer 2 CoS value of an outgoing packet. This command should be used by a router if a user wants to mark a packet that is being sent to a switch. Switches can leverage Layer 2 header information, including a CoS value marking. Packets entering an interface cannot be set with a CoS value.").AddIntegerRangeDescription(0, 7).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 7),
+							},
+						},
+						"police_exceed_action_set_discard_class": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Sets the discard class on IPv4 or MPLS packets. The discard-class can be used only in service policies that are attached in the ingress policy.").AddIntegerRangeDescription(0, 7).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 7),
+							},
+						},
+						"police_exceed_action_set_dscp": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Set IP DSCP (DiffServ CodePoint)").String,
 							Optional:            true,
+						},
+						"police_exceed_action_set_mpls_experimental_imposition": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Sets the experimental value of the MPLS packet imposition labels. Imposition can be used only in service policies that are attached in the ingress policy").AddIntegerRangeDescription(0, 7).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 7),
+							},
+						},
+						"police_exceed_action_set_mpls_experimental_topmost": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Sets the experimental value of the MPLS packet top-most labels.").AddIntegerRangeDescription(0, 7).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 7),
+							},
+						},
+						"police_exceed_action_set_precedence": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set IP Precedence").String,
+							Optional:            true,
+						},
+						"police_exceed_action_set_qos_group": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Sets the QoS group identifiers on IPv4 or MPLS packets. The set qos-group is supported only on an ingress policy.").AddIntegerRangeDescription(0, 512).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 512),
+							},
+						},
+						"police_violate_action_transmit": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Transmit packet").String,
+							Optional:            true,
+						},
+						"police_violate_action_drop": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Drop packet").String,
+							Optional:            true,
+						},
+						"police_violate_action_set_cos": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Sets the specific IEEE 802.1Q Layer 2 CoS value of an outgoing packet. This command should be used by a router if a user wants to mark a packet that is being sent to a switch. Switches can leverage Layer 2 header information, including a CoS value marking. Packets entering an interface cannot be set with a CoS value.").AddIntegerRangeDescription(0, 7).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 7),
+							},
+						},
+						"police_violate_action_set_discard_class": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Sets the discard class on IPv4 or MPLS packets. The discard-class can be used only in service policies that are attached in the ingress policy.").AddIntegerRangeDescription(0, 7).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 7),
+							},
+						},
+						"police_violate_action_set_dscp": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set IP DSCP (DiffServ CodePoint)").String,
+							Optional:            true,
+						},
+						"police_violate_action_set_mpls_experimental_imposition": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Sets the experimental value of the MPLS packet imposition labels. Imposition can be used only in service policies that are attached in the ingress policy").AddIntegerRangeDescription(0, 7).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 7),
+							},
+						},
+						"police_violate_action_set_mpls_experimental_topmost": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Sets the experimental value of the MPLS packet top-most labels.").AddIntegerRangeDescription(0, 7).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 7),
+							},
+						},
+						"police_violate_action_set_precedence": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set IP Precedence").String,
+							Optional:            true,
+						},
+						"police_violate_action_set_qos_group": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Sets the QoS group identifiers on IPv4 or MPLS packets. The set qos-group is supported only on an ingress policy.").AddIntegerRangeDescription(0, 512).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 512),
+							},
 						},
 						"priority_level": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Configure a priority level").AddIntegerRangeDescription(1, 7).String,
@@ -140,6 +354,46 @@ func (r *PolicyMapQoSResource) Schema(ctx context.Context, req resource.SchemaRe
 								},
 							},
 						},
+						"random_detect_default": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable RED with default min and max thresholds").String,
+							Optional:            true,
+						},
+						"random_detect": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable Random Early Detection. All RED profiles in a class must be based on the same field.").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"minimum_threshold_value": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Minimum threshold").AddIntegerRangeDescription(0, 1073741823).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 1073741823),
+										},
+									},
+									"minimum_threshold_unit": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("threshold unit").AddStringEnumDescription("bytes", "gbytes", "kbytes", "mbytes", "ms", "packets", "us").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("bytes", "gbytes", "kbytes", "mbytes", "ms", "packets", "us"),
+										},
+									},
+									"maximum_threshold_value": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Maximum threshold").AddIntegerRangeDescription(0, 1073741823).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 1073741823),
+										},
+									},
+									"maximum_threshold_unit": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("threshold unit").AddStringEnumDescription("bytes", "gbytes", "kbytes", "mbytes", "ms", "packets", "us").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("bytes", "gbytes", "kbytes", "mbytes", "ms", "packets", "us"),
+										},
+									},
+								},
+							},
+						},
 						"service_policy_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Name of the child service policy").String,
 							Optional:            true,
@@ -147,40 +401,55 @@ func (r *PolicyMapQoSResource) Schema(ctx context.Context, req resource.SchemaRe
 								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9][a-zA-Z0-9\._@$%+#:=<>\-]{0,62}`), ""),
 							},
 						},
-						"police_rate_value": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Committed Information Rate").String,
+						"set_traffic_class": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Sets the Traffic Class identifiers on IPv4 or MPLS packets. The set traffic-class is supported only on an ingress policy.").AddIntegerRangeDescription(0, 8).String,
 							Optional:            true,
-						},
-						"police_rate_unit": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Rate unit").AddStringEnumDescription("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent", "pps").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.OneOf("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent", "pps"),
+							Validators: []validator.Int64{
+								int64validator.Between(0, 8),
 							},
 						},
-						"police_conform_action_transmit": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Transmit packet").String,
+						"set_cos": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Sets the specific IEEE 802.1Q Layer 2 CoS value of an outgoing packet. This command should be used by a router if a user wants to mark a packet that is being sent to a switch. Switches can leverage Layer 2 header information, including a CoS value marking. Packets entering an interface cannot be set with a CoS value.").AddIntegerRangeDescription(0, 7).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 7),
+							},
+						},
+						"set_discard_class": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Sets the discard class on IPv4 or MPLS packets. The discard-class can be used only in service policies that are attached in the ingress policy.").AddIntegerRangeDescription(0, 7).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 7),
+							},
+						},
+						"set_dscp": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set IP DSCP (DiffServ CodePoint)").String,
 							Optional:            true,
 						},
-						"police_conform_action_drop": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Drop packet").String,
+						"set_mpls_experimental_imposition": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Sets the experimental value of the MPLS packet imposition labels. Imposition can be used only in service policies that are attached in the ingress policy").AddIntegerRangeDescription(0, 7).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 7),
+							},
+						},
+						"set_mpls_experimental_topmost": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Sets the experimental value of the MPLS packet top-most labels.").AddIntegerRangeDescription(0, 7).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 7),
+							},
+						},
+						"set_precedence": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set IP Precedence").String,
 							Optional:            true,
 						},
-						"police_exceed_action_transmit": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Transmit packet").String,
+						"set_qos_group": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Sets the QoS group identifiers on IPv4 or MPLS packets. The set qos-group is supported only on an ingress policy.").AddIntegerRangeDescription(0, 512).String,
 							Optional:            true,
-						},
-						"police_exceed_action_drop": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Drop packet").String,
-							Optional:            true,
-						},
-						"police_violate_action_transmit": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Transmit packet").String,
-							Optional:            true,
-						},
-						"police_violate_action_drop": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Drop packet").String,
-							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 512),
+							},
 						},
 						"shape_average_rate_value": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Value of Shape rate").String,
@@ -193,16 +462,19 @@ func (r *PolicyMapQoSResource) Schema(ctx context.Context, req resource.SchemaRe
 								stringvalidator.OneOf("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent"),
 							},
 						},
-						"bandwidth_remaining_unit": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Bandwidth value unit").AddStringEnumDescription("percent", "ratio").String,
+						"shape_average_excess_burst_size": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Excess burst size").AddIntegerRangeDescription(1, 4294967295).String,
 							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.OneOf("percent", "ratio"),
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
 							},
 						},
-						"bandwidth_remaining_value": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Bandwidth value").String,
+						"shape_average_excess_burst_unit": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Unit of Excess burst size").AddStringEnumDescription("bytes", "cells", "gbytes", "kbytes", "mbytes", "ms", "packets", "us").String,
 							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("bytes", "cells", "gbytes", "kbytes", "mbytes", "ms", "packets", "us"),
+							},
 						},
 					},
 				},

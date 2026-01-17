@@ -28,7 +28,8 @@ attributes:
     example: true
   - yang_name: multipath/include/locations/location
     tf_name: multipath_locations
-    test_tags: [NCS, C8000, XRV9K]
+    test_tags: [XRV9K, NCS]
+    include_example: true
     type: List
     attributes:
       - yang_name: location-id
@@ -59,6 +60,8 @@ attributes:
     example: 7184
   - yang_name: bundle/coexistence/bob-blb
     example: inherit
+  - yang_name: ipv6/checksum/disable
+    example: true
   - yang_name: interfaces/interface
     tf_name: interfaces
     type: List
@@ -86,5 +89,3 @@ attributes:
         example: 30000
       - yang_name: multiplier
         example: 40
-  - yang_name: ipv6/checksum/disable
-    example: true

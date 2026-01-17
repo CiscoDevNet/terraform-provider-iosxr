@@ -7,147 +7,13 @@ attributes:
     example: 65001
   - yang_name: vrf-name
     reference: true
-    example: VRF3
+    example: VRF2
   - yang_name: af-name
     example: ipv4-unicast
-  - yang_name: additional-paths/send
-    example: true
-  - yang_name: additional-paths/send/disable
-    exclude_example: true
-    example: true
-  - yang_name: additional-paths/receive
-    example: true
-  - yang_name: additional-paths/receive/disable
-    exclude_example: true
-    example: true
-  - yang_name: additional-paths/selection/SELECTION/ROUTE-POLICY/route-policy
-    xpath: additional-paths/selection/route-policy
-    tf_name: additional_paths_selection_route_policy
-    example: "ADDITIONAL_PATHS_POLICY"
-    delete_parent: true
-  - yang_name: additional-paths/selection/SELECTION/DISABLE/disable
-    xpath: additional-paths/selection/disable
-    tf_name: additional_paths_selection_disable
-    exclude_test: true
-    example: true
-    delete_parent: true
-  - yang_name: allocate-label/ALLOCATE-LABEL/ALL/all
-    xpath: allocate-label/all
-    tf_name: allocate_label_all
-    example: true
-    delete_parent: true
-  - yang_name: allocate-label/ALLOCATE-LABEL/ALL/all/unlabeled-path
-    xpath: allocate-label/all/unlabeled-path
-    tf_name: allocate_label_all_unlabeled_path
-    delete_parent: true
-    example: true
-  - yang_name: allocate-label/ALLOCATE-LABEL/ROUTE-POLICY/route-policy/route-policy-name
-    xpath: allocate-label/route-policy/route-policy-name
-    tf_name: allocate_label_route_policy_name
-    description: "Allocate label route policy"
-    delete_parent: true
-    exclude_test: true
-    example: "ALLOCATE_LABEL_POLICY"
-  - yang_name: allocate-label/ALLOCATE-LABEL/ROUTE-POLICY/route-policy/unlabeled-path
-    xpath: allocate-label/route-policy/unlabeled-path
-    tf_name: allocate_label_route_policy_unlabeled_path
-    delete_parent: true
-    exclude_test: true
-    example: true
-  - yang_name: advertise/best-external
-    example: true
-  - yang_name: maximum-paths/ebgp/ebgp-number
-    tf_name: maximum_paths_ebgp_multipath
-    optional: true
-    delete_parent: true
-    example: 10
-  - yang_name: maximum-paths/ebgp/selective
-    example: true
-    delete_parent: true
-  - yang_name: maximum-paths/ebgp/route-policy
-    delete_parent: true
-    example: "MULTIPATH_POLICY"
-  - yang_name: maximum-paths/ibgp/ibgp-number
-    tf_name: maximum_paths_ibgp_multipath
-    optional: true
-    delete_parent: true
-    example: 10
-  - yang_name: maximum-paths/ibgp/unequal-cost
-    example: true
-    delete_parent: true
-  - yang_name: maximum-paths/ibgp/unequal-cost/deterministic
-    example: true
-    delete_grandparent: true
-  - yang_name: maximum-paths/ibgp/selective
-    delete_parent: true
-    example: true
-  - yang_name: maximum-paths/ibgp/route-policy
-    delete_parent: true
-    example: "MULTIPATH_POLICY"
-  - yang_name: maximum-paths/eibgp/eibgp-number
-    tf_name: maximum_paths_eibgp_multipath
-    delete_parent: true
-    optional: true
-    example: 10
-    exclude_test: true
-  - yang_name: maximum-paths/eibgp/equal-cost
-    delete_parent: true
-    example: true
-    exclude_test: true
-  - yang_name: maximum-paths/eibgp/selective
-    delete_parent: true
-    example: true
-    exclude_test: true
-  - yang_name: maximum-paths/eibgp/route-policy
-    delete_parent: true
-    example: "MULTIPATH_POLICY"
-    exclude_test: true
-  - yang_name: maximum-paths/unique-nexthop-check-disable
-    example: true
-    exclude_test: true
-  - yang_name: label/mode/MODE/PER-PREFIX/per-prefix
-    xpath: label/mode/per-prefix
-    tf_name: label_mode_per_prefix
-    delete_parent: true
-    example: true
-  - yang_name: label/mode/MODE/PER-CE/per-ce
-    xpath: label/mode/per-ce
-    tf_name: label_mode_per_ce
-    delete_parent: true
-    exclude_test: true
-    example: true
-  - yang_name: label/mode/MODE/PER-VRF/per-vrf
-    xpath: label/mode/per-vrf
-    tf_name: label_mode_per_vrf
-    delete_parent: true
-    exclude_test: true
-    example: true
-  - yang_name: label/mode/MODE/PER-VRF-46/per-vrf-46
-    xpath: label/mode/per-vrf-46
-    tf_name: label_mode_per_vrf_46
-    delete_parent: true
-    exclude_test: true
-    example: true
-  - yang_name: label/mode/MODE/ROUTE-POLICY/route-policy
-    xpath: label/mode/route-policy
-    tf_name: label_mode_route_policy
-    delete_parent: true
-    exclude_test: true
-    example: true
-  - yang_name: label/mode/MODE/PER-NEXTHOP-RECEIVED-LABEL/per-nexthop-received-label
-    xpath: label/mode/per-nexthop-received-label
-    tf_name: label_mode_per_nexthop_received_label
-    delete_parent: true
-    exclude_test: true
-    example: true
-  - yang_name: label/mode/MODE/PER-NEXTHOP-RECEIVED-LABEL/per-nexthop-received-label/allocate-secondary-label
-    xpath: label/mode/per-nexthop-received-label/allocate-secondary-label
-    tf_name: label_mode_per_nexthop_received_label_allocate_secondary_label
-    delete_parent: true
-    exclude_test: true
-    example: true
   - yang_name: segment-routing/srv6/locator
-    example: LocAlgo11
+    example: locator101
+  - yang_name: segment-routing/srv6/usid/allocation/wide-local-id-block
+    example: true
   - yang_name: segment-routing/srv6/alloc/mode/MODE/PER-CE/per-ce
     xpath: segment-routing/srv6/alloc/mode/per-ce
     tf_name: segment_routing_srv6_alloc_mode_per_ce
@@ -170,30 +36,125 @@ attributes:
     tf_name: segment_routing_srv6_alloc_mode_route_policy
     delete_parent: true
     exclude_test: true
-    example: "SRV6_ALLOC_POLICY"
-  - yang_name: aggregate-addresses/aggregate-address
-    tf_name: aggregate_addresses
-    type: List
-    attributes:
-      - yang_name: address
-        id: true
-        example: 10.0.0.0
-      - yang_name: address-prefix
-        tf_name: prefix
-        id: true
-        example: 8
-      - yang_name: as-set
-        example: true
-      - yang_name: as-confed-set
-        example: false
-      - yang_name: summary-only
-        example: true
-      - yang_name: route-policy
-        example: ROUTE_POLICY_1
-      - yang_name: description
-        example: "Aggregate route description"
-      - yang_name: set-tag
-        example: 100
+    example: ROUTE_POLICY_1
+  - yang_name: domain-distinguisher/domain-distinguisher-number
+    tf_name: domain_distinguisher_as
+    exclude_test: true
+    example: 65001
+  - yang_name: domain-distinguisher/octet-routerid
+    tf_name: domain_distinguisher_router_id
+    exclude_test: true
+    example: 192.168.1.1
+  - yang_name: distance/bgp/external-route-distance
+    tf_name: distance_bgp_external_route
+    example: 200
+  - yang_name: distance/bgp/internal-route-distance
+    tf_name: distance_bgp_internal_route
+    example: 195
+  - yang_name: distance/bgp/local-route-distance
+    tf_name: distance_bgp_local_route
+    example: 190
+  - yang_name: attribute-download
+    tf_name: bgp_attribute_download
+    example: true
+  - yang_name: allow/vpn/default-originate
+    example: true
+  - yang_name: maximum-paths/ebgp/ebgp-number
+    tf_name: maximum_paths_ebgp_multipath
+    optional: true
+    delete_parent: true
+    example: 10
+  - yang_name: maximum-paths/ebgp/selective
+    example: true
+    delete_parent: true
+  - yang_name: maximum-paths/ebgp/route-policy
+    delete_parent: true
+    example: "ROUTE_POLICY_1"
+  - yang_name: maximum-paths/ibgp/ibgp-number
+    tf_name: maximum_paths_ibgp_multipath
+    optional: true
+    delete_parent: true
+    example: 10
+  - yang_name: maximum-paths/ibgp/unequal-cost
+    example: true
+    delete_parent: true
+  - yang_name: maximum-paths/ibgp/unequal-cost/deterministic
+    example: true
+    delete_grandparent: true
+  - yang_name: maximum-paths/ibgp/selective
+    delete_parent: true
+    example: true
+  - yang_name: maximum-paths/ibgp/route-policy
+    delete_parent: true
+    example: "ROUTE_POLICY_1"
+  - yang_name: maximum-paths/eibgp/eibgp-number
+    tf_name: maximum_paths_eibgp_multipath
+    delete_parent: true
+    optional: true
+    example: 10
+    exclude_test: true
+  - yang_name: maximum-paths/eibgp/equal-cost
+    delete_parent: true
+    example: true
+    exclude_test: true
+  - yang_name: maximum-paths/eibgp/selective
+    delete_parent: true
+    example: true
+    exclude_test: true
+  - yang_name: maximum-paths/eibgp/route-policy
+    delete_parent: true
+    example: "ROUTE_POLICY_1"
+    exclude_test: true
+  - yang_name: maximum-paths/unique-nexthop-check-disable
+    example: true
+    exclude_test: true
+  - yang_name: import/from/bridge-domain
+    exclude_test: true
+    example: true
+  - yang_name: additional-paths/send
+    example: true
+  - yang_name: additional-paths/send/disable
+    exclude_test: true
+    example: true
+  - yang_name: additional-paths/receive
+    example: true
+  - yang_name: additional-paths/receive/disable
+    exclude_test: true
+    example: true
+  - yang_name: additional-paths/advertise-limit/ADVERTISE-LIMIT/ADVERTISE-PATH-LIMIT/advertise-path-limit
+    xpath: additional-paths/advertise-limit/advertise-path-limit
+    tf_name: additional_paths_advertise_limit
+    delete_parent: true
+    example: 40
+  - yang_name: additional-paths/selection/SELECTION/ROUTE-POLICY/route-policy
+    xpath: additional-paths/selection/route-policy
+    tf_name: additional_paths_selection_route_policy
+    example: "ROUTE_POLICY_1"
+    delete_parent: true
+  - yang_name: additional-paths/selection/SELECTION/DISABLE/disable
+    xpath: additional-paths/selection/disable
+    tf_name: additional_paths_selection_disable
+    exclude_test: true
+    example: true
+    delete_parent: true
+  - yang_name: permanent-network/route-policy
+    exclude_test: true
+    example: ROUTE_POLICY_1
+  - yang_name: advertise/best-external
+    example: true
+  - yang_name: advertise/best-external/labeled-unicast
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: advertise/best-external/disable
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: advertise/local-labeled-route/safi-unicast
+    example: disable
+  - yang_name: advertise/epe-bgp/labeled-unicast
+    exclude_test: true
+    example: true
   - yang_name: networks/network
     tf_name: networks
     type: List
@@ -222,6 +183,29 @@ attributes:
         delete_parent: true
         exclude_test: true
         example: true
+  - yang_name: aggregate-addresses/aggregate-address
+    tf_name: aggregate_addresses
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: 10.0.0.0
+      - yang_name: address-prefix
+        tf_name: prefix
+        id: true
+        example: 8
+      - yang_name: as-set
+        example: true
+      - yang_name: as-confed-set
+        example: false
+      - yang_name: summary-only
+        example: true
+      - yang_name: route-policy
+        example: ROUTE_POLICY_1
+      - yang_name: description
+        example: "Aggregate route description"
+      - yang_name: set-tag
+        example: 100
   - yang_name: redistribute/ospfs/ospf
     tf_name: redistribute_ospf
     description: "Redistribute OSPF routes"
@@ -452,7 +436,7 @@ attributes:
       - yang_name: multipath
         example: true
       - yang_name: route-policy
-        example: "REDISTRIBUTE_POLICY"
+        example: "ROUTE_POLICY_1"
   - yang_name: redistribute/ospfv3s/ospfv3
     tf_name: redistribute_ospfv3
     description: "Redistribute OSPFv3 routes"
@@ -685,7 +669,7 @@ attributes:
       - yang_name: multipath
         example: true
       - yang_name: route-policy
-        example: "REDISTRIBUTE_POLICY"
+        example: "ROUTE_POLICY_1"
   - yang_name: redistribute/eigrps/eigrp
     tf_name: redistribute_eigrp
     description: "Redistribute EIGRP routes"
@@ -719,7 +703,7 @@ attributes:
       - yang_name: multipath
         example: true
       - yang_name: route-policy
-        example: "REDISTRIBUTE_POLICY"
+        example: "ROUTE_POLICY_1"
   - yang_name: redistribute/isis-processes/isis-process
     tf_name: redistribute_isis
     description: "Redistribute ISIS routes"
@@ -780,7 +764,7 @@ attributes:
       - yang_name: multipath
         example: true
       - yang_name: route-policy
-        example: "REDISTRIBUTE_POLICY"
+        example: "ROUTE_POLICY_1"
   - yang_name: redistribute/connected
     description: "Redistribute connected routes"
     example: true
@@ -789,7 +773,7 @@ attributes:
   - yang_name: redistribute/connected/multipath
     example: true
   - yang_name: redistribute/connected/route-policy
-    example: "REDISTRIBUTE_POLICY"
+    example: "ROUTE_POLICY_1"
   - yang_name: redistribute/static
     description: "Redistribute static routes"
     example: true
@@ -798,7 +782,7 @@ attributes:
   - yang_name: redistribute/static/multipath
     example: true
   - yang_name: redistribute/static/route-policy
-    example: "REDISTRIBUTE_POLICY"
+    example: "ROUTE_POLICY_1"
   - yang_name: redistribute/rip
     description: "Redistribute RIP routes"
     example: true
@@ -807,60 +791,167 @@ attributes:
   - yang_name: redistribute/rip/multipath
     example: true
   - yang_name: redistribute/rip/route-policy
-    example: "REDISTRIBUTE_POLICY"
+    example: "ROUTE_POLICY_1"
+  - yang_name: table-policy
+    example: ROUTE_POLICY_1
+  - yang_name: allocate-label/ALLOCATE-LABEL/ALL/all
+    xpath: allocate-label/all
+    tf_name: allocate_label_all
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: allocate-label/ALLOCATE-LABEL/ALL/all/unlabeled-path
+    xpath: allocate-label/all/unlabeled-path
+    tf_name: allocate_label_all_unlabeled_path
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: allocate-label/ALLOCATE-LABEL/ROUTE-POLICY/route-policy/route-policy-name
+    xpath: allocate-label/route-policy/route-policy-name
+    tf_name: allocate_label_route_policy_name
+    description: "Allocate label route policy"
+    delete_parent: true
+    exclude_test: true
+    example: "ROUTE_POLICY_1"
+  - yang_name: allocate-label/ALLOCATE-LABEL/ROUTE-POLICY/route-policy/unlabeled-path
+    xpath: allocate-label/route-policy/unlabeled-path
+    tf_name: allocate_label_route_policy_unlabeled_path
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: label/mode/MODE/PER-PREFIX/per-prefix
+    xpath: label/mode/per-prefix
+    tf_name: label_mode_per_prefix
+    delete_parent: true
+    example: true
+  - yang_name: label/mode/MODE/PER-CE/per-ce
+    xpath: label/mode/per-ce
+    tf_name: label_mode_per_ce
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: label/mode/MODE/PER-VRF/per-vrf
+    xpath: label/mode/per-vrf
+    tf_name: label_mode_per_vrf
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: label/mode/MODE/PER-VRF-46/per-vrf-46
+    xpath: label/mode/per-vrf-46
+    tf_name: label_mode_per_vrf_46
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: label/mode/MODE/ROUTE-POLICY/route-policy
+    xpath: label/mode/route-policy
+    tf_name: label_mode_route_policy
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: label/mode/MODE/PER-NEXTHOP-RECEIVED-LABEL/per-nexthop-received-label
+    xpath: label/mode/per-nexthop-received-label
+    tf_name: label_mode_per_nexthop_received_label
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: label/mode/MODE/PER-NEXTHOP-RECEIVED-LABEL/per-nexthop-received-label/allocate-secondary-label
+    xpath: label/mode/per-nexthop-received-label/allocate-secondary-label
+    tf_name: label_mode_per_nexthop_received_label_allocate_secondary_label
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: bgp/origin-as/validation/enable
+    example: true
+  - yang_name: bgp/origin-as/validation/signal/ibgp
+    example: true
+  - yang_name: bgp/bestpath/origin-as/use/validity
+    example: true
+  - yang_name: bgp/bestpath/origin-as/allow/invalid
+    example: true
+  - yang_name: bgp/dampening/DAMPENING/HALFLIFE-TIME/halflife-time/half-life-time-number
+    xpath: bgp/dampening/halflife-time/half-life-time-number
+    tf_name: bgp_dampening_decay_half_life
+    optional: true
+    delete_grandparent: true
+    example: 30
+  - yang_name: bgp/dampening/DAMPENING/HALFLIFE-TIME/halflife-time/route-reuse-number
+    xpath: bgp/dampening/halflife-time/route-reuse-number
+    tf_name: bgp_dampening_reuse_threshold
+    delete_grandparent: true
+    example: 40
+  - yang_name: bgp/dampening/DAMPENING/HALFLIFE-TIME/halflife-time/suppress-route-number
+    xpath: bgp/dampening/halflife-time/suppress-route-number
+    tf_name: bgp_dampening_suppress_threshold
+    delete_grandparent: true
+    example: 50
+  - yang_name: bgp/dampening/DAMPENING/HALFLIFE-TIME/halflife-time/stable-route-max-suppress-number
+    xpath: bgp/dampening/halflife-time/stable-route-max-suppress-number
+    tf_name: bgp_dampening_max_suppress_time
+    delete_grandparent: true
+    example: 30
+  - yang_name: bgp/dampening/DAMPENING/ROUTE-POLICY/route-policy
+    xpath: bgp/dampening/route-policy
+    tf_name: bgp_dampening_route_policy
+    delete_parent: true
+    exclude_test: true
+    example: ROUTE_POLICY_1
+  - yang_name: dynamic-med/interval
+    example: 5
+  - yang_name: weight/reset-on-import
+    example: true
+  - yang_name: nexthop/route-policy
+    example: ROUTE_POLICY_1
+  - yang_name: as-path-loopcheck/out/disable
+    example: true
+  - yang_name: inter-as/install
+    exclude_test: true
+    example: true
+  - yang_name: global-table-multicast
+    exclude_test: true
+    example: true
+  - yang_name: segmented-multicast
+    exclude_test: true
+    example: true
+  - yang_name: label-security/asbr/rpf
+    exclude_test: true
+    example: true
+  - yang_name: mvpn/single-forwarder-selection
+    example: highest-ip-address
+  - yang_name: originator-pe-id
+    exclude_test: true
+    example: 192.168.1.1
+  - yang_name: option-b-asbr-only
+    exclude_test: true
+    example: true
+  - yang_name: default-martian-check/disable
+    exclude_test: true
+    example: true
 
 test_prerequisites:
-  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies
-    lists:
-      - name: route-policy
-        key: route-policy-name
-        items:
-          - attributes:
-              - name: route-policy-name
-                value: ROUTE_POLICY_1
-              - name: rpl-route-policy
-                value: "route-policy ROUTE_POLICY_1\\n  pass\\nend-policy\\n"
-          - attributes:
-              - name: route-policy-name
-                value: ADDITIONAL_PATHS_POLICY
-              - name: rpl-route-policy
-                value: "route-policy ADDITIONAL_PATHS_POLICY\\n  pass\\nend-policy\\n"
-          - attributes:
-              - name: route-policy-name
-                value: ALLOCATE_LABEL_POLICY
-              - name: rpl-route-policy
-                value: "route-policy ALLOCATE_LABEL_POLICY\\n  pass\\nend-policy\\n"
-          - attributes:
-              - name: route-policy-name
-                value: MULTIPATH_POLICY
-              - name: rpl-route-policy
-                value: "route-policy MULTIPATH_POLICY\\n  pass\\nend-policy\\n"
-          - attributes:
-              - name: route-policy-name
-                value: REDISTRIBUTE_POLICY
-              - name: rpl-route-policy
-                value: "route-policy REDISTRIBUTE_POLICY\\n  pass\\nend-policy\\n"
-          - attributes:
-              - name: route-policy-name
-                value: LABEL_MODE_POLICY
-              - name: rpl-route-policy
-                value: "route-policy LABEL_MODE_POLICY\\n  pass\\nend-policy\\n"
-          - attributes:
-              - name: route-policy-name
-                value: SRv6_ALLOC_POLICY
-              - name: rpl-route-policy
-                value: "route-policy SRv6_ALLOC_POLICY\\n  pass\\nend-policy\\n"
-  - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF3]
+  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]
+    attributes:
+      - name: route-policy-name
+        value: ROUTE_POLICY_1
+      - name: rpl-route-policy
+        value: "route-policy ROUTE_POLICY_1\\n  pass\\nend-policy\\n"
+  - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF2]
     attributes:
       - name: vrf-name
-        value: VRF3
-  - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF3]/Cisco-IOS-XR-um-router-bgp-cfg:rd/Cisco-IOS-XR-um-router-bgp-cfg:two-byte-as
+        value: VRF2
+  - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF2]/Cisco-IOS-XR-um-router-bgp-cfg:rd/Cisco-IOS-XR-um-router-bgp-cfg:two-byte-as
     attributes:
       - name: two-byte-as-number
         value: 65001
       - name: asn2-index
-        value: 3
+        value: 2
     dependencies: [1]
+  - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]
+    attributes:
+      - name: as-number
+        value: 65001
+      - name: bgp/router-id
+        value: 22.22.22.22
+    dependencies: [2]
   - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]
     attributes:
       - name: as-number
@@ -872,4 +963,16 @@ test_prerequisites:
           - attributes:
               - name: af-name
                 value: vpnv4-unicast
-    dependencies: [2]
+    dependencies: [3]
+  - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]
+    attributes:
+      - name: as-number
+        value: 65001
+    lists:
+      - name: address-families/address-family
+        key: af-name
+        items:
+          - attributes:
+              - name: af-name
+                value: vpnv6-unicast
+    dependencies: [3]

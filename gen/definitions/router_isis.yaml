@@ -5,8 +5,30 @@ doc_category: ISIS
 attributes:
   - yang_name: process-id
     example: P1
-  - yang_name: is-type
-    example: level-1
+  - yang_name: segment-routing/global-block/lower-bound-of-srgb
+    tf_name: segment_routing_global_block_lower_bound
+    example: 16000
+  - yang_name: segment-routing/global-block/upper-bound-of-srgb
+    tf_name: segment_routing_global_block_upper_bound
+    example: 29999
+  - yang_name: receive/application/flex-algo/delay/app-only
+    tf_name: receive_application_flex_algo_delay_app_only
+    example: true
+  - yang_name: lsp-refresh-interval
+    tf_name: lsp_refresh_interval
+    example: 16000
+  - yang_name: lsp-refresh-interval-levels/lsp-refresh-interval-level
+    tf_name: lsp_refresh_interval_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: lsp-refresh-interval
+        example: 16000
+  - yang_name: oor-set-overload-bit/disable
+    tf_name: oor_set_overload_bit_disable
+    example: true
   - yang_name: set-overload-bit
     example: true
   - yang_name: set-overload-bit/on-startup/ON-STARTUP/TIME-TO-ADVERTISE/time-to-advertise/time-to-advertise-number
@@ -50,8 +72,23 @@ attributes:
         example: true
       - yang_name: advertise/interlevel
         example: true
+  - yang_name: lsp-mtu
+    example: 1400
+  - yang_name: lsp-mtu-levels/lsp-mtu-level
+    tf_name: lsp_mtu_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: lsp-mtu
+        example: 1400
+  - yang_name: extended-admin-group
+    example: both
   - yang_name: nsr
     example: true
+  - yang_name: nsr-restart-time
+    example: 240
   - yang_name: nsf/NSF/CISCO/cisco
     xpath: nsf/cisco
     tf_name: nsf_cisco
@@ -71,24 +108,96 @@ attributes:
     example: 5
   - yang_name: nsf/interface-expires
     example: 2
-  - yang_name: log/adjacency/changes
-    example: true
+  - yang_name: lsp-check-interval
+    example: 20
+  - yang_name: lsp-check-interval-levels/lsp-check-interval-level
+    tf_name: lsp_check_interval_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: lsp-check-interval
+        example: 20
   - yang_name: lsp-gen-interval/maximum-wait
     example: 5000
   - yang_name: lsp-gen-interval/initial-wait
     example: 50
   - yang_name: lsp-gen-interval/secondary-wait
     example: 200
-  - yang_name: lsp-refresh-interval
-    tf_name: lsp_refresh_interval
-    example: 65000
-  - yang_name: max-lsp-lifetime
-    example: 65535
+  - yang_name: lsp-gen-interval-levels/lsp-gen-interval-level
+    tf_name: lsp_gen_interval_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: initial-wait
+        example: 50
+      - yang_name: secondary-wait
+        example: 200
+      - yang_name: maximum-wait
+        example: 5000
+  - yang_name: adjacency/stagger
+    example: true
+  - yang_name: adjacency/stagger/initial-neighbors
+    tf_name: adjacency_stagger_initial_neighbors
+    example: 5
+  - yang_name: adjacency/stagger/max-neighbors
+    tf_name: adjacency_stagger_max_neighbors
+    example: 20
+  - yang_name: hostname/dynamic/disable
+    tf_name: hostname_dynamic_disable
+    example: true
+  - yang_name: is-type
+    example: level-1
+  - yang_name: multi-part-tlv/disable
+    tf_name: multi_part_tlv_disable
+    example: true
+  - yang_name: multi-part-tlv/disable/neighbor
+    tf_name: multi_part_tlv_disable_neighbor
+    example: true
+  - yang_name: multi-part-tlv/disable/prefix-tlvs
+    tf_name: multi_part_tlv_disable_prefix_tlvs
+    example: true
+  - yang_name: multi-part-tlv/disable/router-capability
+    tf_name: multi_part_tlv_disable_router_capability
+    example: true
+  - yang_name: multi-part-tlv/disable-levels/disable-level
+    tf_name: multi_part_tlv_disable_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: neighbor
+        example: true
+      - yang_name: prefix-tlvs
+        example: true
+      - yang_name: router-capability
+        example: true
+  - yang_name: log/adjacency/changes
+    example: true
+  - yang_name: log/pdu/drops
+    example: true
+  - yang_name: log/format/brief
+    example: true
+  - yang_name: log/sizes/size
+    tf_name: log_sizes
+    type: List
+    attributes:
+      - yang_name: log-type
+        id: true
+        example: adjacency
+      - yang_name: size-number
+        example: 30
   - yang_name: lsp-password/accept/encrypted
+    sensitive: true
+    write_only: true
     exclude_test: true
     example: "060506324F41584B564B0F49584B"
   - yang_name: lsp-password/accept-levels/accept-level
-    tf_name: lsp_password_levels
+    tf_name: lsp_password_accept_levels
     type: List
     exclude_test: true
     attributes:
@@ -96,12 +205,16 @@ attributes:
         id: true
         example: 1
       - yang_name: encrypted
+        sensitive: true
+        write_only: true
         example: "060506324F41584B564B0F49584B"
   - yang_name: lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options/encrypted
     xpath: lsp-password/lsp-password-option/text/password-options/encrypted
     tf_name: lsp_password_text_encrypted
     optional: true
     delete_parent: true
+    sensitive: true
+    write_only: true
     example: "060506324F41584B564B0F49584B"
     exclude_test: true
   - yang_name: lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options/send-only
@@ -130,6 +243,8 @@ attributes:
     tf_name: lsp_password_hmac_md5_encrypted
     optional: true
     delete_parent: true
+    sensitive: true
+    write_only: true
     example: "060506324F41584B564B0F49584B"
   - yang_name: lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options/send-only
     xpath: lsp-password/lsp-password-option/hmac-md5/password-options/send-only
@@ -174,24 +289,264 @@ attributes:
     optional: true
     exclude_test: true
     example: true
+  - yang_name: lsp-password-levels/lsp-password-level
+    tf_name: lsp_password_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: LSP-PASSWORD-LEVEL/TEXT/text/password-options/encrypted
+        xpath: text/password-options/encrypted
+        tf_name: text_encrypted
+        optional: true
+        delete_parent: true
+        sensitive: true
+        write_only: true
+        example: "060506324F41584B564B0F49584B"
+        exclude_test: true
+      - yang_name: LSP-PASSWORD-LEVEL/TEXT/text/password-options/send-only
+        xpath: text/password-options/send-only
+        tf_name: text_send_only
+        optional: true
+        delete_parent: true
+        example: true
+        exclude_test: true
+      - yang_name: LSP-PASSWORD-LEVEL/TEXT/text/password-options/snp/send-only
+        xpath: text/password-options/snp/send-only
+        tf_name: text_snp_send_only
+        optional: true
+        delete_grandparent: true
+        exclude_test: true
+        example: true
+      - yang_name: LSP-PASSWORD-LEVEL/TEXT/text/password-options/enable-poi
+        xpath: text/password-options/enable-poi
+        tf_name: text_enable_poi
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: LSP-PASSWORD-LEVEL/HMAC-MD5/hmac-md5/password-options/encrypted
+        xpath: hmac-md5/password-options/encrypted
+        tf_name: hmac_md5_encrypted
+        optional: true
+        delete_parent: true
+        sensitive: true
+        write_only: true
+        example: "060506324F41584B564B0F49584B"
+      - yang_name: LSP-PASSWORD-LEVEL/HMAC-MD5/hmac-md5/password-options/send-only
+        xpath: hmac-md5/password-options/send-only
+        tf_name: hmac_md5_send_only
+        optional: true
+        delete_parent: true
+        example: true
+      - yang_name: LSP-PASSWORD-LEVEL/HMAC-MD5/hmac-md5/password-options/snp/send-only
+        xpath: hmac-md5/password-options/snp/send-only
+        tf_name: hmac_md5_snp_send_only
+        optional: true
+        delete_grandparent: true
+        example: true
+      - yang_name: LSP-PASSWORD-LEVEL/HMAC-MD5/hmac-md5/password-options/enable-poi
+        xpath: hmac-md5/password-options/enable-poi
+        tf_name: hmac_md5_enable_poi
+        optional: true
+        delete_parent: true
+        example: true
+      - yang_name: LSP-PASSWORD-LEVEL/KEYCHAIN/keychain/keychain-name
+        xpath: keychain/keychain-name
+        tf_name: keychain_name
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: "ISIS-KEY"
+      - yang_name: LSP-PASSWORD-LEVEL/KEYCHAIN/keychain/send-only
+        xpath: keychain/send-only
+        tf_name: keychain_send_only
+        optional: true
+        exclude_test: true
+        example: true
+      - yang_name: LSP-PASSWORD-LEVEL/KEYCHAIN/keychain/snp/send-only
+        xpath: keychain/snp/send-only
+        tf_name: keychain_snp_send_only
+        optional: true
+        exclude_test: true
+        example: true
+      - yang_name: LSP-PASSWORD-LEVEL/KEYCHAIN/keychain/enable-poi
+        xpath: keychain/enable-poi
+        tf_name: keychain_enable_poi
+        optional: true
+        exclude_test: true
+        example: true
+  - yang_name: authentication-check/disable
+    example: true
+  - yang_name: iid/disable
+    example: true
+  - yang_name: mpls/ldp/sync
+    example: true
+  - yang_name: mpls/ldp/sync/level
+    example: 1
+  - yang_name: protocol/shutdown
+    example: true
+  - yang_name: min-lsp-arrivaltime/initial-wait
+    tf_name: min_lsp_arrival_initial_wait
+    example: 40
+  - yang_name: min-lsp-arrivaltime/secondary-wait
+    tf_name: min_lsp_arrival_secondary_wait
+    example: 100
+  - yang_name: min-lsp-arrivaltime/maximum-wait
+    tf_name: min_lsp_arrival_maximum_wait
+    example: 2000
+  - yang_name: min-lsp-arrivaltime-levels/min-lsp-arrivaltime-level
+    tf_name: min_lsp_arrival_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: initial-wait
+        example: 40
+      - yang_name: secondary-wait
+        example: 100
+      - yang_name: maximum-wait
+        example: 2000
+  - yang_name: max-metric
+    example: true
+  - yang_name: max-metric/on-startup/ON-STARTUP/ADVERTISE/advertise/advertise-number
+    xpath: max-metric/on-startup/advertise/advertise-number
+    tf_name: max_metric_on_startup_advertise
+    optional: true
+    delete_parent: true
+    example: 300
+  - yang_name: max-metric/on-startup/ON-STARTUP/WAIT-FOR-BGP/wait-for-bgp
+    xpath: max-metric/on-startup/wait-for-bgp
+    tf_name: max_metric_on_startup_wait_for_bgp
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: max-metric/external
+    example: true
+  - yang_name: max-metric/interlevel
+    example: true
+  - yang_name: max-metric/default-route
+    example: true
+  - yang_name: max-metric/srv6-locator
+    example: true
+  - yang_name: max-metric/te
+    example: true
+  - yang_name: max-metric/delay
+    example: true
+  - yang_name: max-metric-levels/max-metric-level
+    tf_name: max_metric_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: on-startup/ON-STARTUP/ADVERTISE/advertise/advertise-number
+        xpath: on-startup/advertise/advertise-number
+        tf_name: on_startup_advertise
+        optional: true
+        delete_parent: true
+        example: 300
+      - yang_name: on-startup/ON-STARTUP/WAIT-FOR-BGP/wait-for-bgp
+        xpath: on-startup/wait-for-bgp
+        tf_name: on_startup_wait_for_bgp
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: external
+        example: true
+      - yang_name: interlevel
+        example: true
+      - yang_name: default-route
+        example: true
+      - yang_name: srv6-locator
+        example: true
+      - yang_name: te
+        example: true
+      - yang_name: delay
+        example: true
   - yang_name: distribute/link-state
     example: true
+  - yang_name: distribute/link-state/level
+    example: 2
   - yang_name: distribute/link-state/instance-id
     example: 32
   - yang_name: distribute/link-state/throttle
     example: 1
-  - yang_name: distribute/link-state/level
-    example: 2
+  - yang_name: distribute/link-state/exclude-interarea
+    example: true
+  - yang_name: distribute/link-state/exclude-external
+    example: true
+  - yang_name: distribute/link-state/route-policy
+    example: ROUTE_POLICY_1
+  - yang_name: max-lsp-lifetime
+    example: 1200
+  - yang_name: max-lsp-lifetime-levels/max-lsp-lifetime-level
+    tf_name: max_lsp_lifetime_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: max-lsp-lifetime
+        example: 1200
+  - yang_name: instance-id
+    example: 1
+  - yang_name: hello-padding
+    example: "adaptive"
+  - yang_name: lsp-fast-flooding
+    example: true
+  - yang_name: lsp-fast-flooding/max-lsp-tx
+    example: 500
+  - yang_name: lsp-fast-flooding/remote-psnp-delay
+    example: 1000
+  - yang_name: psnp-interval
+    example: 100
+  - yang_name: nets/net
+    tf_name: nets
+    type: List
+    attributes:
+      - yang_name: net-id
+        id: true
+        example: 49.0001.2222.2222.2222.00
   - yang_name: affinity-maps/affinity-map
     tf_name: affinity_maps
     type: List
     attributes:
       - yang_name: affinity-attribute-name
-        tf_name: name
+        tf_name: affinity_name
         id: true
         example: 22
       - yang_name: bit-position
         example: 4
+  - yang_name: ignore-lsp-errors/disable
+    example: true
+  - yang_name: purge-transmit/strict
+    example: true
+  - yang_name: purge-transmit/strict/strict-value
+    example: "level-1"
+  - yang_name: srlg/admin-weight
+    example: 500
+  - yang_name: srlg/names/name
+    tf_name: srlg_names
+    type: List
+    attributes:
+      - yang_name: srlg-name
+        id: true
+        example: "SRLG-1"
+      - yang_name: admin-weight
+        example: 500
+      - yang_name: static/ipv4/addresses/addresss
+        tf_name: static_ipv4_addresses
+        type: List
+        attributes:
+          - yang_name: local-end-point
+            id: true
+            example: 10.0.0.1
+          - yang_name: remote-end-point
+            id: true
+            example: 10.0.0.2
   - yang_name: flex-algoes/flex-algo
     tf_name: flex_algos
     type: List
@@ -200,39 +555,109 @@ attributes:
         tf_name: number
         id: true
         example: 128
-      - yang_name: advertise-definition
-        example: true
+      - yang_name: minimum-bandwidth
+        example: 1000000000
+      - yang_name: maximum-delay
+        example: 1000000
+      - yang_name: priority
+        example: 10
       - yang_name: metric-type
         tf_name: metric_type
         example: "delay"
-  - yang_name: nets/net
-    tf_name: nets
-    type: List
-    attributes:
-      - yang_name: net-id
-        id: true
-        example: 49.0001.2222.2222.2222.00
-  - yang_name: interfaces/interface
-    tf_name: interfaces
-    type: List
-    attributes:
-      - yang_name: interface-name
-        id: true
-        example: GigabitEthernet0/0/0/1
-      - yang_name: circuit-type
-        example: level-1
-      - yang_name: hello-padding
-        example: "always"
-      - yang_name: priority-levels/priority-level
-        tf_name: priority_levels
+      - yang_name: advertise-definition
+        example: true
+      - yang_name: prefix-metric
+        example: true
+      - yang_name: auto-cost/reference/reference-bandwidth/reference-bandwidth-number
+        tf_name: auto_cost_reference_bandwidth
+        delete_parent: true
+        example: 1000000000
+      - yang_name: auto-cost/reference/reference-bandwidth/granularity
+        tf_name: auto_cost_reference_bandwidth_granularity
+        example: 1000
+      - yang_name: auto-cost/reference/group-mode
+        tf_name: auto_cost_reference_group_mode
+        example: true
+      - yang_name: affinity/exclude-any/exclude-any-argument
+        tf_name: affinity_exclude_any
+        type: StringList
+        example: "AFFINITY-2"
+      - yang_name: affinity/include-any/include-any-argument
+        tf_name: affinity_include_any
+        type: StringList
+        example: "AFFINITY-1"
+      - yang_name: affinity/include-all/include-all-argument
+        tf_name: affinity_include_all
+        type: StringList
+        example: "AFFINITY-1"
+      - yang_name: affinity/reverse/exclude-any/exclude-any-argument
+        tf_name: affinity_reverse_exclude_any
+        type: StringList
+        example: "AFFINITY-2"
+      - yang_name: affinity/reverse/include-any/include-any-argument
+        tf_name: affinity_reverse_include_any
+        type: StringList
+        example: "AFFINITY-1"
+      - yang_name: affinity/reverse/include-all/include-all-argument
+        tf_name: affinity_reverse_include_all
+        type: StringList
+        example: "AFFINITY-1"
+      - yang_name: srlg/exclude-any/exclude-any-argument
+        tf_name: srlg_exclude_any
+        type: StringList
+        example: "SRLG-EXCLUDE-1"
+      - yang_name: fast-reroute/disable
+        example: true
+      - yang_name: microloop/avoidance/disable
+        example: true
+      - yang_name: data-plane/segment-routing
+        example: true
+      - yang_name: data-plane/ip
+        example: false
+      - yang_name: ucmp/disable
+        example: true
+      - yang_name: address-families/address-family
+        tf_name: address_family
         type: List
         attributes:
-          - yang_name: level-number
+          - yang_name: af-name
             id: true
-            example: 1
-          - yang_name: priority
+            example: "ipv4"
+          - yang_name: saf-name
+            id: true
+            example: "unicast"
+          - yang_name: maximum-paths/MAXIMUM-PATHS/NUMBER-OF-PATHS/number-of-paths
+            xpath: maximum-paths/number-of-paths
+            tf_name: maximum_paths
+            delete_parent: true
             example: 10
-      - yang_name: point-to-point
-        example: false
-      - yang_name: state
-        example: "passive"
+          - yang_name: maximum-paths/MAXIMUM-PATHS/ROUTE-POLICY/route-policy
+            xpath: maximum-paths/route-policy
+            tf_name: maximum_paths_route_policy
+            delete_parent: true
+            exclude_test: true
+            example: "ROUTE_POLICY_1"
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]
+    attributes:
+      - name: route-policy-name
+        value: ROUTE_POLICY_1
+      - name: rpl-route-policy
+        value: "route-policy ROUTE_POLICY_1\\n  pass\\nend-policy\\n"
+  - path: Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/affinity-maps/affinity-map[affinity-attribute-name=AFFINITY-1]
+    no_delete: true
+    attributes:
+      - name: affinity-attribute-name
+        value: AFFINITY-1
+      - name: bit-position
+        value: 1
+    dependencies: [0]
+  - path: Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/affinity-maps/affinity-map[affinity-attribute-name=AFFINITY-2]
+    no_delete: true
+    attributes:
+      - name: affinity-attribute-name
+        value: AFFINITY-2
+      - name: bit-position
+        value: 2
+    dependencies: [0]

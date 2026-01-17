@@ -67,12 +67,132 @@ func (d *SNMPServerMIBDataSource) Schema(ctx context.Context, req datasource.Sch
 				MarkdownDescription: "The path of the retrieved object.",
 				Computed:            true,
 			},
-			"ifmib_ifalias_long": schema.BoolAttribute{
-				MarkdownDescription: "Enable support for ifAlias values longer than 64 characters",
+			"cbqosmib_cache": schema.BoolAttribute{
+				MarkdownDescription: "Enable CBQoSMIB stats data caching",
+				Computed:            true,
+			},
+			"cbqosmib_cache_refresh_time": schema.Int64Attribute{
+				MarkdownDescription: "Cache refresh time in seconds ",
+				Computed:            true,
+			},
+			"cbqosmib_cache_service_policy_count": schema.Int64Attribute{
+				MarkdownDescription: "Number of service-policy stats",
+				Computed:            true,
+			},
+			"cbqosmib_persist": schema.BoolAttribute{
+				MarkdownDescription: "Persist CBQoSMIB config, service-policy and object indices",
+				Computed:            true,
+			},
+			"cbqosmib_member_stats": schema.BoolAttribute{
+				MarkdownDescription: "Enable bundle member interface statistics retrieval",
 				Computed:            true,
 			},
 			"ifindex_persist": schema.BoolAttribute{
 				MarkdownDescription: "Persist interface indices",
+				Computed:            true,
+			},
+			"interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "Interface to configure",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: "Interface to configure",
+							Computed:            true,
+						},
+						"notification_linkupdown_enable": schema.BoolAttribute{
+							MarkdownDescription: "Disable linkUp and linkDown notification",
+							Computed:            true,
+						},
+						"notification_linkupdown_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable linkUp and linkDown notification",
+							Computed:            true,
+						},
+						"index_persistence": schema.BoolAttribute{
+							MarkdownDescription: "Persistency across system reloads",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"trap_link_ietf": schema.BoolAttribute{
+				MarkdownDescription: "Set the varbind of linkupdown trap to the RFC specified varbinds (default cisco)",
+				Computed:            true,
+			},
+			"ifmib_ifalias_long": schema.BoolAttribute{
+				MarkdownDescription: "Enable support for ifAlias values longer than 64 characters",
+				Computed:            true,
+			},
+			"ifmib_stats_cache": schema.BoolAttribute{
+				MarkdownDescription: "Get cached interface statistics",
+				Computed:            true,
+			},
+			"ifmib_ipsubscriber": schema.BoolAttribute{
+				MarkdownDescription: "Enable ipsubscriber interfaces in IFMIB",
+				Computed:            true,
+			},
+			"ifmib_internal_cache_max_duration": schema.Int64Attribute{
+				MarkdownDescription: "Change the max duration",
+				Computed:            true,
+			},
+			"rfmib_entphyindex": schema.BoolAttribute{
+				MarkdownDescription: "Enable Entity Physical Index as cRFStatusUnitId and cRFStatusPeerUnitId",
+				Computed:            true,
+			},
+			"sensormib_cache": schema.BoolAttribute{
+				MarkdownDescription: "Enables sensormib caching",
+				Computed:            true,
+			},
+			"mplstemib_cache_timers_garbage_collect": schema.Int64Attribute{
+				MarkdownDescription: "Modify MIB cache garbage collect timer",
+				Computed:            true,
+			},
+			"mplstemib_cache_timers_refresh": schema.Int64Attribute{
+				MarkdownDescription: "Modify MIB cache refresh timer",
+				Computed:            true,
+			},
+			"mplsp2mpmib_cache_timer": schema.Int64Attribute{
+				MarkdownDescription: "Modify MIB cache timer",
+				Computed:            true,
+			},
+			"frrmib_cache_timer": schema.Int64Attribute{
+				MarkdownDescription: "Modify MIB chache timer",
+				Computed:            true,
+			},
+			"cmplsteextmib_cache_timer": schema.Int64Attribute{
+				MarkdownDescription: "Modify MIB chache timer",
+				Computed:            true,
+			},
+			"cmplsteextstdmib_cache_timer": schema.Int64Attribute{
+				MarkdownDescription: "Modify MIB chache timer",
+				Computed:            true,
+			},
+			"mroutemib_send_all_vrf": schema.BoolAttribute{
+				MarkdownDescription: "enable sending all vrf interface info for cIpMRouteInterfaceTable",
+				Computed:            true,
+			},
+			"notification_log_mib_default": schema.BoolAttribute{
+				MarkdownDescription: "To create a default log",
+				Computed:            true,
+			},
+			"notification_log_mib_global_age_out": schema.Int64Attribute{
+				MarkdownDescription: "GlobalAgeOut is the minutes associated with the mib",
+				Computed:            true,
+			},
+			"notification_log_mib_global_size": schema.Int64Attribute{
+				MarkdownDescription: "GlobalSize, max number of notifications that can be logged in all logs",
+				Computed:            true,
+			},
+			"notification_log_mib_disable": schema.BoolAttribute{
+				MarkdownDescription: "disable, to disable the logging in default log",
+				Computed:            true,
+			},
+			"notification_log_mib_size": schema.Int64Attribute{
+				MarkdownDescription: "size, The max number of notifications that this log (default) can hold",
+				Computed:            true,
+			},
+			"entityindex_persist": schema.BoolAttribute{
+				MarkdownDescription: "Persist indices",
 				Computed:            true,
 			},
 		},

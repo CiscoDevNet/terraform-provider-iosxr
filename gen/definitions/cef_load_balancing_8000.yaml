@@ -1,0 +1,88 @@
+---
+name: CEF Load Balancing 8000
+path: Cisco-IOS-XR-8000-fib-platform-cfg:/cef
+doc_category: Cisco 8000 Series
+ds_description: "This data source can read the CEF Load Balancing configuration on Cisco 8000 series routers."
+res_description: "This resource can manage the CEF Load Balancing configuration on Cisco 8000 series routers."
+test_tags: [C8000]
+attributes:
+  - yang_name: platform/load-balance/hash/rotate
+    minimum_test_value: 1
+    example: 1
+  - yang_name: platform/load-balance/fields/userdata/ipv6-udps/ipv6-udp
+    tf_name: platform_load_balance_fields_userdata_ipv6_udp
+    type: List
+    attributes:
+      - yang_name: location-string
+        id: true
+        example: 0_RP0_CPU0
+      - yang_name: ipv6-udp-hash/offset
+        example: 5
+      - yang_name: ipv6-udp-hash/size
+        example: 3
+  - yang_name: platform/load-balance/fields/userdata/ipv6-tcps/ipv6-tcp
+    tf_name: platform_load_balance_fields_userdata_ipv6_tcp
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: location-string
+        id: true
+        example: 0_RP0_CPU0
+      - yang_name: ipv6-tcp-hash/offset
+        example: 5
+      - yang_name: ipv6-tcp-hash/size
+        example: 3
+  - yang_name: platform/load-balance/fields/userdata/ipv6-nontcpudps/ipv6-nontcpudp
+    tf_name: platform_load_balance_fields_userdata_ipv6_non_tcp_udp
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: location-string
+        id: true
+        example: 0_RP0_CPU0
+      - yang_name: ipv6-hash/offset
+        tf_name: ipv6_hash_offset
+        example: 5
+      - yang_name: ipv6-hash/size
+        tf_name: ipv6_hash_size
+        example: 3
+  - yang_name: platform/load-balance/fields/userdata/ipv4-udps/ipv4-udp
+    tf_name: platform_load_balance_fields_userdata_ipv4_udp
+    type: List
+    attributes:
+      - yang_name: location-string
+        id: true
+        example: 0_RP0_CPU0
+      - yang_name: ipv4-udp-hash/offset
+        example: 5
+      - yang_name: ipv4-udp-hash/size
+        example: 3
+  - yang_name: platform/load-balance/fields/userdata/ipv4-tcps/ipv4-tcp
+    tf_name: platform_load_balance_fields_userdata_ipv4_tcp
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: location-string
+        id: true
+        example: 0_RP0_CPU0
+      - yang_name: ipv4-tcp-hash/offset
+        example: 5
+      - yang_name: ipv4-tcp-hash/size
+        example: 3
+  - yang_name: platform/load-balance/fields/userdata/ipv4-nontcpudps/ipv4-nontcpudp
+    tf_name: platform_load_balance_fields_userdata_ipv4_non_tcp_udp
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: location-string
+        id: true
+        example: 0_RP0_CPU0
+      - yang_name: ipv4-hash/offset
+        tf_name: ipv4_hash_offset
+        example: 5
+      - yang_name: ipv4-hash/size
+        tf_name: ipv4_hash_size
+        example: 3
+  - yang_name: platform-load-balance/mpls-hash-non-ip-lbl-only
+    tf_name: platform_load_balance_mpls_hashing_inner_non_ip_label_only
+    example: true

@@ -147,6 +147,15 @@ func (r *RouterVRRPInterfaceIPv6Resource) Schema(ctx context.Context, req resour
 					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 			},
+			"unicast_peer": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable Unicast (Multicast will be disabled) of VRRP to a Peer").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+				},
+			},
 			"timer_advertisement_seconds": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Advertisement time in seconds").AddIntegerRangeDescription(1, 255).String,
 				Optional:            true,

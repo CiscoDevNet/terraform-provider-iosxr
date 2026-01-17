@@ -24,7 +24,7 @@ resource "iosxr_community_set" "example" {
 
 ### Required
 
-- `rpl` (String) Configures a community-set
+- `rpl` (String) Configures a community set
 - `set_name` (String) Set name
 
 ### Optional

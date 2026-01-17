@@ -8,16 +8,42 @@ attributes:
   - yang_name: address
     example: 11.11.11.11
   - yang_name: traps/unencrypted/unencrypted-string
-    tf_name: unencrypted_strings
+    tf_name: traps_unencrypted_strings
     type: List
     minimum_test_value: '["COMMUNITY1"]'
     attributes:
       - yang_name: community-string
         id: true
         minimum_test_value: '"COMMUNITY1"'
+        sensitive: true
+        write_only: true
         example: COMMUNITY1
       - yang_name: udp-port
         default_value: default
+        example: 1100
+        exclude_test: true
+      - yang_name: version/v2c
+        example: true
+        exclude_test: true
+      - yang_name: version/v3/security-level
+        example: auth
+  - yang_name: informs/unencrypted/unencrypted-string
+    tf_name: informs_unencrypted_strings
+    type: List
+    minimum_test_value: '["COMMUNITY2"]'
+    attributes:
+      - yang_name: community-string
+        id: true
+        minimum_test_value: '"COMMUNITY2"'
+        sensitive: true
+        write_only: true
+        example: COMMUNITY2
+      - yang_name: udp-port
+        default_value: default
+        example: 1100
+        exclude_test: true
+      - yang_name: version/v2c
+        example: true
         exclude_test: true
       - yang_name: version/v3/security-level
         example: auth

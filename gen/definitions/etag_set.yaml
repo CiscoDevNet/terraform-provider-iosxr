@@ -1,0 +1,12 @@
+---
+name: Etag Set
+path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/etag-sets/etag-set[set-name=%s]
+no_delete_attributes: true
+doc_category: Route Policy
+attributes:
+  - yang_name: set-name
+    example: ETAG1
+  - yang_name: etag-set-as-text
+    tf_name: rpl
+    description: "Configures an etag-set"
+    example: "etag-set ETAG1\\n  65536,\\n  401001\\nend-set\\n"

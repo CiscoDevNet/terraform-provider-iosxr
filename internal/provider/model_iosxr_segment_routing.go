@@ -37,20 +37,20 @@ type SegmentRouting struct {
 	Device                types.String `tfsdk:"device"`
 	Id                    types.String `tfsdk:"id"`
 	DeleteMode            types.String `tfsdk:"delete_mode"`
-	GlobalBlockLowerBound types.Int64  `tfsdk:"global_block_lower_bound"`
-	GlobalBlockUpperBound types.Int64  `tfsdk:"global_block_upper_bound"`
 	LocalBlockLowerBound  types.Int64  `tfsdk:"local_block_lower_bound"`
 	LocalBlockUpperBound  types.Int64  `tfsdk:"local_block_upper_bound"`
+	GlobalBlockLowerBound types.Int64  `tfsdk:"global_block_lower_bound"`
+	GlobalBlockUpperBound types.Int64  `tfsdk:"global_block_upper_bound"`
 	Enable                types.Bool   `tfsdk:"enable"`
 }
 
 type SegmentRoutingData struct {
 	Device                types.String `tfsdk:"device"`
 	Id                    types.String `tfsdk:"id"`
-	GlobalBlockLowerBound types.Int64  `tfsdk:"global_block_lower_bound"`
-	GlobalBlockUpperBound types.Int64  `tfsdk:"global_block_upper_bound"`
 	LocalBlockLowerBound  types.Int64  `tfsdk:"local_block_lower_bound"`
 	LocalBlockUpperBound  types.Int64  `tfsdk:"local_block_upper_bound"`
+	GlobalBlockLowerBound types.Int64  `tfsdk:"global_block_lower_bound"`
+	GlobalBlockUpperBound types.Int64  `tfsdk:"global_block_upper_bound"`
 	Enable                types.Bool   `tfsdk:"enable"`
 }
 
@@ -72,21 +72,21 @@ func (data SegmentRoutingData) getPath() string {
 
 func (data SegmentRouting) toBody(ctx context.Context) string {
 	body := "{}"
-	if !data.GlobalBlockLowerBound.IsNull() && !data.GlobalBlockLowerBound.IsUnknown() {
-		body, _ = sjson.Set(body, "global-block.lower-bound", strconv.FormatInt(data.GlobalBlockLowerBound.ValueInt64(), 10))
-	}
-	if !data.GlobalBlockUpperBound.IsNull() && !data.GlobalBlockUpperBound.IsUnknown() {
-		body, _ = sjson.Set(body, "global-block.upper-bound", strconv.FormatInt(data.GlobalBlockUpperBound.ValueInt64(), 10))
-	}
 	if !data.LocalBlockLowerBound.IsNull() && !data.LocalBlockLowerBound.IsUnknown() {
 		body, _ = sjson.Set(body, "local-block.lower-bound", strconv.FormatInt(data.LocalBlockLowerBound.ValueInt64(), 10))
 	}
 	if !data.LocalBlockUpperBound.IsNull() && !data.LocalBlockUpperBound.IsUnknown() {
 		body, _ = sjson.Set(body, "local-block.upper-bound", strconv.FormatInt(data.LocalBlockUpperBound.ValueInt64(), 10))
 	}
+	if !data.GlobalBlockLowerBound.IsNull() && !data.GlobalBlockLowerBound.IsUnknown() {
+		body, _ = sjson.Set(body, "global-block.lower-bound", strconv.FormatInt(data.GlobalBlockLowerBound.ValueInt64(), 10))
+	}
+	if !data.GlobalBlockUpperBound.IsNull() && !data.GlobalBlockUpperBound.IsUnknown() {
+		body, _ = sjson.Set(body, "global-block.upper-bound", strconv.FormatInt(data.GlobalBlockUpperBound.ValueInt64(), 10))
+	}
 	if !data.Enable.IsNull() && !data.Enable.IsUnknown() {
 		if data.Enable.ValueBool() {
-			body, _ = sjson.Set(body, "enable", map[string]string{})
+			body, _ = sjson.Set(body, "enable", []interface{}{nil})
 		}
 	}
 	return body
@@ -97,16 +97,6 @@ func (data SegmentRouting) toBody(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *SegmentRouting) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "global-block.lower-bound"); value.Exists() && !data.GlobalBlockLowerBound.IsNull() {
-		data.GlobalBlockLowerBound = types.Int64Value(value.Int())
-	} else {
-		data.GlobalBlockLowerBound = types.Int64Null()
-	}
-	if value := gjson.GetBytes(res, "global-block.upper-bound"); value.Exists() && !data.GlobalBlockUpperBound.IsNull() {
-		data.GlobalBlockUpperBound = types.Int64Value(value.Int())
-	} else {
-		data.GlobalBlockUpperBound = types.Int64Null()
-	}
 	if value := gjson.GetBytes(res, "local-block.lower-bound"); value.Exists() && !data.LocalBlockLowerBound.IsNull() {
 		data.LocalBlockLowerBound = types.Int64Value(value.Int())
 	} else {
@@ -116,6 +106,16 @@ func (data *SegmentRouting) updateFromBody(ctx context.Context, res []byte) {
 		data.LocalBlockUpperBound = types.Int64Value(value.Int())
 	} else {
 		data.LocalBlockUpperBound = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "global-block.lower-bound"); value.Exists() && !data.GlobalBlockLowerBound.IsNull() {
+		data.GlobalBlockLowerBound = types.Int64Value(value.Int())
+	} else {
+		data.GlobalBlockLowerBound = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "global-block.upper-bound"); value.Exists() && !data.GlobalBlockUpperBound.IsNull() {
+		data.GlobalBlockUpperBound = types.Int64Value(value.Int())
+	} else {
+		data.GlobalBlockUpperBound = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "enable"); !data.Enable.IsNull() {
 		if value.Exists() {
@@ -133,17 +133,17 @@ func (data *SegmentRouting) updateFromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *SegmentRouting) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "global-block.lower-bound"); value.Exists() {
-		data.GlobalBlockLowerBound = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "global-block.upper-bound"); value.Exists() {
-		data.GlobalBlockUpperBound = types.Int64Value(value.Int())
-	}
 	if value := gjson.GetBytes(res, "local-block.lower-bound"); value.Exists() {
 		data.LocalBlockLowerBound = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "local-block.upper-bound"); value.Exists() {
 		data.LocalBlockUpperBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "global-block.lower-bound"); value.Exists() {
+		data.GlobalBlockLowerBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "global-block.upper-bound"); value.Exists() {
+		data.GlobalBlockUpperBound = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "enable"); value.Exists() {
 		data.Enable = types.BoolValue(true)
@@ -157,17 +157,17 @@ func (data *SegmentRouting) fromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *SegmentRoutingData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "global-block.lower-bound"); value.Exists() {
-		data.GlobalBlockLowerBound = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "global-block.upper-bound"); value.Exists() {
-		data.GlobalBlockUpperBound = types.Int64Value(value.Int())
-	}
 	if value := gjson.GetBytes(res, "local-block.lower-bound"); value.Exists() {
 		data.LocalBlockLowerBound = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "local-block.upper-bound"); value.Exists() {
 		data.LocalBlockUpperBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "global-block.lower-bound"); value.Exists() {
+		data.GlobalBlockLowerBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "global-block.upper-bound"); value.Exists() {
+		data.GlobalBlockUpperBound = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "enable"); value.Exists() {
 		data.Enable = types.BoolValue(true)
@@ -185,17 +185,17 @@ func (data *SegmentRouting) getDeletedItems(ctx context.Context, state SegmentRo
 	if !state.Enable.IsNull() && data.Enable.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/enable", state.getPath()))
 	}
-	if !state.LocalBlockUpperBound.IsNull() && data.LocalBlockUpperBound.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-block", state.getPath()))
-	}
-	if !state.LocalBlockLowerBound.IsNull() && data.LocalBlockLowerBound.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-block", state.getPath()))
-	}
 	if !state.GlobalBlockUpperBound.IsNull() && data.GlobalBlockUpperBound.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/global-block", state.getPath()))
 	}
 	if !state.GlobalBlockLowerBound.IsNull() && data.GlobalBlockLowerBound.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/global-block", state.getPath()))
+	}
+	if !state.LocalBlockUpperBound.IsNull() && data.LocalBlockUpperBound.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-block", state.getPath()))
+	}
+	if !state.LocalBlockLowerBound.IsNull() && data.LocalBlockLowerBound.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-block", state.getPath()))
 	}
 	return deletedItems
 }
@@ -221,17 +221,17 @@ func (data *SegmentRouting) getDeletePaths(ctx context.Context) []string {
 	if !data.Enable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/enable", data.getPath()))
 	}
-	if !data.LocalBlockUpperBound.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-block", data.getPath()))
-	}
-	if !data.LocalBlockLowerBound.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-block", data.getPath()))
-	}
 	if !data.GlobalBlockUpperBound.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/global-block", data.getPath()))
 	}
 	if !data.GlobalBlockLowerBound.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/global-block", data.getPath()))
+	}
+	if !data.LocalBlockUpperBound.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-block", data.getPath()))
+	}
+	if !data.LocalBlockLowerBound.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-block", data.getPath()))
 	}
 	return deletePaths
 }

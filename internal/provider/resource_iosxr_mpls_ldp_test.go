@@ -36,32 +36,52 @@ import (
 func TestAccIosxrMPLSLDP(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "router_id", "1.2.3.4"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "address_families.0.af_name", "ipv4"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "address_families.0.label_local_allocate_for_access_list", "ACL1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "interfaces.0.interface_name", "GigabitEthernet0/0/0/1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "capabilities_sac", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "capabilities_sac_ipv4_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "capabilities_sac_ipv6_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "capabilities_sac_fec128_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "capabilities_sac_fec129_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "graceful_restart", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "graceful_restart_reconnect_timeout", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "graceful_restart_forwarding_state_holdtime", "180"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "graceful_restart_helper_peer_maintain_on_local_reset_for", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "ltrace_buffer_multiplier", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "default_vrf_implicit_ipv4_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "session_backoff_time_initial", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "session_backoff_time_maximum", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "session_holdtime", "180"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "session_downstream_on_demand_with", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "session_protection", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "session_protection_for_acl", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "session_protection_for_acl_duration", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "nsr", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "entropy_label", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "entropy_label_add_el", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "signalling_dscp", "48"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "igp_sync_delay_on_session_up", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "igp_sync_delay_on_proc_restart", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "mldp", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "mldp_logging_notifications", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "mldp_address_families.0.name", "ipv4"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "mldp_address_families.0.make_before_break_delay", "30"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "mldp_address_families.0.forwarding_recursive", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "mldp_address_families.0.forwarding_recursive_route_policy", "LDP_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "mldp_address_families.0.recursive_fec", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "session_protection", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "capabilities_sac", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "log_hello_adjacency", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "log_neighbor", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "log_nsr", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "log_graceful_restart", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "log_session_protection", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "discovery_hello_holdtime", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "discovery_hello_interval", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "discovery_targeted_hello_holdtime", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "discovery_targeted_hello_interval", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "discovery_instance_tlv_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "discovery_ds_tlv_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "discovery_rtr_id_arb_tlv_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "discovery_quick_start_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "neighbor_dual_stack_transport_connection_prefer_ipv4", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "neighbor_dual_stack_transport_connection_max_wait", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "neighbor_dual_stack_tlv_compliance", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "neighbors.0.neighbor_address", "192.168.2.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "neighbors.0.label_space_id", "0"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrMPLSLDPPrerequisitesConfig + testAccIosxrMPLSLDPConfig_minimum(),
+			Config: testAccIosxrMPLSLDPConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrMPLSLDPPrerequisitesConfig + testAccIosxrMPLSLDPConfig_all(),
+		Config: testAccIosxrMPLSLDPConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -91,16 +111,6 @@ func iosxrMPLSLDPImportStateIdFunc(resourceName string) resource.ImportStateIdFu
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrMPLSLDPPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=LDP_POLICY_1]"
-	attributes = {
-		"route-policy-name" = "LDP_POLICY_1"
-		"rpl-route-policy" = "route-policy LDP_POLICY_1\n  pass\nend-policy\n"
-	}
-}
-
-`
 
 // End of section. //template:end testPrerequisites
 
@@ -108,7 +118,8 @@ resource "iosxr_gnmi" "PreReq0" {
 
 func testAccIosxrMPLSLDPConfig_minimum() string {
 	config := `resource "iosxr_mpls_ldp" "test" {` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	router_id = "1.2.3.4"` + "\n"
+	config += `	graceful_restart = true` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -120,31 +131,47 @@ func testAccIosxrMPLSLDPConfig_minimum() string {
 func testAccIosxrMPLSLDPConfig_all() string {
 	config := `resource "iosxr_mpls_ldp" "test" {` + "\n"
 	config += `	router_id = "1.2.3.4"` + "\n"
-	config += `	address_families = [{` + "\n"
-	config += `		af_name = "ipv4"` + "\n"
-	config += `		label_local_allocate_for_access_list = "ACL1"` + "\n"
-	config += `		}]` + "\n"
-	config += `	interfaces = [{` + "\n"
-	config += `		interface_name = "GigabitEthernet0/0/0/1"` + "\n"
-	config += `		}]` + "\n"
-	config += `	capabilities_sac = true` + "\n"
-	config += `	capabilities_sac_ipv4_disable = true` + "\n"
-	config += `	capabilities_sac_ipv6_disable = true` + "\n"
-	config += `	capabilities_sac_fec128_disable = true` + "\n"
-	config += `	capabilities_sac_fec129_disable = true` + "\n"
+	config += `	graceful_restart = true` + "\n"
+	config += `	graceful_restart_reconnect_timeout = 120` + "\n"
+	config += `	graceful_restart_forwarding_state_holdtime = 180` + "\n"
+	config += `	graceful_restart_helper_peer_maintain_on_local_reset_for = "ACL1"` + "\n"
+	config += `	ltrace_buffer_multiplier = 2` + "\n"
+	config += `	default_vrf_implicit_ipv4_disable = true` + "\n"
+	config += `	session_backoff_time_initial = 10` + "\n"
+	config += `	session_backoff_time_maximum = 100` + "\n"
+	config += `	session_holdtime = 180` + "\n"
+	config += `	session_downstream_on_demand_with = "ACL1"` + "\n"
+	config += `	session_protection = true` + "\n"
+	config += `	session_protection_for_acl = "ACL1"` + "\n"
+	config += `	session_protection_for_acl_duration = 120` + "\n"
+	config += `	nsr = true` + "\n"
+	config += `	entropy_label = true` + "\n"
+	config += `	entropy_label_add_el = true` + "\n"
+	config += `	signalling_dscp = 48` + "\n"
 	config += `	igp_sync_delay_on_session_up = 10` + "\n"
 	config += `	igp_sync_delay_on_proc_restart = 100` + "\n"
-	config += `	mldp = true` + "\n"
-	config += `	mldp_logging_notifications = true` + "\n"
-	config += `	mldp_address_families = [{` + "\n"
-	config += `		name = "ipv4"` + "\n"
-	config += `		make_before_break_delay = 30` + "\n"
-	config += `		forwarding_recursive = true` + "\n"
-	config += `		forwarding_recursive_route_policy = "LDP_POLICY_1"` + "\n"
-	config += `		recursive_fec = true` + "\n"
+	config += `	capabilities_sac = true` + "\n"
+	config += `	log_hello_adjacency = true` + "\n"
+	config += `	log_neighbor = true` + "\n"
+	config += `	log_nsr = true` + "\n"
+	config += `	log_graceful_restart = true` + "\n"
+	config += `	log_session_protection = true` + "\n"
+	config += `	discovery_hello_holdtime = 10` + "\n"
+	config += `	discovery_hello_interval = 3` + "\n"
+	config += `	discovery_targeted_hello_holdtime = 10` + "\n"
+	config += `	discovery_targeted_hello_interval = 3` + "\n"
+	config += `	discovery_instance_tlv_disable = true` + "\n"
+	config += `	discovery_ds_tlv_disable = true` + "\n"
+	config += `	discovery_rtr_id_arb_tlv_disable = true` + "\n"
+	config += `	discovery_quick_start_disable = true` + "\n"
+	config += `	neighbor_dual_stack_transport_connection_prefer_ipv4 = true` + "\n"
+	config += `	neighbor_dual_stack_transport_connection_max_wait = 30` + "\n"
+	config += `	neighbor_dual_stack_tlv_compliance = true` + "\n"
+	config += `	neighbors = [{` + "\n"
+	config += `		neighbor_address = "192.168.2.1"` + "\n"
+	config += `		label_space_id = 0` + "\n"
+	config += `		password_encrypted = "060506324F41"` + "\n"
 	config += `		}]` + "\n"
-	config += `	session_protection = true` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

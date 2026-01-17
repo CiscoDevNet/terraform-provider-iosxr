@@ -75,61 +75,37 @@ func (d *RouterHSRPInterfaceIPv6GroupV2DataSource) Schema(ctx context.Context, r
 				MarkdownDescription: "group number version 2",
 				Required:            true,
 			},
-			"name": schema.StringAttribute{
-				MarkdownDescription: "MGO session name",
+			"addresses": schema.ListNestedAttribute{
+				MarkdownDescription: "Global HSRP IPv6 address",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "Set Global HSRP IPv6 address",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"address_link_local_ipv6_address": schema.StringAttribute{
+				MarkdownDescription: "HSRP IPv6 linklocal address",
 				Computed:            true,
 			},
-			"mac_address": schema.StringAttribute{
-				MarkdownDescription: "Use specified mac address for the virtual router",
+			"address_link_local_autoconfig": schema.BoolAttribute{
+				MarkdownDescription: "Autoconfigure the HSRP IPv6 linklocal address",
 				Computed:            true,
 			},
-			"timers_seconds": schema.Int64Attribute{
-				MarkdownDescription: "Hold time in seconds",
-				Computed:            true,
-			},
-			"timers_seconds_holdtime": schema.Int64Attribute{
-				MarkdownDescription: "Hold time in seconds",
-				Computed:            true,
-			},
-			"timers_msec": schema.Int64Attribute{
-				MarkdownDescription: "Specify hellotime in milliseconds",
-				Computed:            true,
-			},
-			"timers_msec_holdtime": schema.Int64Attribute{
-				MarkdownDescription: "Specify hold time in milliseconds",
-				Computed:            true,
-			},
-			"preempt_delay": schema.Int64Attribute{
-				MarkdownDescription: "Wait before preempting",
+			"address_link_local_autoconfig_legacy_compatible": schema.BoolAttribute{
+				MarkdownDescription: "Autoconfigure for Legacy compatibility (with IOS/NX-OS)",
 				Computed:            true,
 			},
 			"priority": schema.Int64Attribute{
 				MarkdownDescription: "Priority level",
 				Computed:            true,
 			},
-			"bfd_fast_detect_peer_ipv6": schema.StringAttribute{
-				MarkdownDescription: "BFD peer interface IPv6 address",
+			"preempt_delay": schema.Int64Attribute{
+				MarkdownDescription: "Wait before preempting",
 				Computed:            true,
-			},
-			"bfd_fast_detect_peer_interface": schema.StringAttribute{
-				MarkdownDescription: "Select an interface over which to run BFD",
-				Computed:            true,
-			},
-			"track_objects": schema.ListNestedAttribute{
-				MarkdownDescription: "Object tracking",
-				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"object_name": schema.StringAttribute{
-							MarkdownDescription: "Object tracking",
-							Computed:            true,
-						},
-						"priority_decrement": schema.Int64Attribute{
-							MarkdownDescription: "Priority decrement",
-							Computed:            true,
-						},
-					},
-				},
 			},
 			"track_interfaces": schema.ListNestedAttribute{
 				MarkdownDescription: "Configure tracking",
@@ -147,28 +123,52 @@ func (d *RouterHSRPInterfaceIPv6GroupV2DataSource) Schema(ctx context.Context, r
 					},
 				},
 			},
-			"addresses": schema.ListNestedAttribute{
-				MarkdownDescription: "Global HSRP IPv6 address",
+			"track_objects": schema.ListNestedAttribute{
+				MarkdownDescription: "Object tracking",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"address": schema.StringAttribute{
-							MarkdownDescription: "Set Global HSRP IPv6 address",
+						"object_name": schema.StringAttribute{
+							MarkdownDescription: "Object tracking",
+							Computed:            true,
+						},
+						"priority_decrement": schema.Int64Attribute{
+							MarkdownDescription: "Priority decrement",
 							Computed:            true,
 						},
 					},
 				},
 			},
-			"address_link_local_autoconfig": schema.BoolAttribute{
-				MarkdownDescription: "Autoconfigure the HSRP IPv6 linklocal address",
+			"timers_seconds": schema.Int64Attribute{
+				MarkdownDescription: "Hold time in seconds",
 				Computed:            true,
 			},
-			"address_link_local_autoconfig_legacy_compatible": schema.BoolAttribute{
-				MarkdownDescription: "Autoconfigure for Legacy compatibility (with IOS/NX-OS)",
+			"timers_seconds_holdtime": schema.Int64Attribute{
+				MarkdownDescription: "Hold time in seconds",
 				Computed:            true,
 			},
-			"address_link_local_ipv6_address": schema.StringAttribute{
-				MarkdownDescription: "HSRP IPv6 linklocal address",
+			"timers_msec": schema.Int64Attribute{
+				MarkdownDescription: "Specify hellotime in milliseconds",
+				Computed:            true,
+			},
+			"timers_msec_holdtime": schema.Int64Attribute{
+				MarkdownDescription: "Specify hold time in milliseconds",
+				Computed:            true,
+			},
+			"mac_address": schema.StringAttribute{
+				MarkdownDescription: "Use specified mac address for the virtual router",
+				Computed:            true,
+			},
+			"name": schema.StringAttribute{
+				MarkdownDescription: "MGO session name",
+				Computed:            true,
+			},
+			"bfd_fast_detect_peer_ipv6": schema.StringAttribute{
+				MarkdownDescription: "BFD peer interface IPv6 address",
+				Computed:            true,
+			},
+			"bfd_fast_detect_peer_interface": schema.StringAttribute{
+				MarkdownDescription: "Select an interface over which to run BFD",
 				Computed:            true,
 			},
 		},

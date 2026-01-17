@@ -36,21 +36,21 @@ import (
 func TestAccIosxrRouterHSRPInterfaceIPv6GroupV2(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "group_id", "4000"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "name", "gp2"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "mac_address", "00:01:00:02:00:02"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "timers_msec", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "timers_msec_holdtime", "300"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "preempt_delay", "256"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "priority", "244"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "bfd_fast_detect_peer_ipv6", "fe80::240:d0ff:fe48:4672"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "bfd_fast_detect_peer_interface", "GigabitEthernet0/0/0/3"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "track_objects.0.object_name", "TOBJ2"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "track_objects.0.priority_decrement", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "track_interfaces.0.track_name", "GigabitEthernet0/0/0/4"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "track_interfaces.0.priority_decrement", "244"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "addresses.0.address", "2001:db8:cafe:2100::bad1:1010"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "address_link_local_autoconfig", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "address_link_local_autoconfig_legacy_compatible", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "priority", "244"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "preempt_delay", "256"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "track_interfaces.0.track_name", "GigabitEthernet0/0/0/4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "track_interfaces.0.priority_decrement", "244"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "track_objects.0.object_name", "TOBJ2"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "track_objects.0.priority_decrement", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "timers_msec", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "timers_msec_holdtime", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "mac_address", "00:01:00:02:00:02"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "name", "gp2"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "bfd_fast_detect_peer_ipv6", "fe80::240:d0ff:fe48:4672"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "bfd_fast_detect_peer_interface", "GigabitEthernet0/0/0/3"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -122,27 +122,27 @@ func testAccIosxrRouterHSRPInterfaceIPv6GroupV2Config_all() string {
 	config := `resource "iosxr_router_hsrp_interface_ipv6_group_v2" "test" {` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/2"` + "\n"
 	config += `	group_id = 4000` + "\n"
-	config += `	name = "gp2"` + "\n"
-	config += `	mac_address = "00:01:00:02:00:02"` + "\n"
-	config += `	timers_msec = 100` + "\n"
-	config += `	timers_msec_holdtime = 300` + "\n"
-	config += `	preempt_delay = 256` + "\n"
-	config += `	priority = 244` + "\n"
-	config += `	bfd_fast_detect_peer_ipv6 = "fe80::240:d0ff:fe48:4672"` + "\n"
-	config += `	bfd_fast_detect_peer_interface = "GigabitEthernet0/0/0/3"` + "\n"
-	config += `	track_objects = [{` + "\n"
-	config += `		object_name = "TOBJ2"` + "\n"
-	config += `		priority_decrement = 10` + "\n"
-	config += `		}]` + "\n"
-	config += `	track_interfaces = [{` + "\n"
-	config += `		track_name = "GigabitEthernet0/0/0/4"` + "\n"
-	config += `		priority_decrement = 244` + "\n"
-	config += `		}]` + "\n"
 	config += `	addresses = [{` + "\n"
 	config += `		address = "2001:db8:cafe:2100::bad1:1010"` + "\n"
 	config += `		}]` + "\n"
 	config += `	address_link_local_autoconfig = true` + "\n"
 	config += `	address_link_local_autoconfig_legacy_compatible = true` + "\n"
+	config += `	priority = 244` + "\n"
+	config += `	preempt_delay = 256` + "\n"
+	config += `	track_interfaces = [{` + "\n"
+	config += `		track_name = "GigabitEthernet0/0/0/4"` + "\n"
+	config += `		priority_decrement = 244` + "\n"
+	config += `		}]` + "\n"
+	config += `	track_objects = [{` + "\n"
+	config += `		object_name = "TOBJ2"` + "\n"
+	config += `		priority_decrement = 10` + "\n"
+	config += `		}]` + "\n"
+	config += `	timers_msec = 100` + "\n"
+	config += `	timers_msec_holdtime = 300` + "\n"
+	config += `	mac_address = "00:01:00:02:00:02"` + "\n"
+	config += `	name = "gp2"` + "\n"
+	config += `	bfd_fast_detect_peer_ipv6 = "fe80::240:d0ff:fe48:4672"` + "\n"
+	config += `	bfd_fast_detect_peer_interface = "GigabitEthernet0/0/0/3"` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config

@@ -32,10 +32,10 @@ import (
 
 func TestAccDataSourceIosxrSegmentRouting(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing.test", "global_block_lower_bound", "16000"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing.test", "global_block_upper_bound", "29999"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing.test", "local_block_lower_bound", "15000"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing.test", "local_block_upper_bound", "15999"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing.test", "global_block_lower_bound", "16000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing.test", "global_block_upper_bound", "29999"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing.test", "enable", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -60,10 +60,10 @@ func TestAccDataSourceIosxrSegmentRouting(t *testing.T) {
 func testAccDataSourceIosxrSegmentRoutingConfig() string {
 	config := `resource "iosxr_segment_routing" "test" {` + "\n"
 	config += `	delete_mode = "attributes"` + "\n"
-	config += `	global_block_lower_bound = 16000` + "\n"
-	config += `	global_block_upper_bound = 29999` + "\n"
 	config += `	local_block_lower_bound = 15000` + "\n"
 	config += `	local_block_upper_bound = 15999` + "\n"
+	config += `	global_block_lower_bound = 16000` + "\n"
+	config += `	global_block_upper_bound = 29999` + "\n"
 	config += `	enable = true` + "\n"
 	config += `}` + "\n"
 

@@ -71,6 +71,96 @@ func (d *KeyChainDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 				MarkdownDescription: "Name of the key chain - maximum 32 characters",
 				Required:            true,
 			},
+			"accept_tolerance_value": schema.Int64Attribute{
+				MarkdownDescription: "Configure a tolerance-value",
+				Computed:            true,
+			},
+			"accept_tolerance_infinite": schema.BoolAttribute{
+				MarkdownDescription: "Never expires",
+				Computed:            true,
+			},
+			"macsec_keys": schema.ListNestedAttribute{
+				MarkdownDescription: "Configure CKN for macsec PSK",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"ckn": schema.StringAttribute{
+							MarkdownDescription: "Configure CKN for macsec PSK",
+							Computed:            true,
+						},
+						"key_string_password": schema.StringAttribute{
+							MarkdownDescription: "Enter encrypted CAK as hex string",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"key_string_password6": schema.StringAttribute{
+							MarkdownDescription: "Enter encrypted type6 password",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"key_string_cryptographic_algorithm": schema.StringAttribute{
+							MarkdownDescription: "Cryptographic Algorithm",
+							Computed:            true,
+						},
+						"lifetime_start_time_hour": schema.Int64Attribute{
+							MarkdownDescription: "Start time hour",
+							Computed:            true,
+						},
+						"lifetime_start_time_minute": schema.Int64Attribute{
+							MarkdownDescription: "Start time minute",
+							Computed:            true,
+						},
+						"lifetime_start_time_second": schema.Int64Attribute{
+							MarkdownDescription: "Start time second",
+							Computed:            true,
+						},
+						"lifetime_start_time_month": schema.StringAttribute{
+							MarkdownDescription: "Month of the year",
+							Computed:            true,
+						},
+						"lifetime_start_time_day_of_month": schema.Int64Attribute{
+							MarkdownDescription: "Day of the month",
+							Computed:            true,
+						},
+						"lifetime_start_time_year": schema.Int64Attribute{
+							MarkdownDescription: "Year",
+							Computed:            true,
+						},
+						"lifetime_end_time_hour": schema.Int64Attribute{
+							MarkdownDescription: "End time hour",
+							Computed:            true,
+						},
+						"lifetime_end_time_minute": schema.Int64Attribute{
+							MarkdownDescription: "End time minute",
+							Computed:            true,
+						},
+						"lifetime_end_time_second": schema.Int64Attribute{
+							MarkdownDescription: "End time second",
+							Computed:            true,
+						},
+						"lifetime_end_time_month": schema.StringAttribute{
+							MarkdownDescription: "Month of the year",
+							Computed:            true,
+						},
+						"lifetime_end_time_day_of_month": schema.Int64Attribute{
+							MarkdownDescription: "Day of the month",
+							Computed:            true,
+						},
+						"lifetime_end_time_year": schema.Int64Attribute{
+							MarkdownDescription: "Year",
+							Computed:            true,
+						},
+						"lifetime_duration": schema.Int64Attribute{
+							MarkdownDescription: "Lifetime duration",
+							Computed:            true,
+						},
+						"lifetime_infinite": schema.BoolAttribute{
+							MarkdownDescription: "Never expires",
+							Computed:            true,
+						},
+					},
+				},
+			},
 			"keys": schema.ListNestedAttribute{
 				MarkdownDescription: "Configure a Key",
 				Computed:            true,
@@ -83,6 +173,12 @@ func (d *KeyChainDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 						"key_string_password": schema.StringAttribute{
 							MarkdownDescription: "Encrypted key string (even number of characters with first two as digits and sum less than 53, and rest of the characters should be hex digits)",
 							Computed:            true,
+							Sensitive:           true,
+						},
+						"key_string_password6": schema.StringAttribute{
+							MarkdownDescription: "Enter encrypted type6 password",
+							Computed:            true,
+							Sensitive:           true,
 						},
 						"cryptographic_algorithm": schema.StringAttribute{
 							MarkdownDescription: "Choose cryptographic algorithm",
@@ -100,16 +196,44 @@ func (d *KeyChainDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 							MarkdownDescription: "Start time second",
 							Computed:            true,
 						},
-						"accept_lifetime_start_time_day_of_month": schema.Int64Attribute{
-							MarkdownDescription: "Day of the month",
-							Computed:            true,
-						},
 						"accept_lifetime_start_time_month": schema.StringAttribute{
 							MarkdownDescription: "Month of the year",
 							Computed:            true,
 						},
+						"accept_lifetime_start_time_day_of_month": schema.Int64Attribute{
+							MarkdownDescription: "Day of the month",
+							Computed:            true,
+						},
 						"accept_lifetime_start_time_year": schema.Int64Attribute{
 							MarkdownDescription: "Year",
+							Computed:            true,
+						},
+						"accept_lifetime_end_time_hour": schema.Int64Attribute{
+							MarkdownDescription: "End time hour",
+							Computed:            true,
+						},
+						"accept_lifetime_end_time_minute": schema.Int64Attribute{
+							MarkdownDescription: "End time minute",
+							Computed:            true,
+						},
+						"accept_lifetime_end_time_second": schema.Int64Attribute{
+							MarkdownDescription: "End time second",
+							Computed:            true,
+						},
+						"accept_lifetime_end_time_month": schema.StringAttribute{
+							MarkdownDescription: "Month of the year",
+							Computed:            true,
+						},
+						"accept_lifetime_end_time_day_of_month": schema.Int64Attribute{
+							MarkdownDescription: "Day of the month",
+							Computed:            true,
+						},
+						"accept_lifetime_end_time_year": schema.Int64Attribute{
+							MarkdownDescription: "Year",
+							Computed:            true,
+						},
+						"accept_lifetime_duration": schema.Int64Attribute{
+							MarkdownDescription: "Lifetime duration",
 							Computed:            true,
 						},
 						"accept_lifetime_infinite": schema.BoolAttribute{
@@ -128,16 +252,44 @@ func (d *KeyChainDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 							MarkdownDescription: "Start time second",
 							Computed:            true,
 						},
-						"send_lifetime_start_time_day_of_month": schema.Int64Attribute{
-							MarkdownDescription: "Day of the month",
-							Computed:            true,
-						},
 						"send_lifetime_start_time_month": schema.StringAttribute{
 							MarkdownDescription: "Month of the year",
 							Computed:            true,
 						},
+						"send_lifetime_start_time_day_of_month": schema.Int64Attribute{
+							MarkdownDescription: "Day of the month",
+							Computed:            true,
+						},
 						"send_lifetime_start_time_year": schema.Int64Attribute{
 							MarkdownDescription: "Year",
+							Computed:            true,
+						},
+						"send_lifetime_end_time_hour": schema.Int64Attribute{
+							MarkdownDescription: "End time hour",
+							Computed:            true,
+						},
+						"send_lifetime_end_time_minute": schema.Int64Attribute{
+							MarkdownDescription: "End time minute",
+							Computed:            true,
+						},
+						"send_lifetime_end_time_second": schema.Int64Attribute{
+							MarkdownDescription: "End time second",
+							Computed:            true,
+						},
+						"send_lifetime_end_time_month": schema.StringAttribute{
+							MarkdownDescription: "Month of the year",
+							Computed:            true,
+						},
+						"send_lifetime_end_time_day_of_month": schema.Int64Attribute{
+							MarkdownDescription: "Day of the month",
+							Computed:            true,
+						},
+						"send_lifetime_end_time_year": schema.Int64Attribute{
+							MarkdownDescription: "Year",
+							Computed:            true,
+						},
+						"send_lifetime_duration": schema.Int64Attribute{
+							MarkdownDescription: "Lifetime duration",
 							Computed:            true,
 						},
 						"send_lifetime_infinite": schema.BoolAttribute{
@@ -146,6 +298,14 @@ func (d *KeyChainDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 						},
 					},
 				},
+			},
+			"timezone_local": schema.BoolAttribute{
+				MarkdownDescription: "Router Local Timezone",
+				Computed:            true,
+			},
+			"timezone_gmt": schema.BoolAttribute{
+				MarkdownDescription: "GMT (UTC) Timezone",
+				Computed:            true,
 			},
 		},
 	}

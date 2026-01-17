@@ -14,21 +14,44 @@ This resource can manage the Router BGP VRF Neighbor Address Family configuratio
 
 ```terraform
 resource "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
-  as_number                               = "65001"
-  vrf_name                                = "VRF2"
-  address                                 = "10.1.1.2"
-  af_name                                 = "ipv4-unicast"
-  route_policy_in                         = "ROUTE_POLICY_1"
-  route_policy_out                        = "ROUTE_POLICY_1"
-  default_originate                       = true
-  default_originate_route_policy          = "ROUTE_POLICY_1"
-  next_hop_self                           = true
-  next_hop_self_inheritance_disable       = true
-  soft_reconfiguration_inbound_always     = true
-  send_community_ebgp_inheritance_disable = true
-  remove_private_as_inbound               = true
-  remove_private_as_inbound_entire_aspath = true
-  remove_private_as_entire_aspath         = true
+  as_number                                               = "65001"
+  vrf_name                                                = "VRF2"
+  address                                                 = "10.1.1.2"
+  af_name                                                 = "ipv4-unicast"
+  weight                                                  = 100
+  multipath                                               = true
+  capability_orf_prefix                                   = "both"
+  additional_paths_send                                   = true
+  additional_paths_receive                                = true
+  default_originate                                       = true
+  default_originate_route_policy                          = "ROUTE_POLICY_1"
+  maximum_prefix_limit                                    = 1248576
+  maximum_prefix_threshold                                = 80
+  maximum_prefix_warning_only                             = true
+  next_hop_self                                           = true
+  route_policy_in                                         = "ROUTE_POLICY_1"
+  route_policy_out                                        = "ROUTE_POLICY_1"
+  orf_route_policy                                        = "ROUTE_POLICY_1"
+  replace_private_as                                      = true
+  remove_private_as_inbound                               = true
+  remove_private_as_inbound_entire_aspath                 = true
+  remove_private_as_entire_aspath                         = true
+  send_community_ebgp                                     = true
+  send_community_gshut_ebgp                               = true
+  soft_reconfiguration_inbound_always                     = true
+  update_out_originator_loopcheck_disable                 = true
+  allowas_in                                              = 3
+  allowconfedas_in                                        = 5
+  site_of_origin_four_byte_as_number                      = "65536"
+  site_of_origin_four_byte_as_index                       = 100
+  as_override                                             = true
+  aigp                                                    = true
+  aigp_send_med                                           = true
+  aigp_send_cost_community_id                             = 5
+  aigp_send_cost_community_id_poi_pre_bestpath_transitive = true
+  slow_peer_static                                        = true
+  origin_as_validation_disable                            = true
+  bestpath_origin_as_allow_invalid                        = true
 }
 ```
 
@@ -45,14 +68,70 @@ resource "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
 
 ### Optional
 
+- `accept_own` (Boolean) Handle self-originated routes with Accept-Own community
+- `accept_own_inheritance_disable` (Boolean) Prevent item being inherited from a parent group
+- `additional_paths_receive` (Boolean) Additional paths Send capability
+- `additional_paths_receive_disable` (Boolean) Prevent additional-paths receive from being inherited from the parent
+- `additional_paths_send` (Boolean) Additional paths Send capability
+- `additional_paths_send_disable` (Boolean) Prevent additional-paths receive from being inherited from the parent
+- `advertise_l2vpn_evpn_re_originated` (Boolean) Advertise Re-orignated routes only
+- `advertise_l2vpn_evpn_re_originated_stitching_rt` (Boolean) Advertise re-originated routes with stitching Route-Targets
+- `advertise_vpnv4_unicast` (Boolean) Enable advertise vpnv4 unicast
+- `advertise_vpnv4_unicast_re_originated` (Boolean) Advertise re-orignated and local routes only
+- `advertise_vpnv4_unicast_re_originated_stitching_rt` (Boolean) Advertise re-originated and local routes with stitching Route-Targets
+- `advertise_vpnv6_unicast` (Boolean) Enable advertise vpnv6 unicast
+- `advertise_vpnv6_unicast_re_originated` (Boolean) Advertise Re-orignated routes only
+- `advertise_vpnv6_unicast_re_originated_stitching_rt` (Boolean) Advertise re-originated routes with stitching Route-Targets
+- `aigp` (Boolean) Enable AIGP
+- `aigp_disable` (Boolean) Disable AIGP
+- `aigp_send_cost_community_disable` (Boolean) Disable aigp send cost-community
+- `aigp_send_cost_community_id` (Number) Cost community ID
+  - Range: `0`-`255`
+- `aigp_send_cost_community_id_poi_igp_cost` (Boolean) Cost community is used after IGP distance to next hop
+- `aigp_send_cost_community_id_poi_igp_cost_transitive` (Boolean) Enable transitive cost community
+- `aigp_send_cost_community_id_poi_pre_bestpath` (Boolean) Cost community is first step in best path calculation
+- `aigp_send_cost_community_id_poi_pre_bestpath_transitive` (Boolean) Enable transitive cost community
+- `aigp_send_med` (Boolean) Send AIGP value in MED
+- `aigp_send_med_disable` (Boolean) Disable aigp send med
+- `allowas_in` (Number) Number of occurrences of AS number
+  - Range: `1`-`10`
+- `allowconfedas_in` (Number) Number of occurrences of Confederation AS number
+  - Range: `1`-`10`
+- `as_override` (Boolean) Override matching AS-number while sending update
+- `as_override_inheritance_disable` (Boolean) Prevent as-override from being inherited from the parent
+- `bestpath_origin_as_allow_invalid` (Boolean) BGP bestpath selection will allow 'invalid' origin-AS
+- `capability_orf_prefix` (String) Capability to RECEIVE the ORF from this neighbor
+  - Choices: `both`, `none`, `receive`, `send`
+- `cluster_id_allow_equal` (Boolean) Accept routes with first cluster-id in list is same as the router's cluster id
+- `cluster_id_allow_equal_disable` (Boolean) Prevent the configuration from being inherited.
 - `default_originate` (Boolean) Originate default route to this neighbor
 - `default_originate_inheritance_disable` (Boolean) Prevent default-originate being inherited from a parent group
 - `default_originate_route_policy` (String) Route policy to specify criteria to originate default
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
+- `encapsulation_type` (String) Specify encapsulation type
+  - Choices: `srv6`, `vxlan`
+- `import_re_originate` (Boolean) Reoriginate imported routes by attaching stitching RTs
+- `import_stitching_rt` (Boolean) Import routes using stitching RTs
+- `import_stitching_rt_re_originate` (Boolean) Re-originate imported routes
+- `import_stitching_rt_re_originate_stitching_rt` (Boolean) Reoriginate imported routes by attaching stitching RTs
+- `maximum_prefix_discard_extra_paths` (Boolean) Discard extra paths when limit is exceeded
+- `maximum_prefix_limit` (Number) maximum no. of prefix limit
+  - Range: `1`-`4294967295`
+- `maximum_prefix_restart` (Number) Restart time interval
+  - Range: `1`-`65535`
+- `maximum_prefix_threshold` (Number) Threshold value (%) at which to generate a warning msg
+  - Range: `1`-`100`
+- `maximum_prefix_warning_only` (Boolean) Only give warning message when limit is exceeded
+- `multipath` (Boolean) Paths from this neighbor is eligible for multipath
 - `next_hop_self` (Boolean) Disable the next hop calculation for this neighbor
 - `next_hop_self_inheritance_disable` (Boolean) Prevent next-hop-self from being inherited from the parent
+- `next_hop_unchanged` (Boolean) Do not overwrite next hop before advertising to eBGP peers
+- `next_hop_unchanged_inheritance_disable` (Boolean) Prevent next-hop-unchanged from being inherited from the parent
+- `next_hop_unchanged_multipath` (Boolean) Do not overwrite nexthop before advertising multipaths
+- `orf_route_policy` (String) Route policy to specify ORF and inbound filter
+- `origin_as_validation_disable` (Boolean) Disable RPKI origin-AS validation
 - `remove_private_as` (Boolean) Remove private AS number from outbound updates
 - `remove_private_as_entire_aspath` (Boolean) remove only if all ASes in the path are private
 - `remove_private_as_inbound` (Boolean) Remove private AS number from inbound updates
@@ -60,10 +139,41 @@ resource "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
 - `remove_private_as_inbound_inheritance_disable` (Boolean) Prevent remove-private-AS from being inherited from the parent
 - `remove_private_as_inheritance_disable` (Boolean) Prevent remove-private-AS from being inherited from the parent
 - `remove_private_as_internal` (Boolean) remove only if all ASes in the path are private
+- `replace_private_as` (Boolean) Replace private AS number from outbound updates
+- `replace_private_as_internal` (Boolean) remove only if all ASes in the path are private
 - `route_policy_in` (String) Apply route policy to inbound routes
 - `route_policy_out` (String) Apply route policy to outbound routes
+- `route_reflector_client` (Boolean) Configure a neighbor as Route Reflector client
+- `route_reflector_client_inheritance_disable` (Boolean) Prevent route-reflector-client from being inherited from the parent
+- `segment_routing_srv6_prefix_sid_type4` (Boolean) Enable prefix sid version 4 encoding
+- `send_community_ebgp` (Boolean) Send community attribute to this external neighbor
 - `send_community_ebgp_inheritance_disable` (Boolean) Prevent send-community-ebgp from being inherited from the parent
+- `send_community_gshut_ebgp` (Boolean) Allow the g-shut community to be sent to this external neighbor
+- `send_community_gshut_ebgp_inheritance_disable` (Boolean) Prevent send-community-gshut-ebgp from being inherited from the parent
+- `send_extended_community_ebgp` (Boolean) Send extended community attribute to this external neighbor
+- `send_extended_community_ebgp_inheritance_disable` (Boolean) Prevent send-extended-community-ebgp from being inherited from parent
+- `send_multicast_attributes` (Boolean) Send multicast attributes to this neighbor
+- `send_multicast_attributes_disable` (Boolean) Disable send multicast attribute
+- `site_of_origin_four_byte_as_index` (Number) ASN4:index (hex or decimal format)
+  - Range: `0`-`65535`
+- `site_of_origin_four_byte_as_number` (String) 4-byte AS number in asplain format
+- `site_of_origin_ipv4_address` (String) IPv4 address
+- `site_of_origin_ipv4_address_index` (Number) IPv4Address:index (hex or decimal format)
+  - Range: `0`-`65535`
+- `site_of_origin_two_byte_as_index` (Number) ASN2:index (hex or decimal format)
+  - Range: `0`-`4294967295`
+- `site_of_origin_two_byte_as_number` (String) 2-byte AS number
+- `slow_peer_dynamic` (Boolean) Configure this neighbor as dynamic slow-peer
+- `slow_peer_dynamic_disable` (Boolean) Disable dynamic slow-peer
+- `slow_peer_dynamic_threshold` (Number) Threshold (in seconds) to detect this neighbor as slow-peer
+  - Range: `120`-`3600`
+- `slow_peer_static` (Boolean) Configure this neighbor as static slow-peer
 - `soft_reconfiguration_inbound_always` (Boolean) Always use soft reconfig, even if route refresh is supported
+- `update_out_originator_loopcheck` (Boolean) Loop check for same originator which sent the route
+- `update_out_originator_loopcheck_disable` (Boolean) Disable originator loop check
+- `use_af_group` (String) Inherit configuration for this address-family from an af-group
+- `weight` (Number) Set default weight for routes from this neighbor
+  - Range: `0`-`65535`
 
 ### Read-Only
 

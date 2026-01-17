@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -35,14 +36,50 @@ func TestAccDataSourceIosxrPolicyMapQoS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "description", "My description"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.name", "class-default"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.type", "qos"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.set_mpls_experimental_topmost", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.set_dscp", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.priority_level", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.queue_limits.0.value", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.queue_limits.0.unit", "us"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.service_policy_name", "SERVICEPOLICY"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.police_rate_value", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.police_rate_unit", "gbps"))
+	if os.Getenv("XRV9K") != "" || os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.police_burst_value", "500"))
+	}
+	if os.Getenv("XRV9K") != "" || os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.police_burst_unit", "bytes"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.police_peak_rate_value", "6"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.police_peak_rate_unit", "gbps"))
+	if os.Getenv("XRV9K") != "" || os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.police_peak_burst_value", "1000"))
+	}
+	if os.Getenv("XRV9K") != "" || os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.police_peak_burst_unit", "bytes"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.priority_level", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.queue_limits.0.value", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.queue_limits.0.unit", "ms"))
+	if os.Getenv("XRV9K") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.random_detect_default", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.random_detect.0.minimum_threshold_value", "100"))
+		}
+		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.random_detect.0.minimum_threshold_unit", "ms"))
+		}
+		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.random_detect.0.maximum_threshold_value", "200"))
+		}
+		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.random_detect.0.maximum_threshold_unit", "ms"))
+		}
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.service_policy_name", "CHILD_POLICY"))
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.set_traffic_class", "1"))
+	}
+	if os.Getenv("XRV9K") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.set_discard_class", "1"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.set_mpls_experimental_topmost", "5"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -65,27 +102,65 @@ func TestAccDataSourceIosxrPolicyMapQoS(t *testing.T) {
 
 func testAccDataSourceIosxrPolicyMapQoSConfig() string {
 	config := `resource "iosxr_policy_map_qos" "test" {` + "\n"
-	config += `	policy_map_name = "PM1"` + "\n"
+	config += `	policy_map_name = "PM-QOS"` + "\n"
 	config += `	description = "My description"` + "\n"
 	config += `	classes = [{` + "\n"
 	config += `		name = "class-default"` + "\n"
 	config += `		type = "qos"` + "\n"
-	config += `		set_mpls_experimental_topmost = 0` + "\n"
-	config += `		set_dscp = "0"` + "\n"
+	config += `		police_rate_value = "5"` + "\n"
+	config += `		police_rate_unit = "gbps"` + "\n"
+	if os.Getenv("XRV9K") != "" || os.Getenv("NCS") != "" {
+		config += `		police_burst_value = 500` + "\n"
+	}
+	if os.Getenv("XRV9K") != "" || os.Getenv("NCS") != "" {
+		config += `		police_burst_unit = "bytes"` + "\n"
+	}
+	config += `		police_peak_rate_value = "6"` + "\n"
+	config += `		police_peak_rate_unit = "gbps"` + "\n"
+	if os.Getenv("XRV9K") != "" || os.Getenv("NCS") != "" {
+		config += `		police_peak_burst_value = 1000` + "\n"
+	}
+	if os.Getenv("XRV9K") != "" || os.Getenv("NCS") != "" {
+		config += `		police_peak_burst_unit = "bytes"` + "\n"
+	}
 	config += `		priority_level = 1` + "\n"
 	config += `		queue_limits = [{` + "\n"
 	config += `			value = "100"` + "\n"
-	config += `			unit = "us"` + "\n"
+	config += `			unit = "ms"` + "\n"
 	config += `		}]` + "\n"
-	config += `		service_policy_name = "SERVICEPOLICY"` + "\n"
-	config += `		police_rate_value = "5"` + "\n"
-	config += `		police_rate_unit = "gbps"` + "\n"
+	if os.Getenv("XRV9K") != "" {
+		config += `		random_detect_default = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `		random_detect = [{` + "\n"
+		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+			config += `			minimum_threshold_value = 100` + "\n"
+		}
+		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+			config += `			minimum_threshold_unit = "ms"` + "\n"
+		}
+		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+			config += `			maximum_threshold_value = 200` + "\n"
+		}
+		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+			config += `			maximum_threshold_unit = "ms"` + "\n"
+		}
+		config += `		}]` + "\n"
+	}
+	config += `		service_policy_name = "CHILD_POLICY"` + "\n"
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `		set_traffic_class = 1` + "\n"
+	}
+	if os.Getenv("XRV9K") != "" {
+		config += `		set_discard_class = 1` + "\n"
+	}
+	config += `		set_mpls_experimental_topmost = 5` + "\n"
 	config += `	}]` + "\n"
 	config += `}` + "\n"
 
 	config += `
 		data "iosxr_policy_map_qos" "test" {
-			policy_map_name = "PM1"
+			policy_map_name = "PM-QOS"
 			depends_on = [iosxr_policy_map_qos.test]
 		}
 	`

@@ -1,0 +1,178 @@
+---
+name: Ethernet SLA
+path: Cisco-IOS-XR-um-ethernet-sla-cfg:/ethernet/sla/profiles/profile[profile-name=%s]
+doc_category: L2VPN
+no_delete_attributes: true
+test_tags: [NCS, C8000]
+attributes:
+  - yang_name: profile-name
+    example: SLA-PROFILE-1
+  - yang_name: type
+    requires_replace: true
+    example: cfm-delay-measurement
+  - yang_name: probe/send/packet/once
+    tf_name: probe_send_packet_once
+    exclude_test: true
+    example: true
+  - yang_name: probe/send/packet/every/interval
+    tf_name: probe_send_packet_every_interval
+    optional: true
+    exclude_test: true
+    example: 100
+  - yang_name: probe/send/packet/every/milliseconds
+    tf_name: probe_send_packet_every_milliseconds
+    exclude_test: true
+    example: true
+  - yang_name: probe/send/packet/every/seconds
+    tf_name: probe_send_packet_every_seconds
+    exclude_test: true
+    example: true
+  - yang_name: probe/send/packet/every/minutes
+    tf_name: probe_send_packet_every_minutes
+    exclude_test: true
+    example: true
+  - yang_name: probe/send/packet/every/hours
+    tf_name: probe_send_packet_every_hours
+    exclude_test: true
+    example: true
+  - yang_name: probe/send/burst/once
+    tf_name: probe_send_burst_once
+    exclude_test: true
+    example: true
+  - yang_name: probe/send/burst/every/interval
+    tf_name: probe_send_burst_every_interval
+    optional: true
+    example: 30
+  - yang_name: probe/send/burst/every/seconds
+    tf_name: probe_send_burst_every_seconds
+    example: true
+  - yang_name: probe/send/burst/every/minutes
+    tf_name: probe_send_burst_every_minutes
+    exclude_test: true
+    example: true
+  - yang_name: probe/send/burst/every/hours
+    tf_name: probe_send_burst_every_hours
+    exclude_test: true
+    example: true
+  - yang_name: probe/send/burst/packet/count
+    tf_name: probe_send_burst_packet_count
+    example: 5
+  - yang_name: probe/send/burst/packet/interval-in-seconds
+    tf_name: probe_send_burst_packet_interval_seconds
+    example: 1
+  - yang_name: probe/send/burst/packet/interval-in-milliseconds
+    tf_name: probe_send_burst_packet_interval_milliseconds
+    exclude_test: true
+    example: 1000
+  - yang_name: probe/packet/size
+    tf_name: probe_packet_size
+    example: 1500
+  - yang_name: probe/packet/test/pattern/hex
+    tf_name: probe_packet_test_pattern_hex
+    example: 4369
+  - yang_name: probe/priority
+    tf_name: probe_priority
+    example: 7
+  - yang_name: probe/synthetic/loss/calculation/packets
+    tf_name: probe_synthetic_loss_calculation_packets
+    exclude_test: true
+    example: 1000
+  - yang_name: statistics/measures/measure
+    tf_name: statistics_measure
+    type: List
+    attributes:
+      - yang_name: type
+        id: true
+        example: round-trip-delay
+      - yang_name: aggregate/none
+        tf_name: aggregate_none
+        exclude_test: true
+        example: true
+      - yang_name: aggregate/bins
+        tf_name: aggregate_bins
+        example: 5
+      - yang_name: aggregate/width
+        tf_name: aggregate_width
+        example: 1000
+      - yang_name: aggregate/width-tenths
+        tf_name: aggregate_width_percentage
+        exclude_test: true
+        example: 5
+      - yang_name: aggregate/usec
+        tf_name: aggregate_usec
+        example: true
+      - yang_name: buckets/size
+        tf_name: buckets_size
+        example: 5
+      - yang_name: buckets/probes
+        tf_name: buckets_probes
+        example: true
+      - yang_name: buckets/archive
+        tf_name: buckets_archive
+        example: 10
+      - yang_name: thresholds/type/stateful/log/on/max-value
+        tf_name: thresholds_stateful_log_on_max_value
+        example: 1000
+      - yang_name: thresholds/type/stateful/log/on/mean-value
+        tf_name: thresholds_stateful_log_on_mean_value
+        example: 1000
+      - yang_name: thresholds/type/stateful/log/on/sample-count
+        tf_name: thresholds_stateful_log_on_sample_count
+        example: 10
+      - yang_name: thresholds/type/stateful/log/on/in-and-above/bin
+        tf_name: thresholds_stateful_log_on_in_and_above_bin
+        example: 5
+      - yang_name: thresholds/type/stateful/efd/on/max-value
+        tf_name: thresholds_stateful_efd_on_max_value
+        example: 2000
+      - yang_name: thresholds/type/stateful/efd/on/mean-value
+        tf_name: thresholds_stateful_efd_on_mean_value
+        example: 2000
+      - yang_name: thresholds/type/stateful/efd/on/sample-count
+        tf_name: thresholds_stateful_efd_on_sample_count
+        example: 10
+      - yang_name: thresholds/type/stateful/efd/on/in-and-above/bin
+        tf_name: thresholds_stateful_efd_on_in_and_above_bin
+        example: 5
+      - yang_name: thresholds/type/stateless/log/on/max-value
+        tf_name: thresholds_stateless_log_on_max_value
+        example: 2000
+      - yang_name: thresholds/type/stateless/log/on/mean-value
+        tf_name: thresholds_stateless_log_on_mean_value
+        example: 2000
+      - yang_name: thresholds/type/stateless/log/on/sample-count
+        tf_name: thresholds_stateless_log_on_sample_count
+        example: 10
+      - yang_name: thresholds/type/stateless/log/on/in-and-above/bin
+        tf_name: thresholds_stateless_log_on_in_and_above_bin
+        example: 5
+  - yang_name: schedule/every/week/on
+    tf_name: schedule_every_week_on
+    optional: true
+    exclude_test: true
+    example: monday
+  - yang_name: schedule/every/day
+    tf_name: schedule_every_day
+    exclude_test: true
+    example: true
+  - yang_name: schedule/every/interval-in-minutes
+    tf_name: schedule_every_minutes
+    example: 1
+  - yang_name: schedule/every/interval-in-hours
+    tf_name: schedule_every_hours
+    exclude_test: true
+    example: 2
+  - yang_name: schedule/every/at/hours
+    tf_name: schedule_every_at_hours
+    exclude_test: true
+    example: 10
+  - yang_name: schedule/every/at/minutes
+    tf_name: schedule_every_at_minutes
+    exclude_test: true
+    example: 30
+  - yang_name: schedule/every/for/time
+    tf_name: schedule_every_for_time
+    example: 1
+  - yang_name: schedule/every/for/unit
+    tf_name: schedule_every_for_unit
+    example: minutes

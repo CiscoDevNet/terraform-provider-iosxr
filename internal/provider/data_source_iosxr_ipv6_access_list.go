@@ -104,10 +104,6 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "Counter for this ACE",
 							Computed:            true,
 						},
-						"permit_capture": schema.BoolAttribute{
-							MarkdownDescription: "Capture matched packet",
-							Computed:            true,
-						},
 						"permit_range_start_protocol": schema.StringAttribute{
 							MarkdownDescription: "An IPv6 Protocol",
 							Computed:            true,
@@ -364,6 +360,10 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "Specific VRF Name for this nexthop",
 							Computed:            true,
 						},
+						"permit_capture": schema.BoolAttribute{
+							MarkdownDescription: "Capture matched packet",
+							Computed:            true,
+						},
 						"permit_log": schema.BoolAttribute{
 							MarkdownDescription: "Log matches against this entry",
 							Computed:            true,
@@ -398,18 +398,6 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 						},
 						"deny_counter": schema.StringAttribute{
 							MarkdownDescription: "Counter for this ACE",
-							Computed:            true,
-						},
-						"deny_capture": schema.BoolAttribute{
-							MarkdownDescription: "Capture matched packet",
-							Computed:            true,
-						},
-						"deny_icmp_off": schema.BoolAttribute{
-							MarkdownDescription: "Do not generate the ICMP message",
-							Computed:            true,
-						},
-						"deny_icmp_on": schema.BoolAttribute{
-							MarkdownDescription: "Generate the ICMP message",
 							Computed:            true,
 						},
 						"deny_range_start_protocol": schema.StringAttribute{
@@ -632,6 +620,10 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "Set Priority option on this entry",
 							Computed:            true,
 						},
+						"deny_capture": schema.BoolAttribute{
+							MarkdownDescription: "Capture matched packet",
+							Computed:            true,
+						},
 						"deny_log": schema.BoolAttribute{
 							MarkdownDescription: "Log matches against this entry",
 							Computed:            true,
@@ -646,6 +638,14 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 						},
 						"deny_set_ttl": schema.Int64Attribute{
 							MarkdownDescription: "Set ttl value",
+							Computed:            true,
+						},
+						"deny_icmp_off": schema.BoolAttribute{
+							MarkdownDescription: "Do not generate the ICMP message",
+							Computed:            true,
+						},
+						"deny_icmp_on": schema.BoolAttribute{
+							MarkdownDescription: "Generate the ICMP message",
 							Computed:            true,
 						},
 					},

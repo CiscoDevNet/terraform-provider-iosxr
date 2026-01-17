@@ -7,7 +7,7 @@ description: |-
 
 # Changelog
 
-## 0.7.0
+## Unreleased
 
 - BREAKING CHANGE: Decompose `iosxr_interface` into individual interface type resource and data source
   - Interface types:

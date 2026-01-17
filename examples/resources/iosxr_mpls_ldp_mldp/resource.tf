@@ -1,7 +1,7 @@
 resource "iosxr_mpls_ldp_mldp" "example" {
   logging_notifications = true
   logging_internal      = true
-  address_families = [
+  address_family = [
     {
       name = "ipv4"
       statics = [

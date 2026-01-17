@@ -163,7 +163,7 @@ func (r *TelemetryModelDrivenResource) Schema(ctx context.Context, req resource.
 								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
-						"address_families": schema.ListNestedAttribute{
+						"address_family": schema.ListNestedAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Destination address of the recepient of the telemetry information").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{

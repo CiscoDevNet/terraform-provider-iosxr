@@ -16,7 +16,7 @@ This resource can manage the MPLS LDP MLDP configuration.
 resource "iosxr_mpls_ldp_mldp" "example" {
   logging_notifications = true
   logging_internal      = true
-  address_families = [
+  address_family = [
     {
       name = "ipv4"
       statics = [
@@ -55,7 +55,7 @@ resource "iosxr_mpls_ldp_mldp" "example" {
 
 ### Optional
 
-- `address_families` (Attributes List) Configure Address Family and its parameters (see [below for nested schema](#nestedatt--address_families))
+- `address_family` (Attributes List) Configure Address Family and its parameters (see [below for nested schema](#nestedatt--address_family))
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
@@ -66,8 +66,8 @@ resource "iosxr_mpls_ldp_mldp" "example" {
 
 - `id` (String) The path of the object.
 
-<a id="nestedatt--address_families"></a>
-### Nested Schema for `address_families`
+<a id="nestedatt--address_family"></a>
+### Nested Schema for `address_family`
 
 Required:
 
@@ -86,16 +86,16 @@ Optional:
 - `make_before_break_route_policy` (String) Route policy
 - `mofrr_enable` (Boolean) MLDP MoFRR support
 - `mofrr_route_policy` (String) Route policy
-- `neighbors` (Attributes List) configure this node (see [below for nested schema](#nestedatt--address_families--neighbors))
+- `neighbors` (Attributes List) configure this node (see [below for nested schema](#nestedatt--address_family--neighbors))
 - `neighbors_route_policy_in` (String) Route policy
 - `neighbors_route_policy_out` (String) Route policy
 - `recursive_fec_enable` (Boolean) MLDP Recursive FEC enable
 - `recursive_fec_route_policy` (String) Route policy
 - `rib_unicast_always` (Boolean) Always use unicast table for root lookup
-- `statics` (Attributes List) Static mLDP LSP (see [below for nested schema](#nestedatt--address_families--statics))
+- `statics` (Attributes List) Static mLDP LSP (see [below for nested schema](#nestedatt--address_family--statics))
 
-<a id="nestedatt--address_families--neighbors"></a>
-### Nested Schema for `address_families.neighbors`
+<a id="nestedatt--address_family--neighbors"></a>
+### Nested Schema for `address_family.neighbors`
 
 Required:
 
@@ -107,8 +107,8 @@ Optional:
 - `neighbor_route_policy_out` (String) Route policy
 
 
-<a id="nestedatt--address_families--statics"></a>
-### Nested Schema for `address_families.statics`
+<a id="nestedatt--address_family--statics"></a>
+### Nested Schema for `address_family.statics`
 
 Required:
 

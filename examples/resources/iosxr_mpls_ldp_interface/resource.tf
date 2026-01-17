@@ -5,7 +5,7 @@ resource "iosxr_mpls_ldp_interface" "example" {
   discovery_hello_dual_stack_tlv = "ipv4"
   discovery_quick_start_disable  = true
   igp_sync_delay_on_session_up   = 20
-  address_families = [
+  address_family = [
     {
       af_name                        = "ipv4"
       discovery_transport_address_ip = "192.168.1.1"

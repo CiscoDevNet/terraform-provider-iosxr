@@ -58,7 +58,7 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
   graceful_maintenance_activate                  = true
   graceful_maintenance_local_preference          = 200
   graceful_maintenance_as_prepends_number        = 3
-  address_families = [
+  address_family = [
     {
       af_name                                             = "vpnv4-unicast"
       encapsulation_type                                  = "srv6"

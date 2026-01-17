@@ -869,7 +869,7 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 							MarkdownDescription: "Disable Unequal Cost Load Balancing (UCMP) for Flex-Algo",
 							Computed:            true,
 						},
-						"address_families": schema.ListNestedAttribute{
+						"address_family": schema.ListNestedAttribute{
 							MarkdownDescription: "Enter the IS-IS Flex-Algo address-family configuration submode",
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{

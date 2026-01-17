@@ -126,7 +126,7 @@ func (r *MPLSLDPInterfaceResource) Schema(ctx context.Context, req resource.Sche
 				MarkdownDescription: helpers.NewAttributeDescription("Disable").String,
 				Optional:            true,
 			},
-			"address_families": schema.ListNestedAttribute{
+			"address_family": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Configure Address Family and its parameters").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{

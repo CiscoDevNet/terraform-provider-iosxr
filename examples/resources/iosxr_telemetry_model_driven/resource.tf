@@ -14,7 +14,7 @@ resource "iosxr_telemetry_model_driven" "example" {
     {
       name = "DEST-GROUP-1"
       vrf  = "VRF1"
-      address_families = [
+      address_family = [
         {
           af_name              = "ipv4"
           address              = "10.1.1.1"

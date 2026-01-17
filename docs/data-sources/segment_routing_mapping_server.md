@@ -27,18 +27,18 @@ data "iosxr_segment_routing_mapping_server" "example" {
 ### Read-Only
 
 - `id` (String) The path of the retrieved object.
-- `mapping_prefix_sid_address_families` (Attributes List) Address Family (see [below for nested schema](#nestedatt--mapping_prefix_sid_address_families))
+- `mapping_prefix_sid_address_family` (Attributes List) Address Family (see [below for nested schema](#nestedatt--mapping_prefix_sid_address_family))
 
-<a id="nestedatt--mapping_prefix_sid_address_families"></a>
-### Nested Schema for `mapping_prefix_sid_address_families`
+<a id="nestedatt--mapping_prefix_sid_address_family"></a>
+### Nested Schema for `mapping_prefix_sid_address_family`
 
 Read-Only:
 
 - `af_name` (String) Address Family
-- `prefix_addresses` (Attributes List) SID index range (see [below for nested schema](#nestedatt--mapping_prefix_sid_address_families--prefix_addresses))
+- `prefix_addresses` (Attributes List) SID index range (see [below for nested schema](#nestedatt--mapping_prefix_sid_address_family--prefix_addresses))
 
-<a id="nestedatt--mapping_prefix_sid_address_families--prefix_addresses"></a>
-### Nested Schema for `mapping_prefix_sid_address_families.prefix_addresses`
+<a id="nestedatt--mapping_prefix_sid_address_family--prefix_addresses"></a>
+### Nested Schema for `mapping_prefix_sid_address_family.prefix_addresses`
 
 Read-Only:
 

@@ -35,32 +35,32 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type MPLSLDPInterface struct {
-	Device                         types.String                      `tfsdk:"device"`
-	Id                             types.String                      `tfsdk:"id"`
-	DeleteMode                     types.String                      `tfsdk:"delete_mode"`
-	InterfaceName                  types.String                      `tfsdk:"interface_name"`
-	DiscoveryHelloHoldtime         types.Int64                       `tfsdk:"discovery_hello_holdtime"`
-	DiscoveryHelloInterval         types.Int64                       `tfsdk:"discovery_hello_interval"`
-	DiscoveryHelloDualStackTlv     types.String                      `tfsdk:"discovery_hello_dual_stack_tlv"`
-	DiscoveryQuickStartDisable     types.Bool                        `tfsdk:"discovery_quick_start_disable"`
-	IgpSyncDelayOnSessionUp        types.Int64                       `tfsdk:"igp_sync_delay_on_session_up"`
-	IgpSyncDelayOnSessionUpDisable types.Bool                        `tfsdk:"igp_sync_delay_on_session_up_disable"`
-	AddressFamilies                []MPLSLDPInterfaceAddressFamilies `tfsdk:"address_families"`
+	Device                         types.String                    `tfsdk:"device"`
+	Id                             types.String                    `tfsdk:"id"`
+	DeleteMode                     types.String                    `tfsdk:"delete_mode"`
+	InterfaceName                  types.String                    `tfsdk:"interface_name"`
+	DiscoveryHelloHoldtime         types.Int64                     `tfsdk:"discovery_hello_holdtime"`
+	DiscoveryHelloInterval         types.Int64                     `tfsdk:"discovery_hello_interval"`
+	DiscoveryHelloDualStackTlv     types.String                    `tfsdk:"discovery_hello_dual_stack_tlv"`
+	DiscoveryQuickStartDisable     types.Bool                      `tfsdk:"discovery_quick_start_disable"`
+	IgpSyncDelayOnSessionUp        types.Int64                     `tfsdk:"igp_sync_delay_on_session_up"`
+	IgpSyncDelayOnSessionUpDisable types.Bool                      `tfsdk:"igp_sync_delay_on_session_up_disable"`
+	AddressFamily                  []MPLSLDPInterfaceAddressFamily `tfsdk:"address_family"`
 }
 
 type MPLSLDPInterfaceData struct {
-	Device                         types.String                      `tfsdk:"device"`
-	Id                             types.String                      `tfsdk:"id"`
-	InterfaceName                  types.String                      `tfsdk:"interface_name"`
-	DiscoveryHelloHoldtime         types.Int64                       `tfsdk:"discovery_hello_holdtime"`
-	DiscoveryHelloInterval         types.Int64                       `tfsdk:"discovery_hello_interval"`
-	DiscoveryHelloDualStackTlv     types.String                      `tfsdk:"discovery_hello_dual_stack_tlv"`
-	DiscoveryQuickStartDisable     types.Bool                        `tfsdk:"discovery_quick_start_disable"`
-	IgpSyncDelayOnSessionUp        types.Int64                       `tfsdk:"igp_sync_delay_on_session_up"`
-	IgpSyncDelayOnSessionUpDisable types.Bool                        `tfsdk:"igp_sync_delay_on_session_up_disable"`
-	AddressFamilies                []MPLSLDPInterfaceAddressFamilies `tfsdk:"address_families"`
+	Device                         types.String                    `tfsdk:"device"`
+	Id                             types.String                    `tfsdk:"id"`
+	InterfaceName                  types.String                    `tfsdk:"interface_name"`
+	DiscoveryHelloHoldtime         types.Int64                     `tfsdk:"discovery_hello_holdtime"`
+	DiscoveryHelloInterval         types.Int64                     `tfsdk:"discovery_hello_interval"`
+	DiscoveryHelloDualStackTlv     types.String                    `tfsdk:"discovery_hello_dual_stack_tlv"`
+	DiscoveryQuickStartDisable     types.Bool                      `tfsdk:"discovery_quick_start_disable"`
+	IgpSyncDelayOnSessionUp        types.Int64                     `tfsdk:"igp_sync_delay_on_session_up"`
+	IgpSyncDelayOnSessionUpDisable types.Bool                      `tfsdk:"igp_sync_delay_on_session_up_disable"`
+	AddressFamily                  []MPLSLDPInterfaceAddressFamily `tfsdk:"address_family"`
 }
-type MPLSLDPInterfaceAddressFamilies struct {
+type MPLSLDPInterfaceAddressFamily struct {
 	AfName                             types.String `tfsdk:"af_name"`
 	DiscoveryTransportAddressInterface types.Bool   `tfsdk:"discovery_transport_address_interface"`
 	DiscoveryTransportAddressIp        types.String `tfsdk:"discovery_transport_address_ip"`
@@ -111,9 +111,9 @@ func (data MPLSLDPInterface) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "igp.sync.delay.on-session-up.disable", map[string]string{})
 		}
 	}
-	if len(data.AddressFamilies) > 0 {
+	if len(data.AddressFamily) > 0 {
 		body, _ = sjson.Set(body, "address-families.address-family", []interface{}{})
-		for index, item := range data.AddressFamilies {
+		for index, item := range data.AddressFamily {
 			if !item.AfName.IsNull() && !item.AfName.IsUnknown() {
 				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"af-name", item.AfName.ValueString())
 			}
@@ -183,9 +183,9 @@ func (data *MPLSLDPInterface) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.IgpSyncDelayOnSessionUpDisable = types.BoolNull()
 	}
-	for i := range data.AddressFamilies {
+	for i := range data.AddressFamily {
 		keys := [...]string{"af-name"}
-		keyValues := [...]string{data.AddressFamilies[i].AfName.ValueString()}
+		keyValues := [...]string{data.AddressFamily[i].AfName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "address-families.address-family").ForEach(
@@ -206,42 +206,42 @@ func (data *MPLSLDPInterface) updateFromBody(ctx context.Context, res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("af-name"); value.Exists() && !data.AddressFamilies[i].AfName.IsNull() {
-			data.AddressFamilies[i].AfName = types.StringValue(value.String())
+		if value := r.Get("af-name"); value.Exists() && !data.AddressFamily[i].AfName.IsNull() {
+			data.AddressFamily[i].AfName = types.StringValue(value.String())
 		} else {
-			data.AddressFamilies[i].AfName = types.StringNull()
+			data.AddressFamily[i].AfName = types.StringNull()
 		}
-		if value := r.Get("discovery.transport-address.interface"); !data.AddressFamilies[i].DiscoveryTransportAddressInterface.IsNull() {
+		if value := r.Get("discovery.transport-address.interface"); !data.AddressFamily[i].DiscoveryTransportAddressInterface.IsNull() {
 			if value.Exists() {
-				data.AddressFamilies[i].DiscoveryTransportAddressInterface = types.BoolValue(true)
+				data.AddressFamily[i].DiscoveryTransportAddressInterface = types.BoolValue(true)
 			} else {
-				data.AddressFamilies[i].DiscoveryTransportAddressInterface = types.BoolValue(false)
+				data.AddressFamily[i].DiscoveryTransportAddressInterface = types.BoolValue(false)
 			}
 		} else {
-			data.AddressFamilies[i].DiscoveryTransportAddressInterface = types.BoolNull()
+			data.AddressFamily[i].DiscoveryTransportAddressInterface = types.BoolNull()
 		}
-		if value := r.Get("discovery.transport-address.ip-address"); value.Exists() && !data.AddressFamilies[i].DiscoveryTransportAddressIp.IsNull() {
-			data.AddressFamilies[i].DiscoveryTransportAddressIp = types.StringValue(value.String())
+		if value := r.Get("discovery.transport-address.ip-address"); value.Exists() && !data.AddressFamily[i].DiscoveryTransportAddressIp.IsNull() {
+			data.AddressFamily[i].DiscoveryTransportAddressIp = types.StringValue(value.String())
 		} else {
-			data.AddressFamilies[i].DiscoveryTransportAddressIp = types.StringNull()
+			data.AddressFamily[i].DiscoveryTransportAddressIp = types.StringNull()
 		}
-		if value := r.Get("igp.auto-config.disable"); !data.AddressFamilies[i].IgpAutoConfigDisable.IsNull() {
+		if value := r.Get("igp.auto-config.disable"); !data.AddressFamily[i].IgpAutoConfigDisable.IsNull() {
 			if value.Exists() {
-				data.AddressFamilies[i].IgpAutoConfigDisable = types.BoolValue(true)
+				data.AddressFamily[i].IgpAutoConfigDisable = types.BoolValue(true)
 			} else {
-				data.AddressFamilies[i].IgpAutoConfigDisable = types.BoolValue(false)
+				data.AddressFamily[i].IgpAutoConfigDisable = types.BoolValue(false)
 			}
 		} else {
-			data.AddressFamilies[i].IgpAutoConfigDisable = types.BoolNull()
+			data.AddressFamily[i].IgpAutoConfigDisable = types.BoolNull()
 		}
-		if value := r.Get("mldp.disable"); !data.AddressFamilies[i].MldpDisable.IsNull() {
+		if value := r.Get("mldp.disable"); !data.AddressFamily[i].MldpDisable.IsNull() {
 			if value.Exists() {
-				data.AddressFamilies[i].MldpDisable = types.BoolValue(true)
+				data.AddressFamily[i].MldpDisable = types.BoolValue(true)
 			} else {
-				data.AddressFamilies[i].MldpDisable = types.BoolValue(false)
+				data.AddressFamily[i].MldpDisable = types.BoolValue(false)
 			}
 		} else {
-			data.AddressFamilies[i].MldpDisable = types.BoolNull()
+			data.AddressFamily[i].MldpDisable = types.BoolNull()
 		}
 	}
 }
@@ -274,9 +274,9 @@ func (data *MPLSLDPInterface) fromBody(ctx context.Context, res []byte) {
 		data.IgpSyncDelayOnSessionUpDisable = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "address-families.address-family"); value.Exists() {
-		data.AddressFamilies = make([]MPLSLDPInterfaceAddressFamilies, 0)
+		data.AddressFamily = make([]MPLSLDPInterfaceAddressFamily, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := MPLSLDPInterfaceAddressFamilies{}
+			item := MPLSLDPInterfaceAddressFamily{}
 			if cValue := v.Get("af-name"); cValue.Exists() {
 				item.AfName = types.StringValue(cValue.String())
 			}
@@ -298,7 +298,7 @@ func (data *MPLSLDPInterface) fromBody(ctx context.Context, res []byte) {
 			} else {
 				item.MldpDisable = types.BoolValue(false)
 			}
-			data.AddressFamilies = append(data.AddressFamilies, item)
+			data.AddressFamily = append(data.AddressFamily, item)
 			return true
 		})
 	}
@@ -332,9 +332,9 @@ func (data *MPLSLDPInterfaceData) fromBody(ctx context.Context, res []byte) {
 		data.IgpSyncDelayOnSessionUpDisable = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "address-families.address-family"); value.Exists() {
-		data.AddressFamilies = make([]MPLSLDPInterfaceAddressFamilies, 0)
+		data.AddressFamily = make([]MPLSLDPInterfaceAddressFamily, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := MPLSLDPInterfaceAddressFamilies{}
+			item := MPLSLDPInterfaceAddressFamily{}
 			if cValue := v.Get("af-name"); cValue.Exists() {
 				item.AfName = types.StringValue(cValue.String())
 			}
@@ -356,7 +356,7 @@ func (data *MPLSLDPInterfaceData) fromBody(ctx context.Context, res []byte) {
 			} else {
 				item.MldpDisable = types.BoolValue(false)
 			}
-			data.AddressFamilies = append(data.AddressFamilies, item)
+			data.AddressFamily = append(data.AddressFamily, item)
 			return true
 		})
 	}
@@ -368,16 +368,16 @@ func (data *MPLSLDPInterfaceData) fromBody(ctx context.Context, res []byte) {
 
 func (data *MPLSLDPInterface) getDeletedItems(ctx context.Context, state MPLSLDPInterface) []string {
 	deletedItems := make([]string, 0)
-	for i := range state.AddressFamilies {
+	for i := range state.AddressFamily {
 		keys := [...]string{"af-name"}
-		stateKeyValues := [...]string{state.AddressFamilies[i].AfName.ValueString()}
+		stateKeyValues := [...]string{state.AddressFamily[i].AfName.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.AddressFamilies[i].AfName.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.AddressFamily[i].AfName.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -385,22 +385,22 @@ func (data *MPLSLDPInterface) getDeletedItems(ctx context.Context, state MPLSLDP
 		}
 
 		found := false
-		for j := range data.AddressFamilies {
+		for j := range data.AddressFamily {
 			found = true
-			if state.AddressFamilies[i].AfName.ValueString() != data.AddressFamilies[j].AfName.ValueString() {
+			if state.AddressFamily[i].AfName.ValueString() != data.AddressFamily[j].AfName.ValueString() {
 				found = false
 			}
 			if found {
-				if !state.AddressFamilies[i].MldpDisable.IsNull() && data.AddressFamilies[j].MldpDisable.IsNull() {
+				if !state.AddressFamily[i].MldpDisable.IsNull() && data.AddressFamily[j].MldpDisable.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/mldp/disable", state.getPath(), keyString))
 				}
-				if !state.AddressFamilies[i].IgpAutoConfigDisable.IsNull() && data.AddressFamilies[j].IgpAutoConfigDisable.IsNull() {
+				if !state.AddressFamily[i].IgpAutoConfigDisable.IsNull() && data.AddressFamily[j].IgpAutoConfigDisable.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/igp/auto-config/disable", state.getPath(), keyString))
 				}
-				if !state.AddressFamilies[i].DiscoveryTransportAddressIp.IsNull() && data.AddressFamilies[j].DiscoveryTransportAddressIp.IsNull() {
+				if !state.AddressFamily[i].DiscoveryTransportAddressIp.IsNull() && data.AddressFamily[j].DiscoveryTransportAddressIp.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/discovery/transport-address/ip-address", state.getPath(), keyString))
 				}
-				if !state.AddressFamilies[i].DiscoveryTransportAddressInterface.IsNull() && data.AddressFamilies[j].DiscoveryTransportAddressInterface.IsNull() {
+				if !state.AddressFamily[i].DiscoveryTransportAddressInterface.IsNull() && data.AddressFamily[j].DiscoveryTransportAddressInterface.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/discovery/transport-address/interface", state.getPath(), keyString))
 				}
 				break
@@ -437,20 +437,20 @@ func (data *MPLSLDPInterface) getDeletedItems(ctx context.Context, state MPLSLDP
 
 func (data *MPLSLDPInterface) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	for i := range data.AddressFamilies {
+	for i := range data.AddressFamily {
 		keys := [...]string{"af-name"}
-		keyValues := [...]string{data.AddressFamilies[i].AfName.ValueString()}
+		keyValues := [...]string{data.AddressFamily[i].AfName.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		if !data.AddressFamilies[i].MldpDisable.IsNull() && !data.AddressFamilies[i].MldpDisable.ValueBool() {
+		if !data.AddressFamily[i].MldpDisable.IsNull() && !data.AddressFamily[i].MldpDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/mldp/disable", data.getPath(), keyString))
 		}
-		if !data.AddressFamilies[i].IgpAutoConfigDisable.IsNull() && !data.AddressFamilies[i].IgpAutoConfigDisable.ValueBool() {
+		if !data.AddressFamily[i].IgpAutoConfigDisable.IsNull() && !data.AddressFamily[i].IgpAutoConfigDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/igp/auto-config/disable", data.getPath(), keyString))
 		}
-		if !data.AddressFamilies[i].DiscoveryTransportAddressInterface.IsNull() && !data.AddressFamilies[i].DiscoveryTransportAddressInterface.ValueBool() {
+		if !data.AddressFamily[i].DiscoveryTransportAddressInterface.IsNull() && !data.AddressFamily[i].DiscoveryTransportAddressInterface.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/discovery/transport-address/interface", data.getPath(), keyString))
 		}
 	}
@@ -469,9 +469,9 @@ func (data *MPLSLDPInterface) getEmptyLeafsDelete(ctx context.Context) []string 
 
 func (data *MPLSLDPInterface) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	for i := range data.AddressFamilies {
+	for i := range data.AddressFamily {
 		keys := [...]string{"af-name"}
-		keyValues := [...]string{data.AddressFamilies[i].AfName.ValueString()}
+		keyValues := [...]string{data.AddressFamily[i].AfName.ValueString()}
 
 		keyString := ""
 		for ki := range keys {

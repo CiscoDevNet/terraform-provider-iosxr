@@ -124,7 +124,7 @@ func (d *TelemetryModelDrivenDataSource) Schema(ctx context.Context, req datasou
 							MarkdownDescription: "vrf for the dest grp",
 							Computed:            true,
 						},
-						"address_families": schema.ListNestedAttribute{
+						"address_family": schema.ListNestedAttribute{
 							MarkdownDescription: "Destination address of the recepient of the telemetry information",
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{

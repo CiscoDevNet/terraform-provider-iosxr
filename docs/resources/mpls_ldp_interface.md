@@ -20,7 +20,7 @@ resource "iosxr_mpls_ldp_interface" "example" {
   discovery_hello_dual_stack_tlv = "ipv4"
   discovery_quick_start_disable  = true
   igp_sync_delay_on_session_up   = 20
-  address_families = [
+  address_family = [
     {
       af_name                        = "ipv4"
       discovery_transport_address_ip = "192.168.1.1"
@@ -40,7 +40,7 @@ resource "iosxr_mpls_ldp_interface" "example" {
 
 ### Optional
 
-- `address_families` (Attributes List) Configure Address Family and its parameters (see [below for nested schema](#nestedatt--address_families))
+- `address_family` (Attributes List) Configure Address Family and its parameters (see [below for nested schema](#nestedatt--address_family))
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
@@ -59,8 +59,8 @@ resource "iosxr_mpls_ldp_interface" "example" {
 
 - `id` (String) The path of the object.
 
-<a id="nestedatt--address_families"></a>
-### Nested Schema for `address_families`
+<a id="nestedatt--address_family"></a>
+### Nested Schema for `address_family`
 
 Required:
 

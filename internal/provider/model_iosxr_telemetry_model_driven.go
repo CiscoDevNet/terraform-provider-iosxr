@@ -73,10 +73,10 @@ type TelemetryModelDrivenData struct {
 	SensorGroups                    []TelemetryModelDrivenSensorGroups      `tfsdk:"sensor_groups"`
 }
 type TelemetryModelDrivenDestinationGroups struct {
-	Name            types.String                                           `tfsdk:"name"`
-	Vrf             types.String                                           `tfsdk:"vrf"`
-	AddressFamilies []TelemetryModelDrivenDestinationGroupsAddressFamilies `tfsdk:"address_families"`
-	Destinations    []TelemetryModelDrivenDestinationGroupsDestinations    `tfsdk:"destinations"`
+	Name          types.String                                         `tfsdk:"name"`
+	Vrf           types.String                                         `tfsdk:"vrf"`
+	AddressFamily []TelemetryModelDrivenDestinationGroupsAddressFamily `tfsdk:"address_family"`
+	Destinations  []TelemetryModelDrivenDestinationGroupsDestinations  `tfsdk:"destinations"`
 }
 type TelemetryModelDrivenSubscriptions struct {
 	Name              types.String                                      `tfsdk:"name"`
@@ -91,7 +91,7 @@ type TelemetryModelDrivenSensorGroups struct {
 	Name        types.String                                  `tfsdk:"name"`
 	SensorPaths []TelemetryModelDrivenSensorGroupsSensorPaths `tfsdk:"sensor_paths"`
 }
-type TelemetryModelDrivenDestinationGroupsAddressFamilies struct {
+type TelemetryModelDrivenDestinationGroupsAddressFamily struct {
 	AfName                  types.String `tfsdk:"af_name"`
 	Address                 types.String `tfsdk:"address"`
 	Port                    types.Int64  `tfsdk:"port"`
@@ -202,9 +202,9 @@ func (data TelemetryModelDriven) toBody(ctx context.Context) string {
 			if !item.Vrf.IsNull() && !item.Vrf.IsUnknown() {
 				body, _ = sjson.Set(body, "destination-groups.destination-group"+"."+strconv.Itoa(index)+"."+"vrf", item.Vrf.ValueString())
 			}
-			if len(item.AddressFamilies) > 0 {
+			if len(item.AddressFamily) > 0 {
 				body, _ = sjson.Set(body, "destination-groups.destination-group"+"."+strconv.Itoa(index)+"."+"address-families.address-family", []interface{}{})
-				for cindex, citem := range item.AddressFamilies {
+				for cindex, citem := range item.AddressFamily {
 					if !citem.AfName.IsNull() && !citem.AfName.IsUnknown() {
 						body, _ = sjson.Set(body, "destination-groups.destination-group"+"."+strconv.Itoa(index)+"."+"address-families.address-family"+"."+strconv.Itoa(cindex)+"."+"af-name", citem.AfName.ValueString())
 					}
@@ -487,9 +487,9 @@ func (data *TelemetryModelDriven) updateFromBody(ctx context.Context, res []byte
 		} else {
 			data.DestinationGroups[i].Vrf = types.StringNull()
 		}
-		for ci := range data.DestinationGroups[i].AddressFamilies {
+		for ci := range data.DestinationGroups[i].AddressFamily {
 			keys := [...]string{"af-name", "destination-address", "port"}
-			keyValues := [...]string{data.DestinationGroups[i].AddressFamilies[ci].AfName.ValueString(), data.DestinationGroups[i].AddressFamilies[ci].Address.ValueString(), strconv.FormatInt(data.DestinationGroups[i].AddressFamilies[ci].Port.ValueInt64(), 10)}
+			keyValues := [...]string{data.DestinationGroups[i].AddressFamily[ci].AfName.ValueString(), data.DestinationGroups[i].AddressFamily[ci].Address.ValueString(), strconv.FormatInt(data.DestinationGroups[i].AddressFamily[ci].Port.ValueInt64(), 10)}
 
 			var cr gjson.Result
 			r.Get("address-families.address-family").ForEach(
@@ -510,80 +510,80 @@ func (data *TelemetryModelDriven) updateFromBody(ctx context.Context, res []byte
 					return true
 				},
 			)
-			if value := cr.Get("af-name"); value.Exists() && !data.DestinationGroups[i].AddressFamilies[ci].AfName.IsNull() {
-				data.DestinationGroups[i].AddressFamilies[ci].AfName = types.StringValue(value.String())
+			if value := cr.Get("af-name"); value.Exists() && !data.DestinationGroups[i].AddressFamily[ci].AfName.IsNull() {
+				data.DestinationGroups[i].AddressFamily[ci].AfName = types.StringValue(value.String())
 			} else {
-				data.DestinationGroups[i].AddressFamilies[ci].AfName = types.StringNull()
+				data.DestinationGroups[i].AddressFamily[ci].AfName = types.StringNull()
 			}
-			if value := cr.Get("destination-address"); value.Exists() && !data.DestinationGroups[i].AddressFamilies[ci].Address.IsNull() {
-				data.DestinationGroups[i].AddressFamilies[ci].Address = types.StringValue(value.String())
+			if value := cr.Get("destination-address"); value.Exists() && !data.DestinationGroups[i].AddressFamily[ci].Address.IsNull() {
+				data.DestinationGroups[i].AddressFamily[ci].Address = types.StringValue(value.String())
 			} else {
-				data.DestinationGroups[i].AddressFamilies[ci].Address = types.StringNull()
+				data.DestinationGroups[i].AddressFamily[ci].Address = types.StringNull()
 			}
-			if value := cr.Get("port"); value.Exists() && !data.DestinationGroups[i].AddressFamilies[ci].Port.IsNull() {
-				data.DestinationGroups[i].AddressFamilies[ci].Port = types.Int64Value(value.Int())
+			if value := cr.Get("port"); value.Exists() && !data.DestinationGroups[i].AddressFamily[ci].Port.IsNull() {
+				data.DestinationGroups[i].AddressFamily[ci].Port = types.Int64Value(value.Int())
 			} else {
-				data.DestinationGroups[i].AddressFamilies[ci].Port = types.Int64Null()
+				data.DestinationGroups[i].AddressFamily[ci].Port = types.Int64Null()
 			}
-			if value := cr.Get("encoding"); value.Exists() && !data.DestinationGroups[i].AddressFamilies[ci].Encoding.IsNull() {
-				data.DestinationGroups[i].AddressFamilies[ci].Encoding = types.StringValue(value.String())
+			if value := cr.Get("encoding"); value.Exists() && !data.DestinationGroups[i].AddressFamily[ci].Encoding.IsNull() {
+				data.DestinationGroups[i].AddressFamily[ci].Encoding = types.StringValue(value.String())
 			} else {
-				data.DestinationGroups[i].AddressFamilies[ci].Encoding = types.StringNull()
+				data.DestinationGroups[i].AddressFamily[ci].Encoding = types.StringNull()
 			}
-			if value := cr.Get("protocol.grpc"); !data.DestinationGroups[i].AddressFamilies[ci].ProtocolGrpc.IsNull() {
+			if value := cr.Get("protocol.grpc"); !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc.IsNull() {
 				if value.Exists() {
-					data.DestinationGroups[i].AddressFamilies[ci].ProtocolGrpc = types.BoolValue(true)
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc = types.BoolValue(true)
 				} else {
-					data.DestinationGroups[i].AddressFamilies[ci].ProtocolGrpc = types.BoolValue(false)
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc = types.BoolValue(false)
 				}
 			} else {
-				data.DestinationGroups[i].AddressFamilies[ci].ProtocolGrpc = types.BoolNull()
+				data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc = types.BoolNull()
 			}
-			if value := cr.Get("protocol.grpc.no-tls"); !data.DestinationGroups[i].AddressFamilies[ci].ProtocolGrpcNoTls.IsNull() {
+			if value := cr.Get("protocol.grpc.no-tls"); !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls.IsNull() {
 				if value.Exists() {
-					data.DestinationGroups[i].AddressFamilies[ci].ProtocolGrpcNoTls = types.BoolValue(true)
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls = types.BoolValue(true)
 				} else {
-					data.DestinationGroups[i].AddressFamilies[ci].ProtocolGrpcNoTls = types.BoolValue(false)
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls = types.BoolValue(false)
 				}
 			} else {
-				data.DestinationGroups[i].AddressFamilies[ci].ProtocolGrpcNoTls = types.BoolNull()
+				data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls = types.BoolNull()
 			}
-			if value := cr.Get("protocol.grpc.tls-hostname"); value.Exists() && !data.DestinationGroups[i].AddressFamilies[ci].ProtocolGrpcTlsHostname.IsNull() {
-				data.DestinationGroups[i].AddressFamilies[ci].ProtocolGrpcTlsHostname = types.StringValue(value.String())
+			if value := cr.Get("protocol.grpc.tls-hostname"); value.Exists() && !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcTlsHostname.IsNull() {
+				data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcTlsHostname = types.StringValue(value.String())
 			} else {
-				data.DestinationGroups[i].AddressFamilies[ci].ProtocolGrpcTlsHostname = types.StringNull()
+				data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcTlsHostname = types.StringNull()
 			}
-			if value := cr.Get("protocol.grpc.gzip"); !data.DestinationGroups[i].AddressFamilies[ci].ProtocolGrpcGzip.IsNull() {
+			if value := cr.Get("protocol.grpc.gzip"); !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip.IsNull() {
 				if value.Exists() {
-					data.DestinationGroups[i].AddressFamilies[ci].ProtocolGrpcGzip = types.BoolValue(true)
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip = types.BoolValue(true)
 				} else {
-					data.DestinationGroups[i].AddressFamilies[ci].ProtocolGrpcGzip = types.BoolValue(false)
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip = types.BoolValue(false)
 				}
 			} else {
-				data.DestinationGroups[i].AddressFamilies[ci].ProtocolGrpcGzip = types.BoolNull()
+				data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip = types.BoolNull()
 			}
-			if value := cr.Get("protocol.tcp"); !data.DestinationGroups[i].AddressFamilies[ci].ProtocolTcp.IsNull() {
+			if value := cr.Get("protocol.tcp"); !data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp.IsNull() {
 				if value.Exists() {
-					data.DestinationGroups[i].AddressFamilies[ci].ProtocolTcp = types.BoolValue(true)
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp = types.BoolValue(true)
 				} else {
-					data.DestinationGroups[i].AddressFamilies[ci].ProtocolTcp = types.BoolValue(false)
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp = types.BoolValue(false)
 				}
 			} else {
-				data.DestinationGroups[i].AddressFamilies[ci].ProtocolTcp = types.BoolNull()
+				data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp = types.BoolNull()
 			}
-			if value := cr.Get("protocol.udp"); !data.DestinationGroups[i].AddressFamilies[ci].ProtocolUdp.IsNull() {
+			if value := cr.Get("protocol.udp"); !data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp.IsNull() {
 				if value.Exists() {
-					data.DestinationGroups[i].AddressFamilies[ci].ProtocolUdp = types.BoolValue(true)
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp = types.BoolValue(true)
 				} else {
-					data.DestinationGroups[i].AddressFamilies[ci].ProtocolUdp = types.BoolValue(false)
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp = types.BoolValue(false)
 				}
 			} else {
-				data.DestinationGroups[i].AddressFamilies[ci].ProtocolUdp = types.BoolNull()
+				data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp = types.BoolNull()
 			}
-			if value := cr.Get("protocol.udp.packetsize"); value.Exists() && !data.DestinationGroups[i].AddressFamilies[ci].ProtocolUdpPacketsize.IsNull() {
-				data.DestinationGroups[i].AddressFamilies[ci].ProtocolUdpPacketsize = types.Int64Value(value.Int())
+			if value := cr.Get("protocol.udp.packetsize"); value.Exists() && !data.DestinationGroups[i].AddressFamily[ci].ProtocolUdpPacketsize.IsNull() {
+				data.DestinationGroups[i].AddressFamily[ci].ProtocolUdpPacketsize = types.Int64Value(value.Int())
 			} else {
-				data.DestinationGroups[i].AddressFamilies[ci].ProtocolUdpPacketsize = types.Int64Null()
+				data.DestinationGroups[i].AddressFamily[ci].ProtocolUdpPacketsize = types.Int64Null()
 			}
 		}
 		for ci := range data.DestinationGroups[i].Destinations {
@@ -945,9 +945,9 @@ func (data *TelemetryModelDriven) fromBody(ctx context.Context, res []byte) {
 				item.Vrf = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("address-families.address-family"); cValue.Exists() {
-				item.AddressFamilies = make([]TelemetryModelDrivenDestinationGroupsAddressFamilies, 0)
+				item.AddressFamily = make([]TelemetryModelDrivenDestinationGroupsAddressFamily, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := TelemetryModelDrivenDestinationGroupsAddressFamilies{}
+					cItem := TelemetryModelDrivenDestinationGroupsAddressFamily{}
 					if ccValue := cv.Get("af-name"); ccValue.Exists() {
 						cItem.AfName = types.StringValue(ccValue.String())
 					}
@@ -991,7 +991,7 @@ func (data *TelemetryModelDriven) fromBody(ctx context.Context, res []byte) {
 					if ccValue := cv.Get("protocol.udp.packetsize"); ccValue.Exists() {
 						cItem.ProtocolUdpPacketsize = types.Int64Value(ccValue.Int())
 					}
-					item.AddressFamilies = append(item.AddressFamilies, cItem)
+					item.AddressFamily = append(item.AddressFamily, cItem)
 					return true
 				})
 			}
@@ -1197,9 +1197,9 @@ func (data *TelemetryModelDrivenData) fromBody(ctx context.Context, res []byte) 
 				item.Vrf = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("address-families.address-family"); cValue.Exists() {
-				item.AddressFamilies = make([]TelemetryModelDrivenDestinationGroupsAddressFamilies, 0)
+				item.AddressFamily = make([]TelemetryModelDrivenDestinationGroupsAddressFamily, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := TelemetryModelDrivenDestinationGroupsAddressFamilies{}
+					cItem := TelemetryModelDrivenDestinationGroupsAddressFamily{}
 					if ccValue := cv.Get("af-name"); ccValue.Exists() {
 						cItem.AfName = types.StringValue(ccValue.String())
 					}
@@ -1243,7 +1243,7 @@ func (data *TelemetryModelDrivenData) fromBody(ctx context.Context, res []byte) 
 					if ccValue := cv.Get("protocol.udp.packetsize"); ccValue.Exists() {
 						cItem.ProtocolUdpPacketsize = types.Int64Value(ccValue.Int())
 					}
-					item.AddressFamilies = append(item.AddressFamilies, cItem)
+					item.AddressFamily = append(item.AddressFamily, cItem)
 					return true
 				})
 			}
@@ -1659,22 +1659,22 @@ func (data *TelemetryModelDriven) getDeletedItems(ctx context.Context, state Tel
 						deletedItems = append(deletedItems, fmt.Sprintf("%v/destination-groups/destination-group%v/destinations/destination%v", state.getPath(), keyString, ckeyString))
 					}
 				}
-				for ci := range state.DestinationGroups[i].AddressFamilies {
+				for ci := range state.DestinationGroups[i].AddressFamily {
 					ckeys := [...]string{"af-name", "destination-address", "port"}
-					cstateKeyValues := [...]string{state.DestinationGroups[i].AddressFamilies[ci].AfName.ValueString(), state.DestinationGroups[i].AddressFamilies[ci].Address.ValueString(), strconv.FormatInt(state.DestinationGroups[i].AddressFamilies[ci].Port.ValueInt64(), 10)}
+					cstateKeyValues := [...]string{state.DestinationGroups[i].AddressFamily[ci].AfName.ValueString(), state.DestinationGroups[i].AddressFamily[ci].Address.ValueString(), strconv.FormatInt(state.DestinationGroups[i].AddressFamily[ci].Port.ValueInt64(), 10)}
 					ckeyString := ""
 					for cki := range ckeys {
 						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
 					}
 
 					cemptyKeys := true
-					if !reflect.ValueOf(state.DestinationGroups[i].AddressFamilies[ci].AfName.ValueString()).IsZero() {
+					if !reflect.ValueOf(state.DestinationGroups[i].AddressFamily[ci].AfName.ValueString()).IsZero() {
 						cemptyKeys = false
 					}
-					if !reflect.ValueOf(state.DestinationGroups[i].AddressFamilies[ci].Address.ValueString()).IsZero() {
+					if !reflect.ValueOf(state.DestinationGroups[i].AddressFamily[ci].Address.ValueString()).IsZero() {
 						cemptyKeys = false
 					}
-					if !reflect.ValueOf(state.DestinationGroups[i].AddressFamilies[ci].Port.ValueInt64()).IsZero() {
+					if !reflect.ValueOf(state.DestinationGroups[i].AddressFamily[ci].Port.ValueInt64()).IsZero() {
 						cemptyKeys = false
 					}
 					if cemptyKeys {
@@ -1682,40 +1682,40 @@ func (data *TelemetryModelDriven) getDeletedItems(ctx context.Context, state Tel
 					}
 
 					found := false
-					for cj := range data.DestinationGroups[j].AddressFamilies {
+					for cj := range data.DestinationGroups[j].AddressFamily {
 						found = true
-						if state.DestinationGroups[i].AddressFamilies[ci].AfName.ValueString() != data.DestinationGroups[j].AddressFamilies[cj].AfName.ValueString() {
+						if state.DestinationGroups[i].AddressFamily[ci].AfName.ValueString() != data.DestinationGroups[j].AddressFamily[cj].AfName.ValueString() {
 							found = false
 						}
-						if state.DestinationGroups[i].AddressFamilies[ci].Address.ValueString() != data.DestinationGroups[j].AddressFamilies[cj].Address.ValueString() {
+						if state.DestinationGroups[i].AddressFamily[ci].Address.ValueString() != data.DestinationGroups[j].AddressFamily[cj].Address.ValueString() {
 							found = false
 						}
-						if state.DestinationGroups[i].AddressFamilies[ci].Port.ValueInt64() != data.DestinationGroups[j].AddressFamilies[cj].Port.ValueInt64() {
+						if state.DestinationGroups[i].AddressFamily[ci].Port.ValueInt64() != data.DestinationGroups[j].AddressFamily[cj].Port.ValueInt64() {
 							found = false
 						}
 						if found {
-							if !state.DestinationGroups[i].AddressFamilies[ci].ProtocolUdpPacketsize.IsNull() && data.DestinationGroups[j].AddressFamilies[cj].ProtocolUdpPacketsize.IsNull() {
+							if !state.DestinationGroups[i].AddressFamily[ci].ProtocolUdpPacketsize.IsNull() && data.DestinationGroups[j].AddressFamily[cj].ProtocolUdpPacketsize.IsNull() {
 								deletedItems = append(deletedItems, fmt.Sprintf("%v/destination-groups/destination-group%v/address-families/address-family%v/protocol/udp", state.getPath(), keyString, ckeyString))
 							}
-							if !state.DestinationGroups[i].AddressFamilies[ci].ProtocolUdp.IsNull() && data.DestinationGroups[j].AddressFamilies[cj].ProtocolUdp.IsNull() {
+							if !state.DestinationGroups[i].AddressFamily[ci].ProtocolUdp.IsNull() && data.DestinationGroups[j].AddressFamily[cj].ProtocolUdp.IsNull() {
 								deletedItems = append(deletedItems, fmt.Sprintf("%v/destination-groups/destination-group%v/address-families/address-family%v/protocol/udp", state.getPath(), keyString, ckeyString))
 							}
-							if !state.DestinationGroups[i].AddressFamilies[ci].ProtocolTcp.IsNull() && data.DestinationGroups[j].AddressFamilies[cj].ProtocolTcp.IsNull() {
+							if !state.DestinationGroups[i].AddressFamily[ci].ProtocolTcp.IsNull() && data.DestinationGroups[j].AddressFamily[cj].ProtocolTcp.IsNull() {
 								deletedItems = append(deletedItems, fmt.Sprintf("%v/destination-groups/destination-group%v/address-families/address-family%v/protocol/tcp", state.getPath(), keyString, ckeyString))
 							}
-							if !state.DestinationGroups[i].AddressFamilies[ci].ProtocolGrpcGzip.IsNull() && data.DestinationGroups[j].AddressFamilies[cj].ProtocolGrpcGzip.IsNull() {
+							if !state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip.IsNull() && data.DestinationGroups[j].AddressFamily[cj].ProtocolGrpcGzip.IsNull() {
 								deletedItems = append(deletedItems, fmt.Sprintf("%v/destination-groups/destination-group%v/address-families/address-family%v/protocol/grpc", state.getPath(), keyString, ckeyString))
 							}
-							if !state.DestinationGroups[i].AddressFamilies[ci].ProtocolGrpcTlsHostname.IsNull() && data.DestinationGroups[j].AddressFamilies[cj].ProtocolGrpcTlsHostname.IsNull() {
+							if !state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcTlsHostname.IsNull() && data.DestinationGroups[j].AddressFamily[cj].ProtocolGrpcTlsHostname.IsNull() {
 								deletedItems = append(deletedItems, fmt.Sprintf("%v/destination-groups/destination-group%v/address-families/address-family%v/protocol/grpc", state.getPath(), keyString, ckeyString))
 							}
-							if !state.DestinationGroups[i].AddressFamilies[ci].ProtocolGrpcNoTls.IsNull() && data.DestinationGroups[j].AddressFamilies[cj].ProtocolGrpcNoTls.IsNull() {
+							if !state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls.IsNull() && data.DestinationGroups[j].AddressFamily[cj].ProtocolGrpcNoTls.IsNull() {
 								deletedItems = append(deletedItems, fmt.Sprintf("%v/destination-groups/destination-group%v/address-families/address-family%v/protocol/grpc", state.getPath(), keyString, ckeyString))
 							}
-							if !state.DestinationGroups[i].AddressFamilies[ci].ProtocolGrpc.IsNull() && data.DestinationGroups[j].AddressFamilies[cj].ProtocolGrpc.IsNull() {
+							if !state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc.IsNull() && data.DestinationGroups[j].AddressFamily[cj].ProtocolGrpc.IsNull() {
 								deletedItems = append(deletedItems, fmt.Sprintf("%v/destination-groups/destination-group%v/address-families/address-family%v/protocol/grpc", state.getPath(), keyString, ckeyString))
 							}
-							if !state.DestinationGroups[i].AddressFamilies[ci].Encoding.IsNull() && data.DestinationGroups[j].AddressFamilies[cj].Encoding.IsNull() {
+							if !state.DestinationGroups[i].AddressFamily[ci].Encoding.IsNull() && data.DestinationGroups[j].AddressFamily[cj].Encoding.IsNull() {
 								deletedItems = append(deletedItems, fmt.Sprintf("%v/destination-groups/destination-group%v/address-families/address-family%v/encoding", state.getPath(), keyString, ckeyString))
 							}
 							break
@@ -1853,26 +1853,26 @@ func (data *TelemetryModelDriven) getEmptyLeafsDelete(ctx context.Context) []str
 				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/destination-groups/destination-group%v/destinations/destination%v/protocol/grpc", data.getPath(), keyString, ckeyString))
 			}
 		}
-		for ci := range data.DestinationGroups[i].AddressFamilies {
+		for ci := range data.DestinationGroups[i].AddressFamily {
 			ckeys := [...]string{"af-name", "destination-address", "port"}
-			ckeyValues := [...]string{data.DestinationGroups[i].AddressFamilies[ci].AfName.ValueString(), data.DestinationGroups[i].AddressFamilies[ci].Address.ValueString(), strconv.FormatInt(data.DestinationGroups[i].AddressFamilies[ci].Port.ValueInt64(), 10)}
+			ckeyValues := [...]string{data.DestinationGroups[i].AddressFamily[ci].AfName.ValueString(), data.DestinationGroups[i].AddressFamily[ci].Address.ValueString(), strconv.FormatInt(data.DestinationGroups[i].AddressFamily[ci].Port.ValueInt64(), 10)}
 			ckeyString := ""
 			for cki := range ckeys {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
-			if !data.DestinationGroups[i].AddressFamilies[ci].ProtocolUdp.IsNull() && !data.DestinationGroups[i].AddressFamilies[ci].ProtocolUdp.ValueBool() {
+			if !data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp.IsNull() && !data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/destination-groups/destination-group%v/address-families/address-family%v/protocol/udp", data.getPath(), keyString, ckeyString))
 			}
-			if !data.DestinationGroups[i].AddressFamilies[ci].ProtocolTcp.IsNull() && !data.DestinationGroups[i].AddressFamilies[ci].ProtocolTcp.ValueBool() {
+			if !data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp.IsNull() && !data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/destination-groups/destination-group%v/address-families/address-family%v/protocol/tcp", data.getPath(), keyString, ckeyString))
 			}
-			if !data.DestinationGroups[i].AddressFamilies[ci].ProtocolGrpcGzip.IsNull() && !data.DestinationGroups[i].AddressFamilies[ci].ProtocolGrpcGzip.ValueBool() {
+			if !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip.IsNull() && !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/destination-groups/destination-group%v/address-families/address-family%v/protocol/grpc", data.getPath(), keyString, ckeyString))
 			}
-			if !data.DestinationGroups[i].AddressFamilies[ci].ProtocolGrpcNoTls.IsNull() && !data.DestinationGroups[i].AddressFamilies[ci].ProtocolGrpcNoTls.ValueBool() {
+			if !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls.IsNull() && !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/destination-groups/destination-group%v/address-families/address-family%v/protocol/grpc", data.getPath(), keyString, ckeyString))
 			}
-			if !data.DestinationGroups[i].AddressFamilies[ci].ProtocolGrpc.IsNull() && !data.DestinationGroups[i].AddressFamilies[ci].ProtocolGrpc.ValueBool() {
+			if !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc.IsNull() && !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/destination-groups/destination-group%v/address-families/address-family%v/protocol/grpc", data.getPath(), keyString, ckeyString))
 			}
 		}

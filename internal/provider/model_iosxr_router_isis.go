@@ -333,35 +333,35 @@ type RouterISISSrlgNames struct {
 	StaticIpv4Addresses []RouterISISSrlgNamesStaticIpv4Addresses `tfsdk:"static_ipv4_addresses"`
 }
 type RouterISISFlexAlgos struct {
-	Number                                types.Int64                          `tfsdk:"number"`
-	MinimumBandwidth                      types.Int64                          `tfsdk:"minimum_bandwidth"`
-	MaximumDelay                          types.Int64                          `tfsdk:"maximum_delay"`
-	Priority                              types.Int64                          `tfsdk:"priority"`
-	MetricType                            types.String                         `tfsdk:"metric_type"`
-	AdvertiseDefinition                   types.Bool                           `tfsdk:"advertise_definition"`
-	PrefixMetric                          types.Bool                           `tfsdk:"prefix_metric"`
-	AutoCostReferenceBandwidth            types.Int64                          `tfsdk:"auto_cost_reference_bandwidth"`
-	AutoCostReferenceBandwidthGranularity types.Int64                          `tfsdk:"auto_cost_reference_bandwidth_granularity"`
-	AutoCostReferenceGroupMode            types.Bool                           `tfsdk:"auto_cost_reference_group_mode"`
-	AffinityExcludeAny                    types.List                           `tfsdk:"affinity_exclude_any"`
-	AffinityIncludeAny                    types.List                           `tfsdk:"affinity_include_any"`
-	AffinityIncludeAll                    types.List                           `tfsdk:"affinity_include_all"`
-	AffinityReverseExcludeAny             types.List                           `tfsdk:"affinity_reverse_exclude_any"`
-	AffinityReverseIncludeAny             types.List                           `tfsdk:"affinity_reverse_include_any"`
-	AffinityReverseIncludeAll             types.List                           `tfsdk:"affinity_reverse_include_all"`
-	SrlgExcludeAny                        types.List                           `tfsdk:"srlg_exclude_any"`
-	FastRerouteDisable                    types.Bool                           `tfsdk:"fast_reroute_disable"`
-	MicroloopAvoidanceDisable             types.Bool                           `tfsdk:"microloop_avoidance_disable"`
-	DataPlaneSegmentRouting               types.Bool                           `tfsdk:"data_plane_segment_routing"`
-	DataPlaneIp                           types.Bool                           `tfsdk:"data_plane_ip"`
-	UcmpDisable                           types.Bool                           `tfsdk:"ucmp_disable"`
-	AddressFamilies                       []RouterISISFlexAlgosAddressFamilies `tfsdk:"address_families"`
+	Number                                types.Int64                        `tfsdk:"number"`
+	MinimumBandwidth                      types.Int64                        `tfsdk:"minimum_bandwidth"`
+	MaximumDelay                          types.Int64                        `tfsdk:"maximum_delay"`
+	Priority                              types.Int64                        `tfsdk:"priority"`
+	MetricType                            types.String                       `tfsdk:"metric_type"`
+	AdvertiseDefinition                   types.Bool                         `tfsdk:"advertise_definition"`
+	PrefixMetric                          types.Bool                         `tfsdk:"prefix_metric"`
+	AutoCostReferenceBandwidth            types.Int64                        `tfsdk:"auto_cost_reference_bandwidth"`
+	AutoCostReferenceBandwidthGranularity types.Int64                        `tfsdk:"auto_cost_reference_bandwidth_granularity"`
+	AutoCostReferenceGroupMode            types.Bool                         `tfsdk:"auto_cost_reference_group_mode"`
+	AffinityExcludeAny                    types.List                         `tfsdk:"affinity_exclude_any"`
+	AffinityIncludeAny                    types.List                         `tfsdk:"affinity_include_any"`
+	AffinityIncludeAll                    types.List                         `tfsdk:"affinity_include_all"`
+	AffinityReverseExcludeAny             types.List                         `tfsdk:"affinity_reverse_exclude_any"`
+	AffinityReverseIncludeAny             types.List                         `tfsdk:"affinity_reverse_include_any"`
+	AffinityReverseIncludeAll             types.List                         `tfsdk:"affinity_reverse_include_all"`
+	SrlgExcludeAny                        types.List                         `tfsdk:"srlg_exclude_any"`
+	FastRerouteDisable                    types.Bool                         `tfsdk:"fast_reroute_disable"`
+	MicroloopAvoidanceDisable             types.Bool                         `tfsdk:"microloop_avoidance_disable"`
+	DataPlaneSegmentRouting               types.Bool                         `tfsdk:"data_plane_segment_routing"`
+	DataPlaneIp                           types.Bool                         `tfsdk:"data_plane_ip"`
+	UcmpDisable                           types.Bool                         `tfsdk:"ucmp_disable"`
+	AddressFamily                         []RouterISISFlexAlgosAddressFamily `tfsdk:"address_family"`
 }
 type RouterISISSrlgNamesStaticIpv4Addresses struct {
 	LocalEndPoint  types.String `tfsdk:"local_end_point"`
 	RemoteEndPoint types.String `tfsdk:"remote_end_point"`
 }
-type RouterISISFlexAlgosAddressFamilies struct {
+type RouterISISFlexAlgosAddressFamily struct {
 	AfName                  types.String `tfsdk:"af_name"`
 	SafName                 types.String `tfsdk:"saf_name"`
 	MaximumPaths            types.Int64  `tfsdk:"maximum_paths"`
@@ -1125,9 +1125,9 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 					body, _ = sjson.Set(body, "flex-algoes.flex-algo"+"."+strconv.Itoa(index)+"."+"ucmp.disable", []interface{}{nil})
 				}
 			}
-			if len(item.AddressFamilies) > 0 {
+			if len(item.AddressFamily) > 0 {
 				body, _ = sjson.Set(body, "flex-algoes.flex-algo"+"."+strconv.Itoa(index)+"."+"address-families.address-family", []interface{}{})
-				for cindex, citem := range item.AddressFamilies {
+				for cindex, citem := range item.AddressFamily {
 					if !citem.AfName.IsNull() && !citem.AfName.IsUnknown() {
 						body, _ = sjson.Set(body, "flex-algoes.flex-algo"+"."+strconv.Itoa(index)+"."+"address-families.address-family"+"."+strconv.Itoa(cindex)+"."+"af-name", citem.AfName.ValueString())
 					}
@@ -2644,9 +2644,9 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.FlexAlgos[i].UcmpDisable = types.BoolNull()
 		}
-		for ci := range data.FlexAlgos[i].AddressFamilies {
+		for ci := range data.FlexAlgos[i].AddressFamily {
 			keys := [...]string{"af-name", "saf-name"}
-			keyValues := [...]string{data.FlexAlgos[i].AddressFamilies[ci].AfName.ValueString(), data.FlexAlgos[i].AddressFamilies[ci].SafName.ValueString()}
+			keyValues := [...]string{data.FlexAlgos[i].AddressFamily[ci].AfName.ValueString(), data.FlexAlgos[i].AddressFamily[ci].SafName.ValueString()}
 
 			var cr gjson.Result
 			r.Get("address-families.address-family").ForEach(
@@ -2667,25 +2667,25 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 					return true
 				},
 			)
-			if value := cr.Get("af-name"); value.Exists() && !data.FlexAlgos[i].AddressFamilies[ci].AfName.IsNull() {
-				data.FlexAlgos[i].AddressFamilies[ci].AfName = types.StringValue(value.String())
+			if value := cr.Get("af-name"); value.Exists() && !data.FlexAlgos[i].AddressFamily[ci].AfName.IsNull() {
+				data.FlexAlgos[i].AddressFamily[ci].AfName = types.StringValue(value.String())
 			} else {
-				data.FlexAlgos[i].AddressFamilies[ci].AfName = types.StringNull()
+				data.FlexAlgos[i].AddressFamily[ci].AfName = types.StringNull()
 			}
-			if value := cr.Get("saf-name"); value.Exists() && !data.FlexAlgos[i].AddressFamilies[ci].SafName.IsNull() {
-				data.FlexAlgos[i].AddressFamilies[ci].SafName = types.StringValue(value.String())
+			if value := cr.Get("saf-name"); value.Exists() && !data.FlexAlgos[i].AddressFamily[ci].SafName.IsNull() {
+				data.FlexAlgos[i].AddressFamily[ci].SafName = types.StringValue(value.String())
 			} else {
-				data.FlexAlgos[i].AddressFamilies[ci].SafName = types.StringNull()
+				data.FlexAlgos[i].AddressFamily[ci].SafName = types.StringNull()
 			}
-			if value := cr.Get("maximum-paths.number-of-paths"); value.Exists() && !data.FlexAlgos[i].AddressFamilies[ci].MaximumPaths.IsNull() {
-				data.FlexAlgos[i].AddressFamilies[ci].MaximumPaths = types.Int64Value(value.Int())
+			if value := cr.Get("maximum-paths.number-of-paths"); value.Exists() && !data.FlexAlgos[i].AddressFamily[ci].MaximumPaths.IsNull() {
+				data.FlexAlgos[i].AddressFamily[ci].MaximumPaths = types.Int64Value(value.Int())
 			} else {
-				data.FlexAlgos[i].AddressFamilies[ci].MaximumPaths = types.Int64Null()
+				data.FlexAlgos[i].AddressFamily[ci].MaximumPaths = types.Int64Null()
 			}
-			if value := cr.Get("maximum-paths.route-policy"); value.Exists() && !data.FlexAlgos[i].AddressFamilies[ci].MaximumPathsRoutePolicy.IsNull() {
-				data.FlexAlgos[i].AddressFamilies[ci].MaximumPathsRoutePolicy = types.StringValue(value.String())
+			if value := cr.Get("maximum-paths.route-policy"); value.Exists() && !data.FlexAlgos[i].AddressFamily[ci].MaximumPathsRoutePolicy.IsNull() {
+				data.FlexAlgos[i].AddressFamily[ci].MaximumPathsRoutePolicy = types.StringValue(value.String())
 			} else {
-				data.FlexAlgos[i].AddressFamilies[ci].MaximumPathsRoutePolicy = types.StringNull()
+				data.FlexAlgos[i].AddressFamily[ci].MaximumPathsRoutePolicy = types.StringNull()
 			}
 		}
 	}
@@ -3464,9 +3464,9 @@ func (data *RouterISIS) fromBody(ctx context.Context, res []byte) {
 				item.UcmpDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("address-families.address-family"); cValue.Exists() {
-				item.AddressFamilies = make([]RouterISISFlexAlgosAddressFamilies, 0)
+				item.AddressFamily = make([]RouterISISFlexAlgosAddressFamily, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := RouterISISFlexAlgosAddressFamilies{}
+					cItem := RouterISISFlexAlgosAddressFamily{}
 					if ccValue := cv.Get("af-name"); ccValue.Exists() {
 						cItem.AfName = types.StringValue(ccValue.String())
 					}
@@ -3479,7 +3479,7 @@ func (data *RouterISIS) fromBody(ctx context.Context, res []byte) {
 					if ccValue := cv.Get("maximum-paths.route-policy"); ccValue.Exists() {
 						cItem.MaximumPathsRoutePolicy = types.StringValue(ccValue.String())
 					}
-					item.AddressFamilies = append(item.AddressFamilies, cItem)
+					item.AddressFamily = append(item.AddressFamily, cItem)
 					return true
 				})
 			}
@@ -4262,9 +4262,9 @@ func (data *RouterISISData) fromBody(ctx context.Context, res []byte) {
 				item.UcmpDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("address-families.address-family"); cValue.Exists() {
-				item.AddressFamilies = make([]RouterISISFlexAlgosAddressFamilies, 0)
+				item.AddressFamily = make([]RouterISISFlexAlgosAddressFamily, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := RouterISISFlexAlgosAddressFamilies{}
+					cItem := RouterISISFlexAlgosAddressFamily{}
 					if ccValue := cv.Get("af-name"); ccValue.Exists() {
 						cItem.AfName = types.StringValue(ccValue.String())
 					}
@@ -4277,7 +4277,7 @@ func (data *RouterISISData) fromBody(ctx context.Context, res []byte) {
 					if ccValue := cv.Get("maximum-paths.route-policy"); ccValue.Exists() {
 						cItem.MaximumPathsRoutePolicy = types.StringValue(ccValue.String())
 					}
-					item.AddressFamilies = append(item.AddressFamilies, cItem)
+					item.AddressFamily = append(item.AddressFamily, cItem)
 					return true
 				})
 			}
@@ -4316,19 +4316,19 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 				found = false
 			}
 			if found {
-				for ci := range state.FlexAlgos[i].AddressFamilies {
+				for ci := range state.FlexAlgos[i].AddressFamily {
 					ckeys := [...]string{"af-name", "saf-name"}
-					cstateKeyValues := [...]string{state.FlexAlgos[i].AddressFamilies[ci].AfName.ValueString(), state.FlexAlgos[i].AddressFamilies[ci].SafName.ValueString()}
+					cstateKeyValues := [...]string{state.FlexAlgos[i].AddressFamily[ci].AfName.ValueString(), state.FlexAlgos[i].AddressFamily[ci].SafName.ValueString()}
 					ckeyString := ""
 					for cki := range ckeys {
 						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
 					}
 
 					cemptyKeys := true
-					if !reflect.ValueOf(state.FlexAlgos[i].AddressFamilies[ci].AfName.ValueString()).IsZero() {
+					if !reflect.ValueOf(state.FlexAlgos[i].AddressFamily[ci].AfName.ValueString()).IsZero() {
 						cemptyKeys = false
 					}
-					if !reflect.ValueOf(state.FlexAlgos[i].AddressFamilies[ci].SafName.ValueString()).IsZero() {
+					if !reflect.ValueOf(state.FlexAlgos[i].AddressFamily[ci].SafName.ValueString()).IsZero() {
 						cemptyKeys = false
 					}
 					if cemptyKeys {
@@ -4336,19 +4336,19 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 					}
 
 					found := false
-					for cj := range data.FlexAlgos[j].AddressFamilies {
+					for cj := range data.FlexAlgos[j].AddressFamily {
 						found = true
-						if state.FlexAlgos[i].AddressFamilies[ci].AfName.ValueString() != data.FlexAlgos[j].AddressFamilies[cj].AfName.ValueString() {
+						if state.FlexAlgos[i].AddressFamily[ci].AfName.ValueString() != data.FlexAlgos[j].AddressFamily[cj].AfName.ValueString() {
 							found = false
 						}
-						if state.FlexAlgos[i].AddressFamilies[ci].SafName.ValueString() != data.FlexAlgos[j].AddressFamilies[cj].SafName.ValueString() {
+						if state.FlexAlgos[i].AddressFamily[ci].SafName.ValueString() != data.FlexAlgos[j].AddressFamily[cj].SafName.ValueString() {
 							found = false
 						}
 						if found {
-							if !state.FlexAlgos[i].AddressFamilies[ci].MaximumPathsRoutePolicy.IsNull() && data.FlexAlgos[j].AddressFamilies[cj].MaximumPathsRoutePolicy.IsNull() {
+							if !state.FlexAlgos[i].AddressFamily[ci].MaximumPathsRoutePolicy.IsNull() && data.FlexAlgos[j].AddressFamily[cj].MaximumPathsRoutePolicy.IsNull() {
 								deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/address-families/address-family%v/maximum-paths", state.getPath(), keyString, ckeyString))
 							}
-							if !state.FlexAlgos[i].AddressFamilies[ci].MaximumPaths.IsNull() && data.FlexAlgos[j].AddressFamilies[cj].MaximumPaths.IsNull() {
+							if !state.FlexAlgos[i].AddressFamily[ci].MaximumPaths.IsNull() && data.FlexAlgos[j].AddressFamily[cj].MaximumPaths.IsNull() {
 								deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/address-families/address-family%v/maximum-paths", state.getPath(), keyString, ckeyString))
 							}
 							break
@@ -5302,9 +5302,9 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context) []string {
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		for ci := range data.FlexAlgos[i].AddressFamilies {
+		for ci := range data.FlexAlgos[i].AddressFamily {
 			ckeys := [...]string{"af-name", "saf-name"}
-			ckeyValues := [...]string{data.FlexAlgos[i].AddressFamilies[ci].AfName.ValueString(), data.FlexAlgos[i].AddressFamilies[ci].SafName.ValueString()}
+			ckeyValues := [...]string{data.FlexAlgos[i].AddressFamily[ci].AfName.ValueString(), data.FlexAlgos[i].AddressFamily[ci].SafName.ValueString()}
 			ckeyString := ""
 			for cki := range ckeys {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"

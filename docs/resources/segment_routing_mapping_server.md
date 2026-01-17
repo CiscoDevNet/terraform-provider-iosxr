@@ -14,7 +14,7 @@ This resource can manage the Segment Routing Mapping Server configuration.
 
 ```terraform
 resource "iosxr_segment_routing_mapping_server" "example" {
-  mapping_prefix_sid_address_families = [
+  mapping_prefix_sid_address_family = [
     {
       af_name = "ipv4"
       prefix_addresses = [
@@ -39,14 +39,14 @@ resource "iosxr_segment_routing_mapping_server" "example" {
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
-- `mapping_prefix_sid_address_families` (Attributes List) Address Family (see [below for nested schema](#nestedatt--mapping_prefix_sid_address_families))
+- `mapping_prefix_sid_address_family` (Attributes List) Address Family (see [below for nested schema](#nestedatt--mapping_prefix_sid_address_family))
 
 ### Read-Only
 
 - `id` (String) The path of the object.
 
-<a id="nestedatt--mapping_prefix_sid_address_families"></a>
-### Nested Schema for `mapping_prefix_sid_address_families`
+<a id="nestedatt--mapping_prefix_sid_address_family"></a>
+### Nested Schema for `mapping_prefix_sid_address_family`
 
 Required:
 
@@ -55,10 +55,10 @@ Required:
 
 Optional:
 
-- `prefix_addresses` (Attributes List) SID index range (see [below for nested schema](#nestedatt--mapping_prefix_sid_address_families--prefix_addresses))
+- `prefix_addresses` (Attributes List) SID index range (see [below for nested schema](#nestedatt--mapping_prefix_sid_address_family--prefix_addresses))
 
-<a id="nestedatt--mapping_prefix_sid_address_families--prefix_addresses"></a>
-### Nested Schema for `mapping_prefix_sid_address_families.prefix_addresses`
+<a id="nestedatt--mapping_prefix_sid_address_family--prefix_addresses"></a>
+### Nested Schema for `mapping_prefix_sid_address_family.prefix_addresses`
 
 Required:
 

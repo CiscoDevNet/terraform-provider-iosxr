@@ -31,7 +31,7 @@ data "iosxr_mpls_ldp_interface" "example" {
 
 ### Read-Only
 
-- `address_families` (Attributes List) Configure Address Family and its parameters (see [below for nested schema](#nestedatt--address_families))
+- `address_family` (Attributes List) Configure Address Family and its parameters (see [below for nested schema](#nestedatt--address_family))
 - `discovery_hello_dual_stack_tlv` (String) Change AF preference in Dual Stack TLV
 - `discovery_hello_holdtime` (Number) Hello holdtime
 - `discovery_hello_interval` (Number) Hello interval
@@ -40,8 +40,8 @@ data "iosxr_mpls_ldp_interface" "example" {
 - `igp_sync_delay_on_session_up` (Number) Interface sync-up delay (seconds)
 - `igp_sync_delay_on_session_up_disable` (Boolean) Disable
 
-<a id="nestedatt--address_families"></a>
-### Nested Schema for `address_families`
+<a id="nestedatt--address_family"></a>
+### Nested Schema for `address_family`
 
 Read-Only:
 

@@ -75,7 +75,7 @@ func (d *MPLSLDPMLDPDataSource) Schema(ctx context.Context, req datasource.Schem
 				MarkdownDescription: "MLDP logging internal",
 				Computed:            true,
 			},
-			"address_families": schema.ListNestedAttribute{
+			"address_family": schema.ListNestedAttribute{
 				MarkdownDescription: "Configure Address Family and its parameters",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{

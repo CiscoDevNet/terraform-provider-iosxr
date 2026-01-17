@@ -35,12 +35,12 @@ import (
 
 func TestAccIosxrSegmentRoutingMappingServer(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_mapping_server.test", "mapping_prefix_sid_address_families.0.af_name", "ipv4"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_mapping_server.test", "mapping_prefix_sid_address_families.0.prefix_addresses.0.address", "10.1.1.0"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_mapping_server.test", "mapping_prefix_sid_address_families.0.prefix_addresses.0.length", "24"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_mapping_server.test", "mapping_prefix_sid_address_families.0.prefix_addresses.0.sid_index", "500"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_mapping_server.test", "mapping_prefix_sid_address_families.0.prefix_addresses.0.range", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_mapping_server.test", "mapping_prefix_sid_address_families.0.prefix_addresses.0.attached", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_mapping_server.test", "mapping_prefix_sid_address_family.0.af_name", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_mapping_server.test", "mapping_prefix_sid_address_family.0.prefix_addresses.0.address", "10.1.1.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_mapping_server.test", "mapping_prefix_sid_address_family.0.prefix_addresses.0.length", "24"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_mapping_server.test", "mapping_prefix_sid_address_family.0.prefix_addresses.0.sid_index", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_mapping_server.test", "mapping_prefix_sid_address_family.0.prefix_addresses.0.range", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_mapping_server.test", "mapping_prefix_sid_address_family.0.prefix_addresses.0.attached", "true"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -94,7 +94,7 @@ resource "iosxr_gnmi" "PreReq0" {
 
 func testAccIosxrSegmentRoutingMappingServerConfig_minimum() string {
 	config := `resource "iosxr_segment_routing_mapping_server" "test" {` + "\n"
-	config += `	mapping_prefix_sid_address_families = [{` + "\n"
+	config += `	mapping_prefix_sid_address_family = [{` + "\n"
 	config += `		af_name = "ipv4"` + "\n"
 	config += `		prefix_addresses = [{` + "\n"
 	config += `			address = "10.1.1.0"` + "\n"
@@ -114,7 +114,7 @@ func testAccIosxrSegmentRoutingMappingServerConfig_minimum() string {
 
 func testAccIosxrSegmentRoutingMappingServerConfig_all() string {
 	config := `resource "iosxr_segment_routing_mapping_server" "test" {` + "\n"
-	config += `	mapping_prefix_sid_address_families = [{` + "\n"
+	config += `	mapping_prefix_sid_address_family = [{` + "\n"
 	config += `		af_name = "ipv4"` + "\n"
 	config += `		prefix_addresses = [{` + "\n"
 	config += `			address = "10.1.1.0"` + "\n"

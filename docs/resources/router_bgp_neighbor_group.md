@@ -73,7 +73,7 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
   graceful_maintenance_activate                  = true
   graceful_maintenance_local_preference          = 200
   graceful_maintenance_as_prepends_number        = 3
-  address_families = [
+  address_family = [
     {
       af_name                                             = "vpnv4-unicast"
       encapsulation_type                                  = "srv6"
@@ -125,7 +125,7 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
 
 ### Optional
 
-- `address_families` (Attributes List) Enter Address Family command mode (see [below for nested schema](#nestedatt--address_families))
+- `address_family` (Attributes List) Enter Address Family command mode (see [below for nested schema](#nestedatt--address_family))
 - `advertisement_interval_milliseconds` (Number) time in milliseconds
   - Range: `0`-`999`
 - `advertisement_interval_seconds` (Number) time in seconds
@@ -302,8 +302,8 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
 
 - `id` (String) The path of the object.
 
-<a id="nestedatt--address_families"></a>
-### Nested Schema for `address_families`
+<a id="nestedatt--address_family"></a>
+### Nested Schema for `address_family`
 
 Required:
 

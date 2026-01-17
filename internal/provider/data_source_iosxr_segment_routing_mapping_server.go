@@ -67,7 +67,7 @@ func (d *SegmentRoutingMappingServerDataSource) Schema(ctx context.Context, req 
 				MarkdownDescription: "The path of the retrieved object.",
 				Computed:            true,
 			},
-			"mapping_prefix_sid_address_families": schema.ListNestedAttribute{
+			"mapping_prefix_sid_address_family": schema.ListNestedAttribute{
 				MarkdownDescription: "Address Family",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{

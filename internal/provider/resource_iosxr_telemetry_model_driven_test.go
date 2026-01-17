@@ -48,13 +48,13 @@ func TestAccIosxrTelemetryModelDriven(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_telemetry_model_driven.test", "gnmi_bundling_size", "1024"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_telemetry_model_driven.test", "destination_groups.0.name", "DEST-GROUP-1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_telemetry_model_driven.test", "destination_groups.0.vrf", "VRF1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_telemetry_model_driven.test", "destination_groups.0.address_families.0.af_name", "ipv4"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_telemetry_model_driven.test", "destination_groups.0.address_families.0.address", "10.1.1.1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_telemetry_model_driven.test", "destination_groups.0.address_families.0.port", "57500"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_telemetry_model_driven.test", "destination_groups.0.address_families.0.encoding", "json"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_telemetry_model_driven.test", "destination_groups.0.address_families.0.protocol_grpc", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_telemetry_model_driven.test", "destination_groups.0.address_families.0.protocol_grpc_no_tls", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_telemetry_model_driven.test", "destination_groups.0.address_families.0.protocol_grpc_gzip", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_telemetry_model_driven.test", "destination_groups.0.address_family.0.af_name", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_telemetry_model_driven.test", "destination_groups.0.address_family.0.address", "10.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_telemetry_model_driven.test", "destination_groups.0.address_family.0.port", "57500"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_telemetry_model_driven.test", "destination_groups.0.address_family.0.encoding", "json"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_telemetry_model_driven.test", "destination_groups.0.address_family.0.protocol_grpc", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_telemetry_model_driven.test", "destination_groups.0.address_family.0.protocol_grpc_no_tls", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_telemetry_model_driven.test", "destination_groups.0.address_family.0.protocol_grpc_gzip", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_telemetry_model_driven.test", "destination_groups.0.destinations.0.address", "collector.example.com"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_telemetry_model_driven.test", "destination_groups.0.destinations.0.port", "57500"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_telemetry_model_driven.test", "destination_groups.0.destinations.0.address_family", "ipv4"))
@@ -142,7 +142,7 @@ func testAccIosxrTelemetryModelDrivenConfig_all() string {
 	config += `	destination_groups = [{` + "\n"
 	config += `		name = "DEST-GROUP-1"` + "\n"
 	config += `		vrf = "VRF1"` + "\n"
-	config += `		address_families = [{` + "\n"
+	config += `		address_family = [{` + "\n"
 	config += `			af_name = "ipv4"` + "\n"
 	config += `			address = "10.1.1.1"` + "\n"
 	config += `			port = 57500` + "\n"

@@ -169,9 +169,9 @@ func TestAccDataSourceIosxrRouterISIS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.data_plane_segment_routing", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.data_plane_ip", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.ucmp_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.address_families.0.af_name", "ipv4"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.address_families.0.saf_name", "unicast"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.address_families.0.maximum_paths", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.address_family.0.af_name", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.address_family.0.saf_name", "unicast"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.address_family.0.maximum_paths", "10"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -396,7 +396,7 @@ func testAccDataSourceIosxrRouterISISConfig() string {
 	config += `		data_plane_segment_routing = true` + "\n"
 	config += `		data_plane_ip = false` + "\n"
 	config += `		ucmp_disable = true` + "\n"
-	config += `		address_families = [{` + "\n"
+	config += `		address_family = [{` + "\n"
 	config += `			af_name = "ipv4"` + "\n"
 	config += `			saf_name = "unicast"` + "\n"
 	config += `			maximum_paths = 10` + "\n"

@@ -33,7 +33,7 @@ data "iosxr_router_bgp_neighbor_group" "example" {
 
 ### Read-Only
 
-- `address_families` (Attributes List) Enter Address Family command mode (see [below for nested schema](#nestedatt--address_families))
+- `address_family` (Attributes List) Enter Address Family command mode (see [below for nested schema](#nestedatt--address_family))
 - `advertisement_interval_milliseconds` (Number) time in milliseconds
 - `advertisement_interval_seconds` (Number) time in seconds
 - `allowas_in` (Number) Number of occurrences of AS number
@@ -163,8 +163,8 @@ data "iosxr_router_bgp_neighbor_group" "example" {
 - `use_neighbor_group` (String) Inherit configuration from a neighbor-group
 - `use_session_group` (String) Inherit address-family independent config from a session-group
 
-<a id="nestedatt--address_families"></a>
-### Nested Schema for `address_families`
+<a id="nestedatt--address_family"></a>
+### Nested Schema for `address_family`
 
 Read-Only:
 

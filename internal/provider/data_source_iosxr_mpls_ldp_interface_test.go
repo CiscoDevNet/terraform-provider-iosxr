@@ -37,10 +37,10 @@ func TestAccDataSourceIosxrMPLSLDPInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_interface.test", "discovery_hello_dual_stack_tlv", "ipv4"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_interface.test", "discovery_quick_start_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_interface.test", "igp_sync_delay_on_session_up", "20"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_interface.test", "address_families.0.af_name", "ipv4"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_interface.test", "address_families.0.discovery_transport_address_ip", "192.168.1.1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_interface.test", "address_families.0.igp_auto_config_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_interface.test", "address_families.0.mldp_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_interface.test", "address_family.0.af_name", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_interface.test", "address_family.0.discovery_transport_address_ip", "192.168.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_interface.test", "address_family.0.igp_auto_config_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_interface.test", "address_family.0.mldp_disable", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -78,7 +78,7 @@ func testAccDataSourceIosxrMPLSLDPInterfaceConfig() string {
 	config += `	discovery_hello_dual_stack_tlv = "ipv4"` + "\n"
 	config += `	discovery_quick_start_disable = true` + "\n"
 	config += `	igp_sync_delay_on_session_up = 20` + "\n"
-	config += `	address_families = [{` + "\n"
+	config += `	address_family = [{` + "\n"
 	config += `		af_name = "ipv4"` + "\n"
 	config += `		discovery_transport_address_ip = "192.168.1.1"` + "\n"
 	config += `		igp_auto_config_disable = true` + "\n"

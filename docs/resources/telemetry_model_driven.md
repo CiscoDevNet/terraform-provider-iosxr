@@ -29,7 +29,7 @@ resource "iosxr_telemetry_model_driven" "example" {
     {
       name = "DEST-GROUP-1"
       vrf  = "VRF1"
-      address_families = [
+      address_family = [
         {
           af_name              = "ipv4"
           address              = "10.1.1.1"
@@ -130,12 +130,12 @@ Required:
 
 Optional:
 
-- `address_families` (Attributes List) Destination address of the recepient of the telemetry information (see [below for nested schema](#nestedatt--destination_groups--address_families))
+- `address_family` (Attributes List) Destination address of the recepient of the telemetry information (see [below for nested schema](#nestedatt--destination_groups--address_family))
 - `destinations` (Attributes List) Destination IP address or fully qualified domain name (see [below for nested schema](#nestedatt--destination_groups--destinations))
 - `vrf` (String) vrf for the dest grp
 
-<a id="nestedatt--destination_groups--address_families"></a>
-### Nested Schema for `destination_groups.address_families`
+<a id="nestedatt--destination_groups--address_family"></a>
+### Nested Schema for `destination_groups.address_family`
 
 Required:
 

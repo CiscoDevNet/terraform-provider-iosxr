@@ -520,7 +520,7 @@ attributes:
     exclude_test: true
     example: true
   - yang_name: address-families/address-family
-    tf_name: address_families
+    tf_name: address_family
     type: List
     attributes:
       - yang_name: af-name

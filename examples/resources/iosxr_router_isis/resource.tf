@@ -201,7 +201,7 @@ resource "iosxr_router_isis" "example" {
       data_plane_segment_routing                = true
       data_plane_ip                             = false
       ucmp_disable                              = true
-      address_families = [
+      address_family = [
         {
           af_name       = "ipv4"
           saf_name      = "unicast"

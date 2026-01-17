@@ -34,25 +34,25 @@ func TestAccDataSourceIosxrMPLSLDPMLDP(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "logging_notifications", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "logging_internal", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_families.0.name", "ipv4"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_families.0.statics.0.lsp_address", "192.168.2.1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_families.0.statics.0.p2mp", "5"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_families.0.make_before_break_delay", "60"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_families.0.make_before_break_delete_delay", "40"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_families.0.make_before_break_route_policy", "LDP_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_families.0.carrier_supporting_carrier", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_families.0.mofrr_enable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_families.0.mofrr_route_policy", "LDP_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_families.0.recursive_fec_enable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_families.0.recursive_fec_route_policy", "LDP_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_families.0.neighbors_route_policy_in", "LDP_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_families.0.neighbors_route_policy_out", "LDP_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_families.0.neighbors.0.neighbor_address", "192.168.2.1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_families.0.neighbors.0.neighbor_route_policy_in", "LDP_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_families.0.neighbors.0.neighbor_route_policy_out", "LDP_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_families.0.forwarding_recursive", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_families.0.forwarding_recursive_route_policy", "LDP_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_families.0.rib_unicast_always", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_family.0.name", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_family.0.statics.0.lsp_address", "192.168.2.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_family.0.statics.0.p2mp", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_family.0.make_before_break_delay", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_family.0.make_before_break_delete_delay", "40"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_family.0.make_before_break_route_policy", "LDP_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_family.0.carrier_supporting_carrier", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_family.0.mofrr_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_family.0.mofrr_route_policy", "LDP_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_family.0.recursive_fec_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_family.0.recursive_fec_route_policy", "LDP_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_family.0.neighbors_route_policy_in", "LDP_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_family.0.neighbors_route_policy_out", "LDP_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_family.0.neighbors.0.neighbor_address", "192.168.2.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_family.0.neighbors.0.neighbor_route_policy_in", "LDP_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_family.0.neighbors.0.neighbor_route_policy_out", "LDP_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_family.0.forwarding_recursive", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_family.0.forwarding_recursive_route_policy", "LDP_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp_mldp.test", "address_family.0.rib_unicast_always", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -94,7 +94,7 @@ func testAccDataSourceIosxrMPLSLDPMLDPConfig() string {
 	config += `	delete_mode = "attributes"` + "\n"
 	config += `	logging_notifications = true` + "\n"
 	config += `	logging_internal = true` + "\n"
-	config += `	address_families = [{` + "\n"
+	config += `	address_family = [{` + "\n"
 	config += `		name = "ipv4"` + "\n"
 	config += `		statics = [{` + "\n"
 	config += `			lsp_address = "192.168.2.1"` + "\n"

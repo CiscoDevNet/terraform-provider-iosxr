@@ -1,5 +1,5 @@
 resource "iosxr_segment_routing_mapping_server" "example" {
-  mapping_prefix_sid_address_families = [
+  mapping_prefix_sid_address_family = [
     {
       af_name = "ipv4"
       prefix_addresses = [

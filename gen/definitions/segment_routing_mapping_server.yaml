@@ -4,7 +4,7 @@ path: Cisco-IOS-XR-um-segment-routing-cfg:/segment-routing/mapping-server
 doc_category: Segment Routing
 attributes:
   - yang_name: prefix-sid-map/address-families/address-family
-    tf_name: mapping_prefix_sid_address_families
+    tf_name: mapping_prefix_sid_address_family
     minimum_test_value: '["ipv4"]'
     type: List
     attributes:

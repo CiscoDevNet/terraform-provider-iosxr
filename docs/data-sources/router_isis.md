@@ -146,7 +146,7 @@ Read-Only:
 
 Read-Only:
 
-- `address_families` (Attributes List) Enter the IS-IS Flex-Algo address-family configuration submode (see [below for nested schema](#nestedatt--flex_algos--address_families))
+- `address_family` (Attributes List) Enter the IS-IS Flex-Algo address-family configuration submode (see [below for nested schema](#nestedatt--flex_algos--address_family))
 - `advertise_definition` (Boolean) Advertise the Flex-Algo Definition
 - `affinity_exclude_any` (List of String) Affinity to exclude
 - `affinity_include_all` (List of String) Affinity to include
@@ -170,8 +170,8 @@ Read-Only:
 - `srlg_exclude_any` (List of String) SRLG to exclude
 - `ucmp_disable` (Boolean) Disable Unequal Cost Load Balancing (UCMP) for Flex-Algo
 
-<a id="nestedatt--flex_algos--address_families"></a>
-### Nested Schema for `flex_algos.address_families`
+<a id="nestedatt--flex_algos--address_family"></a>
+### Nested Schema for `flex_algos.address_family`
 
 Read-Only:
 

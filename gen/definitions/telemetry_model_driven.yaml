@@ -37,7 +37,7 @@ attributes:
       - yang_name: vrf
         example: VRF1
       - yang_name: address-families/address-family
-        tf_name: address_families
+        tf_name: address_family
         type: List
         attributes:
           - yang_name: af-name

@@ -88,7 +88,7 @@ func (r *MPLSLDPMLDPResource) Schema(ctx context.Context, req resource.SchemaReq
 				MarkdownDescription: helpers.NewAttributeDescription("MLDP logging internal").String,
 				Optional:            true,
 			},
-			"address_families": schema.ListNestedAttribute{
+			"address_family": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Configure Address Family and its parameters").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{

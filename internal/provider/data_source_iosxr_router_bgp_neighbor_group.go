@@ -600,7 +600,7 @@ func (d *RouterBGPNeighborGroupDataSource) Schema(ctx context.Context, req datas
 				MarkdownDescription: "Prevent bandwidth-aware from being inherited from the parent",
 				Computed:            true,
 			},
-			"address_families": schema.ListNestedAttribute{
+			"address_family": schema.ListNestedAttribute{
 				MarkdownDescription: "Enter Address Family command mode",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{

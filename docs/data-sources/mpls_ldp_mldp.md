@@ -26,13 +26,13 @@ data "iosxr_mpls_ldp_mldp" "example" {
 
 ### Read-Only
 
-- `address_families` (Attributes List) Configure Address Family and its parameters (see [below for nested schema](#nestedatt--address_families))
+- `address_family` (Attributes List) Configure Address Family and its parameters (see [below for nested schema](#nestedatt--address_family))
 - `id` (String) The path of the retrieved object.
 - `logging_internal` (Boolean) MLDP logging internal
 - `logging_notifications` (Boolean) MLDP logging notifications
 
-<a id="nestedatt--address_families"></a>
-### Nested Schema for `address_families`
+<a id="nestedatt--address_family"></a>
+### Nested Schema for `address_family`
 
 Read-Only:
 
@@ -45,16 +45,16 @@ Read-Only:
 - `mofrr_enable` (Boolean) MLDP MoFRR support
 - `mofrr_route_policy` (String) Route policy
 - `name` (String) Configure Address Family and its parameters
-- `neighbors` (Attributes List) configure this node (see [below for nested schema](#nestedatt--address_families--neighbors))
+- `neighbors` (Attributes List) configure this node (see [below for nested schema](#nestedatt--address_family--neighbors))
 - `neighbors_route_policy_in` (String) Route policy
 - `neighbors_route_policy_out` (String) Route policy
 - `recursive_fec_enable` (Boolean) MLDP Recursive FEC enable
 - `recursive_fec_route_policy` (String) Route policy
 - `rib_unicast_always` (Boolean) Always use unicast table for root lookup
-- `statics` (Attributes List) Static mLDP LSP (see [below for nested schema](#nestedatt--address_families--statics))
+- `statics` (Attributes List) Static mLDP LSP (see [below for nested schema](#nestedatt--address_family--statics))
 
-<a id="nestedatt--address_families--neighbors"></a>
-### Nested Schema for `address_families.neighbors`
+<a id="nestedatt--address_family--neighbors"></a>
+### Nested Schema for `address_family.neighbors`
 
 Read-Only:
 
@@ -63,8 +63,8 @@ Read-Only:
 - `neighbor_route_policy_out` (String) Route policy
 
 
-<a id="nestedatt--address_families--statics"></a>
-### Nested Schema for `address_families.statics`
+<a id="nestedatt--address_family--statics"></a>
+### Nested Schema for `address_family.statics`
 
 Read-Only:
 

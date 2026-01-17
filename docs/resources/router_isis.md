@@ -216,7 +216,7 @@ resource "iosxr_router_isis" "example" {
       data_plane_segment_routing                = true
       data_plane_ip                             = false
       ucmp_disable                              = true
-      address_families = [
+      address_family = [
         {
           af_name       = "ipv4"
           saf_name      = "unicast"
@@ -399,7 +399,7 @@ Required:
 
 Optional:
 
-- `address_families` (Attributes List) Enter the IS-IS Flex-Algo address-family configuration submode (see [below for nested schema](#nestedatt--flex_algos--address_families))
+- `address_family` (Attributes List) Enter the IS-IS Flex-Algo address-family configuration submode (see [below for nested schema](#nestedatt--flex_algos--address_family))
 - `advertise_definition` (Boolean) Advertise the Flex-Algo Definition
 - `affinity_exclude_any` (List of String) Affinity to exclude
 - `affinity_include_all` (List of String) Affinity to include
@@ -425,8 +425,8 @@ Optional:
 - `srlg_exclude_any` (List of String) SRLG to exclude
 - `ucmp_disable` (Boolean) Disable Unequal Cost Load Balancing (UCMP) for Flex-Algo
 
-<a id="nestedatt--flex_algos--address_families"></a>
-### Nested Schema for `flex_algos.address_families`
+<a id="nestedatt--flex_algos--address_family"></a>
+### Nested Schema for `flex_algos.address_family`
 
 Required:
 

@@ -79,7 +79,7 @@ func (r *SegmentRoutingMappingServerResource) Schema(ctx context.Context, req re
 					stringvalidator.OneOf("all", "attributes"),
 				},
 			},
-			"mapping_prefix_sid_address_families": schema.ListNestedAttribute{
+			"mapping_prefix_sid_address_family": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Address Family").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{

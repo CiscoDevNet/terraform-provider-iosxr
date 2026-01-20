@@ -259,6 +259,10 @@ func (d *RouterBGPVRFNeighborAddressFamilyDataSource) Schema(ctx context.Context
 				MarkdownDescription: "Prevent send-extended-community-ebgp from being inherited from parent",
 				Computed:            true,
 			},
+			"soft_reconfiguration_inbound": schema.BoolAttribute{
+				MarkdownDescription: "Allow inbound soft reconfiguration for this neighbor",
+				Computed:            true,
+			},
 			"soft_reconfiguration_inbound_always": schema.BoolAttribute{
 				MarkdownDescription: "Always use soft reconfig, even if route refresh is supported",
 				Computed:            true,

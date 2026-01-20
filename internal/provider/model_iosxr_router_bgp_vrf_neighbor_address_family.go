@@ -85,6 +85,7 @@ type RouterBGPVRFNeighborAddressFamily struct {
 	SendCommunityGshutEbgpInheritanceDisable        types.Bool   `tfsdk:"send_community_gshut_ebgp_inheritance_disable"`
 	SendExtendedCommunityEbgp                       types.Bool   `tfsdk:"send_extended_community_ebgp"`
 	SendExtendedCommunityEbgpInheritanceDisable     types.Bool   `tfsdk:"send_extended_community_ebgp_inheritance_disable"`
+	SoftReconfigurationInbound                      types.Bool   `tfsdk:"soft_reconfiguration_inbound"`
 	SoftReconfigurationInboundAlways                types.Bool   `tfsdk:"soft_reconfiguration_inbound_always"`
 	UpdateOutOriginatorLoopcheck                    types.Bool   `tfsdk:"update_out_originator_loopcheck"`
 	UpdateOutOriginatorLoopcheckDisable             types.Bool   `tfsdk:"update_out_originator_loopcheck_disable"`
@@ -184,6 +185,7 @@ type RouterBGPVRFNeighborAddressFamilyData struct {
 	SendCommunityGshutEbgpInheritanceDisable        types.Bool   `tfsdk:"send_community_gshut_ebgp_inheritance_disable"`
 	SendExtendedCommunityEbgp                       types.Bool   `tfsdk:"send_extended_community_ebgp"`
 	SendExtendedCommunityEbgpInheritanceDisable     types.Bool   `tfsdk:"send_extended_community_ebgp_inheritance_disable"`
+	SoftReconfigurationInbound                      types.Bool   `tfsdk:"soft_reconfiguration_inbound"`
 	SoftReconfigurationInboundAlways                types.Bool   `tfsdk:"soft_reconfiguration_inbound_always"`
 	UpdateOutOriginatorLoopcheck                    types.Bool   `tfsdk:"update_out_originator_loopcheck"`
 	UpdateOutOriginatorLoopcheckDisable             types.Bool   `tfsdk:"update_out_originator_loopcheck_disable"`
@@ -449,6 +451,11 @@ func (data RouterBGPVRFNeighborAddressFamily) toBody(ctx context.Context) string
 	if !data.SendExtendedCommunityEbgpInheritanceDisable.IsNull() && !data.SendExtendedCommunityEbgpInheritanceDisable.IsUnknown() {
 		if data.SendExtendedCommunityEbgpInheritanceDisable.ValueBool() {
 			body, _ = sjson.Set(body, "send-extended-community-ebgp.inheritance-disable", []interface{}{nil})
+		}
+	}
+	if !data.SoftReconfigurationInbound.IsNull() && !data.SoftReconfigurationInbound.IsUnknown() {
+		if data.SoftReconfigurationInbound.ValueBool() {
+			body, _ = sjson.Set(body, "soft-reconfiguration.inbound", map[string]string{})
 		}
 	}
 	if !data.SoftReconfigurationInboundAlways.IsNull() && !data.SoftReconfigurationInboundAlways.IsUnknown() {
@@ -1020,6 +1027,15 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 		}
 	} else {
 		data.SendExtendedCommunityEbgpInheritanceDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound"); !data.SoftReconfigurationInbound.IsNull() {
+		if value.Exists() {
+			data.SoftReconfigurationInbound = types.BoolValue(true)
+		} else {
+			data.SoftReconfigurationInbound = types.BoolValue(false)
+		}
+	} else {
+		data.SoftReconfigurationInbound = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound.always"); !data.SoftReconfigurationInboundAlways.IsNull() {
 		if value.Exists() {
@@ -1600,6 +1616,11 @@ func (data *RouterBGPVRFNeighborAddressFamily) fromBody(ctx context.Context, res
 	} else {
 		data.SendExtendedCommunityEbgpInheritanceDisable = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound"); value.Exists() {
+		data.SoftReconfigurationInbound = types.BoolValue(true)
+	} else {
+		data.SoftReconfigurationInbound = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound.always"); value.Exists() {
 		data.SoftReconfigurationInboundAlways = types.BoolValue(true)
 	} else {
@@ -2015,6 +2036,11 @@ func (data *RouterBGPVRFNeighborAddressFamilyData) fromBody(ctx context.Context,
 	} else {
 		data.SendExtendedCommunityEbgpInheritanceDisable = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound"); value.Exists() {
+		data.SoftReconfigurationInbound = types.BoolValue(true)
+	} else {
+		data.SoftReconfigurationInbound = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound.always"); value.Exists() {
 		data.SoftReconfigurationInboundAlways = types.BoolValue(true)
 	} else {
@@ -2371,6 +2397,9 @@ func (data *RouterBGPVRFNeighborAddressFamily) getDeletedItems(ctx context.Conte
 	if !state.SoftReconfigurationInboundAlways.IsNull() && data.SoftReconfigurationInboundAlways.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/soft-reconfiguration/inbound/always", state.getPath()))
 	}
+	if !state.SoftReconfigurationInbound.IsNull() && data.SoftReconfigurationInbound.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/soft-reconfiguration/inbound", state.getPath()))
+	}
 	if !state.SendExtendedCommunityEbgpInheritanceDisable.IsNull() && data.SendExtendedCommunityEbgpInheritanceDisable.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/send-extended-community-ebgp/inheritance-disable", state.getPath()))
 	}
@@ -2620,6 +2649,9 @@ func (data *RouterBGPVRFNeighborAddressFamily) getEmptyLeafsDelete(ctx context.C
 	if !data.SoftReconfigurationInboundAlways.IsNull() && !data.SoftReconfigurationInboundAlways.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/soft-reconfiguration/inbound/always", data.getPath()))
 	}
+	if !data.SoftReconfigurationInbound.IsNull() && !data.SoftReconfigurationInbound.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/soft-reconfiguration/inbound", data.getPath()))
+	}
 	if !data.SendExtendedCommunityEbgpInheritanceDisable.IsNull() && !data.SendExtendedCommunityEbgpInheritanceDisable.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/send-extended-community-ebgp/inheritance-disable", data.getPath()))
 	}
@@ -2865,6 +2897,9 @@ func (data *RouterBGPVRFNeighborAddressFamily) getDeletePaths(ctx context.Contex
 	}
 	if !data.SoftReconfigurationInboundAlways.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/soft-reconfiguration/inbound/always", data.getPath()))
+	}
+	if !data.SoftReconfigurationInbound.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/soft-reconfiguration/inbound", data.getPath()))
 	}
 	if !data.SendExtendedCommunityEbgpInheritanceDisable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/send-extended-community-ebgp/inheritance-disable", data.getPath()))

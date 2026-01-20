@@ -123,6 +123,7 @@ data "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
 - `slow_peer_dynamic_disable` (Boolean) Disable dynamic slow-peer
 - `slow_peer_dynamic_threshold` (Number) Threshold (in seconds) to detect this neighbor as slow-peer
 - `slow_peer_static` (Boolean) Configure this neighbor as static slow-peer
+- `soft_reconfiguration_inbound` (Boolean) Allow inbound soft reconfiguration for this neighbor
 - `soft_reconfiguration_inbound_always` (Boolean) Always use soft reconfig, even if route refresh is supported
 - `update_out_originator_loopcheck` (Boolean) Loop check for same originator which sent the route
 - `update_out_originator_loopcheck_disable` (Boolean) Disable originator loop check

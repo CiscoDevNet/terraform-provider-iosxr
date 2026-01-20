@@ -35,118 +35,118 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type RouterBGPVRF struct {
-	Device                                          types.String                         `tfsdk:"device"`
-	Id                                              types.String                         `tfsdk:"id"`
-	DeleteMode                                      types.String                         `tfsdk:"delete_mode"`
-	AsNumber                                        types.String                         `tfsdk:"as_number"`
-	VrfName                                         types.String                         `tfsdk:"vrf_name"`
-	MplsActivateInterfaces                          []RouterBGPVRFMplsActivateInterfaces `tfsdk:"mpls_activate_interfaces"`
-	DefaultInformationOriginate                     types.Bool                           `tfsdk:"default_information_originate"`
-	DefaultMetric                                   types.Int64                          `tfsdk:"default_metric"`
-	SocketReceiveBufferSize                         types.Int64                          `tfsdk:"socket_receive_buffer_size"`
-	SocketReceiveBufferSizeRead                     types.Int64                          `tfsdk:"socket_receive_buffer_size_read"`
-	SocketSendBufferSize                            types.Int64                          `tfsdk:"socket_send_buffer_size"`
-	SocketSendBufferSizeWrite                       types.Int64                          `tfsdk:"socket_send_buffer_size_write"`
-	NexthopMplsForwardingIbgp                       types.Bool                           `tfsdk:"nexthop_mpls_forwarding_ibgp"`
-	NexthopResolutionAllowDefault                   types.Bool                           `tfsdk:"nexthop_resolution_allow_default"`
-	TimersBgpKeepaliveInterval                      types.Int64                          `tfsdk:"timers_bgp_keepalive_interval"`
-	TimersBgpKeepaliveZero                          types.Bool                           `tfsdk:"timers_bgp_keepalive_zero"`
-	TimersBgpKeepaliveZeroHoldtimeZero              types.Bool                           `tfsdk:"timers_bgp_keepalive_zero_holdtime_zero"`
-	TimersBgpKeepaliveZeroMinimumAcceptableHoldtime types.Int64                          `tfsdk:"timers_bgp_keepalive_zero_minimum_acceptable_holdtime"`
-	TimersBgpHoldtime                               types.Int64                          `tfsdk:"timers_bgp_holdtime"`
-	TimersBgpHoldtimeMinimumAcceptableHoldtime      types.Int64                          `tfsdk:"timers_bgp_holdtime_minimum_acceptable_holdtime"`
-	BgpRedistributeInternal                         types.Bool                           `tfsdk:"bgp_redistribute_internal"`
-	BgpRouterId                                     types.String                         `tfsdk:"bgp_router_id"`
-	BgpUnsafeEbgpPolicy                             types.Bool                           `tfsdk:"bgp_unsafe_ebgp_policy"`
-	BgpAutoPolicySoftResetDisable                   types.Bool                           `tfsdk:"bgp_auto_policy_soft_reset_disable"`
-	BgpBestpathCostCommunityIgnore                  types.Bool                           `tfsdk:"bgp_bestpath_cost_community_ignore"`
-	BgpBestpathCompareRouterid                      types.Bool                           `tfsdk:"bgp_bestpath_compare_routerid"`
-	BgpBestpathAigpIgnore                           types.Bool                           `tfsdk:"bgp_bestpath_aigp_ignore"`
-	BgpBestpathIgpMetricIgnore                      types.Bool                           `tfsdk:"bgp_bestpath_igp_metric_ignore"`
-	BgpBestpathMedMissingAsWorst                    types.Bool                           `tfsdk:"bgp_bestpath_med_missing_as_worst"`
-	BgpBestpathMedAlways                            types.Bool                           `tfsdk:"bgp_bestpath_med_always"`
-	BgpBestpathAsPathIgnore                         types.Bool                           `tfsdk:"bgp_bestpath_as_path_ignore"`
-	BgpBestpathAsPathMultipathRelax                 types.Bool                           `tfsdk:"bgp_bestpath_as_path_multipath_relax"`
-	BgpBestpathOriginAsUseValidity                  types.Bool                           `tfsdk:"bgp_bestpath_origin_as_use_validity"`
-	BgpBestpathOriginAsAllowInvalid                 types.Bool                           `tfsdk:"bgp_bestpath_origin_as_allow_invalid"`
-	BgpBestpathSrPolicyPrefer                       types.Bool                           `tfsdk:"bgp_bestpath_sr_policy_prefer"`
-	BgpBestpathSrPolicyForce                        types.Bool                           `tfsdk:"bgp_bestpath_sr_policy_force"`
-	BgpDefaultLocalPreference                       types.Int64                          `tfsdk:"bgp_default_local_preference"`
-	BgpEnforceFirstAsDisable                        types.Bool                           `tfsdk:"bgp_enforce_first_as_disable"`
-	BgpFastExternalFalloverDisable                  types.Bool                           `tfsdk:"bgp_fast_external_fallover_disable"`
-	BgpLogNeighborChangesDisable                    types.Bool                           `tfsdk:"bgp_log_neighbor_changes_disable"`
-	BgpLogMessageDisable                            types.Bool                           `tfsdk:"bgp_log_message_disable"`
-	BgpMultipathUseClusterListLength                types.Bool                           `tfsdk:"bgp_multipath_use_cluster_list_length"`
-	BgpOriginAsValidationSignalIbgp                 types.Bool                           `tfsdk:"bgp_origin_as_validation_signal_ibgp"`
-	BgpOriginAsValidationTimeOff                    types.Bool                           `tfsdk:"bgp_origin_as_validation_time_off"`
-	BgpOriginAsValidationTime                       types.Int64                          `tfsdk:"bgp_origin_as_validation_time"`
-	BfdMinimumInterval                              types.Int64                          `tfsdk:"bfd_minimum_interval"`
-	BfdMultiplier                                   types.Int64                          `tfsdk:"bfd_multiplier"`
-	RdAuto                                          types.Bool                           `tfsdk:"rd_auto"`
-	RdTwoByteAsNumber                               types.String                         `tfsdk:"rd_two_byte_as_number"`
-	RdTwoByteAsIndex                                types.Int64                          `tfsdk:"rd_two_byte_as_index"`
-	RdFourByteAsNumber                              types.String                         `tfsdk:"rd_four_byte_as_number"`
-	RdFourByteAsIndex                               types.Int64                          `tfsdk:"rd_four_byte_as_index"`
-	RdIpv4AddressAddress                            types.String                         `tfsdk:"rd_ipv4_address_address"`
-	RdIpv4AddressIndex                              types.Int64                          `tfsdk:"rd_ipv4_address_index"`
-	Neighbors                                       []RouterBGPVRFNeighbors              `tfsdk:"neighbors"`
+	Device                                         types.String                         `tfsdk:"device"`
+	Id                                             types.String                         `tfsdk:"id"`
+	DeleteMode                                     types.String                         `tfsdk:"delete_mode"`
+	AsNumber                                       types.String                         `tfsdk:"as_number"`
+	VrfName                                        types.String                         `tfsdk:"vrf_name"`
+	MplsActivateInterfaces                         []RouterBGPVRFMplsActivateInterfaces `tfsdk:"mpls_activate_interfaces"`
+	DefaultInformationOriginate                    types.Bool                           `tfsdk:"default_information_originate"`
+	DefaultMetric                                  types.Int64                          `tfsdk:"default_metric"`
+	SocketReceiveBufferSize                        types.Int64                          `tfsdk:"socket_receive_buffer_size"`
+	SocketReceiveBufferSizeRead                    types.Int64                          `tfsdk:"socket_receive_buffer_size_read"`
+	SocketSendBufferSize                           types.Int64                          `tfsdk:"socket_send_buffer_size"`
+	SocketSendBufferSizeWrite                      types.Int64                          `tfsdk:"socket_send_buffer_size_write"`
+	NexthopMplsForwardingIbgp                      types.Bool                           `tfsdk:"nexthop_mpls_forwarding_ibgp"`
+	NexthopResolutionAllowDefault                  types.Bool                           `tfsdk:"nexthop_resolution_allow_default"`
+	TimersBgpKeepaliveInterval                     types.Int64                          `tfsdk:"timers_bgp_keepalive_interval"`
+	TimersBgpHolddownZero                          types.Bool                           `tfsdk:"timers_bgp_holddown_zero"`
+	TimersBgpHolddownZeroMinimumAcceptableZero     types.Bool                           `tfsdk:"timers_bgp_holddown_zero_minimum_acceptable_zero"`
+	TimersBgpHolddownZeroMinimumAcceptableHoldtime types.Int64                          `tfsdk:"timers_bgp_holddown_zero_minimum_acceptable_holdtime"`
+	TimersBgpHoldtime                              types.Int64                          `tfsdk:"timers_bgp_holdtime"`
+	TimersBgpHoldtimeMinimumAcceptableHoldtime     types.Int64                          `tfsdk:"timers_bgp_holdtime_minimum_acceptable_holdtime"`
+	BgpRedistributeInternal                        types.Bool                           `tfsdk:"bgp_redistribute_internal"`
+	BgpRouterId                                    types.String                         `tfsdk:"bgp_router_id"`
+	BgpUnsafeEbgpPolicy                            types.Bool                           `tfsdk:"bgp_unsafe_ebgp_policy"`
+	BgpAutoPolicySoftResetDisable                  types.Bool                           `tfsdk:"bgp_auto_policy_soft_reset_disable"`
+	BgpBestpathCostCommunityIgnore                 types.Bool                           `tfsdk:"bgp_bestpath_cost_community_ignore"`
+	BgpBestpathCompareRouterid                     types.Bool                           `tfsdk:"bgp_bestpath_compare_routerid"`
+	BgpBestpathAigpIgnore                          types.Bool                           `tfsdk:"bgp_bestpath_aigp_ignore"`
+	BgpBestpathIgpMetricIgnore                     types.Bool                           `tfsdk:"bgp_bestpath_igp_metric_ignore"`
+	BgpBestpathMedMissingAsWorst                   types.Bool                           `tfsdk:"bgp_bestpath_med_missing_as_worst"`
+	BgpBestpathMedAlways                           types.Bool                           `tfsdk:"bgp_bestpath_med_always"`
+	BgpBestpathAsPathIgnore                        types.Bool                           `tfsdk:"bgp_bestpath_as_path_ignore"`
+	BgpBestpathAsPathMultipathRelax                types.Bool                           `tfsdk:"bgp_bestpath_as_path_multipath_relax"`
+	BgpBestpathOriginAsUseValidity                 types.Bool                           `tfsdk:"bgp_bestpath_origin_as_use_validity"`
+	BgpBestpathOriginAsAllowInvalid                types.Bool                           `tfsdk:"bgp_bestpath_origin_as_allow_invalid"`
+	BgpBestpathSrPolicyPrefer                      types.Bool                           `tfsdk:"bgp_bestpath_sr_policy_prefer"`
+	BgpBestpathSrPolicyForce                       types.Bool                           `tfsdk:"bgp_bestpath_sr_policy_force"`
+	BgpDefaultLocalPreference                      types.Int64                          `tfsdk:"bgp_default_local_preference"`
+	BgpEnforceFirstAsDisable                       types.Bool                           `tfsdk:"bgp_enforce_first_as_disable"`
+	BgpFastExternalFalloverDisable                 types.Bool                           `tfsdk:"bgp_fast_external_fallover_disable"`
+	BgpLogNeighborChangesDisable                   types.Bool                           `tfsdk:"bgp_log_neighbor_changes_disable"`
+	BgpLogMessageDisable                           types.Bool                           `tfsdk:"bgp_log_message_disable"`
+	BgpMultipathUseClusterListLength               types.Bool                           `tfsdk:"bgp_multipath_use_cluster_list_length"`
+	BgpOriginAsValidationSignalIbgp                types.Bool                           `tfsdk:"bgp_origin_as_validation_signal_ibgp"`
+	BgpOriginAsValidationTimeOff                   types.Bool                           `tfsdk:"bgp_origin_as_validation_time_off"`
+	BgpOriginAsValidationTime                      types.Int64                          `tfsdk:"bgp_origin_as_validation_time"`
+	BfdMinimumInterval                             types.Int64                          `tfsdk:"bfd_minimum_interval"`
+	BfdMultiplier                                  types.Int64                          `tfsdk:"bfd_multiplier"`
+	RdAuto                                         types.Bool                           `tfsdk:"rd_auto"`
+	RdTwoByteAsNumber                              types.String                         `tfsdk:"rd_two_byte_as_number"`
+	RdTwoByteAsIndex                               types.Int64                          `tfsdk:"rd_two_byte_as_index"`
+	RdFourByteAsNumber                             types.String                         `tfsdk:"rd_four_byte_as_number"`
+	RdFourByteAsIndex                              types.Int64                          `tfsdk:"rd_four_byte_as_index"`
+	RdIpv4AddressAddress                           types.String                         `tfsdk:"rd_ipv4_address_address"`
+	RdIpv4AddressIndex                             types.Int64                          `tfsdk:"rd_ipv4_address_index"`
+	Neighbors                                      []RouterBGPVRFNeighbors              `tfsdk:"neighbors"`
 }
 
 type RouterBGPVRFData struct {
-	Device                                          types.String                         `tfsdk:"device"`
-	Id                                              types.String                         `tfsdk:"id"`
-	AsNumber                                        types.String                         `tfsdk:"as_number"`
-	VrfName                                         types.String                         `tfsdk:"vrf_name"`
-	MplsActivateInterfaces                          []RouterBGPVRFMplsActivateInterfaces `tfsdk:"mpls_activate_interfaces"`
-	DefaultInformationOriginate                     types.Bool                           `tfsdk:"default_information_originate"`
-	DefaultMetric                                   types.Int64                          `tfsdk:"default_metric"`
-	SocketReceiveBufferSize                         types.Int64                          `tfsdk:"socket_receive_buffer_size"`
-	SocketReceiveBufferSizeRead                     types.Int64                          `tfsdk:"socket_receive_buffer_size_read"`
-	SocketSendBufferSize                            types.Int64                          `tfsdk:"socket_send_buffer_size"`
-	SocketSendBufferSizeWrite                       types.Int64                          `tfsdk:"socket_send_buffer_size_write"`
-	NexthopMplsForwardingIbgp                       types.Bool                           `tfsdk:"nexthop_mpls_forwarding_ibgp"`
-	NexthopResolutionAllowDefault                   types.Bool                           `tfsdk:"nexthop_resolution_allow_default"`
-	TimersBgpKeepaliveInterval                      types.Int64                          `tfsdk:"timers_bgp_keepalive_interval"`
-	TimersBgpKeepaliveZero                          types.Bool                           `tfsdk:"timers_bgp_keepalive_zero"`
-	TimersBgpKeepaliveZeroHoldtimeZero              types.Bool                           `tfsdk:"timers_bgp_keepalive_zero_holdtime_zero"`
-	TimersBgpKeepaliveZeroMinimumAcceptableHoldtime types.Int64                          `tfsdk:"timers_bgp_keepalive_zero_minimum_acceptable_holdtime"`
-	TimersBgpHoldtime                               types.Int64                          `tfsdk:"timers_bgp_holdtime"`
-	TimersBgpHoldtimeMinimumAcceptableHoldtime      types.Int64                          `tfsdk:"timers_bgp_holdtime_minimum_acceptable_holdtime"`
-	BgpRedistributeInternal                         types.Bool                           `tfsdk:"bgp_redistribute_internal"`
-	BgpRouterId                                     types.String                         `tfsdk:"bgp_router_id"`
-	BgpUnsafeEbgpPolicy                             types.Bool                           `tfsdk:"bgp_unsafe_ebgp_policy"`
-	BgpAutoPolicySoftResetDisable                   types.Bool                           `tfsdk:"bgp_auto_policy_soft_reset_disable"`
-	BgpBestpathCostCommunityIgnore                  types.Bool                           `tfsdk:"bgp_bestpath_cost_community_ignore"`
-	BgpBestpathCompareRouterid                      types.Bool                           `tfsdk:"bgp_bestpath_compare_routerid"`
-	BgpBestpathAigpIgnore                           types.Bool                           `tfsdk:"bgp_bestpath_aigp_ignore"`
-	BgpBestpathIgpMetricIgnore                      types.Bool                           `tfsdk:"bgp_bestpath_igp_metric_ignore"`
-	BgpBestpathMedMissingAsWorst                    types.Bool                           `tfsdk:"bgp_bestpath_med_missing_as_worst"`
-	BgpBestpathMedAlways                            types.Bool                           `tfsdk:"bgp_bestpath_med_always"`
-	BgpBestpathAsPathIgnore                         types.Bool                           `tfsdk:"bgp_bestpath_as_path_ignore"`
-	BgpBestpathAsPathMultipathRelax                 types.Bool                           `tfsdk:"bgp_bestpath_as_path_multipath_relax"`
-	BgpBestpathOriginAsUseValidity                  types.Bool                           `tfsdk:"bgp_bestpath_origin_as_use_validity"`
-	BgpBestpathOriginAsAllowInvalid                 types.Bool                           `tfsdk:"bgp_bestpath_origin_as_allow_invalid"`
-	BgpBestpathSrPolicyPrefer                       types.Bool                           `tfsdk:"bgp_bestpath_sr_policy_prefer"`
-	BgpBestpathSrPolicyForce                        types.Bool                           `tfsdk:"bgp_bestpath_sr_policy_force"`
-	BgpDefaultLocalPreference                       types.Int64                          `tfsdk:"bgp_default_local_preference"`
-	BgpEnforceFirstAsDisable                        types.Bool                           `tfsdk:"bgp_enforce_first_as_disable"`
-	BgpFastExternalFalloverDisable                  types.Bool                           `tfsdk:"bgp_fast_external_fallover_disable"`
-	BgpLogNeighborChangesDisable                    types.Bool                           `tfsdk:"bgp_log_neighbor_changes_disable"`
-	BgpLogMessageDisable                            types.Bool                           `tfsdk:"bgp_log_message_disable"`
-	BgpMultipathUseClusterListLength                types.Bool                           `tfsdk:"bgp_multipath_use_cluster_list_length"`
-	BgpOriginAsValidationSignalIbgp                 types.Bool                           `tfsdk:"bgp_origin_as_validation_signal_ibgp"`
-	BgpOriginAsValidationTimeOff                    types.Bool                           `tfsdk:"bgp_origin_as_validation_time_off"`
-	BgpOriginAsValidationTime                       types.Int64                          `tfsdk:"bgp_origin_as_validation_time"`
-	BfdMinimumInterval                              types.Int64                          `tfsdk:"bfd_minimum_interval"`
-	BfdMultiplier                                   types.Int64                          `tfsdk:"bfd_multiplier"`
-	RdAuto                                          types.Bool                           `tfsdk:"rd_auto"`
-	RdTwoByteAsNumber                               types.String                         `tfsdk:"rd_two_byte_as_number"`
-	RdTwoByteAsIndex                                types.Int64                          `tfsdk:"rd_two_byte_as_index"`
-	RdFourByteAsNumber                              types.String                         `tfsdk:"rd_four_byte_as_number"`
-	RdFourByteAsIndex                               types.Int64                          `tfsdk:"rd_four_byte_as_index"`
-	RdIpv4AddressAddress                            types.String                         `tfsdk:"rd_ipv4_address_address"`
-	RdIpv4AddressIndex                              types.Int64                          `tfsdk:"rd_ipv4_address_index"`
-	Neighbors                                       []RouterBGPVRFNeighbors              `tfsdk:"neighbors"`
+	Device                                         types.String                         `tfsdk:"device"`
+	Id                                             types.String                         `tfsdk:"id"`
+	AsNumber                                       types.String                         `tfsdk:"as_number"`
+	VrfName                                        types.String                         `tfsdk:"vrf_name"`
+	MplsActivateInterfaces                         []RouterBGPVRFMplsActivateInterfaces `tfsdk:"mpls_activate_interfaces"`
+	DefaultInformationOriginate                    types.Bool                           `tfsdk:"default_information_originate"`
+	DefaultMetric                                  types.Int64                          `tfsdk:"default_metric"`
+	SocketReceiveBufferSize                        types.Int64                          `tfsdk:"socket_receive_buffer_size"`
+	SocketReceiveBufferSizeRead                    types.Int64                          `tfsdk:"socket_receive_buffer_size_read"`
+	SocketSendBufferSize                           types.Int64                          `tfsdk:"socket_send_buffer_size"`
+	SocketSendBufferSizeWrite                      types.Int64                          `tfsdk:"socket_send_buffer_size_write"`
+	NexthopMplsForwardingIbgp                      types.Bool                           `tfsdk:"nexthop_mpls_forwarding_ibgp"`
+	NexthopResolutionAllowDefault                  types.Bool                           `tfsdk:"nexthop_resolution_allow_default"`
+	TimersBgpKeepaliveInterval                     types.Int64                          `tfsdk:"timers_bgp_keepalive_interval"`
+	TimersBgpHolddownZero                          types.Bool                           `tfsdk:"timers_bgp_holddown_zero"`
+	TimersBgpHolddownZeroMinimumAcceptableZero     types.Bool                           `tfsdk:"timers_bgp_holddown_zero_minimum_acceptable_zero"`
+	TimersBgpHolddownZeroMinimumAcceptableHoldtime types.Int64                          `tfsdk:"timers_bgp_holddown_zero_minimum_acceptable_holdtime"`
+	TimersBgpHoldtime                              types.Int64                          `tfsdk:"timers_bgp_holdtime"`
+	TimersBgpHoldtimeMinimumAcceptableHoldtime     types.Int64                          `tfsdk:"timers_bgp_holdtime_minimum_acceptable_holdtime"`
+	BgpRedistributeInternal                        types.Bool                           `tfsdk:"bgp_redistribute_internal"`
+	BgpRouterId                                    types.String                         `tfsdk:"bgp_router_id"`
+	BgpUnsafeEbgpPolicy                            types.Bool                           `tfsdk:"bgp_unsafe_ebgp_policy"`
+	BgpAutoPolicySoftResetDisable                  types.Bool                           `tfsdk:"bgp_auto_policy_soft_reset_disable"`
+	BgpBestpathCostCommunityIgnore                 types.Bool                           `tfsdk:"bgp_bestpath_cost_community_ignore"`
+	BgpBestpathCompareRouterid                     types.Bool                           `tfsdk:"bgp_bestpath_compare_routerid"`
+	BgpBestpathAigpIgnore                          types.Bool                           `tfsdk:"bgp_bestpath_aigp_ignore"`
+	BgpBestpathIgpMetricIgnore                     types.Bool                           `tfsdk:"bgp_bestpath_igp_metric_ignore"`
+	BgpBestpathMedMissingAsWorst                   types.Bool                           `tfsdk:"bgp_bestpath_med_missing_as_worst"`
+	BgpBestpathMedAlways                           types.Bool                           `tfsdk:"bgp_bestpath_med_always"`
+	BgpBestpathAsPathIgnore                        types.Bool                           `tfsdk:"bgp_bestpath_as_path_ignore"`
+	BgpBestpathAsPathMultipathRelax                types.Bool                           `tfsdk:"bgp_bestpath_as_path_multipath_relax"`
+	BgpBestpathOriginAsUseValidity                 types.Bool                           `tfsdk:"bgp_bestpath_origin_as_use_validity"`
+	BgpBestpathOriginAsAllowInvalid                types.Bool                           `tfsdk:"bgp_bestpath_origin_as_allow_invalid"`
+	BgpBestpathSrPolicyPrefer                      types.Bool                           `tfsdk:"bgp_bestpath_sr_policy_prefer"`
+	BgpBestpathSrPolicyForce                       types.Bool                           `tfsdk:"bgp_bestpath_sr_policy_force"`
+	BgpDefaultLocalPreference                      types.Int64                          `tfsdk:"bgp_default_local_preference"`
+	BgpEnforceFirstAsDisable                       types.Bool                           `tfsdk:"bgp_enforce_first_as_disable"`
+	BgpFastExternalFalloverDisable                 types.Bool                           `tfsdk:"bgp_fast_external_fallover_disable"`
+	BgpLogNeighborChangesDisable                   types.Bool                           `tfsdk:"bgp_log_neighbor_changes_disable"`
+	BgpLogMessageDisable                           types.Bool                           `tfsdk:"bgp_log_message_disable"`
+	BgpMultipathUseClusterListLength               types.Bool                           `tfsdk:"bgp_multipath_use_cluster_list_length"`
+	BgpOriginAsValidationSignalIbgp                types.Bool                           `tfsdk:"bgp_origin_as_validation_signal_ibgp"`
+	BgpOriginAsValidationTimeOff                   types.Bool                           `tfsdk:"bgp_origin_as_validation_time_off"`
+	BgpOriginAsValidationTime                      types.Int64                          `tfsdk:"bgp_origin_as_validation_time"`
+	BfdMinimumInterval                             types.Int64                          `tfsdk:"bfd_minimum_interval"`
+	BfdMultiplier                                  types.Int64                          `tfsdk:"bfd_multiplier"`
+	RdAuto                                         types.Bool                           `tfsdk:"rd_auto"`
+	RdTwoByteAsNumber                              types.String                         `tfsdk:"rd_two_byte_as_number"`
+	RdTwoByteAsIndex                               types.Int64                          `tfsdk:"rd_two_byte_as_index"`
+	RdFourByteAsNumber                             types.String                         `tfsdk:"rd_four_byte_as_number"`
+	RdFourByteAsIndex                              types.Int64                          `tfsdk:"rd_four_byte_as_index"`
+	RdIpv4AddressAddress                           types.String                         `tfsdk:"rd_ipv4_address_address"`
+	RdIpv4AddressIndex                             types.Int64                          `tfsdk:"rd_ipv4_address_index"`
+	Neighbors                                      []RouterBGPVRFNeighbors              `tfsdk:"neighbors"`
 }
 type RouterBGPVRFMplsActivateInterfaces struct {
 	InterfaceName types.String `tfsdk:"interface_name"`
@@ -199,9 +199,9 @@ type RouterBGPVRFNeighbors struct {
 	FastFalloverInheritanceDisable                              types.Bool                                `tfsdk:"fast_fallover_inheritance_disable"`
 	Shutdown                                                    types.Bool                                `tfsdk:"shutdown"`
 	TimersKeepaliveInterval                                     types.Int64                               `tfsdk:"timers_keepalive_interval"`
-	TimersKeepaliveZero                                         types.Bool                                `tfsdk:"timers_keepalive_zero"`
-	TimersKeepaliveZeroHoldtimeZero                             types.Bool                                `tfsdk:"timers_keepalive_zero_holdtime_zero"`
-	TimersKeepaliveZeroMinimumAcceptableHoldtime                types.Int64                               `tfsdk:"timers_keepalive_zero_minimum_acceptable_holdtime"`
+	TimersHolddownZero                                          types.Bool                                `tfsdk:"timers_holddown_zero"`
+	TimersHolddownZeroMinimumAcceptableZero                     types.Bool                                `tfsdk:"timers_holddown_zero_minimum_acceptable_zero"`
+	TimersHolddownZeroMinimumAcceptableHoldtime                 types.Int64                               `tfsdk:"timers_holddown_zero_minimum_acceptable_holdtime"`
 	TimersHoldtime                                              types.Int64                               `tfsdk:"timers_holdtime"`
 	TimersHoldtimeMinimumAcceptableHoldtime                     types.Int64                               `tfsdk:"timers_holdtime_minimum_acceptable_holdtime"`
 	LocalAddress                                                types.String                              `tfsdk:"local_address"`
@@ -347,18 +347,18 @@ func (data RouterBGPVRF) toBody(ctx context.Context) string {
 	if !data.TimersBgpKeepaliveInterval.IsNull() && !data.TimersBgpKeepaliveInterval.IsUnknown() {
 		body, _ = sjson.Set(body, "timers.bgp.keepalive-interval", strconv.FormatInt(data.TimersBgpKeepaliveInterval.ValueInt64(), 10))
 	}
-	if !data.TimersBgpKeepaliveZero.IsNull() && !data.TimersBgpKeepaliveZero.IsUnknown() {
-		if data.TimersBgpKeepaliveZero.ValueBool() {
+	if !data.TimersBgpHolddownZero.IsNull() && !data.TimersBgpHolddownZero.IsUnknown() {
+		if data.TimersBgpHolddownZero.ValueBool() {
 			body, _ = sjson.Set(body, "timers.bgp.zero", map[string]string{})
 		}
 	}
-	if !data.TimersBgpKeepaliveZeroHoldtimeZero.IsNull() && !data.TimersBgpKeepaliveZeroHoldtimeZero.IsUnknown() {
-		if data.TimersBgpKeepaliveZeroHoldtimeZero.ValueBool() {
+	if !data.TimersBgpHolddownZeroMinimumAcceptableZero.IsNull() && !data.TimersBgpHolddownZeroMinimumAcceptableZero.IsUnknown() {
+		if data.TimersBgpHolddownZeroMinimumAcceptableZero.ValueBool() {
 			body, _ = sjson.Set(body, "timers.bgp.zero.zero", []interface{}{nil})
 		}
 	}
-	if !data.TimersBgpKeepaliveZeroMinimumAcceptableHoldtime.IsNull() && !data.TimersBgpKeepaliveZeroMinimumAcceptableHoldtime.IsUnknown() {
-		body, _ = sjson.Set(body, "timers.bgp.zero.minimum-acceptable-holdtime", strconv.FormatInt(data.TimersBgpKeepaliveZeroMinimumAcceptableHoldtime.ValueInt64(), 10))
+	if !data.TimersBgpHolddownZeroMinimumAcceptableHoldtime.IsNull() && !data.TimersBgpHolddownZeroMinimumAcceptableHoldtime.IsUnknown() {
+		body, _ = sjson.Set(body, "timers.bgp.zero.minimum-acceptable-holdtime", strconv.FormatInt(data.TimersBgpHolddownZeroMinimumAcceptableHoldtime.ValueInt64(), 10))
 	}
 	if !data.TimersBgpHoldtime.IsNull() && !data.TimersBgpHoldtime.IsUnknown() {
 		body, _ = sjson.Set(body, "timers.bgp.holdtime.holdtime-number", strconv.FormatInt(data.TimersBgpHoldtime.ValueInt64(), 10))
@@ -709,18 +709,18 @@ func (data RouterBGPVRF) toBody(ctx context.Context) string {
 			if !item.TimersKeepaliveInterval.IsNull() && !item.TimersKeepaliveInterval.IsUnknown() {
 				body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"timers.keepalive-interval", strconv.FormatInt(item.TimersKeepaliveInterval.ValueInt64(), 10))
 			}
-			if !item.TimersKeepaliveZero.IsNull() && !item.TimersKeepaliveZero.IsUnknown() {
-				if item.TimersKeepaliveZero.ValueBool() {
+			if !item.TimersHolddownZero.IsNull() && !item.TimersHolddownZero.IsUnknown() {
+				if item.TimersHolddownZero.ValueBool() {
 					body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"timers.zero", map[string]string{})
 				}
 			}
-			if !item.TimersKeepaliveZeroHoldtimeZero.IsNull() && !item.TimersKeepaliveZeroHoldtimeZero.IsUnknown() {
-				if item.TimersKeepaliveZeroHoldtimeZero.ValueBool() {
+			if !item.TimersHolddownZeroMinimumAcceptableZero.IsNull() && !item.TimersHolddownZeroMinimumAcceptableZero.IsUnknown() {
+				if item.TimersHolddownZeroMinimumAcceptableZero.ValueBool() {
 					body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"timers.zero.zero", []interface{}{nil})
 				}
 			}
-			if !item.TimersKeepaliveZeroMinimumAcceptableHoldtime.IsNull() && !item.TimersKeepaliveZeroMinimumAcceptableHoldtime.IsUnknown() {
-				body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"timers.zero.minimum-acceptable-holdtime", strconv.FormatInt(item.TimersKeepaliveZeroMinimumAcceptableHoldtime.ValueInt64(), 10))
+			if !item.TimersHolddownZeroMinimumAcceptableHoldtime.IsNull() && !item.TimersHolddownZeroMinimumAcceptableHoldtime.IsUnknown() {
+				body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"timers.zero.minimum-acceptable-holdtime", strconv.FormatInt(item.TimersHolddownZeroMinimumAcceptableHoldtime.ValueInt64(), 10))
 			}
 			if !item.TimersHoldtime.IsNull() && !item.TimersHoldtime.IsUnknown() {
 				body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"timers.holdtime.holdtime-number", strconv.FormatInt(item.TimersHoldtime.ValueInt64(), 10))
@@ -1174,28 +1174,28 @@ func (data *RouterBGPVRF) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.TimersBgpKeepaliveInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timers.bgp.zero"); !data.TimersBgpKeepaliveZero.IsNull() {
+	if value := gjson.GetBytes(res, "timers.bgp.zero"); !data.TimersBgpHolddownZero.IsNull() {
 		if value.Exists() {
-			data.TimersBgpKeepaliveZero = types.BoolValue(true)
+			data.TimersBgpHolddownZero = types.BoolValue(true)
 		} else {
-			data.TimersBgpKeepaliveZero = types.BoolValue(false)
+			data.TimersBgpHolddownZero = types.BoolValue(false)
 		}
 	} else {
-		data.TimersBgpKeepaliveZero = types.BoolNull()
+		data.TimersBgpHolddownZero = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "timers.bgp.zero.zero"); !data.TimersBgpKeepaliveZeroHoldtimeZero.IsNull() {
+	if value := gjson.GetBytes(res, "timers.bgp.zero.zero"); !data.TimersBgpHolddownZeroMinimumAcceptableZero.IsNull() {
 		if value.Exists() {
-			data.TimersBgpKeepaliveZeroHoldtimeZero = types.BoolValue(true)
+			data.TimersBgpHolddownZeroMinimumAcceptableZero = types.BoolValue(true)
 		} else {
-			data.TimersBgpKeepaliveZeroHoldtimeZero = types.BoolValue(false)
+			data.TimersBgpHolddownZeroMinimumAcceptableZero = types.BoolValue(false)
 		}
 	} else {
-		data.TimersBgpKeepaliveZeroHoldtimeZero = types.BoolNull()
+		data.TimersBgpHolddownZeroMinimumAcceptableZero = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "timers.bgp.zero.minimum-acceptable-holdtime"); value.Exists() && !data.TimersBgpKeepaliveZeroMinimumAcceptableHoldtime.IsNull() {
-		data.TimersBgpKeepaliveZeroMinimumAcceptableHoldtime = types.Int64Value(value.Int())
+	if value := gjson.GetBytes(res, "timers.bgp.zero.minimum-acceptable-holdtime"); value.Exists() && !data.TimersBgpHolddownZeroMinimumAcceptableHoldtime.IsNull() {
+		data.TimersBgpHolddownZeroMinimumAcceptableHoldtime = types.Int64Value(value.Int())
 	} else {
-		data.TimersBgpKeepaliveZeroMinimumAcceptableHoldtime = types.Int64Null()
+		data.TimersBgpHolddownZeroMinimumAcceptableHoldtime = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "timers.bgp.holdtime.holdtime-number"); value.Exists() && !data.TimersBgpHoldtime.IsNull() {
 		data.TimersBgpHoldtime = types.Int64Value(value.Int())
@@ -1838,28 +1838,28 @@ func (data *RouterBGPVRF) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Neighbors[i].TimersKeepaliveInterval = types.Int64Null()
 		}
-		if value := r.Get("timers.zero"); !data.Neighbors[i].TimersKeepaliveZero.IsNull() {
+		if value := r.Get("timers.zero"); !data.Neighbors[i].TimersHolddownZero.IsNull() {
 			if value.Exists() {
-				data.Neighbors[i].TimersKeepaliveZero = types.BoolValue(true)
+				data.Neighbors[i].TimersHolddownZero = types.BoolValue(true)
 			} else {
-				data.Neighbors[i].TimersKeepaliveZero = types.BoolValue(false)
+				data.Neighbors[i].TimersHolddownZero = types.BoolValue(false)
 			}
 		} else {
-			data.Neighbors[i].TimersKeepaliveZero = types.BoolNull()
+			data.Neighbors[i].TimersHolddownZero = types.BoolNull()
 		}
-		if value := r.Get("timers.zero.zero"); !data.Neighbors[i].TimersKeepaliveZeroHoldtimeZero.IsNull() {
+		if value := r.Get("timers.zero.zero"); !data.Neighbors[i].TimersHolddownZeroMinimumAcceptableZero.IsNull() {
 			if value.Exists() {
-				data.Neighbors[i].TimersKeepaliveZeroHoldtimeZero = types.BoolValue(true)
+				data.Neighbors[i].TimersHolddownZeroMinimumAcceptableZero = types.BoolValue(true)
 			} else {
-				data.Neighbors[i].TimersKeepaliveZeroHoldtimeZero = types.BoolValue(false)
+				data.Neighbors[i].TimersHolddownZeroMinimumAcceptableZero = types.BoolValue(false)
 			}
 		} else {
-			data.Neighbors[i].TimersKeepaliveZeroHoldtimeZero = types.BoolNull()
+			data.Neighbors[i].TimersHolddownZeroMinimumAcceptableZero = types.BoolNull()
 		}
-		if value := r.Get("timers.zero.minimum-acceptable-holdtime"); value.Exists() && !data.Neighbors[i].TimersKeepaliveZeroMinimumAcceptableHoldtime.IsNull() {
-			data.Neighbors[i].TimersKeepaliveZeroMinimumAcceptableHoldtime = types.Int64Value(value.Int())
+		if value := r.Get("timers.zero.minimum-acceptable-holdtime"); value.Exists() && !data.Neighbors[i].TimersHolddownZeroMinimumAcceptableHoldtime.IsNull() {
+			data.Neighbors[i].TimersHolddownZeroMinimumAcceptableHoldtime = types.Int64Value(value.Int())
 		} else {
-			data.Neighbors[i].TimersKeepaliveZeroMinimumAcceptableHoldtime = types.Int64Null()
+			data.Neighbors[i].TimersHolddownZeroMinimumAcceptableHoldtime = types.Int64Null()
 		}
 		if value := r.Get("timers.holdtime.holdtime-number"); value.Exists() && !data.Neighbors[i].TimersHoldtime.IsNull() {
 			data.Neighbors[i].TimersHoldtime = types.Int64Value(value.Int())
@@ -2541,17 +2541,17 @@ func (data *RouterBGPVRF) fromBody(ctx context.Context, res []byte) {
 		data.TimersBgpKeepaliveInterval = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "timers.bgp.zero"); value.Exists() {
-		data.TimersBgpKeepaliveZero = types.BoolValue(true)
+		data.TimersBgpHolddownZero = types.BoolValue(true)
 	} else {
-		data.TimersBgpKeepaliveZero = types.BoolValue(false)
+		data.TimersBgpHolddownZero = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "timers.bgp.zero.zero"); value.Exists() {
-		data.TimersBgpKeepaliveZeroHoldtimeZero = types.BoolValue(true)
+		data.TimersBgpHolddownZeroMinimumAcceptableZero = types.BoolValue(true)
 	} else {
-		data.TimersBgpKeepaliveZeroHoldtimeZero = types.BoolValue(false)
+		data.TimersBgpHolddownZeroMinimumAcceptableZero = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "timers.bgp.zero.minimum-acceptable-holdtime"); value.Exists() {
-		data.TimersBgpKeepaliveZeroMinimumAcceptableHoldtime = types.Int64Value(value.Int())
+		data.TimersBgpHolddownZeroMinimumAcceptableHoldtime = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "timers.bgp.holdtime.holdtime-number"); value.Exists() {
 		data.TimersBgpHoldtime = types.Int64Value(value.Int())
@@ -2904,17 +2904,17 @@ func (data *RouterBGPVRF) fromBody(ctx context.Context, res []byte) {
 				item.TimersKeepaliveInterval = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("timers.zero"); cValue.Exists() {
-				item.TimersKeepaliveZero = types.BoolValue(true)
+				item.TimersHolddownZero = types.BoolValue(true)
 			} else {
-				item.TimersKeepaliveZero = types.BoolValue(false)
+				item.TimersHolddownZero = types.BoolValue(false)
 			}
 			if cValue := v.Get("timers.zero.zero"); cValue.Exists() {
-				item.TimersKeepaliveZeroHoldtimeZero = types.BoolValue(true)
+				item.TimersHolddownZeroMinimumAcceptableZero = types.BoolValue(true)
 			} else {
-				item.TimersKeepaliveZeroHoldtimeZero = types.BoolValue(false)
+				item.TimersHolddownZeroMinimumAcceptableZero = types.BoolValue(false)
 			}
 			if cValue := v.Get("timers.zero.minimum-acceptable-holdtime"); cValue.Exists() {
-				item.TimersKeepaliveZeroMinimumAcceptableHoldtime = types.Int64Value(cValue.Int())
+				item.TimersHolddownZeroMinimumAcceptableHoldtime = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("timers.holdtime.holdtime-number"); cValue.Exists() {
 				item.TimersHoldtime = types.Int64Value(cValue.Int())
@@ -3323,17 +3323,17 @@ func (data *RouterBGPVRFData) fromBody(ctx context.Context, res []byte) {
 		data.TimersBgpKeepaliveInterval = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "timers.bgp.zero"); value.Exists() {
-		data.TimersBgpKeepaliveZero = types.BoolValue(true)
+		data.TimersBgpHolddownZero = types.BoolValue(true)
 	} else {
-		data.TimersBgpKeepaliveZero = types.BoolValue(false)
+		data.TimersBgpHolddownZero = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "timers.bgp.zero.zero"); value.Exists() {
-		data.TimersBgpKeepaliveZeroHoldtimeZero = types.BoolValue(true)
+		data.TimersBgpHolddownZeroMinimumAcceptableZero = types.BoolValue(true)
 	} else {
-		data.TimersBgpKeepaliveZeroHoldtimeZero = types.BoolValue(false)
+		data.TimersBgpHolddownZeroMinimumAcceptableZero = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "timers.bgp.zero.minimum-acceptable-holdtime"); value.Exists() {
-		data.TimersBgpKeepaliveZeroMinimumAcceptableHoldtime = types.Int64Value(value.Int())
+		data.TimersBgpHolddownZeroMinimumAcceptableHoldtime = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "timers.bgp.holdtime.holdtime-number"); value.Exists() {
 		data.TimersBgpHoldtime = types.Int64Value(value.Int())
@@ -3686,17 +3686,17 @@ func (data *RouterBGPVRFData) fromBody(ctx context.Context, res []byte) {
 				item.TimersKeepaliveInterval = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("timers.zero"); cValue.Exists() {
-				item.TimersKeepaliveZero = types.BoolValue(true)
+				item.TimersHolddownZero = types.BoolValue(true)
 			} else {
-				item.TimersKeepaliveZero = types.BoolValue(false)
+				item.TimersHolddownZero = types.BoolValue(false)
 			}
 			if cValue := v.Get("timers.zero.zero"); cValue.Exists() {
-				item.TimersKeepaliveZeroHoldtimeZero = types.BoolValue(true)
+				item.TimersHolddownZeroMinimumAcceptableZero = types.BoolValue(true)
 			} else {
-				item.TimersKeepaliveZeroHoldtimeZero = types.BoolValue(false)
+				item.TimersHolddownZeroMinimumAcceptableZero = types.BoolValue(false)
 			}
 			if cValue := v.Get("timers.zero.minimum-acceptable-holdtime"); cValue.Exists() {
-				item.TimersKeepaliveZeroMinimumAcceptableHoldtime = types.Int64Value(cValue.Int())
+				item.TimersHolddownZeroMinimumAcceptableHoldtime = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("timers.holdtime.holdtime-number"); cValue.Exists() {
 				item.TimersHoldtime = types.Int64Value(cValue.Int())
@@ -4360,13 +4360,13 @@ func (data *RouterBGPVRF) getDeletedItems(ctx context.Context, state RouterBGPVR
 				if !state.Neighbors[i].TimersHoldtime.IsNull() && data.Neighbors[j].TimersHoldtime.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers/holdtime", state.getPath(), keyString))
 				}
-				if !state.Neighbors[i].TimersKeepaliveZeroMinimumAcceptableHoldtime.IsNull() && data.Neighbors[j].TimersKeepaliveZeroMinimumAcceptableHoldtime.IsNull() {
+				if !state.Neighbors[i].TimersHolddownZeroMinimumAcceptableHoldtime.IsNull() && data.Neighbors[j].TimersHolddownZeroMinimumAcceptableHoldtime.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers/zero", state.getPath(), keyString))
 				}
-				if !state.Neighbors[i].TimersKeepaliveZeroHoldtimeZero.IsNull() && data.Neighbors[j].TimersKeepaliveZeroHoldtimeZero.IsNull() {
+				if !state.Neighbors[i].TimersHolddownZeroMinimumAcceptableZero.IsNull() && data.Neighbors[j].TimersHolddownZeroMinimumAcceptableZero.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers/zero", state.getPath(), keyString))
 				}
-				if !state.Neighbors[i].TimersKeepaliveZero.IsNull() && data.Neighbors[j].TimersKeepaliveZero.IsNull() {
+				if !state.Neighbors[i].TimersHolddownZero.IsNull() && data.Neighbors[j].TimersHolddownZero.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers/zero", state.getPath(), keyString))
 				}
 				if !state.Neighbors[i].TimersKeepaliveInterval.IsNull() && data.Neighbors[j].TimersKeepaliveInterval.IsNull() {
@@ -4649,13 +4649,13 @@ func (data *RouterBGPVRF) getDeletedItems(ctx context.Context, state RouterBGPVR
 	if !state.TimersBgpHoldtime.IsNull() && data.TimersBgpHoldtime.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/bgp/holdtime", state.getPath()))
 	}
-	if !state.TimersBgpKeepaliveZeroMinimumAcceptableHoldtime.IsNull() && data.TimersBgpKeepaliveZeroMinimumAcceptableHoldtime.IsNull() {
+	if !state.TimersBgpHolddownZeroMinimumAcceptableHoldtime.IsNull() && data.TimersBgpHolddownZeroMinimumAcceptableHoldtime.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/bgp/zero", state.getPath()))
 	}
-	if !state.TimersBgpKeepaliveZeroHoldtimeZero.IsNull() && data.TimersBgpKeepaliveZeroHoldtimeZero.IsNull() {
+	if !state.TimersBgpHolddownZeroMinimumAcceptableZero.IsNull() && data.TimersBgpHolddownZeroMinimumAcceptableZero.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/bgp/zero", state.getPath()))
 	}
-	if !state.TimersBgpKeepaliveZero.IsNull() && data.TimersBgpKeepaliveZero.IsNull() {
+	if !state.TimersBgpHolddownZero.IsNull() && data.TimersBgpHolddownZero.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/bgp/zero", state.getPath()))
 	}
 	if !state.TimersBgpKeepaliveInterval.IsNull() && data.TimersBgpKeepaliveInterval.IsNull() {
@@ -4880,10 +4880,10 @@ func (data *RouterBGPVRF) getEmptyLeafsDelete(ctx context.Context) []string {
 		if !data.Neighbors[i].LocalAddressInheritanceDisable.IsNull() && !data.Neighbors[i].LocalAddressInheritanceDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/neighbors/neighbor%v/local/address", data.getPath(), keyString))
 		}
-		if !data.Neighbors[i].TimersKeepaliveZeroHoldtimeZero.IsNull() && !data.Neighbors[i].TimersKeepaliveZeroHoldtimeZero.ValueBool() {
+		if !data.Neighbors[i].TimersHolddownZeroMinimumAcceptableZero.IsNull() && !data.Neighbors[i].TimersHolddownZeroMinimumAcceptableZero.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/neighbors/neighbor%v/timers/zero", data.getPath(), keyString))
 		}
-		if !data.Neighbors[i].TimersKeepaliveZero.IsNull() && !data.Neighbors[i].TimersKeepaliveZero.ValueBool() {
+		if !data.Neighbors[i].TimersHolddownZero.IsNull() && !data.Neighbors[i].TimersHolddownZero.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/neighbors/neighbor%v/timers/zero", data.getPath(), keyString))
 		}
 		if !data.Neighbors[i].Shutdown.IsNull() && !data.Neighbors[i].Shutdown.ValueBool() {
@@ -5033,10 +5033,10 @@ func (data *RouterBGPVRF) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.BgpRedistributeInternal.IsNull() && !data.BgpRedistributeInternal.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bgp/redistribute-internal", data.getPath()))
 	}
-	if !data.TimersBgpKeepaliveZeroHoldtimeZero.IsNull() && !data.TimersBgpKeepaliveZeroHoldtimeZero.ValueBool() {
+	if !data.TimersBgpHolddownZeroMinimumAcceptableZero.IsNull() && !data.TimersBgpHolddownZeroMinimumAcceptableZero.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/timers/bgp/zero", data.getPath()))
 	}
-	if !data.TimersBgpKeepaliveZero.IsNull() && !data.TimersBgpKeepaliveZero.ValueBool() {
+	if !data.TimersBgpHolddownZero.IsNull() && !data.TimersBgpHolddownZero.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/timers/bgp/zero", data.getPath()))
 	}
 	if !data.NexthopResolutionAllowDefault.IsNull() && !data.NexthopResolutionAllowDefault.ValueBool() {
@@ -5183,13 +5183,13 @@ func (data *RouterBGPVRF) getDeletePaths(ctx context.Context) []string {
 	if !data.TimersBgpHoldtime.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/bgp/holdtime", data.getPath()))
 	}
-	if !data.TimersBgpKeepaliveZeroMinimumAcceptableHoldtime.IsNull() {
+	if !data.TimersBgpHolddownZeroMinimumAcceptableHoldtime.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/bgp/zero", data.getPath()))
 	}
-	if !data.TimersBgpKeepaliveZeroHoldtimeZero.IsNull() {
+	if !data.TimersBgpHolddownZeroMinimumAcceptableZero.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/bgp/zero", data.getPath()))
 	}
-	if !data.TimersBgpKeepaliveZero.IsNull() {
+	if !data.TimersBgpHolddownZero.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/bgp/zero", data.getPath()))
 	}
 	if !data.TimersBgpKeepaliveInterval.IsNull() {

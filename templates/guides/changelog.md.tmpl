@@ -9,6 +9,12 @@ description: |-
 
 ## 0.7.0
 
+- BREAKING CHANGE: Rename `timers_bgp_keepalive_zero` to `timers_bgp_holddown_zero` in `iosxr_router_bgp` and `iosxr_router_bgp_vrf` resource and data source
+- BREAKING CHANGE: Rename `timers_bgp_keepalive_zero_holdtime_zero` to `timers_bgp_holddown_zero_minimum_acceptable_zero` in `iosxr_router_bgp` and `iosxr_router_bgp_vrf` resource and data source
+- BREAKING CHANGE: Rename `timers_bgp_keepalive_zero_minimum_acceptable_holdtime` to `timers_bgp_holddown_zero_minimum_acceptable_holdtime` in `iosxr_router_bgp` and `iosxr_router_bgp_vrf` resource and data source
+- BREAKING CHANGE: Rename `timers_keepalive_zero` to `timers_holddown_zero` in `iosxr_router_bgp`, `iosxr_router_bgp_vrf`, `iosxr_router_bgp_neighbor_group` and `iosxr_router_bgp_session_group` resource and data source
+- BREAKING CHANGE: Rename `timers_keepalive_zero_holdtime_zero` to `timers_holddown_zero_minimum_acceptable_zero` in `iosxr_router_bgp`, `iosxr_router_bgp_vrf`, `iosxr_router_bgp_neighbor_group` and `iosxr_router_bgp_session_group` resource and data source
+- BREAKING CHANGE: Rename `timers_keepalive_zero_minimum_acceptable_holdtime` to `timers_holddown_zero_minimum_acceptable_holdtime` in `iosxr_router_bgp`, `iosxr_router_bgp_vrf`, `iosxr_router_bgp_neighbor_group` and `iosxr_router_bgp_session_group` resource and data source
 - BREAKING CHANGE: Decompose `iosxr_interface` into individual interface type resource and data source
   - Interface types:
       `iosxr_interface_ethernet` `iosxr_interface_ethernet_subinterface` `iosxr_interface_bundle_ether` `iosxr_interface_bundle_ether_subinterface` `iosxr_interface_bvi` `iosxr_interface_loopback` `iosxr_interface_tunnel_ip` `iosxr_interface_tunnel_te`

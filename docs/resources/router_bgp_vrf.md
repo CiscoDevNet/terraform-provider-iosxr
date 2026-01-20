@@ -21,41 +21,41 @@ resource "iosxr_router_bgp_vrf" "example" {
       interface_name = "GigabitEthernet0/0/0/1"
     }
   ]
-  default_information_originate           = true
-  default_metric                          = 125
-  socket_receive_buffer_size              = 1024
-  socket_receive_buffer_size_read         = 1024
-  socket_send_buffer_size                 = 4096
-  socket_send_buffer_size_write           = 4096
-  nexthop_mpls_forwarding_ibgp            = true
-  nexthop_resolution_allow_default        = true
-  timers_bgp_keepalive_interval           = 0
-  timers_bgp_keepalive_zero               = true
-  timers_bgp_keepalive_zero_holdtime_zero = true
-  bgp_redistribute_internal               = true
-  bgp_router_id                           = "22.22.22.22"
-  bgp_unsafe_ebgp_policy                  = true
-  bgp_auto_policy_soft_reset_disable      = true
-  bgp_bestpath_cost_community_ignore      = true
-  bgp_bestpath_compare_routerid           = true
-  bgp_bestpath_aigp_ignore                = true
-  bgp_bestpath_igp_metric_ignore          = true
-  bgp_bestpath_med_missing_as_worst       = true
-  bgp_bestpath_as_path_ignore             = true
-  bgp_bestpath_as_path_multipath_relax    = true
-  bgp_bestpath_origin_as_use_validity     = true
-  bgp_bestpath_origin_as_allow_invalid    = true
-  bgp_bestpath_sr_policy_prefer           = true
-  bgp_default_local_preference            = 200
-  bgp_enforce_first_as_disable            = true
-  bgp_fast_external_fallover_disable      = true
-  bgp_log_neighbor_changes_disable        = true
-  bgp_log_message_disable                 = true
-  bgp_multipath_use_cluster_list_length   = true
-  bgp_origin_as_validation_signal_ibgp    = true
-  bfd_minimum_interval                    = 10
-  bfd_multiplier                          = 4
-  rd_auto                                 = true
+  default_information_originate                    = true
+  default_metric                                   = 125
+  socket_receive_buffer_size                       = 1024
+  socket_receive_buffer_size_read                  = 1024
+  socket_send_buffer_size                          = 4096
+  socket_send_buffer_size_write                    = 4096
+  nexthop_mpls_forwarding_ibgp                     = true
+  nexthop_resolution_allow_default                 = true
+  timers_bgp_keepalive_interval                    = 0
+  timers_bgp_holddown_zero                         = true
+  timers_bgp_holddown_zero_minimum_acceptable_zero = true
+  bgp_redistribute_internal                        = true
+  bgp_router_id                                    = "22.22.22.22"
+  bgp_unsafe_ebgp_policy                           = true
+  bgp_auto_policy_soft_reset_disable               = true
+  bgp_bestpath_cost_community_ignore               = true
+  bgp_bestpath_compare_routerid                    = true
+  bgp_bestpath_aigp_ignore                         = true
+  bgp_bestpath_igp_metric_ignore                   = true
+  bgp_bestpath_med_missing_as_worst                = true
+  bgp_bestpath_as_path_ignore                      = true
+  bgp_bestpath_as_path_multipath_relax             = true
+  bgp_bestpath_origin_as_use_validity              = true
+  bgp_bestpath_origin_as_allow_invalid             = true
+  bgp_bestpath_sr_policy_prefer                    = true
+  bgp_default_local_preference                     = 200
+  bgp_enforce_first_as_disable                     = true
+  bgp_fast_external_fallover_disable               = true
+  bgp_log_neighbor_changes_disable                 = true
+  bgp_log_message_disable                          = true
+  bgp_multipath_use_cluster_list_length            = true
+  bgp_origin_as_validation_signal_ibgp             = true
+  bfd_minimum_interval                             = 10
+  bfd_multiplier                                   = 4
+  rd_auto                                          = true
   neighbors = [
     {
       address                             = "10.1.1.2"
@@ -91,8 +91,8 @@ resource "iosxr_router_bgp_vrf" "example" {
       fast_fallover                                                  = true
       shutdown                                                       = false
       timers_keepalive_interval                                      = 0
-      timers_keepalive_zero                                          = true
-      timers_keepalive_zero_minimum_acceptable_holdtime              = 30
+      timers_holddown_zero                                           = true
+      timers_holddown_zero_minimum_acceptable_holdtime               = 30
       local_address                                                  = "192.168.1.1"
       log_neighbor_changes_detail                                    = true
       log_message_in_size                                            = 256
@@ -203,16 +203,16 @@ resource "iosxr_router_bgp_vrf" "example" {
   - Range: `4096`-`131072`
 - `socket_send_buffer_size_write` (Number) BGP Write buffer size in bytes
   - Range: `4096`-`131072`
+- `timers_bgp_holddown_zero` (Boolean) Disable keepalives/hold time
+- `timers_bgp_holddown_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
+  - Range: `3`-`65535`
+- `timers_bgp_holddown_zero_minimum_acceptable_zero` (Boolean) Disable keepalives/hold time
 - `timers_bgp_holdtime` (Number) Holdtime
   - Range: `3`-`65535`
 - `timers_bgp_holdtime_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
   - Range: `3`-`65535`
 - `timers_bgp_keepalive_interval` (Number) Keepalive interval
   - Range: `0`-`65535`
-- `timers_bgp_keepalive_zero` (Boolean) Disable keepalives/hold time
-- `timers_bgp_keepalive_zero_holdtime_zero` (Boolean) Disable keepalives/hold time
-- `timers_bgp_keepalive_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
-  - Range: `3`-`65535`
 
 ### Read-Only
 
@@ -382,16 +382,16 @@ Optional:
   - Range: `68`-`10000`
 - `tcp_mtu_discovery` (Boolean) Enable Path MTU discovery on TCP session
 - `tcp_mtu_discovery_inheritance_disable` (Boolean) Prevent TCP MTU cfg from being inherited from the parent
+- `timers_holddown_zero` (Boolean) Disable keepalives/hold time
+- `timers_holddown_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
+  - Range: `3`-`65535`
+- `timers_holddown_zero_minimum_acceptable_zero` (Boolean) Disable keepalives/hold time
 - `timers_holdtime` (Number) Holdtime
   - Range: `3`-`65535`
 - `timers_holdtime_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
   - Range: `3`-`65535`
 - `timers_keepalive_interval` (Number) Keepalive interval
   - Range: `0`-`65535`
-- `timers_keepalive_zero` (Boolean) Disable keepalives/hold time
-- `timers_keepalive_zero_holdtime_zero` (Boolean) Disable keepalives/hold time
-- `timers_keepalive_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
-  - Range: `3`-`65535`
 - `ttl_security` (Boolean) Enable EBGP TTL security
 - `ttl_security_inheritance_disable` (Boolean) Prevent ttl-security from being inherited from the parent
 - `update_in_error_handling_avoid_reset` (String) Avoid neighbor reset during inbound update message error handling

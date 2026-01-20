@@ -281,15 +281,15 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							MarkdownDescription: "Keepalive interval",
 							Computed:            true,
 						},
-						"timers_keepalive_zero": schema.BoolAttribute{
+						"timers_holddown_zero": schema.BoolAttribute{
 							MarkdownDescription: "Disable keepalives/hold time",
 							Computed:            true,
 						},
-						"timers_keepalive_zero_holdtime_zero": schema.BoolAttribute{
+						"timers_holddown_zero_minimum_acceptable_zero": schema.BoolAttribute{
 							MarkdownDescription: "Disable keepalives/hold time",
 							Computed:            true,
 						},
-						"timers_keepalive_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
+						"timers_holddown_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
 							MarkdownDescription: "Minimum acceptable holdtime from neighbor",
 							Computed:            true,
 						},
@@ -1020,15 +1020,15 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				MarkdownDescription: "Keepalive interval",
 				Computed:            true,
 			},
-			"timers_bgp_keepalive_zero": schema.BoolAttribute{
+			"timers_bgp_holddown_zero": schema.BoolAttribute{
 				MarkdownDescription: "Disable keepalives/hold time",
 				Computed:            true,
 			},
-			"timers_bgp_keepalive_zero_holdtime_zero": schema.BoolAttribute{
+			"timers_bgp_holddown_zero_minimum_acceptable_zero": schema.BoolAttribute{
 				MarkdownDescription: "Disable keepalives/hold time",
 				Computed:            true,
 			},
-			"timers_bgp_keepalive_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
+			"timers_bgp_holddown_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
 				MarkdownDescription: "Minimum acceptable holdtime from neighbor",
 				Computed:            true,
 			},

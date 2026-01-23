@@ -57,6 +57,9 @@ attributes:
     example: true
   - yang_name: authentication/keychain-name
     example: "KEY1"
+  - yang_name: authentication/keychain
+    exclude_test: true
+    example: true
   - yang_name: authentication/null
     exclude_test: true
     example: true
@@ -143,9 +146,10 @@ attributes:
   - yang_name: passive/disable
     example: true
   - yang_name: distribute-list/access-list
-    tf_name: distribute_list_acl
+    tf_name: distribute_list_in_acl
     example: "ACL_1"
   - yang_name: distribute-list/route-policy
+    tf_name: distribute_list_in_route_policy
     exclude_test: true
     example: "ROUTE_POLICY_1"
   - yang_name: packet-size
@@ -383,6 +387,7 @@ attributes:
     type: List
     attributes:
       - yang_name: algorithm-number
+        tf_name: number
         id: true
         example: 128
       - yang_name: index/sid-index

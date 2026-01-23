@@ -141,7 +141,7 @@ func TestAccDataSourceIosxrRouterISIS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "affinity_maps.0.bit_position", "4"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "ignore_lsp_errors_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "purge_transmit_strict", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "purge_transmit_strict_strict_value", "level-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "purge_transmit_strict_value", "level-1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "srlg_admin_weight", "500"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "srlg_names.0.srlg_name", "SRLG-1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "srlg_names.0.admin_weight", "500"))
@@ -363,7 +363,7 @@ func testAccDataSourceIosxrRouterISISConfig() string {
 	config += `	}]` + "\n"
 	config += `	ignore_lsp_errors_disable = true` + "\n"
 	config += `	purge_transmit_strict = true` + "\n"
-	config += `	purge_transmit_strict_strict_value = "level-1"` + "\n"
+	config += `	purge_transmit_strict_value = "level-1"` + "\n"
 	config += `	srlg_admin_weight = 500` + "\n"
 	config += `	srlg_names = [{` + "\n"
 	config += `		srlg_name = "SRLG-1"` + "\n"

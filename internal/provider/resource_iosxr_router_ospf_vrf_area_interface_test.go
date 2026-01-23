@@ -61,7 +61,7 @@ func TestAccIosxrRouterOSPFVRFAreaInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "mtu_ignore_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "database_filter_all_out_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "passive_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "distribute_list_acl", "ACL_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "distribute_list_in_acl", "ACL_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "packet_size", "1400"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "bfd_fast_detect", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_vrf_area_interface.test", "bfd_fast_detect_strict_mode", "true"))
@@ -239,7 +239,7 @@ func testAccIosxrRouterOSPFVRFAreaInterfaceConfig_all() string {
 	config += `	mtu_ignore_enable = true` + "\n"
 	config += `	database_filter_all_out_enable = true` + "\n"
 	config += `	passive_disable = true` + "\n"
-	config += `	distribute_list_acl = "ACL_1"` + "\n"
+	config += `	distribute_list_in_acl = "ACL_1"` + "\n"
 	config += `	packet_size = 1400` + "\n"
 	config += `	bfd_fast_detect = true` + "\n"
 	config += `	bfd_fast_detect_strict_mode = true` + "\n"

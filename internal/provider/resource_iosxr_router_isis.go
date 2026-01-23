@@ -954,7 +954,7 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 				MarkdownDescription: helpers.NewAttributeDescription("Only authentication TLV is allowed").String,
 				Optional:            true,
 			},
-			"purge_transmit_strict_strict_value": schema.StringAttribute{
+			"purge_transmit_strict_value": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Only authentication TLV is allowed").AddStringEnumDescription("level-1", "level-2").String,
 				Optional:            true,
 				Validators: []validator.String{

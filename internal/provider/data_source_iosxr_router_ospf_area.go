@@ -206,6 +206,10 @@ func (d *RouterOSPFAreaDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "Specify keychain name",
 							Computed:            true,
 						},
+						"authentication_keychain": schema.BoolAttribute{
+							MarkdownDescription: "Use keychain",
+							Computed:            true,
+						},
 						"authentication_null": schema.BoolAttribute{
 							MarkdownDescription: "Use no authentication",
 							Computed:            true,
@@ -254,11 +258,11 @@ func (d *RouterOSPFAreaDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "Disable filtering",
 							Computed:            true,
 						},
-						"distribute_list_acl": schema.StringAttribute{
+						"distribute_list_in_acl": schema.StringAttribute{
 							MarkdownDescription: "In-bound access-list name.",
 							Computed:            true,
 						},
-						"distribute_list_route_policy": schema.StringAttribute{
+						"distribute_list_in_route_policy": schema.StringAttribute{
 							MarkdownDescription: "Route Policy to filter OSPF prefixes",
 							Computed:            true,
 						},
@@ -555,6 +559,10 @@ func (d *RouterOSPFAreaDataSource) Schema(ctx context.Context, req datasource.Sc
 				MarkdownDescription: "Specify keychain name",
 				Computed:            true,
 			},
+			"authentication_keychain": schema.BoolAttribute{
+				MarkdownDescription: "Use keychain",
+				Computed:            true,
+			},
 			"authentication_null": schema.BoolAttribute{
 				MarkdownDescription: "Use no authentication",
 				Computed:            true,
@@ -671,11 +679,11 @@ func (d *RouterOSPFAreaDataSource) Schema(ctx context.Context, req datasource.Sc
 				MarkdownDescription: "Disable passive",
 				Computed:            true,
 			},
-			"distribute_list_acl": schema.StringAttribute{
+			"distribute_list_in_acl": schema.StringAttribute{
 				MarkdownDescription: "In-bound access-list name.",
 				Computed:            true,
 			},
-			"distribute_list_route_policy": schema.StringAttribute{
+			"distribute_list_in_route_policy": schema.StringAttribute{
 				MarkdownDescription: "Route Policy to filter OSPF prefixes",
 				Computed:            true,
 			},

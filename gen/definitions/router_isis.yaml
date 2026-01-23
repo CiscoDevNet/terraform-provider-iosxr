@@ -525,6 +525,7 @@ attributes:
   - yang_name: purge-transmit/strict
     example: true
   - yang_name: purge-transmit/strict/strict-value
+    tf_name: purge_transmit_strict_value
     example: "level-1"
   - yang_name: srlg/admin-weight
     example: 500

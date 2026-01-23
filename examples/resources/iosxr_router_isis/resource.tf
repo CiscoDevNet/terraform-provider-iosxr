@@ -161,10 +161,10 @@ resource "iosxr_router_isis" "example" {
       bit_position  = 4
     }
   ]
-  ignore_lsp_errors_disable          = true
-  purge_transmit_strict              = true
-  purge_transmit_strict_strict_value = "level-1"
-  srlg_admin_weight                  = 500
+  ignore_lsp_errors_disable   = true
+  purge_transmit_strict       = true
+  purge_transmit_strict_value = "level-1"
+  srlg_admin_weight           = 500
   srlg_names = [
     {
       srlg_name    = "SRLG-1"

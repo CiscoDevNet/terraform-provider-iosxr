@@ -266,6 +266,10 @@ func (r *RouterOSPFVRFAreaResource) Schema(ctx context.Context, req resource.Sch
 					stringvalidator.LengthBetween(1, 32),
 				},
 			},
+			"authentication_keychain": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use keychain").String,
+				Optional:            true,
+			},
 			"authentication_null": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Use no authentication").String,
 				Optional:            true,
@@ -422,11 +426,11 @@ func (r *RouterOSPFVRFAreaResource) Schema(ctx context.Context, req resource.Sch
 				MarkdownDescription: helpers.NewAttributeDescription("Disable passive").String,
 				Optional:            true,
 			},
-			"distribute_list_acl": schema.StringAttribute{
+			"distribute_list_in_acl": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("In-bound access-list name.").String,
 				Optional:            true,
 			},
-			"distribute_list_route_policy": schema.StringAttribute{
+			"distribute_list_in_route_policy": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Route Policy to filter OSPF prefixes").String,
 				Optional:            true,
 				Validators: []validator.String{
@@ -786,6 +790,10 @@ func (r *RouterOSPFVRFAreaResource) Schema(ctx context.Context, req resource.Sch
 							MarkdownDescription: helpers.NewAttributeDescription("Use message-digest authentication").String,
 							Optional:            true,
 						},
+						"authentication_keychain": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use keychain").String,
+							Optional:            true,
+						},
 						"authentication_keychain_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Specify keychain name").String,
 							Optional:            true,
@@ -893,6 +901,10 @@ func (r *RouterOSPFVRFAreaResource) Schema(ctx context.Context, req resource.Sch
 						},
 						"authentication_message_digest": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Use message-digest authentication").String,
+							Optional:            true,
+						},
+						"authentication_keychain": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use keychain").String,
 							Optional:            true,
 						},
 						"authentication_keychain_name": schema.StringAttribute{

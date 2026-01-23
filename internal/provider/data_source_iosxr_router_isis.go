@@ -729,7 +729,7 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Only authentication TLV is allowed",
 				Computed:            true,
 			},
-			"purge_transmit_strict_strict_value": schema.StringAttribute{
+			"purge_transmit_strict_value": schema.StringAttribute{
 				MarkdownDescription: "Only authentication TLV is allowed",
 				Computed:            true,
 			},

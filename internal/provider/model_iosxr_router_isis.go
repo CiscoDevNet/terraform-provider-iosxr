@@ -135,7 +135,7 @@ type RouterISIS struct {
 	AffinityMaps                           []RouterISISAffinityMaps              `tfsdk:"affinity_maps"`
 	IgnoreLspErrorsDisable                 types.Bool                            `tfsdk:"ignore_lsp_errors_disable"`
 	PurgeTransmitStrict                    types.Bool                            `tfsdk:"purge_transmit_strict"`
-	PurgeTransmitStrictStrictValue         types.String                          `tfsdk:"purge_transmit_strict_strict_value"`
+	PurgeTransmitStrictValue               types.String                          `tfsdk:"purge_transmit_strict_value"`
 	SrlgAdminWeight                        types.Int64                           `tfsdk:"srlg_admin_weight"`
 	SrlgNames                              []RouterISISSrlgNames                 `tfsdk:"srlg_names"`
 	FlexAlgos                              []RouterISISFlexAlgos                 `tfsdk:"flex_algos"`
@@ -240,7 +240,7 @@ type RouterISISData struct {
 	AffinityMaps                           []RouterISISAffinityMaps              `tfsdk:"affinity_maps"`
 	IgnoreLspErrorsDisable                 types.Bool                            `tfsdk:"ignore_lsp_errors_disable"`
 	PurgeTransmitStrict                    types.Bool                            `tfsdk:"purge_transmit_strict"`
-	PurgeTransmitStrictStrictValue         types.String                          `tfsdk:"purge_transmit_strict_strict_value"`
+	PurgeTransmitStrictValue               types.String                          `tfsdk:"purge_transmit_strict_value"`
 	SrlgAdminWeight                        types.Int64                           `tfsdk:"srlg_admin_weight"`
 	SrlgNames                              []RouterISISSrlgNames                 `tfsdk:"srlg_names"`
 	FlexAlgos                              []RouterISISFlexAlgos                 `tfsdk:"flex_algos"`
@@ -722,8 +722,8 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "purge-transmit.strict", map[string]string{})
 		}
 	}
-	if !data.PurgeTransmitStrictStrictValue.IsNull() && !data.PurgeTransmitStrictStrictValue.IsUnknown() {
-		body, _ = sjson.Set(body, "purge-transmit.strict.strict-value", data.PurgeTransmitStrictStrictValue.ValueString())
+	if !data.PurgeTransmitStrictValue.IsNull() && !data.PurgeTransmitStrictValue.IsUnknown() {
+		body, _ = sjson.Set(body, "purge-transmit.strict.strict-value", data.PurgeTransmitStrictValue.ValueString())
 	}
 	if !data.SrlgAdminWeight.IsNull() && !data.SrlgAdminWeight.IsUnknown() {
 		body, _ = sjson.Set(body, "srlg.admin-weight", strconv.FormatInt(data.SrlgAdminWeight.ValueInt64(), 10))
@@ -2401,10 +2401,10 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.PurgeTransmitStrict = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "purge-transmit.strict.strict-value"); value.Exists() && !data.PurgeTransmitStrictStrictValue.IsNull() {
-		data.PurgeTransmitStrictStrictValue = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "purge-transmit.strict.strict-value"); value.Exists() && !data.PurgeTransmitStrictValue.IsNull() {
+		data.PurgeTransmitStrictValue = types.StringValue(value.String())
 	} else {
-		data.PurgeTransmitStrictStrictValue = types.StringNull()
+		data.PurgeTransmitStrictValue = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "srlg.admin-weight"); value.Exists() && !data.SrlgAdminWeight.IsNull() {
 		data.SrlgAdminWeight = types.Int64Value(value.Int())
@@ -3330,7 +3330,7 @@ func (data *RouterISIS) fromBody(ctx context.Context, res []byte) {
 		data.PurgeTransmitStrict = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "purge-transmit.strict.strict-value"); value.Exists() {
-		data.PurgeTransmitStrictStrictValue = types.StringValue(value.String())
+		data.PurgeTransmitStrictValue = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "srlg.admin-weight"); value.Exists() {
 		data.SrlgAdminWeight = types.Int64Value(value.Int())
@@ -4128,7 +4128,7 @@ func (data *RouterISISData) fromBody(ctx context.Context, res []byte) {
 		data.PurgeTransmitStrict = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "purge-transmit.strict.strict-value"); value.Exists() {
-		data.PurgeTransmitStrictStrictValue = types.StringValue(value.String())
+		data.PurgeTransmitStrictValue = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "srlg.admin-weight"); value.Exists() {
 		data.SrlgAdminWeight = types.Int64Value(value.Int())
@@ -4500,7 +4500,7 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 	if !state.SrlgAdminWeight.IsNull() && data.SrlgAdminWeight.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/srlg/admin-weight", state.getPath()))
 	}
-	if !state.PurgeTransmitStrictStrictValue.IsNull() && data.PurgeTransmitStrictStrictValue.IsNull() {
+	if !state.PurgeTransmitStrictValue.IsNull() && data.PurgeTransmitStrictValue.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/purge-transmit/strict/strict-value", state.getPath()))
 	}
 	if !state.PurgeTransmitStrict.IsNull() && data.PurgeTransmitStrict.IsNull() {
@@ -5696,7 +5696,7 @@ func (data *RouterISIS) getDeletePaths(ctx context.Context) []string {
 	if !data.SrlgAdminWeight.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/srlg/admin-weight", data.getPath()))
 	}
-	if !data.PurgeTransmitStrictStrictValue.IsNull() {
+	if !data.PurgeTransmitStrictValue.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/purge-transmit/strict/strict-value", data.getPath()))
 	}
 	if !data.PurgeTransmitStrict.IsNull() {

@@ -76,6 +76,7 @@ type RouterOSPFArea struct {
 	Authentication                                          types.Bool                                                 `tfsdk:"authentication"`
 	AuthenticationMessageDigest                             types.Bool                                                 `tfsdk:"authentication_message_digest"`
 	AuthenticationKeychainName                              types.String                                               `tfsdk:"authentication_keychain_name"`
+	AuthenticationKeychain                                  types.Bool                                                 `tfsdk:"authentication_keychain"`
 	AuthenticationNull                                      types.Bool                                                 `tfsdk:"authentication_null"`
 	NetworkBroadcast                                        types.Bool                                                 `tfsdk:"network_broadcast"`
 	NetworkNonBroadcast                                     types.Bool                                                 `tfsdk:"network_non_broadcast"`
@@ -105,8 +106,8 @@ type RouterOSPFArea struct {
 	DatabaseFilterAllOutDisable                             types.Bool                                                 `tfsdk:"database_filter_all_out_disable"`
 	PassiveEnable                                           types.Bool                                                 `tfsdk:"passive_enable"`
 	PassiveDisable                                          types.Bool                                                 `tfsdk:"passive_disable"`
-	DistributeListAcl                                       types.String                                               `tfsdk:"distribute_list_acl"`
-	DistributeListRoutePolicy                               types.String                                               `tfsdk:"distribute_list_route_policy"`
+	DistributeListInAcl                                     types.String                                               `tfsdk:"distribute_list_in_acl"`
+	DistributeListInRoutePolicy                             types.String                                               `tfsdk:"distribute_list_in_route_policy"`
 	BfdFastDetect                                           types.Bool                                                 `tfsdk:"bfd_fast_detect"`
 	BfdFastDetectStrictMode                                 types.Bool                                                 `tfsdk:"bfd_fast_detect_strict_mode"`
 	BfdFastDetectDisable                                    types.Bool                                                 `tfsdk:"bfd_fast_detect_disable"`
@@ -201,6 +202,7 @@ type RouterOSPFAreaData struct {
 	Authentication                                          types.Bool                                                 `tfsdk:"authentication"`
 	AuthenticationMessageDigest                             types.Bool                                                 `tfsdk:"authentication_message_digest"`
 	AuthenticationKeychainName                              types.String                                               `tfsdk:"authentication_keychain_name"`
+	AuthenticationKeychain                                  types.Bool                                                 `tfsdk:"authentication_keychain"`
 	AuthenticationNull                                      types.Bool                                                 `tfsdk:"authentication_null"`
 	NetworkBroadcast                                        types.Bool                                                 `tfsdk:"network_broadcast"`
 	NetworkNonBroadcast                                     types.Bool                                                 `tfsdk:"network_non_broadcast"`
@@ -230,8 +232,8 @@ type RouterOSPFAreaData struct {
 	DatabaseFilterAllOutDisable                             types.Bool                                                 `tfsdk:"database_filter_all_out_disable"`
 	PassiveEnable                                           types.Bool                                                 `tfsdk:"passive_enable"`
 	PassiveDisable                                          types.Bool                                                 `tfsdk:"passive_disable"`
-	DistributeListAcl                                       types.String                                               `tfsdk:"distribute_list_acl"`
-	DistributeListRoutePolicy                               types.String                                               `tfsdk:"distribute_list_route_policy"`
+	DistributeListInAcl                                     types.String                                               `tfsdk:"distribute_list_in_acl"`
+	DistributeListInRoutePolicy                             types.String                                               `tfsdk:"distribute_list_in_route_policy"`
 	BfdFastDetect                                           types.Bool                                                 `tfsdk:"bfd_fast_detect"`
 	BfdFastDetectStrictMode                                 types.Bool                                                 `tfsdk:"bfd_fast_detect_strict_mode"`
 	BfdFastDetectDisable                                    types.Bool                                                 `tfsdk:"bfd_fast_detect_disable"`
@@ -298,6 +300,7 @@ type RouterOSPFAreaMultiAreaInterfaces struct {
 	Authentication                                          types.Bool                                                                    `tfsdk:"authentication"`
 	AuthenticationMessageDigest                             types.Bool                                                                    `tfsdk:"authentication_message_digest"`
 	AuthenticationKeychainName                              types.String                                                                  `tfsdk:"authentication_keychain_name"`
+	AuthenticationKeychain                                  types.Bool                                                                    `tfsdk:"authentication_keychain"`
 	AuthenticationNull                                      types.Bool                                                                    `tfsdk:"authentication_null"`
 	Cost                                                    types.Int64                                                                   `tfsdk:"cost"`
 	CostFallback                                            types.Int64                                                                   `tfsdk:"cost_fallback"`
@@ -310,8 +313,8 @@ type RouterOSPFAreaMultiAreaInterfaces struct {
 	MtuIgnoreDisable                                        types.Bool                                                                    `tfsdk:"mtu_ignore_disable"`
 	DatabaseFilterAllOutEnable                              types.Bool                                                                    `tfsdk:"database_filter_all_out_enable"`
 	DatabaseFilterAllOutDisable                             types.Bool                                                                    `tfsdk:"database_filter_all_out_disable"`
-	DistributeListAcl                                       types.String                                                                  `tfsdk:"distribute_list_acl"`
-	DistributeListRoutePolicy                               types.String                                                                  `tfsdk:"distribute_list_route_policy"`
+	DistributeListInAcl                                     types.String                                                                  `tfsdk:"distribute_list_in_acl"`
+	DistributeListInRoutePolicy                             types.String                                                                  `tfsdk:"distribute_list_in_route_policy"`
 	PacketSize                                              types.Int64                                                                   `tfsdk:"packet_size"`
 	FastReroutePerLink                                      types.Bool                                                                    `tfsdk:"fast_reroute_per_link"`
 	FastReroutePerLinkExcludeInterfaces                     []RouterOSPFAreaMultiAreaInterfacesFastReroutePerLinkExcludeInterfaces        `tfsdk:"fast_reroute_per_link_exclude_interfaces"`
@@ -578,6 +581,11 @@ func (data RouterOSPFArea) toBody(ctx context.Context) string {
 	if !data.AuthenticationKeychainName.IsNull() && !data.AuthenticationKeychainName.IsUnknown() {
 		body, _ = sjson.Set(body, "authentication.keychain-name", data.AuthenticationKeychainName.ValueString())
 	}
+	if !data.AuthenticationKeychain.IsNull() && !data.AuthenticationKeychain.IsUnknown() {
+		if data.AuthenticationKeychain.ValueBool() {
+			body, _ = sjson.Set(body, "authentication.keychain", map[string]string{})
+		}
+	}
 	if !data.AuthenticationNull.IsNull() && !data.AuthenticationNull.IsUnknown() {
 		if data.AuthenticationNull.ValueBool() {
 			body, _ = sjson.Set(body, "authentication.null", map[string]string{})
@@ -699,11 +707,11 @@ func (data RouterOSPFArea) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "passive.disable", map[string]string{})
 		}
 	}
-	if !data.DistributeListAcl.IsNull() && !data.DistributeListAcl.IsUnknown() {
-		body, _ = sjson.Set(body, "distribute-list.access-list", data.DistributeListAcl.ValueString())
+	if !data.DistributeListInAcl.IsNull() && !data.DistributeListInAcl.IsUnknown() {
+		body, _ = sjson.Set(body, "distribute-list.access-list", data.DistributeListInAcl.ValueString())
 	}
-	if !data.DistributeListRoutePolicy.IsNull() && !data.DistributeListRoutePolicy.IsUnknown() {
-		body, _ = sjson.Set(body, "distribute-list.route-policy", data.DistributeListRoutePolicy.ValueString())
+	if !data.DistributeListInRoutePolicy.IsNull() && !data.DistributeListInRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "distribute-list.route-policy", data.DistributeListInRoutePolicy.ValueString())
 	}
 	if !data.BfdFastDetect.IsNull() && !data.BfdFastDetect.IsUnknown() {
 		if data.BfdFastDetect.ValueBool() {
@@ -948,6 +956,11 @@ func (data RouterOSPFArea) toBody(ctx context.Context) string {
 			if !item.AuthenticationKeychainName.IsNull() && !item.AuthenticationKeychainName.IsUnknown() {
 				body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"authentication.keychain-name", item.AuthenticationKeychainName.ValueString())
 			}
+			if !item.AuthenticationKeychain.IsNull() && !item.AuthenticationKeychain.IsUnknown() {
+				if item.AuthenticationKeychain.ValueBool() {
+					body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"authentication.keychain", map[string]string{})
+				}
+			}
 			if !item.AuthenticationNull.IsNull() && !item.AuthenticationNull.IsUnknown() {
 				if item.AuthenticationNull.ValueBool() {
 					body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"authentication.null", map[string]string{})
@@ -994,11 +1007,11 @@ func (data RouterOSPFArea) toBody(ctx context.Context) string {
 					body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"database-filter.all.out.disable", map[string]string{})
 				}
 			}
-			if !item.DistributeListAcl.IsNull() && !item.DistributeListAcl.IsUnknown() {
-				body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"distribute-list.access-list", item.DistributeListAcl.ValueString())
+			if !item.DistributeListInAcl.IsNull() && !item.DistributeListInAcl.IsUnknown() {
+				body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"distribute-list.access-list", item.DistributeListInAcl.ValueString())
 			}
-			if !item.DistributeListRoutePolicy.IsNull() && !item.DistributeListRoutePolicy.IsUnknown() {
-				body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"distribute-list.route-policy", item.DistributeListRoutePolicy.ValueString())
+			if !item.DistributeListInRoutePolicy.IsNull() && !item.DistributeListInRoutePolicy.IsUnknown() {
+				body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"distribute-list.route-policy", item.DistributeListInRoutePolicy.ValueString())
 			}
 			if !item.PacketSize.IsNull() && !item.PacketSize.IsUnknown() {
 				body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"packet-size", strconv.FormatInt(item.PacketSize.ValueInt64(), 10))
@@ -1566,6 +1579,15 @@ func (data *RouterOSPFArea) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.MultiAreaInterfaces[i].AuthenticationKeychainName = types.StringNull()
 		}
+		if value := r.Get("authentication.keychain"); !data.MultiAreaInterfaces[i].AuthenticationKeychain.IsNull() {
+			if value.Exists() {
+				data.MultiAreaInterfaces[i].AuthenticationKeychain = types.BoolValue(true)
+			} else {
+				data.MultiAreaInterfaces[i].AuthenticationKeychain = types.BoolValue(false)
+			}
+		} else {
+			data.MultiAreaInterfaces[i].AuthenticationKeychain = types.BoolNull()
+		}
 		if value := r.Get("authentication.null"); !data.MultiAreaInterfaces[i].AuthenticationNull.IsNull() {
 			if value.Exists() {
 				data.MultiAreaInterfaces[i].AuthenticationNull = types.BoolValue(true)
@@ -1646,15 +1668,15 @@ func (data *RouterOSPFArea) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.MultiAreaInterfaces[i].DatabaseFilterAllOutDisable = types.BoolNull()
 		}
-		if value := r.Get("distribute-list.access-list"); value.Exists() && !data.MultiAreaInterfaces[i].DistributeListAcl.IsNull() {
-			data.MultiAreaInterfaces[i].DistributeListAcl = types.StringValue(value.String())
+		if value := r.Get("distribute-list.access-list"); value.Exists() && !data.MultiAreaInterfaces[i].DistributeListInAcl.IsNull() {
+			data.MultiAreaInterfaces[i].DistributeListInAcl = types.StringValue(value.String())
 		} else {
-			data.MultiAreaInterfaces[i].DistributeListAcl = types.StringNull()
+			data.MultiAreaInterfaces[i].DistributeListInAcl = types.StringNull()
 		}
-		if value := r.Get("distribute-list.route-policy"); value.Exists() && !data.MultiAreaInterfaces[i].DistributeListRoutePolicy.IsNull() {
-			data.MultiAreaInterfaces[i].DistributeListRoutePolicy = types.StringValue(value.String())
+		if value := r.Get("distribute-list.route-policy"); value.Exists() && !data.MultiAreaInterfaces[i].DistributeListInRoutePolicy.IsNull() {
+			data.MultiAreaInterfaces[i].DistributeListInRoutePolicy = types.StringValue(value.String())
 		} else {
-			data.MultiAreaInterfaces[i].DistributeListRoutePolicy = types.StringNull()
+			data.MultiAreaInterfaces[i].DistributeListInRoutePolicy = types.StringNull()
 		}
 		if value := r.Get("packet-size"); value.Exists() && !data.MultiAreaInterfaces[i].PacketSize.IsNull() {
 			data.MultiAreaInterfaces[i].PacketSize = types.Int64Value(value.Int())
@@ -2237,6 +2259,15 @@ func (data *RouterOSPFArea) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.AuthenticationKeychainName = types.StringNull()
 	}
+	if value := gjson.GetBytes(res, "authentication.keychain"); !data.AuthenticationKeychain.IsNull() {
+		if value.Exists() {
+			data.AuthenticationKeychain = types.BoolValue(true)
+		} else {
+			data.AuthenticationKeychain = types.BoolValue(false)
+		}
+	} else {
+		data.AuthenticationKeychain = types.BoolNull()
+	}
 	if value := gjson.GetBytes(res, "authentication.null"); !data.AuthenticationNull.IsNull() {
 		if value.Exists() {
 			data.AuthenticationNull = types.BoolValue(true)
@@ -2450,15 +2481,15 @@ func (data *RouterOSPFArea) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.PassiveDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "distribute-list.access-list"); value.Exists() && !data.DistributeListAcl.IsNull() {
-		data.DistributeListAcl = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "distribute-list.access-list"); value.Exists() && !data.DistributeListInAcl.IsNull() {
+		data.DistributeListInAcl = types.StringValue(value.String())
 	} else {
-		data.DistributeListAcl = types.StringNull()
+		data.DistributeListInAcl = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "distribute-list.route-policy"); value.Exists() && !data.DistributeListRoutePolicy.IsNull() {
-		data.DistributeListRoutePolicy = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "distribute-list.route-policy"); value.Exists() && !data.DistributeListInRoutePolicy.IsNull() {
+		data.DistributeListInRoutePolicy = types.StringValue(value.String())
 	} else {
-		data.DistributeListRoutePolicy = types.StringNull()
+		data.DistributeListInRoutePolicy = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "bfd.fast-detect"); !data.BfdFastDetect.IsNull() {
 		if value.Exists() {
@@ -3168,6 +3199,11 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("authentication.keychain-name"); cValue.Exists() {
 				item.AuthenticationKeychainName = types.StringValue(cValue.String())
 			}
+			if cValue := v.Get("authentication.keychain"); cValue.Exists() {
+				item.AuthenticationKeychain = types.BoolValue(true)
+			} else {
+				item.AuthenticationKeychain = types.BoolValue(false)
+			}
 			if cValue := v.Get("authentication.null"); cValue.Exists() {
 				item.AuthenticationNull = types.BoolValue(true)
 			} else {
@@ -3215,10 +3251,10 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res []byte) {
 				item.DatabaseFilterAllOutDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("distribute-list.access-list"); cValue.Exists() {
-				item.DistributeListAcl = types.StringValue(cValue.String())
+				item.DistributeListInAcl = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("distribute-list.route-policy"); cValue.Exists() {
-				item.DistributeListRoutePolicy = types.StringValue(cValue.String())
+				item.DistributeListInRoutePolicy = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("packet-size"); cValue.Exists() {
 				item.PacketSize = types.Int64Value(cValue.Int())
@@ -3524,6 +3560,11 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "authentication.keychain-name"); value.Exists() {
 		data.AuthenticationKeychainName = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "authentication.keychain"); value.Exists() {
+		data.AuthenticationKeychain = types.BoolValue(true)
+	} else {
+		data.AuthenticationKeychain = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "authentication.null"); value.Exists() {
 		data.AuthenticationNull = types.BoolValue(true)
 	} else {
@@ -3646,10 +3687,10 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res []byte) {
 		data.PassiveDisable = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "distribute-list.access-list"); value.Exists() {
-		data.DistributeListAcl = types.StringValue(value.String())
+		data.DistributeListInAcl = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "distribute-list.route-policy"); value.Exists() {
-		data.DistributeListRoutePolicy = types.StringValue(value.String())
+		data.DistributeListInRoutePolicy = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "bfd.fast-detect"); value.Exists() {
 		data.BfdFastDetect = types.BoolValue(true)
@@ -4075,6 +4116,11 @@ func (data *RouterOSPFAreaData) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("authentication.keychain-name"); cValue.Exists() {
 				item.AuthenticationKeychainName = types.StringValue(cValue.String())
 			}
+			if cValue := v.Get("authentication.keychain"); cValue.Exists() {
+				item.AuthenticationKeychain = types.BoolValue(true)
+			} else {
+				item.AuthenticationKeychain = types.BoolValue(false)
+			}
 			if cValue := v.Get("authentication.null"); cValue.Exists() {
 				item.AuthenticationNull = types.BoolValue(true)
 			} else {
@@ -4122,10 +4168,10 @@ func (data *RouterOSPFAreaData) fromBody(ctx context.Context, res []byte) {
 				item.DatabaseFilterAllOutDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("distribute-list.access-list"); cValue.Exists() {
-				item.DistributeListAcl = types.StringValue(cValue.String())
+				item.DistributeListInAcl = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("distribute-list.route-policy"); cValue.Exists() {
-				item.DistributeListRoutePolicy = types.StringValue(cValue.String())
+				item.DistributeListInRoutePolicy = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("packet-size"); cValue.Exists() {
 				item.PacketSize = types.Int64Value(cValue.Int())
@@ -4431,6 +4477,11 @@ func (data *RouterOSPFAreaData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "authentication.keychain-name"); value.Exists() {
 		data.AuthenticationKeychainName = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "authentication.keychain"); value.Exists() {
+		data.AuthenticationKeychain = types.BoolValue(true)
+	} else {
+		data.AuthenticationKeychain = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "authentication.null"); value.Exists() {
 		data.AuthenticationNull = types.BoolValue(true)
 	} else {
@@ -4553,10 +4604,10 @@ func (data *RouterOSPFAreaData) fromBody(ctx context.Context, res []byte) {
 		data.PassiveDisable = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "distribute-list.access-list"); value.Exists() {
-		data.DistributeListAcl = types.StringValue(value.String())
+		data.DistributeListInAcl = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "distribute-list.route-policy"); value.Exists() {
-		data.DistributeListRoutePolicy = types.StringValue(value.String())
+		data.DistributeListInRoutePolicy = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "bfd.fast-detect"); value.Exists() {
 		data.BfdFastDetect = types.BoolValue(true)
@@ -5210,10 +5261,10 @@ func (data *RouterOSPFArea) getDeletedItems(ctx context.Context, state RouterOSP
 	if !state.BfdFastDetect.IsNull() && data.BfdFastDetect.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/fast-detect", state.getPath()))
 	}
-	if !state.DistributeListRoutePolicy.IsNull() && data.DistributeListRoutePolicy.IsNull() {
+	if !state.DistributeListInRoutePolicy.IsNull() && data.DistributeListInRoutePolicy.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute-list/route-policy", state.getPath()))
 	}
-	if !state.DistributeListAcl.IsNull() && data.DistributeListAcl.IsNull() {
+	if !state.DistributeListInAcl.IsNull() && data.DistributeListInAcl.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute-list/access-list", state.getPath()))
 	}
 	if !state.PassiveDisable.IsNull() && data.PassiveDisable.IsNull() {
@@ -5302,6 +5353,9 @@ func (data *RouterOSPFArea) getDeletedItems(ctx context.Context, state RouterOSP
 	}
 	if !state.AuthenticationNull.IsNull() && data.AuthenticationNull.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/authentication/null", state.getPath()))
+	}
+	if !state.AuthenticationKeychain.IsNull() && data.AuthenticationKeychain.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/authentication/keychain", state.getPath()))
 	}
 	if !state.AuthenticationKeychainName.IsNull() && data.AuthenticationKeychainName.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/authentication/keychain-name", state.getPath()))
@@ -5647,10 +5701,10 @@ func (data *RouterOSPFArea) getDeletedItems(ctx context.Context, state RouterOSP
 				if !state.MultiAreaInterfaces[i].PacketSize.IsNull() && data.MultiAreaInterfaces[j].PacketSize.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/multi-area-interfaces/multi-area-interface%v/packet-size", state.getPath(), keyString))
 				}
-				if !state.MultiAreaInterfaces[i].DistributeListRoutePolicy.IsNull() && data.MultiAreaInterfaces[j].DistributeListRoutePolicy.IsNull() {
+				if !state.MultiAreaInterfaces[i].DistributeListInRoutePolicy.IsNull() && data.MultiAreaInterfaces[j].DistributeListInRoutePolicy.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/multi-area-interfaces/multi-area-interface%v/distribute-list/route-policy", state.getPath(), keyString))
 				}
-				if !state.MultiAreaInterfaces[i].DistributeListAcl.IsNull() && data.MultiAreaInterfaces[j].DistributeListAcl.IsNull() {
+				if !state.MultiAreaInterfaces[i].DistributeListInAcl.IsNull() && data.MultiAreaInterfaces[j].DistributeListInAcl.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/multi-area-interfaces/multi-area-interface%v/distribute-list/access-list", state.getPath(), keyString))
 				}
 				if !state.MultiAreaInterfaces[i].DatabaseFilterAllOutDisable.IsNull() && data.MultiAreaInterfaces[j].DatabaseFilterAllOutDisable.IsNull() {
@@ -5688,6 +5742,9 @@ func (data *RouterOSPFArea) getDeletedItems(ctx context.Context, state RouterOSP
 				}
 				if !state.MultiAreaInterfaces[i].AuthenticationNull.IsNull() && data.MultiAreaInterfaces[j].AuthenticationNull.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/multi-area-interfaces/multi-area-interface%v/authentication/null", state.getPath(), keyString))
+				}
+				if !state.MultiAreaInterfaces[i].AuthenticationKeychain.IsNull() && data.MultiAreaInterfaces[j].AuthenticationKeychain.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/multi-area-interfaces/multi-area-interface%v/authentication/keychain", state.getPath(), keyString))
 				}
 				if !state.MultiAreaInterfaces[i].AuthenticationKeychainName.IsNull() && data.MultiAreaInterfaces[j].AuthenticationKeychainName.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/multi-area-interfaces/multi-area-interface%v/authentication/keychain-name", state.getPath(), keyString))
@@ -6062,6 +6119,9 @@ func (data *RouterOSPFArea) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.AuthenticationNull.IsNull() && !data.AuthenticationNull.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/authentication/null", data.getPath()))
 	}
+	if !data.AuthenticationKeychain.IsNull() && !data.AuthenticationKeychain.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/authentication/keychain", data.getPath()))
+	}
 	if !data.AuthenticationMessageDigest.IsNull() && !data.AuthenticationMessageDigest.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/authentication/message-digest", data.getPath()))
 	}
@@ -6243,6 +6303,9 @@ func (data *RouterOSPFArea) getEmptyLeafsDelete(ctx context.Context) []string {
 		}
 		if !data.MultiAreaInterfaces[i].AuthenticationNull.IsNull() && !data.MultiAreaInterfaces[i].AuthenticationNull.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/multi-area-interfaces/multi-area-interface%v/authentication/null", data.getPath(), keyString))
+		}
+		if !data.MultiAreaInterfaces[i].AuthenticationKeychain.IsNull() && !data.MultiAreaInterfaces[i].AuthenticationKeychain.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/multi-area-interfaces/multi-area-interface%v/authentication/keychain", data.getPath(), keyString))
 		}
 		if !data.MultiAreaInterfaces[i].AuthenticationMessageDigest.IsNull() && !data.MultiAreaInterfaces[i].AuthenticationMessageDigest.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/multi-area-interfaces/multi-area-interface%v/authentication/message-digest", data.getPath(), keyString))
@@ -6502,10 +6565,10 @@ func (data *RouterOSPFArea) getDeletePaths(ctx context.Context) []string {
 	if !data.BfdFastDetect.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/fast-detect", data.getPath()))
 	}
-	if !data.DistributeListRoutePolicy.IsNull() {
+	if !data.DistributeListInRoutePolicy.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute-list/route-policy", data.getPath()))
 	}
-	if !data.DistributeListAcl.IsNull() {
+	if !data.DistributeListInAcl.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute-list/access-list", data.getPath()))
 	}
 	if !data.PassiveDisable.IsNull() {
@@ -6594,6 +6657,9 @@ func (data *RouterOSPFArea) getDeletePaths(ctx context.Context) []string {
 	}
 	if !data.AuthenticationNull.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/authentication/null", data.getPath()))
+	}
+	if !data.AuthenticationKeychain.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/authentication/keychain", data.getPath()))
 	}
 	if !data.AuthenticationKeychainName.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/authentication/keychain-name", data.getPath()))

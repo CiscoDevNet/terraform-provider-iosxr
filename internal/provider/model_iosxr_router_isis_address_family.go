@@ -58,6 +58,7 @@ type RouterISISAddressFamily struct {
 	RedistributeIsis                                          []RouterISISAddressFamilyRedistributeIsis                                          `tfsdk:"redistribute_isis"`
 	RedistributeBgp                                           []RouterISISAddressFamilyRedistributeBgp                                           `tfsdk:"redistribute_bgp"`
 	RedistributeOspf                                          []RouterISISAddressFamilyRedistributeOspf                                          `tfsdk:"redistribute_ospf"`
+	RedistributeOspfv3                                        []RouterISISAddressFamilyRedistributeOspfv3                                        `tfsdk:"redistribute_ospfv3"`
 	MaximumPaths                                              types.Int64                                                                        `tfsdk:"maximum_paths"`
 	RouterIdInterfaceName                                     types.String                                                                       `tfsdk:"router_id_interface_name"`
 	RouterIdIpAddress                                         types.String                                                                       `tfsdk:"router_id_ip_address"`
@@ -188,6 +189,7 @@ type RouterISISAddressFamilyData struct {
 	RedistributeIsis                                          []RouterISISAddressFamilyRedistributeIsis                                          `tfsdk:"redistribute_isis"`
 	RedistributeBgp                                           []RouterISISAddressFamilyRedistributeBgp                                           `tfsdk:"redistribute_bgp"`
 	RedistributeOspf                                          []RouterISISAddressFamilyRedistributeOspf                                          `tfsdk:"redistribute_ospf"`
+	RedistributeOspfv3                                        []RouterISISAddressFamilyRedistributeOspfv3                                        `tfsdk:"redistribute_ospfv3"`
 	MaximumPaths                                              types.Int64                                                                        `tfsdk:"maximum_paths"`
 	RouterIdInterfaceName                                     types.String                                                                       `tfsdk:"router_id_interface_name"`
 	RouterIdIpAddress                                         types.String                                                                       `tfsdk:"router_id_ip_address"`
@@ -316,6 +318,15 @@ type RouterISISAddressFamilyRedistributeBgp struct {
 	MetricType  types.String `tfsdk:"metric_type"`
 }
 type RouterISISAddressFamilyRedistributeOspf struct {
+	InstanceId    types.String `tfsdk:"instance_id"`
+	MatchInternal types.Bool   `tfsdk:"match_internal"`
+	MatchExternal types.Bool   `tfsdk:"match_external"`
+	Level         types.String `tfsdk:"level"`
+	Metric        types.Int64  `tfsdk:"metric"`
+	RoutePolicy   types.String `tfsdk:"route_policy"`
+	MetricType    types.String `tfsdk:"metric_type"`
+}
+type RouterISISAddressFamilyRedistributeOspfv3 struct {
 	InstanceId    types.String `tfsdk:"instance_id"`
 	MatchInternal types.Bool   `tfsdk:"match_internal"`
 	MatchExternal types.Bool   `tfsdk:"match_external"`
@@ -957,6 +968,36 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 			}
 			if !item.MetricType.IsNull() && !item.MetricType.IsUnknown() {
 				body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"metric-type", item.MetricType.ValueString())
+			}
+		}
+	}
+	if len(data.RedistributeOspfv3) > 0 {
+		body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3", []interface{}{})
+		for index, item := range data.RedistributeOspfv3 {
+			if !item.InstanceId.IsNull() && !item.InstanceId.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"ospfv3-process-id", item.InstanceId.ValueString())
+			}
+			if !item.MatchInternal.IsNull() && !item.MatchInternal.IsUnknown() {
+				if item.MatchInternal.ValueBool() {
+					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.internal", []interface{}{nil})
+				}
+			}
+			if !item.MatchExternal.IsNull() && !item.MatchExternal.IsUnknown() {
+				if item.MatchExternal.ValueBool() {
+					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.external", map[string]string{})
+				}
+			}
+			if !item.Level.IsNull() && !item.Level.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"redistribute-route-level", item.Level.ValueString())
+			}
+			if !item.Metric.IsNull() && !item.Metric.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"metric", strconv.FormatInt(item.Metric.ValueInt64(), 10))
+			}
+			if !item.RoutePolicy.IsNull() && !item.RoutePolicy.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"route-policy", item.RoutePolicy.ValueString())
+			}
+			if !item.MetricType.IsNull() && !item.MetricType.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"metric-type", item.MetricType.ValueString())
 			}
 		}
 	}
@@ -1716,6 +1757,73 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 			data.RedistributeOspf[i].MetricType = types.StringValue(value.String())
 		} else {
 			data.RedistributeOspf[i].MetricType = types.StringNull()
+		}
+	}
+	for i := range data.RedistributeOspfv3 {
+		keys := [...]string{"ospfv3-process-id"}
+		keyValues := [...]string{data.RedistributeOspfv3[i].InstanceId.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "redistribute.ospfv3s.ospfv3").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("ospfv3-process-id"); value.Exists() && !data.RedistributeOspfv3[i].InstanceId.IsNull() {
+			data.RedistributeOspfv3[i].InstanceId = types.StringValue(value.String())
+		} else {
+			data.RedistributeOspfv3[i].InstanceId = types.StringNull()
+		}
+		if value := r.Get("match.internal"); !data.RedistributeOspfv3[i].MatchInternal.IsNull() {
+			if value.Exists() {
+				data.RedistributeOspfv3[i].MatchInternal = types.BoolValue(true)
+			} else {
+				data.RedistributeOspfv3[i].MatchInternal = types.BoolValue(false)
+			}
+		} else {
+			data.RedistributeOspfv3[i].MatchInternal = types.BoolNull()
+		}
+		if value := r.Get("match.external"); !data.RedistributeOspfv3[i].MatchExternal.IsNull() {
+			if value.Exists() {
+				data.RedistributeOspfv3[i].MatchExternal = types.BoolValue(true)
+			} else {
+				data.RedistributeOspfv3[i].MatchExternal = types.BoolValue(false)
+			}
+		} else {
+			data.RedistributeOspfv3[i].MatchExternal = types.BoolNull()
+		}
+		if value := r.Get("redistribute-route-level"); value.Exists() && !data.RedistributeOspfv3[i].Level.IsNull() {
+			data.RedistributeOspfv3[i].Level = types.StringValue(value.String())
+		} else {
+			data.RedistributeOspfv3[i].Level = types.StringNull()
+		}
+		if value := r.Get("metric"); value.Exists() && !data.RedistributeOspfv3[i].Metric.IsNull() {
+			data.RedistributeOspfv3[i].Metric = types.Int64Value(value.Int())
+		} else {
+			data.RedistributeOspfv3[i].Metric = types.Int64Null()
+		}
+		if value := r.Get("route-policy"); value.Exists() && !data.RedistributeOspfv3[i].RoutePolicy.IsNull() {
+			data.RedistributeOspfv3[i].RoutePolicy = types.StringValue(value.String())
+		} else {
+			data.RedistributeOspfv3[i].RoutePolicy = types.StringNull()
+		}
+		if value := r.Get("metric-type"); value.Exists() && !data.RedistributeOspfv3[i].MetricType.IsNull() {
+			data.RedistributeOspfv3[i].MetricType = types.StringValue(value.String())
+		} else {
+			data.RedistributeOspfv3[i].MetricType = types.StringNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "maximum-paths"); value.Exists() && !data.MaximumPaths.IsNull() {
@@ -3604,6 +3712,39 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
+	if value := gjson.GetBytes(res, "redistribute.ospfv3s.ospfv3"); value.Exists() {
+		data.RedistributeOspfv3 = make([]RouterISISAddressFamilyRedistributeOspfv3, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyRedistributeOspfv3{}
+			if cValue := v.Get("ospfv3-process-id"); cValue.Exists() {
+				item.InstanceId = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("match.internal"); cValue.Exists() {
+				item.MatchInternal = types.BoolValue(true)
+			} else {
+				item.MatchInternal = types.BoolValue(false)
+			}
+			if cValue := v.Get("match.external"); cValue.Exists() {
+				item.MatchExternal = types.BoolValue(true)
+			} else {
+				item.MatchExternal = types.BoolValue(false)
+			}
+			if cValue := v.Get("redistribute-route-level"); cValue.Exists() {
+				item.Level = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("metric"); cValue.Exists() {
+				item.Metric = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("route-policy"); cValue.Exists() {
+				item.RoutePolicy = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("metric-type"); cValue.Exists() {
+				item.MetricType = types.StringValue(cValue.String())
+			}
+			data.RedistributeOspfv3 = append(data.RedistributeOspfv3, item)
+			return true
+		})
+	}
 	if value := gjson.GetBytes(res, "maximum-paths"); value.Exists() {
 		data.MaximumPaths = types.Int64Value(value.Int())
 	}
@@ -4615,6 +4756,39 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res []byt
 				item.MetricType = types.StringValue(cValue.String())
 			}
 			data.RedistributeOspf = append(data.RedistributeOspf, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "redistribute.ospfv3s.ospfv3"); value.Exists() {
+		data.RedistributeOspfv3 = make([]RouterISISAddressFamilyRedistributeOspfv3, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyRedistributeOspfv3{}
+			if cValue := v.Get("ospfv3-process-id"); cValue.Exists() {
+				item.InstanceId = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("match.internal"); cValue.Exists() {
+				item.MatchInternal = types.BoolValue(true)
+			} else {
+				item.MatchInternal = types.BoolValue(false)
+			}
+			if cValue := v.Get("match.external"); cValue.Exists() {
+				item.MatchExternal = types.BoolValue(true)
+			} else {
+				item.MatchExternal = types.BoolValue(false)
+			}
+			if cValue := v.Get("redistribute-route-level"); cValue.Exists() {
+				item.Level = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("metric"); cValue.Exists() {
+				item.Metric = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("route-policy"); cValue.Exists() {
+				item.RoutePolicy = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("metric-type"); cValue.Exists() {
+				item.MetricType = types.StringValue(cValue.String())
+			}
+			data.RedistributeOspfv3 = append(data.RedistributeOspfv3, item)
 			return true
 		})
 	}
@@ -6692,6 +6866,54 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 	if !state.MaximumPaths.IsNull() && data.MaximumPaths.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-paths", state.getPath()))
 	}
+	for i := range state.RedistributeOspfv3 {
+		keys := [...]string{"ospfv3-process-id"}
+		stateKeyValues := [...]string{state.RedistributeOspfv3[i].InstanceId.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.RedistributeOspfv3[i].InstanceId.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.RedistributeOspfv3 {
+			found = true
+			if state.RedistributeOspfv3[i].InstanceId.ValueString() != data.RedistributeOspfv3[j].InstanceId.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.RedistributeOspfv3[i].MetricType.IsNull() && data.RedistributeOspfv3[j].MetricType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/metric-type", state.getPath(), keyString))
+				}
+				if !state.RedistributeOspfv3[i].RoutePolicy.IsNull() && data.RedistributeOspfv3[j].RoutePolicy.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/route-policy", state.getPath(), keyString))
+				}
+				if !state.RedistributeOspfv3[i].Metric.IsNull() && data.RedistributeOspfv3[j].Metric.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/metric", state.getPath(), keyString))
+				}
+				if !state.RedistributeOspfv3[i].Level.IsNull() && data.RedistributeOspfv3[j].Level.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/redistribute-route-level", state.getPath(), keyString))
+				}
+				if !state.RedistributeOspfv3[i].MatchExternal.IsNull() && data.RedistributeOspfv3[j].MatchExternal.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/external", state.getPath(), keyString))
+				}
+				if !state.RedistributeOspfv3[i].MatchInternal.IsNull() && data.RedistributeOspfv3[j].MatchInternal.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/internal", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v", state.getPath(), keyString))
+		}
+	}
 	for i := range state.RedistributeOspf {
 		keys := [...]string{"ospf-process-id"}
 		stateKeyValues := [...]string{state.RedistributeOspf[i].InstanceId.ValueString()}
@@ -7301,6 +7523,20 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context) []
 	if !data.AdvertisePassiveOnly.IsNull() && !data.AdvertisePassiveOnly.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise/passive-only", data.getPath()))
 	}
+	for i := range data.RedistributeOspfv3 {
+		keys := [...]string{"ospfv3-process-id"}
+		keyValues := [...]string{data.RedistributeOspfv3[i].InstanceId.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.RedistributeOspfv3[i].MatchExternal.IsNull() && !data.RedistributeOspfv3[i].MatchExternal.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/external", data.getPath(), keyString))
+		}
+		if !data.RedistributeOspfv3[i].MatchInternal.IsNull() && !data.RedistributeOspfv3[i].MatchInternal.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/internal", data.getPath(), keyString))
+		}
+	}
 	for i := range data.RedistributeOspf {
 		keys := [...]string{"ospf-process-id"}
 		keyValues := [...]string{data.RedistributeOspf[i].InstanceId.ValueString()}
@@ -7825,6 +8061,16 @@ func (data *RouterISISAddressFamily) getDeletePaths(ctx context.Context) []strin
 	}
 	if !data.MaximumPaths.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-paths", data.getPath()))
+	}
+	for i := range data.RedistributeOspfv3 {
+		keys := [...]string{"ospfv3-process-id"}
+		keyValues := [...]string{data.RedistributeOspfv3[i].InstanceId.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v", data.getPath(), keyString))
 	}
 	for i := range data.RedistributeOspf {
 		keys := [...]string{"ospf-process-id"}

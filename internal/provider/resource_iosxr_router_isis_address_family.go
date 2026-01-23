@@ -369,6 +369,58 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 					},
 				},
 			},
+			"redistribute_ospfv3": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Open Shortest Path First (OSPFv3)").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"instance_id": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("OSPFv3 process ID").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"match_internal": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF internal routes").String,
+							Optional:            true,
+						},
+						"match_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF external routes").String,
+							Optional:            true,
+						},
+						"level": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute routes into both levels").AddStringEnumDescription("level-1", "level-1-2", "level-2").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("level-1", "level-1-2", "level-2"),
+							},
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Metric for redistributed routes").AddIntegerRangeDescription(0, 16777215).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 16777215),
+							},
+						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route policy reference").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 255),
+							},
+						},
+						"metric_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IS-IS metric type for redistributed routes").AddStringEnumDescription("external", "internal", "rib-metric-as-external", "rib-metric-as-internal").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("external", "internal", "rib-metric-as-external", "rib-metric-as-internal"),
+							},
+						},
+					},
+				},
+			},
 			"maximum_paths": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Maximum number of active parallel paths per route").AddIntegerRangeDescription(1, 64).String,
 				Optional:            true,

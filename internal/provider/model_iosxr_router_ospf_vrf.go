@@ -217,6 +217,7 @@ type RouterOSPFVRF struct {
 	Authentication                                          types.Bool                                                `tfsdk:"authentication"`
 	AuthenticationMessageDigest                             types.Bool                                                `tfsdk:"authentication_message_digest"`
 	AuthenticationKeychainName                              types.String                                              `tfsdk:"authentication_keychain_name"`
+	AuthenticationKeychain                                  types.Bool                                                `tfsdk:"authentication_keychain"`
 	AuthenticationNull                                      types.Bool                                                `tfsdk:"authentication_null"`
 	NetworkBroadcast                                        types.Bool                                                `tfsdk:"network_broadcast"`
 	NetworkNonBroadcast                                     types.Bool                                                `tfsdk:"network_non_broadcast"`
@@ -450,6 +451,7 @@ type RouterOSPFVRFData struct {
 	Authentication                                          types.Bool                                                `tfsdk:"authentication"`
 	AuthenticationMessageDigest                             types.Bool                                                `tfsdk:"authentication_message_digest"`
 	AuthenticationKeychainName                              types.String                                              `tfsdk:"authentication_keychain_name"`
+	AuthenticationKeychain                                  types.Bool                                                `tfsdk:"authentication_keychain"`
 	AuthenticationNull                                      types.Bool                                                `tfsdk:"authentication_null"`
 	NetworkBroadcast                                        types.Bool                                                `tfsdk:"network_broadcast"`
 	NetworkNonBroadcast                                     types.Bool                                                `tfsdk:"network_non_broadcast"`
@@ -1249,6 +1251,11 @@ func (data RouterOSPFVRF) toBody(ctx context.Context) string {
 	}
 	if !data.AuthenticationKeychainName.IsNull() && !data.AuthenticationKeychainName.IsUnknown() {
 		body, _ = sjson.Set(body, "authentication.keychain-name", data.AuthenticationKeychainName.ValueString())
+	}
+	if !data.AuthenticationKeychain.IsNull() && !data.AuthenticationKeychain.IsUnknown() {
+		if data.AuthenticationKeychain.ValueBool() {
+			body, _ = sjson.Set(body, "authentication.keychain", map[string]string{})
+		}
 	}
 	if !data.AuthenticationNull.IsNull() && !data.AuthenticationNull.IsUnknown() {
 		if data.AuthenticationNull.ValueBool() {
@@ -3441,6 +3448,15 @@ func (data *RouterOSPFVRF) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.AuthenticationKeychainName = types.StringNull()
 	}
+	if value := gjson.GetBytes(res, "authentication.keychain"); !data.AuthenticationKeychain.IsNull() {
+		if value.Exists() {
+			data.AuthenticationKeychain = types.BoolValue(true)
+		} else {
+			data.AuthenticationKeychain = types.BoolValue(false)
+		}
+	} else {
+		data.AuthenticationKeychain = types.BoolNull()
+	}
 	if value := gjson.GetBytes(res, "authentication.null"); !data.AuthenticationNull.IsNull() {
 		if value.Exists() {
 			data.AuthenticationNull = types.BoolValue(true)
@@ -4746,6 +4762,11 @@ func (data *RouterOSPFVRF) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "authentication.keychain-name"); value.Exists() {
 		data.AuthenticationKeychainName = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "authentication.keychain"); value.Exists() {
+		data.AuthenticationKeychain = types.BoolValue(true)
+	} else {
+		data.AuthenticationKeychain = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "authentication.null"); value.Exists() {
 		data.AuthenticationNull = types.BoolValue(true)
 	} else {
@@ -5887,6 +5908,11 @@ func (data *RouterOSPFVRFData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "authentication.keychain-name"); value.Exists() {
 		data.AuthenticationKeychainName = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "authentication.keychain"); value.Exists() {
+		data.AuthenticationKeychain = types.BoolValue(true)
+	} else {
+		data.AuthenticationKeychain = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "authentication.null"); value.Exists() {
 		data.AuthenticationNull = types.BoolValue(true)
 	} else {
@@ -6273,6 +6299,9 @@ func (data *RouterOSPFVRF) getDeletedItems(ctx context.Context, state RouterOSPF
 	}
 	if !state.AuthenticationNull.IsNull() && data.AuthenticationNull.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/authentication/null", state.getPath()))
+	}
+	if !state.AuthenticationKeychain.IsNull() && data.AuthenticationKeychain.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/authentication/keychain", state.getPath()))
 	}
 	if !state.AuthenticationKeychainName.IsNull() && data.AuthenticationKeychainName.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/authentication/keychain-name", state.getPath()))
@@ -7323,6 +7352,9 @@ func (data *RouterOSPFVRF) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.AuthenticationNull.IsNull() && !data.AuthenticationNull.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/authentication/null", data.getPath()))
 	}
+	if !data.AuthenticationKeychain.IsNull() && !data.AuthenticationKeychain.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/authentication/keychain", data.getPath()))
+	}
 	if !data.AuthenticationMessageDigest.IsNull() && !data.AuthenticationMessageDigest.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/authentication/message-digest", data.getPath()))
 	}
@@ -7867,6 +7899,9 @@ func (data *RouterOSPFVRF) getDeletePaths(ctx context.Context) []string {
 	}
 	if !data.AuthenticationNull.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/authentication/null", data.getPath()))
+	}
+	if !data.AuthenticationKeychain.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/authentication/keychain", data.getPath()))
 	}
 	if !data.AuthenticationKeychainName.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/authentication/keychain-name", data.getPath()))

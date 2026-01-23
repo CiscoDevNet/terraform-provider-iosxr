@@ -37,6 +37,7 @@ data "iosxr_router_ospf_vrf_area" "example" {
 
 - `authentication` (Boolean) Enable authentication
 - `authentication_key_encrypted` (String, Sensitive) Specifies an ENCRYPTED password (key) will follow
+- `authentication_keychain` (Boolean) Use keychain
 - `authentication_keychain_name` (String) Specify keychain name
 - `authentication_message_digest` (Boolean) Use message-digest authentication
 - `authentication_null` (Boolean) Use no authentication
@@ -62,8 +63,8 @@ data "iosxr_router_ospf_vrf_area" "example" {
 - `delay_normalize_offset` (Number) Normalization offset
 - `demand_circuit_disable` (Boolean) Disable demand circuits
 - `demand_circuit_enable` (Boolean) Enable demand circuits
-- `distribute_list_acl` (String) In-bound access-list name.
-- `distribute_list_route_policy` (String) Route Policy to filter OSPF prefixes
+- `distribute_list_in_acl` (String) In-bound access-list name.
+- `distribute_list_in_route_policy` (String) Route Policy to filter OSPF prefixes
 - `external_out_disable` (Boolean) Disable advertisement of intra-area routes as external
 - `external_out_enable` (Boolean) Enable advertisement of intra-area routes as external
 - `fast_reroute_disable` (Boolean) Disable IP Fast Reroute
@@ -198,6 +199,7 @@ Read-Only:
 
 - `authentication` (Boolean) Enable authentication
 - `authentication_key_encrypted` (String, Sensitive) Specifies an ENCRYPTED password (key) will follow
+- `authentication_keychain` (Boolean) Use keychain
 - `authentication_keychain_name` (String) Specify keychain name
 - `authentication_message_digest` (Boolean) Use message-digest authentication
 - `authentication_null` (Boolean) Use no authentication
@@ -228,6 +230,7 @@ Read-Only:
 - `address` (String) Define a virtual link
 - `authentication` (Boolean) Enable authentication
 - `authentication_key_encrypted` (String, Sensitive) Specifies an ENCRYPTED password (key) will follow
+- `authentication_keychain` (Boolean) Use keychain
 - `authentication_keychain_name` (String) Specify keychain name
 - `authentication_message_digest` (Boolean) Use message-digest authentication
 - `authentication_null` (Boolean) Use no authentication

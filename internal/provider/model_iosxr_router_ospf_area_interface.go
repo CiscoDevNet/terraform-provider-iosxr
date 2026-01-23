@@ -48,6 +48,7 @@ type RouterOSPFAreaInterface struct {
 	Authentication                                          types.Bool                                                          `tfsdk:"authentication"`
 	AuthenticationMessageDigest                             types.Bool                                                          `tfsdk:"authentication_message_digest"`
 	AuthenticationKeychainName                              types.String                                                        `tfsdk:"authentication_keychain_name"`
+	AuthenticationKeychain                                  types.Bool                                                          `tfsdk:"authentication_keychain"`
 	AuthenticationNull                                      types.Bool                                                          `tfsdk:"authentication_null"`
 	NetworkBroadcast                                        types.Bool                                                          `tfsdk:"network_broadcast"`
 	NetworkNonBroadcast                                     types.Bool                                                          `tfsdk:"network_non_broadcast"`
@@ -81,8 +82,8 @@ type RouterOSPFAreaInterface struct {
 	DatabaseFilterAllOutDisable                             types.Bool                                                          `tfsdk:"database_filter_all_out_disable"`
 	PassiveEnable                                           types.Bool                                                          `tfsdk:"passive_enable"`
 	PassiveDisable                                          types.Bool                                                          `tfsdk:"passive_disable"`
-	DistributeListAcl                                       types.String                                                        `tfsdk:"distribute_list_acl"`
-	DistributeListRoutePolicy                               types.String                                                        `tfsdk:"distribute_list_route_policy"`
+	DistributeListInAcl                                     types.String                                                        `tfsdk:"distribute_list_in_acl"`
+	DistributeListInRoutePolicy                             types.String                                                        `tfsdk:"distribute_list_in_route_policy"`
 	PacketSize                                              types.Int64                                                         `tfsdk:"packet_size"`
 	BfdFastDetect                                           types.Bool                                                          `tfsdk:"bfd_fast_detect"`
 	BfdFastDetectStrictMode                                 types.Bool                                                          `tfsdk:"bfd_fast_detect_strict_mode"`
@@ -167,6 +168,7 @@ type RouterOSPFAreaInterfaceData struct {
 	Authentication                                          types.Bool                                                          `tfsdk:"authentication"`
 	AuthenticationMessageDigest                             types.Bool                                                          `tfsdk:"authentication_message_digest"`
 	AuthenticationKeychainName                              types.String                                                        `tfsdk:"authentication_keychain_name"`
+	AuthenticationKeychain                                  types.Bool                                                          `tfsdk:"authentication_keychain"`
 	AuthenticationNull                                      types.Bool                                                          `tfsdk:"authentication_null"`
 	NetworkBroadcast                                        types.Bool                                                          `tfsdk:"network_broadcast"`
 	NetworkNonBroadcast                                     types.Bool                                                          `tfsdk:"network_non_broadcast"`
@@ -200,8 +202,8 @@ type RouterOSPFAreaInterfaceData struct {
 	DatabaseFilterAllOutDisable                             types.Bool                                                          `tfsdk:"database_filter_all_out_disable"`
 	PassiveEnable                                           types.Bool                                                          `tfsdk:"passive_enable"`
 	PassiveDisable                                          types.Bool                                                          `tfsdk:"passive_disable"`
-	DistributeListAcl                                       types.String                                                        `tfsdk:"distribute_list_acl"`
-	DistributeListRoutePolicy                               types.String                                                        `tfsdk:"distribute_list_route_policy"`
+	DistributeListInAcl                                     types.String                                                        `tfsdk:"distribute_list_in_acl"`
+	DistributeListInRoutePolicy                             types.String                                                        `tfsdk:"distribute_list_in_route_policy"`
 	PacketSize                                              types.Int64                                                         `tfsdk:"packet_size"`
 	BfdFastDetect                                           types.Bool                                                          `tfsdk:"bfd_fast_detect"`
 	BfdFastDetectStrictMode                                 types.Bool                                                          `tfsdk:"bfd_fast_detect_strict_mode"`
@@ -299,7 +301,7 @@ type RouterOSPFAreaInterfaceFastReroutePerPrefixLfaCandidateInterfaces struct {
 	InterfaceName types.String `tfsdk:"interface_name"`
 }
 type RouterOSPFAreaInterfacePrefixSidAlgorithms struct {
-	AlgorithmNumber      types.Int64 `tfsdk:"algorithm_number"`
+	Number               types.Int64 `tfsdk:"number"`
 	Index                types.Int64 `tfsdk:"index"`
 	IndexExplicitNull    types.Bool  `tfsdk:"index_explicit_null"`
 	IndexNFlagClear      types.Bool  `tfsdk:"index_n_flag_clear"`
@@ -354,6 +356,11 @@ func (data RouterOSPFAreaInterface) toBody(ctx context.Context) string {
 	}
 	if !data.AuthenticationKeychainName.IsNull() && !data.AuthenticationKeychainName.IsUnknown() {
 		body, _ = sjson.Set(body, "authentication.keychain-name", data.AuthenticationKeychainName.ValueString())
+	}
+	if !data.AuthenticationKeychain.IsNull() && !data.AuthenticationKeychain.IsUnknown() {
+		if data.AuthenticationKeychain.ValueBool() {
+			body, _ = sjson.Set(body, "authentication.keychain", map[string]string{})
+		}
 	}
 	if !data.AuthenticationNull.IsNull() && !data.AuthenticationNull.IsUnknown() {
 		if data.AuthenticationNull.ValueBool() {
@@ -492,11 +499,11 @@ func (data RouterOSPFAreaInterface) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "passive.disable", map[string]string{})
 		}
 	}
-	if !data.DistributeListAcl.IsNull() && !data.DistributeListAcl.IsUnknown() {
-		body, _ = sjson.Set(body, "distribute-list.access-list", data.DistributeListAcl.ValueString())
+	if !data.DistributeListInAcl.IsNull() && !data.DistributeListInAcl.IsUnknown() {
+		body, _ = sjson.Set(body, "distribute-list.access-list", data.DistributeListInAcl.ValueString())
 	}
-	if !data.DistributeListRoutePolicy.IsNull() && !data.DistributeListRoutePolicy.IsUnknown() {
-		body, _ = sjson.Set(body, "distribute-list.route-policy", data.DistributeListRoutePolicy.ValueString())
+	if !data.DistributeListInRoutePolicy.IsNull() && !data.DistributeListInRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "distribute-list.route-policy", data.DistributeListInRoutePolicy.ValueString())
 	}
 	if !data.PacketSize.IsNull() && !data.PacketSize.IsUnknown() {
 		body, _ = sjson.Set(body, "packet-size", strconv.FormatInt(data.PacketSize.ValueInt64(), 10))
@@ -842,8 +849,8 @@ func (data RouterOSPFAreaInterface) toBody(ctx context.Context) string {
 	if len(data.PrefixSidAlgorithms) > 0 {
 		body, _ = sjson.Set(body, "prefix-sid.algorithms.algorithm", []interface{}{})
 		for index, item := range data.PrefixSidAlgorithms {
-			if !item.AlgorithmNumber.IsNull() && !item.AlgorithmNumber.IsUnknown() {
-				body, _ = sjson.Set(body, "prefix-sid.algorithms.algorithm"+"."+strconv.Itoa(index)+"."+"algorithm-number", strconv.FormatInt(item.AlgorithmNumber.ValueInt64(), 10))
+			if !item.Number.IsNull() && !item.Number.IsUnknown() {
+				body, _ = sjson.Set(body, "prefix-sid.algorithms.algorithm"+"."+strconv.Itoa(index)+"."+"algorithm-number", strconv.FormatInt(item.Number.ValueInt64(), 10))
 			}
 			if !item.Index.IsNull() && !item.Index.IsUnknown() {
 				body, _ = sjson.Set(body, "prefix-sid.algorithms.algorithm"+"."+strconv.Itoa(index)+"."+"index.sid-index", strconv.FormatInt(item.Index.ValueInt64(), 10))
@@ -1046,6 +1053,15 @@ func (data *RouterOSPFAreaInterface) updateFromBody(ctx context.Context, res []b
 		data.AuthenticationKeychainName = types.StringValue(value.String())
 	} else {
 		data.AuthenticationKeychainName = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "authentication.keychain"); !data.AuthenticationKeychain.IsNull() {
+		if value.Exists() {
+			data.AuthenticationKeychain = types.BoolValue(true)
+		} else {
+			data.AuthenticationKeychain = types.BoolValue(false)
+		}
+	} else {
+		data.AuthenticationKeychain = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "authentication.null"); !data.AuthenticationNull.IsNull() {
 		if value.Exists() {
@@ -1288,15 +1304,15 @@ func (data *RouterOSPFAreaInterface) updateFromBody(ctx context.Context, res []b
 	} else {
 		data.PassiveDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "distribute-list.access-list"); value.Exists() && !data.DistributeListAcl.IsNull() {
-		data.DistributeListAcl = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "distribute-list.access-list"); value.Exists() && !data.DistributeListInAcl.IsNull() {
+		data.DistributeListInAcl = types.StringValue(value.String())
 	} else {
-		data.DistributeListAcl = types.StringNull()
+		data.DistributeListInAcl = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "distribute-list.route-policy"); value.Exists() && !data.DistributeListRoutePolicy.IsNull() {
-		data.DistributeListRoutePolicy = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "distribute-list.route-policy"); value.Exists() && !data.DistributeListInRoutePolicy.IsNull() {
+		data.DistributeListInRoutePolicy = types.StringValue(value.String())
 	} else {
-		data.DistributeListRoutePolicy = types.StringNull()
+		data.DistributeListInRoutePolicy = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "packet-size"); value.Exists() && !data.PacketSize.IsNull() {
 		data.PacketSize = types.Int64Value(value.Int())
@@ -1852,7 +1868,7 @@ func (data *RouterOSPFAreaInterface) updateFromBody(ctx context.Context, res []b
 	}
 	for i := range data.PrefixSidAlgorithms {
 		keys := [...]string{"algorithm-number"}
-		keyValues := [...]string{strconv.FormatInt(data.PrefixSidAlgorithms[i].AlgorithmNumber.ValueInt64(), 10)}
+		keyValues := [...]string{strconv.FormatInt(data.PrefixSidAlgorithms[i].Number.ValueInt64(), 10)}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "prefix-sid.algorithms.algorithm").ForEach(
@@ -1873,10 +1889,10 @@ func (data *RouterOSPFAreaInterface) updateFromBody(ctx context.Context, res []b
 				return true
 			},
 		)
-		if value := r.Get("algorithm-number"); value.Exists() && !data.PrefixSidAlgorithms[i].AlgorithmNumber.IsNull() {
-			data.PrefixSidAlgorithms[i].AlgorithmNumber = types.Int64Value(value.Int())
+		if value := r.Get("algorithm-number"); value.Exists() && !data.PrefixSidAlgorithms[i].Number.IsNull() {
+			data.PrefixSidAlgorithms[i].Number = types.Int64Value(value.Int())
 		} else {
-			data.PrefixSidAlgorithms[i].AlgorithmNumber = types.Int64Null()
+			data.PrefixSidAlgorithms[i].Number = types.Int64Null()
 		}
 		if value := r.Get("index.sid-index"); value.Exists() && !data.PrefixSidAlgorithms[i].Index.IsNull() {
 			data.PrefixSidAlgorithms[i].Index = types.Int64Value(value.Int())
@@ -2116,6 +2132,11 @@ func (data *RouterOSPFAreaInterface) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "authentication.keychain-name"); value.Exists() {
 		data.AuthenticationKeychainName = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "authentication.keychain"); value.Exists() {
+		data.AuthenticationKeychain = types.BoolValue(true)
+	} else {
+		data.AuthenticationKeychain = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "authentication.null"); value.Exists() {
 		data.AuthenticationNull = types.BoolValue(true)
 	} else {
@@ -2254,10 +2275,10 @@ func (data *RouterOSPFAreaInterface) fromBody(ctx context.Context, res []byte) {
 		data.PassiveDisable = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "distribute-list.access-list"); value.Exists() {
-		data.DistributeListAcl = types.StringValue(value.String())
+		data.DistributeListInAcl = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "distribute-list.route-policy"); value.Exists() {
-		data.DistributeListRoutePolicy = types.StringValue(value.String())
+		data.DistributeListInRoutePolicy = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "packet-size"); value.Exists() {
 		data.PacketSize = types.Int64Value(value.Int())
@@ -2554,7 +2575,7 @@ func (data *RouterOSPFAreaInterface) fromBody(ctx context.Context, res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterOSPFAreaInterfacePrefixSidAlgorithms{}
 			if cValue := v.Get("algorithm-number"); cValue.Exists() {
-				item.AlgorithmNumber = types.Int64Value(cValue.Int())
+				item.Number = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("index.sid-index"); cValue.Exists() {
 				item.Index = types.Int64Value(cValue.Int())
@@ -2713,6 +2734,11 @@ func (data *RouterOSPFAreaInterfaceData) fromBody(ctx context.Context, res []byt
 	if value := gjson.GetBytes(res, "authentication.keychain-name"); value.Exists() {
 		data.AuthenticationKeychainName = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "authentication.keychain"); value.Exists() {
+		data.AuthenticationKeychain = types.BoolValue(true)
+	} else {
+		data.AuthenticationKeychain = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "authentication.null"); value.Exists() {
 		data.AuthenticationNull = types.BoolValue(true)
 	} else {
@@ -2851,10 +2877,10 @@ func (data *RouterOSPFAreaInterfaceData) fromBody(ctx context.Context, res []byt
 		data.PassiveDisable = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "distribute-list.access-list"); value.Exists() {
-		data.DistributeListAcl = types.StringValue(value.String())
+		data.DistributeListInAcl = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "distribute-list.route-policy"); value.Exists() {
-		data.DistributeListRoutePolicy = types.StringValue(value.String())
+		data.DistributeListInRoutePolicy = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "packet-size"); value.Exists() {
 		data.PacketSize = types.Int64Value(value.Int())
@@ -3151,7 +3177,7 @@ func (data *RouterOSPFAreaInterfaceData) fromBody(ctx context.Context, res []byt
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterOSPFAreaInterfacePrefixSidAlgorithms{}
 			if cValue := v.Get("algorithm-number"); cValue.Exists() {
-				item.AlgorithmNumber = types.Int64Value(cValue.Int())
+				item.Number = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("index.sid-index"); cValue.Exists() {
 				item.Index = types.Int64Value(cValue.Int())
@@ -3343,14 +3369,14 @@ func (data *RouterOSPFAreaInterface) getDeletedItems(ctx context.Context, state 
 	}
 	for i := range state.PrefixSidAlgorithms {
 		keys := [...]string{"algorithm-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.PrefixSidAlgorithms[i].AlgorithmNumber.ValueInt64(), 10)}
+		stateKeyValues := [...]string{strconv.FormatInt(state.PrefixSidAlgorithms[i].Number.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.PrefixSidAlgorithms[i].AlgorithmNumber.ValueInt64()).IsZero() {
+		if !reflect.ValueOf(state.PrefixSidAlgorithms[i].Number.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -3360,7 +3386,7 @@ func (data *RouterOSPFAreaInterface) getDeletedItems(ctx context.Context, state 
 		found := false
 		for j := range data.PrefixSidAlgorithms {
 			found = true
-			if state.PrefixSidAlgorithms[i].AlgorithmNumber.ValueInt64() != data.PrefixSidAlgorithms[j].AlgorithmNumber.ValueInt64() {
+			if state.PrefixSidAlgorithms[i].Number.ValueInt64() != data.PrefixSidAlgorithms[j].Number.ValueInt64() {
 				found = false
 			}
 			if found {
@@ -3677,10 +3703,10 @@ func (data *RouterOSPFAreaInterface) getDeletedItems(ctx context.Context, state 
 	if !state.PacketSize.IsNull() && data.PacketSize.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/packet-size", state.getPath()))
 	}
-	if !state.DistributeListRoutePolicy.IsNull() && data.DistributeListRoutePolicy.IsNull() {
+	if !state.DistributeListInRoutePolicy.IsNull() && data.DistributeListInRoutePolicy.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute-list/route-policy", state.getPath()))
 	}
-	if !state.DistributeListAcl.IsNull() && data.DistributeListAcl.IsNull() {
+	if !state.DistributeListInAcl.IsNull() && data.DistributeListInAcl.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute-list/access-list", state.getPath()))
 	}
 	if !state.PassiveDisable.IsNull() && data.PassiveDisable.IsNull() {
@@ -3781,6 +3807,9 @@ func (data *RouterOSPFAreaInterface) getDeletedItems(ctx context.Context, state 
 	}
 	if !state.AuthenticationNull.IsNull() && data.AuthenticationNull.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/authentication/null", state.getPath()))
+	}
+	if !state.AuthenticationKeychain.IsNull() && data.AuthenticationKeychain.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/authentication/keychain", state.getPath()))
 	}
 	if !state.AuthenticationKeychainName.IsNull() && data.AuthenticationKeychainName.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/authentication/keychain-name", state.getPath()))
@@ -3938,7 +3967,7 @@ func (data *RouterOSPFAreaInterface) getEmptyLeafsDelete(ctx context.Context) []
 	}
 	for i := range data.PrefixSidAlgorithms {
 		keys := [...]string{"algorithm-number"}
-		keyValues := [...]string{strconv.FormatInt(data.PrefixSidAlgorithms[i].AlgorithmNumber.ValueInt64(), 10)}
+		keyValues := [...]string{strconv.FormatInt(data.PrefixSidAlgorithms[i].Number.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
@@ -4162,6 +4191,9 @@ func (data *RouterOSPFAreaInterface) getEmptyLeafsDelete(ctx context.Context) []
 	if !data.AuthenticationNull.IsNull() && !data.AuthenticationNull.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/authentication/null", data.getPath()))
 	}
+	if !data.AuthenticationKeychain.IsNull() && !data.AuthenticationKeychain.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/authentication/keychain", data.getPath()))
+	}
 	if !data.AuthenticationMessageDigest.IsNull() && !data.AuthenticationMessageDigest.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/authentication/message-digest", data.getPath()))
 	}
@@ -4244,7 +4276,7 @@ func (data *RouterOSPFAreaInterface) getDeletePaths(ctx context.Context) []strin
 	}
 	for i := range data.PrefixSidAlgorithms {
 		keys := [...]string{"algorithm-number"}
-		keyValues := [...]string{strconv.FormatInt(data.PrefixSidAlgorithms[i].AlgorithmNumber.ValueInt64(), 10)}
+		keyValues := [...]string{strconv.FormatInt(data.PrefixSidAlgorithms[i].Number.ValueInt64(), 10)}
 
 		keyString := ""
 		for ki := range keys {
@@ -4460,10 +4492,10 @@ func (data *RouterOSPFAreaInterface) getDeletePaths(ctx context.Context) []strin
 	if !data.PacketSize.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/packet-size", data.getPath()))
 	}
-	if !data.DistributeListRoutePolicy.IsNull() {
+	if !data.DistributeListInRoutePolicy.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute-list/route-policy", data.getPath()))
 	}
-	if !data.DistributeListAcl.IsNull() {
+	if !data.DistributeListInAcl.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute-list/access-list", data.getPath()))
 	}
 	if !data.PassiveDisable.IsNull() {
@@ -4564,6 +4596,9 @@ func (data *RouterOSPFAreaInterface) getDeletePaths(ctx context.Context) []strin
 	}
 	if !data.AuthenticationNull.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/authentication/null", data.getPath()))
+	}
+	if !data.AuthenticationKeychain.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/authentication/keychain", data.getPath()))
 	}
 	if !data.AuthenticationKeychainName.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/authentication/keychain-name", data.getPath()))

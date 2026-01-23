@@ -176,10 +176,10 @@ resource "iosxr_router_isis" "example" {
       bit_position  = 4
     }
   ]
-  ignore_lsp_errors_disable          = true
-  purge_transmit_strict              = true
-  purge_transmit_strict_strict_value = "level-1"
-  srlg_admin_weight                  = 500
+  ignore_lsp_errors_disable   = true
+  purge_transmit_strict       = true
+  purge_transmit_strict_value = "level-1"
+  srlg_admin_weight           = 500
   srlg_names = [
     {
       srlg_name    = "SRLG-1"
@@ -355,7 +355,7 @@ resource "iosxr_router_isis" "example" {
 - `psnp_interval` (Number) Longest wait to send PSNP
   - Range: `1`-`5000`
 - `purge_transmit_strict` (Boolean) Only authentication TLV is allowed
-- `purge_transmit_strict_strict_value` (String) Only authentication TLV is allowed
+- `purge_transmit_strict_value` (String) Only authentication TLV is allowed
   - Choices: `level-1`, `level-2`
 - `receive_application_flex_algo_delay_app_only` (Boolean) ASLA to take precedence
 - `segment_routing_global_block_lower_bound` (Number) The lower bound of the SRGB

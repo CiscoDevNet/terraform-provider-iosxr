@@ -63,6 +63,7 @@ type RouterOSPFVRFArea struct {
 	Authentication                                          types.Bool                                                    `tfsdk:"authentication"`
 	AuthenticationMessageDigest                             types.Bool                                                    `tfsdk:"authentication_message_digest"`
 	AuthenticationKeychainName                              types.String                                                  `tfsdk:"authentication_keychain_name"`
+	AuthenticationKeychain                                  types.Bool                                                    `tfsdk:"authentication_keychain"`
 	AuthenticationNull                                      types.Bool                                                    `tfsdk:"authentication_null"`
 	NetworkBroadcast                                        types.Bool                                                    `tfsdk:"network_broadcast"`
 	NetworkNonBroadcast                                     types.Bool                                                    `tfsdk:"network_non_broadcast"`
@@ -93,8 +94,8 @@ type RouterOSPFVRFArea struct {
 	DatabaseFilterAllOutDisable                             types.Bool                                                    `tfsdk:"database_filter_all_out_disable"`
 	PassiveEnable                                           types.Bool                                                    `tfsdk:"passive_enable"`
 	PassiveDisable                                          types.Bool                                                    `tfsdk:"passive_disable"`
-	DistributeListAcl                                       types.String                                                  `tfsdk:"distribute_list_acl"`
-	DistributeListRoutePolicy                               types.String                                                  `tfsdk:"distribute_list_route_policy"`
+	DistributeListInAcl                                     types.String                                                  `tfsdk:"distribute_list_in_acl"`
+	DistributeListInRoutePolicy                             types.String                                                  `tfsdk:"distribute_list_in_route_policy"`
 	PacketSize                                              types.Int64                                                   `tfsdk:"packet_size"`
 	BfdFastDetect                                           types.Bool                                                    `tfsdk:"bfd_fast_detect"`
 	BfdFastDetectStrictMode                                 types.Bool                                                    `tfsdk:"bfd_fast_detect_strict_mode"`
@@ -173,6 +174,7 @@ type RouterOSPFVRFAreaData struct {
 	Authentication                                          types.Bool                                                    `tfsdk:"authentication"`
 	AuthenticationMessageDigest                             types.Bool                                                    `tfsdk:"authentication_message_digest"`
 	AuthenticationKeychainName                              types.String                                                  `tfsdk:"authentication_keychain_name"`
+	AuthenticationKeychain                                  types.Bool                                                    `tfsdk:"authentication_keychain"`
 	AuthenticationNull                                      types.Bool                                                    `tfsdk:"authentication_null"`
 	NetworkBroadcast                                        types.Bool                                                    `tfsdk:"network_broadcast"`
 	NetworkNonBroadcast                                     types.Bool                                                    `tfsdk:"network_non_broadcast"`
@@ -203,8 +205,8 @@ type RouterOSPFVRFAreaData struct {
 	DatabaseFilterAllOutDisable                             types.Bool                                                    `tfsdk:"database_filter_all_out_disable"`
 	PassiveEnable                                           types.Bool                                                    `tfsdk:"passive_enable"`
 	PassiveDisable                                          types.Bool                                                    `tfsdk:"passive_disable"`
-	DistributeListAcl                                       types.String                                                  `tfsdk:"distribute_list_acl"`
-	DistributeListRoutePolicy                               types.String                                                  `tfsdk:"distribute_list_route_policy"`
+	DistributeListInAcl                                     types.String                                                  `tfsdk:"distribute_list_in_acl"`
+	DistributeListInRoutePolicy                             types.String                                                  `tfsdk:"distribute_list_in_route_policy"`
 	PacketSize                                              types.Int64                                                   `tfsdk:"packet_size"`
 	BfdFastDetect                                           types.Bool                                                    `tfsdk:"bfd_fast_detect"`
 	BfdFastDetectStrictMode                                 types.Bool                                                    `tfsdk:"bfd_fast_detect_strict_mode"`
@@ -286,6 +288,7 @@ type RouterOSPFVRFAreaVirtualLinks struct {
 	MessageDigestKeys           []RouterOSPFVRFAreaVirtualLinksMessageDigestKeys `tfsdk:"message_digest_keys"`
 	Authentication              types.Bool                                       `tfsdk:"authentication"`
 	AuthenticationMessageDigest types.Bool                                       `tfsdk:"authentication_message_digest"`
+	AuthenticationKeychain      types.Bool                                       `tfsdk:"authentication_keychain"`
 	AuthenticationKeychainName  types.String                                     `tfsdk:"authentication_keychain_name"`
 	AuthenticationNull          types.Bool                                       `tfsdk:"authentication_null"`
 }
@@ -301,6 +304,7 @@ type RouterOSPFVRFAreaShamLinks struct {
 	MessageDigestKeys           []RouterOSPFVRFAreaShamLinksMessageDigestKeys `tfsdk:"message_digest_keys"`
 	Authentication              types.Bool                                    `tfsdk:"authentication"`
 	AuthenticationMessageDigest types.Bool                                    `tfsdk:"authentication_message_digest"`
+	AuthenticationKeychain      types.Bool                                    `tfsdk:"authentication_keychain"`
 	AuthenticationKeychainName  types.String                                  `tfsdk:"authentication_keychain_name"`
 	AuthenticationNull          types.Bool                                    `tfsdk:"authentication_null"`
 }
@@ -419,6 +423,11 @@ func (data RouterOSPFVRFArea) toBody(ctx context.Context) string {
 	}
 	if !data.AuthenticationKeychainName.IsNull() && !data.AuthenticationKeychainName.IsUnknown() {
 		body, _ = sjson.Set(body, "authentication.keychain-name", data.AuthenticationKeychainName.ValueString())
+	}
+	if !data.AuthenticationKeychain.IsNull() && !data.AuthenticationKeychain.IsUnknown() {
+		if data.AuthenticationKeychain.ValueBool() {
+			body, _ = sjson.Set(body, "authentication.keychain", map[string]string{})
+		}
 	}
 	if !data.AuthenticationNull.IsNull() && !data.AuthenticationNull.IsUnknown() {
 		if data.AuthenticationNull.ValueBool() {
@@ -546,11 +555,11 @@ func (data RouterOSPFVRFArea) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "passive.disable", map[string]string{})
 		}
 	}
-	if !data.DistributeListAcl.IsNull() && !data.DistributeListAcl.IsUnknown() {
-		body, _ = sjson.Set(body, "distribute-list.access-list", data.DistributeListAcl.ValueString())
+	if !data.DistributeListInAcl.IsNull() && !data.DistributeListInAcl.IsUnknown() {
+		body, _ = sjson.Set(body, "distribute-list.access-list", data.DistributeListInAcl.ValueString())
 	}
-	if !data.DistributeListRoutePolicy.IsNull() && !data.DistributeListRoutePolicy.IsUnknown() {
-		body, _ = sjson.Set(body, "distribute-list.route-policy", data.DistributeListRoutePolicy.ValueString())
+	if !data.DistributeListInRoutePolicy.IsNull() && !data.DistributeListInRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "distribute-list.route-policy", data.DistributeListInRoutePolicy.ValueString())
 	}
 	if !data.PacketSize.IsNull() && !data.PacketSize.IsUnknown() {
 		body, _ = sjson.Set(body, "packet-size", strconv.FormatInt(data.PacketSize.ValueInt64(), 10))
@@ -827,6 +836,11 @@ func (data RouterOSPFVRFArea) toBody(ctx context.Context) string {
 					body, _ = sjson.Set(body, "virtual-links.virtual-link"+"."+strconv.Itoa(index)+"."+"authentication.message-digest", map[string]string{})
 				}
 			}
+			if !item.AuthenticationKeychain.IsNull() && !item.AuthenticationKeychain.IsUnknown() {
+				if item.AuthenticationKeychain.ValueBool() {
+					body, _ = sjson.Set(body, "virtual-links.virtual-link"+"."+strconv.Itoa(index)+"."+"authentication.keychain", map[string]string{})
+				}
+			}
 			if !item.AuthenticationKeychainName.IsNull() && !item.AuthenticationKeychainName.IsUnknown() {
 				body, _ = sjson.Set(body, "virtual-links.virtual-link"+"."+strconv.Itoa(index)+"."+"authentication.keychain-name", item.AuthenticationKeychainName.ValueString())
 			}
@@ -883,6 +897,11 @@ func (data RouterOSPFVRFArea) toBody(ctx context.Context) string {
 			if !item.AuthenticationMessageDigest.IsNull() && !item.AuthenticationMessageDigest.IsUnknown() {
 				if item.AuthenticationMessageDigest.ValueBool() {
 					body, _ = sjson.Set(body, "sham-links.sham-link"+"."+strconv.Itoa(index)+"."+"authentication.message-digest", map[string]string{})
+				}
+			}
+			if !item.AuthenticationKeychain.IsNull() && !item.AuthenticationKeychain.IsUnknown() {
+				if item.AuthenticationKeychain.ValueBool() {
+					body, _ = sjson.Set(body, "sham-links.sham-link"+"."+strconv.Itoa(index)+"."+"authentication.keychain", map[string]string{})
 				}
 			}
 			if !item.AuthenticationKeychainName.IsNull() && !item.AuthenticationKeychainName.IsUnknown() {
@@ -1142,6 +1161,15 @@ func (data *RouterOSPFVRFArea) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.AuthenticationKeychainName = types.StringNull()
 	}
+	if value := gjson.GetBytes(res, "authentication.keychain"); !data.AuthenticationKeychain.IsNull() {
+		if value.Exists() {
+			data.AuthenticationKeychain = types.BoolValue(true)
+		} else {
+			data.AuthenticationKeychain = types.BoolValue(false)
+		}
+	} else {
+		data.AuthenticationKeychain = types.BoolNull()
+	}
 	if value := gjson.GetBytes(res, "authentication.null"); !data.AuthenticationNull.IsNull() {
 		if value.Exists() {
 			data.AuthenticationNull = types.BoolValue(true)
@@ -1364,15 +1392,15 @@ func (data *RouterOSPFVRFArea) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.PassiveDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "distribute-list.access-list"); value.Exists() && !data.DistributeListAcl.IsNull() {
-		data.DistributeListAcl = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "distribute-list.access-list"); value.Exists() && !data.DistributeListInAcl.IsNull() {
+		data.DistributeListInAcl = types.StringValue(value.String())
 	} else {
-		data.DistributeListAcl = types.StringNull()
+		data.DistributeListInAcl = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "distribute-list.route-policy"); value.Exists() && !data.DistributeListRoutePolicy.IsNull() {
-		data.DistributeListRoutePolicy = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "distribute-list.route-policy"); value.Exists() && !data.DistributeListInRoutePolicy.IsNull() {
+		data.DistributeListInRoutePolicy = types.StringValue(value.String())
 	} else {
-		data.DistributeListRoutePolicy = types.StringNull()
+		data.DistributeListInRoutePolicy = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "packet-size"); value.Exists() && !data.PacketSize.IsNull() {
 		data.PacketSize = types.Int64Value(value.Int())
@@ -1903,6 +1931,15 @@ func (data *RouterOSPFVRFArea) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.VirtualLinks[i].AuthenticationMessageDigest = types.BoolNull()
 		}
+		if value := r.Get("authentication.keychain"); !data.VirtualLinks[i].AuthenticationKeychain.IsNull() {
+			if value.Exists() {
+				data.VirtualLinks[i].AuthenticationKeychain = types.BoolValue(true)
+			} else {
+				data.VirtualLinks[i].AuthenticationKeychain = types.BoolValue(false)
+			}
+		} else {
+			data.VirtualLinks[i].AuthenticationKeychain = types.BoolNull()
+		}
 		if value := r.Get("authentication.keychain-name"); value.Exists() && !data.VirtualLinks[i].AuthenticationKeychainName.IsNull() {
 			data.VirtualLinks[i].AuthenticationKeychainName = types.StringValue(value.String())
 		} else {
@@ -2022,6 +2059,15 @@ func (data *RouterOSPFVRFArea) updateFromBody(ctx context.Context, res []byte) {
 			}
 		} else {
 			data.ShamLinks[i].AuthenticationMessageDigest = types.BoolNull()
+		}
+		if value := r.Get("authentication.keychain"); !data.ShamLinks[i].AuthenticationKeychain.IsNull() {
+			if value.Exists() {
+				data.ShamLinks[i].AuthenticationKeychain = types.BoolValue(true)
+			} else {
+				data.ShamLinks[i].AuthenticationKeychain = types.BoolValue(false)
+			}
+		} else {
+			data.ShamLinks[i].AuthenticationKeychain = types.BoolNull()
 		}
 		if value := r.Get("authentication.keychain-name"); value.Exists() && !data.ShamLinks[i].AuthenticationKeychainName.IsNull() {
 			data.ShamLinks[i].AuthenticationKeychainName = types.StringValue(value.String())
@@ -2163,6 +2209,11 @@ func (data *RouterOSPFVRFArea) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "authentication.keychain-name"); value.Exists() {
 		data.AuthenticationKeychainName = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "authentication.keychain"); value.Exists() {
+		data.AuthenticationKeychain = types.BoolValue(true)
+	} else {
+		data.AuthenticationKeychain = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "authentication.null"); value.Exists() {
 		data.AuthenticationNull = types.BoolValue(true)
 	} else {
@@ -2290,10 +2341,10 @@ func (data *RouterOSPFVRFArea) fromBody(ctx context.Context, res []byte) {
 		data.PassiveDisable = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "distribute-list.access-list"); value.Exists() {
-		data.DistributeListAcl = types.StringValue(value.String())
+		data.DistributeListInAcl = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "distribute-list.route-policy"); value.Exists() {
-		data.DistributeListRoutePolicy = types.StringValue(value.String())
+		data.DistributeListInRoutePolicy = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "packet-size"); value.Exists() {
 		data.PacketSize = types.Int64Value(value.Int())
@@ -2559,6 +2610,11 @@ func (data *RouterOSPFVRFArea) fromBody(ctx context.Context, res []byte) {
 			} else {
 				item.AuthenticationMessageDigest = types.BoolValue(false)
 			}
+			if cValue := v.Get("authentication.keychain"); cValue.Exists() {
+				item.AuthenticationKeychain = types.BoolValue(true)
+			} else {
+				item.AuthenticationKeychain = types.BoolValue(false)
+			}
 			if cValue := v.Get("authentication.keychain-name"); cValue.Exists() {
 				item.AuthenticationKeychainName = types.StringValue(cValue.String())
 			}
@@ -2616,6 +2672,11 @@ func (data *RouterOSPFVRFArea) fromBody(ctx context.Context, res []byte) {
 				item.AuthenticationMessageDigest = types.BoolValue(true)
 			} else {
 				item.AuthenticationMessageDigest = types.BoolValue(false)
+			}
+			if cValue := v.Get("authentication.keychain"); cValue.Exists() {
+				item.AuthenticationKeychain = types.BoolValue(true)
+			} else {
+				item.AuthenticationKeychain = types.BoolValue(false)
 			}
 			if cValue := v.Get("authentication.keychain-name"); cValue.Exists() {
 				item.AuthenticationKeychainName = types.StringValue(cValue.String())
@@ -2754,6 +2815,11 @@ func (data *RouterOSPFVRFAreaData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "authentication.keychain-name"); value.Exists() {
 		data.AuthenticationKeychainName = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "authentication.keychain"); value.Exists() {
+		data.AuthenticationKeychain = types.BoolValue(true)
+	} else {
+		data.AuthenticationKeychain = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "authentication.null"); value.Exists() {
 		data.AuthenticationNull = types.BoolValue(true)
 	} else {
@@ -2881,10 +2947,10 @@ func (data *RouterOSPFVRFAreaData) fromBody(ctx context.Context, res []byte) {
 		data.PassiveDisable = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "distribute-list.access-list"); value.Exists() {
-		data.DistributeListAcl = types.StringValue(value.String())
+		data.DistributeListInAcl = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "distribute-list.route-policy"); value.Exists() {
-		data.DistributeListRoutePolicy = types.StringValue(value.String())
+		data.DistributeListInRoutePolicy = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "packet-size"); value.Exists() {
 		data.PacketSize = types.Int64Value(value.Int())
@@ -3150,6 +3216,11 @@ func (data *RouterOSPFVRFAreaData) fromBody(ctx context.Context, res []byte) {
 			} else {
 				item.AuthenticationMessageDigest = types.BoolValue(false)
 			}
+			if cValue := v.Get("authentication.keychain"); cValue.Exists() {
+				item.AuthenticationKeychain = types.BoolValue(true)
+			} else {
+				item.AuthenticationKeychain = types.BoolValue(false)
+			}
 			if cValue := v.Get("authentication.keychain-name"); cValue.Exists() {
 				item.AuthenticationKeychainName = types.StringValue(cValue.String())
 			}
@@ -3208,6 +3279,11 @@ func (data *RouterOSPFVRFAreaData) fromBody(ctx context.Context, res []byte) {
 			} else {
 				item.AuthenticationMessageDigest = types.BoolValue(false)
 			}
+			if cValue := v.Get("authentication.keychain"); cValue.Exists() {
+				item.AuthenticationKeychain = types.BoolValue(true)
+			} else {
+				item.AuthenticationKeychain = types.BoolValue(false)
+			}
 			if cValue := v.Get("authentication.keychain-name"); cValue.Exists() {
 				item.AuthenticationKeychainName = types.StringValue(cValue.String())
 			}
@@ -3262,6 +3338,9 @@ func (data *RouterOSPFVRFArea) getDeletedItems(ctx context.Context, state Router
 				}
 				if !state.ShamLinks[i].AuthenticationKeychainName.IsNull() && data.ShamLinks[j].AuthenticationKeychainName.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sham-links/sham-link%v/authentication/keychain-name", state.getPath(), keyString))
+				}
+				if !state.ShamLinks[i].AuthenticationKeychain.IsNull() && data.ShamLinks[j].AuthenticationKeychain.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sham-links/sham-link%v/authentication/keychain", state.getPath(), keyString))
 				}
 				if !state.ShamLinks[i].AuthenticationMessageDigest.IsNull() && data.ShamLinks[j].AuthenticationMessageDigest.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sham-links/sham-link%v/authentication/message-digest", state.getPath(), keyString))
@@ -3355,6 +3434,9 @@ func (data *RouterOSPFVRFArea) getDeletedItems(ctx context.Context, state Router
 				}
 				if !state.VirtualLinks[i].AuthenticationKeychainName.IsNull() && data.VirtualLinks[j].AuthenticationKeychainName.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/virtual-links/virtual-link%v/authentication/keychain-name", state.getPath(), keyString))
+				}
+				if !state.VirtualLinks[i].AuthenticationKeychain.IsNull() && data.VirtualLinks[j].AuthenticationKeychain.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/virtual-links/virtual-link%v/authentication/keychain", state.getPath(), keyString))
 				}
 				if !state.VirtualLinks[i].AuthenticationMessageDigest.IsNull() && data.VirtualLinks[j].AuthenticationMessageDigest.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/virtual-links/virtual-link%v/authentication/message-digest", state.getPath(), keyString))
@@ -3663,10 +3745,10 @@ func (data *RouterOSPFVRFArea) getDeletedItems(ctx context.Context, state Router
 	if !state.PacketSize.IsNull() && data.PacketSize.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/packet-size", state.getPath()))
 	}
-	if !state.DistributeListRoutePolicy.IsNull() && data.DistributeListRoutePolicy.IsNull() {
+	if !state.DistributeListInRoutePolicy.IsNull() && data.DistributeListInRoutePolicy.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute-list/route-policy", state.getPath()))
 	}
-	if !state.DistributeListAcl.IsNull() && data.DistributeListAcl.IsNull() {
+	if !state.DistributeListInAcl.IsNull() && data.DistributeListInAcl.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute-list/access-list", state.getPath()))
 	}
 	if !state.PassiveDisable.IsNull() && data.PassiveDisable.IsNull() {
@@ -3758,6 +3840,9 @@ func (data *RouterOSPFVRFArea) getDeletedItems(ctx context.Context, state Router
 	}
 	if !state.AuthenticationNull.IsNull() && data.AuthenticationNull.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/authentication/null", state.getPath()))
+	}
+	if !state.AuthenticationKeychain.IsNull() && data.AuthenticationKeychain.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/authentication/keychain", state.getPath()))
 	}
 	if !state.AuthenticationKeychainName.IsNull() && data.AuthenticationKeychainName.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/authentication/keychain-name", state.getPath()))
@@ -3913,6 +3998,9 @@ func (data *RouterOSPFVRFArea) getEmptyLeafsDelete(ctx context.Context) []string
 		if !data.ShamLinks[i].AuthenticationNull.IsNull() && !data.ShamLinks[i].AuthenticationNull.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sham-links/sham-link%v/authentication/null", data.getPath(), keyString))
 		}
+		if !data.ShamLinks[i].AuthenticationKeychain.IsNull() && !data.ShamLinks[i].AuthenticationKeychain.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sham-links/sham-link%v/authentication/keychain", data.getPath(), keyString))
+		}
 		if !data.ShamLinks[i].AuthenticationMessageDigest.IsNull() && !data.ShamLinks[i].AuthenticationMessageDigest.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sham-links/sham-link%v/authentication/message-digest", data.getPath(), keyString))
 		}
@@ -3937,6 +4025,9 @@ func (data *RouterOSPFVRFArea) getEmptyLeafsDelete(ctx context.Context) []string
 		}
 		if !data.VirtualLinks[i].AuthenticationNull.IsNull() && !data.VirtualLinks[i].AuthenticationNull.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/virtual-links/virtual-link%v/authentication/null", data.getPath(), keyString))
+		}
+		if !data.VirtualLinks[i].AuthenticationKeychain.IsNull() && !data.VirtualLinks[i].AuthenticationKeychain.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/virtual-links/virtual-link%v/authentication/keychain", data.getPath(), keyString))
 		}
 		if !data.VirtualLinks[i].AuthenticationMessageDigest.IsNull() && !data.VirtualLinks[i].AuthenticationMessageDigest.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/virtual-links/virtual-link%v/authentication/message-digest", data.getPath(), keyString))
@@ -4119,6 +4210,9 @@ func (data *RouterOSPFVRFArea) getEmptyLeafsDelete(ctx context.Context) []string
 	}
 	if !data.AuthenticationNull.IsNull() && !data.AuthenticationNull.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/authentication/null", data.getPath()))
+	}
+	if !data.AuthenticationKeychain.IsNull() && !data.AuthenticationKeychain.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/authentication/keychain", data.getPath()))
 	}
 	if !data.AuthenticationMessageDigest.IsNull() && !data.AuthenticationMessageDigest.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/authentication/message-digest", data.getPath()))
@@ -4376,10 +4470,10 @@ func (data *RouterOSPFVRFArea) getDeletePaths(ctx context.Context) []string {
 	if !data.PacketSize.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/packet-size", data.getPath()))
 	}
-	if !data.DistributeListRoutePolicy.IsNull() {
+	if !data.DistributeListInRoutePolicy.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute-list/route-policy", data.getPath()))
 	}
-	if !data.DistributeListAcl.IsNull() {
+	if !data.DistributeListInAcl.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute-list/access-list", data.getPath()))
 	}
 	if !data.PassiveDisable.IsNull() {
@@ -4471,6 +4565,9 @@ func (data *RouterOSPFVRFArea) getDeletePaths(ctx context.Context) []string {
 	}
 	if !data.AuthenticationNull.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/authentication/null", data.getPath()))
+	}
+	if !data.AuthenticationKeychain.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/authentication/keychain", data.getPath()))
 	}
 	if !data.AuthenticationKeychainName.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/authentication/keychain-name", data.getPath()))

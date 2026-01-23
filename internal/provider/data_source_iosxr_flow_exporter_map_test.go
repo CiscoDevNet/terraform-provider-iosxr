@@ -20,50 +20,8 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"os"
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrFlowExporterMap(t *testing.T) {
-	if os.Getenv("NCS") == "" {
-		t.Skip("skipping test, set environment variable NCS")
-	}
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_exporter_map.test", "destination_ipv4_address", "192.0.2.1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_exporter_map.test", "destination_vrf", "VRF1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_exporter_map.test", "source", "GigabitEthernet0/0/0/1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_exporter_map.test", "dscp", "62"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_exporter_map.test", "packet_length", "512"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_exporter_map.test", "transport_udp", "1033"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_exporter_map.test", "dfbit_set", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_exporter_map.test", "version_export_format", "v9"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_exporter_map.test", "version_template_data_timeout", "1024"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_exporter_map.test", "version_template_options_timeout", "3033"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_exporter_map.test", "version_template_timeout", "2222"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_exporter_map.test", "version_options_interface_table_timeout", "6048"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_exporter_map.test", "version_options_sampler_table_timeout", "4096"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_exporter_map.test", "version_options_class_table_timeout", "255"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_exporter_map.test", "version_options_vrf_table_timeout", "122"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrFlowExporterMapPrerequisitesConfig + testAccDataSourceIosxrFlowExporterMapConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrFlowExporterMapPrerequisitesConfig = `
@@ -77,37 +35,3 @@ resource "iosxr_gnmi" "PreReq0" {
 `
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrFlowExporterMapConfig() string {
-	config := `resource "iosxr_flow_exporter_map" "test" {` + "\n"
-	config += `	name = "exporter_map1"` + "\n"
-	config += `	destination_ipv4_address = "192.0.2.1"` + "\n"
-	config += `	destination_vrf = "VRF1"` + "\n"
-	config += `	source = "GigabitEthernet0/0/0/1"` + "\n"
-	config += `	dscp = 62` + "\n"
-	config += `	packet_length = 512` + "\n"
-	config += `	transport_udp = 1033` + "\n"
-	config += `	dfbit_set = true` + "\n"
-	config += `	version_export_format = "v9"` + "\n"
-	config += `	version_template_data_timeout = 1024` + "\n"
-	config += `	version_template_options_timeout = 3033` + "\n"
-	config += `	version_template_timeout = 2222` + "\n"
-	config += `	version_options_interface_table_timeout = 6048` + "\n"
-	config += `	version_options_sampler_table_timeout = 4096` + "\n"
-	config += `	version_options_class_table_timeout = 255` + "\n"
-	config += `	version_options_vrf_table_timeout = 122` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_flow_exporter_map" "test" {
-			name = "exporter_map1"
-			depends_on = [iosxr_flow_exporter_map.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

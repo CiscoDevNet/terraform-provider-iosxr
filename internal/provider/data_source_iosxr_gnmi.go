@@ -104,7 +104,7 @@ func (d *GnmiDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 	attributes := make(map[string]attr.Value)
 
 	if device.Managed {
-		getResp, err := device.Client.Get(ctx, []string{config.Path.ValueString()})
+		getResp, err := device.GnmiClient.Get(ctx, []string{config.Path.ValueString()})
 		if err != nil {
 			resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
 			return

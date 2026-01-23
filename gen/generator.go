@@ -32,6 +32,7 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/openconfig/goyang/pkg/yang"
 	"gopkg.in/yaml.v3"
 )
@@ -198,14 +199,6 @@ func ToGoName(s string) string {
 	return s
 }
 
-// Templating helper function to convert YANG name to GO name
-func ToJsonPath(yangPath, xPath string) string {
-	if xPath != "" {
-		return strings.ReplaceAll(xPath, "/", ".")
-	}
-	return strings.ReplaceAll(yangPath, "/", ".")
-}
-
 // Templating helper function to convert string to camel case
 func CamelCase(s string) string {
 	var g []string
@@ -274,16 +267,8 @@ func ImportAttributes(config YamlConfig) []YamlConfigAttribute {
 	return attributes
 }
 
-// Templating helper function to get xpath if available
-func GetXPath(yangPath, xPath string) string {
-	if xPath != "" {
-		return xPath
-	}
-	return yangPath
-}
-
 func GetDeletePath(attribute YamlConfigAttribute) string {
-	path := GetXPath(attribute.YangName, attribute.XPath)
+	path := attribute.XPath
 	if attribute.DeleteGrandparent {
 		// Remove two levels: grandparent
 		return RemoveLastPathElement(RemoveLastPathElement(path))
@@ -291,6 +276,40 @@ func GetDeletePath(attribute YamlConfigAttribute) string {
 	if attribute.DeleteParent {
 		return RemoveLastPathElement(path)
 	}
+	return path
+}
+
+func GetLastPathElement(path string) string {
+	// Remove namespace prefix if present
+	// e.g., "ipv4//Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/address" -> "address"
+	// Split by / and get the last non-empty element
+	parts := strings.Split(path, "/")
+	for i := len(parts) - 1; i >= 0; i-- {
+		if parts[i] != "" {
+			// Remove namespace prefix if present (e.g., "Cisco-IOS-XR-um:element" -> "element")
+			element := parts[i]
+			if idx := strings.LastIndex(element, ":"); idx >= 0 {
+				element = element[idx+1:]
+			}
+			return element
+		}
+	}
+	return ""
+}
+
+func ToDotPath(path string) string {
+	// Remove leading slash
+	path = strings.TrimPrefix(path, "/")
+	// Replace double slashes with single dot
+	path = strings.ReplaceAll(path, "//", ".")
+	// Replace single slashes with dots
+	path = strings.ReplaceAll(path, "/", ".")
+	return path
+}
+
+// ToGnmiPath converts a path to GNMI format
+// For iosxr (which uses NETCONF/gNMI), we just return the path as-is
+func ToGnmiPath(path string) string {
 	return path
 }
 
@@ -307,40 +326,14 @@ func Add(a, b int) int {
 	return a + b
 }
 
-// Templating helper function to get example dn
-func GetExamplePath(path string, attributes []YamlConfigAttribute) string {
-	a := make([]interface{}, 0, len(attributes))
-	for _, attr := range attributes {
-		if attr.Id || attr.Reference {
-			a = append(a, attr.Example)
-		}
-	}
-	return fmt.Sprintf(path, a...)
-}
-
-// Templating helper function to identify last element of list
-func IsLast(index int, len int) bool {
-	return index+1 == len
-}
-
 // Templating helper function to remove last element of path
 func RemoveLastPathElement(p string) string {
 	return path.Dir(p)
 }
 
-func contains(s []string, str string) bool {
-	for _, v := range s {
-		if v == str {
-			return true
-		}
-	}
-	return false
-}
-
 // Map of templating functions
 var functions = template.FuncMap{
 	"toGoName":              ToGoName,
-	"toJsonPath":            ToJsonPath,
 	"camelCase":             CamelCase,
 	"snakeCase":             SnakeCase,
 	"hasId":                 HasId,
@@ -348,13 +341,13 @@ var functions = template.FuncMap{
 	"importParts":           ImportParts,
 	"importAttributes":      ImportAttributes,
 	"add":                   Add,
-	"getExamplePath":        GetExamplePath,
-	"isLast":                IsLast,
 	"sprintf":               fmt.Sprintf,
 	"removeLastPathElement": RemoveLastPathElement,
-	"getXPath":              GetXPath,
 	"getDeletePath":         GetDeletePath,
+	"getLastPathElement":    GetLastPathElement,
 	"reverseAttributes":     ReverseAttributes,
+	"toDotPath":             ToDotPath,
+	"toGnmiPath":            ToGnmiPath,
 }
 
 func resolvePath(e *yang.Entry, path string) *yang.Entry {
@@ -362,11 +355,11 @@ func resolvePath(e *yang.Entry, path string) *yang.Entry {
 
 	for _, pathElement := range pathElements {
 		if len(pathElement) > 0 {
-			// remove key
+			// remove XPath predicate (e.g., [name=value] or [name=%v])
 			if strings.Contains(pathElement, "[") {
 				pathElement = pathElement[:strings.Index(pathElement, "[")]
 			}
-			// remove reference
+			// remove namespace prefix (e.g., Cisco-IOS-XE-bgp:bgp -> bgp)
 			if strings.Contains(pathElement, ":") {
 				pathElement = pathElement[strings.Index(pathElement, ":")+1:]
 			}
@@ -425,15 +418,15 @@ func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 	//fmt.Printf("%s, Kind: %+v, Type: %+v\n\n", leaf.Name, leaf.Kind, leaf.Type)
 	if leaf.Kind.String() == "Leaf" {
 		if leaf.ListAttr != nil {
-			if contains([]string{"string", "union", "leafref"}, leaf.Type.Kind.String()) {
+			if helpers.Contains([]string{"string", "union", "leafref"}, leaf.Type.Kind.String()) {
 				attr.Type = "StringList"
-			} else if contains([]string{"uint8", "uint16", "uint32", "uint64"}, leaf.Type.Kind.String()) {
+			} else if helpers.Contains([]string{"uint8", "uint16", "uint32", "uint64"}, leaf.Type.Kind.String()) {
 				attr.Type = "Int64List"
 			} else {
 				panic(fmt.Sprintf("Unknown leaf-list type, attribute: %s, type: %s", attr.YangName, leaf.Type.Kind.String()))
 			}
 			// TODO parse union type
-		} else if contains([]string{"string", "union", "leafref"}, leaf.Type.Kind.String()) {
+		} else if helpers.Contains([]string{"string", "union", "leafref"}, leaf.Type.Kind.String()) {
 			attr.Type = "String"
 			if leaf.Type.Length != nil {
 				attr.StringMinLength = int64(leaf.Type.Length[0].Min.Value)
@@ -447,7 +440,7 @@ func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 			if len(leaf.Type.Pattern) > 0 {
 				attr.StringPatterns = leaf.Type.Pattern
 			}
-		} else if contains([]string{"uint8", "uint16", "uint32", "uint64"}, leaf.Type.Kind.String()) {
+		} else if helpers.Contains([]string{"uint8", "uint16", "uint32", "uint64"}, leaf.Type.Kind.String()) {
 			attr.Type = "Int64"
 			if leaf.Type.Range != nil {
 				attr.MinInt = int64(leaf.Type.Range[0].Min.Value)
@@ -458,14 +451,14 @@ func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 				}
 				attr.MaxInt = int64(max)
 			}
-		} else if contains([]string{"boolean", "empty"}, leaf.Type.Kind.String()) {
+		} else if helpers.Contains([]string{"boolean", "empty"}, leaf.Type.Kind.String()) {
 			if leaf.Type.Kind.String() == "boolean" {
 				attr.TypeYangBool = "boolean"
 			} else if leaf.Type.Kind.String() == "empty" {
 				attr.TypeYangBool = "empty"
 			}
 			attr.Type = "Bool"
-		} else if contains([]string{"enumeration"}, leaf.Type.Kind.String()) {
+		} else if helpers.Contains([]string{"enumeration"}, leaf.Type.Kind.String()) {
 			attr.Type = "String"
 			attr.EnumValues = leaf.Type.Enum.Names()
 		} else {
@@ -482,7 +475,12 @@ func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 	if attr.TfName == "" {
 		tfName := strings.ReplaceAll(ToYangShortName(attr.XPath), "-", "_")
 		tfName = strings.ReplaceAll(tfName, "/", "_")
+		// Trim leading underscores to comply with tfsdk naming rules (must start with letter)
+		tfName = strings.TrimLeft(tfName, "_")
 		attr.TfName = tfName
+		fmt.Printf("AUTO-GENERATED TfName: %s from XPath: %s\n", attr.TfName, attr.XPath)
+	} else {
+		fmt.Printf("USING PROVIDED TfName: %s for YangName: %s\n", attr.TfName, attr.YangName)
 	}
 	if attr.Description == "" {
 		attr.Description = strings.ReplaceAll(leaf.Description, "\n", " ")
@@ -510,7 +508,7 @@ func augmentConfig(config *YamlConfig, modelPaths []string) {
 	} else {
 		path = config.Path
 	}
-
+	path = strings.TrimPrefix(path, "/")
 	module := strings.Split(path, ":")[0]
 	e, errors := yang.GetModule(module, modelPaths...)
 	if len(errors) > 0 {
@@ -648,9 +646,11 @@ func renderTemplate(templatePath, outputPath string, config interface{}) {
 }
 
 func main() {
+	fmt.Println("=== GENERATOR STARTING ===")
 	resourceName := ""
 	if len(os.Args) == 2 {
 		resourceName = os.Args[1]
+		fmt.Printf("Filtering for resource: %s\n", resourceName)
 	}
 
 	items, _ := os.ReadDir(definitionsPath)
@@ -658,15 +658,16 @@ func main() {
 
 	// Load configs
 	for i, filename := range items {
+		fmt.Printf("Processing: %s\n", filename.Name())
 		yamlFile, err := os.ReadFile(filepath.Join(definitionsPath, filename.Name()))
 		if err != nil {
-			log.Fatalf("Error reading file: %v", err)
+			log.Fatalf("Error reading file '%s': %v", filename.Name(), err)
 		}
 
 		config := YamlConfig{}
 		err = yaml.Unmarshal(yamlFile, &config)
 		if err != nil {
-			log.Fatalf("Error parsing yaml: %v", err)
+			log.Fatalf("Error parsing yaml file '%s': %v", filename.Name(), err)
 		}
 		configs[i] = config
 	}

@@ -20,75 +20,9 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"os"
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrTelnet(t *testing.T) {
-	if os.Getenv("NCS") == "" && os.Getenv("XRV9K") == "" && os.Getenv("C8000") == "" {
-		t.Skip("skipping test, set environment variable NCS or XRV9K or C8000")
-	}
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_telnet.test", "ipv4_client_source_interface", "GigabitEthernet0/0/0/1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_telnet.test", "ipv6_client_source_interface", "GigabitEthernet0/0/0/1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_telnet.test", "vrfs.0.vrf_name", "ROI"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_telnet.test", "vrfs.0.ipv4_server_max_servers", "32"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_telnet.test", "vrfs.0.ipv4_server_access_list", "ACCESS1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_telnet.test", "vrfs.0.ipv6_server_max_servers", "34"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_telnet.test", "vrfs.0.ipv6_server_access_list", "ACCESS11"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_telnet.test", "vrfs_dscp.0.vrf_name", "TOI"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_telnet.test", "vrfs_dscp.0.ipv4_dscp", "55"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrTelnetConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrTelnetConfig() string {
-	config := `resource "iosxr_telnet" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	ipv4_client_source_interface = "GigabitEthernet0/0/0/1"` + "\n"
-	config += `	ipv6_client_source_interface = "GigabitEthernet0/0/0/1"` + "\n"
-	config += `	vrfs = [{` + "\n"
-	config += `		vrf_name = "ROI"` + "\n"
-	config += `		ipv4_server_max_servers = 32` + "\n"
-	config += `		ipv4_server_access_list = "ACCESS1"` + "\n"
-	config += `		ipv6_server_max_servers = 34` + "\n"
-	config += `		ipv6_server_access_list = "ACCESS11"` + "\n"
-	config += `	}]` + "\n"
-	config += `	vrfs_dscp = [{` + "\n"
-	config += `		vrf_name = "TOI"` + "\n"
-	config += `		ipv4_dscp = 55` + "\n"
-	config += `	}]` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_telnet" "test" {
-			depends_on = [iosxr_telnet.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

@@ -70,6 +70,7 @@ attributes:
         exclude_example: true
         example: disable
       - yang_name: echo/ipv4/source/ipv4-address
+        xpath: echo/ipv4/source/ipv4-address
         tf_name: echo_ipv4_source
         example: 12.1.1.1
       - yang_name: ipv6/checksum/disable

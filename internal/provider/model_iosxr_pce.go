@@ -25,8 +25,13 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
+	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -78,6 +83,17 @@ func (data PCEData) getPath() string {
 	return "Cisco-IOS-XR-um-pce-cfg:/pce"
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data PCE) getXPath() string {
+	path := "Cisco-IOS-XR-um-pce-cfg:/pce"
+	return path
+}
+
+func (data PCEData) getXPath() string {
+	path := "Cisco-IOS-XR-um-pce-cfg:/pce"
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -124,6 +140,61 @@ func (data PCE) toBody(ctx context.Context) string {
 }
 
 // End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data PCE) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.AddressIpv4.IsNull() && !data.AddressIpv4.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/address/ipv4", data.AddressIpv4.ValueString())
+	}
+	if !data.AddressIpv6.IsNull() && !data.AddressIpv6.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/address/ipv6", data.AddressIpv6.ValueString())
+	}
+	if len(data.StateSyncIpv4s) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.StateSyncIpv4s {
+			cBody := netconf.Body{}
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "address", item.Address.ValueString())
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"state-sync/ipv4s/ipv4", cBody.Res())
+		}
+	}
+	if !data.PeerFilterIpv4AccessList.IsNull() && !data.PeerFilterIpv4AccessList.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/peer-filter/ipv4/access-list", data.PeerFilterIpv4AccessList.ValueString())
+	}
+	if !data.ApiAuthenticationDigest.IsNull() && !data.ApiAuthenticationDigest.IsUnknown() {
+		if data.ApiAuthenticationDigest.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/api/authentication/digest", "")
+		}
+	}
+	if !data.ApiSiblingIpv4.IsNull() && !data.ApiSiblingIpv4.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/api/sibling/ipv4", data.ApiSiblingIpv4.ValueString())
+	}
+	if len(data.ApiUsers) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.ApiUsers {
+			cBody := netconf.Body{}
+			if !item.UserName.IsNull() && !item.UserName.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "user-name", item.UserName.ValueString())
+			}
+			if !item.PasswordEncrypted.IsNull() && !item.PasswordEncrypted.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "password/encrypted", item.PasswordEncrypted.ValueString())
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"api/users/user", cBody.Res())
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
@@ -172,15 +243,13 @@ func (data *PCE) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.PeerFilterIpv4AccessList = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "api.authentication.digest"); !data.ApiAuthenticationDigest.IsNull() {
-		if value.Exists() {
-			data.ApiAuthenticationDigest = types.BoolValue(true)
-		} else {
-			data.ApiAuthenticationDigest = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "api.authentication.digest"); value.Exists() {
+		data.ApiAuthenticationDigest = types.BoolValue(true)
+	} else if data.ApiAuthenticationDigest.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.ApiAuthenticationDigest = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 	if value := gjson.GetBytes(res, "api.sibling.ipv4"); value.Exists() && !data.ApiSiblingIpv4.IsNull() {
 		data.ApiSiblingIpv4 = types.StringValue(value.String())
 	} else {
@@ -224,16 +293,119 @@ func (data *PCE) updateFromBody(ctx context.Context, res []byte) {
 
 // End of section. //template:end updateFromBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *PCE) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address/ipv4"); value.Exists() {
+		data.AddressIpv4 = types.StringValue(value.String())
+	} else if data.AddressIpv4.IsNull() {
+		data.AddressIpv4 = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address/ipv6"); value.Exists() {
+		data.AddressIpv6 = types.StringValue(value.String())
+	} else if data.AddressIpv6.IsNull() {
+		data.AddressIpv6 = types.StringNull()
+	}
+	for i := range data.StateSyncIpv4s {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.StateSyncIpv4s[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/state-sync/ipv4s/ipv4").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.StateSyncIpv4s[i].Address = types.StringValue(value.String())
+		} else if data.StateSyncIpv4s[i].Address.IsNull() {
+			data.StateSyncIpv4s[i].Address = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/peer-filter/ipv4/access-list"); value.Exists() {
+		data.PeerFilterIpv4AccessList = types.StringValue(value.String())
+	} else if data.PeerFilterIpv4AccessList.IsNull() {
+		data.PeerFilterIpv4AccessList = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/api/authentication/digest"); value.Exists() {
+		data.ApiAuthenticationDigest = types.BoolValue(true)
+	} else {
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.ApiAuthenticationDigest.IsNull() {
+			data.ApiAuthenticationDigest = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/api/sibling/ipv4"); value.Exists() {
+		data.ApiSiblingIpv4 = types.StringValue(value.String())
+	} else if data.ApiSiblingIpv4.IsNull() {
+		data.ApiSiblingIpv4 = types.StringNull()
+	}
+	for i := range data.ApiUsers {
+		keys := [...]string{"user-name"}
+		keyValues := [...]string{data.ApiUsers[i].UserName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/api/users/user").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "user-name"); value.Exists() {
+			data.ApiUsers[i].UserName = types.StringValue(value.String())
+		} else if data.ApiUsers[i].UserName.IsNull() {
+			data.ApiUsers[i].UserName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "password/encrypted"); value.Exists() {
+			data.ApiUsers[i].PasswordEncrypted = types.StringValue(value.String())
+		} else if data.ApiUsers[i].PasswordEncrypted.IsNull() {
+			data.ApiUsers[i].PasswordEncrypted = types.StringNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *PCE) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "address.ipv4"); value.Exists() {
+func (data *PCE) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "address.ipv4"); value.Exists() {
 		data.AddressIpv4 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "address.ipv6"); value.Exists() {
+	if value := res.Get(prefix + "address.ipv6"); value.Exists() {
 		data.AddressIpv6 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "state-sync.ipv4s.ipv4"); value.Exists() {
+	if value := res.Get(prefix + "state-sync.ipv4s.ipv4"); value.Exists() {
 		data.StateSyncIpv4s = make([]PCEStateSyncIpv4s, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := PCEStateSyncIpv4s{}
@@ -244,18 +416,16 @@ func (data *PCE) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "peer-filter.ipv4.access-list"); value.Exists() {
+	if value := res.Get(prefix + "peer-filter.ipv4.access-list"); value.Exists() {
 		data.PeerFilterIpv4AccessList = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "api.authentication.digest"); value.Exists() {
+	if value := res.Get(prefix + "api.authentication.digest"); value.Exists() {
 		data.ApiAuthenticationDigest = types.BoolValue(true)
-	} else {
-		data.ApiAuthenticationDigest = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "api.sibling.ipv4"); value.Exists() {
+	if value := res.Get(prefix + "api.sibling.ipv4"); value.Exists() {
 		data.ApiSiblingIpv4 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "api.users.user"); value.Exists() {
+	if value := res.Get(prefix + "api.users.user"); value.Exists() {
 		data.ApiUsers = make([]PCEApiUsers, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := PCEApiUsers{}
@@ -275,14 +445,18 @@ func (data *PCE) fromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *PCEData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "address.ipv4"); value.Exists() {
+func (data *PCEData) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "address.ipv4"); value.Exists() {
 		data.AddressIpv4 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "address.ipv6"); value.Exists() {
+	if value := res.Get(prefix + "address.ipv6"); value.Exists() {
 		data.AddressIpv6 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "state-sync.ipv4s.ipv4"); value.Exists() {
+	if value := res.Get(prefix + "state-sync.ipv4s.ipv4"); value.Exists() {
 		data.StateSyncIpv4s = make([]PCEStateSyncIpv4s, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := PCEStateSyncIpv4s{}
@@ -293,18 +467,16 @@ func (data *PCEData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "peer-filter.ipv4.access-list"); value.Exists() {
+	if value := res.Get(prefix + "peer-filter.ipv4.access-list"); value.Exists() {
 		data.PeerFilterIpv4AccessList = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "api.authentication.digest"); value.Exists() {
+	if value := res.Get(prefix + "api.authentication.digest"); value.Exists() {
 		data.ApiAuthenticationDigest = types.BoolValue(true)
-	} else {
-		data.ApiAuthenticationDigest = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "api.sibling.ipv4"); value.Exists() {
+	if value := res.Get(prefix + "api.sibling.ipv4"); value.Exists() {
 		data.ApiSiblingIpv4 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "api.users.user"); value.Exists() {
+	if value := res.Get(prefix + "api.users.user"); value.Exists() {
 		data.ApiUsers = make([]PCEApiUsers, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := PCEApiUsers{}
@@ -321,6 +493,102 @@ func (data *PCEData) fromBody(ctx context.Context, res []byte) {
 }
 
 // End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *PCE) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address/ipv4"); value.Exists() {
+		data.AddressIpv4 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address/ipv6"); value.Exists() {
+		data.AddressIpv6 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/state-sync/ipv4s/ipv4"); value.Exists() {
+		data.StateSyncIpv4s = make([]PCEStateSyncIpv4s, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := PCEStateSyncIpv4s{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.StateSyncIpv4s = append(data.StateSyncIpv4s, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/peer-filter/ipv4/access-list"); value.Exists() {
+		data.PeerFilterIpv4AccessList = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/api/authentication/digest"); value.Exists() {
+		data.ApiAuthenticationDigest = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/api/sibling/ipv4"); value.Exists() {
+		data.ApiSiblingIpv4 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/api/users/user"); value.Exists() {
+		data.ApiUsers = make([]PCEApiUsers, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := PCEApiUsers{}
+			if cValue := helpers.GetFromXPath(v, "user-name"); cValue.Exists() {
+				item.UserName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "password/encrypted"); cValue.Exists() {
+				item.PasswordEncrypted = types.StringValue(cValue.String())
+			}
+			data.ApiUsers = append(data.ApiUsers, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *PCEData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address/ipv4"); value.Exists() {
+		data.AddressIpv4 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address/ipv6"); value.Exists() {
+		data.AddressIpv6 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/state-sync/ipv4s/ipv4"); value.Exists() {
+		data.StateSyncIpv4s = make([]PCEStateSyncIpv4s, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := PCEStateSyncIpv4s{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.StateSyncIpv4s = append(data.StateSyncIpv4s, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/peer-filter/ipv4/access-list"); value.Exists() {
+		data.PeerFilterIpv4AccessList = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/api/authentication/digest"); value.Exists() {
+		data.ApiAuthenticationDigest = types.BoolValue(true)
+	} else {
+		data.ApiAuthenticationDigest = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/api/sibling/ipv4"); value.Exists() {
+		data.ApiSiblingIpv4 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/api/users/user"); value.Exists() {
+		data.ApiUsers = make([]PCEApiUsers, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := PCEApiUsers{}
+			if cValue := helpers.GetFromXPath(v, "user-name"); cValue.Exists() {
+				item.UserName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "password/encrypted"); cValue.Exists() {
+				item.PasswordEncrypted = types.StringValue(cValue.String())
+			}
+			data.ApiUsers = append(data.ApiUsers, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
@@ -362,8 +630,11 @@ func (data *PCE) getDeletedItems(ctx context.Context, state PCE) []string {
 	if !state.ApiSiblingIpv4.IsNull() && data.ApiSiblingIpv4.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/api/sibling/ipv4", state.getPath()))
 	}
-	if !state.ApiAuthenticationDigest.IsNull() && data.ApiAuthenticationDigest.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/api/authentication/digest", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.ApiAuthenticationDigest.IsNull() && state.ApiAuthenticationDigest.ValueBool() {
+		if data.ApiAuthenticationDigest.IsNull() || !data.ApiAuthenticationDigest.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/api/authentication/digest", state.getPath()))
+		}
 	}
 	if !state.PeerFilterIpv4AccessList.IsNull() && data.PeerFilterIpv4AccessList.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-filter/ipv4/access-list", state.getPath()))
@@ -411,7 +682,7 @@ func (data *PCE) getDeletedItems(ctx context.Context, state PCE) []string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *PCE) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *PCE) getEmptyLeafsDelete(ctx context.Context, state *PCE) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.ApiUsers {
 		keys := [...]string{"user-name"}
@@ -421,8 +692,11 @@ func (data *PCE) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ApiAuthenticationDigest.IsNull() && !data.ApiAuthenticationDigest.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/api/authentication/digest", data.getPath()))
+		if state != nil && !state.ApiAuthenticationDigest.IsNull() && state.ApiAuthenticationDigest.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/api/authentication/digest", data.getXPath()))
+		}
 	}
 	for i := range data.StateSyncIpv4s {
 		keys := [...]string{"address"}
@@ -442,14 +716,9 @@ func (data *PCE) getEmptyLeafsDelete(ctx context.Context) []string {
 func (data *PCE) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.ApiUsers {
-		keys := [...]string{"user-name"}
 		keyValues := [...]string{data.ApiUsers[i].UserName.ValueString()}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/api/users/user%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/api/users/user=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	if !data.ApiSiblingIpv4.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/api/sibling/ipv4", data.getPath()))
@@ -461,14 +730,9 @@ func (data *PCE) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/peer-filter/ipv4/access-list", data.getPath()))
 	}
 	for i := range data.StateSyncIpv4s {
-		keys := [...]string{"address"}
 		keyValues := [...]string{data.StateSyncIpv4s[i].Address.ValueString()}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/state-sync/ipv4s/ipv4%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/state-sync/ipv4s/ipv4=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	if !data.AddressIpv6.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/ipv6", data.getPath()))
@@ -476,7 +740,167 @@ func (data *PCE) getDeletePaths(ctx context.Context) []string {
 	if !data.AddressIpv4.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/ipv4", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *PCE) addDeletedItemsXML(ctx context.Context, state PCE, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.ApiUsers {
+		stateKeys := [...]string{"user-name"}
+		stateKeyValues := [...]string{state.ApiUsers[i].UserName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.ApiUsers[i].UserName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.ApiUsers {
+			found = true
+			if state.ApiUsers[i].UserName.ValueString() != data.ApiUsers[j].UserName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.ApiUsers[i].PasswordEncrypted.IsNull() && data.ApiUsers[j].PasswordEncrypted.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/api/users/user%v/password/encrypted", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/api/users/user%v", predicates))
+		}
+	}
+	if !state.ApiSiblingIpv4.IsNull() && data.ApiSiblingIpv4.IsNull() {
+		deletePath := state.getXPath() + "/api/sibling/ipv4"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ApiAuthenticationDigest.IsNull() && state.ApiAuthenticationDigest.ValueBool() && data.ApiAuthenticationDigest.IsNull() {
+		deletePath := state.getXPath() + "/api/authentication/digest"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.PeerFilterIpv4AccessList.IsNull() && data.PeerFilterIpv4AccessList.IsNull() {
+		deletePath := state.getXPath() + "/peer-filter/ipv4/access-list"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.StateSyncIpv4s {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.StateSyncIpv4s[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.StateSyncIpv4s[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.StateSyncIpv4s {
+			found = true
+			if state.StateSyncIpv4s[i].Address.ValueString() != data.StateSyncIpv4s[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/state-sync/ipv4s/ipv4%v", predicates))
+		}
+	}
+	if !state.AddressIpv6.IsNull() && data.AddressIpv6.IsNull() {
+		deletePath := state.getXPath() + "/address/ipv6"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.AddressIpv4.IsNull() && data.AddressIpv4.IsNull() {
+		deletePath := state.getXPath() + "/address/ipv4"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *PCE) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	for i := range data.ApiUsers {
+		keys := [...]string{"user-name"}
+		keyValues := [...]string{data.ApiUsers[i].UserName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/api/users/user%v", predicates))
+	}
+	if !data.ApiSiblingIpv4.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/api/sibling/ipv4")
+	}
+	if !data.ApiAuthenticationDigest.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/api/authentication/digest")
+	}
+	if !data.PeerFilterIpv4AccessList.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/peer-filter/ipv4/access-list")
+	}
+	for i := range data.StateSyncIpv4s {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.StateSyncIpv4s[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/state-sync/ipv4s/ipv4%v", predicates))
+	}
+	if !data.AddressIpv6.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/address/ipv6")
+	}
+	if !data.AddressIpv4.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/address/ipv4")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

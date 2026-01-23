@@ -20,49 +20,8 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrRouterISISInterface(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "circuit_type", "level-1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "hello_padding", "disable"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "hello_padding_levels.0.level_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "hello_padding_levels.0.hello_padding", "always"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "priority", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "priority_levels.0.level_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "priority_levels.0.priority", "64"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "point_to_point", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "state", "passive"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "hello_password_hmac_md5_encrypted", "060506324F41584B564B0F49584B"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "hello_password_hmac_md5_send_only", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "hello_password_levels.0.level_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "hello_password_levels.0.hello_password_text_encrypted", "060506324F41584B564B0F49584B"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "hello_password_levels.0.hello_password_text_send_only", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "bfd_fast_detect_ipv4", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "bfd_fast_detect_ipv6", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "bfd_minimum_interval", "50"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "bfd_multiplier", "3"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrRouterISISInterfacePrerequisitesConfig + testAccDataSourceIosxrRouterISISInterfaceConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRouterISISInterfacePrerequisitesConfig = `
@@ -76,49 +35,3 @@ resource "iosxr_gnmi" "PreReq0" {
 `
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrRouterISISInterfaceConfig() string {
-	config := `resource "iosxr_router_isis_interface" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	process_id = "P1"` + "\n"
-	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
-	config += `	circuit_type = "level-1"` + "\n"
-	config += `	hello_padding = "disable"` + "\n"
-	config += `	hello_padding_levels = [{` + "\n"
-	config += `		level_number = 1` + "\n"
-	config += `		hello_padding = "always"` + "\n"
-	config += `	}]` + "\n"
-	config += `	priority = 10` + "\n"
-	config += `	priority_levels = [{` + "\n"
-	config += `		level_number = 1` + "\n"
-	config += `		priority = 64` + "\n"
-	config += `	}]` + "\n"
-	config += `	point_to_point = false` + "\n"
-	config += `	state = "passive"` + "\n"
-	config += `	hello_password_hmac_md5_encrypted = "060506324F41584B564B0F49584B"` + "\n"
-	config += `	hello_password_hmac_md5_send_only = true` + "\n"
-	config += `	hello_password_levels = [{` + "\n"
-	config += `		level_number = 1` + "\n"
-	config += `		hello_password_text_encrypted = "060506324F41584B564B0F49584B"` + "\n"
-	config += `		hello_password_text_send_only = true` + "\n"
-	config += `	}]` + "\n"
-	config += `	bfd_fast_detect_ipv4 = true` + "\n"
-	config += `	bfd_fast_detect_ipv6 = true` + "\n"
-	config += `	bfd_minimum_interval = 50` + "\n"
-	config += `	bfd_multiplier = 3` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_router_isis_interface" "test" {
-			process_id = "P1"
-			interface_name = "GigabitEthernet0/0/0/1"
-			depends_on = [iosxr_router_isis_interface.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

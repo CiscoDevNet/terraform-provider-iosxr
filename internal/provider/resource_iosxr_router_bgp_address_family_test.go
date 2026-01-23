@@ -5,7 +5,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//	https://mozilla.org/MPL/2.0/
+//     https://mozilla.org/MPL/2.0/
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,12 +21,10 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"fmt"
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 // End of section. //template:end imports
@@ -114,71 +112,6 @@ func TestAccIosxrRouterBGPAddressFamily(t *testing.T) {
 }
 
 // End of section. //template:end testAcc
-
-// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-
-func iosxrRouterBGPAddressFamilyImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
-	return func(s *terraform.State) (string, error) {
-		primary := s.RootModule().Resources[resourceName].Primary
-		AsNumber := primary.Attributes["as_number"]
-		AfName := primary.Attributes["af_name"]
-
-		return fmt.Sprintf("%s,%s", AsNumber, AfName), nil
-	}
-}
-
-// End of section. //template:end importStateIdFunc
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrRouterBGPAddressFamilyPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies"
-	attributes = {
-	}
-	lists = [
-		{
-			name = "route-policy"
-			key = "route-policy-name"
-			items = [
-				{
-					"route-policy-name" = "ROUTE_POLICY_1"
-					"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
-				},
-				{
-					"route-policy-name" = "ADDITIONAL_PATHS_POLICY"
-					"rpl-route-policy" = "route-policy ADDITIONAL_PATHS_POLICY\n  pass\nend-policy\n"
-				},
-				{
-					"route-policy-name" = "ALLOCATE_LABEL_POLICY"
-					"rpl-route-policy" = "route-policy ALLOCATE_LABEL_POLICY\n  pass\nend-policy\n"
-				},
-				{
-					"route-policy-name" = "MULTIPATH_POLICY"
-					"rpl-route-policy" = "route-policy MULTIPATH_POLICY\n  pass\nend-policy\n"
-				},
-				{
-					"route-policy-name" = "REDISTRIBUTE_POLICY"
-					"rpl-route-policy" = "route-policy REDISTRIBUTE_POLICY\n  pass\nend-policy\n"
-				},
-				{
-					"route-policy-name" = "LABEL_MODE_POLICY"
-					"rpl-route-policy" = "route-policy LABEL_MODE_POLICY\n  pass\nend-policy\n"
-				},
-			]
-		},
-	]
-}
-
-resource "iosxr_gnmi" "PreReq1" {
-	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
-	attributes = {
-		"as-number" = "65001"
-	}
-}
-
-`
-
-// End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 

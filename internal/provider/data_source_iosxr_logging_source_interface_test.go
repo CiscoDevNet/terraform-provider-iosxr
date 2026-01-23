@@ -20,32 +20,8 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrLoggingSourceInterface(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging_source_interface.test", "vrfs.0.name", "VRF1"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrLoggingSourceInterfacePrerequisitesConfig + testAccDataSourceIosxrLoggingSourceInterfaceConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrLoggingSourceInterfacePrerequisitesConfig = `
@@ -66,25 +42,3 @@ resource "iosxr_gnmi" "PreReq1" {
 `
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrLoggingSourceInterfaceConfig() string {
-	config := `resource "iosxr_logging_source_interface" "test" {` + "\n"
-	config += `	name = "Loopback0"` + "\n"
-	config += `	vrfs = [{` + "\n"
-	config += `		name = "VRF1"` + "\n"
-	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_logging_source_interface" "test" {
-			name = "Loopback0"
-			depends_on = [iosxr_logging_source_interface.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

@@ -20,86 +20,9 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrKeyChain(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_key_chain.test", "keys.0.key_name", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_key_chain.test", "keys.0.key_string_password", "00071A150754"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_key_chain.test", "keys.0.cryptographic_algorithm", "hmac-md5"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_key_chain.test", "keys.0.accept_lifetime_start_time_hour", "11"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_key_chain.test", "keys.0.accept_lifetime_start_time_minute", "52"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_key_chain.test", "keys.0.accept_lifetime_start_time_second", "55"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_key_chain.test", "keys.0.accept_lifetime_start_time_day_of_month", "21"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_key_chain.test", "keys.0.accept_lifetime_start_time_month", "january"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_key_chain.test", "keys.0.accept_lifetime_start_time_year", "2023"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_key_chain.test", "keys.0.accept_lifetime_infinite", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_key_chain.test", "keys.0.send_lifetime_start_time_hour", "8"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_key_chain.test", "keys.0.send_lifetime_start_time_minute", "36"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_key_chain.test", "keys.0.send_lifetime_start_time_second", "22"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_key_chain.test", "keys.0.send_lifetime_start_time_day_of_month", "15"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_key_chain.test", "keys.0.send_lifetime_start_time_month", "january"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_key_chain.test", "keys.0.send_lifetime_start_time_year", "2023"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_key_chain.test", "keys.0.send_lifetime_infinite", "true"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrKeyChainConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrKeyChainConfig() string {
-	config := `resource "iosxr_key_chain" "test" {` + "\n"
-	config += `	name = "KEY11"` + "\n"
-	config += `	keys = [{` + "\n"
-	config += `		key_name = "1"` + "\n"
-	config += `		key_string_password = "00071A150754"` + "\n"
-	config += `		cryptographic_algorithm = "hmac-md5"` + "\n"
-	config += `		accept_lifetime_start_time_hour = 11` + "\n"
-	config += `		accept_lifetime_start_time_minute = 52` + "\n"
-	config += `		accept_lifetime_start_time_second = 55` + "\n"
-	config += `		accept_lifetime_start_time_day_of_month = 21` + "\n"
-	config += `		accept_lifetime_start_time_month = "january"` + "\n"
-	config += `		accept_lifetime_start_time_year = 2023` + "\n"
-	config += `		accept_lifetime_infinite = true` + "\n"
-	config += `		send_lifetime_start_time_hour = 8` + "\n"
-	config += `		send_lifetime_start_time_minute = 36` + "\n"
-	config += `		send_lifetime_start_time_second = 22` + "\n"
-	config += `		send_lifetime_start_time_day_of_month = 15` + "\n"
-	config += `		send_lifetime_start_time_month = "january"` + "\n"
-	config += `		send_lifetime_start_time_year = 2023` + "\n"
-	config += `		send_lifetime_infinite = true` + "\n"
-	config += `	}]` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_key_chain" "test" {
-			name = "KEY11"
-			depends_on = [iosxr_key_chain.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

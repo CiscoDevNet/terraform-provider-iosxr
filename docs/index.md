@@ -3,17 +3,36 @@
 layout: ""
 page_title: "Provider: IOSXR"
 description: |-
-  The IOSXR provider provides resources to interact with one or more Cisco IOS-XR devices.
+  The IOSXR provider provides resources to interact with one or more Cisco IOS-XR devices using gNMI or NETCONF protocols.
 ---
 
 # IOSXR Provider
 
-The IOSXR provider provides resources to interact with one or more Cisco IOS-XR devices.
+The IOSXR provider provides resources to interact with one or more Cisco IOS-XR devices using gNMI or NETCONF protocols.
 
-The required device configuration can be found below.
+## Supported Protocols
+
+The provider supports two protocols for device communication:
+
+- **gNMI (gRPC Network Management Interface)** - Default protocol, recommended for production use
+- **NETCONF** - Alternative protocol for legacy systems or specific use cases
+
+## Device Configuration Requirements
+
+### For gNMI (Default)
 
 ```
 grpc
+```
+
+### For NETCONF
+
+```
+netconf-yang agent
+ ssh
+!
+ssh server v2
+ssh server netconf vrf default
 ```
 
 All resources and data sources have been tested with the following releases.
@@ -27,11 +46,25 @@ All resources and data sources have been tested with the following releases.
 
 ## Example Usage
 
+### Using gNMI (Default)
+
 ```terraform
 provider "iosxr" {
   username = "admin"
   password = "password"
   host     = "10.1.1.1"
+  protocol = "gnmi"  # Optional, gnmi is the default
+}
+```
+
+### Using NETCONF
+
+```terraform
+provider "iosxr" {
+  username = "admin"
+  password = "password"
+  host     = "10.1.1.1"  # Default NETCONF port is 830
+  protocol = "netconf"
 }
 ```
 
@@ -40,13 +73,17 @@ provider "iosxr" {
 
 ### Optional
 
+- `auto_commit` (Boolean) Automatically commit configuration changes after each resource operation. When `true` (default), each resource commits its changes immediately. When `false`, changes are left in the candidate datastore and must be explicitly committed using the `iosxr_commit` resource. **Requires reuse_connection=true when disabled**. Only applies to NETCONF protocol with candidate datastore support. This can also be set as the IOSXR_AUTO_COMMIT environment variable. Defaults to `true`.
 - `ca_certificate` (String) TLS CA certificate content. This can also be set as the IOSXR_CA_CERTIFICATE environment variable.
 - `certificate` (String) TLS certificate content. This can also be set as the IOSXR_CERTIFICATE environment variable.
 - `devices` (Attributes List) This can be used to manage a list of devices from a single provider. All devices must use the same credentials. Each resource and data source has an optional attribute named `device`, which can then select a device by its name from this list. (see [below for nested schema](#nestedatt--devices))
-- `host` (String) IP or name of the Cisco IOS-XR device. Optionally a port can be added with `:12345`. The default port is `57400`. This can also be set as the IOSXR_HOST environment variable. If no `host` is provided, the `host` of the first device from the `devices` list is being used.
+- `host` (String) Hostname or IP address of the Cisco IOS-XR device. Optionally a port can be added with `:port`. Default port is `57400` for gNMI and `830` for NETCONF. This can also be set as the IOSXR_HOST environment variable.
 - `key` (String) TLS private key content. This can also be set as the IOSXR_KEY environment variable.
+- `lock_release_timeout` (Number) Number of seconds to wait for the device database lock to be released. This can also be set as the IOSXR_LOCK_RELEASE_TIMEOUT environment variable. Defaults to `120`.
 - `password` (String, Sensitive) Password for the IOS-XR device. This can also be set as the IOSXR_PASSWORD environment variable.
-- `reuse_connection` (Boolean) Reuse gNMI connection. This can also be set as the IOSXR_REUSE_CONNECTION environment variable. Defaults to `true`.
+- `protocol` (String) Protocol to use for device communication. Either `gnmi` or `netconf` (SSH). This can also be set as the IOSXR_PROTOCOL environment variable. Defaults to `gnmi`.
+- `retries` (Number) Number of retries for API calls. This can also be set as the IOSXR_RETRIES environment variable. Defaults to `3`.
+- `reuse_connection` (Boolean) Keep connections open between operations for better performance. **Required when auto_commit=false** - Manual commit mode requires persistent connections to maintain staged candidate configuration changes. When disabled, connections are closed and reopened for each operation. Only applies to NETCONF protocol. This can also be set as the IOSXR_REUSE_CONNECTION environment variable. Defaults to `true`.
 - `selected_devices` (List of String) This can be used to select a list of devices to manage from the `devices` list. Selected devices will be managed while other devices will be skipped and their state will be frozen. This can be used to deploy changes to a subset of devices. Defaults to all devices.
 - `tls` (Boolean) Use TLS. This can also be set as the IOSXR_TLS environment variable. Defaults to `true`.
 - `username` (String) Username for the IOS-XR device. This can also be set as the IOSXR_USERNAME environment variable.

@@ -8,6 +8,7 @@ attributes:
     example: ROUTE_POLICY_1
   - yang_name: rpl-route-policy
     tf_name: rpl
+    read_raw: true
     description: "Configures a route policy"
     example: "route-policy ROUTE_POLICY_1\\n  if destination in PREFIX_SET_1 then\\n    set extcommunity rt (12345:1) additive\\n  endif\\n  pass\\nend-policy\\n"
 

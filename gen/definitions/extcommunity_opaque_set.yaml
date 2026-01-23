@@ -8,5 +8,6 @@ attributes:
     example: BLUE
   - yang_name: rpl-extended-community-opaque-set
     tf_name: rpl
+    read_raw: true
     description: "Configures an extended community opaque set"
     example: "extcommunity-set opaque BLUE\\n  100\\nend-set\\n"

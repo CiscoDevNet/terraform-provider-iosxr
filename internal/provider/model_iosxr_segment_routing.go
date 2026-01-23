@@ -23,9 +23,14 @@ package provider
 import (
 	"context"
 	"fmt"
+	"sort"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -66,6 +71,17 @@ func (data SegmentRoutingData) getPath() string {
 	return "Cisco-IOS-XR-segment-routing-ms-cfg:/sr"
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data SegmentRouting) getXPath() string {
+	path := "Cisco-IOS-XR-segment-routing-ms-cfg:/sr"
+	return path
+}
+
+func (data SegmentRoutingData) getXPath() string {
+	path := "Cisco-IOS-XR-segment-routing-ms-cfg:/sr"
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -94,6 +110,36 @@ func (data SegmentRouting) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data SegmentRouting) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.GlobalBlockLowerBound.IsNull() && !data.GlobalBlockLowerBound.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/global-block/lower-bound", strconv.FormatInt(data.GlobalBlockLowerBound.ValueInt64(), 10))
+	}
+	if !data.GlobalBlockUpperBound.IsNull() && !data.GlobalBlockUpperBound.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/global-block/upper-bound", strconv.FormatInt(data.GlobalBlockUpperBound.ValueInt64(), 10))
+	}
+	if !data.LocalBlockLowerBound.IsNull() && !data.LocalBlockLowerBound.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/local-block/lower-bound", strconv.FormatInt(data.LocalBlockLowerBound.ValueInt64(), 10))
+	}
+	if !data.LocalBlockUpperBound.IsNull() && !data.LocalBlockUpperBound.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/local-block/upper-bound", strconv.FormatInt(data.LocalBlockUpperBound.ValueInt64(), 10))
+	}
+	if !data.Enable.IsNull() && !data.Enable.IsUnknown() {
+		if data.Enable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/enable", "")
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *SegmentRouting) updateFromBody(ctx context.Context, res []byte) {
@@ -117,38 +163,74 @@ func (data *SegmentRouting) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.LocalBlockUpperBound = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "enable"); !data.Enable.IsNull() {
-		if value.Exists() {
-			data.Enable = types.BoolValue(true)
-		} else {
-			data.Enable = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "enable"); value.Exists() {
+		data.Enable = types.BoolValue(true)
+	} else if data.Enable.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.Enable = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 }
 
 // End of section. //template:end updateFromBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
-func (data *SegmentRouting) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "global-block.lower-bound"); value.Exists() {
+func (data *SegmentRouting) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/global-block/lower-bound"); value.Exists() {
 		data.GlobalBlockLowerBound = types.Int64Value(value.Int())
+	} else if data.GlobalBlockLowerBound.IsNull() {
+		data.GlobalBlockLowerBound = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "global-block.upper-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/global-block/upper-bound"); value.Exists() {
 		data.GlobalBlockUpperBound = types.Int64Value(value.Int())
+	} else if data.GlobalBlockUpperBound.IsNull() {
+		data.GlobalBlockUpperBound = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "local-block.lower-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/local-block/lower-bound"); value.Exists() {
 		data.LocalBlockLowerBound = types.Int64Value(value.Int())
+	} else if data.LocalBlockLowerBound.IsNull() {
+		data.LocalBlockLowerBound = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "local-block.upper-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/local-block/upper-bound"); value.Exists() {
 		data.LocalBlockUpperBound = types.Int64Value(value.Int())
+	} else if data.LocalBlockUpperBound.IsNull() {
+		data.LocalBlockUpperBound = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/enable"); value.Exists() {
 		data.Enable = types.BoolValue(true)
 	} else {
-		data.Enable = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.Enable.IsNull() {
+			data.Enable = types.BoolNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *SegmentRouting) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "global-block.lower-bound"); value.Exists() {
+		data.GlobalBlockLowerBound = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "global-block.upper-bound"); value.Exists() {
+		data.GlobalBlockUpperBound = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "local-block.lower-bound"); value.Exists() {
+		data.LocalBlockLowerBound = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "local-block.upper-bound"); value.Exists() {
+		data.LocalBlockUpperBound = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "enable"); value.Exists() {
+		data.Enable = types.BoolValue(true)
 	}
 }
 
@@ -156,34 +238,85 @@ func (data *SegmentRouting) fromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *SegmentRoutingData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "global-block.lower-bound"); value.Exists() {
+func (data *SegmentRoutingData) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "global-block.lower-bound"); value.Exists() {
 		data.GlobalBlockLowerBound = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "global-block.upper-bound"); value.Exists() {
+	if value := res.Get(prefix + "global-block.upper-bound"); value.Exists() {
 		data.GlobalBlockUpperBound = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "local-block.lower-bound"); value.Exists() {
+	if value := res.Get(prefix + "local-block.lower-bound"); value.Exists() {
 		data.LocalBlockLowerBound = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "local-block.upper-bound"); value.Exists() {
+	if value := res.Get(prefix + "local-block.upper-bound"); value.Exists() {
 		data.LocalBlockUpperBound = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "enable"); value.Exists() {
+	if value := res.Get(prefix + "enable"); value.Exists() {
+		data.Enable = types.BoolValue(true)
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *SegmentRouting) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/global-block/lower-bound"); value.Exists() {
+		data.GlobalBlockLowerBound = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/global-block/upper-bound"); value.Exists() {
+		data.GlobalBlockUpperBound = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/local-block/lower-bound"); value.Exists() {
+		data.LocalBlockLowerBound = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/local-block/upper-bound"); value.Exists() {
+		data.LocalBlockUpperBound = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/enable"); value.Exists() {
+		data.Enable = types.BoolValue(true)
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *SegmentRoutingData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/global-block/lower-bound"); value.Exists() {
+		data.GlobalBlockLowerBound = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/global-block/upper-bound"); value.Exists() {
+		data.GlobalBlockUpperBound = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/local-block/lower-bound"); value.Exists() {
+		data.LocalBlockLowerBound = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/local-block/upper-bound"); value.Exists() {
+		data.LocalBlockUpperBound = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/enable"); value.Exists() {
 		data.Enable = types.BoolValue(true)
 	} else {
 		data.Enable = types.BoolValue(false)
 	}
 }
 
-// End of section. //template:end fromBodyData
+// End of section. //template:end fromBodyDataXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *SegmentRouting) getDeletedItems(ctx context.Context, state SegmentRouting) []string {
 	deletedItems := make([]string, 0)
-	if !state.Enable.IsNull() && data.Enable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/enable", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.Enable.IsNull() && state.Enable.ValueBool() {
+		if data.Enable.IsNull() || !data.Enable.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/enable", state.getPath()))
+		}
 	}
 	if !state.LocalBlockUpperBound.IsNull() && data.LocalBlockUpperBound.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-block", state.getPath()))
@@ -204,10 +337,13 @@ func (data *SegmentRouting) getDeletedItems(ctx context.Context, state SegmentRo
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *SegmentRouting) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *SegmentRouting) getEmptyLeafsDelete(ctx context.Context, state *SegmentRouting) []string {
 	emptyLeafsDelete := make([]string, 0)
+	// Only delete if state has true and plan has false
 	if !data.Enable.IsNull() && !data.Enable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/enable", data.getPath()))
+		if state != nil && !state.Enable.IsNull() && state.Enable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/enable", data.getXPath()))
+		}
 	}
 	return emptyLeafsDelete
 }
@@ -233,7 +369,144 @@ func (data *SegmentRouting) getDeletePaths(ctx context.Context) []string {
 	if !data.GlobalBlockLowerBound.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/global-block", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *SegmentRouting) addDeletedItemsXML(ctx context.Context, state SegmentRouting, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Enable.IsNull() && state.Enable.ValueBool() && data.Enable.IsNull() {
+		deletePath := state.getXPath() + "/enable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.LocalBlockUpperBound.IsNull() && data.LocalBlockUpperBound.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/local-block"
+		predicates := make(map[string]string)
+		if !state.LocalBlockLowerBound.IsNull() {
+			predicates["lower-bound"] = fmt.Sprintf("%v", state.LocalBlockLowerBound.ValueInt64())
+		}
+		predicates["upper-bound"] = fmt.Sprintf("%v", state.LocalBlockUpperBound.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.LocalBlockLowerBound.IsNull() && data.LocalBlockLowerBound.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/local-block"
+		predicates := make(map[string]string)
+		if !state.LocalBlockUpperBound.IsNull() {
+			predicates["upper-bound"] = fmt.Sprintf("%v", state.LocalBlockUpperBound.ValueInt64())
+		}
+		predicates["lower-bound"] = fmt.Sprintf("%v", state.LocalBlockLowerBound.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.GlobalBlockUpperBound.IsNull() && data.GlobalBlockUpperBound.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/global-block"
+		predicates := make(map[string]string)
+		if !state.GlobalBlockLowerBound.IsNull() {
+			predicates["lower-bound"] = fmt.Sprintf("%v", state.GlobalBlockLowerBound.ValueInt64())
+		}
+		predicates["upper-bound"] = fmt.Sprintf("%v", state.GlobalBlockUpperBound.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.GlobalBlockLowerBound.IsNull() && data.GlobalBlockLowerBound.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/global-block"
+		predicates := make(map[string]string)
+		if !state.GlobalBlockUpperBound.IsNull() {
+			predicates["upper-bound"] = fmt.Sprintf("%v", state.GlobalBlockUpperBound.ValueInt64())
+		}
+		predicates["lower-bound"] = fmt.Sprintf("%v", state.GlobalBlockLowerBound.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *SegmentRouting) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.Enable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/enable")
+	}
+	if !data.LocalBlockUpperBound.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/local-block")
+	}
+	if !data.LocalBlockLowerBound.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/local-block")
+	}
+	if !data.GlobalBlockUpperBound.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/global-block")
+	}
+	if !data.GlobalBlockLowerBound.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/global-block")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

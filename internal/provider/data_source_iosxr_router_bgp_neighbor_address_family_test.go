@@ -20,48 +20,8 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrRouterBGPNeighborAddressFamily(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "route_reflector_client", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "route_reflector_client_inheritance_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "advertise_vpnv4_unicast", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "advertise_vpnv4_unicast_re_originated", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "advertise_vpnv4_unicast_re_originated_stitching_rt", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "next_hop_self", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "next_hop_self_inheritance_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "encapsulation_type", "srv6"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "route_policy_in", "ROUTE_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "route_policy_out", "ROUTE_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "soft_reconfiguration_inbound", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "soft_reconfiguration_inbound_always", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "maximum_prefix_limit", "1248576"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "maximum_prefix_threshold", "80"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "maximum_prefix_warning_only", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "default_originate", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "default_originate_route_policy", "ROUTE_POLICY_1"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrRouterBGPNeighborAddressFamilyPrerequisitesConfig + testAccDataSourceIosxrRouterBGPNeighborAddressFamilyConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRouterBGPNeighborAddressFamilyPrerequisitesConfig = `
@@ -104,44 +64,3 @@ resource "iosxr_gnmi" "PreReq1" {
 `
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrRouterBGPNeighborAddressFamilyConfig() string {
-	config := `resource "iosxr_router_bgp_neighbor_address_family" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	as_number = "65001"` + "\n"
-	config += `	address = "10.1.1.2"` + "\n"
-	config += `	af_name = "vpnv4-unicast"` + "\n"
-	config += `	route_reflector_client = true` + "\n"
-	config += `	route_reflector_client_inheritance_disable = true` + "\n"
-	config += `	advertise_vpnv4_unicast = true` + "\n"
-	config += `	advertise_vpnv4_unicast_re_originated = true` + "\n"
-	config += `	advertise_vpnv4_unicast_re_originated_stitching_rt = true` + "\n"
-	config += `	next_hop_self = true` + "\n"
-	config += `	next_hop_self_inheritance_disable = true` + "\n"
-	config += `	encapsulation_type = "srv6"` + "\n"
-	config += `	route_policy_in = "ROUTE_POLICY_1"` + "\n"
-	config += `	route_policy_out = "ROUTE_POLICY_1"` + "\n"
-	config += `	soft_reconfiguration_inbound = true` + "\n"
-	config += `	soft_reconfiguration_inbound_always = true` + "\n"
-	config += `	maximum_prefix_limit = 1248576` + "\n"
-	config += `	maximum_prefix_threshold = 80` + "\n"
-	config += `	maximum_prefix_warning_only = true` + "\n"
-	config += `	default_originate = true` + "\n"
-	config += `	default_originate_route_policy = "ROUTE_POLICY_1"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_router_bgp_neighbor_address_family" "test" {
-			as_number = "65001"
-			address = "10.1.1.2"
-			af_name = "vpnv4-unicast"
-			depends_on = [iosxr_router_bgp_neighbor_address_family.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

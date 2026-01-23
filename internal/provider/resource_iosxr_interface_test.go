@@ -5,7 +5,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//	https://mozilla.org/MPL/2.0/
+//     https://mozilla.org/MPL/2.0/
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,12 +21,10 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"fmt"
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 // End of section. //template:end imports
@@ -148,107 +146,6 @@ func TestAccIosxrInterface(t *testing.T) {
 }
 
 // End of section. //template:end testAcc
-
-// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-
-func iosxrInterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
-	return func(s *terraform.State) (string, error) {
-		primary := s.RootModule().Resources[resourceName].Primary
-		InterfaceName := primary.Attributes["interface_name"]
-
-		return fmt.Sprintf("%s", InterfaceName), nil
-	}
-}
-
-// End of section. //template:end importStateIdFunc
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrInterfacePrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PMAP-IN]"
-	attributes = {
-		"policy-map-name" = "PMAP-IN"
-	}
-	lists = [
-		{
-			name = "class"
-			key = "name,type"
-			items = [
-				{
-					"name" = "class-default"
-					"type" = "qos"
-					"set/qos-group" = "0"
-				},
-			]
-		},
-	]
-}
-
-resource "iosxr_gnmi" "PreReq1" {
-	path = "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PMAP-OUT]"
-	attributes = {
-		"policy-map-name" = "PMAP-OUT"
-	}
-	lists = [
-		{
-			name = "class"
-			key = "name,type"
-			items = [
-				{
-					"name" = "class-default"
-					"type" = "qos"
-					"set/dscp" = "0"
-				},
-			]
-		},
-	]
-}
-
-resource "iosxr_gnmi" "PreReq2" {
-	path = "Cisco-IOS-XR-um-ipv4-access-list-cfg:/ipv4/access-lists/access-list[access-list-name=ACL1]"
-	attributes = {
-		"access-list-name" = "ACL1"
-	}
-	lists = [
-		{
-			name = "sequences/sequence"
-			key = "sequence-number"
-			items = [
-				{
-					"sequence-number" = "10"
-					"permit/protocol" = "ipv4"
-					"permit/source/host" = "10.1.1.1"
-					"permit/destination/host" = "10.1.1.2"
-				},
-			]
-		},
-	]
-}
-
-resource "iosxr_gnmi" "PreReq3" {
-	path = "Cisco-IOS-XR-um-ipv6-access-list-cfg:/ipv6/access-lists/access-list[access-list-name=ACL2]"
-	attributes = {
-		"access-list-name" = "ACL2"
-	}
-	lists = [
-		{
-			name = "sequences/sequence"
-			key = "sequence-number"
-			items = [
-				{
-					"sequence-number" = "10"
-					"permit/protocol" = "ipv6"
-					"permit/source/host" = "2001::1"
-					"permit/destination/host" = "2001::2"
-				},
-			]
-		},
-	]
-}
-
-`
-
-// End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 

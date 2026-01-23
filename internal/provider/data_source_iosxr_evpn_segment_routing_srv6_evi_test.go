@@ -20,38 +20,8 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrEVPNSegmentRoutingSRv6EVI(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "description", "My Description"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_import_two_byte_as_format.0.as_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_import_two_byte_as_format.0.assigned_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_export_two_byte_as_format.0.as_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_export_two_byte_as_format.0.assigned_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "advertise_mac", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "locators.0.locator_name", "LOC12"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig + testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig = `
@@ -87,35 +57,3 @@ resource "iosxr_gnmi" "PreReq3" {
 `
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIConfig() string {
-	config := `resource "iosxr_evpn_segment_routing_srv6_evi" "test" {` + "\n"
-	config += `	vpn_id = 1235` + "\n"
-	config += `	description = "My Description"` + "\n"
-	config += `	bgp_route_target_import_two_byte_as_format = [{` + "\n"
-	config += `		as_number = 1` + "\n"
-	config += `		assigned_number = 1` + "\n"
-	config += `	}]` + "\n"
-	config += `	bgp_route_target_export_two_byte_as_format = [{` + "\n"
-	config += `		as_number = 1` + "\n"
-	config += `		assigned_number = 1` + "\n"
-	config += `	}]` + "\n"
-	config += `	advertise_mac = true` + "\n"
-	config += `	locators = [{` + "\n"
-	config += `		locator_name = "LOC12"` + "\n"
-	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_evpn_segment_routing_srv6_evi" "test" {
-			vpn_id = 1235
-			depends_on = [iosxr_evpn_segment_routing_srv6_evi.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

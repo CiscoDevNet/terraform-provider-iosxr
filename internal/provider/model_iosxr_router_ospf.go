@@ -25,8 +25,13 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
+	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -139,6 +144,19 @@ func (data RouterOSPF) getPath() string {
 
 func (data RouterOSPFData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=%s]", data.ProcessName.ValueString())
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data RouterOSPF) getXPath() string {
+	path := "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.ProcessName.ValueString()))
+	return path
+}
+
+func (data RouterOSPFData) getXPath() string {
+	path := "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.ProcessName.ValueString()))
+	return path
 }
 
 // End of section. //template:end getPath
@@ -336,18 +354,225 @@ func (data RouterOSPF) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data RouterOSPF) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.ProcessName.IsNull() && !data.ProcessName.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/process-name", data.ProcessName.ValueString())
+	}
+	if !data.MplsLdpSync.IsNull() && !data.MplsLdpSync.IsUnknown() {
+		if data.MplsLdpSync.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/mpls/ldp/sync", "")
+		}
+	}
+	if !data.HelloInterval.IsNull() && !data.HelloInterval.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/hello-interval", strconv.FormatInt(data.HelloInterval.ValueInt64(), 10))
+	}
+	if !data.DeadInterval.IsNull() && !data.DeadInterval.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/dead-interval", strconv.FormatInt(data.DeadInterval.ValueInt64(), 10))
+	}
+	if !data.Priority.IsNull() && !data.Priority.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/priority", strconv.FormatInt(data.Priority.ValueInt64(), 10))
+	}
+	if !data.MtuIgnoreEnable.IsNull() && !data.MtuIgnoreEnable.IsUnknown() {
+		if data.MtuIgnoreEnable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/mtu-ignore/enable", "")
+		}
+	}
+	if !data.MtuIgnoreDisable.IsNull() && !data.MtuIgnoreDisable.IsUnknown() {
+		if data.MtuIgnoreDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/mtu-ignore/disable", "")
+		}
+	}
+	if !data.PassiveEnable.IsNull() && !data.PassiveEnable.IsUnknown() {
+		if data.PassiveEnable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/passive/enable", "")
+		}
+	}
+	if !data.PassiveDisable.IsNull() && !data.PassiveDisable.IsUnknown() {
+		if data.PassiveDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/passive/disable", "")
+		}
+	}
+	if !data.RouterId.IsNull() && !data.RouterId.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/router-id", data.RouterId.ValueString())
+	}
+	if !data.RedistributeConnected.IsNull() && !data.RedistributeConnected.IsUnknown() {
+		if data.RedistributeConnected.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/redistribute/connected", "")
+		}
+	}
+	if !data.RedistributeConnectedTag.IsNull() && !data.RedistributeConnectedTag.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/redistribute/connected/tag", strconv.FormatInt(data.RedistributeConnectedTag.ValueInt64(), 10))
+	}
+	if !data.RedistributeConnectedMetricType.IsNull() && !data.RedistributeConnectedMetricType.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/redistribute/connected/metric-type", data.RedistributeConnectedMetricType.ValueString())
+	}
+	if !data.RedistributeStatic.IsNull() && !data.RedistributeStatic.IsUnknown() {
+		if data.RedistributeStatic.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/redistribute/static", "")
+		}
+	}
+	if !data.RedistributeStaticTag.IsNull() && !data.RedistributeStaticTag.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/redistribute/static/tag", strconv.FormatInt(data.RedistributeStaticTag.ValueInt64(), 10))
+	}
+	if !data.RedistributeStaticMetricType.IsNull() && !data.RedistributeStaticMetricType.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/redistribute/static/metric-type", data.RedistributeStaticMetricType.ValueString())
+	}
+	if !data.BfdFastDetect.IsNull() && !data.BfdFastDetect.IsUnknown() {
+		if data.BfdFastDetect.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bfd/fast-detect", "")
+		}
+	}
+	if !data.BfdMinimumInterval.IsNull() && !data.BfdMinimumInterval.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bfd/minimum-interval", strconv.FormatInt(data.BfdMinimumInterval.ValueInt64(), 10))
+	}
+	if !data.BfdMultiplier.IsNull() && !data.BfdMultiplier.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bfd/multiplier", strconv.FormatInt(data.BfdMultiplier.ValueInt64(), 10))
+	}
+	if !data.DefaultInformationOriginate.IsNull() && !data.DefaultInformationOriginate.IsUnknown() {
+		if data.DefaultInformationOriginate.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/default-information/originate", "")
+		}
+	}
+	if !data.DefaultInformationOriginateAlways.IsNull() && !data.DefaultInformationOriginateAlways.IsUnknown() {
+		if data.DefaultInformationOriginateAlways.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/default-information/originate/always", "")
+		}
+	}
+	if !data.DefaultInformationOriginateMetricType.IsNull() && !data.DefaultInformationOriginateMetricType.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/default-information/originate/metric-type", strconv.FormatInt(data.DefaultInformationOriginateMetricType.ValueInt64(), 10))
+	}
+	if !data.AutoCostReferenceBandwidth.IsNull() && !data.AutoCostReferenceBandwidth.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/auto-cost/reference-bandwidth", strconv.FormatInt(data.AutoCostReferenceBandwidth.ValueInt64(), 10))
+	}
+	if !data.AutoCostDisable.IsNull() && !data.AutoCostDisable.IsUnknown() {
+		if data.AutoCostDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/auto-cost/disable", "")
+		}
+	}
+	if !data.SegmentRoutingMpls.IsNull() && !data.SegmentRoutingMpls.IsUnknown() {
+		if data.SegmentRoutingMpls.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/segment-routing/mpls", "")
+		}
+	}
+	if !data.SegmentRoutingSrPrefer.IsNull() && !data.SegmentRoutingSrPrefer.IsUnknown() {
+		if data.SegmentRoutingSrPrefer.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/segment-routing/sr-prefer", "")
+		}
+	}
+	if len(data.Areas) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.Areas {
+			cBody := netconf.Body{}
+			if !item.AreaId.IsNull() && !item.AreaId.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "area-id", item.AreaId.ValueString())
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"areas/area", cBody.Res())
+		}
+	}
+	if len(data.RedistributeBgp) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.RedistributeBgp {
+			cBody := netconf.Body{}
+			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "as-number", item.AsNumber.ValueString())
+			}
+			if !item.Tag.IsNull() && !item.Tag.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "tag", strconv.FormatInt(item.Tag.ValueInt64(), 10))
+			}
+			if !item.MetricType.IsNull() && !item.MetricType.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "metric-type", item.MetricType.ValueString())
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"redistribute/bgp/as", cBody.Res())
+		}
+	}
+	if len(data.RedistributeIsis) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.RedistributeIsis {
+			cBody := netconf.Body{}
+			if !item.InstanceName.IsNull() && !item.InstanceName.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "instance-name", item.InstanceName.ValueString())
+			}
+			if !item.Level1.IsNull() && !item.Level1.IsUnknown() {
+				if item.Level1.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "level-1", "")
+				}
+			}
+			if !item.Level2.IsNull() && !item.Level2.IsUnknown() {
+				if item.Level2.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "level-2", "")
+				}
+			}
+			if !item.Level12.IsNull() && !item.Level12.IsUnknown() {
+				if item.Level12.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "level-1-2", "")
+				}
+			}
+			if !item.Tag.IsNull() && !item.Tag.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "tag", strconv.FormatInt(item.Tag.ValueInt64(), 10))
+			}
+			if !item.MetricType.IsNull() && !item.MetricType.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "metric-type", item.MetricType.ValueString())
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"redistribute/isis", cBody.Res())
+		}
+	}
+	if len(data.RedistributeOspf) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.RedistributeOspf {
+			cBody := netconf.Body{}
+			if !item.InstanceName.IsNull() && !item.InstanceName.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "instance-name", item.InstanceName.ValueString())
+			}
+			if !item.MatchInternal.IsNull() && !item.MatchInternal.IsUnknown() {
+				if item.MatchInternal.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "match/internal", "")
+				}
+			}
+			if !item.MatchExternal.IsNull() && !item.MatchExternal.IsUnknown() {
+				if item.MatchExternal.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "match/external", "")
+				}
+			}
+			if !item.MatchNssaExternal.IsNull() && !item.MatchNssaExternal.IsUnknown() {
+				if item.MatchNssaExternal.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "match/nssa-external", "")
+				}
+			}
+			if !item.Tag.IsNull() && !item.Tag.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "tag", strconv.FormatInt(item.Tag.ValueInt64(), 10))
+			}
+			if !item.MetricType.IsNull() && !item.MetricType.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "metric-type", item.MetricType.ValueString())
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"redistribute/ospf", cBody.Res())
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *RouterOSPF) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "mpls.ldp.sync"); !data.MplsLdpSync.IsNull() {
-		if value.Exists() {
-			data.MplsLdpSync = types.BoolValue(true)
-		} else {
-			data.MplsLdpSync = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "mpls.ldp.sync"); value.Exists() {
+		data.MplsLdpSync = types.BoolValue(true)
+	} else if data.MplsLdpSync.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.MplsLdpSync = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 	if value := gjson.GetBytes(res, "hello-interval"); value.Exists() && !data.HelloInterval.IsNull() {
 		data.HelloInterval = types.Int64Value(value.Int())
 	} else {
@@ -363,56 +588,46 @@ func (data *RouterOSPF) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Priority = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "mtu-ignore.enable"); !data.MtuIgnoreEnable.IsNull() {
-		if value.Exists() {
-			data.MtuIgnoreEnable = types.BoolValue(true)
-		} else {
-			data.MtuIgnoreEnable = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "mtu-ignore.enable"); value.Exists() {
+		data.MtuIgnoreEnable = types.BoolValue(true)
+	} else if data.MtuIgnoreEnable.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.MtuIgnoreEnable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "mtu-ignore.disable"); !data.MtuIgnoreDisable.IsNull() {
-		if value.Exists() {
-			data.MtuIgnoreDisable = types.BoolValue(true)
-		} else {
-			data.MtuIgnoreDisable = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "mtu-ignore.disable"); value.Exists() {
+		data.MtuIgnoreDisable = types.BoolValue(true)
+	} else if data.MtuIgnoreDisable.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.MtuIgnoreDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "passive.enable"); !data.PassiveEnable.IsNull() {
-		if value.Exists() {
-			data.PassiveEnable = types.BoolValue(true)
-		} else {
-			data.PassiveEnable = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "passive.enable"); value.Exists() {
+		data.PassiveEnable = types.BoolValue(true)
+	} else if data.PassiveEnable.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.PassiveEnable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "passive.disable"); !data.PassiveDisable.IsNull() {
-		if value.Exists() {
-			data.PassiveDisable = types.BoolValue(true)
-		} else {
-			data.PassiveDisable = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "passive.disable"); value.Exists() {
+		data.PassiveDisable = types.BoolValue(true)
+	} else if data.PassiveDisable.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.PassiveDisable = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 	if value := gjson.GetBytes(res, "router-id"); value.Exists() && !data.RouterId.IsNull() {
 		data.RouterId = types.StringValue(value.String())
 	} else {
 		data.RouterId = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "redistribute.connected"); !data.RedistributeConnected.IsNull() {
-		if value.Exists() {
-			data.RedistributeConnected = types.BoolValue(true)
-		} else {
-			data.RedistributeConnected = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "redistribute.connected"); value.Exists() {
+		data.RedistributeConnected = types.BoolValue(true)
+	} else if data.RedistributeConnected.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.RedistributeConnected = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 	if value := gjson.GetBytes(res, "redistribute.connected.tag"); value.Exists() && !data.RedistributeConnectedTag.IsNull() {
 		data.RedistributeConnectedTag = types.Int64Value(value.Int())
 	} else {
@@ -423,15 +638,13 @@ func (data *RouterOSPF) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.RedistributeConnectedMetricType = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "redistribute.static"); !data.RedistributeStatic.IsNull() {
-		if value.Exists() {
-			data.RedistributeStatic = types.BoolValue(true)
-		} else {
-			data.RedistributeStatic = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "redistribute.static"); value.Exists() {
+		data.RedistributeStatic = types.BoolValue(true)
+	} else if data.RedistributeStatic.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.RedistributeStatic = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 	if value := gjson.GetBytes(res, "redistribute.static.tag"); value.Exists() && !data.RedistributeStaticTag.IsNull() {
 		data.RedistributeStaticTag = types.Int64Value(value.Int())
 	} else {
@@ -442,15 +655,13 @@ func (data *RouterOSPF) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.RedistributeStaticMetricType = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect"); !data.BfdFastDetect.IsNull() {
-		if value.Exists() {
-			data.BfdFastDetect = types.BoolValue(true)
-		} else {
-			data.BfdFastDetect = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "bfd.fast-detect"); value.Exists() {
+		data.BfdFastDetect = types.BoolValue(true)
+	} else if data.BfdFastDetect.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.BfdFastDetect = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() && !data.BfdMinimumInterval.IsNull() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	} else {
@@ -461,24 +672,20 @@ func (data *RouterOSPF) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.BfdMultiplier = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "default-information.originate"); !data.DefaultInformationOriginate.IsNull() {
-		if value.Exists() {
-			data.DefaultInformationOriginate = types.BoolValue(true)
-		} else {
-			data.DefaultInformationOriginate = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
+		data.DefaultInformationOriginate = types.BoolValue(true)
+	} else if data.DefaultInformationOriginate.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.DefaultInformationOriginate = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "default-information.originate.always"); !data.DefaultInformationOriginateAlways.IsNull() {
-		if value.Exists() {
-			data.DefaultInformationOriginateAlways = types.BoolValue(true)
-		} else {
-			data.DefaultInformationOriginateAlways = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "default-information.originate.always"); value.Exists() {
+		data.DefaultInformationOriginateAlways = types.BoolValue(true)
+	} else if data.DefaultInformationOriginateAlways.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.DefaultInformationOriginateAlways = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 	if value := gjson.GetBytes(res, "default-information.originate.metric-type"); value.Exists() && !data.DefaultInformationOriginateMetricType.IsNull() {
 		data.DefaultInformationOriginateMetricType = types.Int64Value(value.Int())
 	} else {
@@ -489,33 +696,27 @@ func (data *RouterOSPF) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.AutoCostReferenceBandwidth = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "auto-cost.disable"); !data.AutoCostDisable.IsNull() {
-		if value.Exists() {
-			data.AutoCostDisable = types.BoolValue(true)
-		} else {
-			data.AutoCostDisable = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "auto-cost.disable"); value.Exists() {
+		data.AutoCostDisable = types.BoolValue(true)
+	} else if data.AutoCostDisable.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.AutoCostDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "segment-routing.mpls"); !data.SegmentRoutingMpls.IsNull() {
-		if value.Exists() {
-			data.SegmentRoutingMpls = types.BoolValue(true)
-		} else {
-			data.SegmentRoutingMpls = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "segment-routing.mpls"); value.Exists() {
+		data.SegmentRoutingMpls = types.BoolValue(true)
+	} else if data.SegmentRoutingMpls.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.SegmentRoutingMpls = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "segment-routing.sr-prefer"); !data.SegmentRoutingSrPrefer.IsNull() {
-		if value.Exists() {
-			data.SegmentRoutingSrPrefer = types.BoolValue(true)
-		} else {
-			data.SegmentRoutingSrPrefer = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "segment-routing.sr-prefer"); value.Exists() {
+		data.SegmentRoutingSrPrefer = types.BoolValue(true)
+	} else if data.SegmentRoutingSrPrefer.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.SegmentRoutingSrPrefer = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 	for i := range data.Areas {
 		keys := [...]string{"area-id"}
 		keyValues := [...]string{data.Areas[i].AreaId.ValueString()}
@@ -612,33 +813,27 @@ func (data *RouterOSPF) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.RedistributeIsis[i].InstanceName = types.StringNull()
 		}
-		if value := r.Get("level-1"); !data.RedistributeIsis[i].Level1.IsNull() {
-			if value.Exists() {
-				data.RedistributeIsis[i].Level1 = types.BoolValue(true)
-			} else {
-				data.RedistributeIsis[i].Level1 = types.BoolValue(false)
-			}
-		} else {
+		if value := r.Get("level-1"); value.Exists() {
+			data.RedistributeIsis[i].Level1 = types.BoolValue(true)
+		} else if data.RedistributeIsis[i].Level1.IsNull() {
+			// If currently null, keep as null (field not in config)
 			data.RedistributeIsis[i].Level1 = types.BoolNull()
 		}
-		if value := r.Get("level-2"); !data.RedistributeIsis[i].Level2.IsNull() {
-			if value.Exists() {
-				data.RedistributeIsis[i].Level2 = types.BoolValue(true)
-			} else {
-				data.RedistributeIsis[i].Level2 = types.BoolValue(false)
-			}
-		} else {
+		// else: preserve existing value (e.g., false from config)
+		if value := r.Get("level-2"); value.Exists() {
+			data.RedistributeIsis[i].Level2 = types.BoolValue(true)
+		} else if data.RedistributeIsis[i].Level2.IsNull() {
+			// If currently null, keep as null (field not in config)
 			data.RedistributeIsis[i].Level2 = types.BoolNull()
 		}
-		if value := r.Get("level-1-2"); !data.RedistributeIsis[i].Level12.IsNull() {
-			if value.Exists() {
-				data.RedistributeIsis[i].Level12 = types.BoolValue(true)
-			} else {
-				data.RedistributeIsis[i].Level12 = types.BoolValue(false)
-			}
-		} else {
+		// else: preserve existing value (e.g., false from config)
+		if value := r.Get("level-1-2"); value.Exists() {
+			data.RedistributeIsis[i].Level12 = types.BoolValue(true)
+		} else if data.RedistributeIsis[i].Level12.IsNull() {
+			// If currently null, keep as null (field not in config)
 			data.RedistributeIsis[i].Level12 = types.BoolNull()
 		}
+		// else: preserve existing value (e.g., false from config)
 		if value := r.Get("tag"); value.Exists() && !data.RedistributeIsis[i].Tag.IsNull() {
 			data.RedistributeIsis[i].Tag = types.Int64Value(value.Int())
 		} else {
@@ -678,33 +873,27 @@ func (data *RouterOSPF) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.RedistributeOspf[i].InstanceName = types.StringNull()
 		}
-		if value := r.Get("match.internal"); !data.RedistributeOspf[i].MatchInternal.IsNull() {
-			if value.Exists() {
-				data.RedistributeOspf[i].MatchInternal = types.BoolValue(true)
-			} else {
-				data.RedistributeOspf[i].MatchInternal = types.BoolValue(false)
-			}
-		} else {
+		if value := r.Get("match.internal"); value.Exists() {
+			data.RedistributeOspf[i].MatchInternal = types.BoolValue(true)
+		} else if data.RedistributeOspf[i].MatchInternal.IsNull() {
+			// If currently null, keep as null (field not in config)
 			data.RedistributeOspf[i].MatchInternal = types.BoolNull()
 		}
-		if value := r.Get("match.external"); !data.RedistributeOspf[i].MatchExternal.IsNull() {
-			if value.Exists() {
-				data.RedistributeOspf[i].MatchExternal = types.BoolValue(true)
-			} else {
-				data.RedistributeOspf[i].MatchExternal = types.BoolValue(false)
-			}
-		} else {
+		// else: preserve existing value (e.g., false from config)
+		if value := r.Get("match.external"); value.Exists() {
+			data.RedistributeOspf[i].MatchExternal = types.BoolValue(true)
+		} else if data.RedistributeOspf[i].MatchExternal.IsNull() {
+			// If currently null, keep as null (field not in config)
 			data.RedistributeOspf[i].MatchExternal = types.BoolNull()
 		}
-		if value := r.Get("match.nssa-external"); !data.RedistributeOspf[i].MatchNssaExternal.IsNull() {
-			if value.Exists() {
-				data.RedistributeOspf[i].MatchNssaExternal = types.BoolValue(true)
-			} else {
-				data.RedistributeOspf[i].MatchNssaExternal = types.BoolValue(false)
-			}
-		} else {
+		// else: preserve existing value (e.g., false from config)
+		if value := r.Get("match.nssa-external"); value.Exists() {
+			data.RedistributeOspf[i].MatchNssaExternal = types.BoolValue(true)
+		} else if data.RedistributeOspf[i].MatchNssaExternal.IsNull() {
+			// If currently null, keep as null (field not in config)
 			data.RedistributeOspf[i].MatchNssaExternal = types.BoolNull()
 		}
+		// else: preserve existing value (e.g., false from config)
 		if value := r.Get("tag"); value.Exists() && !data.RedistributeOspf[i].Tag.IsNull() {
 			data.RedistributeOspf[i].Tag = types.Int64Value(value.Int())
 		} else {
@@ -720,111 +909,478 @@ func (data *RouterOSPF) updateFromBody(ctx context.Context, res []byte) {
 
 // End of section. //template:end updateFromBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
-func (data *RouterOSPF) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "mpls.ldp.sync"); value.Exists() {
+func (data *RouterOSPF) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/process-name"); value.Exists() {
+		data.ProcessName = types.StringValue(value.String())
+	} else if data.ProcessName.IsNull() {
+		data.ProcessName = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mpls/ldp/sync"); value.Exists() {
 		data.MplsLdpSync = types.BoolValue(true)
 	} else {
-		data.MplsLdpSync = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.MplsLdpSync.IsNull() {
+			data.MplsLdpSync = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "hello-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-interval"); value.Exists() {
 		data.HelloInterval = types.Int64Value(value.Int())
+	} else if data.HelloInterval.IsNull() {
+		data.HelloInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "dead-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dead-interval"); value.Exists() {
 		data.DeadInterval = types.Int64Value(value.Int())
+	} else if data.DeadInterval.IsNull() {
+		data.DeadInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "priority"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/priority"); value.Exists() {
 		data.Priority = types.Int64Value(value.Int())
+	} else if data.Priority.IsNull() {
+		data.Priority = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "mtu-ignore.enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mtu-ignore/enable"); value.Exists() {
 		data.MtuIgnoreEnable = types.BoolValue(true)
 	} else {
-		data.MtuIgnoreEnable = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.MtuIgnoreEnable.IsNull() {
+			data.MtuIgnoreEnable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "mtu-ignore.disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mtu-ignore/disable"); value.Exists() {
 		data.MtuIgnoreDisable = types.BoolValue(true)
 	} else {
-		data.MtuIgnoreDisable = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.MtuIgnoreDisable.IsNull() {
+			data.MtuIgnoreDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "passive.enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/passive/enable"); value.Exists() {
 		data.PassiveEnable = types.BoolValue(true)
 	} else {
-		data.PassiveEnable = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.PassiveEnable.IsNull() {
+			data.PassiveEnable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "passive.disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/passive/disable"); value.Exists() {
 		data.PassiveDisable = types.BoolValue(true)
 	} else {
-		data.PassiveDisable = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.PassiveDisable.IsNull() {
+			data.PassiveDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "router-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router-id"); value.Exists() {
 		data.RouterId = types.StringValue(value.String())
+	} else if data.RouterId.IsNull() {
+		data.RouterId = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "redistribute.connected"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/connected"); value.Exists() {
 		data.RedistributeConnected = types.BoolValue(true)
 	} else {
-		data.RedistributeConnected = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.RedistributeConnected.IsNull() {
+			data.RedistributeConnected = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "redistribute.connected.tag"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/connected/tag"); value.Exists() {
 		data.RedistributeConnectedTag = types.Int64Value(value.Int())
+	} else if data.RedistributeConnectedTag.IsNull() {
+		data.RedistributeConnectedTag = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "redistribute.connected.metric-type"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/connected/metric-type"); value.Exists() {
 		data.RedistributeConnectedMetricType = types.StringValue(value.String())
+	} else if data.RedistributeConnectedMetricType.IsNull() {
+		data.RedistributeConnectedMetricType = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "redistribute.static"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/static"); value.Exists() {
 		data.RedistributeStatic = types.BoolValue(true)
 	} else {
-		data.RedistributeStatic = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.RedistributeStatic.IsNull() {
+			data.RedistributeStatic = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "redistribute.static.tag"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/static/tag"); value.Exists() {
 		data.RedistributeStaticTag = types.Int64Value(value.Int())
+	} else if data.RedistributeStaticTag.IsNull() {
+		data.RedistributeStaticTag = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "redistribute.static.metric-type"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/static/metric-type"); value.Exists() {
 		data.RedistributeStaticMetricType = types.StringValue(value.String())
+	} else if data.RedistributeStaticMetricType.IsNull() {
+		data.RedistributeStaticMetricType = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/fast-detect"); value.Exists() {
 		data.BfdFastDetect = types.BoolValue(true)
 	} else {
-		data.BfdFastDetect = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.BfdFastDetect.IsNull() {
+			data.BfdFastDetect = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
+	} else if data.BfdMinimumInterval.IsNull() {
+		data.BfdMinimumInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
+	} else if data.BfdMultiplier.IsNull() {
+		data.BfdMultiplier = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-information/originate"); value.Exists() {
 		data.DefaultInformationOriginate = types.BoolValue(true)
 	} else {
-		data.DefaultInformationOriginate = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.DefaultInformationOriginate.IsNull() {
+			data.DefaultInformationOriginate = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "default-information.originate.always"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-information/originate/always"); value.Exists() {
 		data.DefaultInformationOriginateAlways = types.BoolValue(true)
 	} else {
-		data.DefaultInformationOriginateAlways = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.DefaultInformationOriginateAlways.IsNull() {
+			data.DefaultInformationOriginateAlways = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "default-information.originate.metric-type"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-information/originate/metric-type"); value.Exists() {
 		data.DefaultInformationOriginateMetricType = types.Int64Value(value.Int())
+	} else if data.DefaultInformationOriginateMetricType.IsNull() {
+		data.DefaultInformationOriginateMetricType = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "auto-cost.reference-bandwidth"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-cost/reference-bandwidth"); value.Exists() {
 		data.AutoCostReferenceBandwidth = types.Int64Value(value.Int())
+	} else if data.AutoCostReferenceBandwidth.IsNull() {
+		data.AutoCostReferenceBandwidth = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "auto-cost.disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-cost/disable"); value.Exists() {
 		data.AutoCostDisable = types.BoolValue(true)
 	} else {
-		data.AutoCostDisable = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.AutoCostDisable.IsNull() {
+			data.AutoCostDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "segment-routing.mpls"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/segment-routing/mpls"); value.Exists() {
 		data.SegmentRoutingMpls = types.BoolValue(true)
 	} else {
-		data.SegmentRoutingMpls = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.SegmentRoutingMpls.IsNull() {
+			data.SegmentRoutingMpls = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "segment-routing.sr-prefer"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/segment-routing/sr-prefer"); value.Exists() {
 		data.SegmentRoutingSrPrefer = types.BoolValue(true)
 	} else {
-		data.SegmentRoutingSrPrefer = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.SegmentRoutingSrPrefer.IsNull() {
+			data.SegmentRoutingSrPrefer = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "areas.area"); value.Exists() {
+	for i := range data.Areas {
+		keys := [...]string{"area-id"}
+		keyValues := [...]string{data.Areas[i].AreaId.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/areas/area").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "area-id"); value.Exists() {
+			data.Areas[i].AreaId = types.StringValue(value.String())
+		} else if data.Areas[i].AreaId.IsNull() {
+			data.Areas[i].AreaId = types.StringNull()
+		}
+	}
+	for i := range data.RedistributeBgp {
+		keys := [...]string{"as-number"}
+		keyValues := [...]string{data.RedistributeBgp[i].AsNumber.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/bgp/as").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "as-number"); value.Exists() {
+			data.RedistributeBgp[i].AsNumber = types.StringValue(value.String())
+		} else if data.RedistributeBgp[i].AsNumber.IsNull() {
+			data.RedistributeBgp[i].AsNumber = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "tag"); value.Exists() {
+			data.RedistributeBgp[i].Tag = types.Int64Value(value.Int())
+		} else if data.RedistributeBgp[i].Tag.IsNull() {
+			data.RedistributeBgp[i].Tag = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "metric-type"); value.Exists() {
+			data.RedistributeBgp[i].MetricType = types.StringValue(value.String())
+		} else if data.RedistributeBgp[i].MetricType.IsNull() {
+			data.RedistributeBgp[i].MetricType = types.StringNull()
+		}
+	}
+	for i := range data.RedistributeIsis {
+		keys := [...]string{"instance-name"}
+		keyValues := [...]string{data.RedistributeIsis[i].InstanceName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/isis").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "instance-name"); value.Exists() {
+			data.RedistributeIsis[i].InstanceName = types.StringValue(value.String())
+		} else if data.RedistributeIsis[i].InstanceName.IsNull() {
+			data.RedistributeIsis[i].InstanceName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "level-1"); value.Exists() {
+			data.RedistributeIsis[i].Level1 = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.RedistributeIsis[i].Level1.IsNull() {
+				data.RedistributeIsis[i].Level1 = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "level-2"); value.Exists() {
+			data.RedistributeIsis[i].Level2 = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.RedistributeIsis[i].Level2.IsNull() {
+				data.RedistributeIsis[i].Level2 = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "level-1-2"); value.Exists() {
+			data.RedistributeIsis[i].Level12 = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.RedistributeIsis[i].Level12.IsNull() {
+				data.RedistributeIsis[i].Level12 = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "tag"); value.Exists() {
+			data.RedistributeIsis[i].Tag = types.Int64Value(value.Int())
+		} else if data.RedistributeIsis[i].Tag.IsNull() {
+			data.RedistributeIsis[i].Tag = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "metric-type"); value.Exists() {
+			data.RedistributeIsis[i].MetricType = types.StringValue(value.String())
+		} else if data.RedistributeIsis[i].MetricType.IsNull() {
+			data.RedistributeIsis[i].MetricType = types.StringNull()
+		}
+	}
+	for i := range data.RedistributeOspf {
+		keys := [...]string{"instance-name"}
+		keyValues := [...]string{data.RedistributeOspf[i].InstanceName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/ospf").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "instance-name"); value.Exists() {
+			data.RedistributeOspf[i].InstanceName = types.StringValue(value.String())
+		} else if data.RedistributeOspf[i].InstanceName.IsNull() {
+			data.RedistributeOspf[i].InstanceName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "match/internal"); value.Exists() {
+			data.RedistributeOspf[i].MatchInternal = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.RedistributeOspf[i].MatchInternal.IsNull() {
+				data.RedistributeOspf[i].MatchInternal = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "match/external"); value.Exists() {
+			data.RedistributeOspf[i].MatchExternal = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.RedistributeOspf[i].MatchExternal.IsNull() {
+				data.RedistributeOspf[i].MatchExternal = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "match/nssa-external"); value.Exists() {
+			data.RedistributeOspf[i].MatchNssaExternal = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.RedistributeOspf[i].MatchNssaExternal.IsNull() {
+				data.RedistributeOspf[i].MatchNssaExternal = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "tag"); value.Exists() {
+			data.RedistributeOspf[i].Tag = types.Int64Value(value.Int())
+		} else if data.RedistributeOspf[i].Tag.IsNull() {
+			data.RedistributeOspf[i].Tag = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "metric-type"); value.Exists() {
+			data.RedistributeOspf[i].MetricType = types.StringValue(value.String())
+		} else if data.RedistributeOspf[i].MetricType.IsNull() {
+			data.RedistributeOspf[i].MetricType = types.StringNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *RouterOSPF) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "mpls.ldp.sync"); value.Exists() {
+		data.MplsLdpSync = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "hello-interval"); value.Exists() {
+		data.HelloInterval = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "dead-interval"); value.Exists() {
+		data.DeadInterval = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "priority"); value.Exists() {
+		data.Priority = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "mtu-ignore.enable"); value.Exists() {
+		data.MtuIgnoreEnable = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "mtu-ignore.disable"); value.Exists() {
+		data.MtuIgnoreDisable = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "passive.enable"); value.Exists() {
+		data.PassiveEnable = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "passive.disable"); value.Exists() {
+		data.PassiveDisable = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "router-id"); value.Exists() {
+		data.RouterId = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "redistribute.connected"); value.Exists() {
+		data.RedistributeConnected = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "redistribute.connected.tag"); value.Exists() {
+		data.RedistributeConnectedTag = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "redistribute.connected.metric-type"); value.Exists() {
+		data.RedistributeConnectedMetricType = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "redistribute.static"); value.Exists() {
+		data.RedistributeStatic = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "redistribute.static.tag"); value.Exists() {
+		data.RedistributeStaticTag = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "redistribute.static.metric-type"); value.Exists() {
+		data.RedistributeStaticMetricType = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "bfd.fast-detect"); value.Exists() {
+		data.BfdFastDetect = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "bfd.minimum-interval"); value.Exists() {
+		data.BfdMinimumInterval = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "bfd.multiplier"); value.Exists() {
+		data.BfdMultiplier = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "default-information.originate"); value.Exists() {
+		data.DefaultInformationOriginate = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "default-information.originate.always"); value.Exists() {
+		data.DefaultInformationOriginateAlways = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "default-information.originate.metric-type"); value.Exists() {
+		data.DefaultInformationOriginateMetricType = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "auto-cost.reference-bandwidth"); value.Exists() {
+		data.AutoCostReferenceBandwidth = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "auto-cost.disable"); value.Exists() {
+		data.AutoCostDisable = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "segment-routing.mpls"); value.Exists() {
+		data.SegmentRoutingMpls = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "segment-routing.sr-prefer"); value.Exists() {
+		data.SegmentRoutingSrPrefer = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "areas.area"); value.Exists() {
 		data.Areas = make([]RouterOSPFAreas, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterOSPFAreas{}
@@ -835,7 +1391,7 @@ func (data *RouterOSPF) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "redistribute.bgp.as"); value.Exists() {
+	if value := res.Get(prefix + "redistribute.bgp.as"); value.Exists() {
 		data.RedistributeBgp = make([]RouterOSPFRedistributeBgp, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterOSPFRedistributeBgp{}
@@ -852,7 +1408,7 @@ func (data *RouterOSPF) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "redistribute.isis"); value.Exists() {
+	if value := res.Get(prefix + "redistribute.isis"); value.Exists() {
 		data.RedistributeIsis = make([]RouterOSPFRedistributeIsis, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterOSPFRedistributeIsis{}
@@ -884,7 +1440,7 @@ func (data *RouterOSPF) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "redistribute.ospf"); value.Exists() {
+	if value := res.Get(prefix + "redistribute.ospf"); value.Exists() {
 		data.RedistributeOspf = make([]RouterOSPFRedistributeOspf, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterOSPFRedistributeOspf{}
@@ -922,109 +1478,87 @@ func (data *RouterOSPF) fromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *RouterOSPFData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "mpls.ldp.sync"); value.Exists() {
-		data.MplsLdpSync = types.BoolValue(true)
-	} else {
-		data.MplsLdpSync = types.BoolValue(false)
+func (data *RouterOSPFData) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
 	}
-	if value := gjson.GetBytes(res, "hello-interval"); value.Exists() {
+	if value := res.Get(prefix + "mpls.ldp.sync"); value.Exists() {
+		data.MplsLdpSync = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "hello-interval"); value.Exists() {
 		data.HelloInterval = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "dead-interval"); value.Exists() {
+	if value := res.Get(prefix + "dead-interval"); value.Exists() {
 		data.DeadInterval = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "priority"); value.Exists() {
+	if value := res.Get(prefix + "priority"); value.Exists() {
 		data.Priority = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "mtu-ignore.enable"); value.Exists() {
+	if value := res.Get(prefix + "mtu-ignore.enable"); value.Exists() {
 		data.MtuIgnoreEnable = types.BoolValue(true)
-	} else {
-		data.MtuIgnoreEnable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "mtu-ignore.disable"); value.Exists() {
+	if value := res.Get(prefix + "mtu-ignore.disable"); value.Exists() {
 		data.MtuIgnoreDisable = types.BoolValue(true)
-	} else {
-		data.MtuIgnoreDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "passive.enable"); value.Exists() {
+	if value := res.Get(prefix + "passive.enable"); value.Exists() {
 		data.PassiveEnable = types.BoolValue(true)
-	} else {
-		data.PassiveEnable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "passive.disable"); value.Exists() {
+	if value := res.Get(prefix + "passive.disable"); value.Exists() {
 		data.PassiveDisable = types.BoolValue(true)
-	} else {
-		data.PassiveDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "router-id"); value.Exists() {
+	if value := res.Get(prefix + "router-id"); value.Exists() {
 		data.RouterId = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "redistribute.connected"); value.Exists() {
+	if value := res.Get(prefix + "redistribute.connected"); value.Exists() {
 		data.RedistributeConnected = types.BoolValue(true)
-	} else {
-		data.RedistributeConnected = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "redistribute.connected.tag"); value.Exists() {
+	if value := res.Get(prefix + "redistribute.connected.tag"); value.Exists() {
 		data.RedistributeConnectedTag = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "redistribute.connected.metric-type"); value.Exists() {
+	if value := res.Get(prefix + "redistribute.connected.metric-type"); value.Exists() {
 		data.RedistributeConnectedMetricType = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "redistribute.static"); value.Exists() {
+	if value := res.Get(prefix + "redistribute.static"); value.Exists() {
 		data.RedistributeStatic = types.BoolValue(true)
-	} else {
-		data.RedistributeStatic = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "redistribute.static.tag"); value.Exists() {
+	if value := res.Get(prefix + "redistribute.static.tag"); value.Exists() {
 		data.RedistributeStaticTag = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "redistribute.static.metric-type"); value.Exists() {
+	if value := res.Get(prefix + "redistribute.static.metric-type"); value.Exists() {
 		data.RedistributeStaticMetricType = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect"); value.Exists() {
+	if value := res.Get(prefix + "bfd.fast-detect"); value.Exists() {
 		data.BfdFastDetect = types.BoolValue(true)
-	} else {
-		data.BfdFastDetect = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() {
+	if value := res.Get(prefix + "bfd.minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() {
+	if value := res.Get(prefix + "bfd.multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
+	if value := res.Get(prefix + "default-information.originate"); value.Exists() {
 		data.DefaultInformationOriginate = types.BoolValue(true)
-	} else {
-		data.DefaultInformationOriginate = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "default-information.originate.always"); value.Exists() {
+	if value := res.Get(prefix + "default-information.originate.always"); value.Exists() {
 		data.DefaultInformationOriginateAlways = types.BoolValue(true)
-	} else {
-		data.DefaultInformationOriginateAlways = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "default-information.originate.metric-type"); value.Exists() {
+	if value := res.Get(prefix + "default-information.originate.metric-type"); value.Exists() {
 		data.DefaultInformationOriginateMetricType = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "auto-cost.reference-bandwidth"); value.Exists() {
+	if value := res.Get(prefix + "auto-cost.reference-bandwidth"); value.Exists() {
 		data.AutoCostReferenceBandwidth = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "auto-cost.disable"); value.Exists() {
+	if value := res.Get(prefix + "auto-cost.disable"); value.Exists() {
 		data.AutoCostDisable = types.BoolValue(true)
-	} else {
-		data.AutoCostDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "segment-routing.mpls"); value.Exists() {
+	if value := res.Get(prefix + "segment-routing.mpls"); value.Exists() {
 		data.SegmentRoutingMpls = types.BoolValue(true)
-	} else {
-		data.SegmentRoutingMpls = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "segment-routing.sr-prefer"); value.Exists() {
+	if value := res.Get(prefix + "segment-routing.sr-prefer"); value.Exists() {
 		data.SegmentRoutingSrPrefer = types.BoolValue(true)
-	} else {
-		data.SegmentRoutingSrPrefer = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "areas.area"); value.Exists() {
+	if value := res.Get(prefix + "areas.area"); value.Exists() {
 		data.Areas = make([]RouterOSPFAreas, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterOSPFAreas{}
@@ -1035,7 +1569,7 @@ func (data *RouterOSPFData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "redistribute.bgp.as"); value.Exists() {
+	if value := res.Get(prefix + "redistribute.bgp.as"); value.Exists() {
 		data.RedistributeBgp = make([]RouterOSPFRedistributeBgp, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterOSPFRedistributeBgp{}
@@ -1052,7 +1586,7 @@ func (data *RouterOSPFData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "redistribute.isis"); value.Exists() {
+	if value := res.Get(prefix + "redistribute.isis"); value.Exists() {
 		data.RedistributeIsis = make([]RouterOSPFRedistributeIsis, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterOSPFRedistributeIsis{}
@@ -1084,7 +1618,7 @@ func (data *RouterOSPFData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "redistribute.ospf"); value.Exists() {
+	if value := res.Get(prefix + "redistribute.ospf"); value.Exists() {
 		data.RedistributeOspf = make([]RouterOSPFRedistributeOspf, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterOSPFRedistributeOspf{}
@@ -1120,6 +1654,374 @@ func (data *RouterOSPFData) fromBody(ctx context.Context, res []byte) {
 
 // End of section. //template:end fromBodyData
 
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *RouterOSPF) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mpls/ldp/sync"); value.Exists() {
+		data.MplsLdpSync = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-interval"); value.Exists() {
+		data.HelloInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dead-interval"); value.Exists() {
+		data.DeadInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/priority"); value.Exists() {
+		data.Priority = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mtu-ignore/enable"); value.Exists() {
+		data.MtuIgnoreEnable = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mtu-ignore/disable"); value.Exists() {
+		data.MtuIgnoreDisable = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/passive/enable"); value.Exists() {
+		data.PassiveEnable = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/passive/disable"); value.Exists() {
+		data.PassiveDisable = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router-id"); value.Exists() {
+		data.RouterId = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/connected"); value.Exists() {
+		data.RedistributeConnected = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/connected/tag"); value.Exists() {
+		data.RedistributeConnectedTag = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/connected/metric-type"); value.Exists() {
+		data.RedistributeConnectedMetricType = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/static"); value.Exists() {
+		data.RedistributeStatic = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/static/tag"); value.Exists() {
+		data.RedistributeStaticTag = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/static/metric-type"); value.Exists() {
+		data.RedistributeStaticMetricType = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/fast-detect"); value.Exists() {
+		data.BfdFastDetect = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/minimum-interval"); value.Exists() {
+		data.BfdMinimumInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/multiplier"); value.Exists() {
+		data.BfdMultiplier = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-information/originate"); value.Exists() {
+		data.DefaultInformationOriginate = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-information/originate/always"); value.Exists() {
+		data.DefaultInformationOriginateAlways = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-information/originate/metric-type"); value.Exists() {
+		data.DefaultInformationOriginateMetricType = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-cost/reference-bandwidth"); value.Exists() {
+		data.AutoCostReferenceBandwidth = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-cost/disable"); value.Exists() {
+		data.AutoCostDisable = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/segment-routing/mpls"); value.Exists() {
+		data.SegmentRoutingMpls = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/segment-routing/sr-prefer"); value.Exists() {
+		data.SegmentRoutingSrPrefer = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/areas/area"); value.Exists() {
+		data.Areas = make([]RouterOSPFAreas, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterOSPFAreas{}
+			if cValue := helpers.GetFromXPath(v, "area-id"); cValue.Exists() {
+				item.AreaId = types.StringValue(cValue.String())
+			}
+			data.Areas = append(data.Areas, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/bgp/as"); value.Exists() {
+		data.RedistributeBgp = make([]RouterOSPFRedistributeBgp, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterOSPFRedistributeBgp{}
+			if cValue := helpers.GetFromXPath(v, "as-number"); cValue.Exists() {
+				item.AsNumber = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "tag"); cValue.Exists() {
+				item.Tag = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "metric-type"); cValue.Exists() {
+				item.MetricType = types.StringValue(cValue.String())
+			}
+			data.RedistributeBgp = append(data.RedistributeBgp, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/isis"); value.Exists() {
+		data.RedistributeIsis = make([]RouterOSPFRedistributeIsis, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterOSPFRedistributeIsis{}
+			if cValue := helpers.GetFromXPath(v, "instance-name"); cValue.Exists() {
+				item.InstanceName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "level-1"); cValue.Exists() {
+				item.Level1 = types.BoolValue(true)
+			} else {
+			}
+			if cValue := helpers.GetFromXPath(v, "level-2"); cValue.Exists() {
+				item.Level2 = types.BoolValue(true)
+			} else {
+			}
+			if cValue := helpers.GetFromXPath(v, "level-1-2"); cValue.Exists() {
+				item.Level12 = types.BoolValue(true)
+			} else {
+			}
+			if cValue := helpers.GetFromXPath(v, "tag"); cValue.Exists() {
+				item.Tag = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "metric-type"); cValue.Exists() {
+				item.MetricType = types.StringValue(cValue.String())
+			}
+			data.RedistributeIsis = append(data.RedistributeIsis, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/ospf"); value.Exists() {
+		data.RedistributeOspf = make([]RouterOSPFRedistributeOspf, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterOSPFRedistributeOspf{}
+			if cValue := helpers.GetFromXPath(v, "instance-name"); cValue.Exists() {
+				item.InstanceName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "match/internal"); cValue.Exists() {
+				item.MatchInternal = types.BoolValue(true)
+			} else {
+			}
+			if cValue := helpers.GetFromXPath(v, "match/external"); cValue.Exists() {
+				item.MatchExternal = types.BoolValue(true)
+			} else {
+			}
+			if cValue := helpers.GetFromXPath(v, "match/nssa-external"); cValue.Exists() {
+				item.MatchNssaExternal = types.BoolValue(true)
+			} else {
+			}
+			if cValue := helpers.GetFromXPath(v, "tag"); cValue.Exists() {
+				item.Tag = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "metric-type"); cValue.Exists() {
+				item.MetricType = types.StringValue(cValue.String())
+			}
+			data.RedistributeOspf = append(data.RedistributeOspf, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *RouterOSPFData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mpls/ldp/sync"); value.Exists() {
+		data.MplsLdpSync = types.BoolValue(true)
+	} else {
+		data.MplsLdpSync = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hello-interval"); value.Exists() {
+		data.HelloInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dead-interval"); value.Exists() {
+		data.DeadInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/priority"); value.Exists() {
+		data.Priority = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mtu-ignore/enable"); value.Exists() {
+		data.MtuIgnoreEnable = types.BoolValue(true)
+	} else {
+		data.MtuIgnoreEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mtu-ignore/disable"); value.Exists() {
+		data.MtuIgnoreDisable = types.BoolValue(true)
+	} else {
+		data.MtuIgnoreDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/passive/enable"); value.Exists() {
+		data.PassiveEnable = types.BoolValue(true)
+	} else {
+		data.PassiveEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/passive/disable"); value.Exists() {
+		data.PassiveDisable = types.BoolValue(true)
+	} else {
+		data.PassiveDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router-id"); value.Exists() {
+		data.RouterId = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/connected"); value.Exists() {
+		data.RedistributeConnected = types.BoolValue(true)
+	} else {
+		data.RedistributeConnected = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/connected/tag"); value.Exists() {
+		data.RedistributeConnectedTag = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/connected/metric-type"); value.Exists() {
+		data.RedistributeConnectedMetricType = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/static"); value.Exists() {
+		data.RedistributeStatic = types.BoolValue(true)
+	} else {
+		data.RedistributeStatic = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/static/tag"); value.Exists() {
+		data.RedistributeStaticTag = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/static/metric-type"); value.Exists() {
+		data.RedistributeStaticMetricType = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/fast-detect"); value.Exists() {
+		data.BfdFastDetect = types.BoolValue(true)
+	} else {
+		data.BfdFastDetect = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/minimum-interval"); value.Exists() {
+		data.BfdMinimumInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/multiplier"); value.Exists() {
+		data.BfdMultiplier = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-information/originate"); value.Exists() {
+		data.DefaultInformationOriginate = types.BoolValue(true)
+	} else {
+		data.DefaultInformationOriginate = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-information/originate/always"); value.Exists() {
+		data.DefaultInformationOriginateAlways = types.BoolValue(true)
+	} else {
+		data.DefaultInformationOriginateAlways = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-information/originate/metric-type"); value.Exists() {
+		data.DefaultInformationOriginateMetricType = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-cost/reference-bandwidth"); value.Exists() {
+		data.AutoCostReferenceBandwidth = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-cost/disable"); value.Exists() {
+		data.AutoCostDisable = types.BoolValue(true)
+	} else {
+		data.AutoCostDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/segment-routing/mpls"); value.Exists() {
+		data.SegmentRoutingMpls = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingMpls = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/segment-routing/sr-prefer"); value.Exists() {
+		data.SegmentRoutingSrPrefer = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingSrPrefer = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/areas/area"); value.Exists() {
+		data.Areas = make([]RouterOSPFAreas, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterOSPFAreas{}
+			if cValue := helpers.GetFromXPath(v, "area-id"); cValue.Exists() {
+				item.AreaId = types.StringValue(cValue.String())
+			}
+			data.Areas = append(data.Areas, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/bgp/as"); value.Exists() {
+		data.RedistributeBgp = make([]RouterOSPFRedistributeBgp, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterOSPFRedistributeBgp{}
+			if cValue := helpers.GetFromXPath(v, "as-number"); cValue.Exists() {
+				item.AsNumber = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "tag"); cValue.Exists() {
+				item.Tag = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "metric-type"); cValue.Exists() {
+				item.MetricType = types.StringValue(cValue.String())
+			}
+			data.RedistributeBgp = append(data.RedistributeBgp, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/isis"); value.Exists() {
+		data.RedistributeIsis = make([]RouterOSPFRedistributeIsis, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterOSPFRedistributeIsis{}
+			if cValue := helpers.GetFromXPath(v, "instance-name"); cValue.Exists() {
+				item.InstanceName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "level-1"); cValue.Exists() {
+				item.Level1 = types.BoolValue(true)
+			} else {
+				item.Level1 = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "level-2"); cValue.Exists() {
+				item.Level2 = types.BoolValue(true)
+			} else {
+				item.Level2 = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "level-1-2"); cValue.Exists() {
+				item.Level12 = types.BoolValue(true)
+			} else {
+				item.Level12 = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "tag"); cValue.Exists() {
+				item.Tag = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "metric-type"); cValue.Exists() {
+				item.MetricType = types.StringValue(cValue.String())
+			}
+			data.RedistributeIsis = append(data.RedistributeIsis, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/redistribute/ospf"); value.Exists() {
+		data.RedistributeOspf = make([]RouterOSPFRedistributeOspf, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterOSPFRedistributeOspf{}
+			if cValue := helpers.GetFromXPath(v, "instance-name"); cValue.Exists() {
+				item.InstanceName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "match/internal"); cValue.Exists() {
+				item.MatchInternal = types.BoolValue(true)
+			} else {
+				item.MatchInternal = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "match/external"); cValue.Exists() {
+				item.MatchExternal = types.BoolValue(true)
+			} else {
+				item.MatchExternal = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "match/nssa-external"); cValue.Exists() {
+				item.MatchNssaExternal = types.BoolValue(true)
+			} else {
+				item.MatchNssaExternal = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "tag"); cValue.Exists() {
+				item.Tag = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "metric-type"); cValue.Exists() {
+				item.MetricType = types.StringValue(cValue.String())
+			}
+			data.RedistributeOspf = append(data.RedistributeOspf, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *RouterOSPF) getDeletedItems(ctx context.Context, state RouterOSPF) []string {
@@ -1153,14 +2055,23 @@ func (data *RouterOSPF) getDeletedItems(ctx context.Context, state RouterOSPF) [
 				if !state.RedistributeOspf[i].Tag.IsNull() && data.RedistributeOspf[j].Tag.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospf%v/tag", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspf[i].MatchNssaExternal.IsNull() && data.RedistributeOspf[j].MatchNssaExternal.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospf%v/match/nssa-external", state.getPath(), keyString))
+				// For presence-based booleans, delete if going from true to false or to null
+				if !state.RedistributeOspf[i].MatchNssaExternal.IsNull() && state.RedistributeOspf[i].MatchNssaExternal.ValueBool() {
+					if data.RedistributeOspf[j].MatchNssaExternal.IsNull() || !data.RedistributeOspf[j].MatchNssaExternal.ValueBool() {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospf%v/match/nssa-external", state.getPath(), keyString))
+					}
 				}
-				if !state.RedistributeOspf[i].MatchExternal.IsNull() && data.RedistributeOspf[j].MatchExternal.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospf%v/match/external", state.getPath(), keyString))
+				// For presence-based booleans, delete if going from true to false or to null
+				if !state.RedistributeOspf[i].MatchExternal.IsNull() && state.RedistributeOspf[i].MatchExternal.ValueBool() {
+					if data.RedistributeOspf[j].MatchExternal.IsNull() || !data.RedistributeOspf[j].MatchExternal.ValueBool() {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospf%v/match/external", state.getPath(), keyString))
+					}
 				}
-				if !state.RedistributeOspf[i].MatchInternal.IsNull() && data.RedistributeOspf[j].MatchInternal.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospf%v/match/internal", state.getPath(), keyString))
+				// For presence-based booleans, delete if going from true to false or to null
+				if !state.RedistributeOspf[i].MatchInternal.IsNull() && state.RedistributeOspf[i].MatchInternal.ValueBool() {
+					if data.RedistributeOspf[j].MatchInternal.IsNull() || !data.RedistributeOspf[j].MatchInternal.ValueBool() {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospf%v/match/internal", state.getPath(), keyString))
+					}
 				}
 				break
 			}
@@ -1198,14 +2109,23 @@ func (data *RouterOSPF) getDeletedItems(ctx context.Context, state RouterOSPF) [
 				if !state.RedistributeIsis[i].Tag.IsNull() && data.RedistributeIsis[j].Tag.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis%v/tag", state.getPath(), keyString))
 				}
-				if !state.RedistributeIsis[i].Level12.IsNull() && data.RedistributeIsis[j].Level12.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis%v/level-1-2", state.getPath(), keyString))
+				// For presence-based booleans, delete if going from true to false or to null
+				if !state.RedistributeIsis[i].Level12.IsNull() && state.RedistributeIsis[i].Level12.ValueBool() {
+					if data.RedistributeIsis[j].Level12.IsNull() || !data.RedistributeIsis[j].Level12.ValueBool() {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis%v/level-1-2", state.getPath(), keyString))
+					}
 				}
-				if !state.RedistributeIsis[i].Level2.IsNull() && data.RedistributeIsis[j].Level2.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis%v/level-2", state.getPath(), keyString))
+				// For presence-based booleans, delete if going from true to false or to null
+				if !state.RedistributeIsis[i].Level2.IsNull() && state.RedistributeIsis[i].Level2.ValueBool() {
+					if data.RedistributeIsis[j].Level2.IsNull() || !data.RedistributeIsis[j].Level2.ValueBool() {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis%v/level-2", state.getPath(), keyString))
+					}
 				}
-				if !state.RedistributeIsis[i].Level1.IsNull() && data.RedistributeIsis[j].Level1.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis%v/level-1", state.getPath(), keyString))
+				// For presence-based booleans, delete if going from true to false or to null
+				if !state.RedistributeIsis[i].Level1.IsNull() && state.RedistributeIsis[i].Level1.ValueBool() {
+					if data.RedistributeIsis[j].Level1.IsNull() || !data.RedistributeIsis[j].Level1.ValueBool() {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis%v/level-1", state.getPath(), keyString))
+					}
 				}
 				break
 			}
@@ -1280,14 +2200,23 @@ func (data *RouterOSPF) getDeletedItems(ctx context.Context, state RouterOSPF) [
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/areas/area%v", state.getPath(), keyString))
 		}
 	}
-	if !state.SegmentRoutingSrPrefer.IsNull() && data.SegmentRoutingSrPrefer.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/sr-prefer", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.SegmentRoutingSrPrefer.IsNull() && state.SegmentRoutingSrPrefer.ValueBool() {
+		if data.SegmentRoutingSrPrefer.IsNull() || !data.SegmentRoutingSrPrefer.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/sr-prefer", state.getPath()))
+		}
 	}
-	if !state.SegmentRoutingMpls.IsNull() && data.SegmentRoutingMpls.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.SegmentRoutingMpls.IsNull() && state.SegmentRoutingMpls.ValueBool() {
+		if data.SegmentRoutingMpls.IsNull() || !data.SegmentRoutingMpls.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls", state.getPath()))
+		}
 	}
-	if !state.AutoCostDisable.IsNull() && data.AutoCostDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/auto-cost/disable", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.AutoCostDisable.IsNull() && state.AutoCostDisable.ValueBool() {
+		if data.AutoCostDisable.IsNull() || !data.AutoCostDisable.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/auto-cost/disable", state.getPath()))
+		}
 	}
 	if !state.AutoCostReferenceBandwidth.IsNull() && data.AutoCostReferenceBandwidth.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/auto-cost/reference-bandwidth", state.getPath()))
@@ -1295,11 +2224,17 @@ func (data *RouterOSPF) getDeletedItems(ctx context.Context, state RouterOSPF) [
 	if !state.DefaultInformationOriginateMetricType.IsNull() && data.DefaultInformationOriginateMetricType.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-information/originate/metric-type", state.getPath()))
 	}
-	if !state.DefaultInformationOriginateAlways.IsNull() && data.DefaultInformationOriginateAlways.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-information/originate/always", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.DefaultInformationOriginateAlways.IsNull() && state.DefaultInformationOriginateAlways.ValueBool() {
+		if data.DefaultInformationOriginateAlways.IsNull() || !data.DefaultInformationOriginateAlways.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/default-information/originate/always", state.getPath()))
+		}
 	}
-	if !state.DefaultInformationOriginate.IsNull() && data.DefaultInformationOriginate.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-information/originate", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.DefaultInformationOriginate.IsNull() && state.DefaultInformationOriginate.ValueBool() {
+		if data.DefaultInformationOriginate.IsNull() || !data.DefaultInformationOriginate.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/default-information/originate", state.getPath()))
+		}
 	}
 	if !state.BfdMultiplier.IsNull() && data.BfdMultiplier.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/multiplier", state.getPath()))
@@ -1307,8 +2242,11 @@ func (data *RouterOSPF) getDeletedItems(ctx context.Context, state RouterOSPF) [
 	if !state.BfdMinimumInterval.IsNull() && data.BfdMinimumInterval.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/minimum-interval", state.getPath()))
 	}
-	if !state.BfdFastDetect.IsNull() && data.BfdFastDetect.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/fast-detect", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.BfdFastDetect.IsNull() && state.BfdFastDetect.ValueBool() {
+		if data.BfdFastDetect.IsNull() || !data.BfdFastDetect.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/fast-detect", state.getPath()))
+		}
 	}
 	if !state.RedistributeStaticMetricType.IsNull() && data.RedistributeStaticMetricType.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/static/metric-type", state.getPath()))
@@ -1316,8 +2254,11 @@ func (data *RouterOSPF) getDeletedItems(ctx context.Context, state RouterOSPF) [
 	if !state.RedistributeStaticTag.IsNull() && data.RedistributeStaticTag.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/static/tag", state.getPath()))
 	}
-	if !state.RedistributeStatic.IsNull() && data.RedistributeStatic.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/static", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.RedistributeStatic.IsNull() && state.RedistributeStatic.ValueBool() {
+		if data.RedistributeStatic.IsNull() || !data.RedistributeStatic.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/static", state.getPath()))
+		}
 	}
 	if !state.RedistributeConnectedMetricType.IsNull() && data.RedistributeConnectedMetricType.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/connected/metric-type", state.getPath()))
@@ -1325,23 +2266,38 @@ func (data *RouterOSPF) getDeletedItems(ctx context.Context, state RouterOSPF) [
 	if !state.RedistributeConnectedTag.IsNull() && data.RedistributeConnectedTag.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/connected/tag", state.getPath()))
 	}
-	if !state.RedistributeConnected.IsNull() && data.RedistributeConnected.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/connected", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.RedistributeConnected.IsNull() && state.RedistributeConnected.ValueBool() {
+		if data.RedistributeConnected.IsNull() || !data.RedistributeConnected.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/connected", state.getPath()))
+		}
 	}
 	if !state.RouterId.IsNull() && data.RouterId.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/router-id", state.getPath()))
 	}
-	if !state.PassiveDisable.IsNull() && data.PassiveDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/passive/disable", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.PassiveDisable.IsNull() && state.PassiveDisable.ValueBool() {
+		if data.PassiveDisable.IsNull() || !data.PassiveDisable.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/passive/disable", state.getPath()))
+		}
 	}
-	if !state.PassiveEnable.IsNull() && data.PassiveEnable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/passive/enable", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.PassiveEnable.IsNull() && state.PassiveEnable.ValueBool() {
+		if data.PassiveEnable.IsNull() || !data.PassiveEnable.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/passive/enable", state.getPath()))
+		}
 	}
-	if !state.MtuIgnoreDisable.IsNull() && data.MtuIgnoreDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mtu-ignore/disable", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.MtuIgnoreDisable.IsNull() && state.MtuIgnoreDisable.ValueBool() {
+		if data.MtuIgnoreDisable.IsNull() || !data.MtuIgnoreDisable.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/mtu-ignore/disable", state.getPath()))
+		}
 	}
-	if !state.MtuIgnoreEnable.IsNull() && data.MtuIgnoreEnable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mtu-ignore/enable", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.MtuIgnoreEnable.IsNull() && state.MtuIgnoreEnable.ValueBool() {
+		if data.MtuIgnoreEnable.IsNull() || !data.MtuIgnoreEnable.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/mtu-ignore/enable", state.getPath()))
+		}
 	}
 	if !state.Priority.IsNull() && data.Priority.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/priority", state.getPath()))
@@ -1352,8 +2308,11 @@ func (data *RouterOSPF) getDeletedItems(ctx context.Context, state RouterOSPF) [
 	if !state.HelloInterval.IsNull() && data.HelloInterval.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-interval", state.getPath()))
 	}
-	if !state.MplsLdpSync.IsNull() && data.MplsLdpSync.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/ldp/sync", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.MplsLdpSync.IsNull() && state.MplsLdpSync.ValueBool() {
+		if data.MplsLdpSync.IsNull() || !data.MplsLdpSync.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/ldp/sync", state.getPath()))
+		}
 	}
 	return deletedItems
 }
@@ -1362,7 +2321,7 @@ func (data *RouterOSPF) getDeletedItems(ctx context.Context, state RouterOSPF) [
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *RouterOSPF) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *RouterOSPF) getEmptyLeafsDelete(ctx context.Context, state *RouterOSPF) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.RedistributeOspf {
 		keys := [...]string{"instance-name"}
@@ -1371,14 +2330,26 @@ func (data *RouterOSPF) getEmptyLeafsDelete(ctx context.Context) []string {
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
+		// Only delete if state has true and plan has false
 		if !data.RedistributeOspf[i].MatchNssaExternal.IsNull() && !data.RedistributeOspf[i].MatchNssaExternal.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospf%v/match/nssa-external", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.RedistributeOspf) && !state.RedistributeOspf[i].MatchNssaExternal.IsNull() && state.RedistributeOspf[i].MatchNssaExternal.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospf%v/match/nssa-external", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.RedistributeOspf[i].MatchExternal.IsNull() && !data.RedistributeOspf[i].MatchExternal.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospf%v/match/external", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.RedistributeOspf) && !state.RedistributeOspf[i].MatchExternal.IsNull() && state.RedistributeOspf[i].MatchExternal.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospf%v/match/external", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.RedistributeOspf[i].MatchInternal.IsNull() && !data.RedistributeOspf[i].MatchInternal.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospf%v/match/internal", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.RedistributeOspf) && !state.RedistributeOspf[i].MatchInternal.IsNull() && state.RedistributeOspf[i].MatchInternal.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospf%v/match/internal", data.getXPath(), keyString))
+			}
 		}
 	}
 	for i := range data.RedistributeIsis {
@@ -1388,14 +2359,26 @@ func (data *RouterOSPF) getEmptyLeafsDelete(ctx context.Context) []string {
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
+		// Only delete if state has true and plan has false
 		if !data.RedistributeIsis[i].Level12.IsNull() && !data.RedistributeIsis[i].Level12.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/isis%v/level-1-2", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.RedistributeIsis) && !state.RedistributeIsis[i].Level12.IsNull() && state.RedistributeIsis[i].Level12.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/isis%v/level-1-2", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.RedistributeIsis[i].Level2.IsNull() && !data.RedistributeIsis[i].Level2.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/isis%v/level-2", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.RedistributeIsis) && !state.RedistributeIsis[i].Level2.IsNull() && state.RedistributeIsis[i].Level2.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/isis%v/level-2", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.RedistributeIsis[i].Level1.IsNull() && !data.RedistributeIsis[i].Level1.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/isis%v/level-1", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.RedistributeIsis) && !state.RedistributeIsis[i].Level1.IsNull() && state.RedistributeIsis[i].Level1.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/isis%v/level-1", data.getXPath(), keyString))
+			}
 		}
 	}
 	for i := range data.RedistributeBgp {
@@ -1414,44 +2397,83 @@ func (data *RouterOSPF) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.SegmentRoutingSrPrefer.IsNull() && !data.SegmentRoutingSrPrefer.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/sr-prefer", data.getPath()))
+		if state != nil && !state.SegmentRoutingSrPrefer.IsNull() && state.SegmentRoutingSrPrefer.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/sr-prefer", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.SegmentRoutingMpls.IsNull() && !data.SegmentRoutingMpls.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls", data.getPath()))
+		if state != nil && !state.SegmentRoutingMpls.IsNull() && state.SegmentRoutingMpls.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.AutoCostDisable.IsNull() && !data.AutoCostDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/auto-cost/disable", data.getPath()))
+		if state != nil && !state.AutoCostDisable.IsNull() && state.AutoCostDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/auto-cost/disable", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.DefaultInformationOriginateAlways.IsNull() && !data.DefaultInformationOriginateAlways.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-information/originate/always", data.getPath()))
+		if state != nil && !state.DefaultInformationOriginateAlways.IsNull() && state.DefaultInformationOriginateAlways.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-information/originate/always", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.DefaultInformationOriginate.IsNull() && !data.DefaultInformationOriginate.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-information/originate", data.getPath()))
+		if state != nil && !state.DefaultInformationOriginate.IsNull() && state.DefaultInformationOriginate.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-information/originate", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.BfdFastDetect.IsNull() && !data.BfdFastDetect.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/fast-detect", data.getPath()))
+		if state != nil && !state.BfdFastDetect.IsNull() && state.BfdFastDetect.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/fast-detect", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.RedistributeStatic.IsNull() && !data.RedistributeStatic.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/static", data.getPath()))
+		if state != nil && !state.RedistributeStatic.IsNull() && state.RedistributeStatic.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/static", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.RedistributeConnected.IsNull() && !data.RedistributeConnected.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/connected", data.getPath()))
+		if state != nil && !state.RedistributeConnected.IsNull() && state.RedistributeConnected.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/connected", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.PassiveDisable.IsNull() && !data.PassiveDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/passive/disable", data.getPath()))
+		if state != nil && !state.PassiveDisable.IsNull() && state.PassiveDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/passive/disable", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.PassiveEnable.IsNull() && !data.PassiveEnable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/passive/enable", data.getPath()))
+		if state != nil && !state.PassiveEnable.IsNull() && state.PassiveEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/passive/enable", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.MtuIgnoreDisable.IsNull() && !data.MtuIgnoreDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mtu-ignore/disable", data.getPath()))
+		if state != nil && !state.MtuIgnoreDisable.IsNull() && state.MtuIgnoreDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mtu-ignore/disable", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.MtuIgnoreEnable.IsNull() && !data.MtuIgnoreEnable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mtu-ignore/enable", data.getPath()))
+		if state != nil && !state.MtuIgnoreEnable.IsNull() && state.MtuIgnoreEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mtu-ignore/enable", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.MplsLdpSync.IsNull() && !data.MplsLdpSync.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/ldp/sync", data.getPath()))
+		if state != nil && !state.MplsLdpSync.IsNull() && state.MplsLdpSync.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/ldp/sync", data.getXPath()))
+		}
 	}
 	return emptyLeafsDelete
 }
@@ -1463,44 +2485,24 @@ func (data *RouterOSPF) getEmptyLeafsDelete(ctx context.Context) []string {
 func (data *RouterOSPF) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.RedistributeOspf {
-		keys := [...]string{"instance-name"}
 		keyValues := [...]string{data.RedistributeOspf[i].InstanceName.ValueString()}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/ospf%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/ospf=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.RedistributeIsis {
-		keys := [...]string{"instance-name"}
 		keyValues := [...]string{data.RedistributeIsis[i].InstanceName.ValueString()}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/isis%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/isis=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.RedistributeBgp {
-		keys := [...]string{"as-number"}
 		keyValues := [...]string{data.RedistributeBgp[i].AsNumber.ValueString()}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/bgp/as%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/bgp/as=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.Areas {
-		keys := [...]string{"area-id"}
 		keyValues := [...]string{data.Areas[i].AreaId.ValueString()}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/areas/area%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/areas/area=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	if !data.SegmentRoutingSrPrefer.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/sr-prefer", data.getPath()))
@@ -1577,7 +2579,498 @@ func (data *RouterOSPF) getDeletePaths(ctx context.Context) []string {
 	if !data.MplsLdpSync.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/ldp/sync", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *RouterOSPF) addDeletedItemsXML(ctx context.Context, state RouterOSPF, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.RedistributeOspf {
+		stateKeys := [...]string{"instance-name"}
+		stateKeyValues := [...]string{state.RedistributeOspf[i].InstanceName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.RedistributeOspf[i].InstanceName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.RedistributeOspf {
+			found = true
+			if state.RedistributeOspf[i].InstanceName.ValueString() != data.RedistributeOspf[j].InstanceName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.RedistributeOspf[i].MetricType.IsNull() && data.RedistributeOspf[j].MetricType.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/redistribute/ospf%v/metric-type", predicates))
+				}
+				if !state.RedistributeOspf[i].Tag.IsNull() && data.RedistributeOspf[j].Tag.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/redistribute/ospf%v/tag", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.RedistributeOspf[i].MatchNssaExternal.IsNull() && state.RedistributeOspf[i].MatchNssaExternal.ValueBool() && data.RedistributeOspf[j].MatchNssaExternal.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/redistribute/ospf%v/match/nssa-external", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.RedistributeOspf[i].MatchExternal.IsNull() && state.RedistributeOspf[i].MatchExternal.ValueBool() && data.RedistributeOspf[j].MatchExternal.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/redistribute/ospf%v/match/external", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.RedistributeOspf[i].MatchInternal.IsNull() && state.RedistributeOspf[i].MatchInternal.ValueBool() && data.RedistributeOspf[j].MatchInternal.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/redistribute/ospf%v/match/internal", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/redistribute/ospf%v", predicates))
+		}
+	}
+	for i := range state.RedistributeIsis {
+		stateKeys := [...]string{"instance-name"}
+		stateKeyValues := [...]string{state.RedistributeIsis[i].InstanceName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.RedistributeIsis[i].InstanceName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.RedistributeIsis {
+			found = true
+			if state.RedistributeIsis[i].InstanceName.ValueString() != data.RedistributeIsis[j].InstanceName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.RedistributeIsis[i].MetricType.IsNull() && data.RedistributeIsis[j].MetricType.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/redistribute/isis%v/metric-type", predicates))
+				}
+				if !state.RedistributeIsis[i].Tag.IsNull() && data.RedistributeIsis[j].Tag.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/redistribute/isis%v/tag", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.RedistributeIsis[i].Level12.IsNull() && state.RedistributeIsis[i].Level12.ValueBool() && data.RedistributeIsis[j].Level12.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/redistribute/isis%v/level-1-2", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.RedistributeIsis[i].Level2.IsNull() && state.RedistributeIsis[i].Level2.ValueBool() && data.RedistributeIsis[j].Level2.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/redistribute/isis%v/level-2", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.RedistributeIsis[i].Level1.IsNull() && state.RedistributeIsis[i].Level1.ValueBool() && data.RedistributeIsis[j].Level1.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/redistribute/isis%v/level-1", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/redistribute/isis%v", predicates))
+		}
+	}
+	for i := range state.RedistributeBgp {
+		stateKeys := [...]string{"as-number"}
+		stateKeyValues := [...]string{state.RedistributeBgp[i].AsNumber.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.RedistributeBgp[i].AsNumber.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.RedistributeBgp {
+			found = true
+			if state.RedistributeBgp[i].AsNumber.ValueString() != data.RedistributeBgp[j].AsNumber.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.RedistributeBgp[i].MetricType.IsNull() && data.RedistributeBgp[j].MetricType.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/redistribute/bgp/as%v/metric-type", predicates))
+				}
+				if !state.RedistributeBgp[i].Tag.IsNull() && data.RedistributeBgp[j].Tag.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/redistribute/bgp/as%v/tag", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/redistribute/bgp/as%v", predicates))
+		}
+	}
+	for i := range state.Areas {
+		stateKeys := [...]string{"area-id"}
+		stateKeyValues := [...]string{state.Areas[i].AreaId.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Areas[i].AreaId.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Areas {
+			found = true
+			if state.Areas[i].AreaId.ValueString() != data.Areas[j].AreaId.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/areas/area%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.SegmentRoutingSrPrefer.IsNull() && state.SegmentRoutingSrPrefer.ValueBool() && data.SegmentRoutingSrPrefer.IsNull() {
+		deletePath := state.getXPath() + "/segment-routing/sr-prefer"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.SegmentRoutingMpls.IsNull() && state.SegmentRoutingMpls.ValueBool() && data.SegmentRoutingMpls.IsNull() {
+		deletePath := state.getXPath() + "/segment-routing/mpls"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.AutoCostDisable.IsNull() && state.AutoCostDisable.ValueBool() && data.AutoCostDisable.IsNull() {
+		deletePath := state.getXPath() + "/auto-cost/disable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.AutoCostReferenceBandwidth.IsNull() && data.AutoCostReferenceBandwidth.IsNull() {
+		deletePath := state.getXPath() + "/auto-cost/reference-bandwidth"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.DefaultInformationOriginateMetricType.IsNull() && data.DefaultInformationOriginateMetricType.IsNull() {
+		deletePath := state.getXPath() + "/default-information/originate/metric-type"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.DefaultInformationOriginateAlways.IsNull() && state.DefaultInformationOriginateAlways.ValueBool() && data.DefaultInformationOriginateAlways.IsNull() {
+		deletePath := state.getXPath() + "/default-information/originate/always"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.DefaultInformationOriginate.IsNull() && state.DefaultInformationOriginate.ValueBool() && data.DefaultInformationOriginate.IsNull() {
+		deletePath := state.getXPath() + "/default-information/originate"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BfdMultiplier.IsNull() && data.BfdMultiplier.IsNull() {
+		deletePath := state.getXPath() + "/bfd/multiplier"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BfdMinimumInterval.IsNull() && data.BfdMinimumInterval.IsNull() {
+		deletePath := state.getXPath() + "/bfd/minimum-interval"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.BfdFastDetect.IsNull() && state.BfdFastDetect.ValueBool() && data.BfdFastDetect.IsNull() {
+		deletePath := state.getXPath() + "/bfd/fast-detect"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.RedistributeStaticMetricType.IsNull() && data.RedistributeStaticMetricType.IsNull() {
+		deletePath := state.getXPath() + "/redistribute/static/metric-type"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.RedistributeStaticTag.IsNull() && data.RedistributeStaticTag.IsNull() {
+		deletePath := state.getXPath() + "/redistribute/static/tag"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.RedistributeStatic.IsNull() && state.RedistributeStatic.ValueBool() && data.RedistributeStatic.IsNull() {
+		deletePath := state.getXPath() + "/redistribute/static"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.RedistributeConnectedMetricType.IsNull() && data.RedistributeConnectedMetricType.IsNull() {
+		deletePath := state.getXPath() + "/redistribute/connected/metric-type"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.RedistributeConnectedTag.IsNull() && data.RedistributeConnectedTag.IsNull() {
+		deletePath := state.getXPath() + "/redistribute/connected/tag"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.RedistributeConnected.IsNull() && state.RedistributeConnected.ValueBool() && data.RedistributeConnected.IsNull() {
+		deletePath := state.getXPath() + "/redistribute/connected"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.RouterId.IsNull() && data.RouterId.IsNull() {
+		deletePath := state.getXPath() + "/router-id"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.PassiveDisable.IsNull() && state.PassiveDisable.ValueBool() && data.PassiveDisable.IsNull() {
+		deletePath := state.getXPath() + "/passive/disable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.PassiveEnable.IsNull() && state.PassiveEnable.ValueBool() && data.PassiveEnable.IsNull() {
+		deletePath := state.getXPath() + "/passive/enable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.MtuIgnoreDisable.IsNull() && state.MtuIgnoreDisable.ValueBool() && data.MtuIgnoreDisable.IsNull() {
+		deletePath := state.getXPath() + "/mtu-ignore/disable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.MtuIgnoreEnable.IsNull() && state.MtuIgnoreEnable.ValueBool() && data.MtuIgnoreEnable.IsNull() {
+		deletePath := state.getXPath() + "/mtu-ignore/enable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Priority.IsNull() && data.Priority.IsNull() {
+		deletePath := state.getXPath() + "/priority"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.DeadInterval.IsNull() && data.DeadInterval.IsNull() {
+		deletePath := state.getXPath() + "/dead-interval"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.HelloInterval.IsNull() && data.HelloInterval.IsNull() {
+		deletePath := state.getXPath() + "/hello-interval"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.MplsLdpSync.IsNull() && state.MplsLdpSync.ValueBool() && data.MplsLdpSync.IsNull() {
+		deletePath := state.getXPath() + "/mpls/ldp/sync"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *RouterOSPF) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	for i := range data.RedistributeOspf {
+		keys := [...]string{"instance-name"}
+		keyValues := [...]string{data.RedistributeOspf[i].InstanceName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/redistribute/ospf%v", predicates))
+	}
+	for i := range data.RedistributeIsis {
+		keys := [...]string{"instance-name"}
+		keyValues := [...]string{data.RedistributeIsis[i].InstanceName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/redistribute/isis%v", predicates))
+	}
+	for i := range data.RedistributeBgp {
+		keys := [...]string{"as-number"}
+		keyValues := [...]string{data.RedistributeBgp[i].AsNumber.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/redistribute/bgp/as%v", predicates))
+	}
+	for i := range data.Areas {
+		keys := [...]string{"area-id"}
+		keyValues := [...]string{data.Areas[i].AreaId.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/areas/area%v", predicates))
+	}
+	if !data.SegmentRoutingSrPrefer.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/segment-routing/sr-prefer")
+	}
+	if !data.SegmentRoutingMpls.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/segment-routing/mpls")
+	}
+	if !data.AutoCostDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/auto-cost/disable")
+	}
+	if !data.AutoCostReferenceBandwidth.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/auto-cost/reference-bandwidth")
+	}
+	if !data.DefaultInformationOriginateMetricType.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/default-information/originate/metric-type")
+	}
+	if !data.DefaultInformationOriginateAlways.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/default-information/originate/always")
+	}
+	if !data.DefaultInformationOriginate.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/default-information/originate")
+	}
+	if !data.BfdMultiplier.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bfd/multiplier")
+	}
+	if !data.BfdMinimumInterval.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bfd/minimum-interval")
+	}
+	if !data.BfdFastDetect.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bfd/fast-detect")
+	}
+	if !data.RedistributeStaticMetricType.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/redistribute/static/metric-type")
+	}
+	if !data.RedistributeStaticTag.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/redistribute/static/tag")
+	}
+	if !data.RedistributeStatic.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/redistribute/static")
+	}
+	if !data.RedistributeConnectedMetricType.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/redistribute/connected/metric-type")
+	}
+	if !data.RedistributeConnectedTag.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/redistribute/connected/tag")
+	}
+	if !data.RedistributeConnected.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/redistribute/connected")
+	}
+	if !data.RouterId.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/router-id")
+	}
+	if !data.PassiveDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/passive/disable")
+	}
+	if !data.PassiveEnable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/passive/enable")
+	}
+	if !data.MtuIgnoreDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/mtu-ignore/disable")
+	}
+	if !data.MtuIgnoreEnable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/mtu-ignore/enable")
+	}
+	if !data.Priority.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/priority")
+	}
+	if !data.DeadInterval.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/dead-interval")
+	}
+	if !data.HelloInterval.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/hello-interval")
+	}
+	if !data.MplsLdpSync.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/mpls/ldp/sync")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

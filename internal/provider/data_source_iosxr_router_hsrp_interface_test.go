@@ -20,65 +20,9 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrRouterHSRPInterface(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface.test", "hsrp_use_bia", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface.test", "hsrp_redirects_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface.test", "hsrp_delay_minimum", "500"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface.test", "hsrp_delay_reload", "700"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface.test", "hsrp_bfd_minimum_interval", "20000"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface.test", "hsrp_bfd_multiplier", "40"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface.test", "hsrp_mac_refresh", "5000"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrRouterHSRPInterfaceConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrRouterHSRPInterfaceConfig() string {
-	config := `resource "iosxr_router_hsrp_interface" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
-	config += `	hsrp_use_bia = true` + "\n"
-	config += `	hsrp_redirects_disable = true` + "\n"
-	config += `	hsrp_delay_minimum = 500` + "\n"
-	config += `	hsrp_delay_reload = 700` + "\n"
-	config += `	hsrp_bfd_minimum_interval = 20000` + "\n"
-	config += `	hsrp_bfd_multiplier = 40` + "\n"
-	config += `	hsrp_mac_refresh = 5000` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_router_hsrp_interface" "test" {
-			interface_name = "GigabitEthernet0/0/0/1"
-			depends_on = [iosxr_router_hsrp_interface.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

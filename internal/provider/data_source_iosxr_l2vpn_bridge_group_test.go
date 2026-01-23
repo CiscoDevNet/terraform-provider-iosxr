@@ -20,31 +20,8 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrL2VPNBridgeGroup(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrL2VPNBridgeGroupPrerequisitesConfig + testAccDataSourceIosxrL2VPNBridgeGroupConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrL2VPNBridgeGroupPrerequisitesConfig = `
@@ -57,23 +34,3 @@ resource "iosxr_gnmi" "PreReq0" {
 `
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrL2VPNBridgeGroupConfig() string {
-	config := `resource "iosxr_l2vpn_bridge_group" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	group_name = "BG123"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_l2vpn_bridge_group" "test" {
-			group_name = "BG123"
-			depends_on = [iosxr_l2vpn_bridge_group.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

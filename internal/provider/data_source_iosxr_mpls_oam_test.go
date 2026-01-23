@@ -20,59 +20,9 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrMPLSOAM(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_oam.test", "oam", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_oam.test", "oam_echo_disable_vendor_extension", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_oam.test", "oam_echo_reply_mode_control_channel_allow_reverse_lsp", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_oam.test", "oam_dpm_pps", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_oam.test", "oam_dpm_interval", "60"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrMPLSOAMConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrMPLSOAMConfig() string {
-	config := `resource "iosxr_mpls_oam" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	oam = true` + "\n"
-	config += `	oam_echo_disable_vendor_extension = true` + "\n"
-	config += `	oam_echo_reply_mode_control_channel_allow_reverse_lsp = true` + "\n"
-	config += `	oam_dpm_pps = 10` + "\n"
-	config += `	oam_dpm_interval = 60` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_mpls_oam" "test" {
-			depends_on = [iosxr_mpls_oam.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

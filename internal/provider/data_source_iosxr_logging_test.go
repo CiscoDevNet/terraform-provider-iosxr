@@ -20,71 +20,9 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrLogging(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "ipv4_dscp", "cs6"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "trap", "informational"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "events_display_location", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "events_level", "informational"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "console", "disable"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "monitor", "disable"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "buffered_logging_buffer_size", "4000000"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "buffered_level", "debugging"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "facility_level", "local7"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "hostnameprefix", "HOSTNAME01"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "suppress_duplicates", "true"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrLoggingConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrLoggingConfig() string {
-	config := `resource "iosxr_logging" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	ipv4_dscp = "cs6"` + "\n"
-	config += `	trap = "informational"` + "\n"
-	config += `	events_display_location = true` + "\n"
-	config += `	events_level = "informational"` + "\n"
-	config += `	console = "disable"` + "\n"
-	config += `	monitor = "disable"` + "\n"
-	config += `	buffered_logging_buffer_size = 4000000` + "\n"
-	config += `	buffered_level = "debugging"` + "\n"
-	config += `	facility_level = "local7"` + "\n"
-	config += `	hostnameprefix = "HOSTNAME01"` + "\n"
-	config += `	suppress_duplicates = true` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_logging" "test" {
-			depends_on = [iosxr_logging.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

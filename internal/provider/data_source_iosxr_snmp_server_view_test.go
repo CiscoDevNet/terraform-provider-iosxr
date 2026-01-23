@@ -20,57 +20,9 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrSNMPServerView(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_view.test", "mib_view_families.0.name", "iso"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_view.test", "mib_view_families.0.included", "true"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrSNMPServerViewConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrSNMPServerViewConfig() string {
-	config := `resource "iosxr_snmp_server_view" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	view_name = "VIEW12"` + "\n"
-	config += `	mib_view_families = [{` + "\n"
-	config += `		name = "iso"` + "\n"
-	config += `		included = true` + "\n"
-	config += `	}]` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_snmp_server_view" "test" {
-			view_name = "VIEW12"
-			depends_on = [iosxr_snmp_server_view.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

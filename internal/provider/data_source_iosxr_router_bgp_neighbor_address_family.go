@@ -27,8 +27,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/path"
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/tidwall/gjson"
+
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 )
 
 // End of section. //template:end imports
@@ -218,32 +220,48 @@ func (d *RouterBGPNeighborAddressFamilyDataSource) Read(ctx context.Context, req
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getPath()))
 
 	if device.Managed {
-		if !d.data.ReuseConnection {
-			defer device.Client.Disconnect()
-		}
-		getResp, err := device.Client.Get(ctx, []string{config.getPath()})
-		if err != nil {
-			resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
-			return
-		}
+		if device.Protocol == "gnmi" {
+			if !d.data.ReuseConnection {
+				defer device.GnmiClient.Disconnect()
+			}
+			getResp, err := device.GnmiClient.Get(ctx, []string{config.getPath()})
+			if err != nil {
+				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+				return
+			}
 
-		// Defensive bounds checking for response structure
-		if len(getResp.Notifications) == 0 {
-			resp.Diagnostics.AddError("Invalid gNMI response",
-				"Response contains no notifications")
-			return
-		}
-		if len(getResp.Notifications[0].Update) == 0 {
-			resp.Diagnostics.AddError("Invalid gNMI response",
-				"Response notification contains no updates")
-			return
-		}
+			// Defensive bounds checking for response structure
+			if len(getResp.Notifications) == 0 {
+				resp.Diagnostics.AddError("Invalid gNMI response",
+					"Response contains no notifications")
+				return
+			}
+			if len(getResp.Notifications[0].Update) == 0 {
+				resp.Diagnostics.AddError("Invalid gNMI response",
+					"Response notification contains no updates")
+				return
+			}
 
-		respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-		config.fromBody(ctx, respBody)
+			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
+			config.fromBody(ctx, gjson.ParseBytes(respBody))
+		} else {
+			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
+			locked := helpers.AcquireNetconfLock(&device.NetconfOpMutex, device.ReuseConnection, false)
+			if locked {
+				defer device.NetconfOpMutex.Unlock()
+			}
+			defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
+
+			filter := helpers.GetSubtreeFilter(config.getXPath())
+			res, err := device.NetconfClient.GetConfig(ctx, "running", filter)
+			if err != nil {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object (%s), got error: %s", config.getPath(), err))
+				return
+			}
+
+			config.fromBodyXML(ctx, res.Res)
+		}
 	}
-
-	config.Id = types.StringValue(config.getPath())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

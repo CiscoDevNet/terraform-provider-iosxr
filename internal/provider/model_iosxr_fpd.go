@@ -24,7 +24,11 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -63,6 +67,17 @@ func (data FPDData) getPath() string {
 	return "Cisco-IOS-XR-um-fpd-cfg:/fpd"
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data FPD) getXPath() string {
+	path := "Cisco-IOS-XR-um-fpd-cfg:/fpd"
+	return path
+}
+
+func (data FPDData) getXPath() string {
+	path := "Cisco-IOS-XR-um-fpd-cfg:/fpd"
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -94,71 +109,135 @@ func (data FPD) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data FPD) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.AutoUpgradeEnable.IsNull() && !data.AutoUpgradeEnable.IsUnknown() {
+		if data.AutoUpgradeEnable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/auto-upgrade/enable", "")
+		}
+	}
+	if !data.AutoUpgradeDisable.IsNull() && !data.AutoUpgradeDisable.IsUnknown() {
+		if data.AutoUpgradeDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/auto-upgrade/disable", "")
+		}
+	}
+	if !data.AutoReloadEnable.IsNull() && !data.AutoReloadEnable.IsUnknown() {
+		if data.AutoReloadEnable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/auto-reload/enable", "")
+		}
+	}
+	if !data.AutoReloadDisable.IsNull() && !data.AutoReloadDisable.IsUnknown() {
+		if data.AutoReloadDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/auto-reload/disable", "")
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *FPD) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "auto-upgrade.enable"); !data.AutoUpgradeEnable.IsNull() {
-		if value.Exists() {
-			data.AutoUpgradeEnable = types.BoolValue(true)
-		} else {
-			data.AutoUpgradeEnable = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "auto-upgrade.enable"); value.Exists() {
+		data.AutoUpgradeEnable = types.BoolValue(true)
+	} else if data.AutoUpgradeEnable.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.AutoUpgradeEnable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "auto-upgrade.disable"); !data.AutoUpgradeDisable.IsNull() {
-		if value.Exists() {
-			data.AutoUpgradeDisable = types.BoolValue(true)
-		} else {
-			data.AutoUpgradeDisable = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "auto-upgrade.disable"); value.Exists() {
+		data.AutoUpgradeDisable = types.BoolValue(true)
+	} else if data.AutoUpgradeDisable.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.AutoUpgradeDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "auto-reload.enable"); !data.AutoReloadEnable.IsNull() {
-		if value.Exists() {
-			data.AutoReloadEnable = types.BoolValue(true)
-		} else {
-			data.AutoReloadEnable = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "auto-reload.enable"); value.Exists() {
+		data.AutoReloadEnable = types.BoolValue(true)
+	} else if data.AutoReloadEnable.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.AutoReloadEnable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "auto-reload.disable"); !data.AutoReloadDisable.IsNull() {
-		if value.Exists() {
-			data.AutoReloadDisable = types.BoolValue(true)
-		} else {
-			data.AutoReloadDisable = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "auto-reload.disable"); value.Exists() {
+		data.AutoReloadDisable = types.BoolValue(true)
+	} else if data.AutoReloadDisable.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.AutoReloadDisable = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 }
 
 // End of section. //template:end updateFromBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
-func (data *FPD) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "auto-upgrade.enable"); value.Exists() {
+func (data *FPD) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-upgrade/enable"); value.Exists() {
 		data.AutoUpgradeEnable = types.BoolValue(true)
 	} else {
-		data.AutoUpgradeEnable = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.AutoUpgradeEnable.IsNull() {
+			data.AutoUpgradeEnable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "auto-upgrade.disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-upgrade/disable"); value.Exists() {
 		data.AutoUpgradeDisable = types.BoolValue(true)
 	} else {
-		data.AutoUpgradeDisable = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.AutoUpgradeDisable.IsNull() {
+			data.AutoUpgradeDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "auto-reload.enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-reload/enable"); value.Exists() {
 		data.AutoReloadEnable = types.BoolValue(true)
 	} else {
-		data.AutoReloadEnable = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.AutoReloadEnable.IsNull() {
+			data.AutoReloadEnable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "auto-reload.disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-reload/disable"); value.Exists() {
 		data.AutoReloadDisable = types.BoolValue(true)
 	} else {
-		data.AutoReloadDisable = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.AutoReloadDisable.IsNull() {
+			data.AutoReloadDisable = types.BoolNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *FPD) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "auto-upgrade.enable"); value.Exists() {
+		data.AutoUpgradeEnable = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "auto-upgrade.disable"); value.Exists() {
+		data.AutoUpgradeDisable = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "auto-reload.enable"); value.Exists() {
+		data.AutoReloadEnable = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "auto-reload.disable"); value.Exists() {
+		data.AutoReloadDisable = types.BoolValue(true)
 	}
 }
 
@@ -166,46 +245,100 @@ func (data *FPD) fromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *FPDData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "auto-upgrade.enable"); value.Exists() {
+func (data *FPDData) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "auto-upgrade.enable"); value.Exists() {
+		data.AutoUpgradeEnable = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "auto-upgrade.disable"); value.Exists() {
+		data.AutoUpgradeDisable = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "auto-reload.enable"); value.Exists() {
+		data.AutoReloadEnable = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "auto-reload.disable"); value.Exists() {
+		data.AutoReloadDisable = types.BoolValue(true)
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *FPD) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-upgrade/enable"); value.Exists() {
+		data.AutoUpgradeEnable = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-upgrade/disable"); value.Exists() {
+		data.AutoUpgradeDisable = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-reload/enable"); value.Exists() {
+		data.AutoReloadEnable = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-reload/disable"); value.Exists() {
+		data.AutoReloadDisable = types.BoolValue(true)
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *FPDData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-upgrade/enable"); value.Exists() {
 		data.AutoUpgradeEnable = types.BoolValue(true)
 	} else {
 		data.AutoUpgradeEnable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "auto-upgrade.disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-upgrade/disable"); value.Exists() {
 		data.AutoUpgradeDisable = types.BoolValue(true)
 	} else {
 		data.AutoUpgradeDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "auto-reload.enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-reload/enable"); value.Exists() {
 		data.AutoReloadEnable = types.BoolValue(true)
 	} else {
 		data.AutoReloadEnable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "auto-reload.disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-reload/disable"); value.Exists() {
 		data.AutoReloadDisable = types.BoolValue(true)
 	} else {
 		data.AutoReloadDisable = types.BoolValue(false)
 	}
 }
 
-// End of section. //template:end fromBodyData
+// End of section. //template:end fromBodyDataXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *FPD) getDeletedItems(ctx context.Context, state FPD) []string {
 	deletedItems := make([]string, 0)
-	if !state.AutoReloadDisable.IsNull() && data.AutoReloadDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/auto-reload/disable", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.AutoReloadDisable.IsNull() && state.AutoReloadDisable.ValueBool() {
+		if data.AutoReloadDisable.IsNull() || !data.AutoReloadDisable.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/auto-reload/disable", state.getPath()))
+		}
 	}
-	if !state.AutoReloadEnable.IsNull() && data.AutoReloadEnable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/auto-reload/enable", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.AutoReloadEnable.IsNull() && state.AutoReloadEnable.ValueBool() {
+		if data.AutoReloadEnable.IsNull() || !data.AutoReloadEnable.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/auto-reload/enable", state.getPath()))
+		}
 	}
-	if !state.AutoUpgradeDisable.IsNull() && data.AutoUpgradeDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/auto-upgrade/disable", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.AutoUpgradeDisable.IsNull() && state.AutoUpgradeDisable.ValueBool() {
+		if data.AutoUpgradeDisable.IsNull() || !data.AutoUpgradeDisable.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/auto-upgrade/disable", state.getPath()))
+		}
 	}
-	if !state.AutoUpgradeEnable.IsNull() && data.AutoUpgradeEnable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/auto-upgrade/enable", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.AutoUpgradeEnable.IsNull() && state.AutoUpgradeEnable.ValueBool() {
+		if data.AutoUpgradeEnable.IsNull() || !data.AutoUpgradeEnable.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/auto-upgrade/enable", state.getPath()))
+		}
 	}
 	return deletedItems
 }
@@ -214,19 +347,31 @@ func (data *FPD) getDeletedItems(ctx context.Context, state FPD) []string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *FPD) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *FPD) getEmptyLeafsDelete(ctx context.Context, state *FPD) []string {
 	emptyLeafsDelete := make([]string, 0)
+	// Only delete if state has true and plan has false
 	if !data.AutoReloadDisable.IsNull() && !data.AutoReloadDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/auto-reload/disable", data.getPath()))
+		if state != nil && !state.AutoReloadDisable.IsNull() && state.AutoReloadDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/auto-reload/disable", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.AutoReloadEnable.IsNull() && !data.AutoReloadEnable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/auto-reload/enable", data.getPath()))
+		if state != nil && !state.AutoReloadEnable.IsNull() && state.AutoReloadEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/auto-reload/enable", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.AutoUpgradeDisable.IsNull() && !data.AutoUpgradeDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/auto-upgrade/disable", data.getPath()))
+		if state != nil && !state.AutoUpgradeDisable.IsNull() && state.AutoUpgradeDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/auto-upgrade/disable", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.AutoUpgradeEnable.IsNull() && !data.AutoUpgradeEnable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/auto-upgrade/enable", data.getPath()))
+		if state != nil && !state.AutoUpgradeEnable.IsNull() && state.AutoUpgradeEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/auto-upgrade/enable", data.getXPath()))
+		}
 	}
 	return emptyLeafsDelete
 }
@@ -249,7 +394,77 @@ func (data *FPD) getDeletePaths(ctx context.Context) []string {
 	if !data.AutoUpgradeEnable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/auto-upgrade/enable", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *FPD) addDeletedItemsXML(ctx context.Context, state FPD, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.AutoReloadDisable.IsNull() && state.AutoReloadDisable.ValueBool() && data.AutoReloadDisable.IsNull() {
+		deletePath := state.getXPath() + "/auto-reload/disable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.AutoReloadEnable.IsNull() && state.AutoReloadEnable.ValueBool() && data.AutoReloadEnable.IsNull() {
+		deletePath := state.getXPath() + "/auto-reload/enable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.AutoUpgradeDisable.IsNull() && state.AutoUpgradeDisable.ValueBool() && data.AutoUpgradeDisable.IsNull() {
+		deletePath := state.getXPath() + "/auto-upgrade/disable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.AutoUpgradeEnable.IsNull() && state.AutoUpgradeEnable.ValueBool() && data.AutoUpgradeEnable.IsNull() {
+		deletePath := state.getXPath() + "/auto-upgrade/enable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *FPD) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.AutoReloadDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/auto-reload/disable")
+	}
+	if !data.AutoReloadEnable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/auto-reload/enable")
+	}
+	if !data.AutoUpgradeDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/auto-upgrade/disable")
+	}
+	if !data.AutoUpgradeEnable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/auto-upgrade/enable")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

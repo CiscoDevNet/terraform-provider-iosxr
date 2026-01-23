@@ -207,12 +207,16 @@ attributes:
         example: VIEW1
       - yang_name: ro
         example: true
+        type_yang_bool: empty-leaf
       - yang_name: rw
         example: false
+        type_yang_bool: empty-leaf
       - yang_name: sdrowner
         example: false
+        type_yang_bool: empty-leaf
       - yang_name: systemowner
         example: true
+        type_yang_bool: empty-leaf
       - yang_name: ipv4
         example: ACL1
       - yang_name: ipv6

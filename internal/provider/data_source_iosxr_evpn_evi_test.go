@@ -20,48 +20,8 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrEVPNEVI(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "description", "My Description"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "load_balancing", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "load_balancing_flow_label_static", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "bgp_rd_two_byte_as_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "bgp_rd_two_byte_as_assigned_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "bgp_route_target_import_two_byte_as_format.0.as_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "bgp_route_target_import_two_byte_as_format.0.assigned_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "bgp_route_target_export_ipv4_address_format.0.ipv4_address", "1.1.1.1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "bgp_route_target_export_ipv4_address_format.0.assigned_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "bgp_route_policy_import", "EVI_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "bgp_route_policy_export", "EVI_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "advertise_mac", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "unknown_unicast_suppression", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "control_word_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "etree", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "etree_leaf", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "etree_rt_leaf", "true"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrEVPNEVIPrerequisitesConfig + testAccDataSourceIosxrEVPNEVIConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrEVPNEVIPrerequisitesConfig = `
@@ -82,44 +42,3 @@ resource "iosxr_gnmi" "PreReq1" {
 `
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrEVPNEVIConfig() string {
-	config := `resource "iosxr_evpn_evi" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	vpn_id = 1234` + "\n"
-	config += `	description = "My Description"` + "\n"
-	config += `	load_balancing = true` + "\n"
-	config += `	load_balancing_flow_label_static = true` + "\n"
-	config += `	bgp_rd_two_byte_as_number = 1` + "\n"
-	config += `	bgp_rd_two_byte_as_assigned_number = 1` + "\n"
-	config += `	bgp_route_target_import_two_byte_as_format = [{` + "\n"
-	config += `		as_number = 1` + "\n"
-	config += `		assigned_number = 1` + "\n"
-	config += `	}]` + "\n"
-	config += `	bgp_route_target_export_ipv4_address_format = [{` + "\n"
-	config += `		ipv4_address = "1.1.1.1"` + "\n"
-	config += `		assigned_number = 1` + "\n"
-	config += `	}]` + "\n"
-	config += `	bgp_route_policy_import = "EVI_POLICY_1"` + "\n"
-	config += `	bgp_route_policy_export = "EVI_POLICY_1"` + "\n"
-	config += `	advertise_mac = true` + "\n"
-	config += `	unknown_unicast_suppression = true` + "\n"
-	config += `	control_word_disable = true` + "\n"
-	config += `	etree = true` + "\n"
-	config += `	etree_leaf = false` + "\n"
-	config += `	etree_rt_leaf = true` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_evpn_evi" "test" {
-			vpn_id = 1234
-			depends_on = [iosxr_evpn_evi.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

@@ -25,7 +25,11 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -66,6 +70,17 @@ func (data MPLSOAMData) getPath() string {
 	return "Cisco-IOS-XR-um-mpls-oam-cfg:/mpls"
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data MPLSOAM) getXPath() string {
+	path := "Cisco-IOS-XR-um-mpls-oam-cfg:/mpls"
+	return path
+}
+
+func (data MPLSOAMData) getXPath() string {
+	path := "Cisco-IOS-XR-um-mpls-oam-cfg:/mpls"
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -98,36 +113,64 @@ func (data MPLSOAM) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data MPLSOAM) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.Oam.IsNull() && !data.Oam.IsUnknown() {
+		if data.Oam.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/oam", "")
+		}
+	}
+	if !data.OamEchoDisableVendorExtension.IsNull() && !data.OamEchoDisableVendorExtension.IsUnknown() {
+		if data.OamEchoDisableVendorExtension.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/oam/echo/disable-vendor-extension", "")
+		}
+	}
+	if !data.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() && !data.OamEchoReplyModeControlChannelAllowReverseLsp.IsUnknown() {
+		if data.OamEchoReplyModeControlChannelAllowReverseLsp.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/oam/echo/reply-mode/control-channel/allow-reverse-lsp", "")
+		}
+	}
+	if !data.OamDpmPps.IsNull() && !data.OamDpmPps.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/oam/dpm/pps", strconv.FormatInt(data.OamDpmPps.ValueInt64(), 10))
+	}
+	if !data.OamDpmInterval.IsNull() && !data.OamDpmInterval.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/oam/dpm/interval", strconv.FormatInt(data.OamDpmInterval.ValueInt64(), 10))
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *MPLSOAM) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "oam"); !data.Oam.IsNull() {
-		if value.Exists() {
-			data.Oam = types.BoolValue(true)
-		} else {
-			data.Oam = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "oam"); value.Exists() {
+		data.Oam = types.BoolValue(true)
+	} else if data.Oam.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.Oam = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "oam.echo.disable-vendor-extension"); !data.OamEchoDisableVendorExtension.IsNull() {
-		if value.Exists() {
-			data.OamEchoDisableVendorExtension = types.BoolValue(true)
-		} else {
-			data.OamEchoDisableVendorExtension = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "oam.echo.disable-vendor-extension"); value.Exists() {
+		data.OamEchoDisableVendorExtension = types.BoolValue(true)
+	} else if data.OamEchoDisableVendorExtension.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.OamEchoDisableVendorExtension = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "oam.echo.reply-mode.control-channel.allow-reverse-lsp"); !data.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() {
-		if value.Exists() {
-			data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolValue(true)
-		} else {
-			data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "oam.echo.reply-mode.control-channel.allow-reverse-lsp"); value.Exists() {
+		data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolValue(true)
+	} else if data.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 	if value := gjson.GetBytes(res, "oam.dpm.pps"); value.Exists() && !data.OamDpmPps.IsNull() {
 		data.OamDpmPps = types.Int64Value(value.Int())
 	} else {
@@ -142,28 +185,70 @@ func (data *MPLSOAM) updateFromBody(ctx context.Context, res []byte) {
 
 // End of section. //template:end updateFromBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
-func (data *MPLSOAM) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "oam"); value.Exists() {
+func (data *MPLSOAM) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam"); value.Exists() {
 		data.Oam = types.BoolValue(true)
 	} else {
-		data.Oam = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.Oam.IsNull() {
+			data.Oam = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "oam.echo.disable-vendor-extension"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/echo/disable-vendor-extension"); value.Exists() {
 		data.OamEchoDisableVendorExtension = types.BoolValue(true)
 	} else {
-		data.OamEchoDisableVendorExtension = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.OamEchoDisableVendorExtension.IsNull() {
+			data.OamEchoDisableVendorExtension = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "oam.echo.reply-mode.control-channel.allow-reverse-lsp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/echo/reply-mode/control-channel/allow-reverse-lsp"); value.Exists() {
 		data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolValue(true)
 	} else {
-		data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() {
+			data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "oam.dpm.pps"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/dpm/pps"); value.Exists() {
+		data.OamDpmPps = types.Int64Value(value.Int())
+	} else if data.OamDpmPps.IsNull() {
+		data.OamDpmPps = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/dpm/interval"); value.Exists() {
+		data.OamDpmInterval = types.Int64Value(value.Int())
+	} else if data.OamDpmInterval.IsNull() {
+		data.OamDpmInterval = types.Int64Null()
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *MPLSOAM) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "oam"); value.Exists() {
+		data.Oam = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "oam.echo.disable-vendor-extension"); value.Exists() {
+		data.OamEchoDisableVendorExtension = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "oam.echo.reply-mode.control-channel.allow-reverse-lsp"); value.Exists() {
+		data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "oam.dpm.pps"); value.Exists() {
 		data.OamDpmPps = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "oam.dpm.interval"); value.Exists() {
+	if value := res.Get(prefix + "oam.dpm.interval"); value.Exists() {
 		data.OamDpmInterval = types.Int64Value(value.Int())
 	}
 }
@@ -172,31 +257,79 @@ func (data *MPLSOAM) fromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *MPLSOAMData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "oam"); value.Exists() {
+func (data *MPLSOAMData) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "oam"); value.Exists() {
 		data.Oam = types.BoolValue(true)
-	} else {
-		data.Oam = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "oam.echo.disable-vendor-extension"); value.Exists() {
+	if value := res.Get(prefix + "oam.echo.disable-vendor-extension"); value.Exists() {
 		data.OamEchoDisableVendorExtension = types.BoolValue(true)
-	} else {
-		data.OamEchoDisableVendorExtension = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "oam.echo.reply-mode.control-channel.allow-reverse-lsp"); value.Exists() {
+	if value := res.Get(prefix + "oam.echo.reply-mode.control-channel.allow-reverse-lsp"); value.Exists() {
 		data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolValue(true)
-	} else {
-		data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "oam.dpm.pps"); value.Exists() {
+	if value := res.Get(prefix + "oam.dpm.pps"); value.Exists() {
 		data.OamDpmPps = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "oam.dpm.interval"); value.Exists() {
+	if value := res.Get(prefix + "oam.dpm.interval"); value.Exists() {
 		data.OamDpmInterval = types.Int64Value(value.Int())
 	}
 }
 
 // End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *MPLSOAM) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam"); value.Exists() {
+		data.Oam = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/echo/disable-vendor-extension"); value.Exists() {
+		data.OamEchoDisableVendorExtension = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/echo/reply-mode/control-channel/allow-reverse-lsp"); value.Exists() {
+		data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/dpm/pps"); value.Exists() {
+		data.OamDpmPps = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/dpm/interval"); value.Exists() {
+		data.OamDpmInterval = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *MPLSOAMData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam"); value.Exists() {
+		data.Oam = types.BoolValue(true)
+	} else {
+		data.Oam = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/echo/disable-vendor-extension"); value.Exists() {
+		data.OamEchoDisableVendorExtension = types.BoolValue(true)
+	} else {
+		data.OamEchoDisableVendorExtension = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/echo/reply-mode/control-channel/allow-reverse-lsp"); value.Exists() {
+		data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolValue(true)
+	} else {
+		data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/dpm/pps"); value.Exists() {
+		data.OamDpmPps = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/dpm/interval"); value.Exists() {
+		data.OamDpmInterval = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
@@ -208,14 +341,23 @@ func (data *MPLSOAM) getDeletedItems(ctx context.Context, state MPLSOAM) []strin
 	if !state.OamDpmPps.IsNull() && data.OamDpmPps.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/oam/dpm/pps", state.getPath()))
 	}
-	if !state.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() && data.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/oam/echo/reply-mode/control-channel/allow-reverse-lsp", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() && state.OamEchoReplyModeControlChannelAllowReverseLsp.ValueBool() {
+		if data.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() || !data.OamEchoReplyModeControlChannelAllowReverseLsp.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/oam/echo/reply-mode/control-channel/allow-reverse-lsp", state.getPath()))
+		}
 	}
-	if !state.OamEchoDisableVendorExtension.IsNull() && data.OamEchoDisableVendorExtension.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/oam/echo/disable-vendor-extension", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.OamEchoDisableVendorExtension.IsNull() && state.OamEchoDisableVendorExtension.ValueBool() {
+		if data.OamEchoDisableVendorExtension.IsNull() || !data.OamEchoDisableVendorExtension.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/oam/echo/disable-vendor-extension", state.getPath()))
+		}
 	}
-	if !state.Oam.IsNull() && data.Oam.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/oam", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.Oam.IsNull() && state.Oam.ValueBool() {
+		if data.Oam.IsNull() || !data.Oam.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/oam", state.getPath()))
+		}
 	}
 	return deletedItems
 }
@@ -224,16 +366,25 @@ func (data *MPLSOAM) getDeletedItems(ctx context.Context, state MPLSOAM) []strin
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *MPLSOAM) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *MPLSOAM) getEmptyLeafsDelete(ctx context.Context, state *MPLSOAM) []string {
 	emptyLeafsDelete := make([]string, 0)
+	// Only delete if state has true and plan has false
 	if !data.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() && !data.OamEchoReplyModeControlChannelAllowReverseLsp.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/oam/echo/reply-mode/control-channel/allow-reverse-lsp", data.getPath()))
+		if state != nil && !state.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() && state.OamEchoReplyModeControlChannelAllowReverseLsp.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/oam/echo/reply-mode/control-channel/allow-reverse-lsp", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.OamEchoDisableVendorExtension.IsNull() && !data.OamEchoDisableVendorExtension.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/oam/echo/disable-vendor-extension", data.getPath()))
+		if state != nil && !state.OamEchoDisableVendorExtension.IsNull() && state.OamEchoDisableVendorExtension.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/oam/echo/disable-vendor-extension", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.Oam.IsNull() && !data.Oam.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/oam", data.getPath()))
+		if state != nil && !state.Oam.IsNull() && state.Oam.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/oam", data.getXPath()))
+		}
 	}
 	return emptyLeafsDelete
 }
@@ -259,7 +410,86 @@ func (data *MPLSOAM) getDeletePaths(ctx context.Context) []string {
 	if !data.Oam.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/oam", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *MPLSOAM) addDeletedItemsXML(ctx context.Context, state MPLSOAM, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.OamDpmInterval.IsNull() && data.OamDpmInterval.IsNull() {
+		deletePath := state.getXPath() + "/oam/dpm/interval"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.OamDpmPps.IsNull() && data.OamDpmPps.IsNull() {
+		deletePath := state.getXPath() + "/oam/dpm/pps"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() && state.OamEchoReplyModeControlChannelAllowReverseLsp.ValueBool() && data.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() {
+		deletePath := state.getXPath() + "/oam/echo/reply-mode/control-channel/allow-reverse-lsp"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.OamEchoDisableVendorExtension.IsNull() && state.OamEchoDisableVendorExtension.ValueBool() && data.OamEchoDisableVendorExtension.IsNull() {
+		deletePath := state.getXPath() + "/oam/echo/disable-vendor-extension"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Oam.IsNull() && state.Oam.ValueBool() && data.Oam.IsNull() {
+		deletePath := state.getXPath() + "/oam"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *MPLSOAM) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.OamDpmInterval.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/oam/dpm/interval")
+	}
+	if !data.OamDpmPps.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/oam/dpm/pps")
+	}
+	if !data.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/oam/echo/reply-mode/control-channel/allow-reverse-lsp")
+	}
+	if !data.OamEchoDisableVendorExtension.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/oam/echo/disable-vendor-extension")
+	}
+	if !data.Oam.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/oam")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

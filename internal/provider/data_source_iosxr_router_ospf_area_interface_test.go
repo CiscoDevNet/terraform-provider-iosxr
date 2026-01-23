@@ -20,42 +20,8 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrRouterOSPFAreaInterface(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "network_broadcast", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "network_non_broadcast", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "network_point_to_point", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "network_point_to_multipoint", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "cost", "20"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "priority", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "passive_enable", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "passive_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "fast_reroute_per_prefix_ti_lfa", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "fast_reroute_per_prefix_tiebreaker_srlg_disjoint", "22"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "fast_reroute_per_prefix_tiebreaker_node_protecting", "33"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrRouterOSPFAreaInterfacePrerequisitesConfig + testAccDataSourceIosxrRouterOSPFAreaInterfaceConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRouterOSPFAreaInterfacePrerequisitesConfig = `
@@ -77,38 +43,3 @@ resource "iosxr_gnmi" "PreReq1" {
 `
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrRouterOSPFAreaInterfaceConfig() string {
-	config := `resource "iosxr_router_ospf_area_interface" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	process_name = "OSPF1"` + "\n"
-	config += `	area_id = "0"` + "\n"
-	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
-	config += `	network_broadcast = false` + "\n"
-	config += `	network_non_broadcast = false` + "\n"
-	config += `	network_point_to_point = true` + "\n"
-	config += `	network_point_to_multipoint = false` + "\n"
-	config += `	cost = 20` + "\n"
-	config += `	priority = 100` + "\n"
-	config += `	passive_enable = false` + "\n"
-	config += `	passive_disable = true` + "\n"
-	config += `	fast_reroute_per_prefix_ti_lfa = true` + "\n"
-	config += `	fast_reroute_per_prefix_tiebreaker_srlg_disjoint = 22` + "\n"
-	config += `	fast_reroute_per_prefix_tiebreaker_node_protecting = 33` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_router_ospf_area_interface" "test" {
-			process_name = "OSPF1"
-			area_id = "0"
-			interface_name = "GigabitEthernet0/0/0/1"
-			depends_on = [iosxr_router_ospf_area_interface.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

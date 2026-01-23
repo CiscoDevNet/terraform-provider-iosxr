@@ -5,7 +5,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//	https://mozilla.org/MPL/2.0/
+//     https://mozilla.org/MPL/2.0/
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,12 +21,10 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"fmt"
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 // End of section. //template:end imports
@@ -61,39 +59,6 @@ func TestAccIosxrLoggingSourceInterface(t *testing.T) {
 }
 
 // End of section. //template:end testAcc
-
-// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-
-func iosxrLoggingSourceInterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
-	return func(s *terraform.State) (string, error) {
-		primary := s.RootModule().Resources[resourceName].Primary
-		Name := primary.Attributes["name"]
-
-		return fmt.Sprintf("%s", Name), nil
-	}
-}
-
-// End of section. //template:end importStateIdFunc
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrLoggingSourceInterfacePrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=Loopback0]"
-	attributes = {
-		"interface-name" = "Loopback0"
-	}
-}
-
-resource "iosxr_gnmi" "PreReq1" {
-	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
-	attributes = {
-		"vrf-name" = "VRF1"
-	}
-}
-
-`
-
-// End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 

@@ -20,39 +20,8 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrRouterOSPFVRFAreaInterface(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf_area_interface.test", "network_broadcast", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf_area_interface.test", "network_non_broadcast", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf_area_interface.test", "network_point_to_point", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf_area_interface.test", "network_point_to_multipoint", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf_area_interface.test", "cost", "20"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf_area_interface.test", "priority", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf_area_interface.test", "passive_enable", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf_area_interface.test", "passive_disable", "true"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrRouterOSPFVRFAreaInterfacePrerequisitesConfig + testAccDataSourceIosxrRouterOSPFVRFAreaInterfaceConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRouterOSPFVRFAreaInterfacePrerequisitesConfig = `
@@ -82,37 +51,3 @@ resource "iosxr_gnmi" "PreReq2" {
 `
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrRouterOSPFVRFAreaInterfaceConfig() string {
-	config := `resource "iosxr_router_ospf_vrf_area_interface" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	process_name = "OSPF1"` + "\n"
-	config += `	vrf_name = "VRF1"` + "\n"
-	config += `	area_id = "0"` + "\n"
-	config += `	interface_name = "GigabitEthernet0/0/0/2"` + "\n"
-	config += `	network_broadcast = false` + "\n"
-	config += `	network_non_broadcast = false` + "\n"
-	config += `	network_point_to_point = true` + "\n"
-	config += `	network_point_to_multipoint = false` + "\n"
-	config += `	cost = 20` + "\n"
-	config += `	priority = 100` + "\n"
-	config += `	passive_enable = false` + "\n"
-	config += `	passive_disable = true` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_router_ospf_vrf_area_interface" "test" {
-			process_name = "OSPF1"
-			vrf_name = "VRF1"
-			area_id = "0"
-			interface_name = "GigabitEthernet0/0/0/2"
-			depends_on = [iosxr_router_ospf_vrf_area_interface.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

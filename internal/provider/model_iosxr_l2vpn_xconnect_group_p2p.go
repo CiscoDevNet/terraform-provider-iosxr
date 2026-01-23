@@ -25,8 +25,13 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
+	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -102,6 +107,19 @@ func (data L2VPNXconnectGroupP2P) getPath() string {
 
 func (data L2VPNXconnectGroupP2PData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/xconnect/groups/group[group-name=%s]/p2ps/p2p[p2p-xconnect-name=%s]", data.GroupName.ValueString(), data.P2pXconnectName.ValueString())
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data L2VPNXconnectGroupP2P) getXPath() string {
+	path := "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/xconnect/groups/group[group-name=%s]/p2ps/p2p[p2p-xconnect-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.GroupName.ValueString()), fmt.Sprintf("%v", data.P2pXconnectName.ValueString()))
+	return path
+}
+
+func (data L2VPNXconnectGroupP2PData) getXPath() string {
+	path := "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/xconnect/groups/group[group-name=%s]/p2ps/p2p[p2p-xconnect-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.GroupName.ValueString()), fmt.Sprintf("%v", data.P2pXconnectName.ValueString()))
+	return path
 }
 
 // End of section. //template:end getPath
@@ -201,6 +219,124 @@ func (data L2VPNXconnectGroupP2P) toBody(ctx context.Context) string {
 }
 
 // End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data L2VPNXconnectGroupP2P) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.P2pXconnectName.IsNull() && !data.P2pXconnectName.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/p2p-xconnect-name", data.P2pXconnectName.ValueString())
+	}
+	if !data.Description.IsNull() && !data.Description.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/description", data.Description.ValueString())
+	}
+	if len(data.Interfaces) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.Interfaces {
+			cBody := netconf.Body{}
+			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "interface-name", item.InterfaceName.ValueString())
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"interfaces/interface", cBody.Res())
+		}
+	}
+	if len(data.Ipv4Neighbors) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.Ipv4Neighbors {
+			cBody := netconf.Body{}
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "address", item.Address.ValueString())
+			}
+			if !item.PwId.IsNull() && !item.PwId.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "pw-id", strconv.FormatInt(item.PwId.ValueInt64(), 10))
+			}
+			if !item.PwClass.IsNull() && !item.PwClass.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "pw-class", item.PwClass.ValueString())
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"neighbor/ipv4s/ipv4", cBody.Res())
+		}
+	}
+	if len(data.Ipv6Neighbors) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.Ipv6Neighbors {
+			cBody := netconf.Body{}
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "address", item.Address.ValueString())
+			}
+			if !item.PwId.IsNull() && !item.PwId.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "pw-id", strconv.FormatInt(item.PwId.ValueInt64(), 10))
+			}
+			if !item.PwClass.IsNull() && !item.PwClass.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "pw-class", item.PwClass.ValueString())
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"neighbor/ipv6s/ipv6", cBody.Res())
+		}
+	}
+	if len(data.EvpnTargetNeighbors) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.EvpnTargetNeighbors {
+			cBody := netconf.Body{}
+			if !item.VpnId.IsNull() && !item.VpnId.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "vpn-id", strconv.FormatInt(item.VpnId.ValueInt64(), 10))
+			}
+			if !item.RemoteAcId.IsNull() && !item.RemoteAcId.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "remote-ac-id", strconv.FormatInt(item.RemoteAcId.ValueInt64(), 10))
+			}
+			if !item.Source.IsNull() && !item.Source.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "source", strconv.FormatInt(item.Source.ValueInt64(), 10))
+			}
+			if !item.PwClass.IsNull() && !item.PwClass.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "pw-class", item.PwClass.ValueString())
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"neighbor/evpn/evi/targets/target", cBody.Res())
+		}
+	}
+	if len(data.EvpnServiceNeighbors) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.EvpnServiceNeighbors {
+			cBody := netconf.Body{}
+			if !item.VpnId.IsNull() && !item.VpnId.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "vpn-id", strconv.FormatInt(item.VpnId.ValueInt64(), 10))
+			}
+			if !item.ServiceId.IsNull() && !item.ServiceId.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "service-id", strconv.FormatInt(item.ServiceId.ValueInt64(), 10))
+			}
+			if !item.PwClass.IsNull() && !item.PwClass.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "pw-class", item.PwClass.ValueString())
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"neighbor/evpn/evi/services/service", cBody.Res())
+		}
+	}
+	if len(data.NeighborEvpnEviSegmentRoutingServices) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.NeighborEvpnEviSegmentRoutingServices {
+			cBody := netconf.Body{}
+			if !item.VpnId.IsNull() && !item.VpnId.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "vpn-id", strconv.FormatInt(item.VpnId.ValueInt64(), 10))
+			}
+			if !item.ServiceId.IsNull() && !item.ServiceId.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "service-id", strconv.FormatInt(item.ServiceId.ValueInt64(), 10))
+			}
+			if !item.SegmentRoutingSrv6Locator.IsNull() && !item.SegmentRoutingSrv6Locator.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "segment-routing/srv6/locator", item.SegmentRoutingSrv6Locator.ValueString())
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"neighbor/evpn/evi/segment-routing-services/service", cBody.Res())
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
@@ -443,13 +579,263 @@ func (data *L2VPNXconnectGroupP2P) updateFromBody(ctx context.Context, res []byt
 
 // End of section. //template:end updateFromBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *L2VPNXconnectGroupP2P) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/p2p-xconnect-name"); value.Exists() {
+		data.P2pXconnectName = types.StringValue(value.String())
+	} else if data.P2pXconnectName.IsNull() {
+		data.P2pXconnectName = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
+	} else if data.Description.IsNull() {
+		data.Description = types.StringNull()
+	}
+	for i := range data.Interfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/interface").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "interface-name"); value.Exists() {
+			data.Interfaces[i].InterfaceName = types.StringValue(value.String())
+		} else if data.Interfaces[i].InterfaceName.IsNull() {
+			data.Interfaces[i].InterfaceName = types.StringNull()
+		}
+	}
+	for i := range data.Ipv4Neighbors {
+		keys := [...]string{"address", "pw-id"}
+		keyValues := [...]string{data.Ipv4Neighbors[i].Address.ValueString(), strconv.FormatInt(data.Ipv4Neighbors[i].PwId.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbor/ipv4s/ipv4").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.Ipv4Neighbors[i].Address = types.StringValue(value.String())
+		} else if data.Ipv4Neighbors[i].Address.IsNull() {
+			data.Ipv4Neighbors[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "pw-id"); value.Exists() {
+			data.Ipv4Neighbors[i].PwId = types.Int64Value(value.Int())
+		} else if data.Ipv4Neighbors[i].PwId.IsNull() {
+			data.Ipv4Neighbors[i].PwId = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "pw-class"); value.Exists() {
+			data.Ipv4Neighbors[i].PwClass = types.StringValue(value.String())
+		} else if data.Ipv4Neighbors[i].PwClass.IsNull() {
+			data.Ipv4Neighbors[i].PwClass = types.StringNull()
+		}
+	}
+	for i := range data.Ipv6Neighbors {
+		keys := [...]string{"address", "pw-id"}
+		keyValues := [...]string{data.Ipv6Neighbors[i].Address.ValueString(), strconv.FormatInt(data.Ipv6Neighbors[i].PwId.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbor/ipv6s/ipv6").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+			data.Ipv6Neighbors[i].Address = types.StringValue(value.String())
+		} else if data.Ipv6Neighbors[i].Address.IsNull() {
+			data.Ipv6Neighbors[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "pw-id"); value.Exists() {
+			data.Ipv6Neighbors[i].PwId = types.Int64Value(value.Int())
+		} else if data.Ipv6Neighbors[i].PwId.IsNull() {
+			data.Ipv6Neighbors[i].PwId = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "pw-class"); value.Exists() {
+			data.Ipv6Neighbors[i].PwClass = types.StringValue(value.String())
+		} else if data.Ipv6Neighbors[i].PwClass.IsNull() {
+			data.Ipv6Neighbors[i].PwClass = types.StringNull()
+		}
+	}
+	for i := range data.EvpnTargetNeighbors {
+		keys := [...]string{"vpn-id", "remote-ac-id", "source"}
+		keyValues := [...]string{strconv.FormatInt(data.EvpnTargetNeighbors[i].VpnId.ValueInt64(), 10), strconv.FormatInt(data.EvpnTargetNeighbors[i].RemoteAcId.ValueInt64(), 10), strconv.FormatInt(data.EvpnTargetNeighbors[i].Source.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbor/evpn/evi/targets/target").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "vpn-id"); value.Exists() {
+			data.EvpnTargetNeighbors[i].VpnId = types.Int64Value(value.Int())
+		} else if data.EvpnTargetNeighbors[i].VpnId.IsNull() {
+			data.EvpnTargetNeighbors[i].VpnId = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "remote-ac-id"); value.Exists() {
+			data.EvpnTargetNeighbors[i].RemoteAcId = types.Int64Value(value.Int())
+		} else if data.EvpnTargetNeighbors[i].RemoteAcId.IsNull() {
+			data.EvpnTargetNeighbors[i].RemoteAcId = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "source"); value.Exists() {
+			data.EvpnTargetNeighbors[i].Source = types.Int64Value(value.Int())
+		} else if data.EvpnTargetNeighbors[i].Source.IsNull() {
+			data.EvpnTargetNeighbors[i].Source = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "pw-class"); value.Exists() {
+			data.EvpnTargetNeighbors[i].PwClass = types.StringValue(value.String())
+		} else if data.EvpnTargetNeighbors[i].PwClass.IsNull() {
+			data.EvpnTargetNeighbors[i].PwClass = types.StringNull()
+		}
+	}
+	for i := range data.EvpnServiceNeighbors {
+		keys := [...]string{"vpn-id", "service-id"}
+		keyValues := [...]string{strconv.FormatInt(data.EvpnServiceNeighbors[i].VpnId.ValueInt64(), 10), strconv.FormatInt(data.EvpnServiceNeighbors[i].ServiceId.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbor/evpn/evi/services/service").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "vpn-id"); value.Exists() {
+			data.EvpnServiceNeighbors[i].VpnId = types.Int64Value(value.Int())
+		} else if data.EvpnServiceNeighbors[i].VpnId.IsNull() {
+			data.EvpnServiceNeighbors[i].VpnId = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "service-id"); value.Exists() {
+			data.EvpnServiceNeighbors[i].ServiceId = types.Int64Value(value.Int())
+		} else if data.EvpnServiceNeighbors[i].ServiceId.IsNull() {
+			data.EvpnServiceNeighbors[i].ServiceId = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "pw-class"); value.Exists() {
+			data.EvpnServiceNeighbors[i].PwClass = types.StringValue(value.String())
+		} else if data.EvpnServiceNeighbors[i].PwClass.IsNull() {
+			data.EvpnServiceNeighbors[i].PwClass = types.StringNull()
+		}
+	}
+	for i := range data.NeighborEvpnEviSegmentRoutingServices {
+		keys := [...]string{"vpn-id", "service-id"}
+		keyValues := [...]string{strconv.FormatInt(data.NeighborEvpnEviSegmentRoutingServices[i].VpnId.ValueInt64(), 10), strconv.FormatInt(data.NeighborEvpnEviSegmentRoutingServices[i].ServiceId.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbor/evpn/evi/segment-routing-services/service").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "vpn-id"); value.Exists() {
+			data.NeighborEvpnEviSegmentRoutingServices[i].VpnId = types.Int64Value(value.Int())
+		} else if data.NeighborEvpnEviSegmentRoutingServices[i].VpnId.IsNull() {
+			data.NeighborEvpnEviSegmentRoutingServices[i].VpnId = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "service-id"); value.Exists() {
+			data.NeighborEvpnEviSegmentRoutingServices[i].ServiceId = types.Int64Value(value.Int())
+		} else if data.NeighborEvpnEviSegmentRoutingServices[i].ServiceId.IsNull() {
+			data.NeighborEvpnEviSegmentRoutingServices[i].ServiceId = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "segment-routing/srv6/locator"); value.Exists() {
+			data.NeighborEvpnEviSegmentRoutingServices[i].SegmentRoutingSrv6Locator = types.StringValue(value.String())
+		} else if data.NeighborEvpnEviSegmentRoutingServices[i].SegmentRoutingSrv6Locator.IsNull() {
+			data.NeighborEvpnEviSegmentRoutingServices[i].SegmentRoutingSrv6Locator = types.StringNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *L2VPNXconnectGroupP2P) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "description"); value.Exists() {
+func (data *L2VPNXconnectGroupP2P) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix + "interfaces.interface"); value.Exists() {
 		data.Interfaces = make([]L2VPNXconnectGroupP2PInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNXconnectGroupP2PInterfaces{}
@@ -460,7 +846,7 @@ func (data *L2VPNXconnectGroupP2P) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "neighbor.ipv4s.ipv4"); value.Exists() {
+	if value := res.Get(prefix + "neighbor.ipv4s.ipv4"); value.Exists() {
 		data.Ipv4Neighbors = make([]L2VPNXconnectGroupP2PIpv4Neighbors, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNXconnectGroupP2PIpv4Neighbors{}
@@ -477,7 +863,7 @@ func (data *L2VPNXconnectGroupP2P) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "neighbor.ipv6s.ipv6"); value.Exists() {
+	if value := res.Get(prefix + "neighbor.ipv6s.ipv6"); value.Exists() {
 		data.Ipv6Neighbors = make([]L2VPNXconnectGroupP2PIpv6Neighbors, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNXconnectGroupP2PIpv6Neighbors{}
@@ -494,7 +880,7 @@ func (data *L2VPNXconnectGroupP2P) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "neighbor.evpn.evi.targets.target"); value.Exists() {
+	if value := res.Get(prefix + "neighbor.evpn.evi.targets.target"); value.Exists() {
 		data.EvpnTargetNeighbors = make([]L2VPNXconnectGroupP2PEvpnTargetNeighbors, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNXconnectGroupP2PEvpnTargetNeighbors{}
@@ -514,7 +900,7 @@ func (data *L2VPNXconnectGroupP2P) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "neighbor.evpn.evi.services.service"); value.Exists() {
+	if value := res.Get(prefix + "neighbor.evpn.evi.services.service"); value.Exists() {
 		data.EvpnServiceNeighbors = make([]L2VPNXconnectGroupP2PEvpnServiceNeighbors, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNXconnectGroupP2PEvpnServiceNeighbors{}
@@ -531,7 +917,7 @@ func (data *L2VPNXconnectGroupP2P) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "neighbor.evpn.evi.segment-routing-services.service"); value.Exists() {
+	if value := res.Get(prefix + "neighbor.evpn.evi.segment-routing-services.service"); value.Exists() {
 		data.NeighborEvpnEviSegmentRoutingServices = make([]L2VPNXconnectGroupP2PNeighborEvpnEviSegmentRoutingServices, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNXconnectGroupP2PNeighborEvpnEviSegmentRoutingServices{}
@@ -554,11 +940,15 @@ func (data *L2VPNXconnectGroupP2P) fromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *L2VPNXconnectGroupP2PData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "description"); value.Exists() {
+func (data *L2VPNXconnectGroupP2PData) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix + "interfaces.interface"); value.Exists() {
 		data.Interfaces = make([]L2VPNXconnectGroupP2PInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNXconnectGroupP2PInterfaces{}
@@ -569,7 +959,7 @@ func (data *L2VPNXconnectGroupP2PData) fromBody(ctx context.Context, res []byte)
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "neighbor.ipv4s.ipv4"); value.Exists() {
+	if value := res.Get(prefix + "neighbor.ipv4s.ipv4"); value.Exists() {
 		data.Ipv4Neighbors = make([]L2VPNXconnectGroupP2PIpv4Neighbors, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNXconnectGroupP2PIpv4Neighbors{}
@@ -586,7 +976,7 @@ func (data *L2VPNXconnectGroupP2PData) fromBody(ctx context.Context, res []byte)
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "neighbor.ipv6s.ipv6"); value.Exists() {
+	if value := res.Get(prefix + "neighbor.ipv6s.ipv6"); value.Exists() {
 		data.Ipv6Neighbors = make([]L2VPNXconnectGroupP2PIpv6Neighbors, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNXconnectGroupP2PIpv6Neighbors{}
@@ -603,7 +993,7 @@ func (data *L2VPNXconnectGroupP2PData) fromBody(ctx context.Context, res []byte)
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "neighbor.evpn.evi.targets.target"); value.Exists() {
+	if value := res.Get(prefix + "neighbor.evpn.evi.targets.target"); value.Exists() {
 		data.EvpnTargetNeighbors = make([]L2VPNXconnectGroupP2PEvpnTargetNeighbors, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNXconnectGroupP2PEvpnTargetNeighbors{}
@@ -623,7 +1013,7 @@ func (data *L2VPNXconnectGroupP2PData) fromBody(ctx context.Context, res []byte)
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "neighbor.evpn.evi.services.service"); value.Exists() {
+	if value := res.Get(prefix + "neighbor.evpn.evi.services.service"); value.Exists() {
 		data.EvpnServiceNeighbors = make([]L2VPNXconnectGroupP2PEvpnServiceNeighbors, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNXconnectGroupP2PEvpnServiceNeighbors{}
@@ -640,7 +1030,7 @@ func (data *L2VPNXconnectGroupP2PData) fromBody(ctx context.Context, res []byte)
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "neighbor.evpn.evi.segment-routing-services.service"); value.Exists() {
+	if value := res.Get(prefix + "neighbor.evpn.evi.segment-routing-services.service"); value.Exists() {
 		data.NeighborEvpnEviSegmentRoutingServices = make([]L2VPNXconnectGroupP2PNeighborEvpnEviSegmentRoutingServices, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNXconnectGroupP2PNeighborEvpnEviSegmentRoutingServices{}
@@ -660,6 +1050,224 @@ func (data *L2VPNXconnectGroupP2PData) fromBody(ctx context.Context, res []byte)
 }
 
 // End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *L2VPNXconnectGroupP2P) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/interface"); value.Exists() {
+		data.Interfaces = make([]L2VPNXconnectGroupP2PInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNXconnectGroupP2PInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			data.Interfaces = append(data.Interfaces, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbor/ipv4s/ipv4"); value.Exists() {
+		data.Ipv4Neighbors = make([]L2VPNXconnectGroupP2PIpv4Neighbors, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNXconnectGroupP2PIpv4Neighbors{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "pw-id"); cValue.Exists() {
+				item.PwId = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "pw-class"); cValue.Exists() {
+				item.PwClass = types.StringValue(cValue.String())
+			}
+			data.Ipv4Neighbors = append(data.Ipv4Neighbors, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbor/ipv6s/ipv6"); value.Exists() {
+		data.Ipv6Neighbors = make([]L2VPNXconnectGroupP2PIpv6Neighbors, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNXconnectGroupP2PIpv6Neighbors{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "pw-id"); cValue.Exists() {
+				item.PwId = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "pw-class"); cValue.Exists() {
+				item.PwClass = types.StringValue(cValue.String())
+			}
+			data.Ipv6Neighbors = append(data.Ipv6Neighbors, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbor/evpn/evi/targets/target"); value.Exists() {
+		data.EvpnTargetNeighbors = make([]L2VPNXconnectGroupP2PEvpnTargetNeighbors, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNXconnectGroupP2PEvpnTargetNeighbors{}
+			if cValue := helpers.GetFromXPath(v, "vpn-id"); cValue.Exists() {
+				item.VpnId = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "remote-ac-id"); cValue.Exists() {
+				item.RemoteAcId = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "source"); cValue.Exists() {
+				item.Source = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "pw-class"); cValue.Exists() {
+				item.PwClass = types.StringValue(cValue.String())
+			}
+			data.EvpnTargetNeighbors = append(data.EvpnTargetNeighbors, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbor/evpn/evi/services/service"); value.Exists() {
+		data.EvpnServiceNeighbors = make([]L2VPNXconnectGroupP2PEvpnServiceNeighbors, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNXconnectGroupP2PEvpnServiceNeighbors{}
+			if cValue := helpers.GetFromXPath(v, "vpn-id"); cValue.Exists() {
+				item.VpnId = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "service-id"); cValue.Exists() {
+				item.ServiceId = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "pw-class"); cValue.Exists() {
+				item.PwClass = types.StringValue(cValue.String())
+			}
+			data.EvpnServiceNeighbors = append(data.EvpnServiceNeighbors, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbor/evpn/evi/segment-routing-services/service"); value.Exists() {
+		data.NeighborEvpnEviSegmentRoutingServices = make([]L2VPNXconnectGroupP2PNeighborEvpnEviSegmentRoutingServices, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNXconnectGroupP2PNeighborEvpnEviSegmentRoutingServices{}
+			if cValue := helpers.GetFromXPath(v, "vpn-id"); cValue.Exists() {
+				item.VpnId = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "service-id"); cValue.Exists() {
+				item.ServiceId = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "segment-routing/srv6/locator"); cValue.Exists() {
+				item.SegmentRoutingSrv6Locator = types.StringValue(cValue.String())
+			}
+			data.NeighborEvpnEviSegmentRoutingServices = append(data.NeighborEvpnEviSegmentRoutingServices, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *L2VPNXconnectGroupP2PData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/interface"); value.Exists() {
+		data.Interfaces = make([]L2VPNXconnectGroupP2PInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNXconnectGroupP2PInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			data.Interfaces = append(data.Interfaces, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbor/ipv4s/ipv4"); value.Exists() {
+		data.Ipv4Neighbors = make([]L2VPNXconnectGroupP2PIpv4Neighbors, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNXconnectGroupP2PIpv4Neighbors{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "pw-id"); cValue.Exists() {
+				item.PwId = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "pw-class"); cValue.Exists() {
+				item.PwClass = types.StringValue(cValue.String())
+			}
+			data.Ipv4Neighbors = append(data.Ipv4Neighbors, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbor/ipv6s/ipv6"); value.Exists() {
+		data.Ipv6Neighbors = make([]L2VPNXconnectGroupP2PIpv6Neighbors, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNXconnectGroupP2PIpv6Neighbors{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "pw-id"); cValue.Exists() {
+				item.PwId = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "pw-class"); cValue.Exists() {
+				item.PwClass = types.StringValue(cValue.String())
+			}
+			data.Ipv6Neighbors = append(data.Ipv6Neighbors, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbor/evpn/evi/targets/target"); value.Exists() {
+		data.EvpnTargetNeighbors = make([]L2VPNXconnectGroupP2PEvpnTargetNeighbors, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNXconnectGroupP2PEvpnTargetNeighbors{}
+			if cValue := helpers.GetFromXPath(v, "vpn-id"); cValue.Exists() {
+				item.VpnId = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "remote-ac-id"); cValue.Exists() {
+				item.RemoteAcId = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "source"); cValue.Exists() {
+				item.Source = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "pw-class"); cValue.Exists() {
+				item.PwClass = types.StringValue(cValue.String())
+			}
+			data.EvpnTargetNeighbors = append(data.EvpnTargetNeighbors, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbor/evpn/evi/services/service"); value.Exists() {
+		data.EvpnServiceNeighbors = make([]L2VPNXconnectGroupP2PEvpnServiceNeighbors, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNXconnectGroupP2PEvpnServiceNeighbors{}
+			if cValue := helpers.GetFromXPath(v, "vpn-id"); cValue.Exists() {
+				item.VpnId = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "service-id"); cValue.Exists() {
+				item.ServiceId = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "pw-class"); cValue.Exists() {
+				item.PwClass = types.StringValue(cValue.String())
+			}
+			data.EvpnServiceNeighbors = append(data.EvpnServiceNeighbors, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbor/evpn/evi/segment-routing-services/service"); value.Exists() {
+		data.NeighborEvpnEviSegmentRoutingServices = make([]L2VPNXconnectGroupP2PNeighborEvpnEviSegmentRoutingServices, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNXconnectGroupP2PNeighborEvpnEviSegmentRoutingServices{}
+			if cValue := helpers.GetFromXPath(v, "vpn-id"); cValue.Exists() {
+				item.VpnId = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "service-id"); cValue.Exists() {
+				item.ServiceId = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "segment-routing/srv6/locator"); cValue.Exists() {
+				item.SegmentRoutingSrv6Locator = types.StringValue(cValue.String())
+			}
+			data.NeighborEvpnEviSegmentRoutingServices = append(data.NeighborEvpnEviSegmentRoutingServices, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
@@ -906,7 +1514,7 @@ func (data *L2VPNXconnectGroupP2P) getDeletedItems(ctx context.Context, state L2
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *L2VPNXconnectGroupP2P) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *L2VPNXconnectGroupP2P) getEmptyLeafsDelete(ctx context.Context, state *L2VPNXconnectGroupP2P) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.NeighborEvpnEviSegmentRoutingServices {
 		keys := [...]string{"vpn-id", "service-id"}
@@ -966,69 +1574,366 @@ func (data *L2VPNXconnectGroupP2P) getEmptyLeafsDelete(ctx context.Context) []st
 func (data *L2VPNXconnectGroupP2P) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.NeighborEvpnEviSegmentRoutingServices {
-		keys := [...]string{"vpn-id", "service-id"}
 		keyValues := [...]string{strconv.FormatInt(data.NeighborEvpnEviSegmentRoutingServices[i].VpnId.ValueInt64(), 10), strconv.FormatInt(data.NeighborEvpnEviSegmentRoutingServices[i].ServiceId.ValueInt64(), 10)}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbor/evpn/evi/segment-routing-services/service%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbor/evpn/evi/segment-routing-services/service=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.EvpnServiceNeighbors {
-		keys := [...]string{"vpn-id", "service-id"}
 		keyValues := [...]string{strconv.FormatInt(data.EvpnServiceNeighbors[i].VpnId.ValueInt64(), 10), strconv.FormatInt(data.EvpnServiceNeighbors[i].ServiceId.ValueInt64(), 10)}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbor/evpn/evi/services/service%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbor/evpn/evi/services/service=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.EvpnTargetNeighbors {
-		keys := [...]string{"vpn-id", "remote-ac-id", "source"}
 		keyValues := [...]string{strconv.FormatInt(data.EvpnTargetNeighbors[i].VpnId.ValueInt64(), 10), strconv.FormatInt(data.EvpnTargetNeighbors[i].RemoteAcId.ValueInt64(), 10), strconv.FormatInt(data.EvpnTargetNeighbors[i].Source.ValueInt64(), 10)}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbor/evpn/evi/targets/target%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbor/evpn/evi/targets/target=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.Ipv6Neighbors {
-		keys := [...]string{"address", "pw-id"}
 		keyValues := [...]string{data.Ipv6Neighbors[i].Address.ValueString(), strconv.FormatInt(data.Ipv6Neighbors[i].PwId.ValueInt64(), 10)}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbor/ipv6s/ipv6%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbor/ipv6s/ipv6=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.Ipv4Neighbors {
-		keys := [...]string{"address", "pw-id"}
 		keyValues := [...]string{data.Ipv4Neighbors[i].Address.ValueString(), strconv.FormatInt(data.Ipv4Neighbors[i].PwId.ValueInt64(), 10)}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbor/ipv4s/ipv4%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbor/ipv4s/ipv4=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.Interfaces {
-		keys := [...]string{"interface-name"}
 		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/interface%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	if !data.Description.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/description", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *L2VPNXconnectGroupP2P) addDeletedItemsXML(ctx context.Context, state L2VPNXconnectGroupP2P, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.NeighborEvpnEviSegmentRoutingServices {
+		stateKeys := [...]string{"vpn-id", "service-id"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.NeighborEvpnEviSegmentRoutingServices[i].VpnId.ValueInt64(), 10), strconv.FormatInt(state.NeighborEvpnEviSegmentRoutingServices[i].ServiceId.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.NeighborEvpnEviSegmentRoutingServices[i].VpnId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.NeighborEvpnEviSegmentRoutingServices[i].ServiceId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.NeighborEvpnEviSegmentRoutingServices {
+			found = true
+			if state.NeighborEvpnEviSegmentRoutingServices[i].VpnId.ValueInt64() != data.NeighborEvpnEviSegmentRoutingServices[j].VpnId.ValueInt64() {
+				found = false
+			}
+			if state.NeighborEvpnEviSegmentRoutingServices[i].ServiceId.ValueInt64() != data.NeighborEvpnEviSegmentRoutingServices[j].ServiceId.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.NeighborEvpnEviSegmentRoutingServices[i].SegmentRoutingSrv6Locator.IsNull() && data.NeighborEvpnEviSegmentRoutingServices[j].SegmentRoutingSrv6Locator.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbor/evpn/evi/segment-routing-services/service%v/segment-routing/srv6/locator", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbor/evpn/evi/segment-routing-services/service%v", predicates))
+		}
+	}
+	for i := range state.EvpnServiceNeighbors {
+		stateKeys := [...]string{"vpn-id", "service-id"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.EvpnServiceNeighbors[i].VpnId.ValueInt64(), 10), strconv.FormatInt(state.EvpnServiceNeighbors[i].ServiceId.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.EvpnServiceNeighbors[i].VpnId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.EvpnServiceNeighbors[i].ServiceId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.EvpnServiceNeighbors {
+			found = true
+			if state.EvpnServiceNeighbors[i].VpnId.ValueInt64() != data.EvpnServiceNeighbors[j].VpnId.ValueInt64() {
+				found = false
+			}
+			if state.EvpnServiceNeighbors[i].ServiceId.ValueInt64() != data.EvpnServiceNeighbors[j].ServiceId.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.EvpnServiceNeighbors[i].PwClass.IsNull() && data.EvpnServiceNeighbors[j].PwClass.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbor/evpn/evi/services/service%v/pw-class", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbor/evpn/evi/services/service%v", predicates))
+		}
+	}
+	for i := range state.EvpnTargetNeighbors {
+		stateKeys := [...]string{"vpn-id", "remote-ac-id", "source"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.EvpnTargetNeighbors[i].VpnId.ValueInt64(), 10), strconv.FormatInt(state.EvpnTargetNeighbors[i].RemoteAcId.ValueInt64(), 10), strconv.FormatInt(state.EvpnTargetNeighbors[i].Source.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.EvpnTargetNeighbors[i].VpnId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.EvpnTargetNeighbors[i].RemoteAcId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.EvpnTargetNeighbors[i].Source.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.EvpnTargetNeighbors {
+			found = true
+			if state.EvpnTargetNeighbors[i].VpnId.ValueInt64() != data.EvpnTargetNeighbors[j].VpnId.ValueInt64() {
+				found = false
+			}
+			if state.EvpnTargetNeighbors[i].RemoteAcId.ValueInt64() != data.EvpnTargetNeighbors[j].RemoteAcId.ValueInt64() {
+				found = false
+			}
+			if state.EvpnTargetNeighbors[i].Source.ValueInt64() != data.EvpnTargetNeighbors[j].Source.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.EvpnTargetNeighbors[i].PwClass.IsNull() && data.EvpnTargetNeighbors[j].PwClass.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbor/evpn/evi/targets/target%v/pw-class", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbor/evpn/evi/targets/target%v", predicates))
+		}
+	}
+	for i := range state.Ipv6Neighbors {
+		stateKeys := [...]string{"address", "pw-id"}
+		stateKeyValues := [...]string{state.Ipv6Neighbors[i].Address.ValueString(), strconv.FormatInt(state.Ipv6Neighbors[i].PwId.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Ipv6Neighbors[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Ipv6Neighbors[i].PwId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Ipv6Neighbors {
+			found = true
+			if state.Ipv6Neighbors[i].Address.ValueString() != data.Ipv6Neighbors[j].Address.ValueString() {
+				found = false
+			}
+			if state.Ipv6Neighbors[i].PwId.ValueInt64() != data.Ipv6Neighbors[j].PwId.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.Ipv6Neighbors[i].PwClass.IsNull() && data.Ipv6Neighbors[j].PwClass.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbor/ipv6s/ipv6%v/pw-class", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbor/ipv6s/ipv6%v", predicates))
+		}
+	}
+	for i := range state.Ipv4Neighbors {
+		stateKeys := [...]string{"address", "pw-id"}
+		stateKeyValues := [...]string{state.Ipv4Neighbors[i].Address.ValueString(), strconv.FormatInt(state.Ipv4Neighbors[i].PwId.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Ipv4Neighbors[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Ipv4Neighbors[i].PwId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Ipv4Neighbors {
+			found = true
+			if state.Ipv4Neighbors[i].Address.ValueString() != data.Ipv4Neighbors[j].Address.ValueString() {
+				found = false
+			}
+			if state.Ipv4Neighbors[i].PwId.ValueInt64() != data.Ipv4Neighbors[j].PwId.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.Ipv4Neighbors[i].PwClass.IsNull() && data.Ipv4Neighbors[j].PwClass.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbor/ipv4s/ipv4%v/pw-class", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/neighbor/ipv4s/ipv4%v", predicates))
+		}
+	}
+	for i := range state.Interfaces {
+		stateKeys := [...]string{"interface-name"}
+		stateKeyValues := [...]string{state.Interfaces[i].InterfaceName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Interfaces[i].InterfaceName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Interfaces {
+			found = true
+			if state.Interfaces[i].InterfaceName.ValueString() != data.Interfaces[j].InterfaceName.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v", predicates))
+		}
+	}
+	if !state.Description.IsNull() && data.Description.IsNull() {
+		deletePath := state.getXPath() + "/description"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *L2VPNXconnectGroupP2P) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	for i := range data.NeighborEvpnEviSegmentRoutingServices {
+		keys := [...]string{"vpn-id", "service-id"}
+		keyValues := [...]string{strconv.FormatInt(data.NeighborEvpnEviSegmentRoutingServices[i].VpnId.ValueInt64(), 10), strconv.FormatInt(data.NeighborEvpnEviSegmentRoutingServices[i].ServiceId.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/neighbor/evpn/evi/segment-routing-services/service%v", predicates))
+	}
+	for i := range data.EvpnServiceNeighbors {
+		keys := [...]string{"vpn-id", "service-id"}
+		keyValues := [...]string{strconv.FormatInt(data.EvpnServiceNeighbors[i].VpnId.ValueInt64(), 10), strconv.FormatInt(data.EvpnServiceNeighbors[i].ServiceId.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/neighbor/evpn/evi/services/service%v", predicates))
+	}
+	for i := range data.EvpnTargetNeighbors {
+		keys := [...]string{"vpn-id", "remote-ac-id", "source"}
+		keyValues := [...]string{strconv.FormatInt(data.EvpnTargetNeighbors[i].VpnId.ValueInt64(), 10), strconv.FormatInt(data.EvpnTargetNeighbors[i].RemoteAcId.ValueInt64(), 10), strconv.FormatInt(data.EvpnTargetNeighbors[i].Source.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/neighbor/evpn/evi/targets/target%v", predicates))
+	}
+	for i := range data.Ipv6Neighbors {
+		keys := [...]string{"address", "pw-id"}
+		keyValues := [...]string{data.Ipv6Neighbors[i].Address.ValueString(), strconv.FormatInt(data.Ipv6Neighbors[i].PwId.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/neighbor/ipv6s/ipv6%v", predicates))
+	}
+	for i := range data.Ipv4Neighbors {
+		keys := [...]string{"address", "pw-id"}
+		keyValues := [...]string{data.Ipv4Neighbors[i].Address.ValueString(), strconv.FormatInt(data.Ipv4Neighbors[i].PwId.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/neighbor/ipv4s/ipv4%v", predicates))
+	}
+	for i := range data.Interfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/interfaces/interface%v", predicates))
+	}
+	if !data.Description.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/description")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

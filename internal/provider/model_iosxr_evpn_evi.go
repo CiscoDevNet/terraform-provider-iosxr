@@ -25,8 +25,13 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
+	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -127,6 +132,19 @@ func (data EVPNEVI) getPath() string {
 
 func (data EVPNEVIData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/evpn/evis/evi[vpn-id=%v]", data.VpnId.ValueInt64())
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data EVPNEVI) getXPath() string {
+	path := "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/evis/evi[vpn-id=%v]"
+	path = fmt.Sprintf(path, data.VpnId.ValueInt64())
+	return path
+}
+
+func (data EVPNEVIData) getXPath() string {
+	path := "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/evis/evi[vpn-id=%v]"
+	path = fmt.Sprintf(path, data.VpnId.ValueInt64())
+	return path
 }
 
 // End of section. //template:end getPath
@@ -276,6 +294,173 @@ func (data EVPNEVI) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data EVPNEVI) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.VpnId.IsNull() && !data.VpnId.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/vpn-id", strconv.FormatInt(data.VpnId.ValueInt64(), 10))
+	}
+	if !data.Description.IsNull() && !data.Description.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/description", data.Description.ValueString())
+	}
+	if !data.LoadBalancing.IsNull() && !data.LoadBalancing.IsUnknown() {
+		if data.LoadBalancing.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/load-balancing", "")
+		}
+	}
+	if !data.LoadBalancingFlowLabelStatic.IsNull() && !data.LoadBalancingFlowLabelStatic.IsUnknown() {
+		if data.LoadBalancingFlowLabelStatic.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/load-balancing/flow-label/static", "")
+		}
+	}
+	if !data.BgpRdTwoByteAsNumber.IsNull() && !data.BgpRdTwoByteAsNumber.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/rd/two-byte-as-number", strconv.FormatInt(data.BgpRdTwoByteAsNumber.ValueInt64(), 10))
+	}
+	if !data.BgpRdTwoByteAsAssignedNumber.IsNull() && !data.BgpRdTwoByteAsAssignedNumber.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/rd/two-byte-as-assigned-number", strconv.FormatInt(data.BgpRdTwoByteAsAssignedNumber.ValueInt64(), 10))
+	}
+	if !data.BgpRdFourByteAsNumber.IsNull() && !data.BgpRdFourByteAsNumber.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/rd/four-byte-as-number", strconv.FormatInt(data.BgpRdFourByteAsNumber.ValueInt64(), 10))
+	}
+	if !data.BgpRdFourByteAsAssignedNumber.IsNull() && !data.BgpRdFourByteAsAssignedNumber.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/rd/four-byte-as-assigned-number", strconv.FormatInt(data.BgpRdFourByteAsAssignedNumber.ValueInt64(), 10))
+	}
+	if !data.BgpRdIpv4Address.IsNull() && !data.BgpRdIpv4Address.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/rd/ipv4-address", data.BgpRdIpv4Address.ValueString())
+	}
+	if !data.BgpRdIpv4AddressAssignedNumber.IsNull() && !data.BgpRdIpv4AddressAssignedNumber.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/rd/ipv4-address-assigned-number", strconv.FormatInt(data.BgpRdIpv4AddressAssignedNumber.ValueInt64(), 10))
+	}
+	if len(data.BgpRouteTargetImportTwoByteAsFormat) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.BgpRouteTargetImportTwoByteAsFormat {
+			cBody := netconf.Body{}
+			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "two-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
+			}
+			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bgp/route-target/import/two-byte-as-rts/two-byte-as-rt", cBody.Res())
+		}
+	}
+	if len(data.BgpRouteTargetImportFourByteAsFormat) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.BgpRouteTargetImportFourByteAsFormat {
+			cBody := netconf.Body{}
+			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "four-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
+			}
+			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bgp/route-target/import/four-byte-as-rts/four-byte-as-rt", cBody.Res())
+		}
+	}
+	if len(data.BgpRouteTargetImportIpv4AddressFormat) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.BgpRouteTargetImportIpv4AddressFormat {
+			cBody := netconf.Body{}
+			if !item.Ipv4Address.IsNull() && !item.Ipv4Address.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "ipv4-address", item.Ipv4Address.ValueString())
+			}
+			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bgp/route-target/import/ipv4-address-rts/ipv4-address-rt", cBody.Res())
+		}
+	}
+	if len(data.BgpRouteTargetExportTwoByteAsFormat) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.BgpRouteTargetExportTwoByteAsFormat {
+			cBody := netconf.Body{}
+			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "two-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
+			}
+			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bgp/route-target/export/two-byte-as-rts/two-byte-as-rt", cBody.Res())
+		}
+	}
+	if len(data.BgpRouteTargetExportFourByteAsFormat) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.BgpRouteTargetExportFourByteAsFormat {
+			cBody := netconf.Body{}
+			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "four-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
+			}
+			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bgp/route-target/export/four-byte-as-rts/four-byte-as-rt", cBody.Res())
+		}
+	}
+	if len(data.BgpRouteTargetExportIpv4AddressFormat) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.BgpRouteTargetExportIpv4AddressFormat {
+			cBody := netconf.Body{}
+			if !item.Ipv4Address.IsNull() && !item.Ipv4Address.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "ipv4-address", item.Ipv4Address.ValueString())
+			}
+			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bgp/route-target/export/ipv4-address-rts/ipv4-address-rt", cBody.Res())
+		}
+	}
+	if !data.BgpRoutePolicyImport.IsNull() && !data.BgpRoutePolicyImport.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/route-policy/import", data.BgpRoutePolicyImport.ValueString())
+	}
+	if !data.BgpRoutePolicyExport.IsNull() && !data.BgpRoutePolicyExport.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/route-policy/export", data.BgpRoutePolicyExport.ValueString())
+	}
+	if !data.AdvertiseMac.IsNull() && !data.AdvertiseMac.IsUnknown() {
+		if data.AdvertiseMac.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/advertise-mac", "")
+		}
+	}
+	if !data.UnknownUnicastSuppression.IsNull() && !data.UnknownUnicastSuppression.IsUnknown() {
+		if data.UnknownUnicastSuppression.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/unknown-unicast-suppression", "")
+		}
+	}
+	if !data.ControlWordDisable.IsNull() && !data.ControlWordDisable.IsUnknown() {
+		if data.ControlWordDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/control-word-disable", "")
+		}
+	}
+	if !data.Etree.IsNull() && !data.Etree.IsUnknown() {
+		if data.Etree.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/etree", "")
+		}
+	}
+	if !data.EtreeLeaf.IsNull() && !data.EtreeLeaf.IsUnknown() {
+		if data.EtreeLeaf.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/etree/leaf", "")
+		}
+	}
+	if !data.EtreeRtLeaf.IsNull() && !data.EtreeRtLeaf.IsUnknown() {
+		if data.EtreeRtLeaf.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/etree/rt-leaf", "")
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *EVPNEVI) updateFromBody(ctx context.Context, res []byte) {
@@ -284,24 +469,20 @@ func (data *EVPNEVI) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Description = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "load-balancing"); !data.LoadBalancing.IsNull() {
-		if value.Exists() {
-			data.LoadBalancing = types.BoolValue(true)
-		} else {
-			data.LoadBalancing = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "load-balancing"); value.Exists() {
+		data.LoadBalancing = types.BoolValue(true)
+	} else if data.LoadBalancing.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.LoadBalancing = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "load-balancing.flow-label.static"); !data.LoadBalancingFlowLabelStatic.IsNull() {
-		if value.Exists() {
-			data.LoadBalancingFlowLabelStatic = types.BoolValue(true)
-		} else {
-			data.LoadBalancingFlowLabelStatic = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "load-balancing.flow-label.static"); value.Exists() {
+		data.LoadBalancingFlowLabelStatic = types.BoolValue(true)
+	} else if data.LoadBalancingFlowLabelStatic.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.LoadBalancingFlowLabelStatic = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 	if value := gjson.GetBytes(res, "bgp.rd.two-byte-as-number"); value.Exists() && !data.BgpRdTwoByteAsNumber.IsNull() {
 		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
 	} else {
@@ -546,99 +727,420 @@ func (data *EVPNEVI) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.BgpRoutePolicyExport = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "advertise-mac"); !data.AdvertiseMac.IsNull() {
-		if value.Exists() {
-			data.AdvertiseMac = types.BoolValue(true)
-		} else {
-			data.AdvertiseMac = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "advertise-mac"); value.Exists() {
+		data.AdvertiseMac = types.BoolValue(true)
+	} else if data.AdvertiseMac.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.AdvertiseMac = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "unknown-unicast-suppression"); !data.UnknownUnicastSuppression.IsNull() {
-		if value.Exists() {
-			data.UnknownUnicastSuppression = types.BoolValue(true)
-		} else {
-			data.UnknownUnicastSuppression = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "unknown-unicast-suppression"); value.Exists() {
+		data.UnknownUnicastSuppression = types.BoolValue(true)
+	} else if data.UnknownUnicastSuppression.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.UnknownUnicastSuppression = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "control-word-disable"); !data.ControlWordDisable.IsNull() {
-		if value.Exists() {
-			data.ControlWordDisable = types.BoolValue(true)
-		} else {
-			data.ControlWordDisable = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "control-word-disable"); value.Exists() {
+		data.ControlWordDisable = types.BoolValue(true)
+	} else if data.ControlWordDisable.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.ControlWordDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "etree"); !data.Etree.IsNull() {
-		if value.Exists() {
-			data.Etree = types.BoolValue(true)
-		} else {
-			data.Etree = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "etree"); value.Exists() {
+		data.Etree = types.BoolValue(true)
+	} else if data.Etree.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.Etree = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "etree.leaf"); !data.EtreeLeaf.IsNull() {
-		if value.Exists() {
-			data.EtreeLeaf = types.BoolValue(true)
-		} else {
-			data.EtreeLeaf = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "etree.leaf"); value.Exists() {
+		data.EtreeLeaf = types.BoolValue(true)
+	} else if data.EtreeLeaf.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.EtreeLeaf = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "etree.rt-leaf"); !data.EtreeRtLeaf.IsNull() {
-		if value.Exists() {
-			data.EtreeRtLeaf = types.BoolValue(true)
-		} else {
-			data.EtreeRtLeaf = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "etree.rt-leaf"); value.Exists() {
+		data.EtreeRtLeaf = types.BoolValue(true)
+	} else if data.EtreeRtLeaf.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.EtreeRtLeaf = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 }
 
 // End of section. //template:end updateFromBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
-func (data *EVPNEVI) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "description"); value.Exists() {
-		data.Description = types.StringValue(value.String())
+func (data *EVPNEVI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/vpn-id"); value.Exists() {
+		data.VpnId = types.Int64Value(value.Int())
+	} else if data.VpnId.IsNull() {
+		data.VpnId = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "load-balancing"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
+	} else if data.Description.IsNull() {
+		data.Description = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/load-balancing"); value.Exists() {
 		data.LoadBalancing = types.BoolValue(true)
 	} else {
-		data.LoadBalancing = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.LoadBalancing.IsNull() {
+			data.LoadBalancing = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "load-balancing.flow-label.static"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/load-balancing/flow-label/static"); value.Exists() {
 		data.LoadBalancingFlowLabelStatic = types.BoolValue(true)
 	} else {
-		data.LoadBalancingFlowLabelStatic = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.LoadBalancingFlowLabelStatic.IsNull() {
+			data.LoadBalancingFlowLabelStatic = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bgp.rd.two-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-number"); value.Exists() {
+		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
+	} else if data.BgpRdTwoByteAsNumber.IsNull() {
+		data.BgpRdTwoByteAsNumber = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
+		data.BgpRdTwoByteAsAssignedNumber = types.Int64Value(value.Int())
+	} else if data.BgpRdTwoByteAsAssignedNumber.IsNull() {
+		data.BgpRdTwoByteAsAssignedNumber = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-number"); value.Exists() {
+		data.BgpRdFourByteAsNumber = types.Int64Value(value.Int())
+	} else if data.BgpRdFourByteAsNumber.IsNull() {
+		data.BgpRdFourByteAsNumber = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
+		data.BgpRdFourByteAsAssignedNumber = types.Int64Value(value.Int())
+	} else if data.BgpRdFourByteAsAssignedNumber.IsNull() {
+		data.BgpRdFourByteAsAssignedNumber = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address"); value.Exists() {
+		data.BgpRdIpv4Address = types.StringValue(value.String())
+	} else if data.BgpRdIpv4Address.IsNull() {
+		data.BgpRdIpv4Address = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
+		data.BgpRdIpv4AddressAssignedNumber = types.Int64Value(value.Int())
+	} else if data.BgpRdIpv4AddressAssignedNumber.IsNull() {
+		data.BgpRdIpv4AddressAssignedNumber = types.Int64Null()
+	}
+	for i := range data.BgpRouteTargetImportTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "assigned-number"}
+		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "two-byte-as-number"); value.Exists() {
+			data.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber = types.Int64Value(value.Int())
+		} else if data.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.IsNull() {
+			data.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "assigned-number"); value.Exists() {
+			data.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber = types.Int64Value(value.Int())
+		} else if data.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.IsNull() {
+			data.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber = types.Int64Null()
+		}
+	}
+	for i := range data.BgpRouteTargetImportFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "assigned-number"}
+		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "four-byte-as-number"); value.Exists() {
+			data.BgpRouteTargetImportFourByteAsFormat[i].AsNumber = types.Int64Value(value.Int())
+		} else if data.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.IsNull() {
+			data.BgpRouteTargetImportFourByteAsFormat[i].AsNumber = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "assigned-number"); value.Exists() {
+			data.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber = types.Int64Value(value.Int())
+		} else if data.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.IsNull() {
+			data.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber = types.Int64Null()
+		}
+	}
+	for i := range data.BgpRouteTargetImportIpv4AddressFormat {
+		keys := [...]string{"ipv4-address", "assigned-number"}
+		keyValues := [...]string{data.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "ipv4-address"); value.Exists() {
+			data.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address = types.StringValue(value.String())
+		} else if data.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.IsNull() {
+			data.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "assigned-number"); value.Exists() {
+			data.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber = types.Int64Value(value.Int())
+		} else if data.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.IsNull() {
+			data.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber = types.Int64Null()
+		}
+	}
+	for i := range data.BgpRouteTargetExportTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "assigned-number"}
+		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "two-byte-as-number"); value.Exists() {
+			data.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber = types.Int64Value(value.Int())
+		} else if data.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.IsNull() {
+			data.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "assigned-number"); value.Exists() {
+			data.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber = types.Int64Value(value.Int())
+		} else if data.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.IsNull() {
+			data.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber = types.Int64Null()
+		}
+	}
+	for i := range data.BgpRouteTargetExportFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "assigned-number"}
+		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "four-byte-as-number"); value.Exists() {
+			data.BgpRouteTargetExportFourByteAsFormat[i].AsNumber = types.Int64Value(value.Int())
+		} else if data.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.IsNull() {
+			data.BgpRouteTargetExportFourByteAsFormat[i].AsNumber = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "assigned-number"); value.Exists() {
+			data.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber = types.Int64Value(value.Int())
+		} else if data.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.IsNull() {
+			data.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber = types.Int64Null()
+		}
+	}
+	for i := range data.BgpRouteTargetExportIpv4AddressFormat {
+		keys := [...]string{"ipv4-address", "assigned-number"}
+		keyValues := [...]string{data.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "ipv4-address"); value.Exists() {
+			data.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address = types.StringValue(value.String())
+		} else if data.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.IsNull() {
+			data.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "assigned-number"); value.Exists() {
+			data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber = types.Int64Value(value.Int())
+		} else if data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.IsNull() {
+			data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber = types.Int64Null()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-policy/import"); value.Exists() {
+		data.BgpRoutePolicyImport = types.StringValue(value.String())
+	} else if data.BgpRoutePolicyImport.IsNull() {
+		data.BgpRoutePolicyImport = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-policy/export"); value.Exists() {
+		data.BgpRoutePolicyExport = types.StringValue(value.String())
+	} else if data.BgpRoutePolicyExport.IsNull() {
+		data.BgpRoutePolicyExport = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise-mac"); value.Exists() {
+		data.AdvertiseMac = types.BoolValue(true)
+	} else {
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.AdvertiseMac.IsNull() {
+			data.AdvertiseMac = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/unknown-unicast-suppression"); value.Exists() {
+		data.UnknownUnicastSuppression = types.BoolValue(true)
+	} else {
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.UnknownUnicastSuppression.IsNull() {
+			data.UnknownUnicastSuppression = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/control-word-disable"); value.Exists() {
+		data.ControlWordDisable = types.BoolValue(true)
+	} else {
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.ControlWordDisable.IsNull() {
+			data.ControlWordDisable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etree"); value.Exists() {
+		data.Etree = types.BoolValue(true)
+	} else {
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.Etree.IsNull() {
+			data.Etree = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etree/leaf"); value.Exists() {
+		data.EtreeLeaf = types.BoolValue(true)
+	} else {
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.EtreeLeaf.IsNull() {
+			data.EtreeLeaf = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etree/rt-leaf"); value.Exists() {
+		data.EtreeRtLeaf = types.BoolValue(true)
+	} else {
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.EtreeRtLeaf.IsNull() {
+			data.EtreeRtLeaf = types.BoolNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *EVPNEVI) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "load-balancing"); value.Exists() {
+		data.LoadBalancing = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "load-balancing.flow-label.static"); value.Exists() {
+		data.LoadBalancingFlowLabelStatic = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "bgp.rd.two-byte-as-number"); value.Exists() {
 		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bgp.rd.two-byte-as-assigned-number"); value.Exists() {
+	if value := res.Get(prefix + "bgp.rd.two-byte-as-assigned-number"); value.Exists() {
 		data.BgpRdTwoByteAsAssignedNumber = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bgp.rd.four-byte-as-number"); value.Exists() {
+	if value := res.Get(prefix + "bgp.rd.four-byte-as-number"); value.Exists() {
 		data.BgpRdFourByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bgp.rd.four-byte-as-assigned-number"); value.Exists() {
+	if value := res.Get(prefix + "bgp.rd.four-byte-as-assigned-number"); value.Exists() {
 		data.BgpRdFourByteAsAssignedNumber = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bgp.rd.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "bgp.rd.ipv4-address"); value.Exists() {
 		data.BgpRdIpv4Address = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "bgp.rd.ipv4-address-assigned-number"); value.Exists() {
+	if value := res.Get(prefix + "bgp.rd.ipv4-address-assigned-number"); value.Exists() {
 		data.BgpRdIpv4AddressAssignedNumber = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bgp.route-target.import.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
+	if value := res.Get(prefix + "bgp.route-target.import.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetImportTwoByteAsFormat = make([]EVPNEVIBgpRouteTargetImportTwoByteAsFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNEVIBgpRouteTargetImportTwoByteAsFormat{}
@@ -652,7 +1154,7 @@ func (data *EVPNEVI) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "bgp.route-target.import.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
+	if value := res.Get(prefix + "bgp.route-target.import.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetImportFourByteAsFormat = make([]EVPNEVIBgpRouteTargetImportFourByteAsFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNEVIBgpRouteTargetImportFourByteAsFormat{}
@@ -666,7 +1168,7 @@ func (data *EVPNEVI) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "bgp.route-target.import.ipv4-address-rts.ipv4-address-rt"); value.Exists() {
+	if value := res.Get(prefix + "bgp.route-target.import.ipv4-address-rts.ipv4-address-rt"); value.Exists() {
 		data.BgpRouteTargetImportIpv4AddressFormat = make([]EVPNEVIBgpRouteTargetImportIpv4AddressFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNEVIBgpRouteTargetImportIpv4AddressFormat{}
@@ -680,7 +1182,7 @@ func (data *EVPNEVI) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "bgp.route-target.export.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
+	if value := res.Get(prefix + "bgp.route-target.export.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetExportTwoByteAsFormat = make([]EVPNEVIBgpRouteTargetExportTwoByteAsFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNEVIBgpRouteTargetExportTwoByteAsFormat{}
@@ -694,7 +1196,7 @@ func (data *EVPNEVI) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "bgp.route-target.export.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
+	if value := res.Get(prefix + "bgp.route-target.export.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetExportFourByteAsFormat = make([]EVPNEVIBgpRouteTargetExportFourByteAsFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNEVIBgpRouteTargetExportFourByteAsFormat{}
@@ -708,7 +1210,7 @@ func (data *EVPNEVI) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "bgp.route-target.export.ipv4-address-rts.ipv4-address-rt"); value.Exists() {
+	if value := res.Get(prefix + "bgp.route-target.export.ipv4-address-rts.ipv4-address-rt"); value.Exists() {
 		data.BgpRouteTargetExportIpv4AddressFormat = make([]EVPNEVIBgpRouteTargetExportIpv4AddressFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNEVIBgpRouteTargetExportIpv4AddressFormat{}
@@ -722,41 +1224,29 @@ func (data *EVPNEVI) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "bgp.route-policy.import"); value.Exists() {
+	if value := res.Get(prefix + "bgp.route-policy.import"); value.Exists() {
 		data.BgpRoutePolicyImport = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "bgp.route-policy.export"); value.Exists() {
+	if value := res.Get(prefix + "bgp.route-policy.export"); value.Exists() {
 		data.BgpRoutePolicyExport = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "advertise-mac"); value.Exists() {
+	if value := res.Get(prefix + "advertise-mac"); value.Exists() {
 		data.AdvertiseMac = types.BoolValue(true)
-	} else {
-		data.AdvertiseMac = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "unknown-unicast-suppression"); value.Exists() {
+	if value := res.Get(prefix + "unknown-unicast-suppression"); value.Exists() {
 		data.UnknownUnicastSuppression = types.BoolValue(true)
-	} else {
-		data.UnknownUnicastSuppression = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "control-word-disable"); value.Exists() {
+	if value := res.Get(prefix + "control-word-disable"); value.Exists() {
 		data.ControlWordDisable = types.BoolValue(true)
-	} else {
-		data.ControlWordDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "etree"); value.Exists() {
+	if value := res.Get(prefix + "etree"); value.Exists() {
 		data.Etree = types.BoolValue(true)
-	} else {
-		data.Etree = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "etree.leaf"); value.Exists() {
+	if value := res.Get(prefix + "etree.leaf"); value.Exists() {
 		data.EtreeLeaf = types.BoolValue(true)
-	} else {
-		data.EtreeLeaf = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "etree.rt-leaf"); value.Exists() {
+	if value := res.Get(prefix + "etree.rt-leaf"); value.Exists() {
 		data.EtreeRtLeaf = types.BoolValue(true)
-	} else {
-		data.EtreeRtLeaf = types.BoolValue(false)
 	}
 }
 
@@ -764,39 +1254,39 @@ func (data *EVPNEVI) fromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *EVPNEVIData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "description"); value.Exists() {
+func (data *EVPNEVIData) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "load-balancing"); value.Exists() {
+	if value := res.Get(prefix + "load-balancing"); value.Exists() {
 		data.LoadBalancing = types.BoolValue(true)
-	} else {
-		data.LoadBalancing = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "load-balancing.flow-label.static"); value.Exists() {
+	if value := res.Get(prefix + "load-balancing.flow-label.static"); value.Exists() {
 		data.LoadBalancingFlowLabelStatic = types.BoolValue(true)
-	} else {
-		data.LoadBalancingFlowLabelStatic = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "bgp.rd.two-byte-as-number"); value.Exists() {
+	if value := res.Get(prefix + "bgp.rd.two-byte-as-number"); value.Exists() {
 		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bgp.rd.two-byte-as-assigned-number"); value.Exists() {
+	if value := res.Get(prefix + "bgp.rd.two-byte-as-assigned-number"); value.Exists() {
 		data.BgpRdTwoByteAsAssignedNumber = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bgp.rd.four-byte-as-number"); value.Exists() {
+	if value := res.Get(prefix + "bgp.rd.four-byte-as-number"); value.Exists() {
 		data.BgpRdFourByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bgp.rd.four-byte-as-assigned-number"); value.Exists() {
+	if value := res.Get(prefix + "bgp.rd.four-byte-as-assigned-number"); value.Exists() {
 		data.BgpRdFourByteAsAssignedNumber = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bgp.rd.ipv4-address"); value.Exists() {
+	if value := res.Get(prefix + "bgp.rd.ipv4-address"); value.Exists() {
 		data.BgpRdIpv4Address = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "bgp.rd.ipv4-address-assigned-number"); value.Exists() {
+	if value := res.Get(prefix + "bgp.rd.ipv4-address-assigned-number"); value.Exists() {
 		data.BgpRdIpv4AddressAssignedNumber = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bgp.route-target.import.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
+	if value := res.Get(prefix + "bgp.route-target.import.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetImportTwoByteAsFormat = make([]EVPNEVIBgpRouteTargetImportTwoByteAsFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNEVIBgpRouteTargetImportTwoByteAsFormat{}
@@ -810,7 +1300,7 @@ func (data *EVPNEVIData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "bgp.route-target.import.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
+	if value := res.Get(prefix + "bgp.route-target.import.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetImportFourByteAsFormat = make([]EVPNEVIBgpRouteTargetImportFourByteAsFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNEVIBgpRouteTargetImportFourByteAsFormat{}
@@ -824,7 +1314,7 @@ func (data *EVPNEVIData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "bgp.route-target.import.ipv4-address-rts.ipv4-address-rt"); value.Exists() {
+	if value := res.Get(prefix + "bgp.route-target.import.ipv4-address-rts.ipv4-address-rt"); value.Exists() {
 		data.BgpRouteTargetImportIpv4AddressFormat = make([]EVPNEVIBgpRouteTargetImportIpv4AddressFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNEVIBgpRouteTargetImportIpv4AddressFormat{}
@@ -838,7 +1328,7 @@ func (data *EVPNEVIData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "bgp.route-target.export.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
+	if value := res.Get(prefix + "bgp.route-target.export.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetExportTwoByteAsFormat = make([]EVPNEVIBgpRouteTargetExportTwoByteAsFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNEVIBgpRouteTargetExportTwoByteAsFormat{}
@@ -852,7 +1342,7 @@ func (data *EVPNEVIData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "bgp.route-target.export.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
+	if value := res.Get(prefix + "bgp.route-target.export.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetExportFourByteAsFormat = make([]EVPNEVIBgpRouteTargetExportFourByteAsFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNEVIBgpRouteTargetExportFourByteAsFormat{}
@@ -866,7 +1356,7 @@ func (data *EVPNEVIData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "bgp.route-target.export.ipv4-address-rts.ipv4-address-rt"); value.Exists() {
+	if value := res.Get(prefix + "bgp.route-target.export.ipv4-address-rts.ipv4-address-rt"); value.Exists() {
 		data.BgpRouteTargetExportIpv4AddressFormat = make([]EVPNEVIBgpRouteTargetExportIpv4AddressFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNEVIBgpRouteTargetExportIpv4AddressFormat{}
@@ -880,67 +1370,373 @@ func (data *EVPNEVIData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "bgp.route-policy.import"); value.Exists() {
+	if value := res.Get(prefix + "bgp.route-policy.import"); value.Exists() {
 		data.BgpRoutePolicyImport = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "bgp.route-policy.export"); value.Exists() {
+	if value := res.Get(prefix + "bgp.route-policy.export"); value.Exists() {
 		data.BgpRoutePolicyExport = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "advertise-mac"); value.Exists() {
+	if value := res.Get(prefix + "advertise-mac"); value.Exists() {
+		data.AdvertiseMac = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "unknown-unicast-suppression"); value.Exists() {
+		data.UnknownUnicastSuppression = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "control-word-disable"); value.Exists() {
+		data.ControlWordDisable = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "etree"); value.Exists() {
+		data.Etree = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "etree.leaf"); value.Exists() {
+		data.EtreeLeaf = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "etree.rt-leaf"); value.Exists() {
+		data.EtreeRtLeaf = types.BoolValue(true)
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *EVPNEVI) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/load-balancing"); value.Exists() {
+		data.LoadBalancing = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/load-balancing/flow-label/static"); value.Exists() {
+		data.LoadBalancingFlowLabelStatic = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-number"); value.Exists() {
+		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
+		data.BgpRdTwoByteAsAssignedNumber = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-number"); value.Exists() {
+		data.BgpRdFourByteAsNumber = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
+		data.BgpRdFourByteAsAssignedNumber = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address"); value.Exists() {
+		data.BgpRdIpv4Address = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
+		data.BgpRdIpv4AddressAssignedNumber = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+		data.BgpRouteTargetImportTwoByteAsFormat = make([]EVPNEVIBgpRouteTargetImportTwoByteAsFormat, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := EVPNEVIBgpRouteTargetImportTwoByteAsFormat{}
+			if cValue := helpers.GetFromXPath(v, "two-byte-as-number"); cValue.Exists() {
+				item.AsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetImportTwoByteAsFormat = append(data.BgpRouteTargetImportTwoByteAsFormat, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+		data.BgpRouteTargetImportFourByteAsFormat = make([]EVPNEVIBgpRouteTargetImportFourByteAsFormat, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := EVPNEVIBgpRouteTargetImportFourByteAsFormat{}
+			if cValue := helpers.GetFromXPath(v, "four-byte-as-number"); cValue.Exists() {
+				item.AsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetImportFourByteAsFormat = append(data.BgpRouteTargetImportFourByteAsFormat, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+		data.BgpRouteTargetImportIpv4AddressFormat = make([]EVPNEVIBgpRouteTargetImportIpv4AddressFormat, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := EVPNEVIBgpRouteTargetImportIpv4AddressFormat{}
+			if cValue := helpers.GetFromXPath(v, "ipv4-address"); cValue.Exists() {
+				item.Ipv4Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetImportIpv4AddressFormat = append(data.BgpRouteTargetImportIpv4AddressFormat, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+		data.BgpRouteTargetExportTwoByteAsFormat = make([]EVPNEVIBgpRouteTargetExportTwoByteAsFormat, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := EVPNEVIBgpRouteTargetExportTwoByteAsFormat{}
+			if cValue := helpers.GetFromXPath(v, "two-byte-as-number"); cValue.Exists() {
+				item.AsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetExportTwoByteAsFormat = append(data.BgpRouteTargetExportTwoByteAsFormat, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+		data.BgpRouteTargetExportFourByteAsFormat = make([]EVPNEVIBgpRouteTargetExportFourByteAsFormat, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := EVPNEVIBgpRouteTargetExportFourByteAsFormat{}
+			if cValue := helpers.GetFromXPath(v, "four-byte-as-number"); cValue.Exists() {
+				item.AsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetExportFourByteAsFormat = append(data.BgpRouteTargetExportFourByteAsFormat, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+		data.BgpRouteTargetExportIpv4AddressFormat = make([]EVPNEVIBgpRouteTargetExportIpv4AddressFormat, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := EVPNEVIBgpRouteTargetExportIpv4AddressFormat{}
+			if cValue := helpers.GetFromXPath(v, "ipv4-address"); cValue.Exists() {
+				item.Ipv4Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetExportIpv4AddressFormat = append(data.BgpRouteTargetExportIpv4AddressFormat, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-policy/import"); value.Exists() {
+		data.BgpRoutePolicyImport = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-policy/export"); value.Exists() {
+		data.BgpRoutePolicyExport = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise-mac"); value.Exists() {
+		data.AdvertiseMac = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/unknown-unicast-suppression"); value.Exists() {
+		data.UnknownUnicastSuppression = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/control-word-disable"); value.Exists() {
+		data.ControlWordDisable = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etree"); value.Exists() {
+		data.Etree = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etree/leaf"); value.Exists() {
+		data.EtreeLeaf = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etree/rt-leaf"); value.Exists() {
+		data.EtreeRtLeaf = types.BoolValue(true)
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *EVPNEVIData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/load-balancing"); value.Exists() {
+		data.LoadBalancing = types.BoolValue(true)
+	} else {
+		data.LoadBalancing = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/load-balancing/flow-label/static"); value.Exists() {
+		data.LoadBalancingFlowLabelStatic = types.BoolValue(true)
+	} else {
+		data.LoadBalancingFlowLabelStatic = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-number"); value.Exists() {
+		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
+		data.BgpRdTwoByteAsAssignedNumber = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-number"); value.Exists() {
+		data.BgpRdFourByteAsNumber = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
+		data.BgpRdFourByteAsAssignedNumber = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address"); value.Exists() {
+		data.BgpRdIpv4Address = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
+		data.BgpRdIpv4AddressAssignedNumber = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+		data.BgpRouteTargetImportTwoByteAsFormat = make([]EVPNEVIBgpRouteTargetImportTwoByteAsFormat, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := EVPNEVIBgpRouteTargetImportTwoByteAsFormat{}
+			if cValue := helpers.GetFromXPath(v, "two-byte-as-number"); cValue.Exists() {
+				item.AsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetImportTwoByteAsFormat = append(data.BgpRouteTargetImportTwoByteAsFormat, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+		data.BgpRouteTargetImportFourByteAsFormat = make([]EVPNEVIBgpRouteTargetImportFourByteAsFormat, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := EVPNEVIBgpRouteTargetImportFourByteAsFormat{}
+			if cValue := helpers.GetFromXPath(v, "four-byte-as-number"); cValue.Exists() {
+				item.AsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetImportFourByteAsFormat = append(data.BgpRouteTargetImportFourByteAsFormat, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+		data.BgpRouteTargetImportIpv4AddressFormat = make([]EVPNEVIBgpRouteTargetImportIpv4AddressFormat, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := EVPNEVIBgpRouteTargetImportIpv4AddressFormat{}
+			if cValue := helpers.GetFromXPath(v, "ipv4-address"); cValue.Exists() {
+				item.Ipv4Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetImportIpv4AddressFormat = append(data.BgpRouteTargetImportIpv4AddressFormat, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+		data.BgpRouteTargetExportTwoByteAsFormat = make([]EVPNEVIBgpRouteTargetExportTwoByteAsFormat, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := EVPNEVIBgpRouteTargetExportTwoByteAsFormat{}
+			if cValue := helpers.GetFromXPath(v, "two-byte-as-number"); cValue.Exists() {
+				item.AsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetExportTwoByteAsFormat = append(data.BgpRouteTargetExportTwoByteAsFormat, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+		data.BgpRouteTargetExportFourByteAsFormat = make([]EVPNEVIBgpRouteTargetExportFourByteAsFormat, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := EVPNEVIBgpRouteTargetExportFourByteAsFormat{}
+			if cValue := helpers.GetFromXPath(v, "four-byte-as-number"); cValue.Exists() {
+				item.AsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetExportFourByteAsFormat = append(data.BgpRouteTargetExportFourByteAsFormat, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+		data.BgpRouteTargetExportIpv4AddressFormat = make([]EVPNEVIBgpRouteTargetExportIpv4AddressFormat, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := EVPNEVIBgpRouteTargetExportIpv4AddressFormat{}
+			if cValue := helpers.GetFromXPath(v, "ipv4-address"); cValue.Exists() {
+				item.Ipv4Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetExportIpv4AddressFormat = append(data.BgpRouteTargetExportIpv4AddressFormat, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-policy/import"); value.Exists() {
+		data.BgpRoutePolicyImport = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-policy/export"); value.Exists() {
+		data.BgpRoutePolicyExport = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise-mac"); value.Exists() {
 		data.AdvertiseMac = types.BoolValue(true)
 	} else {
 		data.AdvertiseMac = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "unknown-unicast-suppression"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/unknown-unicast-suppression"); value.Exists() {
 		data.UnknownUnicastSuppression = types.BoolValue(true)
 	} else {
 		data.UnknownUnicastSuppression = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "control-word-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/control-word-disable"); value.Exists() {
 		data.ControlWordDisable = types.BoolValue(true)
 	} else {
 		data.ControlWordDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "etree"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etree"); value.Exists() {
 		data.Etree = types.BoolValue(true)
 	} else {
 		data.Etree = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "etree.leaf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etree/leaf"); value.Exists() {
 		data.EtreeLeaf = types.BoolValue(true)
 	} else {
 		data.EtreeLeaf = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "etree.rt-leaf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etree/rt-leaf"); value.Exists() {
 		data.EtreeRtLeaf = types.BoolValue(true)
 	} else {
 		data.EtreeRtLeaf = types.BoolValue(false)
 	}
 }
 
-// End of section. //template:end fromBodyData
+// End of section. //template:end fromBodyDataXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *EVPNEVI) getDeletedItems(ctx context.Context, state EVPNEVI) []string {
 	deletedItems := make([]string, 0)
-	if !state.EtreeRtLeaf.IsNull() && data.EtreeRtLeaf.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/etree/rt-leaf", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.EtreeRtLeaf.IsNull() && state.EtreeRtLeaf.ValueBool() {
+		if data.EtreeRtLeaf.IsNull() || !data.EtreeRtLeaf.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/etree/rt-leaf", state.getPath()))
+		}
 	}
-	if !state.EtreeLeaf.IsNull() && data.EtreeLeaf.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/etree/leaf", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.EtreeLeaf.IsNull() && state.EtreeLeaf.ValueBool() {
+		if data.EtreeLeaf.IsNull() || !data.EtreeLeaf.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/etree/leaf", state.getPath()))
+		}
 	}
-	if !state.Etree.IsNull() && data.Etree.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/etree", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.Etree.IsNull() && state.Etree.ValueBool() {
+		if data.Etree.IsNull() || !data.Etree.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/etree", state.getPath()))
+		}
 	}
-	if !state.ControlWordDisable.IsNull() && data.ControlWordDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/control-word-disable", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.ControlWordDisable.IsNull() && state.ControlWordDisable.ValueBool() {
+		if data.ControlWordDisable.IsNull() || !data.ControlWordDisable.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/control-word-disable", state.getPath()))
+		}
 	}
-	if !state.UnknownUnicastSuppression.IsNull() && data.UnknownUnicastSuppression.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/unknown-unicast-suppression", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.UnknownUnicastSuppression.IsNull() && state.UnknownUnicastSuppression.ValueBool() {
+		if data.UnknownUnicastSuppression.IsNull() || !data.UnknownUnicastSuppression.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/unknown-unicast-suppression", state.getPath()))
+		}
 	}
-	if !state.AdvertiseMac.IsNull() && data.AdvertiseMac.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise-mac", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.AdvertiseMac.IsNull() && state.AdvertiseMac.ValueBool() {
+		if data.AdvertiseMac.IsNull() || !data.AdvertiseMac.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise-mac", state.getPath()))
+		}
 	}
 	if !state.BgpRoutePolicyExport.IsNull() && data.BgpRoutePolicyExport.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/route-policy/export", state.getPath()))
@@ -1182,11 +1978,17 @@ func (data *EVPNEVI) getDeletedItems(ctx context.Context, state EVPNEVI) []strin
 	if !state.BgpRdTwoByteAsNumber.IsNull() && data.BgpRdTwoByteAsNumber.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/rd/two-byte-as-number", state.getPath()))
 	}
-	if !state.LoadBalancingFlowLabelStatic.IsNull() && data.LoadBalancingFlowLabelStatic.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/load-balancing/flow-label/static", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.LoadBalancingFlowLabelStatic.IsNull() && state.LoadBalancingFlowLabelStatic.ValueBool() {
+		if data.LoadBalancingFlowLabelStatic.IsNull() || !data.LoadBalancingFlowLabelStatic.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/load-balancing/flow-label/static", state.getPath()))
+		}
 	}
-	if !state.LoadBalancing.IsNull() && data.LoadBalancing.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/load-balancing", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.LoadBalancing.IsNull() && state.LoadBalancing.ValueBool() {
+		if data.LoadBalancing.IsNull() || !data.LoadBalancing.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/load-balancing", state.getPath()))
+		}
 	}
 	if !state.Description.IsNull() && data.Description.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/description", state.getPath()))
@@ -1198,25 +2000,43 @@ func (data *EVPNEVI) getDeletedItems(ctx context.Context, state EVPNEVI) []strin
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *EVPNEVI) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *EVPNEVI) getEmptyLeafsDelete(ctx context.Context, state *EVPNEVI) []string {
 	emptyLeafsDelete := make([]string, 0)
+	// Only delete if state has true and plan has false
 	if !data.EtreeRtLeaf.IsNull() && !data.EtreeRtLeaf.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/etree/rt-leaf", data.getPath()))
+		if state != nil && !state.EtreeRtLeaf.IsNull() && state.EtreeRtLeaf.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/etree/rt-leaf", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.EtreeLeaf.IsNull() && !data.EtreeLeaf.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/etree/leaf", data.getPath()))
+		if state != nil && !state.EtreeLeaf.IsNull() && state.EtreeLeaf.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/etree/leaf", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.Etree.IsNull() && !data.Etree.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/etree", data.getPath()))
+		if state != nil && !state.Etree.IsNull() && state.Etree.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/etree", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ControlWordDisable.IsNull() && !data.ControlWordDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/control-word-disable", data.getPath()))
+		if state != nil && !state.ControlWordDisable.IsNull() && state.ControlWordDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/control-word-disable", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.UnknownUnicastSuppression.IsNull() && !data.UnknownUnicastSuppression.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/unknown-unicast-suppression", data.getPath()))
+		if state != nil && !state.UnknownUnicastSuppression.IsNull() && state.UnknownUnicastSuppression.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/unknown-unicast-suppression", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.AdvertiseMac.IsNull() && !data.AdvertiseMac.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise-mac", data.getPath()))
+		if state != nil && !state.AdvertiseMac.IsNull() && state.AdvertiseMac.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise-mac", data.getXPath()))
+		}
 	}
 	for i := range data.BgpRouteTargetExportIpv4AddressFormat {
 		keys := [...]string{"ipv4-address", "assigned-number"}
@@ -1266,11 +2086,17 @@ func (data *EVPNEVI) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.LoadBalancingFlowLabelStatic.IsNull() && !data.LoadBalancingFlowLabelStatic.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/load-balancing/flow-label/static", data.getPath()))
+		if state != nil && !state.LoadBalancingFlowLabelStatic.IsNull() && state.LoadBalancingFlowLabelStatic.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/load-balancing/flow-label/static", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.LoadBalancing.IsNull() && !data.LoadBalancing.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/load-balancing", data.getPath()))
+		if state != nil && !state.LoadBalancing.IsNull() && state.LoadBalancing.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/load-balancing", data.getXPath()))
+		}
 	}
 	return emptyLeafsDelete
 }
@@ -1306,64 +2132,34 @@ func (data *EVPNEVI) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-policy/import", data.getPath()))
 	}
 	for i := range data.BgpRouteTargetExportIpv4AddressFormat {
-		keys := [...]string{"ipv4-address", "assigned-number"}
 		keyValues := [...]string{data.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.BgpRouteTargetExportFourByteAsFormat {
-		keys := [...]string{"four-byte-as-number", "assigned-number"}
 		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.BgpRouteTargetExportTwoByteAsFormat {
-		keys := [...]string{"two-byte-as-number", "assigned-number"}
 		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.BgpRouteTargetImportIpv4AddressFormat {
-		keys := [...]string{"ipv4-address", "assigned-number"}
 		keyValues := [...]string{data.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.BgpRouteTargetImportFourByteAsFormat {
-		keys := [...]string{"four-byte-as-number", "assigned-number"}
 		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.BgpRouteTargetImportTwoByteAsFormat {
-		keys := [...]string{"two-byte-as-number", "assigned-number"}
 		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	if !data.BgpRdIpv4AddressAssignedNumber.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/rd/ipv4-address-assigned-number", data.getPath()))
@@ -1392,7 +2188,487 @@ func (data *EVPNEVI) getDeletePaths(ctx context.Context) []string {
 	if !data.Description.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/description", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *EVPNEVI) addDeletedItemsXML(ctx context.Context, state EVPNEVI, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.EtreeRtLeaf.IsNull() && state.EtreeRtLeaf.ValueBool() && data.EtreeRtLeaf.IsNull() {
+		deletePath := state.getXPath() + "/etree/rt-leaf"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.EtreeLeaf.IsNull() && state.EtreeLeaf.ValueBool() && data.EtreeLeaf.IsNull() {
+		deletePath := state.getXPath() + "/etree/leaf"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Etree.IsNull() && state.Etree.ValueBool() && data.Etree.IsNull() {
+		deletePath := state.getXPath() + "/etree"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ControlWordDisable.IsNull() && state.ControlWordDisable.ValueBool() && data.ControlWordDisable.IsNull() {
+		deletePath := state.getXPath() + "/control-word-disable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.UnknownUnicastSuppression.IsNull() && state.UnknownUnicastSuppression.ValueBool() && data.UnknownUnicastSuppression.IsNull() {
+		deletePath := state.getXPath() + "/unknown-unicast-suppression"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.AdvertiseMac.IsNull() && state.AdvertiseMac.ValueBool() && data.AdvertiseMac.IsNull() {
+		deletePath := state.getXPath() + "/advertise-mac"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BgpRoutePolicyExport.IsNull() && data.BgpRoutePolicyExport.IsNull() {
+		deletePath := state.getXPath() + "/bgp/route-policy/export"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BgpRoutePolicyImport.IsNull() && data.BgpRoutePolicyImport.IsNull() {
+		deletePath := state.getXPath() + "/bgp/route-policy/import"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.BgpRouteTargetExportIpv4AddressFormat {
+		stateKeys := [...]string{"ipv4-address", "assigned-number"}
+		stateKeyValues := [...]string{state.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(state.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.BgpRouteTargetExportIpv4AddressFormat {
+			found = true
+			if state.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString() != data.BgpRouteTargetExportIpv4AddressFormat[j].Ipv4Address.ValueString() {
+				found = false
+			}
+			if state.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64() != data.BgpRouteTargetExportIpv4AddressFormat[j].AssignedNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt%v", predicates))
+		}
+	}
+	for i := range state.BgpRouteTargetExportFourByteAsFormat {
+		stateKeys := [...]string{"four-byte-as-number", "assigned-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.BgpRouteTargetExportFourByteAsFormat {
+			found = true
+			if state.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64() != data.BgpRouteTargetExportFourByteAsFormat[j].AsNumber.ValueInt64() {
+				found = false
+			}
+			if state.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64() != data.BgpRouteTargetExportFourByteAsFormat[j].AssignedNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt%v", predicates))
+		}
+	}
+	for i := range state.BgpRouteTargetExportTwoByteAsFormat {
+		stateKeys := [...]string{"two-byte-as-number", "assigned-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.BgpRouteTargetExportTwoByteAsFormat {
+			found = true
+			if state.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64() != data.BgpRouteTargetExportTwoByteAsFormat[j].AsNumber.ValueInt64() {
+				found = false
+			}
+			if state.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64() != data.BgpRouteTargetExportTwoByteAsFormat[j].AssignedNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt%v", predicates))
+		}
+	}
+	for i := range state.BgpRouteTargetImportIpv4AddressFormat {
+		stateKeys := [...]string{"ipv4-address", "assigned-number"}
+		stateKeyValues := [...]string{state.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(state.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.BgpRouteTargetImportIpv4AddressFormat {
+			found = true
+			if state.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString() != data.BgpRouteTargetImportIpv4AddressFormat[j].Ipv4Address.ValueString() {
+				found = false
+			}
+			if state.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64() != data.BgpRouteTargetImportIpv4AddressFormat[j].AssignedNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt%v", predicates))
+		}
+	}
+	for i := range state.BgpRouteTargetImportFourByteAsFormat {
+		stateKeys := [...]string{"four-byte-as-number", "assigned-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.BgpRouteTargetImportFourByteAsFormat {
+			found = true
+			if state.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64() != data.BgpRouteTargetImportFourByteAsFormat[j].AsNumber.ValueInt64() {
+				found = false
+			}
+			if state.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64() != data.BgpRouteTargetImportFourByteAsFormat[j].AssignedNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt%v", predicates))
+		}
+	}
+	for i := range state.BgpRouteTargetImportTwoByteAsFormat {
+		stateKeys := [...]string{"two-byte-as-number", "assigned-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.BgpRouteTargetImportTwoByteAsFormat {
+			found = true
+			if state.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64() != data.BgpRouteTargetImportTwoByteAsFormat[j].AsNumber.ValueInt64() {
+				found = false
+			}
+			if state.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64() != data.BgpRouteTargetImportTwoByteAsFormat[j].AssignedNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt%v", predicates))
+		}
+	}
+	if !state.BgpRdIpv4AddressAssignedNumber.IsNull() && data.BgpRdIpv4AddressAssignedNumber.IsNull() {
+		deletePath := state.getXPath() + "/bgp/rd/ipv4-address-assigned-number"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BgpRdIpv4Address.IsNull() && data.BgpRdIpv4Address.IsNull() {
+		deletePath := state.getXPath() + "/bgp/rd/ipv4-address"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BgpRdFourByteAsAssignedNumber.IsNull() && data.BgpRdFourByteAsAssignedNumber.IsNull() {
+		deletePath := state.getXPath() + "/bgp/rd/four-byte-as-assigned-number"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BgpRdFourByteAsNumber.IsNull() && data.BgpRdFourByteAsNumber.IsNull() {
+		deletePath := state.getXPath() + "/bgp/rd/four-byte-as-number"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BgpRdTwoByteAsAssignedNumber.IsNull() && data.BgpRdTwoByteAsAssignedNumber.IsNull() {
+		deletePath := state.getXPath() + "/bgp/rd/two-byte-as-assigned-number"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BgpRdTwoByteAsNumber.IsNull() && data.BgpRdTwoByteAsNumber.IsNull() {
+		deletePath := state.getXPath() + "/bgp/rd/two-byte-as-number"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.LoadBalancingFlowLabelStatic.IsNull() && state.LoadBalancingFlowLabelStatic.ValueBool() && data.LoadBalancingFlowLabelStatic.IsNull() {
+		deletePath := state.getXPath() + "/load-balancing/flow-label/static"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.LoadBalancing.IsNull() && state.LoadBalancing.ValueBool() && data.LoadBalancing.IsNull() {
+		deletePath := state.getXPath() + "/load-balancing"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Description.IsNull() && data.Description.IsNull() {
+		deletePath := state.getXPath() + "/description"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *EVPNEVI) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.EtreeRtLeaf.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/etree/rt-leaf")
+	}
+	if !data.EtreeLeaf.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/etree/leaf")
+	}
+	if !data.Etree.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/etree")
+	}
+	if !data.ControlWordDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/control-word-disable")
+	}
+	if !data.UnknownUnicastSuppression.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/unknown-unicast-suppression")
+	}
+	if !data.AdvertiseMac.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/advertise-mac")
+	}
+	if !data.BgpRoutePolicyExport.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bgp/route-policy/export")
+	}
+	if !data.BgpRoutePolicyImport.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bgp/route-policy/import")
+	}
+	for i := range data.BgpRouteTargetExportIpv4AddressFormat {
+		keys := [...]string{"ipv4-address", "assigned-number"}
+		keyValues := [...]string{data.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt%v", predicates))
+	}
+	for i := range data.BgpRouteTargetExportFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "assigned-number"}
+		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt%v", predicates))
+	}
+	for i := range data.BgpRouteTargetExportTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "assigned-number"}
+		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt%v", predicates))
+	}
+	for i := range data.BgpRouteTargetImportIpv4AddressFormat {
+		keys := [...]string{"ipv4-address", "assigned-number"}
+		keyValues := [...]string{data.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt%v", predicates))
+	}
+	for i := range data.BgpRouteTargetImportFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "assigned-number"}
+		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt%v", predicates))
+	}
+	for i := range data.BgpRouteTargetImportTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "assigned-number"}
+		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt%v", predicates))
+	}
+	if !data.BgpRdIpv4AddressAssignedNumber.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bgp/rd/ipv4-address-assigned-number")
+	}
+	if !data.BgpRdIpv4Address.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bgp/rd/ipv4-address")
+	}
+	if !data.BgpRdFourByteAsAssignedNumber.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bgp/rd/four-byte-as-assigned-number")
+	}
+	if !data.BgpRdFourByteAsNumber.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bgp/rd/four-byte-as-number")
+	}
+	if !data.BgpRdTwoByteAsAssignedNumber.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bgp/rd/two-byte-as-assigned-number")
+	}
+	if !data.BgpRdTwoByteAsNumber.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bgp/rd/two-byte-as-number")
+	}
+	if !data.LoadBalancingFlowLabelStatic.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/load-balancing/flow-label/static")
+	}
+	if !data.LoadBalancing.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/load-balancing")
+	}
+	if !data.Description.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/description")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

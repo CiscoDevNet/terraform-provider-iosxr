@@ -20,33 +20,8 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrL2VPNBridgeGroupBridgeDomain(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "evis.0.vpn_id", "1234"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "vnis.0.vni_id", "1234"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrL2VPNBridgeGroupBridgeDomainPrerequisitesConfig + testAccDataSourceIosxrL2VPNBridgeGroupBridgeDomainConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrL2VPNBridgeGroupBridgeDomainPrerequisitesConfig = `
@@ -67,31 +42,3 @@ resource "iosxr_gnmi" "PreReq1" {
 `
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrL2VPNBridgeGroupBridgeDomainConfig() string {
-	config := `resource "iosxr_l2vpn_bridge_group_bridge_domain" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	bridge_group_name = "BG123"` + "\n"
-	config += `	bridge_domain_name = "BD123"` + "\n"
-	config += `	evis = [{` + "\n"
-	config += `		vpn_id = 1234` + "\n"
-	config += `	}]` + "\n"
-	config += `	vnis = [{` + "\n"
-	config += `		vni_id = 1234` + "\n"
-	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_l2vpn_bridge_group_bridge_domain" "test" {
-			bridge_group_name = "BG123"
-			bridge_domain_name = "BD123"
-			depends_on = [iosxr_l2vpn_bridge_group_bridge_domain.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

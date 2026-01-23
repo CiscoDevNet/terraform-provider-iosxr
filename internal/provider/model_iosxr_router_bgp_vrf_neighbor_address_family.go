@@ -23,8 +23,13 @@ package provider
 import (
 	"context"
 	"fmt"
+	"sort"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -93,6 +98,19 @@ func (data RouterBGPVRFNeighborAddressFamily) getPath() string {
 
 func (data RouterBGPVRFNeighborAddressFamilyData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]/neighbors/neighbor[address=%s]/address-families/address-family[af-name=%s]", data.AsNumber.ValueString(), data.VrfName.ValueString(), data.Address.ValueString(), data.AfName.ValueString())
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data RouterBGPVRFNeighborAddressFamily) getXPath() string {
+	path := "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]/neighbors/neighbor[address=%s]/address-families/address-family[af-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.AsNumber.ValueString()), fmt.Sprintf("%v", data.VrfName.ValueString()), fmt.Sprintf("%v", data.Address.ValueString()), fmt.Sprintf("%v", data.AfName.ValueString()))
+	return path
+}
+
+func (data RouterBGPVRFNeighborAddressFamilyData) getXPath() string {
+	path := "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]/neighbors/neighbor[address=%s]/address-families/address-family[af-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.AsNumber.ValueString()), fmt.Sprintf("%v", data.VrfName.ValueString()), fmt.Sprintf("%v", data.Address.ValueString()), fmt.Sprintf("%v", data.AfName.ValueString()))
+	return path
 }
 
 // End of section. //template:end getPath
@@ -183,6 +201,96 @@ func (data RouterBGPVRFNeighborAddressFamily) toBody(ctx context.Context) string
 
 // End of section. //template:end toBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data RouterBGPVRFNeighborAddressFamily) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.AfName.IsNull() && !data.AfName.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/af-name", data.AfName.ValueString())
+	}
+	if !data.RoutePolicyIn.IsNull() && !data.RoutePolicyIn.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/route-policy/in", data.RoutePolicyIn.ValueString())
+	}
+	if !data.RoutePolicyOut.IsNull() && !data.RoutePolicyOut.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/route-policy/out", data.RoutePolicyOut.ValueString())
+	}
+	if !data.DefaultOriginate.IsNull() && !data.DefaultOriginate.IsUnknown() {
+		if data.DefaultOriginate.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/default-originate", "")
+		}
+	}
+	if !data.DefaultOriginateRoutePolicy.IsNull() && !data.DefaultOriginateRoutePolicy.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/default-originate/route-policy", data.DefaultOriginateRoutePolicy.ValueString())
+	}
+	if !data.DefaultOriginateInheritanceDisable.IsNull() && !data.DefaultOriginateInheritanceDisable.IsUnknown() {
+		if data.DefaultOriginateInheritanceDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/default-originate/inheritance-disable", "")
+		}
+	}
+	if !data.NextHopSelf.IsNull() && !data.NextHopSelf.IsUnknown() {
+		if data.NextHopSelf.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/next-hop-self", "")
+		}
+	}
+	if !data.NextHopSelfInheritanceDisable.IsNull() && !data.NextHopSelfInheritanceDisable.IsUnknown() {
+		if data.NextHopSelfInheritanceDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/next-hop-self/inheritance-disable", "")
+		}
+	}
+	if !data.SoftReconfigurationInboundAlways.IsNull() && !data.SoftReconfigurationInboundAlways.IsUnknown() {
+		if data.SoftReconfigurationInboundAlways.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/soft-reconfiguration/inbound/always", "")
+		}
+	}
+	if !data.SendCommunityEbgpInheritanceDisable.IsNull() && !data.SendCommunityEbgpInheritanceDisable.IsUnknown() {
+		if data.SendCommunityEbgpInheritanceDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/send-community-ebgp/inheritance-disable", "")
+		}
+	}
+	if !data.RemovePrivateAsInbound.IsNull() && !data.RemovePrivateAsInbound.IsUnknown() {
+		if data.RemovePrivateAsInbound.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/remove-private-as/inbound", "")
+		}
+	}
+	if !data.RemovePrivateAsInboundInheritanceDisable.IsNull() && !data.RemovePrivateAsInboundInheritanceDisable.IsUnknown() {
+		if data.RemovePrivateAsInboundInheritanceDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/remove-private-as/inbound/inheritance-disable", "")
+		}
+	}
+	if !data.RemovePrivateAsInboundEntireAspath.IsNull() && !data.RemovePrivateAsInboundEntireAspath.IsUnknown() {
+		if data.RemovePrivateAsInboundEntireAspath.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/remove-private-as/inbound/entire-aspath", "")
+		}
+	}
+	if !data.RemovePrivateAs.IsNull() && !data.RemovePrivateAs.IsUnknown() {
+		if data.RemovePrivateAs.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/remove-private-as/remove-private-as-outbound", "")
+		}
+	}
+	if !data.RemovePrivateAsEntireAspath.IsNull() && !data.RemovePrivateAsEntireAspath.IsUnknown() {
+		if data.RemovePrivateAsEntireAspath.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/remove-private-as/remove-private-as-outbound/entire-aspath", "")
+		}
+	}
+	if !data.RemovePrivateAsInheritanceDisable.IsNull() && !data.RemovePrivateAsInheritanceDisable.IsUnknown() {
+		if data.RemovePrivateAsInheritanceDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/remove-private-as/remove-private-as-outbound/inheritance-disable", "")
+		}
+	}
+	if !data.RemovePrivateAsInternal.IsNull() && !data.RemovePrivateAsInternal.IsUnknown() {
+		if data.RemovePrivateAsInternal.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/remove-private-as/remove-private-as-outbound/internal", "")
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Context, res []byte) {
@@ -196,208 +304,304 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 	} else {
 		data.RoutePolicyOut = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "default-originate"); !data.DefaultOriginate.IsNull() {
-		if value.Exists() {
-			data.DefaultOriginate = types.BoolValue(true)
-		} else {
-			data.DefaultOriginate = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "default-originate"); value.Exists() {
+		data.DefaultOriginate = types.BoolValue(true)
+	} else if data.DefaultOriginate.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.DefaultOriginate = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 	if value := gjson.GetBytes(res, "default-originate.route-policy"); value.Exists() && !data.DefaultOriginateRoutePolicy.IsNull() {
 		data.DefaultOriginateRoutePolicy = types.StringValue(value.String())
 	} else {
 		data.DefaultOriginateRoutePolicy = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "default-originate.inheritance-disable"); !data.DefaultOriginateInheritanceDisable.IsNull() {
-		if value.Exists() {
-			data.DefaultOriginateInheritanceDisable = types.BoolValue(true)
-		} else {
-			data.DefaultOriginateInheritanceDisable = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "default-originate.inheritance-disable"); value.Exists() {
+		data.DefaultOriginateInheritanceDisable = types.BoolValue(true)
+	} else if data.DefaultOriginateInheritanceDisable.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.DefaultOriginateInheritanceDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "next-hop-self"); !data.NextHopSelf.IsNull() {
-		if value.Exists() {
-			data.NextHopSelf = types.BoolValue(true)
-		} else {
-			data.NextHopSelf = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "next-hop-self"); value.Exists() {
+		data.NextHopSelf = types.BoolValue(true)
+	} else if data.NextHopSelf.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.NextHopSelf = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "next-hop-self.inheritance-disable"); !data.NextHopSelfInheritanceDisable.IsNull() {
-		if value.Exists() {
-			data.NextHopSelfInheritanceDisable = types.BoolValue(true)
-		} else {
-			data.NextHopSelfInheritanceDisable = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "next-hop-self.inheritance-disable"); value.Exists() {
+		data.NextHopSelfInheritanceDisable = types.BoolValue(true)
+	} else if data.NextHopSelfInheritanceDisable.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.NextHopSelfInheritanceDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound.always"); !data.SoftReconfigurationInboundAlways.IsNull() {
-		if value.Exists() {
-			data.SoftReconfigurationInboundAlways = types.BoolValue(true)
-		} else {
-			data.SoftReconfigurationInboundAlways = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound.always"); value.Exists() {
+		data.SoftReconfigurationInboundAlways = types.BoolValue(true)
+	} else if data.SoftReconfigurationInboundAlways.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.SoftReconfigurationInboundAlways = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "send-community-ebgp.inheritance-disable"); !data.SendCommunityEbgpInheritanceDisable.IsNull() {
-		if value.Exists() {
-			data.SendCommunityEbgpInheritanceDisable = types.BoolValue(true)
-		} else {
-			data.SendCommunityEbgpInheritanceDisable = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "send-community-ebgp.inheritance-disable"); value.Exists() {
+		data.SendCommunityEbgpInheritanceDisable = types.BoolValue(true)
+	} else if data.SendCommunityEbgpInheritanceDisable.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.SendCommunityEbgpInheritanceDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.inbound"); !data.RemovePrivateAsInbound.IsNull() {
-		if value.Exists() {
-			data.RemovePrivateAsInbound = types.BoolValue(true)
-		} else {
-			data.RemovePrivateAsInbound = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "remove-private-as.inbound"); value.Exists() {
+		data.RemovePrivateAsInbound = types.BoolValue(true)
+	} else if data.RemovePrivateAsInbound.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.RemovePrivateAsInbound = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.inbound.inheritance-disable"); !data.RemovePrivateAsInboundInheritanceDisable.IsNull() {
-		if value.Exists() {
-			data.RemovePrivateAsInboundInheritanceDisable = types.BoolValue(true)
-		} else {
-			data.RemovePrivateAsInboundInheritanceDisable = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "remove-private-as.inbound.inheritance-disable"); value.Exists() {
+		data.RemovePrivateAsInboundInheritanceDisable = types.BoolValue(true)
+	} else if data.RemovePrivateAsInboundInheritanceDisable.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.RemovePrivateAsInboundInheritanceDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.inbound.entire-aspath"); !data.RemovePrivateAsInboundEntireAspath.IsNull() {
-		if value.Exists() {
-			data.RemovePrivateAsInboundEntireAspath = types.BoolValue(true)
-		} else {
-			data.RemovePrivateAsInboundEntireAspath = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "remove-private-as.inbound.entire-aspath"); value.Exists() {
+		data.RemovePrivateAsInboundEntireAspath = types.BoolValue(true)
+	} else if data.RemovePrivateAsInboundEntireAspath.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.RemovePrivateAsInboundEntireAspath = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound"); !data.RemovePrivateAs.IsNull() {
-		if value.Exists() {
-			data.RemovePrivateAs = types.BoolValue(true)
-		} else {
-			data.RemovePrivateAs = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound"); value.Exists() {
+		data.RemovePrivateAs = types.BoolValue(true)
+	} else if data.RemovePrivateAs.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.RemovePrivateAs = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.entire-aspath"); !data.RemovePrivateAsEntireAspath.IsNull() {
-		if value.Exists() {
-			data.RemovePrivateAsEntireAspath = types.BoolValue(true)
-		} else {
-			data.RemovePrivateAsEntireAspath = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.entire-aspath"); value.Exists() {
+		data.RemovePrivateAsEntireAspath = types.BoolValue(true)
+	} else if data.RemovePrivateAsEntireAspath.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.RemovePrivateAsEntireAspath = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.inheritance-disable"); !data.RemovePrivateAsInheritanceDisable.IsNull() {
-		if value.Exists() {
-			data.RemovePrivateAsInheritanceDisable = types.BoolValue(true)
-		} else {
-			data.RemovePrivateAsInheritanceDisable = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.inheritance-disable"); value.Exists() {
+		data.RemovePrivateAsInheritanceDisable = types.BoolValue(true)
+	} else if data.RemovePrivateAsInheritanceDisable.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.RemovePrivateAsInheritanceDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.internal"); !data.RemovePrivateAsInternal.IsNull() {
-		if value.Exists() {
-			data.RemovePrivateAsInternal = types.BoolValue(true)
-		} else {
-			data.RemovePrivateAsInternal = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.internal"); value.Exists() {
+		data.RemovePrivateAsInternal = types.BoolValue(true)
+	} else if data.RemovePrivateAsInternal.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.RemovePrivateAsInternal = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 }
 
 // End of section. //template:end updateFromBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
-func (data *RouterBGPVRFNeighborAddressFamily) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "route-policy.in"); value.Exists() {
+func (data *RouterBGPVRFNeighborAddressFamily) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/af-name"); value.Exists() {
+		data.AfName = types.StringValue(value.String())
+	} else if data.AfName.IsNull() {
+		data.AfName = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/route-policy/in"); value.Exists() {
 		data.RoutePolicyIn = types.StringValue(value.String())
+	} else if data.RoutePolicyIn.IsNull() {
+		data.RoutePolicyIn = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "route-policy.out"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/route-policy/out"); value.Exists() {
 		data.RoutePolicyOut = types.StringValue(value.String())
+	} else if data.RoutePolicyOut.IsNull() {
+		data.RoutePolicyOut = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "default-originate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-originate"); value.Exists() {
 		data.DefaultOriginate = types.BoolValue(true)
 	} else {
-		data.DefaultOriginate = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.DefaultOriginate.IsNull() {
+			data.DefaultOriginate = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "default-originate.route-policy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-originate/route-policy"); value.Exists() {
 		data.DefaultOriginateRoutePolicy = types.StringValue(value.String())
+	} else if data.DefaultOriginateRoutePolicy.IsNull() {
+		data.DefaultOriginateRoutePolicy = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "default-originate.inheritance-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-originate/inheritance-disable"); value.Exists() {
 		data.DefaultOriginateInheritanceDisable = types.BoolValue(true)
 	} else {
-		data.DefaultOriginateInheritanceDisable = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.DefaultOriginateInheritanceDisable.IsNull() {
+			data.DefaultOriginateInheritanceDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "next-hop-self"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/next-hop-self"); value.Exists() {
 		data.NextHopSelf = types.BoolValue(true)
 	} else {
-		data.NextHopSelf = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.NextHopSelf.IsNull() {
+			data.NextHopSelf = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "next-hop-self.inheritance-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/next-hop-self/inheritance-disable"); value.Exists() {
 		data.NextHopSelfInheritanceDisable = types.BoolValue(true)
 	} else {
-		data.NextHopSelfInheritanceDisable = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.NextHopSelfInheritanceDisable.IsNull() {
+			data.NextHopSelfInheritanceDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound.always"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/soft-reconfiguration/inbound/always"); value.Exists() {
 		data.SoftReconfigurationInboundAlways = types.BoolValue(true)
 	} else {
-		data.SoftReconfigurationInboundAlways = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.SoftReconfigurationInboundAlways.IsNull() {
+			data.SoftReconfigurationInboundAlways = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "send-community-ebgp.inheritance-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/send-community-ebgp/inheritance-disable"); value.Exists() {
 		data.SendCommunityEbgpInheritanceDisable = types.BoolValue(true)
 	} else {
-		data.SendCommunityEbgpInheritanceDisable = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.SendCommunityEbgpInheritanceDisable.IsNull() {
+			data.SendCommunityEbgpInheritanceDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.inbound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/remove-private-as/inbound"); value.Exists() {
 		data.RemovePrivateAsInbound = types.BoolValue(true)
 	} else {
-		data.RemovePrivateAsInbound = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.RemovePrivateAsInbound.IsNull() {
+			data.RemovePrivateAsInbound = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.inbound.inheritance-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/remove-private-as/inbound/inheritance-disable"); value.Exists() {
 		data.RemovePrivateAsInboundInheritanceDisable = types.BoolValue(true)
 	} else {
-		data.RemovePrivateAsInboundInheritanceDisable = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.RemovePrivateAsInboundInheritanceDisable.IsNull() {
+			data.RemovePrivateAsInboundInheritanceDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.inbound.entire-aspath"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/remove-private-as/inbound/entire-aspath"); value.Exists() {
 		data.RemovePrivateAsInboundEntireAspath = types.BoolValue(true)
 	} else {
-		data.RemovePrivateAsInboundEntireAspath = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.RemovePrivateAsInboundEntireAspath.IsNull() {
+			data.RemovePrivateAsInboundEntireAspath = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/remove-private-as/remove-private-as-outbound"); value.Exists() {
 		data.RemovePrivateAs = types.BoolValue(true)
 	} else {
-		data.RemovePrivateAs = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.RemovePrivateAs.IsNull() {
+			data.RemovePrivateAs = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.entire-aspath"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/remove-private-as/remove-private-as-outbound/entire-aspath"); value.Exists() {
 		data.RemovePrivateAsEntireAspath = types.BoolValue(true)
 	} else {
-		data.RemovePrivateAsEntireAspath = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.RemovePrivateAsEntireAspath.IsNull() {
+			data.RemovePrivateAsEntireAspath = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.inheritance-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/remove-private-as/remove-private-as-outbound/inheritance-disable"); value.Exists() {
 		data.RemovePrivateAsInheritanceDisable = types.BoolValue(true)
 	} else {
-		data.RemovePrivateAsInheritanceDisable = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.RemovePrivateAsInheritanceDisable.IsNull() {
+			data.RemovePrivateAsInheritanceDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.internal"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/remove-private-as/remove-private-as-outbound/internal"); value.Exists() {
 		data.RemovePrivateAsInternal = types.BoolValue(true)
 	} else {
-		data.RemovePrivateAsInternal = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.RemovePrivateAsInternal.IsNull() {
+			data.RemovePrivateAsInternal = types.BoolNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *RouterBGPVRFNeighborAddressFamily) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "route-policy.in"); value.Exists() {
+		data.RoutePolicyIn = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "route-policy.out"); value.Exists() {
+		data.RoutePolicyOut = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "default-originate"); value.Exists() {
+		data.DefaultOriginate = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "default-originate.route-policy"); value.Exists() {
+		data.DefaultOriginateRoutePolicy = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "default-originate.inheritance-disable"); value.Exists() {
+		data.DefaultOriginateInheritanceDisable = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "next-hop-self"); value.Exists() {
+		data.NextHopSelf = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "next-hop-self.inheritance-disable"); value.Exists() {
+		data.NextHopSelfInheritanceDisable = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "soft-reconfiguration.inbound.always"); value.Exists() {
+		data.SoftReconfigurationInboundAlways = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "send-community-ebgp.inheritance-disable"); value.Exists() {
+		data.SendCommunityEbgpInheritanceDisable = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "remove-private-as.inbound"); value.Exists() {
+		data.RemovePrivateAsInbound = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "remove-private-as.inbound.inheritance-disable"); value.Exists() {
+		data.RemovePrivateAsInboundInheritanceDisable = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "remove-private-as.inbound.entire-aspath"); value.Exists() {
+		data.RemovePrivateAsInboundEntireAspath = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "remove-private-as.remove-private-as-outbound"); value.Exists() {
+		data.RemovePrivateAs = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "remove-private-as.remove-private-as-outbound.entire-aspath"); value.Exists() {
+		data.RemovePrivateAsEntireAspath = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "remove-private-as.remove-private-as-outbound.inheritance-disable"); value.Exists() {
+		data.RemovePrivateAsInheritanceDisable = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "remove-private-as.remove-private-as-outbound.internal"); value.Exists() {
+		data.RemovePrivateAsInternal = types.BoolValue(true)
 	}
 }
 
@@ -405,130 +609,283 @@ func (data *RouterBGPVRFNeighborAddressFamily) fromBody(ctx context.Context, res
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *RouterBGPVRFNeighborAddressFamilyData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "route-policy.in"); value.Exists() {
+func (data *RouterBGPVRFNeighborAddressFamilyData) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "route-policy.in"); value.Exists() {
 		data.RoutePolicyIn = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "route-policy.out"); value.Exists() {
+	if value := res.Get(prefix + "route-policy.out"); value.Exists() {
 		data.RoutePolicyOut = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "default-originate"); value.Exists() {
+	if value := res.Get(prefix + "default-originate"); value.Exists() {
+		data.DefaultOriginate = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "default-originate.route-policy"); value.Exists() {
+		data.DefaultOriginateRoutePolicy = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "default-originate.inheritance-disable"); value.Exists() {
+		data.DefaultOriginateInheritanceDisable = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "next-hop-self"); value.Exists() {
+		data.NextHopSelf = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "next-hop-self.inheritance-disable"); value.Exists() {
+		data.NextHopSelfInheritanceDisable = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "soft-reconfiguration.inbound.always"); value.Exists() {
+		data.SoftReconfigurationInboundAlways = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "send-community-ebgp.inheritance-disable"); value.Exists() {
+		data.SendCommunityEbgpInheritanceDisable = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "remove-private-as.inbound"); value.Exists() {
+		data.RemovePrivateAsInbound = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "remove-private-as.inbound.inheritance-disable"); value.Exists() {
+		data.RemovePrivateAsInboundInheritanceDisable = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "remove-private-as.inbound.entire-aspath"); value.Exists() {
+		data.RemovePrivateAsInboundEntireAspath = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "remove-private-as.remove-private-as-outbound"); value.Exists() {
+		data.RemovePrivateAs = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "remove-private-as.remove-private-as-outbound.entire-aspath"); value.Exists() {
+		data.RemovePrivateAsEntireAspath = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "remove-private-as.remove-private-as-outbound.inheritance-disable"); value.Exists() {
+		data.RemovePrivateAsInheritanceDisable = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "remove-private-as.remove-private-as-outbound.internal"); value.Exists() {
+		data.RemovePrivateAsInternal = types.BoolValue(true)
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *RouterBGPVRFNeighborAddressFamily) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/route-policy/in"); value.Exists() {
+		data.RoutePolicyIn = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/route-policy/out"); value.Exists() {
+		data.RoutePolicyOut = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-originate"); value.Exists() {
+		data.DefaultOriginate = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-originate/route-policy"); value.Exists() {
+		data.DefaultOriginateRoutePolicy = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-originate/inheritance-disable"); value.Exists() {
+		data.DefaultOriginateInheritanceDisable = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/next-hop-self"); value.Exists() {
+		data.NextHopSelf = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/next-hop-self/inheritance-disable"); value.Exists() {
+		data.NextHopSelfInheritanceDisable = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/soft-reconfiguration/inbound/always"); value.Exists() {
+		data.SoftReconfigurationInboundAlways = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/send-community-ebgp/inheritance-disable"); value.Exists() {
+		data.SendCommunityEbgpInheritanceDisable = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/remove-private-as/inbound"); value.Exists() {
+		data.RemovePrivateAsInbound = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/remove-private-as/inbound/inheritance-disable"); value.Exists() {
+		data.RemovePrivateAsInboundInheritanceDisable = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/remove-private-as/inbound/entire-aspath"); value.Exists() {
+		data.RemovePrivateAsInboundEntireAspath = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/remove-private-as/remove-private-as-outbound"); value.Exists() {
+		data.RemovePrivateAs = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/remove-private-as/remove-private-as-outbound/entire-aspath"); value.Exists() {
+		data.RemovePrivateAsEntireAspath = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/remove-private-as/remove-private-as-outbound/inheritance-disable"); value.Exists() {
+		data.RemovePrivateAsInheritanceDisable = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/remove-private-as/remove-private-as-outbound/internal"); value.Exists() {
+		data.RemovePrivateAsInternal = types.BoolValue(true)
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *RouterBGPVRFNeighborAddressFamilyData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/route-policy/in"); value.Exists() {
+		data.RoutePolicyIn = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/route-policy/out"); value.Exists() {
+		data.RoutePolicyOut = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-originate"); value.Exists() {
 		data.DefaultOriginate = types.BoolValue(true)
 	} else {
 		data.DefaultOriginate = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "default-originate.route-policy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-originate/route-policy"); value.Exists() {
 		data.DefaultOriginateRoutePolicy = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "default-originate.inheritance-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-originate/inheritance-disable"); value.Exists() {
 		data.DefaultOriginateInheritanceDisable = types.BoolValue(true)
 	} else {
 		data.DefaultOriginateInheritanceDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "next-hop-self"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/next-hop-self"); value.Exists() {
 		data.NextHopSelf = types.BoolValue(true)
 	} else {
 		data.NextHopSelf = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "next-hop-self.inheritance-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/next-hop-self/inheritance-disable"); value.Exists() {
 		data.NextHopSelfInheritanceDisable = types.BoolValue(true)
 	} else {
 		data.NextHopSelfInheritanceDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound.always"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/soft-reconfiguration/inbound/always"); value.Exists() {
 		data.SoftReconfigurationInboundAlways = types.BoolValue(true)
 	} else {
 		data.SoftReconfigurationInboundAlways = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "send-community-ebgp.inheritance-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/send-community-ebgp/inheritance-disable"); value.Exists() {
 		data.SendCommunityEbgpInheritanceDisable = types.BoolValue(true)
 	} else {
 		data.SendCommunityEbgpInheritanceDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.inbound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/remove-private-as/inbound"); value.Exists() {
 		data.RemovePrivateAsInbound = types.BoolValue(true)
 	} else {
 		data.RemovePrivateAsInbound = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.inbound.inheritance-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/remove-private-as/inbound/inheritance-disable"); value.Exists() {
 		data.RemovePrivateAsInboundInheritanceDisable = types.BoolValue(true)
 	} else {
 		data.RemovePrivateAsInboundInheritanceDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.inbound.entire-aspath"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/remove-private-as/inbound/entire-aspath"); value.Exists() {
 		data.RemovePrivateAsInboundEntireAspath = types.BoolValue(true)
 	} else {
 		data.RemovePrivateAsInboundEntireAspath = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/remove-private-as/remove-private-as-outbound"); value.Exists() {
 		data.RemovePrivateAs = types.BoolValue(true)
 	} else {
 		data.RemovePrivateAs = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.entire-aspath"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/remove-private-as/remove-private-as-outbound/entire-aspath"); value.Exists() {
 		data.RemovePrivateAsEntireAspath = types.BoolValue(true)
 	} else {
 		data.RemovePrivateAsEntireAspath = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.inheritance-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/remove-private-as/remove-private-as-outbound/inheritance-disable"); value.Exists() {
 		data.RemovePrivateAsInheritanceDisable = types.BoolValue(true)
 	} else {
 		data.RemovePrivateAsInheritanceDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.internal"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/remove-private-as/remove-private-as-outbound/internal"); value.Exists() {
 		data.RemovePrivateAsInternal = types.BoolValue(true)
 	} else {
 		data.RemovePrivateAsInternal = types.BoolValue(false)
 	}
 }
 
-// End of section. //template:end fromBodyData
+// End of section. //template:end fromBodyDataXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *RouterBGPVRFNeighborAddressFamily) getDeletedItems(ctx context.Context, state RouterBGPVRFNeighborAddressFamily) []string {
 	deletedItems := make([]string, 0)
-	if !state.RemovePrivateAsInternal.IsNull() && data.RemovePrivateAsInternal.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound/internal", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.RemovePrivateAsInternal.IsNull() && state.RemovePrivateAsInternal.ValueBool() {
+		if data.RemovePrivateAsInternal.IsNull() || !data.RemovePrivateAsInternal.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound/internal", state.getPath()))
+		}
 	}
-	if !state.RemovePrivateAsInheritanceDisable.IsNull() && data.RemovePrivateAsInheritanceDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound/inheritance-disable", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.RemovePrivateAsInheritanceDisable.IsNull() && state.RemovePrivateAsInheritanceDisable.ValueBool() {
+		if data.RemovePrivateAsInheritanceDisable.IsNull() || !data.RemovePrivateAsInheritanceDisable.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound/inheritance-disable", state.getPath()))
+		}
 	}
-	if !state.RemovePrivateAsEntireAspath.IsNull() && data.RemovePrivateAsEntireAspath.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound/entire-aspath", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.RemovePrivateAsEntireAspath.IsNull() && state.RemovePrivateAsEntireAspath.ValueBool() {
+		if data.RemovePrivateAsEntireAspath.IsNull() || !data.RemovePrivateAsEntireAspath.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound/entire-aspath", state.getPath()))
+		}
 	}
-	if !state.RemovePrivateAs.IsNull() && data.RemovePrivateAs.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.RemovePrivateAs.IsNull() && state.RemovePrivateAs.ValueBool() {
+		if data.RemovePrivateAs.IsNull() || !data.RemovePrivateAs.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound", state.getPath()))
+		}
 	}
-	if !state.RemovePrivateAsInboundEntireAspath.IsNull() && data.RemovePrivateAsInboundEntireAspath.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/remove-private-as/inbound/entire-aspath", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.RemovePrivateAsInboundEntireAspath.IsNull() && state.RemovePrivateAsInboundEntireAspath.ValueBool() {
+		if data.RemovePrivateAsInboundEntireAspath.IsNull() || !data.RemovePrivateAsInboundEntireAspath.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/remove-private-as/inbound/entire-aspath", state.getPath()))
+		}
 	}
-	if !state.RemovePrivateAsInboundInheritanceDisable.IsNull() && data.RemovePrivateAsInboundInheritanceDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/remove-private-as/inbound/inheritance-disable", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.RemovePrivateAsInboundInheritanceDisable.IsNull() && state.RemovePrivateAsInboundInheritanceDisable.ValueBool() {
+		if data.RemovePrivateAsInboundInheritanceDisable.IsNull() || !data.RemovePrivateAsInboundInheritanceDisable.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/remove-private-as/inbound/inheritance-disable", state.getPath()))
+		}
 	}
-	if !state.RemovePrivateAsInbound.IsNull() && data.RemovePrivateAsInbound.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/remove-private-as/inbound", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.RemovePrivateAsInbound.IsNull() && state.RemovePrivateAsInbound.ValueBool() {
+		if data.RemovePrivateAsInbound.IsNull() || !data.RemovePrivateAsInbound.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/remove-private-as/inbound", state.getPath()))
+		}
 	}
-	if !state.SendCommunityEbgpInheritanceDisable.IsNull() && data.SendCommunityEbgpInheritanceDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/send-community-ebgp/inheritance-disable", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.SendCommunityEbgpInheritanceDisable.IsNull() && state.SendCommunityEbgpInheritanceDisable.ValueBool() {
+		if data.SendCommunityEbgpInheritanceDisable.IsNull() || !data.SendCommunityEbgpInheritanceDisable.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/send-community-ebgp/inheritance-disable", state.getPath()))
+		}
 	}
-	if !state.SoftReconfigurationInboundAlways.IsNull() && data.SoftReconfigurationInboundAlways.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/soft-reconfiguration/inbound/always", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.SoftReconfigurationInboundAlways.IsNull() && state.SoftReconfigurationInboundAlways.ValueBool() {
+		if data.SoftReconfigurationInboundAlways.IsNull() || !data.SoftReconfigurationInboundAlways.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/soft-reconfiguration/inbound/always", state.getPath()))
+		}
 	}
-	if !state.NextHopSelfInheritanceDisable.IsNull() && data.NextHopSelfInheritanceDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/next-hop-self/inheritance-disable", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.NextHopSelfInheritanceDisable.IsNull() && state.NextHopSelfInheritanceDisable.ValueBool() {
+		if data.NextHopSelfInheritanceDisable.IsNull() || !data.NextHopSelfInheritanceDisable.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/next-hop-self/inheritance-disable", state.getPath()))
+		}
 	}
-	if !state.NextHopSelf.IsNull() && data.NextHopSelf.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/next-hop-self", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.NextHopSelf.IsNull() && state.NextHopSelf.ValueBool() {
+		if data.NextHopSelf.IsNull() || !data.NextHopSelf.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/next-hop-self", state.getPath()))
+		}
 	}
-	if !state.DefaultOriginateInheritanceDisable.IsNull() && data.DefaultOriginateInheritanceDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.DefaultOriginateInheritanceDisable.IsNull() && state.DefaultOriginateInheritanceDisable.ValueBool() {
+		if data.DefaultOriginateInheritanceDisable.IsNull() || !data.DefaultOriginateInheritanceDisable.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate", state.getPath()))
+		}
 	}
 	if !state.DefaultOriginateRoutePolicy.IsNull() && data.DefaultOriginateRoutePolicy.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate", state.getPath()))
 	}
-	if !state.DefaultOriginate.IsNull() && data.DefaultOriginate.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.DefaultOriginate.IsNull() && state.DefaultOriginate.ValueBool() {
+		if data.DefaultOriginate.IsNull() || !data.DefaultOriginate.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate", state.getPath()))
+		}
 	}
 	if !state.RoutePolicyOut.IsNull() && data.RoutePolicyOut.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/route-policy/out", state.getPath()))
@@ -543,46 +900,85 @@ func (data *RouterBGPVRFNeighborAddressFamily) getDeletedItems(ctx context.Conte
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *RouterBGPVRFNeighborAddressFamily) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *RouterBGPVRFNeighborAddressFamily) getEmptyLeafsDelete(ctx context.Context, state *RouterBGPVRFNeighborAddressFamily) []string {
 	emptyLeafsDelete := make([]string, 0)
+	// Only delete if state has true and plan has false
 	if !data.RemovePrivateAsInternal.IsNull() && !data.RemovePrivateAsInternal.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound/internal", data.getPath()))
+		if state != nil && !state.RemovePrivateAsInternal.IsNull() && state.RemovePrivateAsInternal.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound/internal", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.RemovePrivateAsInheritanceDisable.IsNull() && !data.RemovePrivateAsInheritanceDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound/inheritance-disable", data.getPath()))
+		if state != nil && !state.RemovePrivateAsInheritanceDisable.IsNull() && state.RemovePrivateAsInheritanceDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound/inheritance-disable", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.RemovePrivateAsEntireAspath.IsNull() && !data.RemovePrivateAsEntireAspath.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound/entire-aspath", data.getPath()))
+		if state != nil && !state.RemovePrivateAsEntireAspath.IsNull() && state.RemovePrivateAsEntireAspath.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound/entire-aspath", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.RemovePrivateAs.IsNull() && !data.RemovePrivateAs.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound", data.getPath()))
+		if state != nil && !state.RemovePrivateAs.IsNull() && state.RemovePrivateAs.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.RemovePrivateAsInboundEntireAspath.IsNull() && !data.RemovePrivateAsInboundEntireAspath.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as/inbound/entire-aspath", data.getPath()))
+		if state != nil && !state.RemovePrivateAsInboundEntireAspath.IsNull() && state.RemovePrivateAsInboundEntireAspath.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as/inbound/entire-aspath", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.RemovePrivateAsInboundInheritanceDisable.IsNull() && !data.RemovePrivateAsInboundInheritanceDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as/inbound/inheritance-disable", data.getPath()))
+		if state != nil && !state.RemovePrivateAsInboundInheritanceDisable.IsNull() && state.RemovePrivateAsInboundInheritanceDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as/inbound/inheritance-disable", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.RemovePrivateAsInbound.IsNull() && !data.RemovePrivateAsInbound.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as/inbound", data.getPath()))
+		if state != nil && !state.RemovePrivateAsInbound.IsNull() && state.RemovePrivateAsInbound.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as/inbound", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.SendCommunityEbgpInheritanceDisable.IsNull() && !data.SendCommunityEbgpInheritanceDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/send-community-ebgp/inheritance-disable", data.getPath()))
+		if state != nil && !state.SendCommunityEbgpInheritanceDisable.IsNull() && state.SendCommunityEbgpInheritanceDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/send-community-ebgp/inheritance-disable", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.SoftReconfigurationInboundAlways.IsNull() && !data.SoftReconfigurationInboundAlways.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/soft-reconfiguration/inbound/always", data.getPath()))
+		if state != nil && !state.SoftReconfigurationInboundAlways.IsNull() && state.SoftReconfigurationInboundAlways.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/soft-reconfiguration/inbound/always", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.NextHopSelfInheritanceDisable.IsNull() && !data.NextHopSelfInheritanceDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/next-hop-self/inheritance-disable", data.getPath()))
+		if state != nil && !state.NextHopSelfInheritanceDisable.IsNull() && state.NextHopSelfInheritanceDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/next-hop-self/inheritance-disable", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.NextHopSelf.IsNull() && !data.NextHopSelf.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/next-hop-self", data.getPath()))
+		if state != nil && !state.NextHopSelf.IsNull() && state.NextHopSelf.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/next-hop-self", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.DefaultOriginateInheritanceDisable.IsNull() && !data.DefaultOriginateInheritanceDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-originate", data.getPath()))
+		if state != nil && !state.DefaultOriginateInheritanceDisable.IsNull() && state.DefaultOriginateInheritanceDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-originate", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.DefaultOriginate.IsNull() && !data.DefaultOriginate.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-originate", data.getPath()))
+		if state != nil && !state.DefaultOriginate.IsNull() && state.DefaultOriginate.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-originate", data.getXPath()))
+		}
 	}
 	return emptyLeafsDelete
 }
@@ -641,7 +1037,236 @@ func (data *RouterBGPVRFNeighborAddressFamily) getDeletePaths(ctx context.Contex
 	if !data.RoutePolicyIn.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/route-policy/in", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *RouterBGPVRFNeighborAddressFamily) addDeletedItemsXML(ctx context.Context, state RouterBGPVRFNeighborAddressFamily, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.RemovePrivateAsInternal.IsNull() && state.RemovePrivateAsInternal.ValueBool() && data.RemovePrivateAsInternal.IsNull() {
+		deletePath := state.getXPath() + "/remove-private-as/remove-private-as-outbound/internal"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.RemovePrivateAsInheritanceDisable.IsNull() && state.RemovePrivateAsInheritanceDisable.ValueBool() && data.RemovePrivateAsInheritanceDisable.IsNull() {
+		deletePath := state.getXPath() + "/remove-private-as/remove-private-as-outbound/inheritance-disable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.RemovePrivateAsEntireAspath.IsNull() && state.RemovePrivateAsEntireAspath.ValueBool() && data.RemovePrivateAsEntireAspath.IsNull() {
+		deletePath := state.getXPath() + "/remove-private-as/remove-private-as-outbound/entire-aspath"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.RemovePrivateAs.IsNull() && state.RemovePrivateAs.ValueBool() && data.RemovePrivateAs.IsNull() {
+		deletePath := state.getXPath() + "/remove-private-as/remove-private-as-outbound"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.RemovePrivateAsInboundEntireAspath.IsNull() && state.RemovePrivateAsInboundEntireAspath.ValueBool() && data.RemovePrivateAsInboundEntireAspath.IsNull() {
+		deletePath := state.getXPath() + "/remove-private-as/inbound/entire-aspath"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.RemovePrivateAsInboundInheritanceDisable.IsNull() && state.RemovePrivateAsInboundInheritanceDisable.ValueBool() && data.RemovePrivateAsInboundInheritanceDisable.IsNull() {
+		deletePath := state.getXPath() + "/remove-private-as/inbound/inheritance-disable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.RemovePrivateAsInbound.IsNull() && state.RemovePrivateAsInbound.ValueBool() && data.RemovePrivateAsInbound.IsNull() {
+		deletePath := state.getXPath() + "/remove-private-as/inbound"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.SendCommunityEbgpInheritanceDisable.IsNull() && state.SendCommunityEbgpInheritanceDisable.ValueBool() && data.SendCommunityEbgpInheritanceDisable.IsNull() {
+		deletePath := state.getXPath() + "/send-community-ebgp/inheritance-disable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.SoftReconfigurationInboundAlways.IsNull() && state.SoftReconfigurationInboundAlways.ValueBool() && data.SoftReconfigurationInboundAlways.IsNull() {
+		deletePath := state.getXPath() + "/soft-reconfiguration/inbound/always"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.NextHopSelfInheritanceDisable.IsNull() && state.NextHopSelfInheritanceDisable.ValueBool() && data.NextHopSelfInheritanceDisable.IsNull() {
+		deletePath := state.getXPath() + "/next-hop-self/inheritance-disable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.NextHopSelf.IsNull() && state.NextHopSelf.ValueBool() && data.NextHopSelf.IsNull() {
+		deletePath := state.getXPath() + "/next-hop-self"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.DefaultOriginateInheritanceDisable.IsNull() && state.DefaultOriginateInheritanceDisable.ValueBool() && data.DefaultOriginateInheritanceDisable.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/default-originate"
+		predicates := make(map[string]string)
+		if !state.DefaultOriginateRoutePolicy.IsNull() {
+			predicates["route-policy"] = fmt.Sprintf("%v", state.DefaultOriginateRoutePolicy.ValueString())
+		}
+		predicates["inheritance-disable"] = fmt.Sprintf("%v", state.DefaultOriginateInheritanceDisable.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.DefaultOriginateRoutePolicy.IsNull() && data.DefaultOriginateRoutePolicy.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/default-originate"
+		predicates := make(map[string]string)
+		if !state.DefaultOriginateInheritanceDisable.IsNull() {
+			predicates["inheritance-disable"] = fmt.Sprintf("%v", state.DefaultOriginateInheritanceDisable.ValueBool())
+		}
+		predicates["route-policy"] = fmt.Sprintf("%v", state.DefaultOriginateRoutePolicy.ValueString())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.DefaultOriginate.IsNull() && state.DefaultOriginate.ValueBool() && data.DefaultOriginate.IsNull() {
+		deletePath := state.getXPath() + "/default-originate"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.RoutePolicyOut.IsNull() && data.RoutePolicyOut.IsNull() {
+		deletePath := state.getXPath() + "/route-policy/out"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.RoutePolicyIn.IsNull() && data.RoutePolicyIn.IsNull() {
+		deletePath := state.getXPath() + "/route-policy/in"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *RouterBGPVRFNeighborAddressFamily) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.RemovePrivateAsInternal.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/remove-private-as/remove-private-as-outbound/internal")
+	}
+	if !data.RemovePrivateAsInheritanceDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/remove-private-as/remove-private-as-outbound/inheritance-disable")
+	}
+	if !data.RemovePrivateAsEntireAspath.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/remove-private-as/remove-private-as-outbound/entire-aspath")
+	}
+	if !data.RemovePrivateAs.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/remove-private-as/remove-private-as-outbound")
+	}
+	if !data.RemovePrivateAsInboundEntireAspath.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/remove-private-as/inbound/entire-aspath")
+	}
+	if !data.RemovePrivateAsInboundInheritanceDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/remove-private-as/inbound/inheritance-disable")
+	}
+	if !data.RemovePrivateAsInbound.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/remove-private-as/inbound")
+	}
+	if !data.SendCommunityEbgpInheritanceDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/send-community-ebgp/inheritance-disable")
+	}
+	if !data.SoftReconfigurationInboundAlways.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/soft-reconfiguration/inbound/always")
+	}
+	if !data.NextHopSelfInheritanceDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/next-hop-self/inheritance-disable")
+	}
+	if !data.NextHopSelf.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/next-hop-self")
+	}
+	if !data.DefaultOriginateInheritanceDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/default-originate")
+	}
+	if !data.DefaultOriginateRoutePolicy.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/default-originate")
+	}
+	if !data.DefaultOriginate.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/default-originate")
+	}
+	if !data.RoutePolicyOut.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/route-policy/out")
+	}
+	if !data.RoutePolicyIn.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/route-policy/in")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

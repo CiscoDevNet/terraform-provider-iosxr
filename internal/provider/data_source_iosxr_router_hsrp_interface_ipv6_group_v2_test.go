@@ -20,46 +20,8 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrRouterHSRPInterfaceIPv6GroupV2(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv6_group_v2.test", "name", "gp2"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv6_group_v2.test", "mac_address", "00:01:00:02:00:02"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv6_group_v2.test", "timers_msec", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv6_group_v2.test", "timers_msec_holdtime", "300"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv6_group_v2.test", "preempt_delay", "256"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv6_group_v2.test", "priority", "244"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv6_group_v2.test", "bfd_fast_detect_peer_ipv6", "fe80::240:d0ff:fe48:4672"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv6_group_v2.test", "bfd_fast_detect_peer_interface", "GigabitEthernet0/0/0/3"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv6_group_v2.test", "track_objects.0.object_name", "TOBJ2"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv6_group_v2.test", "track_objects.0.priority_decrement", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv6_group_v2.test", "track_interfaces.0.track_name", "GigabitEthernet0/0/0/4"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv6_group_v2.test", "track_interfaces.0.priority_decrement", "244"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv6_group_v2.test", "addresses.0.address", "2001:db8:cafe:2100::bad1:1010"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv6_group_v2.test", "address_link_local_autoconfig", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv6_group_v2.test", "address_link_local_autoconfig_legacy_compatible", "true"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrRouterHSRPInterfaceIPv6GroupV2PrerequisitesConfig + testAccDataSourceIosxrRouterHSRPInterfaceIPv6GroupV2Config(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRouterHSRPInterfaceIPv6GroupV2PrerequisitesConfig = `
@@ -73,46 +35,3 @@ resource "iosxr_gnmi" "PreReq0" {
 `
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrRouterHSRPInterfaceIPv6GroupV2Config() string {
-	config := `resource "iosxr_router_hsrp_interface_ipv6_group_v2" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	interface_name = "GigabitEthernet0/0/0/2"` + "\n"
-	config += `	group_id = 4000` + "\n"
-	config += `	name = "gp2"` + "\n"
-	config += `	mac_address = "00:01:00:02:00:02"` + "\n"
-	config += `	timers_msec = 100` + "\n"
-	config += `	timers_msec_holdtime = 300` + "\n"
-	config += `	preempt_delay = 256` + "\n"
-	config += `	priority = 244` + "\n"
-	config += `	bfd_fast_detect_peer_ipv6 = "fe80::240:d0ff:fe48:4672"` + "\n"
-	config += `	bfd_fast_detect_peer_interface = "GigabitEthernet0/0/0/3"` + "\n"
-	config += `	track_objects = [{` + "\n"
-	config += `		object_name = "TOBJ2"` + "\n"
-	config += `		priority_decrement = 10` + "\n"
-	config += `	}]` + "\n"
-	config += `	track_interfaces = [{` + "\n"
-	config += `		track_name = "GigabitEthernet0/0/0/4"` + "\n"
-	config += `		priority_decrement = 244` + "\n"
-	config += `	}]` + "\n"
-	config += `	addresses = [{` + "\n"
-	config += `		address = "2001:db8:cafe:2100::bad1:1010"` + "\n"
-	config += `	}]` + "\n"
-	config += `	address_link_local_autoconfig = true` + "\n"
-	config += `	address_link_local_autoconfig_legacy_compatible = true` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_router_hsrp_interface_ipv6_group_v2" "test" {
-			interface_name = "GigabitEthernet0/0/0/2"
-			group_id = 4000
-			depends_on = [iosxr_router_hsrp_interface_ipv6_group_v2.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

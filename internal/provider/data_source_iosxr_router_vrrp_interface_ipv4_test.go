@@ -20,46 +20,8 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrRouterVRRPInterfaceIPv4(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv4.test", "address", "1.1.1.1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv4.test", "priority", "250"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv4.test", "name", "TEST"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv4.test", "text_authentication", "password"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv4.test", "secondary_addresses.0.address", "2.2.2.2"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv4.test", "timer_advertisement_seconds", "123"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv4.test", "timer_force", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv4.test", "preempt_disable", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv4.test", "preempt_delay", "255"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv4.test", "accept_mode_disable", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv4.test", "track_interfaces.0.interface_name", "GigabitEthernet0/0/0/4"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv4.test", "track_interfaces.0.priority_decrement", "12"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv4.test", "track_objects.0.object_name", "OBJECT"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv4.test", "track_objects.0.priority_decrement", "22"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_ipv4.test", "bfd_fast_detect_peer_ipv4", "33.33.33.3"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrRouterVRRPInterfaceIPv4PrerequisitesConfig + testAccDataSourceIosxrRouterVRRPInterfaceIPv4Config(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRouterVRRPInterfaceIPv4PrerequisitesConfig = `
@@ -80,48 +42,3 @@ resource "iosxr_gnmi" "PreReq1" {
 `
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrRouterVRRPInterfaceIPv4Config() string {
-	config := `resource "iosxr_router_vrrp_interface_ipv4" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
-	config += `	vrrp_id = 123` + "\n"
-	config += `	version = 2` + "\n"
-	config += `	address = "1.1.1.1"` + "\n"
-	config += `	priority = 250` + "\n"
-	config += `	name = "TEST"` + "\n"
-	config += `	text_authentication = "password"` + "\n"
-	config += `	secondary_addresses = [{` + "\n"
-	config += `		address = "2.2.2.2"` + "\n"
-	config += `	}]` + "\n"
-	config += `	timer_advertisement_seconds = 123` + "\n"
-	config += `	timer_force = false` + "\n"
-	config += `	preempt_disable = false` + "\n"
-	config += `	preempt_delay = 255` + "\n"
-	config += `	accept_mode_disable = false` + "\n"
-	config += `	track_interfaces = [{` + "\n"
-	config += `		interface_name = "GigabitEthernet0/0/0/4"` + "\n"
-	config += `		priority_decrement = 12` + "\n"
-	config += `	}]` + "\n"
-	config += `	track_objects = [{` + "\n"
-	config += `		object_name = "OBJECT"` + "\n"
-	config += `		priority_decrement = 22` + "\n"
-	config += `	}]` + "\n"
-	config += `	bfd_fast_detect_peer_ipv4 = "33.33.33.3"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_router_vrrp_interface_ipv4" "test" {
-			interface_name = "GigabitEthernet0/0/0/1"
-			vrrp_id = 123
-			version = 2
-			depends_on = [iosxr_router_vrrp_interface_ipv4.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

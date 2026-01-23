@@ -20,44 +20,8 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrRouterStaticVRFIPv6Unicast(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_vrf_ipv6_unicast.test", "nexthop_addresses.0.address", "3::3"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_vrf_ipv6_unicast.test", "nexthop_addresses.0.description", "ip-description"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_vrf_ipv6_unicast.test", "nexthop_addresses.0.tag", "104"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_vrf_ipv6_unicast.test", "nexthop_addresses.0.distance_metric", "155"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_vrf_ipv6_unicast.test", "nexthop_addresses.0.track", "TRACK1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_vrf_ipv6_unicast.test", "nexthop_addresses.0.metric", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_vrf_ipv6_unicast.test", "vrfs.0.vrf_name", "VRF1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_vrf_ipv6_unicast.test", "vrfs.0.nexthop_addresses.0.address", "3::3"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_vrf_ipv6_unicast.test", "vrfs.0.nexthop_addresses.0.description", "ip-description"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_vrf_ipv6_unicast.test", "vrfs.0.nexthop_addresses.0.tag", "104"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_vrf_ipv6_unicast.test", "vrfs.0.nexthop_addresses.0.distance_metric", "155"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_vrf_ipv6_unicast.test", "vrfs.0.nexthop_addresses.0.track", "TRACK1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_vrf_ipv6_unicast.test", "vrfs.0.nexthop_addresses.0.metric", "10"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrRouterStaticVRFIPv6UnicastPrerequisitesConfig + testAccDataSourceIosxrRouterStaticVRFIPv6UnicastConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRouterStaticVRFIPv6UnicastPrerequisitesConfig = `
@@ -71,46 +35,3 @@ resource "iosxr_gnmi" "PreReq0" {
 `
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrRouterStaticVRFIPv6UnicastConfig() string {
-	config := `resource "iosxr_router_static_vrf_ipv6_unicast" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	vrf_name = "VRF2"` + "\n"
-	config += `	prefix_address = "1::"` + "\n"
-	config += `	prefix_length = 64` + "\n"
-	config += `	nexthop_addresses = [{` + "\n"
-	config += `		address = "3::3"` + "\n"
-	config += `		description = "ip-description"` + "\n"
-	config += `		tag = 104` + "\n"
-	config += `		distance_metric = 155` + "\n"
-	config += `		track = "TRACK1"` + "\n"
-	config += `		metric = 10` + "\n"
-	config += `	}]` + "\n"
-	config += `	vrfs = [{` + "\n"
-	config += `		vrf_name = "VRF1"` + "\n"
-	config += `		nexthop_addresses = [{` + "\n"
-	config += `			address = "3::3"` + "\n"
-	config += `			description = "ip-description"` + "\n"
-	config += `			tag = 104` + "\n"
-	config += `			distance_metric = 155` + "\n"
-	config += `			track = "TRACK1"` + "\n"
-	config += `			metric = 10` + "\n"
-	config += `		}]` + "\n"
-	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_router_static_vrf_ipv6_unicast" "test" {
-			vrf_name = "VRF2"
-			prefix_address = "1::"
-			prefix_length = 64
-			depends_on = [iosxr_router_static_vrf_ipv6_unicast.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

@@ -25,8 +25,13 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
+	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -74,6 +79,17 @@ func (data SSHData) getPath() string {
 	return "Cisco-IOS-XR-um-ssh-cfg:/ssh"
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data SSH) getXPath() string {
+	path := "Cisco-IOS-XR-um-ssh-cfg:/ssh"
+	return path
+}
+
+func (data SSHData) getXPath() string {
+	path := "Cisco-IOS-XR-um-ssh-cfg:/ssh"
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -118,6 +134,55 @@ func (data SSH) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data SSH) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.ServerDscp.IsNull() && !data.ServerDscp.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/server/dscp", strconv.FormatInt(data.ServerDscp.ValueInt64(), 10))
+	}
+	if !data.ServerLogging.IsNull() && !data.ServerLogging.IsUnknown() {
+		if data.ServerLogging.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/server/logging", "")
+		}
+	}
+	if !data.ServerRateLimit.IsNull() && !data.ServerRateLimit.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/server/rate-limit", strconv.FormatInt(data.ServerRateLimit.ValueInt64(), 10))
+	}
+	if !data.ServerSessionLimit.IsNull() && !data.ServerSessionLimit.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/server/session-limit", strconv.FormatInt(data.ServerSessionLimit.ValueInt64(), 10))
+	}
+	if !data.ServerV2.IsNull() && !data.ServerV2.IsUnknown() {
+		if data.ServerV2.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/server/v2", "")
+		}
+	}
+	if len(data.ServerVrfs) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.ServerVrfs {
+			cBody := netconf.Body{}
+			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "vrf-name", item.VrfName.ValueString())
+			}
+			if !item.Ipv4AccessList.IsNull() && !item.Ipv4AccessList.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "ipv4/access-list", item.Ipv4AccessList.ValueString())
+			}
+			if !item.Ipv6AccessList.IsNull() && !item.Ipv6AccessList.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "ipv6/access-list", item.Ipv6AccessList.ValueString())
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"server/vrfs/vrf", cBody.Res())
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
@@ -126,15 +191,13 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.ServerDscp = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "server.logging"); !data.ServerLogging.IsNull() {
-		if value.Exists() {
-			data.ServerLogging = types.BoolValue(true)
-		} else {
-			data.ServerLogging = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "server.logging"); value.Exists() {
+		data.ServerLogging = types.BoolValue(true)
+	} else if data.ServerLogging.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.ServerLogging = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 	if value := gjson.GetBytes(res, "server.rate-limit"); value.Exists() && !data.ServerRateLimit.IsNull() {
 		data.ServerRateLimit = types.Int64Value(value.Int())
 	} else {
@@ -145,15 +208,13 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.ServerSessionLimit = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "server.v2"); !data.ServerV2.IsNull() {
-		if value.Exists() {
-			data.ServerV2 = types.BoolValue(true)
-		} else {
-			data.ServerV2 = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "server.v2"); value.Exists() {
+		data.ServerV2 = types.BoolValue(true)
+	} else if data.ServerV2.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.ServerV2 = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 	for i := range data.ServerVrfs {
 		keys := [...]string{"vrf-name"}
 		keyValues := [...]string{data.ServerVrfs[i].VrfName.ValueString()}
@@ -197,29 +258,108 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 
 // End of section. //template:end updateFromBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
-func (data *SSH) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "server.dscp"); value.Exists() {
+func (data *SSH) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/server/dscp"); value.Exists() {
 		data.ServerDscp = types.Int64Value(value.Int())
+	} else if data.ServerDscp.IsNull() {
+		data.ServerDscp = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "server.logging"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/server/logging"); value.Exists() {
 		data.ServerLogging = types.BoolValue(true)
 	} else {
-		data.ServerLogging = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.ServerLogging.IsNull() {
+			data.ServerLogging = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "server.rate-limit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/server/rate-limit"); value.Exists() {
 		data.ServerRateLimit = types.Int64Value(value.Int())
+	} else if data.ServerRateLimit.IsNull() {
+		data.ServerRateLimit = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "server.session-limit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/server/session-limit"); value.Exists() {
 		data.ServerSessionLimit = types.Int64Value(value.Int())
+	} else if data.ServerSessionLimit.IsNull() {
+		data.ServerSessionLimit = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "server.v2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/server/v2"); value.Exists() {
 		data.ServerV2 = types.BoolValue(true)
 	} else {
-		data.ServerV2 = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.ServerV2.IsNull() {
+			data.ServerV2 = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "server.vrfs.vrf"); value.Exists() {
+	for i := range data.ServerVrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.ServerVrfs[i].VrfName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/server/vrfs/vrf").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "vrf-name"); value.Exists() {
+			data.ServerVrfs[i].VrfName = types.StringValue(value.String())
+		} else if data.ServerVrfs[i].VrfName.IsNull() {
+			data.ServerVrfs[i].VrfName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "ipv4/access-list"); value.Exists() {
+			data.ServerVrfs[i].Ipv4AccessList = types.StringValue(value.String())
+		} else if data.ServerVrfs[i].Ipv4AccessList.IsNull() {
+			data.ServerVrfs[i].Ipv4AccessList = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "ipv6/access-list"); value.Exists() {
+			data.ServerVrfs[i].Ipv6AccessList = types.StringValue(value.String())
+		} else if data.ServerVrfs[i].Ipv6AccessList.IsNull() {
+			data.ServerVrfs[i].Ipv6AccessList = types.StringNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *SSH) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "server.dscp"); value.Exists() {
+		data.ServerDscp = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "server.logging"); value.Exists() {
+		data.ServerLogging = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "server.rate-limit"); value.Exists() {
+		data.ServerRateLimit = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "server.session-limit"); value.Exists() {
+		data.ServerSessionLimit = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "server.v2"); value.Exists() {
+		data.ServerV2 = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "server.vrfs.vrf"); value.Exists() {
 		data.ServerVrfs = make([]SSHServerVrfs, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SSHServerVrfs{}
@@ -242,27 +382,27 @@ func (data *SSH) fromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *SSHData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "server.dscp"); value.Exists() {
+func (data *SSHData) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "server.dscp"); value.Exists() {
 		data.ServerDscp = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "server.logging"); value.Exists() {
+	if value := res.Get(prefix + "server.logging"); value.Exists() {
 		data.ServerLogging = types.BoolValue(true)
-	} else {
-		data.ServerLogging = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.rate-limit"); value.Exists() {
+	if value := res.Get(prefix + "server.rate-limit"); value.Exists() {
 		data.ServerRateLimit = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "server.session-limit"); value.Exists() {
+	if value := res.Get(prefix + "server.session-limit"); value.Exists() {
 		data.ServerSessionLimit = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "server.v2"); value.Exists() {
+	if value := res.Get(prefix + "server.v2"); value.Exists() {
 		data.ServerV2 = types.BoolValue(true)
-	} else {
-		data.ServerV2 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "server.vrfs.vrf"); value.Exists() {
+	if value := res.Get(prefix + "server.vrfs.vrf"); value.Exists() {
 		data.ServerVrfs = make([]SSHServerVrfs, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SSHServerVrfs{}
@@ -282,6 +422,88 @@ func (data *SSHData) fromBody(ctx context.Context, res []byte) {
 }
 
 // End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *SSH) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/server/dscp"); value.Exists() {
+		data.ServerDscp = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/server/logging"); value.Exists() {
+		data.ServerLogging = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/server/rate-limit"); value.Exists() {
+		data.ServerRateLimit = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/server/session-limit"); value.Exists() {
+		data.ServerSessionLimit = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/server/v2"); value.Exists() {
+		data.ServerV2 = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/server/vrfs/vrf"); value.Exists() {
+		data.ServerVrfs = make([]SSHServerVrfs, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SSHServerVrfs{}
+			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv4/access-list"); cValue.Exists() {
+				item.Ipv4AccessList = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv6/access-list"); cValue.Exists() {
+				item.Ipv6AccessList = types.StringValue(cValue.String())
+			}
+			data.ServerVrfs = append(data.ServerVrfs, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *SSHData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/server/dscp"); value.Exists() {
+		data.ServerDscp = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/server/logging"); value.Exists() {
+		data.ServerLogging = types.BoolValue(true)
+	} else {
+		data.ServerLogging = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/server/rate-limit"); value.Exists() {
+		data.ServerRateLimit = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/server/session-limit"); value.Exists() {
+		data.ServerSessionLimit = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/server/v2"); value.Exists() {
+		data.ServerV2 = types.BoolValue(true)
+	} else {
+		data.ServerV2 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/server/vrfs/vrf"); value.Exists() {
+		data.ServerVrfs = make([]SSHServerVrfs, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SSHServerVrfs{}
+			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv4/access-list"); cValue.Exists() {
+				item.Ipv4AccessList = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv6/access-list"); cValue.Exists() {
+				item.Ipv6AccessList = types.StringValue(cValue.String())
+			}
+			data.ServerVrfs = append(data.ServerVrfs, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
@@ -323,8 +545,11 @@ func (data *SSH) getDeletedItems(ctx context.Context, state SSH) []string {
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/server/vrfs/vrf%v", state.getPath(), keyString))
 		}
 	}
-	if !state.ServerV2.IsNull() && data.ServerV2.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/server/v2", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.ServerV2.IsNull() && state.ServerV2.ValueBool() {
+		if data.ServerV2.IsNull() || !data.ServerV2.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/server/v2", state.getPath()))
+		}
 	}
 	if !state.ServerSessionLimit.IsNull() && data.ServerSessionLimit.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/server/session-limit", state.getPath()))
@@ -332,8 +557,11 @@ func (data *SSH) getDeletedItems(ctx context.Context, state SSH) []string {
 	if !state.ServerRateLimit.IsNull() && data.ServerRateLimit.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/server/rate-limit", state.getPath()))
 	}
-	if !state.ServerLogging.IsNull() && data.ServerLogging.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/server/logging", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.ServerLogging.IsNull() && state.ServerLogging.ValueBool() {
+		if data.ServerLogging.IsNull() || !data.ServerLogging.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/server/logging", state.getPath()))
+		}
 	}
 	if !state.ServerDscp.IsNull() && data.ServerDscp.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/server/dscp", state.getPath()))
@@ -345,7 +573,7 @@ func (data *SSH) getDeletedItems(ctx context.Context, state SSH) []string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *SSH) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *SSH) getEmptyLeafsDelete(ctx context.Context, state *SSH) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.ServerVrfs {
 		keys := [...]string{"vrf-name"}
@@ -355,11 +583,17 @@ func (data *SSH) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ServerV2.IsNull() && !data.ServerV2.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/v2", data.getPath()))
+		if state != nil && !state.ServerV2.IsNull() && state.ServerV2.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/v2", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.ServerLogging.IsNull() && !data.ServerLogging.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/logging", data.getPath()))
+		if state != nil && !state.ServerLogging.IsNull() && state.ServerLogging.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/logging", data.getXPath()))
+		}
 	}
 	return emptyLeafsDelete
 }
@@ -371,14 +605,9 @@ func (data *SSH) getEmptyLeafsDelete(ctx context.Context) []string {
 func (data *SSH) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.ServerVrfs {
-		keys := [...]string{"vrf-name"}
 		keyValues := [...]string{data.ServerVrfs[i].VrfName.ValueString()}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/vrfs/vrf%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/vrfs/vrf=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	if !data.ServerV2.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/v2", data.getPath()))
@@ -395,7 +624,131 @@ func (data *SSH) getDeletePaths(ctx context.Context) []string {
 	if !data.ServerDscp.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/dscp", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *SSH) addDeletedItemsXML(ctx context.Context, state SSH, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.ServerVrfs {
+		stateKeys := [...]string{"vrf-name"}
+		stateKeyValues := [...]string{state.ServerVrfs[i].VrfName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.ServerVrfs[i].VrfName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.ServerVrfs {
+			found = true
+			if state.ServerVrfs[i].VrfName.ValueString() != data.ServerVrfs[j].VrfName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.ServerVrfs[i].Ipv6AccessList.IsNull() && data.ServerVrfs[j].Ipv6AccessList.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server/vrfs/vrf%v/ipv6/access-list", predicates))
+				}
+				if !state.ServerVrfs[i].Ipv4AccessList.IsNull() && data.ServerVrfs[j].Ipv4AccessList.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server/vrfs/vrf%v/ipv4/access-list", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server/vrfs/vrf%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ServerV2.IsNull() && state.ServerV2.ValueBool() && data.ServerV2.IsNull() {
+		deletePath := state.getXPath() + "/server/v2"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ServerSessionLimit.IsNull() && data.ServerSessionLimit.IsNull() {
+		deletePath := state.getXPath() + "/server/session-limit"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ServerRateLimit.IsNull() && data.ServerRateLimit.IsNull() {
+		deletePath := state.getXPath() + "/server/rate-limit"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ServerLogging.IsNull() && state.ServerLogging.ValueBool() && data.ServerLogging.IsNull() {
+		deletePath := state.getXPath() + "/server/logging"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ServerDscp.IsNull() && data.ServerDscp.IsNull() {
+		deletePath := state.getXPath() + "/server/dscp"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *SSH) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	for i := range data.ServerVrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.ServerVrfs[i].VrfName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/server/vrfs/vrf%v", predicates))
+	}
+	if !data.ServerV2.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/v2")
+	}
+	if !data.ServerSessionLimit.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/session-limit")
+	}
+	if !data.ServerRateLimit.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/rate-limit")
+	}
+	if !data.ServerLogging.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/logging")
+	}
+	if !data.ServerDscp.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/dscp")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

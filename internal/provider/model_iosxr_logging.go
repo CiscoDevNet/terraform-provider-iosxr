@@ -25,7 +25,11 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -78,6 +82,17 @@ func (data LoggingData) getPath() string {
 	return "Cisco-IOS-XR-um-logging-cfg:/logging"
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data Logging) getXPath() string {
+	path := "Cisco-IOS-XR-um-logging-cfg:/logging"
+	return path
+}
+
+func (data LoggingData) getXPath() string {
+	path := "Cisco-IOS-XR-um-logging-cfg:/logging"
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -126,6 +141,56 @@ func (data Logging) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data Logging) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.Ipv4Dscp.IsNull() && !data.Ipv4Dscp.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ipv4/dscp", data.Ipv4Dscp.ValueString())
+	}
+	if !data.Trap.IsNull() && !data.Trap.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/trap", data.Trap.ValueString())
+	}
+	if !data.EventsDisplayLocation.IsNull() && !data.EventsDisplayLocation.IsUnknown() {
+		if data.EventsDisplayLocation.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/display-location", "")
+		}
+	}
+	if !data.EventsLevel.IsNull() && !data.EventsLevel.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/level", data.EventsLevel.ValueString())
+	}
+	if !data.Console.IsNull() && !data.Console.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/console", data.Console.ValueString())
+	}
+	if !data.Monitor.IsNull() && !data.Monitor.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/monitor", data.Monitor.ValueString())
+	}
+	if !data.BufferedLoggingBufferSize.IsNull() && !data.BufferedLoggingBufferSize.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/buffered/logging-buffer-size", strconv.FormatInt(data.BufferedLoggingBufferSize.ValueInt64(), 10))
+	}
+	if !data.BufferedLevel.IsNull() && !data.BufferedLevel.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/buffered/level", data.BufferedLevel.ValueString())
+	}
+	if !data.FacilityLevel.IsNull() && !data.FacilityLevel.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/facility/level", data.FacilityLevel.ValueString())
+	}
+	if !data.Hostnameprefix.IsNull() && !data.Hostnameprefix.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/hostnameprefix", data.Hostnameprefix.ValueString())
+	}
+	if !data.SuppressDuplicates.IsNull() && !data.SuppressDuplicates.IsUnknown() {
+		if data.SuppressDuplicates.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/suppress/duplicates", "")
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
@@ -139,15 +204,13 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Trap = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.display-location"); !data.EventsDisplayLocation.IsNull() {
-		if value.Exists() {
-			data.EventsDisplayLocation = types.BoolValue(true)
-		} else {
-			data.EventsDisplayLocation = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.display-location"); value.Exists() {
+		data.EventsDisplayLocation = types.BoolValue(true)
+	} else if data.EventsDisplayLocation.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.EventsDisplayLocation = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.level"); value.Exists() && !data.EventsLevel.IsNull() {
 		data.EventsLevel = types.StringValue(value.String())
 	} else {
@@ -183,58 +246,126 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Hostnameprefix = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "suppress.duplicates"); !data.SuppressDuplicates.IsNull() {
-		if value.Exists() {
-			data.SuppressDuplicates = types.BoolValue(true)
-		} else {
-			data.SuppressDuplicates = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "suppress.duplicates"); value.Exists() {
+		data.SuppressDuplicates = types.BoolValue(true)
+	} else if data.SuppressDuplicates.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.SuppressDuplicates = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 }
 
 // End of section. //template:end updateFromBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
-func (data *Logging) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "ipv4.dscp"); value.Exists() {
+func (data *Logging) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/dscp"); value.Exists() {
 		data.Ipv4Dscp = types.StringValue(value.String())
+	} else if data.Ipv4Dscp.IsNull() {
+		data.Ipv4Dscp = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "trap"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/trap"); value.Exists() {
 		data.Trap = types.StringValue(value.String())
+	} else if data.Trap.IsNull() {
+		data.Trap = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.display-location"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/display-location"); value.Exists() {
 		data.EventsDisplayLocation = types.BoolValue(true)
 	} else {
-		data.EventsDisplayLocation = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.EventsDisplayLocation.IsNull() {
+			data.EventsDisplayLocation = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/level"); value.Exists() {
 		data.EventsLevel = types.StringValue(value.String())
+	} else if data.EventsLevel.IsNull() {
+		data.EventsLevel = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "console"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/console"); value.Exists() {
 		data.Console = types.StringValue(value.String())
+	} else if data.Console.IsNull() {
+		data.Console = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "monitor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/monitor"); value.Exists() {
 		data.Monitor = types.StringValue(value.String())
+	} else if data.Monitor.IsNull() {
+		data.Monitor = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "buffered.logging-buffer-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/logging-buffer-size"); value.Exists() {
 		data.BufferedLoggingBufferSize = types.Int64Value(value.Int())
+	} else if data.BufferedLoggingBufferSize.IsNull() {
+		data.BufferedLoggingBufferSize = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "buffered.level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/level"); value.Exists() {
 		data.BufferedLevel = types.StringValue(value.String())
+	} else if data.BufferedLevel.IsNull() {
+		data.BufferedLevel = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "facility.level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/facility/level"); value.Exists() {
 		data.FacilityLevel = types.StringValue(value.String())
+	} else if data.FacilityLevel.IsNull() {
+		data.FacilityLevel = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "hostnameprefix"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hostnameprefix"); value.Exists() {
 		data.Hostnameprefix = types.StringValue(value.String())
+	} else if data.Hostnameprefix.IsNull() {
+		data.Hostnameprefix = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "suppress.duplicates"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/suppress/duplicates"); value.Exists() {
 		data.SuppressDuplicates = types.BoolValue(true)
 	} else {
-		data.SuppressDuplicates = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.SuppressDuplicates.IsNull() {
+			data.SuppressDuplicates = types.BoolNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *Logging) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "ipv4.dscp"); value.Exists() {
+		data.Ipv4Dscp = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "trap"); value.Exists() {
+		data.Trap = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.display-location"); value.Exists() {
+		data.EventsDisplayLocation = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.level"); value.Exists() {
+		data.EventsLevel = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "console"); value.Exists() {
+		data.Console = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "monitor"); value.Exists() {
+		data.Monitor = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "buffered.logging-buffer-size"); value.Exists() {
+		data.BufferedLoggingBufferSize = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "buffered.level"); value.Exists() {
+		data.BufferedLevel = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "facility.level"); value.Exists() {
+		data.FacilityLevel = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "hostnameprefix"); value.Exists() {
+		data.Hostnameprefix = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "suppress.duplicates"); value.Exists() {
+		data.SuppressDuplicates = types.BoolValue(true)
 	}
 }
 
@@ -242,54 +373,141 @@ func (data *Logging) fromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *LoggingData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "ipv4.dscp"); value.Exists() {
+func (data *LoggingData) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "ipv4.dscp"); value.Exists() {
 		data.Ipv4Dscp = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "trap"); value.Exists() {
+	if value := res.Get(prefix + "trap"); value.Exists() {
 		data.Trap = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.display-location"); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.display-location"); value.Exists() {
+		data.EventsDisplayLocation = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-logging-events-cfg:events.level"); value.Exists() {
+		data.EventsLevel = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "console"); value.Exists() {
+		data.Console = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "monitor"); value.Exists() {
+		data.Monitor = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "buffered.logging-buffer-size"); value.Exists() {
+		data.BufferedLoggingBufferSize = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "buffered.level"); value.Exists() {
+		data.BufferedLevel = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "facility.level"); value.Exists() {
+		data.FacilityLevel = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "hostnameprefix"); value.Exists() {
+		data.Hostnameprefix = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "suppress.duplicates"); value.Exists() {
+		data.SuppressDuplicates = types.BoolValue(true)
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *Logging) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/dscp"); value.Exists() {
+		data.Ipv4Dscp = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/trap"); value.Exists() {
+		data.Trap = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/display-location"); value.Exists() {
+		data.EventsDisplayLocation = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/level"); value.Exists() {
+		data.EventsLevel = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/console"); value.Exists() {
+		data.Console = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/monitor"); value.Exists() {
+		data.Monitor = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/logging-buffer-size"); value.Exists() {
+		data.BufferedLoggingBufferSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/level"); value.Exists() {
+		data.BufferedLevel = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/facility/level"); value.Exists() {
+		data.FacilityLevel = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hostnameprefix"); value.Exists() {
+		data.Hostnameprefix = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/suppress/duplicates"); value.Exists() {
+		data.SuppressDuplicates = types.BoolValue(true)
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *LoggingData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/dscp"); value.Exists() {
+		data.Ipv4Dscp = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/trap"); value.Exists() {
+		data.Trap = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/display-location"); value.Exists() {
 		data.EventsDisplayLocation = types.BoolValue(true)
 	} else {
 		data.EventsDisplayLocation = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/level"); value.Exists() {
 		data.EventsLevel = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "console"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/console"); value.Exists() {
 		data.Console = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "monitor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/monitor"); value.Exists() {
 		data.Monitor = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "buffered.logging-buffer-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/logging-buffer-size"); value.Exists() {
 		data.BufferedLoggingBufferSize = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "buffered.level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/buffered/level"); value.Exists() {
 		data.BufferedLevel = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "facility.level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/facility/level"); value.Exists() {
 		data.FacilityLevel = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "hostnameprefix"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hostnameprefix"); value.Exists() {
 		data.Hostnameprefix = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "suppress.duplicates"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/suppress/duplicates"); value.Exists() {
 		data.SuppressDuplicates = types.BoolValue(true)
 	} else {
 		data.SuppressDuplicates = types.BoolValue(false)
 	}
 }
 
-// End of section. //template:end fromBodyData
+// End of section. //template:end fromBodyDataXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []string {
 	deletedItems := make([]string, 0)
-	if !state.SuppressDuplicates.IsNull() && data.SuppressDuplicates.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/suppress/duplicates", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.SuppressDuplicates.IsNull() && state.SuppressDuplicates.ValueBool() {
+		if data.SuppressDuplicates.IsNull() || !data.SuppressDuplicates.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/suppress/duplicates", state.getPath()))
+		}
 	}
 	if !state.Hostnameprefix.IsNull() && data.Hostnameprefix.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/hostnameprefix", state.getPath()))
@@ -312,8 +530,11 @@ func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []strin
 	if !state.EventsLevel.IsNull() && data.EventsLevel.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/level", state.getPath()))
 	}
-	if !state.EventsDisplayLocation.IsNull() && data.EventsDisplayLocation.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/display-location", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.EventsDisplayLocation.IsNull() && state.EventsDisplayLocation.ValueBool() {
+		if data.EventsDisplayLocation.IsNull() || !data.EventsDisplayLocation.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/display-location", state.getPath()))
+		}
 	}
 	if !state.Trap.IsNull() && data.Trap.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/trap", state.getPath()))
@@ -328,13 +549,19 @@ func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []strin
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *Logging) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *Logging) getEmptyLeafsDelete(ctx context.Context, state *Logging) []string {
 	emptyLeafsDelete := make([]string, 0)
+	// Only delete if state has true and plan has false
 	if !data.SuppressDuplicates.IsNull() && !data.SuppressDuplicates.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/suppress/duplicates", data.getPath()))
+		if state != nil && !state.SuppressDuplicates.IsNull() && state.SuppressDuplicates.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/suppress/duplicates", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.EventsDisplayLocation.IsNull() && !data.EventsDisplayLocation.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/display-location", data.getPath()))
+		if state != nil && !state.EventsDisplayLocation.IsNull() && state.EventsDisplayLocation.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/display-location", data.getXPath()))
+		}
 	}
 	return emptyLeafsDelete
 }
@@ -378,7 +605,145 @@ func (data *Logging) getDeletePaths(ctx context.Context) []string {
 	if !data.Ipv4Dscp.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/dscp", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *Logging) addDeletedItemsXML(ctx context.Context, state Logging, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.SuppressDuplicates.IsNull() && state.SuppressDuplicates.ValueBool() && data.SuppressDuplicates.IsNull() {
+		deletePath := state.getXPath() + "/suppress/duplicates"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Hostnameprefix.IsNull() && data.Hostnameprefix.IsNull() {
+		deletePath := state.getXPath() + "/hostnameprefix"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.FacilityLevel.IsNull() && data.FacilityLevel.IsNull() {
+		deletePath := state.getXPath() + "/facility/level"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BufferedLevel.IsNull() && data.BufferedLevel.IsNull() {
+		deletePath := state.getXPath() + "/buffered/level"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BufferedLoggingBufferSize.IsNull() && data.BufferedLoggingBufferSize.IsNull() {
+		deletePath := state.getXPath() + "/buffered/logging-buffer-size"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Monitor.IsNull() && data.Monitor.IsNull() {
+		deletePath := state.getXPath() + "/monitor"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Console.IsNull() && data.Console.IsNull() {
+		deletePath := state.getXPath() + "/console"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.EventsLevel.IsNull() && data.EventsLevel.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/level"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.EventsDisplayLocation.IsNull() && state.EventsDisplayLocation.ValueBool() && data.EventsDisplayLocation.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-logging-events-cfg:events/display-location"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Trap.IsNull() && data.Trap.IsNull() {
+		deletePath := state.getXPath() + "/trap"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Ipv4Dscp.IsNull() && data.Ipv4Dscp.IsNull() {
+		deletePath := state.getXPath() + "/ipv4/dscp"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *Logging) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.SuppressDuplicates.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/suppress/duplicates")
+	}
+	if !data.Hostnameprefix.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/hostnameprefix")
+	}
+	if !data.FacilityLevel.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/facility/level")
+	}
+	if !data.BufferedLevel.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/buffered/level")
+	}
+	if !data.BufferedLoggingBufferSize.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/buffered/logging-buffer-size")
+	}
+	if !data.Monitor.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/monitor")
+	}
+	if !data.Console.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/console")
+	}
+	if !data.EventsLevel.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/level")
+	}
+	if !data.EventsDisplayLocation.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-logging-events-cfg:events/display-location")
+	}
+	if !data.Trap.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/trap")
+	}
+	if !data.Ipv4Dscp.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ipv4/dscp")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

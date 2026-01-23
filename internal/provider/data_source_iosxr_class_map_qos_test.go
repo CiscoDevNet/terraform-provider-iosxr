@@ -20,58 +20,9 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrClassMapQoS(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_class_map_qos.test", "match_any", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_class_map_qos.test", "description", "description1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_class_map_qos.test", "match_dscp.0", "46"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_class_map_qos.test", "match_mpls_experimental_topmost.0", "5"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrClassMapQoSConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrClassMapQoSConfig() string {
-	config := `resource "iosxr_class_map_qos" "test" {` + "\n"
-	config += `	class_map_name = "TEST"` + "\n"
-	config += `	match_any = true` + "\n"
-	config += `	description = "description1"` + "\n"
-	config += `	match_dscp = ["46"]` + "\n"
-	config += `	match_mpls_experimental_topmost = [5]` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_class_map_qos" "test" {
-			class_map_name = "TEST"
-			depends_on = [iosxr_class_map_qos.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

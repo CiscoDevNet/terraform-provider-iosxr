@@ -5,7 +5,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//	https://mozilla.org/MPL/2.0/
+//     https://mozilla.org/MPL/2.0/
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,12 +21,10 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"fmt"
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 // End of section. //template:end imports
@@ -68,51 +66,6 @@ func TestAccIosxrRouterOSPFVRFAreaInterface(t *testing.T) {
 }
 
 // End of section. //template:end testAcc
-
-// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-
-func iosxrRouterOSPFVRFAreaInterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
-	return func(s *terraform.State) (string, error) {
-		primary := s.RootModule().Resources[resourceName].Primary
-		ProcessName := primary.Attributes["process_name"]
-		VrfName := primary.Attributes["vrf_name"]
-		AreaId := primary.Attributes["area_id"]
-		InterfaceName := primary.Attributes["interface_name"]
-
-		return fmt.Sprintf("%s,%s,%s,%s", ProcessName, VrfName, AreaId, InterfaceName), nil
-	}
-}
-
-// End of section. //template:end importStateIdFunc
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrRouterOSPFVRFAreaInterfacePrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]"
-	attributes = {
-		"process-name" = "OSPF1"
-	}
-}
-
-resource "iosxr_gnmi" "PreReq1" {
-	path = "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]/vrfs/vrf[vrf-name=VRF1]"
-	attributes = {
-		"vrf-name" = "VRF1"
-	}
-	depends_on = [iosxr_gnmi.PreReq0, ]
-}
-
-resource "iosxr_gnmi" "PreReq2" {
-	path = "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]/vrfs/vrf[vrf-name=VRF1]/areas/area[area-id=0]"
-	attributes = {
-		"area-id" = "0"
-	}
-	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]
-}
-
-`
-
-// End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 

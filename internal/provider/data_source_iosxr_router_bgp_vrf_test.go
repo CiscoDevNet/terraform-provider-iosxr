@@ -20,64 +20,8 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrRouterBGPVRF(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "default_information_originate", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "default_metric", "125"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "rd_auto", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "timers_bgp_keepalive_interval", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "timers_bgp_keepalive_zero", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "timers_bgp_keepalive_zero_holdtime_zero", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "bgp_router_id", "22.22.22.22"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "bfd_minimum_interval", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "bfd_multiplier", "4"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.address", "10.1.1.2"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.remote_as", "65002"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.description", "My Neighbor Description"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.use_neighbor_group", "GROUP1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.advertisement_interval_seconds", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.ignore_connected_check", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.ebgp_multihop_maximum_hop_count", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.bfd_minimum_interval", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.bfd_multiplier", "4"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.bfd_fast_detect", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.bfd_fast_detect_strict_mode", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.bfd_fast_detect_disable", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.local_as", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.local_as_no_prepend", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.local_as_no_prepend_replace_as", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.local_as_no_prepend_replace_as_dual_as", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.password", "12341C2713181F13253920"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.password_inheritance_disable", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.shutdown", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.timers_keepalive_interval", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.timers_keepalive_zero", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.timers_keepalive_zero_minimum_acceptable_holdtime", "30"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.update_source", "GigabitEthernet0/0/0/1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.ttl_security", "false"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrRouterBGPVRFPrerequisitesConfig + testAccDataSourceIosxrRouterBGPVRFConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRouterBGPVRFPrerequisitesConfig = `
@@ -104,60 +48,3 @@ resource "iosxr_gnmi" "PreReq0" {
 `
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrRouterBGPVRFConfig() string {
-	config := `resource "iosxr_router_bgp_vrf" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	as_number = "65001"` + "\n"
-	config += `	vrf_name = "VRF1"` + "\n"
-	config += `	default_information_originate = true` + "\n"
-	config += `	default_metric = 125` + "\n"
-	config += `	rd_auto = true` + "\n"
-	config += `	timers_bgp_keepalive_interval = 0` + "\n"
-	config += `	timers_bgp_keepalive_zero = true` + "\n"
-	config += `	timers_bgp_keepalive_zero_holdtime_zero = true` + "\n"
-	config += `	bgp_router_id = "22.22.22.22"` + "\n"
-	config += `	bfd_minimum_interval = 10` + "\n"
-	config += `	bfd_multiplier = 4` + "\n"
-	config += `	neighbors = [{` + "\n"
-	config += `		address = "10.1.1.2"` + "\n"
-	config += `		remote_as = "65002"` + "\n"
-	config += `		description = "My Neighbor Description"` + "\n"
-	config += `		use_neighbor_group = "GROUP1"` + "\n"
-	config += `		advertisement_interval_seconds = 10` + "\n"
-	config += `		ignore_connected_check = true` + "\n"
-	config += `		ebgp_multihop_maximum_hop_count = 10` + "\n"
-	config += `		bfd_minimum_interval = 10` + "\n"
-	config += `		bfd_multiplier = 4` + "\n"
-	config += `		bfd_fast_detect = true` + "\n"
-	config += `		bfd_fast_detect_strict_mode = false` + "\n"
-	config += `		bfd_fast_detect_disable = false` + "\n"
-	config += `		local_as = "10"` + "\n"
-	config += `		local_as_no_prepend = true` + "\n"
-	config += `		local_as_no_prepend_replace_as = true` + "\n"
-	config += `		local_as_no_prepend_replace_as_dual_as = true` + "\n"
-	config += `		password = "12341C2713181F13253920"` + "\n"
-	config += `		password_inheritance_disable = false` + "\n"
-	config += `		shutdown = false` + "\n"
-	config += `		timers_keepalive_interval = 0` + "\n"
-	config += `		timers_keepalive_zero = true` + "\n"
-	config += `		timers_keepalive_zero_minimum_acceptable_holdtime = 30` + "\n"
-	config += `		update_source = "GigabitEthernet0/0/0/1"` + "\n"
-	config += `		ttl_security = false` + "\n"
-	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_router_bgp_vrf" "test" {
-			as_number = "65001"
-			vrf_name = "VRF1"
-			depends_on = [iosxr_router_bgp_vrf.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

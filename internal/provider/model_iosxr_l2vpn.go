@@ -25,8 +25,13 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
+	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -70,6 +75,17 @@ func (data L2VPNData) getPath() string {
 	return "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn"
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data L2VPN) getXPath() string {
+	path := "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn"
+	return path
+}
+
+func (data L2VPNData) getXPath() string {
+	path := "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn"
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -105,6 +121,46 @@ func (data L2VPN) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data L2VPN) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.Description.IsNull() && !data.Description.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/description", data.Description.ValueString())
+	}
+	if !data.RouterId.IsNull() && !data.RouterId.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/router-id", data.RouterId.ValueString())
+	}
+	if !data.LoadBalancingFlowSrcDstMac.IsNull() && !data.LoadBalancingFlowSrcDstMac.IsUnknown() {
+		if data.LoadBalancingFlowSrcDstMac.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/load-balancing/flow/src-dst-mac", "")
+		}
+	}
+	if !data.LoadBalancingFlowSrcDstIp.IsNull() && !data.LoadBalancingFlowSrcDstIp.IsUnknown() {
+		if data.LoadBalancingFlowSrcDstIp.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/load-balancing/flow/src-dst-ip", "")
+		}
+	}
+	if len(data.XconnectGroups) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.XconnectGroups {
+			cBody := netconf.Body{}
+			if !item.GroupName.IsNull() && !item.GroupName.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "group-name", item.GroupName.ValueString())
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"xconnect/groups/group", cBody.Res())
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
@@ -118,24 +174,20 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.RouterId = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "load-balancing.flow.src-dst-mac"); !data.LoadBalancingFlowSrcDstMac.IsNull() {
-		if value.Exists() {
-			data.LoadBalancingFlowSrcDstMac = types.BoolValue(true)
-		} else {
-			data.LoadBalancingFlowSrcDstMac = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "load-balancing.flow.src-dst-mac"); value.Exists() {
+		data.LoadBalancingFlowSrcDstMac = types.BoolValue(true)
+	} else if data.LoadBalancingFlowSrcDstMac.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.LoadBalancingFlowSrcDstMac = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "load-balancing.flow.src-dst-ip"); !data.LoadBalancingFlowSrcDstIp.IsNull() {
-		if value.Exists() {
-			data.LoadBalancingFlowSrcDstIp = types.BoolValue(true)
-		} else {
-			data.LoadBalancingFlowSrcDstIp = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "load-balancing.flow.src-dst-ip"); value.Exists() {
+		data.LoadBalancingFlowSrcDstIp = types.BoolValue(true)
+	} else if data.LoadBalancingFlowSrcDstIp.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.LoadBalancingFlowSrcDstIp = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 	for i := range data.XconnectGroups {
 		keys := [...]string{"group-name"}
 		keyValues := [...]string{data.XconnectGroups[i].GroupName.ValueString()}
@@ -169,26 +221,90 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 
 // End of section. //template:end updateFromBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
-func (data *L2VPN) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "description"); value.Exists() {
+func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
+	} else if data.Description.IsNull() {
+		data.Description = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "router-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router-id"); value.Exists() {
 		data.RouterId = types.StringValue(value.String())
+	} else if data.RouterId.IsNull() {
+		data.RouterId = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "load-balancing.flow.src-dst-mac"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/load-balancing/flow/src-dst-mac"); value.Exists() {
 		data.LoadBalancingFlowSrcDstMac = types.BoolValue(true)
 	} else {
-		data.LoadBalancingFlowSrcDstMac = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.LoadBalancingFlowSrcDstMac.IsNull() {
+			data.LoadBalancingFlowSrcDstMac = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "load-balancing.flow.src-dst-ip"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/load-balancing/flow/src-dst-ip"); value.Exists() {
 		data.LoadBalancingFlowSrcDstIp = types.BoolValue(true)
 	} else {
-		data.LoadBalancingFlowSrcDstIp = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.LoadBalancingFlowSrcDstIp.IsNull() {
+			data.LoadBalancingFlowSrcDstIp = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "xconnect.groups.group"); value.Exists() {
+	for i := range data.XconnectGroups {
+		keys := [...]string{"group-name"}
+		keyValues := [...]string{data.XconnectGroups[i].GroupName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/xconnect/groups/group").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "group-name"); value.Exists() {
+			data.XconnectGroups[i].GroupName = types.StringValue(value.String())
+		} else if data.XconnectGroups[i].GroupName.IsNull() {
+			data.XconnectGroups[i].GroupName = types.StringNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *L2VPN) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "router-id"); value.Exists() {
+		data.RouterId = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "load-balancing.flow.src-dst-mac"); value.Exists() {
+		data.LoadBalancingFlowSrcDstMac = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "load-balancing.flow.src-dst-ip"); value.Exists() {
+		data.LoadBalancingFlowSrcDstIp = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "xconnect.groups.group"); value.Exists() {
 		data.XconnectGroups = make([]L2VPNXconnectGroups, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNXconnectGroups{}
@@ -205,24 +321,24 @@ func (data *L2VPN) fromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *L2VPNData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "description"); value.Exists() {
+func (data *L2VPNData) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "router-id"); value.Exists() {
+	if value := res.Get(prefix + "router-id"); value.Exists() {
 		data.RouterId = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "load-balancing.flow.src-dst-mac"); value.Exists() {
+	if value := res.Get(prefix + "load-balancing.flow.src-dst-mac"); value.Exists() {
 		data.LoadBalancingFlowSrcDstMac = types.BoolValue(true)
-	} else {
-		data.LoadBalancingFlowSrcDstMac = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "load-balancing.flow.src-dst-ip"); value.Exists() {
+	if value := res.Get(prefix + "load-balancing.flow.src-dst-ip"); value.Exists() {
 		data.LoadBalancingFlowSrcDstIp = types.BoolValue(true)
-	} else {
-		data.LoadBalancingFlowSrcDstIp = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "xconnect.groups.group"); value.Exists() {
+	if value := res.Get(prefix + "xconnect.groups.group"); value.Exists() {
 		data.XconnectGroups = make([]L2VPNXconnectGroups, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNXconnectGroups{}
@@ -236,6 +352,70 @@ func (data *L2VPNData) fromBody(ctx context.Context, res []byte) {
 }
 
 // End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *L2VPN) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router-id"); value.Exists() {
+		data.RouterId = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/load-balancing/flow/src-dst-mac"); value.Exists() {
+		data.LoadBalancingFlowSrcDstMac = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/load-balancing/flow/src-dst-ip"); value.Exists() {
+		data.LoadBalancingFlowSrcDstIp = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/xconnect/groups/group"); value.Exists() {
+		data.XconnectGroups = make([]L2VPNXconnectGroups, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNXconnectGroups{}
+			if cValue := helpers.GetFromXPath(v, "group-name"); cValue.Exists() {
+				item.GroupName = types.StringValue(cValue.String())
+			}
+			data.XconnectGroups = append(data.XconnectGroups, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *L2VPNData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router-id"); value.Exists() {
+		data.RouterId = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/load-balancing/flow/src-dst-mac"); value.Exists() {
+		data.LoadBalancingFlowSrcDstMac = types.BoolValue(true)
+	} else {
+		data.LoadBalancingFlowSrcDstMac = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/load-balancing/flow/src-dst-ip"); value.Exists() {
+		data.LoadBalancingFlowSrcDstIp = types.BoolValue(true)
+	} else {
+		data.LoadBalancingFlowSrcDstIp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/xconnect/groups/group"); value.Exists() {
+		data.XconnectGroups = make([]L2VPNXconnectGroups, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNXconnectGroups{}
+			if cValue := helpers.GetFromXPath(v, "group-name"); cValue.Exists() {
+				item.GroupName = types.StringValue(cValue.String())
+			}
+			data.XconnectGroups = append(data.XconnectGroups, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
@@ -271,11 +451,17 @@ func (data *L2VPN) getDeletedItems(ctx context.Context, state L2VPN) []string {
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/xconnect/groups/group%v", state.getPath(), keyString))
 		}
 	}
-	if !state.LoadBalancingFlowSrcDstIp.IsNull() && data.LoadBalancingFlowSrcDstIp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/load-balancing/flow/src-dst-ip", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.LoadBalancingFlowSrcDstIp.IsNull() && state.LoadBalancingFlowSrcDstIp.ValueBool() {
+		if data.LoadBalancingFlowSrcDstIp.IsNull() || !data.LoadBalancingFlowSrcDstIp.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/load-balancing/flow/src-dst-ip", state.getPath()))
+		}
 	}
-	if !state.LoadBalancingFlowSrcDstMac.IsNull() && data.LoadBalancingFlowSrcDstMac.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/load-balancing/flow/src-dst-mac", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.LoadBalancingFlowSrcDstMac.IsNull() && state.LoadBalancingFlowSrcDstMac.ValueBool() {
+		if data.LoadBalancingFlowSrcDstMac.IsNull() || !data.LoadBalancingFlowSrcDstMac.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/load-balancing/flow/src-dst-mac", state.getPath()))
+		}
 	}
 	if !state.RouterId.IsNull() && data.RouterId.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/router-id", state.getPath()))
@@ -290,7 +476,7 @@ func (data *L2VPN) getDeletedItems(ctx context.Context, state L2VPN) []string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *L2VPN) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *L2VPN) getEmptyLeafsDelete(ctx context.Context, state *L2VPN) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.XconnectGroups {
 		keys := [...]string{"group-name"}
@@ -300,11 +486,17 @@ func (data *L2VPN) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.LoadBalancingFlowSrcDstIp.IsNull() && !data.LoadBalancingFlowSrcDstIp.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/load-balancing/flow/src-dst-ip", data.getPath()))
+		if state != nil && !state.LoadBalancingFlowSrcDstIp.IsNull() && state.LoadBalancingFlowSrcDstIp.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/load-balancing/flow/src-dst-ip", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.LoadBalancingFlowSrcDstMac.IsNull() && !data.LoadBalancingFlowSrcDstMac.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/load-balancing/flow/src-dst-mac", data.getPath()))
+		if state != nil && !state.LoadBalancingFlowSrcDstMac.IsNull() && state.LoadBalancingFlowSrcDstMac.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/load-balancing/flow/src-dst-mac", data.getXPath()))
+		}
 	}
 	return emptyLeafsDelete
 }
@@ -316,14 +508,9 @@ func (data *L2VPN) getEmptyLeafsDelete(ctx context.Context) []string {
 func (data *L2VPN) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.XconnectGroups {
-		keys := [...]string{"group-name"}
 		keyValues := [...]string{data.XconnectGroups[i].GroupName.ValueString()}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/xconnect/groups/group%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/xconnect/groups/group=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	if !data.LoadBalancingFlowSrcDstIp.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/load-balancing/flow/src-dst-ip", data.getPath()))
@@ -337,7 +524,115 @@ func (data *L2VPN) getDeletePaths(ctx context.Context) []string {
 	if !data.Description.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/description", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *L2VPN) addDeletedItemsXML(ctx context.Context, state L2VPN, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.XconnectGroups {
+		stateKeys := [...]string{"group-name"}
+		stateKeyValues := [...]string{state.XconnectGroups[i].GroupName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.XconnectGroups[i].GroupName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.XconnectGroups {
+			found = true
+			if state.XconnectGroups[i].GroupName.ValueString() != data.XconnectGroups[j].GroupName.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/xconnect/groups/group%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.LoadBalancingFlowSrcDstIp.IsNull() && state.LoadBalancingFlowSrcDstIp.ValueBool() && data.LoadBalancingFlowSrcDstIp.IsNull() {
+		deletePath := state.getXPath() + "/load-balancing/flow/src-dst-ip"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.LoadBalancingFlowSrcDstMac.IsNull() && state.LoadBalancingFlowSrcDstMac.ValueBool() && data.LoadBalancingFlowSrcDstMac.IsNull() {
+		deletePath := state.getXPath() + "/load-balancing/flow/src-dst-mac"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.RouterId.IsNull() && data.RouterId.IsNull() {
+		deletePath := state.getXPath() + "/router-id"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Description.IsNull() && data.Description.IsNull() {
+		deletePath := state.getXPath() + "/description"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *L2VPN) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	for i := range data.XconnectGroups {
+		keys := [...]string{"group-name"}
+		keyValues := [...]string{data.XconnectGroups[i].GroupName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/xconnect/groups/group%v", predicates))
+	}
+	if !data.LoadBalancingFlowSrcDstIp.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/load-balancing/flow/src-dst-ip")
+	}
+	if !data.LoadBalancingFlowSrcDstMac.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/load-balancing/flow/src-dst-mac")
+	}
+	if !data.RouterId.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/router-id")
+	}
+	if !data.Description.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/description")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

@@ -25,8 +25,13 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
+	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -73,6 +78,19 @@ func (data LoggingVRF) getPath() string {
 
 func (data LoggingVRFData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-logging-cfg:/logging/vrfs/vrf[vrf-name=%s]", data.VrfName.ValueString())
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data LoggingVRF) getXPath() string {
+	path := "Cisco-IOS-XR-um-logging-cfg:/logging/vrfs/vrf[vrf-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.VrfName.ValueString()))
+	return path
+}
+
+func (data LoggingVRFData) getXPath() string {
+	path := "Cisco-IOS-XR-um-logging-cfg:/logging/vrfs/vrf[vrf-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.VrfName.ValueString()))
+	return path
 }
 
 // End of section. //template:end getPath
@@ -122,6 +140,62 @@ func (data LoggingVRF) toBody(ctx context.Context) string {
 }
 
 // End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data LoggingVRF) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.VrfName.IsNull() && !data.VrfName.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/vrf-name", data.VrfName.ValueString())
+	}
+	if len(data.HostIpv4Addresses) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.HostIpv4Addresses {
+			cBody := netconf.Body{}
+			if !item.Ipv4Address.IsNull() && !item.Ipv4Address.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "ipv4-address", item.Ipv4Address.ValueString())
+			}
+			if !item.Severity.IsNull() && !item.Severity.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "severity", item.Severity.ValueString())
+			}
+			if !item.Port.IsNull() && !item.Port.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "port", strconv.FormatInt(item.Port.ValueInt64(), 10))
+			}
+			if !item.Operator.IsNull() && !item.Operator.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "operator", item.Operator.ValueString())
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"host-ipv4-addresses/host-ipv4-address", cBody.Res())
+		}
+	}
+	if len(data.HostIpv6Addresses) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.HostIpv6Addresses {
+			cBody := netconf.Body{}
+			if !item.Ipv6Address.IsNull() && !item.Ipv6Address.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "ipv6-address", item.Ipv6Address.ValueString())
+			}
+			if !item.Severity.IsNull() && !item.Severity.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "severity", item.Severity.ValueString())
+			}
+			if !item.Port.IsNull() && !item.Port.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "port", strconv.FormatInt(item.Port.ValueInt64(), 10))
+			}
+			if !item.Operator.IsNull() && !item.Operator.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "operator", item.Operator.ValueString())
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"host-ipv6-addresses/host-ipv6-address", cBody.Res())
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
@@ -218,10 +292,114 @@ func (data *LoggingVRF) updateFromBody(ctx context.Context, res []byte) {
 
 // End of section. //template:end updateFromBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *LoggingVRF) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/vrf-name"); value.Exists() {
+		data.VrfName = types.StringValue(value.String())
+	} else if data.VrfName.IsNull() {
+		data.VrfName = types.StringNull()
+	}
+	for i := range data.HostIpv4Addresses {
+		keys := [...]string{"ipv4-address"}
+		keyValues := [...]string{data.HostIpv4Addresses[i].Ipv4Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/host-ipv4-addresses/host-ipv4-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "ipv4-address"); value.Exists() {
+			data.HostIpv4Addresses[i].Ipv4Address = types.StringValue(value.String())
+		} else if data.HostIpv4Addresses[i].Ipv4Address.IsNull() {
+			data.HostIpv4Addresses[i].Ipv4Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "severity"); value.Exists() {
+			data.HostIpv4Addresses[i].Severity = types.StringValue(value.String())
+		} else if data.HostIpv4Addresses[i].Severity.IsNull() {
+			data.HostIpv4Addresses[i].Severity = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "port"); value.Exists() {
+			data.HostIpv4Addresses[i].Port = types.Int64Value(value.Int())
+		} else if data.HostIpv4Addresses[i].Port.IsNull() {
+			data.HostIpv4Addresses[i].Port = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "operator"); value.Exists() {
+			data.HostIpv4Addresses[i].Operator = types.StringValue(value.String())
+		} else if data.HostIpv4Addresses[i].Operator.IsNull() {
+			data.HostIpv4Addresses[i].Operator = types.StringNull()
+		}
+	}
+	for i := range data.HostIpv6Addresses {
+		keys := [...]string{"ipv6-address"}
+		keyValues := [...]string{data.HostIpv6Addresses[i].Ipv6Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/host-ipv6-addresses/host-ipv6-address").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "ipv6-address"); value.Exists() {
+			data.HostIpv6Addresses[i].Ipv6Address = types.StringValue(value.String())
+		} else if data.HostIpv6Addresses[i].Ipv6Address.IsNull() {
+			data.HostIpv6Addresses[i].Ipv6Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "severity"); value.Exists() {
+			data.HostIpv6Addresses[i].Severity = types.StringValue(value.String())
+		} else if data.HostIpv6Addresses[i].Severity.IsNull() {
+			data.HostIpv6Addresses[i].Severity = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "port"); value.Exists() {
+			data.HostIpv6Addresses[i].Port = types.Int64Value(value.Int())
+		} else if data.HostIpv6Addresses[i].Port.IsNull() {
+			data.HostIpv6Addresses[i].Port = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "operator"); value.Exists() {
+			data.HostIpv6Addresses[i].Operator = types.StringValue(value.String())
+		} else if data.HostIpv6Addresses[i].Operator.IsNull() {
+			data.HostIpv6Addresses[i].Operator = types.StringNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *LoggingVRF) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "host-ipv4-addresses.host-ipv4-address"); value.Exists() {
+func (data *LoggingVRF) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "host-ipv4-addresses.host-ipv4-address"); value.Exists() {
 		data.HostIpv4Addresses = make([]LoggingVRFHostIpv4Addresses, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LoggingVRFHostIpv4Addresses{}
@@ -241,7 +419,7 @@ func (data *LoggingVRF) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "host-ipv6-addresses.host-ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "host-ipv6-addresses.host-ipv6-address"); value.Exists() {
 		data.HostIpv6Addresses = make([]LoggingVRFHostIpv6Addresses, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LoggingVRFHostIpv6Addresses{}
@@ -267,8 +445,12 @@ func (data *LoggingVRF) fromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *LoggingVRFData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "host-ipv4-addresses.host-ipv4-address"); value.Exists() {
+func (data *LoggingVRFData) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "host-ipv4-addresses.host-ipv4-address"); value.Exists() {
 		data.HostIpv4Addresses = make([]LoggingVRFHostIpv4Addresses, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LoggingVRFHostIpv4Addresses{}
@@ -288,7 +470,7 @@ func (data *LoggingVRFData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "host-ipv6-addresses.host-ipv6-address"); value.Exists() {
+	if value := res.Get(prefix + "host-ipv6-addresses.host-ipv6-address"); value.Exists() {
 		data.HostIpv6Addresses = make([]LoggingVRFHostIpv6Addresses, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := LoggingVRFHostIpv6Addresses{}
@@ -311,6 +493,100 @@ func (data *LoggingVRFData) fromBody(ctx context.Context, res []byte) {
 }
 
 // End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *LoggingVRF) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/host-ipv4-addresses/host-ipv4-address"); value.Exists() {
+		data.HostIpv4Addresses = make([]LoggingVRFHostIpv4Addresses, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := LoggingVRFHostIpv4Addresses{}
+			if cValue := helpers.GetFromXPath(v, "ipv4-address"); cValue.Exists() {
+				item.Ipv4Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "severity"); cValue.Exists() {
+				item.Severity = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "port"); cValue.Exists() {
+				item.Port = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "operator"); cValue.Exists() {
+				item.Operator = types.StringValue(cValue.String())
+			}
+			data.HostIpv4Addresses = append(data.HostIpv4Addresses, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/host-ipv6-addresses/host-ipv6-address"); value.Exists() {
+		data.HostIpv6Addresses = make([]LoggingVRFHostIpv6Addresses, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := LoggingVRFHostIpv6Addresses{}
+			if cValue := helpers.GetFromXPath(v, "ipv6-address"); cValue.Exists() {
+				item.Ipv6Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "severity"); cValue.Exists() {
+				item.Severity = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "port"); cValue.Exists() {
+				item.Port = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "operator"); cValue.Exists() {
+				item.Operator = types.StringValue(cValue.String())
+			}
+			data.HostIpv6Addresses = append(data.HostIpv6Addresses, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *LoggingVRFData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/host-ipv4-addresses/host-ipv4-address"); value.Exists() {
+		data.HostIpv4Addresses = make([]LoggingVRFHostIpv4Addresses, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := LoggingVRFHostIpv4Addresses{}
+			if cValue := helpers.GetFromXPath(v, "ipv4-address"); cValue.Exists() {
+				item.Ipv4Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "severity"); cValue.Exists() {
+				item.Severity = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "port"); cValue.Exists() {
+				item.Port = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "operator"); cValue.Exists() {
+				item.Operator = types.StringValue(cValue.String())
+			}
+			data.HostIpv4Addresses = append(data.HostIpv4Addresses, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/host-ipv6-addresses/host-ipv6-address"); value.Exists() {
+		data.HostIpv6Addresses = make([]LoggingVRFHostIpv6Addresses, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := LoggingVRFHostIpv6Addresses{}
+			if cValue := helpers.GetFromXPath(v, "ipv6-address"); cValue.Exists() {
+				item.Ipv6Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "severity"); cValue.Exists() {
+				item.Severity = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "port"); cValue.Exists() {
+				item.Port = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "operator"); cValue.Exists() {
+				item.Operator = types.StringValue(cValue.String())
+			}
+			data.HostIpv6Addresses = append(data.HostIpv6Addresses, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
@@ -401,7 +677,7 @@ func (data *LoggingVRF) getDeletedItems(ctx context.Context, state LoggingVRF) [
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *LoggingVRF) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *LoggingVRF) getEmptyLeafsDelete(ctx context.Context, state *LoggingVRF) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.HostIpv6Addresses {
 		keys := [...]string{"ipv6-address"}
@@ -429,26 +705,140 @@ func (data *LoggingVRF) getEmptyLeafsDelete(ctx context.Context) []string {
 func (data *LoggingVRF) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.HostIpv6Addresses {
-		keys := [...]string{"ipv6-address"}
 		keyValues := [...]string{data.HostIpv6Addresses[i].Ipv6Address.ValueString()}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/host-ipv6-addresses/host-ipv6-address%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/host-ipv6-addresses/host-ipv6-address=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.HostIpv4Addresses {
-		keys := [...]string{"ipv4-address"}
 		keyValues := [...]string{data.HostIpv4Addresses[i].Ipv4Address.ValueString()}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/host-ipv4-addresses/host-ipv4-address%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/host-ipv4-addresses/host-ipv4-address=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *LoggingVRF) addDeletedItemsXML(ctx context.Context, state LoggingVRF, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.HostIpv6Addresses {
+		stateKeys := [...]string{"ipv6-address"}
+		stateKeyValues := [...]string{state.HostIpv6Addresses[i].Ipv6Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.HostIpv6Addresses[i].Ipv6Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.HostIpv6Addresses {
+			found = true
+			if state.HostIpv6Addresses[i].Ipv6Address.ValueString() != data.HostIpv6Addresses[j].Ipv6Address.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.HostIpv6Addresses[i].Operator.IsNull() && data.HostIpv6Addresses[j].Operator.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/host-ipv6-addresses/host-ipv6-address%v/operator", predicates))
+				}
+				if !state.HostIpv6Addresses[i].Port.IsNull() && data.HostIpv6Addresses[j].Port.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/host-ipv6-addresses/host-ipv6-address%v/port", predicates))
+				}
+				if !state.HostIpv6Addresses[i].Severity.IsNull() && data.HostIpv6Addresses[j].Severity.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/host-ipv6-addresses/host-ipv6-address%v/severity", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/host-ipv6-addresses/host-ipv6-address%v", predicates))
+		}
+	}
+	for i := range state.HostIpv4Addresses {
+		stateKeys := [...]string{"ipv4-address"}
+		stateKeyValues := [...]string{state.HostIpv4Addresses[i].Ipv4Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.HostIpv4Addresses[i].Ipv4Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.HostIpv4Addresses {
+			found = true
+			if state.HostIpv4Addresses[i].Ipv4Address.ValueString() != data.HostIpv4Addresses[j].Ipv4Address.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.HostIpv4Addresses[i].Operator.IsNull() && data.HostIpv4Addresses[j].Operator.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/host-ipv4-addresses/host-ipv4-address%v/operator", predicates))
+				}
+				if !state.HostIpv4Addresses[i].Port.IsNull() && data.HostIpv4Addresses[j].Port.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/host-ipv4-addresses/host-ipv4-address%v/port", predicates))
+				}
+				if !state.HostIpv4Addresses[i].Severity.IsNull() && data.HostIpv4Addresses[j].Severity.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/host-ipv4-addresses/host-ipv4-address%v/severity", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/host-ipv4-addresses/host-ipv4-address%v", predicates))
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *LoggingVRF) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	for i := range data.HostIpv6Addresses {
+		keys := [...]string{"ipv6-address"}
+		keyValues := [...]string{data.HostIpv6Addresses[i].Ipv6Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/host-ipv6-addresses/host-ipv6-address%v", predicates))
+	}
+	for i := range data.HostIpv4Addresses {
+		keys := [...]string{"ipv4-address"}
+		keyValues := [...]string{data.HostIpv4Addresses[i].Ipv4Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/host-ipv4-addresses/host-ipv4-address%v", predicates))
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

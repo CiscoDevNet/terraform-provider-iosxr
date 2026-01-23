@@ -20,36 +20,8 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrL2VPNXconnectGroupP2P(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group_p2p.test", "description", "My P2P Description"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group_p2p.test", "interfaces.0.interface_name", "GigabitEthernet0/0/0/2"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group_p2p.test", "neighbor_evpn_evi_segment_routing_services.0.vpn_id", "4600"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group_p2p.test", "neighbor_evpn_evi_segment_routing_services.0.service_id", "600"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group_p2p.test", "neighbor_evpn_evi_segment_routing_services.0.segment_routing_srv6_locator", "LOC11"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrL2VPNXconnectGroupP2PPrerequisitesConfig + testAccDataSourceIosxrL2VPNXconnectGroupP2PConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrL2VPNXconnectGroupP2PPrerequisitesConfig = `
@@ -70,34 +42,3 @@ resource "iosxr_gnmi" "PreReq1" {
 `
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrL2VPNXconnectGroupP2PConfig() string {
-	config := `resource "iosxr_l2vpn_xconnect_group_p2p" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	group_name = "P2P"` + "\n"
-	config += `	p2p_xconnect_name = "XC"` + "\n"
-	config += `	description = "My P2P Description"` + "\n"
-	config += `	interfaces = [{` + "\n"
-	config += `		interface_name = "GigabitEthernet0/0/0/2"` + "\n"
-	config += `	}]` + "\n"
-	config += `	neighbor_evpn_evi_segment_routing_services = [{` + "\n"
-	config += `		vpn_id = 4600` + "\n"
-	config += `		service_id = 600` + "\n"
-	config += `		segment_routing_srv6_locator = "LOC11"` + "\n"
-	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_l2vpn_xconnect_group_p2p" "test" {
-			group_name = "P2P"
-			p2p_xconnect_name = "XC"
-			depends_on = [iosxr_l2vpn_xconnect_group_p2p.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

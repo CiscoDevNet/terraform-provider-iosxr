@@ -20,36 +20,8 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrRouterVRRPInterface(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface.test", "mac_refresh", "14"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface.test", "delay_minimum", "1234"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface.test", "delay_reload", "4321"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface.test", "bfd_minimum_interval", "255"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface.test", "bfd_multiplier", "33"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrRouterVRRPInterfacePrerequisitesConfig + testAccDataSourceIosxrRouterVRRPInterfaceConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRouterVRRPInterfacePrerequisitesConfig = `
@@ -62,28 +34,3 @@ resource "iosxr_gnmi" "PreReq0" {
 `
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrRouterVRRPInterfaceConfig() string {
-	config := `resource "iosxr_router_vrrp_interface" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
-	config += `	mac_refresh = 14` + "\n"
-	config += `	delay_minimum = 1234` + "\n"
-	config += `	delay_reload = 4321` + "\n"
-	config += `	bfd_minimum_interval = 255` + "\n"
-	config += `	bfd_multiplier = 33` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_router_vrrp_interface" "test" {
-			interface_name = "GigabitEthernet0/0/0/1"
-			depends_on = [iosxr_router_vrrp_interface.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

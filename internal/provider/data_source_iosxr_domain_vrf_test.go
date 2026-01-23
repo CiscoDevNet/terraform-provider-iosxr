@@ -20,83 +20,9 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrDomainVRF(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "domains.0.domain_name", "example.com"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "domains.0.order", "12345"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "lookup_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "lookup_source_interface", "Loopback214"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "name", "cisco.com"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "ipv4_hosts.0.host_name", "HOST_NAME_IPV4"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "ipv4_hosts.0.ip_address.0", "10.0.0.10"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "name_servers.0.address", "10.0.0.1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "name_servers.0.order", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "ipv6_hosts.0.host_name", "HOST_NAME_IPV6"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "ipv6_hosts.0.ipv6_address.0", "10::10"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "multicast", "multicast.cisco.com"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrDomainVRFConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrDomainVRFConfig() string {
-	config := `resource "iosxr_domain_vrf" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	vrf_name = "TEST-VRF"` + "\n"
-	config += `	domains = [{` + "\n"
-	config += `		domain_name = "example.com"` + "\n"
-	config += `		order = 12345` + "\n"
-	config += `	}]` + "\n"
-	config += `	lookup_disable = true` + "\n"
-	config += `	lookup_source_interface = "Loopback214"` + "\n"
-	config += `	name = "cisco.com"` + "\n"
-	config += `	ipv4_hosts = [{` + "\n"
-	config += `		host_name = "HOST_NAME_IPV4"` + "\n"
-	config += `		ip_address = ["10.0.0.10"]` + "\n"
-	config += `	}]` + "\n"
-	config += `	name_servers = [{` + "\n"
-	config += `		address = "10.0.0.1"` + "\n"
-	config += `		order = 0` + "\n"
-	config += `	}]` + "\n"
-	config += `	ipv6_hosts = [{` + "\n"
-	config += `		host_name = "HOST_NAME_IPV6"` + "\n"
-	config += `		ipv6_address = ["10::10"]` + "\n"
-	config += `	}]` + "\n"
-	config += `	multicast = "multicast.cisco.com"` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_domain_vrf" "test" {
-			vrf_name = "TEST-VRF"
-			depends_on = [iosxr_domain_vrf.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

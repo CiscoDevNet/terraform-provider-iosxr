@@ -20,32 +20,8 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrEVPNGroup(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_group.test", "core_interfaces.0.interface_name", "Bundle-Ether111"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrEVPNGroupPrerequisitesConfig + testAccDataSourceIosxrEVPNGroupConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrEVPNGroupPrerequisitesConfig = `
@@ -58,26 +34,3 @@ resource "iosxr_gnmi" "PreReq0" {
 `
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrEVPNGroupConfig() string {
-	config := `resource "iosxr_evpn_group" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	group_id = 1` + "\n"
-	config += `	core_interfaces = [{` + "\n"
-	config += `		interface_name = "Bundle-Ether111"` + "\n"
-	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_evpn_group" "test" {
-			group_id = 1
-			depends_on = [iosxr_evpn_group.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

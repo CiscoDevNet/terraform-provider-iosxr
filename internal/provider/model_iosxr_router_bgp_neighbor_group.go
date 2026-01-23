@@ -24,9 +24,15 @@ import (
 	"context"
 	"fmt"
 	"reflect"
+	"sort"
 	"strconv"
+	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -128,6 +134,19 @@ func (data RouterBGPNeighborGroupData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/neighbor-groups/neighbor-group[neighbor-group-name=%s]", data.AsNumber.ValueString(), data.Name.ValueString())
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data RouterBGPNeighborGroup) getXPath() string {
+	path := "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/neighbor-groups/neighbor-group[neighbor-group-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.AsNumber.ValueString()), fmt.Sprintf("%v", data.Name.ValueString()))
+	return path
+}
+
+func (data RouterBGPNeighborGroupData) getXPath() string {
+	path := "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/neighbor-groups/neighbor-group[neighbor-group-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.AsNumber.ValueString()), fmt.Sprintf("%v", data.Name.ValueString()))
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -213,11 +232,11 @@ func (data RouterBGPNeighborGroup) toBody(ctx context.Context) string {
 		}
 	}
 	if !data.Password.IsNull() && !data.Password.IsUnknown() {
-		body, _ = sjson.Set(body, "password.encrypted", data.Password.ValueString())
+		body, _ = sjson.Set(body, "", data.Password.ValueString())
 	}
 	if !data.PasswordInheritanceDisable.IsNull() && !data.PasswordInheritanceDisable.IsUnknown() {
 		if data.PasswordInheritanceDisable.ValueBool() {
-			body, _ = sjson.Set(body, "password.inheritance-disable", map[string]string{})
+			body, _ = sjson.Set(body, "", map[string]string{})
 		}
 	}
 	if !data.TimersKeepaliveInterval.IsNull() && !data.TimersKeepaliveInterval.IsUnknown() {
@@ -289,6 +308,172 @@ func (data RouterBGPNeighborGroup) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data RouterBGPNeighborGroup) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.Name.IsNull() && !data.Name.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/neighbor-group-name", data.Name.ValueString())
+	}
+	if !data.RemoteAs.IsNull() && !data.RemoteAs.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/remote-as", data.RemoteAs.ValueString())
+	}
+	if !data.Description.IsNull() && !data.Description.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/description", data.Description.ValueString())
+	}
+	if !data.UpdateSource.IsNull() && !data.UpdateSource.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/update-source", data.UpdateSource.ValueString())
+	}
+	if !data.AdvertisementIntervalSeconds.IsNull() && !data.AdvertisementIntervalSeconds.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/advertisement-interval/advertisement-interval-time-in-seconds", strconv.FormatInt(data.AdvertisementIntervalSeconds.ValueInt64(), 10))
+	}
+	if !data.AdvertisementIntervalMilliseconds.IsNull() && !data.AdvertisementIntervalMilliseconds.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/advertisement-interval/advertisement-interval-time-in-milliseconds", strconv.FormatInt(data.AdvertisementIntervalMilliseconds.ValueInt64(), 10))
+	}
+	if !data.AoKeyChainName.IsNull() && !data.AoKeyChainName.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ao/key-chain-name/key-chain-name", data.AoKeyChainName.ValueString())
+	}
+	if !data.AoKeyChainIncludeTcpOptions.IsNull() && !data.AoKeyChainIncludeTcpOptions.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ao/key-chain-name/include-tcp-options", data.AoKeyChainIncludeTcpOptions.ValueString())
+	}
+	if !data.AoKeyChainAcceptMismatch.IsNull() && !data.AoKeyChainAcceptMismatch.IsUnknown() {
+		if data.AoKeyChainAcceptMismatch.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ao/key-chain-name/accept-ao-mismatch-connection", "")
+		}
+	}
+	if !data.AoInheritanceDisable.IsNull() && !data.AoInheritanceDisable.IsUnknown() {
+		if data.AoInheritanceDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ao/inheritance-disable", "")
+		}
+	}
+	if !data.BfdMinimumInterval.IsNull() && !data.BfdMinimumInterval.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bfd/minimum-interval", strconv.FormatInt(data.BfdMinimumInterval.ValueInt64(), 10))
+	}
+	if !data.BfdMultiplier.IsNull() && !data.BfdMultiplier.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bfd/multiplier", strconv.FormatInt(data.BfdMultiplier.ValueInt64(), 10))
+	}
+	if !data.BfdFastDetect.IsNull() && !data.BfdFastDetect.IsUnknown() {
+		if data.BfdFastDetect.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bfd/fast-detect", "")
+		}
+	}
+	if !data.BfdFastDetectStrictMode.IsNull() && !data.BfdFastDetectStrictMode.IsUnknown() {
+		if data.BfdFastDetectStrictMode.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bfd/fast-detect/strict-mode", "")
+		}
+	}
+	if !data.BfdFastDetectDisable.IsNull() && !data.BfdFastDetectDisable.IsUnknown() {
+		if data.BfdFastDetectDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bfd/fast-detect/disable", "")
+		}
+	}
+	if !data.LocalAsInheritanceDisable.IsNull() && !data.LocalAsInheritanceDisable.IsUnknown() {
+		if data.LocalAsInheritanceDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/local-as/inheritance-disable", "")
+		}
+	}
+	if !data.LocalAs.IsNull() && !data.LocalAs.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/local-as/as/as-number", data.LocalAs.ValueString())
+	}
+	if !data.LocalAsNoPrepend.IsNull() && !data.LocalAsNoPrepend.IsUnknown() {
+		if data.LocalAsNoPrepend.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/local-as/as/no-prepend", "")
+		}
+	}
+	if !data.LocalAsReplaceAs.IsNull() && !data.LocalAsReplaceAs.IsUnknown() {
+		if data.LocalAsReplaceAs.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/local-as/as/no-prepend/replace-as", "")
+		}
+	}
+	if !data.LocalAsDualAs.IsNull() && !data.LocalAsDualAs.IsUnknown() {
+		if data.LocalAsDualAs.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/local-as/as/no-prepend/replace-as/dual-as", "")
+		}
+	}
+	if !data.Password.IsNull() && !data.Password.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/", data.Password.ValueString())
+	}
+	if !data.PasswordInheritanceDisable.IsNull() && !data.PasswordInheritanceDisable.IsUnknown() {
+		if data.PasswordInheritanceDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/", "")
+		}
+	}
+	if !data.TimersKeepaliveInterval.IsNull() && !data.TimersKeepaliveInterval.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/timers/keepalive-interval", strconv.FormatInt(data.TimersKeepaliveInterval.ValueInt64(), 10))
+	}
+	if !data.TimersKeepaliveZero.IsNull() && !data.TimersKeepaliveZero.IsUnknown() {
+		if data.TimersKeepaliveZero.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/timers/zero", "")
+		}
+	}
+	if !data.TimersKeepaliveZeroHoldtimeZero.IsNull() && !data.TimersKeepaliveZeroHoldtimeZero.IsUnknown() {
+		if data.TimersKeepaliveZeroHoldtimeZero.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/timers/zero/zero", "")
+		}
+	}
+	if !data.TimersKeepaliveZeroMinimumAcceptableHoldtime.IsNull() && !data.TimersKeepaliveZeroMinimumAcceptableHoldtime.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/timers/zero/minimum-acceptable-holdtime", strconv.FormatInt(data.TimersKeepaliveZeroMinimumAcceptableHoldtime.ValueInt64(), 10))
+	}
+	if !data.TimersHoldtime.IsNull() && !data.TimersHoldtime.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/timers/holdtime/holdtime-number", strconv.FormatInt(data.TimersHoldtime.ValueInt64(), 10))
+	}
+	if !data.TimersHoldtimeMinimumAcceptableHoldtime.IsNull() && !data.TimersHoldtimeMinimumAcceptableHoldtime.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/timers/holdtime/minimum-acceptable-holdtime", strconv.FormatInt(data.TimersHoldtimeMinimumAcceptableHoldtime.ValueInt64(), 10))
+	}
+	if len(data.AddressFamilies) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.AddressFamilies {
+			cBody := netconf.Body{}
+			if !item.AfName.IsNull() && !item.AfName.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "af-name", item.AfName.ValueString())
+			}
+			if !item.SoftReconfigurationInboundAlways.IsNull() && !item.SoftReconfigurationInboundAlways.IsUnknown() {
+				if item.SoftReconfigurationInboundAlways.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "soft-reconfiguration/inbound/always", "")
+				}
+			}
+			if !item.NextHopSelf.IsNull() && !item.NextHopSelf.IsUnknown() {
+				if item.NextHopSelf.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "next-hop-self", "")
+				}
+			}
+			if !item.NextHopSelfInheritanceDisable.IsNull() && !item.NextHopSelfInheritanceDisable.IsUnknown() {
+				if item.NextHopSelfInheritanceDisable.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "next-hop-self/inheritance-disable", "")
+				}
+			}
+			if !item.RouteReflectorClient.IsNull() && !item.RouteReflectorClient.IsUnknown() {
+				if item.RouteReflectorClient.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "route-reflector-client", "")
+				}
+			}
+			if !item.RouteReflectorClientInheritanceDisable.IsNull() && !item.RouteReflectorClientInheritanceDisable.IsUnknown() {
+				if item.RouteReflectorClientInheritanceDisable.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "route-reflector-client/inheritance-disable", "")
+				}
+			}
+			if !item.RoutePolicyIn.IsNull() && !item.RoutePolicyIn.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "route-policy/in", item.RoutePolicyIn.ValueString())
+			}
+			if !item.RoutePolicyOut.IsNull() && !item.RoutePolicyOut.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "route-policy/out", item.RoutePolicyOut.ValueString())
+			}
+			if !item.UseAfGroup.IsNull() && !item.UseAfGroup.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "use/af-group", item.UseAfGroup.ValueString())
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"address-families/address-family", cBody.Res())
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []byte) {
@@ -327,24 +512,20 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 	} else {
 		data.AoKeyChainIncludeTcpOptions = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ao.key-chain-name.accept-ao-mismatch-connection"); !data.AoKeyChainAcceptMismatch.IsNull() {
-		if value.Exists() {
-			data.AoKeyChainAcceptMismatch = types.BoolValue(true)
-		} else {
-			data.AoKeyChainAcceptMismatch = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "ao.key-chain-name.accept-ao-mismatch-connection"); value.Exists() {
+		data.AoKeyChainAcceptMismatch = types.BoolValue(true)
+	} else if data.AoKeyChainAcceptMismatch.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.AoKeyChainAcceptMismatch = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "ao.inheritance-disable"); !data.AoInheritanceDisable.IsNull() {
-		if value.Exists() {
-			data.AoInheritanceDisable = types.BoolValue(true)
-		} else {
-			data.AoInheritanceDisable = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "ao.inheritance-disable"); value.Exists() {
+		data.AoInheritanceDisable = types.BoolValue(true)
+	} else if data.AoInheritanceDisable.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.AoInheritanceDisable = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() && !data.BfdMinimumInterval.IsNull() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	} else {
@@ -355,111 +536,91 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 	} else {
 		data.BfdMultiplier = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect"); !data.BfdFastDetect.IsNull() {
-		if value.Exists() {
-			data.BfdFastDetect = types.BoolValue(true)
-		} else {
-			data.BfdFastDetect = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "bfd.fast-detect"); value.Exists() {
+		data.BfdFastDetect = types.BoolValue(true)
+	} else if data.BfdFastDetect.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.BfdFastDetect = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect.strict-mode"); !data.BfdFastDetectStrictMode.IsNull() {
-		if value.Exists() {
-			data.BfdFastDetectStrictMode = types.BoolValue(true)
-		} else {
-			data.BfdFastDetectStrictMode = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "bfd.fast-detect.strict-mode"); value.Exists() {
+		data.BfdFastDetectStrictMode = types.BoolValue(true)
+	} else if data.BfdFastDetectStrictMode.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.BfdFastDetectStrictMode = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect.disable"); !data.BfdFastDetectDisable.IsNull() {
-		if value.Exists() {
-			data.BfdFastDetectDisable = types.BoolValue(true)
-		} else {
-			data.BfdFastDetectDisable = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "bfd.fast-detect.disable"); value.Exists() {
+		data.BfdFastDetectDisable = types.BoolValue(true)
+	} else if data.BfdFastDetectDisable.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.BfdFastDetectDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "local-as.inheritance-disable"); !data.LocalAsInheritanceDisable.IsNull() {
-		if value.Exists() {
-			data.LocalAsInheritanceDisable = types.BoolValue(true)
-		} else {
-			data.LocalAsInheritanceDisable = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "local-as.inheritance-disable"); value.Exists() {
+		data.LocalAsInheritanceDisable = types.BoolValue(true)
+	} else if data.LocalAsInheritanceDisable.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.LocalAsInheritanceDisable = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 	if value := gjson.GetBytes(res, "local-as.as.as-number"); value.Exists() && !data.LocalAs.IsNull() {
 		data.LocalAs = types.StringValue(value.String())
 	} else {
 		data.LocalAs = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "local-as.as.no-prepend"); !data.LocalAsNoPrepend.IsNull() {
-		if value.Exists() {
-			data.LocalAsNoPrepend = types.BoolValue(true)
-		} else {
-			data.LocalAsNoPrepend = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "local-as.as.no-prepend"); value.Exists() {
+		data.LocalAsNoPrepend = types.BoolValue(true)
+	} else if data.LocalAsNoPrepend.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.LocalAsNoPrepend = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "local-as.as.no-prepend.replace-as"); !data.LocalAsReplaceAs.IsNull() {
-		if value.Exists() {
-			data.LocalAsReplaceAs = types.BoolValue(true)
-		} else {
-			data.LocalAsReplaceAs = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "local-as.as.no-prepend.replace-as"); value.Exists() {
+		data.LocalAsReplaceAs = types.BoolValue(true)
+	} else if data.LocalAsReplaceAs.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.LocalAsReplaceAs = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "local-as.as.no-prepend.replace-as.dual-as"); !data.LocalAsDualAs.IsNull() {
-		if value.Exists() {
-			data.LocalAsDualAs = types.BoolValue(true)
-		} else {
-			data.LocalAsDualAs = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "local-as.as.no-prepend.replace-as.dual-as"); value.Exists() {
+		data.LocalAsDualAs = types.BoolValue(true)
+	} else if data.LocalAsDualAs.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.LocalAsDualAs = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "password.encrypted"); value.Exists() && !data.Password.IsNull() {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, ""); value.Exists() && !data.Password.IsNull() {
 		data.Password = types.StringValue(value.String())
 	} else {
 		data.Password = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "password.inheritance-disable"); !data.PasswordInheritanceDisable.IsNull() {
-		if value.Exists() {
-			data.PasswordInheritanceDisable = types.BoolValue(true)
-		} else {
-			data.PasswordInheritanceDisable = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, ""); value.Exists() {
+		data.PasswordInheritanceDisable = types.BoolValue(true)
+	} else if data.PasswordInheritanceDisable.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.PasswordInheritanceDisable = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 	if value := gjson.GetBytes(res, "timers.keepalive-interval"); value.Exists() && !data.TimersKeepaliveInterval.IsNull() {
 		data.TimersKeepaliveInterval = types.Int64Value(value.Int())
 	} else {
 		data.TimersKeepaliveInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timers.zero"); !data.TimersKeepaliveZero.IsNull() {
-		if value.Exists() {
-			data.TimersKeepaliveZero = types.BoolValue(true)
-		} else {
-			data.TimersKeepaliveZero = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "timers.zero"); value.Exists() {
+		data.TimersKeepaliveZero = types.BoolValue(true)
+	} else if data.TimersKeepaliveZero.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.TimersKeepaliveZero = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "timers.zero.zero"); !data.TimersKeepaliveZeroHoldtimeZero.IsNull() {
-		if value.Exists() {
-			data.TimersKeepaliveZeroHoldtimeZero = types.BoolValue(true)
-		} else {
-			data.TimersKeepaliveZeroHoldtimeZero = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "timers.zero.zero"); value.Exists() {
+		data.TimersKeepaliveZeroHoldtimeZero = types.BoolValue(true)
+	} else if data.TimersKeepaliveZeroHoldtimeZero.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.TimersKeepaliveZeroHoldtimeZero = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 	if value := gjson.GetBytes(res, "timers.zero.minimum-acceptable-holdtime"); value.Exists() && !data.TimersKeepaliveZeroMinimumAcceptableHoldtime.IsNull() {
 		data.TimersKeepaliveZeroMinimumAcceptableHoldtime = types.Int64Value(value.Int())
 	} else {
@@ -503,51 +664,41 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 		} else {
 			data.AddressFamilies[i].AfName = types.StringNull()
 		}
-		if value := r.Get("soft-reconfiguration.inbound.always"); !data.AddressFamilies[i].SoftReconfigurationInboundAlways.IsNull() {
-			if value.Exists() {
-				data.AddressFamilies[i].SoftReconfigurationInboundAlways = types.BoolValue(true)
-			} else {
-				data.AddressFamilies[i].SoftReconfigurationInboundAlways = types.BoolValue(false)
-			}
-		} else {
+		if value := r.Get("soft-reconfiguration.inbound.always"); value.Exists() {
+			data.AddressFamilies[i].SoftReconfigurationInboundAlways = types.BoolValue(true)
+		} else if data.AddressFamilies[i].SoftReconfigurationInboundAlways.IsNull() {
+			// If currently null, keep as null (field not in config)
 			data.AddressFamilies[i].SoftReconfigurationInboundAlways = types.BoolNull()
 		}
-		if value := r.Get("next-hop-self"); !data.AddressFamilies[i].NextHopSelf.IsNull() {
-			if value.Exists() {
-				data.AddressFamilies[i].NextHopSelf = types.BoolValue(true)
-			} else {
-				data.AddressFamilies[i].NextHopSelf = types.BoolValue(false)
-			}
-		} else {
+		// else: preserve existing value (e.g., false from config)
+		if value := r.Get("next-hop-self"); value.Exists() {
+			data.AddressFamilies[i].NextHopSelf = types.BoolValue(true)
+		} else if data.AddressFamilies[i].NextHopSelf.IsNull() {
+			// If currently null, keep as null (field not in config)
 			data.AddressFamilies[i].NextHopSelf = types.BoolNull()
 		}
-		if value := r.Get("next-hop-self.inheritance-disable"); !data.AddressFamilies[i].NextHopSelfInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.AddressFamilies[i].NextHopSelfInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.AddressFamilies[i].NextHopSelfInheritanceDisable = types.BoolValue(false)
-			}
-		} else {
+		// else: preserve existing value (e.g., false from config)
+		if value := r.Get("next-hop-self.inheritance-disable"); value.Exists() {
+			data.AddressFamilies[i].NextHopSelfInheritanceDisable = types.BoolValue(true)
+		} else if data.AddressFamilies[i].NextHopSelfInheritanceDisable.IsNull() {
+			// If currently null, keep as null (field not in config)
 			data.AddressFamilies[i].NextHopSelfInheritanceDisable = types.BoolNull()
 		}
-		if value := r.Get("route-reflector-client"); !data.AddressFamilies[i].RouteReflectorClient.IsNull() {
-			if value.Exists() {
-				data.AddressFamilies[i].RouteReflectorClient = types.BoolValue(true)
-			} else {
-				data.AddressFamilies[i].RouteReflectorClient = types.BoolValue(false)
-			}
-		} else {
+		// else: preserve existing value (e.g., false from config)
+		if value := r.Get("route-reflector-client"); value.Exists() {
+			data.AddressFamilies[i].RouteReflectorClient = types.BoolValue(true)
+		} else if data.AddressFamilies[i].RouteReflectorClient.IsNull() {
+			// If currently null, keep as null (field not in config)
 			data.AddressFamilies[i].RouteReflectorClient = types.BoolNull()
 		}
-		if value := r.Get("route-reflector-client.inheritance-disable"); !data.AddressFamilies[i].RouteReflectorClientInheritanceDisable.IsNull() {
-			if value.Exists() {
-				data.AddressFamilies[i].RouteReflectorClientInheritanceDisable = types.BoolValue(true)
-			} else {
-				data.AddressFamilies[i].RouteReflectorClientInheritanceDisable = types.BoolValue(false)
-			}
-		} else {
+		// else: preserve existing value (e.g., false from config)
+		if value := r.Get("route-reflector-client.inheritance-disable"); value.Exists() {
+			data.AddressFamilies[i].RouteReflectorClientInheritanceDisable = types.BoolValue(true)
+		} else if data.AddressFamilies[i].RouteReflectorClientInheritanceDisable.IsNull() {
+			// If currently null, keep as null (field not in config)
 			data.AddressFamilies[i].RouteReflectorClientInheritanceDisable = types.BoolNull()
 		}
+		// else: preserve existing value (e.g., false from config)
 		if value := r.Get("route-policy.in"); value.Exists() && !data.AddressFamilies[i].RoutePolicyIn.IsNull() {
 			data.AddressFamilies[i].RoutePolicyIn = types.StringValue(value.String())
 		} else {
@@ -568,115 +719,379 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 
 // End of section. //template:end updateFromBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
-func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "remote-as"); value.Exists() {
+func (data *RouterBGPNeighborGroup) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbor-group-name"); value.Exists() {
+		data.Name = types.StringValue(value.String())
+	} else if data.Name.IsNull() {
+		data.Name = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/remote-as"); value.Exists() {
 		data.RemoteAs = types.StringValue(value.String())
+	} else if data.RemoteAs.IsNull() {
+		data.RemoteAs = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
+	} else if data.Description.IsNull() {
+		data.Description = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "update-source"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update-source"); value.Exists() {
 		data.UpdateSource = types.StringValue(value.String())
+	} else if data.UpdateSource.IsNull() {
+		data.UpdateSource = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "advertisement-interval.advertisement-interval-time-in-seconds"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertisement-interval/advertisement-interval-time-in-seconds"); value.Exists() {
 		data.AdvertisementIntervalSeconds = types.Int64Value(value.Int())
+	} else if data.AdvertisementIntervalSeconds.IsNull() {
+		data.AdvertisementIntervalSeconds = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "advertisement-interval.advertisement-interval-time-in-milliseconds"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertisement-interval/advertisement-interval-time-in-milliseconds"); value.Exists() {
 		data.AdvertisementIntervalMilliseconds = types.Int64Value(value.Int())
+	} else if data.AdvertisementIntervalMilliseconds.IsNull() {
+		data.AdvertisementIntervalMilliseconds = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ao.key-chain-name.key-chain-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ao/key-chain-name/key-chain-name"); value.Exists() {
 		data.AoKeyChainName = types.StringValue(value.String())
+	} else if data.AoKeyChainName.IsNull() {
+		data.AoKeyChainName = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ao.key-chain-name.include-tcp-options"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ao/key-chain-name/include-tcp-options"); value.Exists() {
 		data.AoKeyChainIncludeTcpOptions = types.StringValue(value.String())
+	} else if data.AoKeyChainIncludeTcpOptions.IsNull() {
+		data.AoKeyChainIncludeTcpOptions = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ao.key-chain-name.accept-ao-mismatch-connection"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ao/key-chain-name/accept-ao-mismatch-connection"); value.Exists() {
 		data.AoKeyChainAcceptMismatch = types.BoolValue(true)
 	} else {
-		data.AoKeyChainAcceptMismatch = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.AoKeyChainAcceptMismatch.IsNull() {
+			data.AoKeyChainAcceptMismatch = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "ao.inheritance-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ao/inheritance-disable"); value.Exists() {
 		data.AoInheritanceDisable = types.BoolValue(true)
 	} else {
-		data.AoInheritanceDisable = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.AoInheritanceDisable.IsNull() {
+			data.AoInheritanceDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
+	} else if data.BfdMinimumInterval.IsNull() {
+		data.BfdMinimumInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
+	} else if data.BfdMultiplier.IsNull() {
+		data.BfdMultiplier = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/fast-detect"); value.Exists() {
 		data.BfdFastDetect = types.BoolValue(true)
 	} else {
-		data.BfdFastDetect = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.BfdFastDetect.IsNull() {
+			data.BfdFastDetect = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect.strict-mode"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/fast-detect/strict-mode"); value.Exists() {
 		data.BfdFastDetectStrictMode = types.BoolValue(true)
 	} else {
-		data.BfdFastDetectStrictMode = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.BfdFastDetectStrictMode.IsNull() {
+			data.BfdFastDetectStrictMode = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect.disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/fast-detect/disable"); value.Exists() {
 		data.BfdFastDetectDisable = types.BoolValue(true)
 	} else {
-		data.BfdFastDetectDisable = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.BfdFastDetectDisable.IsNull() {
+			data.BfdFastDetectDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "local-as.inheritance-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/local-as/inheritance-disable"); value.Exists() {
 		data.LocalAsInheritanceDisable = types.BoolValue(true)
 	} else {
-		data.LocalAsInheritanceDisable = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.LocalAsInheritanceDisable.IsNull() {
+			data.LocalAsInheritanceDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "local-as.as.as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/local-as/as/as-number"); value.Exists() {
 		data.LocalAs = types.StringValue(value.String())
+	} else if data.LocalAs.IsNull() {
+		data.LocalAs = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "local-as.as.no-prepend"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/local-as/as/no-prepend"); value.Exists() {
 		data.LocalAsNoPrepend = types.BoolValue(true)
 	} else {
-		data.LocalAsNoPrepend = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.LocalAsNoPrepend.IsNull() {
+			data.LocalAsNoPrepend = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "local-as.as.no-prepend.replace-as"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/local-as/as/no-prepend/replace-as"); value.Exists() {
 		data.LocalAsReplaceAs = types.BoolValue(true)
 	} else {
-		data.LocalAsReplaceAs = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.LocalAsReplaceAs.IsNull() {
+			data.LocalAsReplaceAs = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "local-as.as.no-prepend.replace-as.dual-as"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/local-as/as/no-prepend/replace-as/dual-as"); value.Exists() {
 		data.LocalAsDualAs = types.BoolValue(true)
 	} else {
-		data.LocalAsDualAs = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.LocalAsDualAs.IsNull() {
+			data.LocalAsDualAs = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "password.encrypted"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
 		data.Password = types.StringValue(value.String())
+	} else if data.Password.IsNull() {
+		data.Password = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "password.inheritance-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
 		data.PasswordInheritanceDisable = types.BoolValue(true)
 	} else {
-		data.PasswordInheritanceDisable = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.PasswordInheritanceDisable.IsNull() {
+			data.PasswordInheritanceDisable = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "timers.keepalive-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/keepalive-interval"); value.Exists() {
 		data.TimersKeepaliveInterval = types.Int64Value(value.Int())
+	} else if data.TimersKeepaliveInterval.IsNull() {
+		data.TimersKeepaliveInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timers.zero"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/zero"); value.Exists() {
 		data.TimersKeepaliveZero = types.BoolValue(true)
 	} else {
-		data.TimersKeepaliveZero = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.TimersKeepaliveZero.IsNull() {
+			data.TimersKeepaliveZero = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "timers.zero.zero"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/zero/zero"); value.Exists() {
 		data.TimersKeepaliveZeroHoldtimeZero = types.BoolValue(true)
 	} else {
-		data.TimersKeepaliveZeroHoldtimeZero = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.TimersKeepaliveZeroHoldtimeZero.IsNull() {
+			data.TimersKeepaliveZeroHoldtimeZero = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "timers.zero.minimum-acceptable-holdtime"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/zero/minimum-acceptable-holdtime"); value.Exists() {
+		data.TimersKeepaliveZeroMinimumAcceptableHoldtime = types.Int64Value(value.Int())
+	} else if data.TimersKeepaliveZeroMinimumAcceptableHoldtime.IsNull() {
+		data.TimersKeepaliveZeroMinimumAcceptableHoldtime = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/holdtime/holdtime-number"); value.Exists() {
+		data.TimersHoldtime = types.Int64Value(value.Int())
+	} else if data.TimersHoldtime.IsNull() {
+		data.TimersHoldtime = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/holdtime/minimum-acceptable-holdtime"); value.Exists() {
+		data.TimersHoldtimeMinimumAcceptableHoldtime = types.Int64Value(value.Int())
+	} else if data.TimersHoldtimeMinimumAcceptableHoldtime.IsNull() {
+		data.TimersHoldtimeMinimumAcceptableHoldtime = types.Int64Null()
+	}
+	for i := range data.AddressFamilies {
+		keys := [...]string{"af-name"}
+		keyValues := [...]string{data.AddressFamilies[i].AfName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/address-families/address-family").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "af-name"); value.Exists() {
+			data.AddressFamilies[i].AfName = types.StringValue(value.String())
+		} else if data.AddressFamilies[i].AfName.IsNull() {
+			data.AddressFamilies[i].AfName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "soft-reconfiguration/inbound/always"); value.Exists() {
+			data.AddressFamilies[i].SoftReconfigurationInboundAlways = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.AddressFamilies[i].SoftReconfigurationInboundAlways.IsNull() {
+				data.AddressFamilies[i].SoftReconfigurationInboundAlways = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "next-hop-self"); value.Exists() {
+			data.AddressFamilies[i].NextHopSelf = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.AddressFamilies[i].NextHopSelf.IsNull() {
+				data.AddressFamilies[i].NextHopSelf = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "next-hop-self/inheritance-disable"); value.Exists() {
+			data.AddressFamilies[i].NextHopSelfInheritanceDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.AddressFamilies[i].NextHopSelfInheritanceDisable.IsNull() {
+				data.AddressFamilies[i].NextHopSelfInheritanceDisable = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "route-reflector-client"); value.Exists() {
+			data.AddressFamilies[i].RouteReflectorClient = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.AddressFamilies[i].RouteReflectorClient.IsNull() {
+				data.AddressFamilies[i].RouteReflectorClient = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "route-reflector-client/inheritance-disable"); value.Exists() {
+			data.AddressFamilies[i].RouteReflectorClientInheritanceDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.AddressFamilies[i].RouteReflectorClientInheritanceDisable.IsNull() {
+				data.AddressFamilies[i].RouteReflectorClientInheritanceDisable = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "route-policy/in"); value.Exists() {
+			data.AddressFamilies[i].RoutePolicyIn = types.StringValue(value.String())
+		} else if data.AddressFamilies[i].RoutePolicyIn.IsNull() {
+			data.AddressFamilies[i].RoutePolicyIn = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "route-policy/out"); value.Exists() {
+			data.AddressFamilies[i].RoutePolicyOut = types.StringValue(value.String())
+		} else if data.AddressFamilies[i].RoutePolicyOut.IsNull() {
+			data.AddressFamilies[i].RoutePolicyOut = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "use/af-group"); value.Exists() {
+			data.AddressFamilies[i].UseAfGroup = types.StringValue(value.String())
+		} else if data.AddressFamilies[i].UseAfGroup.IsNull() {
+			data.AddressFamilies[i].UseAfGroup = types.StringNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "remote-as"); value.Exists() {
+		data.RemoteAs = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "update-source"); value.Exists() {
+		data.UpdateSource = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "advertisement-interval.advertisement-interval-time-in-seconds"); value.Exists() {
+		data.AdvertisementIntervalSeconds = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "advertisement-interval.advertisement-interval-time-in-milliseconds"); value.Exists() {
+		data.AdvertisementIntervalMilliseconds = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "ao.key-chain-name.key-chain-name"); value.Exists() {
+		data.AoKeyChainName = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "ao.key-chain-name.include-tcp-options"); value.Exists() {
+		data.AoKeyChainIncludeTcpOptions = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "ao.key-chain-name.accept-ao-mismatch-connection"); value.Exists() {
+		data.AoKeyChainAcceptMismatch = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "ao.inheritance-disable"); value.Exists() {
+		data.AoInheritanceDisable = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "bfd.minimum-interval"); value.Exists() {
+		data.BfdMinimumInterval = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "bfd.multiplier"); value.Exists() {
+		data.BfdMultiplier = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "bfd.fast-detect"); value.Exists() {
+		data.BfdFastDetect = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "bfd.fast-detect.strict-mode"); value.Exists() {
+		data.BfdFastDetectStrictMode = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "bfd.fast-detect.disable"); value.Exists() {
+		data.BfdFastDetectDisable = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "local-as.inheritance-disable"); value.Exists() {
+		data.LocalAsInheritanceDisable = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "local-as.as.as-number"); value.Exists() {
+		data.LocalAs = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "local-as.as.no-prepend"); value.Exists() {
+		data.LocalAsNoPrepend = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "local-as.as.no-prepend.replace-as"); value.Exists() {
+		data.LocalAsReplaceAs = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "local-as.as.no-prepend.replace-as.dual-as"); value.Exists() {
+		data.LocalAsDualAs = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + ""); value.Exists() {
+		data.Password = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + ""); value.Exists() {
+		data.PasswordInheritanceDisable = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "timers.keepalive-interval"); value.Exists() {
+		data.TimersKeepaliveInterval = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "timers.zero"); value.Exists() {
+		data.TimersKeepaliveZero = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "timers.zero.zero"); value.Exists() {
+		data.TimersKeepaliveZeroHoldtimeZero = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "timers.zero.minimum-acceptable-holdtime"); value.Exists() {
 		data.TimersKeepaliveZeroMinimumAcceptableHoldtime = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "timers.holdtime.holdtime-number"); value.Exists() {
+	if value := res.Get(prefix + "timers.holdtime.holdtime-number"); value.Exists() {
 		data.TimersHoldtime = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "timers.holdtime.minimum-acceptable-holdtime"); value.Exists() {
+	if value := res.Get(prefix + "timers.holdtime.minimum-acceptable-holdtime"); value.Exists() {
 		data.TimersHoldtimeMinimumAcceptableHoldtime = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "address-families.address-family"); value.Exists() {
+	if value := res.Get(prefix + "address-families.address-family"); value.Exists() {
 		data.AddressFamilies = make([]RouterBGPNeighborGroupAddressFamilies, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterBGPNeighborGroupAddressFamilies{}
@@ -727,113 +1142,93 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *RouterBGPNeighborGroupData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "remote-as"); value.Exists() {
+func (data *RouterBGPNeighborGroupData) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "remote-as"); value.Exists() {
 		data.RemoteAs = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "description"); value.Exists() {
+	if value := res.Get(prefix + "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "update-source"); value.Exists() {
+	if value := res.Get(prefix + "update-source"); value.Exists() {
 		data.UpdateSource = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "advertisement-interval.advertisement-interval-time-in-seconds"); value.Exists() {
+	if value := res.Get(prefix + "advertisement-interval.advertisement-interval-time-in-seconds"); value.Exists() {
 		data.AdvertisementIntervalSeconds = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "advertisement-interval.advertisement-interval-time-in-milliseconds"); value.Exists() {
+	if value := res.Get(prefix + "advertisement-interval.advertisement-interval-time-in-milliseconds"); value.Exists() {
 		data.AdvertisementIntervalMilliseconds = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "ao.key-chain-name.key-chain-name"); value.Exists() {
+	if value := res.Get(prefix + "ao.key-chain-name.key-chain-name"); value.Exists() {
 		data.AoKeyChainName = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "ao.key-chain-name.include-tcp-options"); value.Exists() {
+	if value := res.Get(prefix + "ao.key-chain-name.include-tcp-options"); value.Exists() {
 		data.AoKeyChainIncludeTcpOptions = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "ao.key-chain-name.accept-ao-mismatch-connection"); value.Exists() {
+	if value := res.Get(prefix + "ao.key-chain-name.accept-ao-mismatch-connection"); value.Exists() {
 		data.AoKeyChainAcceptMismatch = types.BoolValue(true)
-	} else {
-		data.AoKeyChainAcceptMismatch = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "ao.inheritance-disable"); value.Exists() {
+	if value := res.Get(prefix + "ao.inheritance-disable"); value.Exists() {
 		data.AoInheritanceDisable = types.BoolValue(true)
-	} else {
-		data.AoInheritanceDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() {
+	if value := res.Get(prefix + "bfd.minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() {
+	if value := res.Get(prefix + "bfd.multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect"); value.Exists() {
+	if value := res.Get(prefix + "bfd.fast-detect"); value.Exists() {
 		data.BfdFastDetect = types.BoolValue(true)
-	} else {
-		data.BfdFastDetect = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect.strict-mode"); value.Exists() {
+	if value := res.Get(prefix + "bfd.fast-detect.strict-mode"); value.Exists() {
 		data.BfdFastDetectStrictMode = types.BoolValue(true)
-	} else {
-		data.BfdFastDetectStrictMode = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect.disable"); value.Exists() {
+	if value := res.Get(prefix + "bfd.fast-detect.disable"); value.Exists() {
 		data.BfdFastDetectDisable = types.BoolValue(true)
-	} else {
-		data.BfdFastDetectDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "local-as.inheritance-disable"); value.Exists() {
+	if value := res.Get(prefix + "local-as.inheritance-disable"); value.Exists() {
 		data.LocalAsInheritanceDisable = types.BoolValue(true)
-	} else {
-		data.LocalAsInheritanceDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "local-as.as.as-number"); value.Exists() {
+	if value := res.Get(prefix + "local-as.as.as-number"); value.Exists() {
 		data.LocalAs = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "local-as.as.no-prepend"); value.Exists() {
+	if value := res.Get(prefix + "local-as.as.no-prepend"); value.Exists() {
 		data.LocalAsNoPrepend = types.BoolValue(true)
-	} else {
-		data.LocalAsNoPrepend = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "local-as.as.no-prepend.replace-as"); value.Exists() {
+	if value := res.Get(prefix + "local-as.as.no-prepend.replace-as"); value.Exists() {
 		data.LocalAsReplaceAs = types.BoolValue(true)
-	} else {
-		data.LocalAsReplaceAs = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "local-as.as.no-prepend.replace-as.dual-as"); value.Exists() {
+	if value := res.Get(prefix + "local-as.as.no-prepend.replace-as.dual-as"); value.Exists() {
 		data.LocalAsDualAs = types.BoolValue(true)
-	} else {
-		data.LocalAsDualAs = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "password.encrypted"); value.Exists() {
+	if value := res.Get(prefix + ""); value.Exists() {
 		data.Password = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "password.inheritance-disable"); value.Exists() {
+	if value := res.Get(prefix + ""); value.Exists() {
 		data.PasswordInheritanceDisable = types.BoolValue(true)
-	} else {
-		data.PasswordInheritanceDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "timers.keepalive-interval"); value.Exists() {
+	if value := res.Get(prefix + "timers.keepalive-interval"); value.Exists() {
 		data.TimersKeepaliveInterval = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "timers.zero"); value.Exists() {
+	if value := res.Get(prefix + "timers.zero"); value.Exists() {
 		data.TimersKeepaliveZero = types.BoolValue(true)
-	} else {
-		data.TimersKeepaliveZero = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "timers.zero.zero"); value.Exists() {
+	if value := res.Get(prefix + "timers.zero.zero"); value.Exists() {
 		data.TimersKeepaliveZeroHoldtimeZero = types.BoolValue(true)
-	} else {
-		data.TimersKeepaliveZeroHoldtimeZero = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "timers.zero.minimum-acceptable-holdtime"); value.Exists() {
+	if value := res.Get(prefix + "timers.zero.minimum-acceptable-holdtime"); value.Exists() {
 		data.TimersKeepaliveZeroMinimumAcceptableHoldtime = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "timers.holdtime.holdtime-number"); value.Exists() {
+	if value := res.Get(prefix + "timers.holdtime.holdtime-number"); value.Exists() {
 		data.TimersHoldtime = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "timers.holdtime.minimum-acceptable-holdtime"); value.Exists() {
+	if value := res.Get(prefix + "timers.holdtime.minimum-acceptable-holdtime"); value.Exists() {
 		data.TimersHoldtimeMinimumAcceptableHoldtime = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "address-families.address-family"); value.Exists() {
+	if value := res.Get(prefix + "address-families.address-family"); value.Exists() {
 		data.AddressFamilies = make([]RouterBGPNeighborGroupAddressFamilies, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterBGPNeighborGroupAddressFamilies{}
@@ -882,6 +1277,291 @@ func (data *RouterBGPNeighborGroupData) fromBody(ctx context.Context, res []byte
 
 // End of section. //template:end fromBodyData
 
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *RouterBGPNeighborGroup) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/remote-as"); value.Exists() {
+		data.RemoteAs = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update-source"); value.Exists() {
+		data.UpdateSource = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertisement-interval/advertisement-interval-time-in-seconds"); value.Exists() {
+		data.AdvertisementIntervalSeconds = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertisement-interval/advertisement-interval-time-in-milliseconds"); value.Exists() {
+		data.AdvertisementIntervalMilliseconds = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ao/key-chain-name/key-chain-name"); value.Exists() {
+		data.AoKeyChainName = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ao/key-chain-name/include-tcp-options"); value.Exists() {
+		data.AoKeyChainIncludeTcpOptions = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ao/key-chain-name/accept-ao-mismatch-connection"); value.Exists() {
+		data.AoKeyChainAcceptMismatch = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ao/inheritance-disable"); value.Exists() {
+		data.AoInheritanceDisable = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/minimum-interval"); value.Exists() {
+		data.BfdMinimumInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/multiplier"); value.Exists() {
+		data.BfdMultiplier = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/fast-detect"); value.Exists() {
+		data.BfdFastDetect = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/fast-detect/strict-mode"); value.Exists() {
+		data.BfdFastDetectStrictMode = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/fast-detect/disable"); value.Exists() {
+		data.BfdFastDetectDisable = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/local-as/inheritance-disable"); value.Exists() {
+		data.LocalAsInheritanceDisable = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/local-as/as/as-number"); value.Exists() {
+		data.LocalAs = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/local-as/as/no-prepend"); value.Exists() {
+		data.LocalAsNoPrepend = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/local-as/as/no-prepend/replace-as"); value.Exists() {
+		data.LocalAsReplaceAs = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/local-as/as/no-prepend/replace-as/dual-as"); value.Exists() {
+		data.LocalAsDualAs = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+		data.Password = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+		data.PasswordInheritanceDisable = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/keepalive-interval"); value.Exists() {
+		data.TimersKeepaliveInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/zero"); value.Exists() {
+		data.TimersKeepaliveZero = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/zero/zero"); value.Exists() {
+		data.TimersKeepaliveZeroHoldtimeZero = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/zero/minimum-acceptable-holdtime"); value.Exists() {
+		data.TimersKeepaliveZeroMinimumAcceptableHoldtime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/holdtime/holdtime-number"); value.Exists() {
+		data.TimersHoldtime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/holdtime/minimum-acceptable-holdtime"); value.Exists() {
+		data.TimersHoldtimeMinimumAcceptableHoldtime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address-families/address-family"); value.Exists() {
+		data.AddressFamilies = make([]RouterBGPNeighborGroupAddressFamilies, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterBGPNeighborGroupAddressFamilies{}
+			if cValue := helpers.GetFromXPath(v, "af-name"); cValue.Exists() {
+				item.AfName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "soft-reconfiguration/inbound/always"); cValue.Exists() {
+				item.SoftReconfigurationInboundAlways = types.BoolValue(true)
+			} else {
+			}
+			if cValue := helpers.GetFromXPath(v, "next-hop-self"); cValue.Exists() {
+				item.NextHopSelf = types.BoolValue(true)
+			} else {
+			}
+			if cValue := helpers.GetFromXPath(v, "next-hop-self/inheritance-disable"); cValue.Exists() {
+				item.NextHopSelfInheritanceDisable = types.BoolValue(true)
+			} else {
+			}
+			if cValue := helpers.GetFromXPath(v, "route-reflector-client"); cValue.Exists() {
+				item.RouteReflectorClient = types.BoolValue(true)
+			} else {
+			}
+			if cValue := helpers.GetFromXPath(v, "route-reflector-client/inheritance-disable"); cValue.Exists() {
+				item.RouteReflectorClientInheritanceDisable = types.BoolValue(true)
+			} else {
+			}
+			if cValue := helpers.GetFromXPath(v, "route-policy/in"); cValue.Exists() {
+				item.RoutePolicyIn = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "route-policy/out"); cValue.Exists() {
+				item.RoutePolicyOut = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "use/af-group"); cValue.Exists() {
+				item.UseAfGroup = types.StringValue(cValue.String())
+			}
+			data.AddressFamilies = append(data.AddressFamilies, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *RouterBGPNeighborGroupData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/remote-as"); value.Exists() {
+		data.RemoteAs = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update-source"); value.Exists() {
+		data.UpdateSource = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertisement-interval/advertisement-interval-time-in-seconds"); value.Exists() {
+		data.AdvertisementIntervalSeconds = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertisement-interval/advertisement-interval-time-in-milliseconds"); value.Exists() {
+		data.AdvertisementIntervalMilliseconds = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ao/key-chain-name/key-chain-name"); value.Exists() {
+		data.AoKeyChainName = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ao/key-chain-name/include-tcp-options"); value.Exists() {
+		data.AoKeyChainIncludeTcpOptions = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ao/key-chain-name/accept-ao-mismatch-connection"); value.Exists() {
+		data.AoKeyChainAcceptMismatch = types.BoolValue(true)
+	} else {
+		data.AoKeyChainAcceptMismatch = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ao/inheritance-disable"); value.Exists() {
+		data.AoInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.AoInheritanceDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/minimum-interval"); value.Exists() {
+		data.BfdMinimumInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/multiplier"); value.Exists() {
+		data.BfdMultiplier = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/fast-detect"); value.Exists() {
+		data.BfdFastDetect = types.BoolValue(true)
+	} else {
+		data.BfdFastDetect = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/fast-detect/strict-mode"); value.Exists() {
+		data.BfdFastDetectStrictMode = types.BoolValue(true)
+	} else {
+		data.BfdFastDetectStrictMode = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/fast-detect/disable"); value.Exists() {
+		data.BfdFastDetectDisable = types.BoolValue(true)
+	} else {
+		data.BfdFastDetectDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/local-as/inheritance-disable"); value.Exists() {
+		data.LocalAsInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.LocalAsInheritanceDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/local-as/as/as-number"); value.Exists() {
+		data.LocalAs = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/local-as/as/no-prepend"); value.Exists() {
+		data.LocalAsNoPrepend = types.BoolValue(true)
+	} else {
+		data.LocalAsNoPrepend = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/local-as/as/no-prepend/replace-as"); value.Exists() {
+		data.LocalAsReplaceAs = types.BoolValue(true)
+	} else {
+		data.LocalAsReplaceAs = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/local-as/as/no-prepend/replace-as/dual-as"); value.Exists() {
+		data.LocalAsDualAs = types.BoolValue(true)
+	} else {
+		data.LocalAsDualAs = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+		data.Password = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+		data.PasswordInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.PasswordInheritanceDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/keepalive-interval"); value.Exists() {
+		data.TimersKeepaliveInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/zero"); value.Exists() {
+		data.TimersKeepaliveZero = types.BoolValue(true)
+	} else {
+		data.TimersKeepaliveZero = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/zero/zero"); value.Exists() {
+		data.TimersKeepaliveZeroHoldtimeZero = types.BoolValue(true)
+	} else {
+		data.TimersKeepaliveZeroHoldtimeZero = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/zero/minimum-acceptable-holdtime"); value.Exists() {
+		data.TimersKeepaliveZeroMinimumAcceptableHoldtime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/holdtime/holdtime-number"); value.Exists() {
+		data.TimersHoldtime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/holdtime/minimum-acceptable-holdtime"); value.Exists() {
+		data.TimersHoldtimeMinimumAcceptableHoldtime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address-families/address-family"); value.Exists() {
+		data.AddressFamilies = make([]RouterBGPNeighborGroupAddressFamilies, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterBGPNeighborGroupAddressFamilies{}
+			if cValue := helpers.GetFromXPath(v, "af-name"); cValue.Exists() {
+				item.AfName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "soft-reconfiguration/inbound/always"); cValue.Exists() {
+				item.SoftReconfigurationInboundAlways = types.BoolValue(true)
+			} else {
+				item.SoftReconfigurationInboundAlways = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "next-hop-self"); cValue.Exists() {
+				item.NextHopSelf = types.BoolValue(true)
+			} else {
+				item.NextHopSelf = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "next-hop-self/inheritance-disable"); cValue.Exists() {
+				item.NextHopSelfInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.NextHopSelfInheritanceDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "route-reflector-client"); cValue.Exists() {
+				item.RouteReflectorClient = types.BoolValue(true)
+			} else {
+				item.RouteReflectorClient = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "route-reflector-client/inheritance-disable"); cValue.Exists() {
+				item.RouteReflectorClientInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.RouteReflectorClientInheritanceDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "route-policy/in"); cValue.Exists() {
+				item.RoutePolicyIn = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "route-policy/out"); cValue.Exists() {
+				item.RoutePolicyOut = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "use/af-group"); cValue.Exists() {
+				item.UseAfGroup = types.StringValue(cValue.String())
+			}
+			data.AddressFamilies = append(data.AddressFamilies, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state RouterBGPNeighborGroup) []string {
@@ -918,20 +1598,35 @@ func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state R
 				if !state.AddressFamilies[i].RoutePolicyIn.IsNull() && data.AddressFamilies[j].RoutePolicyIn.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/route-policy/in", state.getPath(), keyString))
 				}
-				if !state.AddressFamilies[i].RouteReflectorClientInheritanceDisable.IsNull() && data.AddressFamilies[j].RouteReflectorClientInheritanceDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/route-reflector-client/inheritance-disable", state.getPath(), keyString))
+				// For presence-based booleans, delete if going from true to false or to null
+				if !state.AddressFamilies[i].RouteReflectorClientInheritanceDisable.IsNull() && state.AddressFamilies[i].RouteReflectorClientInheritanceDisable.ValueBool() {
+					if data.AddressFamilies[j].RouteReflectorClientInheritanceDisable.IsNull() || !data.AddressFamilies[j].RouteReflectorClientInheritanceDisable.ValueBool() {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/route-reflector-client/inheritance-disable", state.getPath(), keyString))
+					}
 				}
-				if !state.AddressFamilies[i].RouteReflectorClient.IsNull() && data.AddressFamilies[j].RouteReflectorClient.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/route-reflector-client", state.getPath(), keyString))
+				// For presence-based booleans, delete if going from true to false or to null
+				if !state.AddressFamilies[i].RouteReflectorClient.IsNull() && state.AddressFamilies[i].RouteReflectorClient.ValueBool() {
+					if data.AddressFamilies[j].RouteReflectorClient.IsNull() || !data.AddressFamilies[j].RouteReflectorClient.ValueBool() {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/route-reflector-client", state.getPath(), keyString))
+					}
 				}
-				if !state.AddressFamilies[i].NextHopSelfInheritanceDisable.IsNull() && data.AddressFamilies[j].NextHopSelfInheritanceDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/next-hop-self/inheritance-disable", state.getPath(), keyString))
+				// For presence-based booleans, delete if going from true to false or to null
+				if !state.AddressFamilies[i].NextHopSelfInheritanceDisable.IsNull() && state.AddressFamilies[i].NextHopSelfInheritanceDisable.ValueBool() {
+					if data.AddressFamilies[j].NextHopSelfInheritanceDisable.IsNull() || !data.AddressFamilies[j].NextHopSelfInheritanceDisable.ValueBool() {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/next-hop-self/inheritance-disable", state.getPath(), keyString))
+					}
 				}
-				if !state.AddressFamilies[i].NextHopSelf.IsNull() && data.AddressFamilies[j].NextHopSelf.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/next-hop-self", state.getPath(), keyString))
+				// For presence-based booleans, delete if going from true to false or to null
+				if !state.AddressFamilies[i].NextHopSelf.IsNull() && state.AddressFamilies[i].NextHopSelf.ValueBool() {
+					if data.AddressFamilies[j].NextHopSelf.IsNull() || !data.AddressFamilies[j].NextHopSelf.ValueBool() {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/next-hop-self", state.getPath(), keyString))
+					}
 				}
-				if !state.AddressFamilies[i].SoftReconfigurationInboundAlways.IsNull() && data.AddressFamilies[j].SoftReconfigurationInboundAlways.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/soft-reconfiguration/inbound/always", state.getPath(), keyString))
+				// For presence-based booleans, delete if going from true to false or to null
+				if !state.AddressFamilies[i].SoftReconfigurationInboundAlways.IsNull() && state.AddressFamilies[i].SoftReconfigurationInboundAlways.ValueBool() {
+					if data.AddressFamilies[j].SoftReconfigurationInboundAlways.IsNull() || !data.AddressFamilies[j].SoftReconfigurationInboundAlways.ValueBool() {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/soft-reconfiguration/inbound/always", state.getPath(), keyString))
+					}
 				}
 				break
 			}
@@ -949,44 +1644,74 @@ func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state R
 	if !state.TimersKeepaliveZeroMinimumAcceptableHoldtime.IsNull() && data.TimersKeepaliveZeroMinimumAcceptableHoldtime.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/zero", state.getPath()))
 	}
-	if !state.TimersKeepaliveZeroHoldtimeZero.IsNull() && data.TimersKeepaliveZeroHoldtimeZero.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/zero", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.TimersKeepaliveZeroHoldtimeZero.IsNull() && state.TimersKeepaliveZeroHoldtimeZero.ValueBool() {
+		if data.TimersKeepaliveZeroHoldtimeZero.IsNull() || !data.TimersKeepaliveZeroHoldtimeZero.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/zero", state.getPath()))
+		}
 	}
-	if !state.TimersKeepaliveZero.IsNull() && data.TimersKeepaliveZero.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/zero", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.TimersKeepaliveZero.IsNull() && state.TimersKeepaliveZero.ValueBool() {
+		if data.TimersKeepaliveZero.IsNull() || !data.TimersKeepaliveZero.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/zero", state.getPath()))
+		}
 	}
 	if !state.TimersKeepaliveInterval.IsNull() && data.TimersKeepaliveInterval.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/keepalive-interval", state.getPath()))
 	}
-	if !state.PasswordInheritanceDisable.IsNull() && data.PasswordInheritanceDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/password/inheritance-disable", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.PasswordInheritanceDisable.IsNull() && state.PasswordInheritanceDisable.ValueBool() {
+		if data.PasswordInheritanceDisable.IsNull() || !data.PasswordInheritanceDisable.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		}
 	}
 	if !state.Password.IsNull() && data.Password.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/password/encrypted", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
 	}
-	if !state.LocalAsDualAs.IsNull() && data.LocalAsDualAs.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/as/no-prepend/replace-as", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.LocalAsDualAs.IsNull() && state.LocalAsDualAs.ValueBool() {
+		if data.LocalAsDualAs.IsNull() || !data.LocalAsDualAs.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/as/no-prepend/replace-as", state.getPath()))
+		}
 	}
-	if !state.LocalAsReplaceAs.IsNull() && data.LocalAsReplaceAs.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/as/no-prepend", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.LocalAsReplaceAs.IsNull() && state.LocalAsReplaceAs.ValueBool() {
+		if data.LocalAsReplaceAs.IsNull() || !data.LocalAsReplaceAs.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/as/no-prepend", state.getPath()))
+		}
 	}
-	if !state.LocalAsNoPrepend.IsNull() && data.LocalAsNoPrepend.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/as/no-prepend", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.LocalAsNoPrepend.IsNull() && state.LocalAsNoPrepend.ValueBool() {
+		if data.LocalAsNoPrepend.IsNull() || !data.LocalAsNoPrepend.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/as/no-prepend", state.getPath()))
+		}
 	}
 	if !state.LocalAs.IsNull() && data.LocalAs.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/as", state.getPath()))
 	}
-	if !state.LocalAsInheritanceDisable.IsNull() && data.LocalAsInheritanceDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.LocalAsInheritanceDisable.IsNull() && state.LocalAsInheritanceDisable.ValueBool() {
+		if data.LocalAsInheritanceDisable.IsNull() || !data.LocalAsInheritanceDisable.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as", state.getPath()))
+		}
 	}
-	if !state.BfdFastDetectDisable.IsNull() && data.BfdFastDetectDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/fast-detect", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.BfdFastDetectDisable.IsNull() && state.BfdFastDetectDisable.ValueBool() {
+		if data.BfdFastDetectDisable.IsNull() || !data.BfdFastDetectDisable.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/fast-detect", state.getPath()))
+		}
 	}
-	if !state.BfdFastDetectStrictMode.IsNull() && data.BfdFastDetectStrictMode.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/fast-detect/strict-mode", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.BfdFastDetectStrictMode.IsNull() && state.BfdFastDetectStrictMode.ValueBool() {
+		if data.BfdFastDetectStrictMode.IsNull() || !data.BfdFastDetectStrictMode.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/fast-detect/strict-mode", state.getPath()))
+		}
 	}
-	if !state.BfdFastDetect.IsNull() && data.BfdFastDetect.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/fast-detect", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.BfdFastDetect.IsNull() && state.BfdFastDetect.ValueBool() {
+		if data.BfdFastDetect.IsNull() || !data.BfdFastDetect.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/fast-detect", state.getPath()))
+		}
 	}
 	if !state.BfdMultiplier.IsNull() && data.BfdMultiplier.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/multiplier", state.getPath()))
@@ -994,11 +1719,17 @@ func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state R
 	if !state.BfdMinimumInterval.IsNull() && data.BfdMinimumInterval.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/minimum-interval", state.getPath()))
 	}
-	if !state.AoInheritanceDisable.IsNull() && data.AoInheritanceDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ao", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.AoInheritanceDisable.IsNull() && state.AoInheritanceDisable.ValueBool() {
+		if data.AoInheritanceDisable.IsNull() || !data.AoInheritanceDisable.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/ao", state.getPath()))
+		}
 	}
-	if !state.AoKeyChainAcceptMismatch.IsNull() && data.AoKeyChainAcceptMismatch.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ao/key-chain-name/accept-ao-mismatch-connection", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.AoKeyChainAcceptMismatch.IsNull() && state.AoKeyChainAcceptMismatch.ValueBool() {
+		if data.AoKeyChainAcceptMismatch.IsNull() || !data.AoKeyChainAcceptMismatch.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/ao/key-chain-name/accept-ao-mismatch-connection", state.getPath()))
+		}
 	}
 	if !state.AoKeyChainIncludeTcpOptions.IsNull() && data.AoKeyChainIncludeTcpOptions.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ao/key-chain-name", state.getPath()))
@@ -1028,7 +1759,7 @@ func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state R
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *RouterBGPNeighborGroup) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *RouterBGPNeighborGroup) getEmptyLeafsDelete(ctx context.Context, state *RouterBGPNeighborGroup) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.AddressFamilies {
 		keys := [...]string{"af-name"}
@@ -1037,57 +1768,113 @@ func (data *RouterBGPNeighborGroup) getEmptyLeafsDelete(ctx context.Context) []s
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
+		// Only delete if state has true and plan has false
 		if !data.AddressFamilies[i].RouteReflectorClientInheritanceDisable.IsNull() && !data.AddressFamilies[i].RouteReflectorClientInheritanceDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/route-reflector-client/inheritance-disable", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.AddressFamilies) && !state.AddressFamilies[i].RouteReflectorClientInheritanceDisable.IsNull() && state.AddressFamilies[i].RouteReflectorClientInheritanceDisable.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/route-reflector-client/inheritance-disable", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.AddressFamilies[i].RouteReflectorClient.IsNull() && !data.AddressFamilies[i].RouteReflectorClient.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/route-reflector-client", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.AddressFamilies) && !state.AddressFamilies[i].RouteReflectorClient.IsNull() && state.AddressFamilies[i].RouteReflectorClient.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/route-reflector-client", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.AddressFamilies[i].NextHopSelfInheritanceDisable.IsNull() && !data.AddressFamilies[i].NextHopSelfInheritanceDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/next-hop-self/inheritance-disable", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.AddressFamilies) && !state.AddressFamilies[i].NextHopSelfInheritanceDisable.IsNull() && state.AddressFamilies[i].NextHopSelfInheritanceDisable.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/next-hop-self/inheritance-disable", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.AddressFamilies[i].NextHopSelf.IsNull() && !data.AddressFamilies[i].NextHopSelf.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/next-hop-self", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.AddressFamilies) && !state.AddressFamilies[i].NextHopSelf.IsNull() && state.AddressFamilies[i].NextHopSelf.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/next-hop-self", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.AddressFamilies[i].SoftReconfigurationInboundAlways.IsNull() && !data.AddressFamilies[i].SoftReconfigurationInboundAlways.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/soft-reconfiguration/inbound/always", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.AddressFamilies) && !state.AddressFamilies[i].SoftReconfigurationInboundAlways.IsNull() && state.AddressFamilies[i].SoftReconfigurationInboundAlways.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/soft-reconfiguration/inbound/always", data.getXPath(), keyString))
+			}
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.TimersKeepaliveZeroHoldtimeZero.IsNull() && !data.TimersKeepaliveZeroHoldtimeZero.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/timers/zero", data.getPath()))
+		if state != nil && !state.TimersKeepaliveZeroHoldtimeZero.IsNull() && state.TimersKeepaliveZeroHoldtimeZero.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/timers/zero", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.TimersKeepaliveZero.IsNull() && !data.TimersKeepaliveZero.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/timers/zero", data.getPath()))
+		if state != nil && !state.TimersKeepaliveZero.IsNull() && state.TimersKeepaliveZero.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/timers/zero", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.PasswordInheritanceDisable.IsNull() && !data.PasswordInheritanceDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/password/inheritance-disable", data.getPath()))
+		if state != nil && !state.PasswordInheritanceDisable.IsNull() && state.PasswordInheritanceDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.LocalAsDualAs.IsNull() && !data.LocalAsDualAs.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/local-as/as/no-prepend/replace-as", data.getPath()))
+		if state != nil && !state.LocalAsDualAs.IsNull() && state.LocalAsDualAs.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/local-as/as/no-prepend/replace-as", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.LocalAsReplaceAs.IsNull() && !data.LocalAsReplaceAs.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/local-as/as/no-prepend", data.getPath()))
+		if state != nil && !state.LocalAsReplaceAs.IsNull() && state.LocalAsReplaceAs.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/local-as/as/no-prepend", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.LocalAsNoPrepend.IsNull() && !data.LocalAsNoPrepend.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/local-as/as/no-prepend", data.getPath()))
+		if state != nil && !state.LocalAsNoPrepend.IsNull() && state.LocalAsNoPrepend.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/local-as/as/no-prepend", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.LocalAsInheritanceDisable.IsNull() && !data.LocalAsInheritanceDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/local-as", data.getPath()))
+		if state != nil && !state.LocalAsInheritanceDisable.IsNull() && state.LocalAsInheritanceDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/local-as", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.BfdFastDetectDisable.IsNull() && !data.BfdFastDetectDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/fast-detect", data.getPath()))
+		if state != nil && !state.BfdFastDetectDisable.IsNull() && state.BfdFastDetectDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/fast-detect", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.BfdFastDetectStrictMode.IsNull() && !data.BfdFastDetectStrictMode.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/fast-detect/strict-mode", data.getPath()))
+		if state != nil && !state.BfdFastDetectStrictMode.IsNull() && state.BfdFastDetectStrictMode.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/fast-detect/strict-mode", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.BfdFastDetect.IsNull() && !data.BfdFastDetect.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/fast-detect", data.getPath()))
+		if state != nil && !state.BfdFastDetect.IsNull() && state.BfdFastDetect.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/fast-detect", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.AoInheritanceDisable.IsNull() && !data.AoInheritanceDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ao", data.getPath()))
+		if state != nil && !state.AoInheritanceDisable.IsNull() && state.AoInheritanceDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ao", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.AoKeyChainAcceptMismatch.IsNull() && !data.AoKeyChainAcceptMismatch.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ao/key-chain-name/accept-ao-mismatch-connection", data.getPath()))
+		if state != nil && !state.AoKeyChainAcceptMismatch.IsNull() && state.AoKeyChainAcceptMismatch.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ao/key-chain-name/accept-ao-mismatch-connection", data.getXPath()))
+		}
 	}
 	return emptyLeafsDelete
 }
@@ -1099,14 +1886,9 @@ func (data *RouterBGPNeighborGroup) getEmptyLeafsDelete(ctx context.Context) []s
 func (data *RouterBGPNeighborGroup) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.AddressFamilies {
-		keys := [...]string{"af-name"}
 		keyValues := [...]string{data.AddressFamilies[i].AfName.ValueString()}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-families/address-family%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-families/address-family=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	if !data.TimersHoldtimeMinimumAcceptableHoldtime.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/holdtime", data.getPath()))
@@ -1127,10 +1909,10 @@ func (data *RouterBGPNeighborGroup) getDeletePaths(ctx context.Context) []string
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/keepalive-interval", data.getPath()))
 	}
 	if !data.PasswordInheritanceDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/password/inheritance-disable", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
 	}
 	if !data.Password.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/password/encrypted", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
 	}
 	if !data.LocalAsDualAs.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-as/as/no-prepend/replace-as", data.getPath()))
@@ -1189,7 +1971,576 @@ func (data *RouterBGPNeighborGroup) getDeletePaths(ctx context.Context) []string
 	if !data.RemoteAs.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/remote-as", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *RouterBGPNeighborGroup) addDeletedItemsXML(ctx context.Context, state RouterBGPNeighborGroup, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.AddressFamilies {
+		stateKeys := [...]string{"af-name"}
+		stateKeyValues := [...]string{state.AddressFamilies[i].AfName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.AddressFamilies[i].AfName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.AddressFamilies {
+			found = true
+			if state.AddressFamilies[i].AfName.ValueString() != data.AddressFamilies[j].AfName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.AddressFamilies[i].UseAfGroup.IsNull() && data.AddressFamilies[j].UseAfGroup.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/address-families/address-family%v/use/af-group", predicates))
+				}
+				if !state.AddressFamilies[i].RoutePolicyOut.IsNull() && data.AddressFamilies[j].RoutePolicyOut.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/address-families/address-family%v/route-policy/out", predicates))
+				}
+				if !state.AddressFamilies[i].RoutePolicyIn.IsNull() && data.AddressFamilies[j].RoutePolicyIn.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/address-families/address-family%v/route-policy/in", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.AddressFamilies[i].RouteReflectorClientInheritanceDisable.IsNull() && state.AddressFamilies[i].RouteReflectorClientInheritanceDisable.ValueBool() && data.AddressFamilies[j].RouteReflectorClientInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/address-families/address-family%v/route-reflector-client/inheritance-disable", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.AddressFamilies[i].RouteReflectorClient.IsNull() && state.AddressFamilies[i].RouteReflectorClient.ValueBool() && data.AddressFamilies[j].RouteReflectorClient.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/address-families/address-family%v/route-reflector-client", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.AddressFamilies[i].NextHopSelfInheritanceDisable.IsNull() && state.AddressFamilies[i].NextHopSelfInheritanceDisable.ValueBool() && data.AddressFamilies[j].NextHopSelfInheritanceDisable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/address-families/address-family%v/next-hop-self/inheritance-disable", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.AddressFamilies[i].NextHopSelf.IsNull() && state.AddressFamilies[i].NextHopSelf.ValueBool() && data.AddressFamilies[j].NextHopSelf.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/address-families/address-family%v/next-hop-self", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.AddressFamilies[i].SoftReconfigurationInboundAlways.IsNull() && state.AddressFamilies[i].SoftReconfigurationInboundAlways.ValueBool() && data.AddressFamilies[j].SoftReconfigurationInboundAlways.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/address-families/address-family%v/soft-reconfiguration/inbound/always", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/address-families/address-family%v", predicates))
+		}
+	}
+	if !state.TimersHoldtimeMinimumAcceptableHoldtime.IsNull() && data.TimersHoldtimeMinimumAcceptableHoldtime.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/timers/holdtime"
+		predicates := make(map[string]string)
+		if !state.TimersHoldtime.IsNull() {
+			predicates["holdtime-number"] = fmt.Sprintf("%v", state.TimersHoldtime.ValueInt64())
+		}
+		predicates["minimum-acceptable-holdtime"] = fmt.Sprintf("%v", state.TimersHoldtimeMinimumAcceptableHoldtime.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.TimersHoldtime.IsNull() && data.TimersHoldtime.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/timers/holdtime"
+		predicates := make(map[string]string)
+		if !state.TimersHoldtimeMinimumAcceptableHoldtime.IsNull() {
+			predicates["minimum-acceptable-holdtime"] = fmt.Sprintf("%v", state.TimersHoldtimeMinimumAcceptableHoldtime.ValueInt64())
+		}
+		predicates["holdtime-number"] = fmt.Sprintf("%v", state.TimersHoldtime.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.TimersKeepaliveZeroMinimumAcceptableHoldtime.IsNull() && data.TimersKeepaliveZeroMinimumAcceptableHoldtime.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/timers/zero"
+		predicates := make(map[string]string)
+		if !state.TimersKeepaliveZeroHoldtimeZero.IsNull() {
+			predicates["zero"] = fmt.Sprintf("%v", state.TimersKeepaliveZeroHoldtimeZero.ValueBool())
+		}
+		predicates["minimum-acceptable-holdtime"] = fmt.Sprintf("%v", state.TimersKeepaliveZeroMinimumAcceptableHoldtime.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.TimersKeepaliveZeroHoldtimeZero.IsNull() && state.TimersKeepaliveZeroHoldtimeZero.ValueBool() && data.TimersKeepaliveZeroHoldtimeZero.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/timers/zero"
+		predicates := make(map[string]string)
+		if !state.TimersKeepaliveZeroMinimumAcceptableHoldtime.IsNull() {
+			predicates["minimum-acceptable-holdtime"] = fmt.Sprintf("%v", state.TimersKeepaliveZeroMinimumAcceptableHoldtime.ValueInt64())
+		}
+		predicates["zero"] = fmt.Sprintf("%v", state.TimersKeepaliveZeroHoldtimeZero.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.TimersKeepaliveZero.IsNull() && state.TimersKeepaliveZero.ValueBool() && data.TimersKeepaliveZero.IsNull() {
+		deletePath := state.getXPath() + "/timers/zero"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.TimersKeepaliveInterval.IsNull() && data.TimersKeepaliveInterval.IsNull() {
+		deletePath := state.getXPath() + "/timers/keepalive-interval"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.PasswordInheritanceDisable.IsNull() && state.PasswordInheritanceDisable.ValueBool() && data.PasswordInheritanceDisable.IsNull() {
+		deletePath := state.getXPath() + "/"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Password.IsNull() && data.Password.IsNull() {
+		deletePath := state.getXPath() + "/"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.LocalAsDualAs.IsNull() && state.LocalAsDualAs.ValueBool() && data.LocalAsDualAs.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/local-as/as/no-prepend/replace-as"
+		predicates := make(map[string]string)
+		predicates["dual-as"] = fmt.Sprintf("%v", state.LocalAsDualAs.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.LocalAsReplaceAs.IsNull() && state.LocalAsReplaceAs.ValueBool() && data.LocalAsReplaceAs.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/local-as/as/no-prepend"
+		predicates := make(map[string]string)
+		predicates["replace-as"] = fmt.Sprintf("%v", state.LocalAsReplaceAs.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.LocalAsNoPrepend.IsNull() && state.LocalAsNoPrepend.ValueBool() && data.LocalAsNoPrepend.IsNull() {
+		deletePath := state.getXPath() + "/local-as/as/no-prepend"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.LocalAs.IsNull() && data.LocalAs.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/local-as/as"
+		predicates := make(map[string]string)
+		predicates["as-number"] = fmt.Sprintf("%v", state.LocalAs.ValueString())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.LocalAsInheritanceDisable.IsNull() && state.LocalAsInheritanceDisable.ValueBool() && data.LocalAsInheritanceDisable.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/local-as"
+		predicates := make(map[string]string)
+		predicates["inheritance-disable"] = fmt.Sprintf("%v", state.LocalAsInheritanceDisable.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.BfdFastDetectDisable.IsNull() && state.BfdFastDetectDisable.ValueBool() && data.BfdFastDetectDisable.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/bfd/fast-detect"
+		predicates := make(map[string]string)
+		predicates["disable"] = fmt.Sprintf("%v", state.BfdFastDetectDisable.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.BfdFastDetectStrictMode.IsNull() && state.BfdFastDetectStrictMode.ValueBool() && data.BfdFastDetectStrictMode.IsNull() {
+		deletePath := state.getXPath() + "/bfd/fast-detect/strict-mode"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.BfdFastDetect.IsNull() && state.BfdFastDetect.ValueBool() && data.BfdFastDetect.IsNull() {
+		deletePath := state.getXPath() + "/bfd/fast-detect"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BfdMultiplier.IsNull() && data.BfdMultiplier.IsNull() {
+		deletePath := state.getXPath() + "/bfd/multiplier"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BfdMinimumInterval.IsNull() && data.BfdMinimumInterval.IsNull() {
+		deletePath := state.getXPath() + "/bfd/minimum-interval"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.AoInheritanceDisable.IsNull() && state.AoInheritanceDisable.ValueBool() && data.AoInheritanceDisable.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/ao"
+		predicates := make(map[string]string)
+		predicates["inheritance-disable"] = fmt.Sprintf("%v", state.AoInheritanceDisable.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.AoKeyChainAcceptMismatch.IsNull() && state.AoKeyChainAcceptMismatch.ValueBool() && data.AoKeyChainAcceptMismatch.IsNull() {
+		deletePath := state.getXPath() + "/ao/key-chain-name/accept-ao-mismatch-connection"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.AoKeyChainIncludeTcpOptions.IsNull() && data.AoKeyChainIncludeTcpOptions.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/ao/key-chain-name"
+		predicates := make(map[string]string)
+		if !state.AoKeyChainName.IsNull() {
+			predicates["key-chain-name"] = fmt.Sprintf("%v", state.AoKeyChainName.ValueString())
+		}
+		predicates["include-tcp-options"] = fmt.Sprintf("%v", state.AoKeyChainIncludeTcpOptions.ValueString())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.AoKeyChainName.IsNull() && data.AoKeyChainName.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/ao/key-chain-name"
+		predicates := make(map[string]string)
+		if !state.AoKeyChainIncludeTcpOptions.IsNull() {
+			predicates["include-tcp-options"] = fmt.Sprintf("%v", state.AoKeyChainIncludeTcpOptions.ValueString())
+		}
+		predicates["key-chain-name"] = fmt.Sprintf("%v", state.AoKeyChainName.ValueString())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.AdvertisementIntervalMilliseconds.IsNull() && data.AdvertisementIntervalMilliseconds.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/advertisement-interval"
+		predicates := make(map[string]string)
+		if !state.AdvertisementIntervalSeconds.IsNull() {
+			predicates["advertisement-interval-time-in-seconds"] = fmt.Sprintf("%v", state.AdvertisementIntervalSeconds.ValueInt64())
+		}
+		predicates["advertisement-interval-time-in-milliseconds"] = fmt.Sprintf("%v", state.AdvertisementIntervalMilliseconds.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.AdvertisementIntervalSeconds.IsNull() && data.AdvertisementIntervalSeconds.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/advertisement-interval"
+		predicates := make(map[string]string)
+		if !state.AdvertisementIntervalMilliseconds.IsNull() {
+			predicates["advertisement-interval-time-in-milliseconds"] = fmt.Sprintf("%v", state.AdvertisementIntervalMilliseconds.ValueInt64())
+		}
+		predicates["advertisement-interval-time-in-seconds"] = fmt.Sprintf("%v", state.AdvertisementIntervalSeconds.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.UpdateSource.IsNull() && data.UpdateSource.IsNull() {
+		deletePath := state.getXPath() + "/update-source"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Description.IsNull() && data.Description.IsNull() {
+		deletePath := state.getXPath() + "/description"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.RemoteAs.IsNull() && data.RemoteAs.IsNull() {
+		deletePath := state.getXPath() + "/remote-as"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *RouterBGPNeighborGroup) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	for i := range data.AddressFamilies {
+		keys := [...]string{"af-name"}
+		keyValues := [...]string{data.AddressFamilies[i].AfName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/address-families/address-family%v", predicates))
+	}
+	if !data.TimersHoldtimeMinimumAcceptableHoldtime.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/timers/holdtime")
+	}
+	if !data.TimersHoldtime.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/timers/holdtime")
+	}
+	if !data.TimersKeepaliveZeroMinimumAcceptableHoldtime.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/timers/zero")
+	}
+	if !data.TimersKeepaliveZeroHoldtimeZero.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/timers/zero")
+	}
+	if !data.TimersKeepaliveZero.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/timers/zero")
+	}
+	if !data.TimersKeepaliveInterval.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/timers/keepalive-interval")
+	}
+	if !data.PasswordInheritanceDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+	}
+	if !data.Password.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+	}
+	if !data.LocalAsDualAs.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/local-as/as/no-prepend/replace-as")
+	}
+	if !data.LocalAsReplaceAs.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/local-as/as/no-prepend")
+	}
+	if !data.LocalAsNoPrepend.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/local-as/as/no-prepend")
+	}
+	if !data.LocalAs.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/local-as/as")
+	}
+	if !data.LocalAsInheritanceDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/local-as")
+	}
+	if !data.BfdFastDetectDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bfd/fast-detect")
+	}
+	if !data.BfdFastDetectStrictMode.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bfd/fast-detect/strict-mode")
+	}
+	if !data.BfdFastDetect.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bfd/fast-detect")
+	}
+	if !data.BfdMultiplier.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bfd/multiplier")
+	}
+	if !data.BfdMinimumInterval.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bfd/minimum-interval")
+	}
+	if !data.AoInheritanceDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ao")
+	}
+	if !data.AoKeyChainAcceptMismatch.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ao/key-chain-name/accept-ao-mismatch-connection")
+	}
+	if !data.AoKeyChainIncludeTcpOptions.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ao/key-chain-name")
+	}
+	if !data.AoKeyChainName.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ao/key-chain-name")
+	}
+	if !data.AdvertisementIntervalMilliseconds.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/advertisement-interval")
+	}
+	if !data.AdvertisementIntervalSeconds.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/advertisement-interval")
+	}
+	if !data.UpdateSource.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/update-source")
+	}
+	if !data.Description.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/description")
+	}
+	if !data.RemoteAs.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/remote-as")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

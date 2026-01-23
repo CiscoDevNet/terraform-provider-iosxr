@@ -20,76 +20,9 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrPolicyMapQoS(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "description", "My description"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.name", "class-default"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.type", "qos"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.set_mpls_experimental_topmost", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.set_dscp", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.priority_level", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.queue_limits.0.value", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.queue_limits.0.unit", "us"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.service_policy_name", "SERVICEPOLICY"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.police_rate_value", "5"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.police_rate_unit", "gbps"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrPolicyMapQoSConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrPolicyMapQoSConfig() string {
-	config := `resource "iosxr_policy_map_qos" "test" {` + "\n"
-	config += `	policy_map_name = "PM1"` + "\n"
-	config += `	description = "My description"` + "\n"
-	config += `	classes = [{` + "\n"
-	config += `		name = "class-default"` + "\n"
-	config += `		type = "qos"` + "\n"
-	config += `		set_mpls_experimental_topmost = 0` + "\n"
-	config += `		set_dscp = "0"` + "\n"
-	config += `		priority_level = 1` + "\n"
-	config += `		queue_limits = [{` + "\n"
-	config += `			value = "100"` + "\n"
-	config += `			unit = "us"` + "\n"
-	config += `		}]` + "\n"
-	config += `		service_policy_name = "SERVICEPOLICY"` + "\n"
-	config += `		police_rate_value = "5"` + "\n"
-	config += `		police_rate_unit = "gbps"` + "\n"
-	config += `	}]` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_policy_map_qos" "test" {
-			policy_map_name = "PM1"
-			depends_on = [iosxr_policy_map_qos.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

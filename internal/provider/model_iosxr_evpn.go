@@ -25,8 +25,13 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
+	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -74,6 +79,17 @@ func (data EVPN) getPath() string {
 
 func (data EVPNData) getPath() string {
 	return "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data EVPN) getXPath() string {
+	path := "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
+	return path
+}
+
+func (data EVPNData) getXPath() string {
+	path := "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
+	return path
 }
 
 // End of section. //template:end getPath
@@ -129,6 +145,67 @@ func (data EVPN) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data EVPN) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.SourceInterface.IsNull() && !data.SourceInterface.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/source/interface", data.SourceInterface.ValueString())
+	}
+	if len(data.Interfaces) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.Interfaces {
+			cBody := netconf.Body{}
+			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "interface-name", item.InterfaceName.ValueString())
+			}
+			if !item.EthernetSegmentEnable.IsNull() && !item.EthernetSegmentEnable.IsUnknown() {
+				if item.EthernetSegmentEnable.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "ethernet-segment", "")
+				}
+			}
+			if !item.EthernetSegmentEsiZero.IsNull() && !item.EthernetSegmentEsiZero.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "ethernet-segment/identifier/type/zero/esi", item.EthernetSegmentEsiZero.ValueString())
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"interface/interface", cBody.Res())
+		}
+	}
+	if !data.Srv6.IsNull() && !data.Srv6.IsUnknown() {
+		if data.Srv6.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/segment-routing/srv6", "")
+		}
+	}
+	if len(data.Srv6Locators) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.Srv6Locators {
+			cBody := netconf.Body{}
+			if !item.LocatorName.IsNull() && !item.LocatorName.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "locator-name", item.LocatorName.ValueString())
+			}
+			if !item.UsidAllocationWideLocalIdBlock.IsNull() && !item.UsidAllocationWideLocalIdBlock.IsUnknown() {
+				if item.UsidAllocationWideLocalIdBlock.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "usid/allocation/wide-local-id-block", "")
+				}
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"segment-routing/srv6/locators/locator", cBody.Res())
+		}
+	}
+	if !data.Srv6UsidAllocationWideLocalIdBlock.IsNull() && !data.Srv6UsidAllocationWideLocalIdBlock.IsUnknown() {
+		if data.Srv6UsidAllocationWideLocalIdBlock.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/segment-routing/srv6/usid/allocation/wide-local-id-block", "")
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
@@ -165,30 +242,26 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Interfaces[i].InterfaceName = types.StringNull()
 		}
-		if value := r.Get("ethernet-segment"); !data.Interfaces[i].EthernetSegmentEnable.IsNull() {
-			if value.Exists() {
-				data.Interfaces[i].EthernetSegmentEnable = types.BoolValue(true)
-			} else {
-				data.Interfaces[i].EthernetSegmentEnable = types.BoolValue(false)
-			}
-		} else {
+		if value := r.Get("ethernet-segment"); value.Exists() {
+			data.Interfaces[i].EthernetSegmentEnable = types.BoolValue(true)
+		} else if data.Interfaces[i].EthernetSegmentEnable.IsNull() {
+			// If currently null, keep as null (field not in config)
 			data.Interfaces[i].EthernetSegmentEnable = types.BoolNull()
 		}
+		// else: preserve existing value (e.g., false from config)
 		if value := r.Get("ethernet-segment.identifier.type.zero.esi"); value.Exists() && !data.Interfaces[i].EthernetSegmentEsiZero.IsNull() {
 			data.Interfaces[i].EthernetSegmentEsiZero = types.StringValue(value.String())
 		} else {
 			data.Interfaces[i].EthernetSegmentEsiZero = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "segment-routing.srv6"); !data.Srv6.IsNull() {
-		if value.Exists() {
-			data.Srv6 = types.BoolValue(true)
-		} else {
-			data.Srv6 = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "segment-routing.srv6"); value.Exists() {
+		data.Srv6 = types.BoolValue(true)
+	} else if data.Srv6.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.Srv6 = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 	for i := range data.Srv6Locators {
 		keys := [...]string{"locator-name"}
 		keyValues := [...]string{data.Srv6Locators[i].LocatorName.ValueString()}
@@ -217,36 +290,147 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Srv6Locators[i].LocatorName = types.StringNull()
 		}
-		if value := r.Get("usid.allocation.wide-local-id-block"); !data.Srv6Locators[i].UsidAllocationWideLocalIdBlock.IsNull() {
-			if value.Exists() {
-				data.Srv6Locators[i].UsidAllocationWideLocalIdBlock = types.BoolValue(true)
-			} else {
-				data.Srv6Locators[i].UsidAllocationWideLocalIdBlock = types.BoolValue(false)
-			}
-		} else {
+		if value := r.Get("usid.allocation.wide-local-id-block"); value.Exists() {
+			data.Srv6Locators[i].UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+		} else if data.Srv6Locators[i].UsidAllocationWideLocalIdBlock.IsNull() {
+			// If currently null, keep as null (field not in config)
 			data.Srv6Locators[i].UsidAllocationWideLocalIdBlock = types.BoolNull()
 		}
+		// else: preserve existing value (e.g., false from config)
 	}
-	if value := gjson.GetBytes(res, "segment-routing.srv6.usid.allocation.wide-local-id-block"); !data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
-		if value.Exists() {
-			data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
-		} else {
-			data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "segment-routing.srv6.usid.allocation.wide-local-id-block"); value.Exists() {
+		data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+	} else if data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.Srv6UsidAllocationWideLocalIdBlock = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 }
 
 // End of section. //template:end updateFromBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *EVPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source/interface"); value.Exists() {
+		data.SourceInterface = types.StringValue(value.String())
+	} else if data.SourceInterface.IsNull() {
+		data.SourceInterface = types.StringNull()
+	}
+	for i := range data.Interfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/interface/interface").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "interface-name"); value.Exists() {
+			data.Interfaces[i].InterfaceName = types.StringValue(value.String())
+		} else if data.Interfaces[i].InterfaceName.IsNull() {
+			data.Interfaces[i].InterfaceName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "ethernet-segment"); value.Exists() {
+			data.Interfaces[i].EthernetSegmentEnable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Interfaces[i].EthernetSegmentEnable.IsNull() {
+				data.Interfaces[i].EthernetSegmentEnable = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "ethernet-segment/identifier/type/zero/esi"); value.Exists() {
+			data.Interfaces[i].EthernetSegmentEsiZero = types.StringValue(value.String())
+		} else if data.Interfaces[i].EthernetSegmentEsiZero.IsNull() {
+			data.Interfaces[i].EthernetSegmentEsiZero = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/segment-routing/srv6"); value.Exists() {
+		data.Srv6 = types.BoolValue(true)
+	} else {
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.Srv6.IsNull() {
+			data.Srv6 = types.BoolNull()
+		}
+	}
+	for i := range data.Srv6Locators {
+		keys := [...]string{"locator-name"}
+		keyValues := [...]string{data.Srv6Locators[i].LocatorName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/segment-routing/srv6/locators/locator").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "locator-name"); value.Exists() {
+			data.Srv6Locators[i].LocatorName = types.StringValue(value.String())
+		} else if data.Srv6Locators[i].LocatorName.IsNull() {
+			data.Srv6Locators[i].LocatorName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "usid/allocation/wide-local-id-block"); value.Exists() {
+			data.Srv6Locators[i].UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Srv6Locators[i].UsidAllocationWideLocalIdBlock.IsNull() {
+				data.Srv6Locators[i].UsidAllocationWideLocalIdBlock = types.BoolNull()
+			}
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/segment-routing/srv6/usid/allocation/wide-local-id-block"); value.Exists() {
+		data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+	} else {
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
+			data.Srv6UsidAllocationWideLocalIdBlock = types.BoolNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *EVPN) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "source.interface"); value.Exists() {
+func (data *EVPN) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "source.interface"); value.Exists() {
 		data.SourceInterface = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "interface.interface"); value.Exists() {
+	if value := res.Get(prefix + "interface.interface"); value.Exists() {
 		data.Interfaces = make([]EVPNInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNInterfaces{}
@@ -265,12 +449,10 @@ func (data *EVPN) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "segment-routing.srv6"); value.Exists() {
+	if value := res.Get(prefix + "segment-routing.srv6"); value.Exists() {
 		data.Srv6 = types.BoolValue(true)
-	} else {
-		data.Srv6 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "segment-routing.srv6.locators.locator"); value.Exists() {
+	if value := res.Get(prefix + "segment-routing.srv6.locators.locator"); value.Exists() {
 		data.Srv6Locators = make([]EVPNSrv6Locators, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNSrv6Locators{}
@@ -286,10 +468,8 @@ func (data *EVPN) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "segment-routing.srv6.usid.allocation.wide-local-id-block"); value.Exists() {
+	if value := res.Get(prefix + "segment-routing.srv6.usid.allocation.wide-local-id-block"); value.Exists() {
 		data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
-	} else {
-		data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
 	}
 }
 
@@ -297,11 +477,15 @@ func (data *EVPN) fromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *EVPNData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "source.interface"); value.Exists() {
+func (data *EVPNData) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "source.interface"); value.Exists() {
 		data.SourceInterface = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "interface.interface"); value.Exists() {
+	if value := res.Get(prefix + "interface.interface"); value.Exists() {
 		data.Interfaces = make([]EVPNInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNInterfaces{}
@@ -320,12 +504,10 @@ func (data *EVPNData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "segment-routing.srv6"); value.Exists() {
+	if value := res.Get(prefix + "segment-routing.srv6"); value.Exists() {
 		data.Srv6 = types.BoolValue(true)
-	} else {
-		data.Srv6 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "segment-routing.srv6.locators.locator"); value.Exists() {
+	if value := res.Get(prefix + "segment-routing.srv6.locators.locator"); value.Exists() {
 		data.Srv6Locators = make([]EVPNSrv6Locators, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNSrv6Locators{}
@@ -341,21 +523,126 @@ func (data *EVPNData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "segment-routing.srv6.usid.allocation.wide-local-id-block"); value.Exists() {
+	if value := res.Get(prefix + "segment-routing.srv6.usid.allocation.wide-local-id-block"); value.Exists() {
+		data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *EVPN) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source/interface"); value.Exists() {
+		data.SourceInterface = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interface/interface"); value.Exists() {
+		data.Interfaces = make([]EVPNInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := EVPNInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ethernet-segment"); cValue.Exists() {
+				item.EthernetSegmentEnable = types.BoolValue(true)
+			} else {
+			}
+			if cValue := helpers.GetFromXPath(v, "ethernet-segment/identifier/type/zero/esi"); cValue.Exists() {
+				item.EthernetSegmentEsiZero = types.StringValue(cValue.String())
+			}
+			data.Interfaces = append(data.Interfaces, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/segment-routing/srv6"); value.Exists() {
+		data.Srv6 = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/segment-routing/srv6/locators/locator"); value.Exists() {
+		data.Srv6Locators = make([]EVPNSrv6Locators, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := EVPNSrv6Locators{}
+			if cValue := helpers.GetFromXPath(v, "locator-name"); cValue.Exists() {
+				item.LocatorName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "usid/allocation/wide-local-id-block"); cValue.Exists() {
+				item.UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+			} else {
+			}
+			data.Srv6Locators = append(data.Srv6Locators, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/segment-routing/srv6/usid/allocation/wide-local-id-block"); value.Exists() {
+		data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *EVPNData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source/interface"); value.Exists() {
+		data.SourceInterface = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interface/interface"); value.Exists() {
+		data.Interfaces = make([]EVPNInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := EVPNInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ethernet-segment"); cValue.Exists() {
+				item.EthernetSegmentEnable = types.BoolValue(true)
+			} else {
+				item.EthernetSegmentEnable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "ethernet-segment/identifier/type/zero/esi"); cValue.Exists() {
+				item.EthernetSegmentEsiZero = types.StringValue(cValue.String())
+			}
+			data.Interfaces = append(data.Interfaces, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/segment-routing/srv6"); value.Exists() {
+		data.Srv6 = types.BoolValue(true)
+	} else {
+		data.Srv6 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/segment-routing/srv6/locators/locator"); value.Exists() {
+		data.Srv6Locators = make([]EVPNSrv6Locators, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := EVPNSrv6Locators{}
+			if cValue := helpers.GetFromXPath(v, "locator-name"); cValue.Exists() {
+				item.LocatorName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "usid/allocation/wide-local-id-block"); cValue.Exists() {
+				item.UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+			} else {
+				item.UsidAllocationWideLocalIdBlock = types.BoolValue(false)
+			}
+			data.Srv6Locators = append(data.Srv6Locators, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/segment-routing/srv6/usid/allocation/wide-local-id-block"); value.Exists() {
 		data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 	} else {
 		data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
 	}
 }
 
-// End of section. //template:end fromBodyData
+// End of section. //template:end fromBodyDataXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *EVPN) getDeletedItems(ctx context.Context, state EVPN) []string {
 	deletedItems := make([]string, 0)
-	if !state.Srv6UsidAllocationWideLocalIdBlock.IsNull() && data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/srv6/usid/allocation/wide-local-id-block", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.Srv6UsidAllocationWideLocalIdBlock.IsNull() && state.Srv6UsidAllocationWideLocalIdBlock.ValueBool() {
+		if data.Srv6UsidAllocationWideLocalIdBlock.IsNull() || !data.Srv6UsidAllocationWideLocalIdBlock.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/srv6/usid/allocation/wide-local-id-block", state.getPath()))
+		}
 	}
 	for i := range state.Srv6Locators {
 		keys := [...]string{"locator-name"}
@@ -380,8 +667,11 @@ func (data *EVPN) getDeletedItems(ctx context.Context, state EVPN) []string {
 				found = false
 			}
 			if found {
-				if !state.Srv6Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && data.Srv6Locators[j].UsidAllocationWideLocalIdBlock.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v/usid/allocation/wide-local-id-block", state.getPath(), keyString))
+				// For presence-based booleans, delete if going from true to false or to null
+				if !state.Srv6Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && state.Srv6Locators[i].UsidAllocationWideLocalIdBlock.ValueBool() {
+					if data.Srv6Locators[j].UsidAllocationWideLocalIdBlock.IsNull() || !data.Srv6Locators[j].UsidAllocationWideLocalIdBlock.ValueBool() {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v/usid/allocation/wide-local-id-block", state.getPath(), keyString))
+					}
 				}
 				break
 			}
@@ -390,8 +680,11 @@ func (data *EVPN) getDeletedItems(ctx context.Context, state EVPN) []string {
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v", state.getPath(), keyString))
 		}
 	}
-	if !state.Srv6.IsNull() && data.Srv6.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/srv6", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.Srv6.IsNull() && state.Srv6.ValueBool() {
+		if data.Srv6.IsNull() || !data.Srv6.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/srv6", state.getPath()))
+		}
 	}
 	for i := range state.Interfaces {
 		keys := [...]string{"interface-name"}
@@ -419,8 +712,11 @@ func (data *EVPN) getDeletedItems(ctx context.Context, state EVPN) []string {
 				if !state.Interfaces[i].EthernetSegmentEsiZero.IsNull() && data.Interfaces[j].EthernetSegmentEsiZero.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/interface/interface%v/ethernet-segment/identifier/type/zero/esi", state.getPath(), keyString))
 				}
-				if !state.Interfaces[i].EthernetSegmentEnable.IsNull() && data.Interfaces[j].EthernetSegmentEnable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interface/interface%v/ethernet-segment", state.getPath(), keyString))
+				// For presence-based booleans, delete if going from true to false or to null
+				if !state.Interfaces[i].EthernetSegmentEnable.IsNull() && state.Interfaces[i].EthernetSegmentEnable.ValueBool() {
+					if data.Interfaces[j].EthernetSegmentEnable.IsNull() || !data.Interfaces[j].EthernetSegmentEnable.ValueBool() {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/interface/interface%v/ethernet-segment", state.getPath(), keyString))
+					}
 				}
 				break
 			}
@@ -439,10 +735,13 @@ func (data *EVPN) getDeletedItems(ctx context.Context, state EVPN) []string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *EVPN) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *EVPN) getEmptyLeafsDelete(ctx context.Context, state *EVPN) []string {
 	emptyLeafsDelete := make([]string, 0)
+	// Only delete if state has true and plan has false
 	if !data.Srv6UsidAllocationWideLocalIdBlock.IsNull() && !data.Srv6UsidAllocationWideLocalIdBlock.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/srv6/usid/allocation/wide-local-id-block", data.getPath()))
+		if state != nil && !state.Srv6UsidAllocationWideLocalIdBlock.IsNull() && state.Srv6UsidAllocationWideLocalIdBlock.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/srv6/usid/allocation/wide-local-id-block", data.getXPath()))
+		}
 	}
 	for i := range data.Srv6Locators {
 		keys := [...]string{"locator-name"}
@@ -451,12 +750,19 @@ func (data *EVPN) getEmptyLeafsDelete(ctx context.Context) []string {
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
+		// Only delete if state has true and plan has false
 		if !data.Srv6Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && !data.Srv6Locators[i].UsidAllocationWideLocalIdBlock.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v/usid/allocation/wide-local-id-block", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.Srv6Locators) && !state.Srv6Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && state.Srv6Locators[i].UsidAllocationWideLocalIdBlock.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v/usid/allocation/wide-local-id-block", data.getXPath(), keyString))
+			}
 		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.Srv6.IsNull() && !data.Srv6.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/srv6", data.getPath()))
+		if state != nil && !state.Srv6.IsNull() && state.Srv6.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/srv6", data.getXPath()))
+		}
 	}
 	for i := range data.Interfaces {
 		keys := [...]string{"interface-name"}
@@ -465,8 +771,12 @@ func (data *EVPN) getEmptyLeafsDelete(ctx context.Context) []string {
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
+		// Only delete if state has true and plan has false
 		if !data.Interfaces[i].EthernetSegmentEnable.IsNull() && !data.Interfaces[i].EthernetSegmentEnable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interface/interface%v/ethernet-segment", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.Interfaces) && !state.Interfaces[i].EthernetSegmentEnable.IsNull() && state.Interfaces[i].EthernetSegmentEnable.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interface/interface%v/ethernet-segment", data.getXPath(), keyString))
+			}
 		}
 	}
 	return emptyLeafsDelete
@@ -482,32 +792,171 @@ func (data *EVPN) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/srv6/usid/allocation/wide-local-id-block", data.getPath()))
 	}
 	for i := range data.Srv6Locators {
-		keys := [...]string{"locator-name"}
 		keyValues := [...]string{data.Srv6Locators[i].LocatorName.ValueString()}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/srv6/locators/locator=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	if !data.Srv6.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/srv6", data.getPath()))
 	}
 	for i := range data.Interfaces {
-		keys := [...]string{"interface-name"}
 		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interface/interface%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/interface/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	if !data.SourceInterface.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/source/interface", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *EVPN) addDeletedItemsXML(ctx context.Context, state EVPN, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Srv6UsidAllocationWideLocalIdBlock.IsNull() && state.Srv6UsidAllocationWideLocalIdBlock.ValueBool() && data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
+		deletePath := state.getXPath() + "/segment-routing/srv6/usid/allocation/wide-local-id-block"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.Srv6Locators {
+		stateKeys := [...]string{"locator-name"}
+		stateKeyValues := [...]string{state.Srv6Locators[i].LocatorName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Srv6Locators[i].LocatorName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Srv6Locators {
+			found = true
+			if state.Srv6Locators[i].LocatorName.ValueString() != data.Srv6Locators[j].LocatorName.ValueString() {
+				found = false
+			}
+			if found {
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Srv6Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && state.Srv6Locators[i].UsidAllocationWideLocalIdBlock.ValueBool() && data.Srv6Locators[j].UsidAllocationWideLocalIdBlock.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/segment-routing/srv6/locators/locator%v/usid/allocation/wide-local-id-block", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/segment-routing/srv6/locators/locator%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Srv6.IsNull() && state.Srv6.ValueBool() && data.Srv6.IsNull() {
+		deletePath := state.getXPath() + "/segment-routing/srv6"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.Interfaces {
+		stateKeys := [...]string{"interface-name"}
+		stateKeyValues := [...]string{state.Interfaces[i].InterfaceName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Interfaces[i].InterfaceName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Interfaces {
+			found = true
+			if state.Interfaces[i].InterfaceName.ValueString() != data.Interfaces[j].InterfaceName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.Interfaces[i].EthernetSegmentEsiZero.IsNull() && data.Interfaces[j].EthernetSegmentEsiZero.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interface/interface%v/ethernet-segment/identifier/type/zero/esi", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Interfaces[i].EthernetSegmentEnable.IsNull() && state.Interfaces[i].EthernetSegmentEnable.ValueBool() && data.Interfaces[j].EthernetSegmentEnable.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interface/interface%v/ethernet-segment", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interface/interface%v", predicates))
+		}
+	}
+	if !state.SourceInterface.IsNull() && data.SourceInterface.IsNull() {
+		deletePath := state.getXPath() + "/source/interface"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *EVPN) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/segment-routing/srv6/usid/allocation/wide-local-id-block")
+	}
+	for i := range data.Srv6Locators {
+		keys := [...]string{"locator-name"}
+		keyValues := [...]string{data.Srv6Locators[i].LocatorName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/segment-routing/srv6/locators/locator%v", predicates))
+	}
+	if !data.Srv6.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/segment-routing/srv6")
+	}
+	for i := range data.Interfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/interface/interface%v", predicates))
+	}
+	if !data.SourceInterface.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/source/interface")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

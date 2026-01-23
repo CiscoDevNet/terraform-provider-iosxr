@@ -25,8 +25,13 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
+	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -68,6 +73,19 @@ func (data IPv4PrefixList) getPath() string {
 
 func (data IPv4PrefixListData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-ipv4-prefix-list-cfg:/ipv4/prefix-lists/prefix-list[prefix-list-name=%s]", data.PrefixListName.ValueString())
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data IPv4PrefixList) getXPath() string {
+	path := "Cisco-IOS-XR-um-ipv4-prefix-list-cfg:/ipv4/prefix-lists/prefix-list[prefix-list-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.PrefixListName.ValueString()))
+	return path
+}
+
+func (data IPv4PrefixListData) getXPath() string {
+	path := "Cisco-IOS-XR-um-ipv4-prefix-list-cfg:/ipv4/prefix-lists/prefix-list[prefix-list-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.PrefixListName.ValueString()))
+	return path
 }
 
 // End of section. //template:end getPath
@@ -112,6 +130,54 @@ func (data IPv4PrefixList) toBody(ctx context.Context) string {
 }
 
 // End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data IPv4PrefixList) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.PrefixListName.IsNull() && !data.PrefixListName.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/prefix-list-name", data.PrefixListName.ValueString())
+	}
+	if len(data.Sequences) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.Sequences {
+			cBody := netconf.Body{}
+			if !item.SequenceNumber.IsNull() && !item.SequenceNumber.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "sequence-number", strconv.FormatInt(item.SequenceNumber.ValueInt64(), 10))
+			}
+			if !item.Remark.IsNull() && !item.Remark.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "remark", item.Remark.ValueString())
+			}
+			if !item.Permission.IsNull() && !item.Permission.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "permission", item.Permission.ValueString())
+			}
+			if !item.Prefix.IsNull() && !item.Prefix.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "prefix", item.Prefix.ValueString())
+			}
+			if !item.Mask.IsNull() && !item.Mask.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "mask", item.Mask.ValueString())
+			}
+			if !item.MatchPrefixLengthEq.IsNull() && !item.MatchPrefixLengthEq.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "match-prefix-length/eq", strconv.FormatInt(item.MatchPrefixLengthEq.ValueInt64(), 10))
+			}
+			if !item.MatchPrefixLengthGe.IsNull() && !item.MatchPrefixLengthGe.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "match-prefix-length/ge", strconv.FormatInt(item.MatchPrefixLengthGe.ValueInt64(), 10))
+			}
+			if !item.MatchPrefixLengthLe.IsNull() && !item.MatchPrefixLengthLe.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "match-prefix-length/le", strconv.FormatInt(item.MatchPrefixLengthLe.ValueInt64(), 10))
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"sequences/sequence", cBody.Res())
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
@@ -184,10 +250,90 @@ func (data *IPv4PrefixList) updateFromBody(ctx context.Context, res []byte) {
 
 // End of section. //template:end updateFromBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *IPv4PrefixList) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-list-name"); value.Exists() {
+		data.PrefixListName = types.StringValue(value.String())
+	} else if data.PrefixListName.IsNull() {
+		data.PrefixListName = types.StringNull()
+	}
+	for i := range data.Sequences {
+		keys := [...]string{"sequence-number"}
+		keyValues := [...]string{strconv.FormatInt(data.Sequences[i].SequenceNumber.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/sequences/sequence").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "sequence-number"); value.Exists() {
+			data.Sequences[i].SequenceNumber = types.Int64Value(value.Int())
+		} else if data.Sequences[i].SequenceNumber.IsNull() {
+			data.Sequences[i].SequenceNumber = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "remark"); value.Exists() {
+			data.Sequences[i].Remark = types.StringValue(value.String())
+		} else if data.Sequences[i].Remark.IsNull() {
+			data.Sequences[i].Remark = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "permission"); value.Exists() {
+			data.Sequences[i].Permission = types.StringValue(value.String())
+		} else if data.Sequences[i].Permission.IsNull() {
+			data.Sequences[i].Permission = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "prefix"); value.Exists() {
+			data.Sequences[i].Prefix = types.StringValue(value.String())
+		} else if data.Sequences[i].Prefix.IsNull() {
+			data.Sequences[i].Prefix = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "mask"); value.Exists() {
+			data.Sequences[i].Mask = types.StringValue(value.String())
+		} else if data.Sequences[i].Mask.IsNull() {
+			data.Sequences[i].Mask = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "match-prefix-length/eq"); value.Exists() {
+			data.Sequences[i].MatchPrefixLengthEq = types.Int64Value(value.Int())
+		} else if data.Sequences[i].MatchPrefixLengthEq.IsNull() {
+			data.Sequences[i].MatchPrefixLengthEq = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "match-prefix-length/ge"); value.Exists() {
+			data.Sequences[i].MatchPrefixLengthGe = types.Int64Value(value.Int())
+		} else if data.Sequences[i].MatchPrefixLengthGe.IsNull() {
+			data.Sequences[i].MatchPrefixLengthGe = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "match-prefix-length/le"); value.Exists() {
+			data.Sequences[i].MatchPrefixLengthLe = types.Int64Value(value.Int())
+		} else if data.Sequences[i].MatchPrefixLengthLe.IsNull() {
+			data.Sequences[i].MatchPrefixLengthLe = types.Int64Null()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *IPv4PrefixList) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "sequences.sequence"); value.Exists() {
+func (data *IPv4PrefixList) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "sequences.sequence"); value.Exists() {
 		data.Sequences = make([]IPv4PrefixListSequences, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := IPv4PrefixListSequences{}
@@ -225,8 +371,12 @@ func (data *IPv4PrefixList) fromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *IPv4PrefixListData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "sequences.sequence"); value.Exists() {
+func (data *IPv4PrefixListData) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "sequences.sequence"); value.Exists() {
 		data.Sequences = make([]IPv4PrefixListSequences, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := IPv4PrefixListSequences{}
@@ -261,6 +411,84 @@ func (data *IPv4PrefixListData) fromBody(ctx context.Context, res []byte) {
 }
 
 // End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *IPv4PrefixList) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sequences/sequence"); value.Exists() {
+		data.Sequences = make([]IPv4PrefixListSequences, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := IPv4PrefixListSequences{}
+			if cValue := helpers.GetFromXPath(v, "sequence-number"); cValue.Exists() {
+				item.SequenceNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "remark"); cValue.Exists() {
+				item.Remark = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "permission"); cValue.Exists() {
+				item.Permission = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "prefix"); cValue.Exists() {
+				item.Prefix = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "mask"); cValue.Exists() {
+				item.Mask = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "match-prefix-length/eq"); cValue.Exists() {
+				item.MatchPrefixLengthEq = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "match-prefix-length/ge"); cValue.Exists() {
+				item.MatchPrefixLengthGe = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "match-prefix-length/le"); cValue.Exists() {
+				item.MatchPrefixLengthLe = types.Int64Value(cValue.Int())
+			}
+			data.Sequences = append(data.Sequences, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *IPv4PrefixListData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sequences/sequence"); value.Exists() {
+		data.Sequences = make([]IPv4PrefixListSequences, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := IPv4PrefixListSequences{}
+			if cValue := helpers.GetFromXPath(v, "sequence-number"); cValue.Exists() {
+				item.SequenceNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "remark"); cValue.Exists() {
+				item.Remark = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "permission"); cValue.Exists() {
+				item.Permission = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "prefix"); cValue.Exists() {
+				item.Prefix = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "mask"); cValue.Exists() {
+				item.Mask = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "match-prefix-length/eq"); cValue.Exists() {
+				item.MatchPrefixLengthEq = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "match-prefix-length/ge"); cValue.Exists() {
+				item.MatchPrefixLengthGe = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "match-prefix-length/le"); cValue.Exists() {
+				item.MatchPrefixLengthLe = types.Int64Value(cValue.Int())
+			}
+			data.Sequences = append(data.Sequences, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
@@ -324,7 +552,7 @@ func (data *IPv4PrefixList) getDeletedItems(ctx context.Context, state IPv4Prefi
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *IPv4PrefixList) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *IPv4PrefixList) getEmptyLeafsDelete(ctx context.Context, state *IPv4PrefixList) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.Sequences {
 		keys := [...]string{"sequence-number"}
@@ -344,16 +572,98 @@ func (data *IPv4PrefixList) getEmptyLeafsDelete(ctx context.Context) []string {
 func (data *IPv4PrefixList) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Sequences {
-		keys := [...]string{"sequence-number"}
 		keyValues := [...]string{strconv.FormatInt(data.Sequences[i].SequenceNumber.ValueInt64(), 10)}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sequences/sequence%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/sequences/sequence=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *IPv4PrefixList) addDeletedItemsXML(ctx context.Context, state IPv4PrefixList, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.Sequences {
+		stateKeys := [...]string{"sequence-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.Sequences[i].SequenceNumber.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Sequences[i].SequenceNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Sequences {
+			found = true
+			if state.Sequences[i].SequenceNumber.ValueInt64() != data.Sequences[j].SequenceNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.Sequences[i].MatchPrefixLengthLe.IsNull() && data.Sequences[j].MatchPrefixLengthLe.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/match-prefix-length/le", predicates))
+				}
+				if !state.Sequences[i].MatchPrefixLengthGe.IsNull() && data.Sequences[j].MatchPrefixLengthGe.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/match-prefix-length/ge", predicates))
+				}
+				if !state.Sequences[i].MatchPrefixLengthEq.IsNull() && data.Sequences[j].MatchPrefixLengthEq.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/match-prefix-length/eq", predicates))
+				}
+				if !state.Sequences[i].Mask.IsNull() && data.Sequences[j].Mask.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/mask", predicates))
+				}
+				if !state.Sequences[i].Prefix.IsNull() && data.Sequences[j].Prefix.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/prefix", predicates))
+				}
+				if !state.Sequences[i].Permission.IsNull() && data.Sequences[j].Permission.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permission", predicates))
+				}
+				if !state.Sequences[i].Remark.IsNull() && data.Sequences[j].Remark.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/remark", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v", predicates))
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *IPv4PrefixList) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	for i := range data.Sequences {
+		keys := [...]string{"sequence-number"}
+		keyValues := [...]string{strconv.FormatInt(data.Sequences[i].SequenceNumber.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/sequences/sequence%v", predicates))
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

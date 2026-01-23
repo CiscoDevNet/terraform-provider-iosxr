@@ -25,8 +25,13 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
+	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -64,6 +69,19 @@ func (data EVPNGroupData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/evpn/groups/group[group-name=%v]", data.GroupId.ValueInt64())
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data EVPNGroup) getXPath() string {
+	path := "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/groups/group[group-name=%v]"
+	path = fmt.Sprintf(path, data.GroupId.ValueInt64())
+	return path
+}
+
+func (data EVPNGroupData) getXPath() string {
+	path := "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/groups/group[group-name=%v]"
+	path = fmt.Sprintf(path, data.GroupId.ValueInt64())
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -85,6 +103,33 @@ func (data EVPNGroup) toBody(ctx context.Context) string {
 }
 
 // End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data EVPNGroup) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.GroupId.IsNull() && !data.GroupId.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/group-name", strconv.FormatInt(data.GroupId.ValueInt64(), 10))
+	}
+	if len(data.CoreInterfaces) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.CoreInterfaces {
+			cBody := netconf.Body{}
+			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "interface-name", item.InterfaceName.ValueString())
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"core/interface", cBody.Res())
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
@@ -122,10 +167,55 @@ func (data *EVPNGroup) updateFromBody(ctx context.Context, res []byte) {
 
 // End of section. //template:end updateFromBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *EVPNGroup) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/group-name"); value.Exists() {
+		data.GroupId = types.Int64Value(value.Int())
+	} else if data.GroupId.IsNull() {
+		data.GroupId = types.Int64Null()
+	}
+	for i := range data.CoreInterfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.CoreInterfaces[i].InterfaceName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/core/interface").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "interface-name"); value.Exists() {
+			data.CoreInterfaces[i].InterfaceName = types.StringValue(value.String())
+		} else if data.CoreInterfaces[i].InterfaceName.IsNull() {
+			data.CoreInterfaces[i].InterfaceName = types.StringNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *EVPNGroup) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "core.interface"); value.Exists() {
+func (data *EVPNGroup) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "core.interface"); value.Exists() {
 		data.CoreInterfaces = make([]EVPNGroupCoreInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNGroupCoreInterfaces{}
@@ -142,8 +232,12 @@ func (data *EVPNGroup) fromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *EVPNGroupData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "core.interface"); value.Exists() {
+func (data *EVPNGroupData) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "core.interface"); value.Exists() {
 		data.CoreInterfaces = make([]EVPNGroupCoreInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := EVPNGroupCoreInterfaces{}
@@ -157,6 +251,42 @@ func (data *EVPNGroupData) fromBody(ctx context.Context, res []byte) {
 }
 
 // End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *EVPNGroup) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/core/interface"); value.Exists() {
+		data.CoreInterfaces = make([]EVPNGroupCoreInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := EVPNGroupCoreInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			data.CoreInterfaces = append(data.CoreInterfaces, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *EVPNGroupData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/core/interface"); value.Exists() {
+		data.CoreInterfaces = make([]EVPNGroupCoreInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := EVPNGroupCoreInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			data.CoreInterfaces = append(data.CoreInterfaces, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
@@ -199,7 +329,7 @@ func (data *EVPNGroup) getDeletedItems(ctx context.Context, state EVPNGroup) []s
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *EVPNGroup) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *EVPNGroup) getEmptyLeafsDelete(ctx context.Context, state *EVPNGroup) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.CoreInterfaces {
 		keys := [...]string{"interface-name"}
@@ -219,16 +349,77 @@ func (data *EVPNGroup) getEmptyLeafsDelete(ctx context.Context) []string {
 func (data *EVPNGroup) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.CoreInterfaces {
-		keys := [...]string{"interface-name"}
 		keyValues := [...]string{data.CoreInterfaces[i].InterfaceName.ValueString()}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/core/interface%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/core/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *EVPNGroup) addDeletedItemsXML(ctx context.Context, state EVPNGroup, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.CoreInterfaces {
+		stateKeys := [...]string{"interface-name"}
+		stateKeyValues := [...]string{state.CoreInterfaces[i].InterfaceName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.CoreInterfaces[i].InterfaceName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.CoreInterfaces {
+			found = true
+			if state.CoreInterfaces[i].InterfaceName.ValueString() != data.CoreInterfaces[j].InterfaceName.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/core/interface%v", predicates))
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *EVPNGroup) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	for i := range data.CoreInterfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.CoreInterfaces[i].InterfaceName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/core/interface%v", predicates))
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

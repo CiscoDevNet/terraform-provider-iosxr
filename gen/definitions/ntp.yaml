@@ -191,10 +191,13 @@ attributes:
         example: 5
       - yang_name: prefer
         example: true
+        type_yang_bool: empty-leaf
       - yang_name: burst
         example: true
+        type_yang_bool: empty-leaf
       - yang_name: iburst
         example: true
+        type_yang_bool: empty-leaf
       - yang_name: source
         example: GigabitEthernet0/0/0/1
   - yang_name: peer-server/ipv6/ipv6-peer-server
@@ -218,10 +221,13 @@ attributes:
         example: 5
       - yang_name: prefer
         example: true
+        type_yang_bool: empty-leaf
       - yang_name: burst
         example: true
+        type_yang_bool: empty-leaf
       - yang_name: iburst
         example: true
+        type_yang_bool: empty-leaf
       - yang_name: source
         example: GigabitEthernet0/0/0/1
       - yang_name: ipv6-address
@@ -254,10 +260,13 @@ attributes:
             example: 5
           - yang_name: prefer
             example: true
+            type_yang_bool: empty-leaf
           - yang_name: burst
             example: true
+            type_yang_bool: empty-leaf
           - yang_name: iburst
             example: true
+            type_yang_bool: empty-leaf
           - yang_name: source
             example: GigabitEthernet0/0/0/1
       - yang_name: ipv6/ipv6-peer-server
@@ -280,10 +289,13 @@ attributes:
             example: 5
           - yang_name: prefer
             example: true
+            type_yang_bool: empty-leaf
           - yang_name: burst
             example: true
+            type_yang_bool: empty-leaf
           - yang_name: iburst
             example: true
+            type_yang_bool: empty-leaf
           - yang_name: source
             example: GigabitEthernet0/0/0/1
           - yang_name: ipv6-address

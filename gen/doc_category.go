@@ -84,7 +84,7 @@ func main() {
 		}
 	}
 
-	// update iosxr_gnmi resource and data source
+	//update iosxr_gnmi resource and data source
 	for _, path := range docPaths {
 		filename := path + "gnmi.md"
 		content, err := ioutil.ReadFile(filename)

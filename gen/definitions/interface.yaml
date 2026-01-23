@@ -42,6 +42,7 @@ attributes:
         id: true
         example: PMAP-OUT
   - yang_name: Cisco-IOS-XR-um-if-bundle-cfg:bfd/mode/ietf
+    xpath: Cisco-IOS-XR-um-if-bundle-cfg:bfd/mode/ietf
     tf_name: bfd_mode_ietf
     example: true
     no_augment_config: true
@@ -50,6 +51,7 @@ attributes:
     type_yang_bool: presence
     exclude_test: true
   - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation/dot1q/vlan-id
+    xpath: Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation/dot1q/vlan-id
     tf_name: encapsulation_dot1q_vlan_id
     no_augment_config: true
     type: Int64
@@ -59,15 +61,19 @@ attributes:
     example: 1234
     exclude_test: true
   - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/vlan-id
+    tf_name: l2transport_encapsulation_dot1q_vlan_id
     example: 1234
     exclude_test: true
   - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/second-dot1q
+    tf_name: l2transport_encapsulation_dot1q_second_dot1q
     example: 1235
     exclude_test: true
   - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:rewrite/ingress/tag/pop/one
+    tf_name: rewrite_ingress_tag_pop_one
     example: true
     exclude_test: true
   - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:rewrite/ingress/tag/pop/two
+    tf_name: rewrite_ingress_tag_pop_two
     example: false
     exclude_test: true
   - yang_name: shutdown
@@ -80,9 +86,11 @@ attributes:
   - yang_name: description
     example: My Interface Description
   - yang_name: Cisco-IOS-XR-um-statistics-cfg:load-interval
+    tf_name: load_interval
     minimum_test_value: 30
     example: 30
   - yang_name: Cisco-IOS-XR-um-if-vrf-cfg:vrf
+    tf_name: vrf
     example: VRF1
   - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/address
     tf_name: ipv4_address

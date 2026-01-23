@@ -20,36 +20,8 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrSegmentRoutingTEPolicyCandidatePath(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te_policy_candidate_path.test", "path_infos.0.type", "dynamic"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te_policy_candidate_path.test", "path_infos.0.pcep", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te_policy_candidate_path.test", "path_infos.0.metric_type", "igp"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te_policy_candidate_path.test", "path_infos.0.hop_type", "mpls"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te_policy_candidate_path.test", "path_infos.0.segment_list_name", "dynamic"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrSegmentRoutingTEPolicyCandidatePathPrerequisitesConfig + testAccDataSourceIosxrSegmentRoutingTEPolicyCandidatePathConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrSegmentRoutingTEPolicyCandidatePathPrerequisitesConfig = `
@@ -70,32 +42,3 @@ resource "iosxr_gnmi" "PreReq1" {
 `
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrSegmentRoutingTEPolicyCandidatePathConfig() string {
-	config := `resource "iosxr_segment_routing_te_policy_candidate_path" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	policy_name = "POLICY1"` + "\n"
-	config += `	path_index = 100` + "\n"
-	config += `	path_infos = [{` + "\n"
-	config += `		type = "dynamic"` + "\n"
-	config += `		pcep = true` + "\n"
-	config += `		metric_type = "igp"` + "\n"
-	config += `		hop_type = "mpls"` + "\n"
-	config += `		segment_list_name = "dynamic"` + "\n"
-	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_segment_routing_te_policy_candidate_path" "test" {
-			policy_name = "POLICY1"
-			path_index = 100
-			depends_on = [iosxr_segment_routing_te_policy_candidate_path.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

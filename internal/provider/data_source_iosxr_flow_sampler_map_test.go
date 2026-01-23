@@ -20,58 +20,9 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"os"
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrFlowSamplerMap(t *testing.T) {
-	if os.Getenv("NCS") == "" {
-		t.Skip("skipping test, set environment variable NCS")
-	}
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_sampler_map.test", "random", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_sampler_map.test", "out_of", "1"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrFlowSamplerMapConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrFlowSamplerMapConfig() string {
-	config := `resource "iosxr_flow_sampler_map" "test" {` + "\n"
-	config += `	name = "sampler_map1"` + "\n"
-	config += `	random = 1` + "\n"
-	config += `	out_of = 1` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_flow_sampler_map" "test" {
-			name = "sampler_map1"
-			depends_on = [iosxr_flow_sampler_map.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

@@ -20,39 +20,8 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrEVPN(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn.test", "source_interface", "Loopback0"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn.test", "interfaces.0.interface_name", "GigabitEthernet0/0/0/1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn.test", "interfaces.0.ethernet_segment_enable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn.test", "interfaces.0.ethernet_segment_esi_zero", "01.02.03.04.05.06.07.08.09"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn.test", "srv6", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn.test", "srv6_locators.0.locator_name", "LOC1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn.test", "srv6_locators.0.usid_allocation_wide_local_id_block", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn.test", "srv6_usid_allocation_wide_local_id_block", "true"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrEVPNPrerequisitesConfig + testAccDataSourceIosxrEVPNConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrEVPNPrerequisitesConfig = `
@@ -65,33 +34,3 @@ resource "iosxr_gnmi" "PreReq0" {
 `
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrEVPNConfig() string {
-	config := `resource "iosxr_evpn" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	source_interface = "Loopback0"` + "\n"
-	config += `	interfaces = [{` + "\n"
-	config += `		interface_name = "GigabitEthernet0/0/0/1"` + "\n"
-	config += `		ethernet_segment_enable = true` + "\n"
-	config += `		ethernet_segment_esi_zero = "01.02.03.04.05.06.07.08.09"` + "\n"
-	config += `	}]` + "\n"
-	config += `	srv6 = true` + "\n"
-	config += `	srv6_locators = [{` + "\n"
-	config += `		locator_name = "LOC1"` + "\n"
-	config += `		usid_allocation_wide_local_id_block = true` + "\n"
-	config += `	}]` + "\n"
-	config += `	srv6_usid_allocation_wide_local_id_block = true` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_evpn" "test" {
-			depends_on = [iosxr_evpn.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

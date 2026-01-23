@@ -20,64 +20,9 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrIPv6PrefixList(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv6_prefix_list.test", "sequences.0.sequence_number", "4096"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv6_prefix_list.test", "sequences.0.permission", "permit"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv6_prefix_list.test", "sequences.0.prefix", "2001:db8::"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv6_prefix_list.test", "sequences.0.mask", "32"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv6_prefix_list.test", "sequences.0.match_prefix_length_ge", "64"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv6_prefix_list.test", "sequences.0.match_prefix_length_le", "128"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrIPv6PrefixListConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrIPv6PrefixListConfig() string {
-	config := `resource "iosxr_ipv6_prefix_list" "test" {` + "\n"
-	config += `	prefix_list_name = "LIST1"` + "\n"
-	config += `	sequences = [{` + "\n"
-	config += `		sequence_number = 4096` + "\n"
-	config += `		permission = "permit"` + "\n"
-	config += `		prefix = "2001:db8::"` + "\n"
-	config += `		mask = 32` + "\n"
-	config += `		match_prefix_length_ge = 64` + "\n"
-	config += `		match_prefix_length_le = 128` + "\n"
-	config += `	}]` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_ipv6_prefix_list" "test" {
-			prefix_list_name = "LIST1"
-			depends_on = [iosxr_ipv6_prefix_list.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

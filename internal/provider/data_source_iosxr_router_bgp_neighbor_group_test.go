@@ -20,52 +20,8 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrRouterBGPNeighborGroup(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "remote_as", "65001"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "description", "My Neighbor Group Description"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "update_source", "Loopback0"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "advertisement_interval_seconds", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "bfd_minimum_interval", "3"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "bfd_multiplier", "4"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "bfd_fast_detect", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "bfd_fast_detect_strict_mode", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "password", "12341C2713181F13253920"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "password_inheritance_disable", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "timers_keepalive_interval", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "timers_holdtime", "30"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "timers_holdtime_minimum_acceptable_holdtime", "30"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.af_name", "ipv4-labeled-unicast"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.soft_reconfiguration_inbound_always", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.next_hop_self", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.next_hop_self_inheritance_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.route_reflector_client", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.route_reflector_client_inheritance_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.route_policy_in", "ROUTE_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.route_policy_out", "ROUTE_POLICY_1"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrRouterBGPNeighborGroupPrerequisitesConfig + testAccDataSourceIosxrRouterBGPNeighborGroupConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRouterBGPNeighborGroupPrerequisitesConfig = `
@@ -87,48 +43,3 @@ resource "iosxr_gnmi" "PreReq1" {
 `
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrRouterBGPNeighborGroupConfig() string {
-	config := `resource "iosxr_router_bgp_neighbor_group" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	as_number = "65001"` + "\n"
-	config += `	name = "GROUP1"` + "\n"
-	config += `	remote_as = "65001"` + "\n"
-	config += `	description = "My Neighbor Group Description"` + "\n"
-	config += `	update_source = "Loopback0"` + "\n"
-	config += `	advertisement_interval_seconds = 10` + "\n"
-	config += `	bfd_minimum_interval = 3` + "\n"
-	config += `	bfd_multiplier = 4` + "\n"
-	config += `	bfd_fast_detect = true` + "\n"
-	config += `	bfd_fast_detect_strict_mode = false` + "\n"
-	config += `	password = "12341C2713181F13253920"` + "\n"
-	config += `	password_inheritance_disable = false` + "\n"
-	config += `	timers_keepalive_interval = 10` + "\n"
-	config += `	timers_holdtime = 30` + "\n"
-	config += `	timers_holdtime_minimum_acceptable_holdtime = 30` + "\n"
-	config += `	address_families = [{` + "\n"
-	config += `		af_name = "ipv4-labeled-unicast"` + "\n"
-	config += `		soft_reconfiguration_inbound_always = true` + "\n"
-	config += `		next_hop_self = true` + "\n"
-	config += `		next_hop_self_inheritance_disable = true` + "\n"
-	config += `		route_reflector_client = true` + "\n"
-	config += `		route_reflector_client_inheritance_disable = true` + "\n"
-	config += `		route_policy_in = "ROUTE_POLICY_1"` + "\n"
-	config += `		route_policy_out = "ROUTE_POLICY_1"` + "\n"
-	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_router_bgp_neighbor_group" "test" {
-			as_number = "65001"
-			name = "GROUP1"
-			depends_on = [iosxr_router_bgp_neighbor_group.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

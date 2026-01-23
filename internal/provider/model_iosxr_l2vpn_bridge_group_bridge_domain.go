@@ -25,8 +25,13 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
+	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -94,6 +99,19 @@ func (data L2VPNBridgeGroupBridgeDomain) getPath() string {
 
 func (data L2VPNBridgeGroupBridgeDomainData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=%s]/bridge-domains/bridge-domain[bridge-domain-name=%s]", data.BridgeGroupName.ValueString(), data.BridgeDomainName.ValueString())
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data L2VPNBridgeGroupBridgeDomain) getXPath() string {
+	path := "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=%s]/bridge-domains/bridge-domain[bridge-domain-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.BridgeGroupName.ValueString()), fmt.Sprintf("%v", data.BridgeDomainName.ValueString()))
+	return path
+}
+
+func (data L2VPNBridgeGroupBridgeDomainData) getXPath() string {
+	path := "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=%s]/bridge-domains/bridge-domain[bridge-domain-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.BridgeGroupName.ValueString()), fmt.Sprintf("%v", data.BridgeDomainName.ValueString()))
+	return path
 }
 
 // End of section. //template:end getPath
@@ -167,6 +185,92 @@ func (data L2VPNBridgeGroupBridgeDomain) toBody(ctx context.Context) string {
 }
 
 // End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data L2VPNBridgeGroupBridgeDomain) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.BridgeDomainName.IsNull() && !data.BridgeDomainName.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bridge-domain-name", data.BridgeDomainName.ValueString())
+	}
+	if len(data.Evis) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.Evis {
+			cBody := netconf.Body{}
+			if !item.VpnId.IsNull() && !item.VpnId.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "vpn-id", strconv.FormatInt(item.VpnId.ValueInt64(), 10))
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"evis/evi", cBody.Res())
+		}
+	}
+	if len(data.Vnis) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.Vnis {
+			cBody := netconf.Body{}
+			if !item.VniId.IsNull() && !item.VniId.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "vni-id", strconv.FormatInt(item.VniId.ValueInt64(), 10))
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"vnis/vni", cBody.Res())
+		}
+	}
+	if !data.Mtu.IsNull() && !data.Mtu.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/mtu", strconv.FormatInt(data.Mtu.ValueInt64(), 10))
+	}
+	if !data.StormControlBroadcastPps.IsNull() && !data.StormControlBroadcastPps.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/storm-control/broadcast/pps", strconv.FormatInt(data.StormControlBroadcastPps.ValueInt64(), 10))
+	}
+	if !data.StormControlBroadcastKbps.IsNull() && !data.StormControlBroadcastKbps.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/storm-control/broadcast/kbps", strconv.FormatInt(data.StormControlBroadcastKbps.ValueInt64(), 10))
+	}
+	if !data.StormControlMulticastPps.IsNull() && !data.StormControlMulticastPps.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/storm-control/multicast/pps", strconv.FormatInt(data.StormControlMulticastPps.ValueInt64(), 10))
+	}
+	if !data.StormControlMulticastKbps.IsNull() && !data.StormControlMulticastKbps.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/storm-control/multicast/kbps", strconv.FormatInt(data.StormControlMulticastKbps.ValueInt64(), 10))
+	}
+	if !data.StormControlUnknownUnicastPps.IsNull() && !data.StormControlUnknownUnicastPps.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/storm-control/unknown-unicast/pps", strconv.FormatInt(data.StormControlUnknownUnicastPps.ValueInt64(), 10))
+	}
+	if !data.StormControlUnknownUnicastKbps.IsNull() && !data.StormControlUnknownUnicastKbps.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/storm-control/unknown-unicast/kbps", strconv.FormatInt(data.StormControlUnknownUnicastKbps.ValueInt64(), 10))
+	}
+	if len(data.Interfaces) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.Interfaces {
+			cBody := netconf.Body{}
+			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "interface-name", item.InterfaceName.ValueString())
+			}
+			if !item.SplitHorizonGroup.IsNull() && !item.SplitHorizonGroup.IsUnknown() {
+				if item.SplitHorizonGroup.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "split-horizon/group", "")
+				}
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"interfaces/interface", cBody.Res())
+		}
+	}
+	if len(data.Srv6Evis) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.Srv6Evis {
+			cBody := netconf.Body{}
+			if !item.VpnId.IsNull() && !item.VpnId.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "vpn-id", strconv.FormatInt(item.VpnId.ValueInt64(), 10))
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"segment-routing-srv6-evis/evi", cBody.Res())
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
@@ -292,15 +396,13 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 		} else {
 			data.Interfaces[i].InterfaceName = types.StringNull()
 		}
-		if value := r.Get("split-horizon.group"); !data.Interfaces[i].SplitHorizonGroup.IsNull() {
-			if value.Exists() {
-				data.Interfaces[i].SplitHorizonGroup = types.BoolValue(true)
-			} else {
-				data.Interfaces[i].SplitHorizonGroup = types.BoolValue(false)
-			}
-		} else {
+		if value := r.Get("split-horizon.group"); value.Exists() {
+			data.Interfaces[i].SplitHorizonGroup = types.BoolValue(true)
+		} else if data.Interfaces[i].SplitHorizonGroup.IsNull() {
+			// If currently null, keep as null (field not in config)
 			data.Interfaces[i].SplitHorizonGroup = types.BoolNull()
 		}
+		// else: preserve existing value (e.g., false from config)
 	}
 	for i := range data.Srv6Evis {
 		keys := [...]string{"vpn-id"}
@@ -335,10 +437,186 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 
 // End of section. //template:end updateFromBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *L2VPNBridgeGroupBridgeDomain) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bridge-domain-name"); value.Exists() {
+		data.BridgeDomainName = types.StringValue(value.String())
+	} else if data.BridgeDomainName.IsNull() {
+		data.BridgeDomainName = types.StringNull()
+	}
+	for i := range data.Evis {
+		keys := [...]string{"vpn-id"}
+		keyValues := [...]string{strconv.FormatInt(data.Evis[i].VpnId.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/evis/evi").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "vpn-id"); value.Exists() {
+			data.Evis[i].VpnId = types.Int64Value(value.Int())
+		} else if data.Evis[i].VpnId.IsNull() {
+			data.Evis[i].VpnId = types.Int64Null()
+		}
+	}
+	for i := range data.Vnis {
+		keys := [...]string{"vni-id"}
+		keyValues := [...]string{strconv.FormatInt(data.Vnis[i].VniId.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/vnis/vni").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "vni-id"); value.Exists() {
+			data.Vnis[i].VniId = types.Int64Value(value.Int())
+		} else if data.Vnis[i].VniId.IsNull() {
+			data.Vnis[i].VniId = types.Int64Null()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mtu"); value.Exists() {
+		data.Mtu = types.Int64Value(value.Int())
+	} else if data.Mtu.IsNull() {
+		data.Mtu = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/broadcast/pps"); value.Exists() {
+		data.StormControlBroadcastPps = types.Int64Value(value.Int())
+	} else if data.StormControlBroadcastPps.IsNull() {
+		data.StormControlBroadcastPps = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/broadcast/kbps"); value.Exists() {
+		data.StormControlBroadcastKbps = types.Int64Value(value.Int())
+	} else if data.StormControlBroadcastKbps.IsNull() {
+		data.StormControlBroadcastKbps = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/multicast/pps"); value.Exists() {
+		data.StormControlMulticastPps = types.Int64Value(value.Int())
+	} else if data.StormControlMulticastPps.IsNull() {
+		data.StormControlMulticastPps = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/multicast/kbps"); value.Exists() {
+		data.StormControlMulticastKbps = types.Int64Value(value.Int())
+	} else if data.StormControlMulticastKbps.IsNull() {
+		data.StormControlMulticastKbps = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/unknown-unicast/pps"); value.Exists() {
+		data.StormControlUnknownUnicastPps = types.Int64Value(value.Int())
+	} else if data.StormControlUnknownUnicastPps.IsNull() {
+		data.StormControlUnknownUnicastPps = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/unknown-unicast/kbps"); value.Exists() {
+		data.StormControlUnknownUnicastKbps = types.Int64Value(value.Int())
+	} else if data.StormControlUnknownUnicastKbps.IsNull() {
+		data.StormControlUnknownUnicastKbps = types.Int64Null()
+	}
+	for i := range data.Interfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/interface").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "interface-name"); value.Exists() {
+			data.Interfaces[i].InterfaceName = types.StringValue(value.String())
+		} else if data.Interfaces[i].InterfaceName.IsNull() {
+			data.Interfaces[i].InterfaceName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "split-horizon/group"); value.Exists() {
+			data.Interfaces[i].SplitHorizonGroup = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Interfaces[i].SplitHorizonGroup.IsNull() {
+				data.Interfaces[i].SplitHorizonGroup = types.BoolNull()
+			}
+		}
+	}
+	for i := range data.Srv6Evis {
+		keys := [...]string{"vpn-id"}
+		keyValues := [...]string{strconv.FormatInt(data.Srv6Evis[i].VpnId.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/segment-routing-srv6-evis/evi").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "vpn-id"); value.Exists() {
+			data.Srv6Evis[i].VpnId = types.Int64Value(value.Int())
+		} else if data.Srv6Evis[i].VpnId.IsNull() {
+			data.Srv6Evis[i].VpnId = types.Int64Null()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "evis.evi"); value.Exists() {
+func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "evis.evi"); value.Exists() {
 		data.Evis = make([]L2VPNBridgeGroupBridgeDomainEvis, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainEvis{}
@@ -349,7 +627,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res []by
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "vnis.vni"); value.Exists() {
+	if value := res.Get(prefix + "vnis.vni"); value.Exists() {
 		data.Vnis = make([]L2VPNBridgeGroupBridgeDomainVnis, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainVnis{}
@@ -360,28 +638,28 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res []by
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "mtu"); value.Exists() {
+	if value := res.Get(prefix + "mtu"); value.Exists() {
 		data.Mtu = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "storm-control.broadcast.pps"); value.Exists() {
+	if value := res.Get(prefix + "storm-control.broadcast.pps"); value.Exists() {
 		data.StormControlBroadcastPps = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "storm-control.broadcast.kbps"); value.Exists() {
+	if value := res.Get(prefix + "storm-control.broadcast.kbps"); value.Exists() {
 		data.StormControlBroadcastKbps = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "storm-control.multicast.pps"); value.Exists() {
+	if value := res.Get(prefix + "storm-control.multicast.pps"); value.Exists() {
 		data.StormControlMulticastPps = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "storm-control.multicast.kbps"); value.Exists() {
+	if value := res.Get(prefix + "storm-control.multicast.kbps"); value.Exists() {
 		data.StormControlMulticastKbps = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "storm-control.unknown-unicast.pps"); value.Exists() {
+	if value := res.Get(prefix + "storm-control.unknown-unicast.pps"); value.Exists() {
 		data.StormControlUnknownUnicastPps = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "storm-control.unknown-unicast.kbps"); value.Exists() {
+	if value := res.Get(prefix + "storm-control.unknown-unicast.kbps"); value.Exists() {
 		data.StormControlUnknownUnicastKbps = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix + "interfaces.interface"); value.Exists() {
 		data.Interfaces = make([]L2VPNBridgeGroupBridgeDomainInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainInterfaces{}
@@ -397,7 +675,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res []by
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "segment-routing-srv6-evis.evi"); value.Exists() {
+	if value := res.Get(prefix + "segment-routing-srv6-evis.evi"); value.Exists() {
 		data.Srv6Evis = make([]L2VPNBridgeGroupBridgeDomainSrv6Evis, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainSrv6Evis{}
@@ -414,8 +692,12 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res []by
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *L2VPNBridgeGroupBridgeDomainData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "evis.evi"); value.Exists() {
+func (data *L2VPNBridgeGroupBridgeDomainData) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "evis.evi"); value.Exists() {
 		data.Evis = make([]L2VPNBridgeGroupBridgeDomainEvis, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainEvis{}
@@ -426,7 +708,7 @@ func (data *L2VPNBridgeGroupBridgeDomainData) fromBody(ctx context.Context, res 
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "vnis.vni"); value.Exists() {
+	if value := res.Get(prefix + "vnis.vni"); value.Exists() {
 		data.Vnis = make([]L2VPNBridgeGroupBridgeDomainVnis, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainVnis{}
@@ -437,28 +719,28 @@ func (data *L2VPNBridgeGroupBridgeDomainData) fromBody(ctx context.Context, res 
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "mtu"); value.Exists() {
+	if value := res.Get(prefix + "mtu"); value.Exists() {
 		data.Mtu = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "storm-control.broadcast.pps"); value.Exists() {
+	if value := res.Get(prefix + "storm-control.broadcast.pps"); value.Exists() {
 		data.StormControlBroadcastPps = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "storm-control.broadcast.kbps"); value.Exists() {
+	if value := res.Get(prefix + "storm-control.broadcast.kbps"); value.Exists() {
 		data.StormControlBroadcastKbps = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "storm-control.multicast.pps"); value.Exists() {
+	if value := res.Get(prefix + "storm-control.multicast.pps"); value.Exists() {
 		data.StormControlMulticastPps = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "storm-control.multicast.kbps"); value.Exists() {
+	if value := res.Get(prefix + "storm-control.multicast.kbps"); value.Exists() {
 		data.StormControlMulticastKbps = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "storm-control.unknown-unicast.pps"); value.Exists() {
+	if value := res.Get(prefix + "storm-control.unknown-unicast.pps"); value.Exists() {
 		data.StormControlUnknownUnicastPps = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "storm-control.unknown-unicast.kbps"); value.Exists() {
+	if value := res.Get(prefix + "storm-control.unknown-unicast.kbps"); value.Exists() {
 		data.StormControlUnknownUnicastKbps = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "interfaces.interface"); value.Exists() {
+	if value := res.Get(prefix + "interfaces.interface"); value.Exists() {
 		data.Interfaces = make([]L2VPNBridgeGroupBridgeDomainInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainInterfaces{}
@@ -474,7 +756,7 @@ func (data *L2VPNBridgeGroupBridgeDomainData) fromBody(ctx context.Context, res 
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "segment-routing-srv6-evis.evi"); value.Exists() {
+	if value := res.Get(prefix + "segment-routing-srv6-evis.evi"); value.Exists() {
 		data.Srv6Evis = make([]L2VPNBridgeGroupBridgeDomainSrv6Evis, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainSrv6Evis{}
@@ -488,6 +770,159 @@ func (data *L2VPNBridgeGroupBridgeDomainData) fromBody(ctx context.Context, res 
 }
 
 // End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *L2VPNBridgeGroupBridgeDomain) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/evis/evi"); value.Exists() {
+		data.Evis = make([]L2VPNBridgeGroupBridgeDomainEvis, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNBridgeGroupBridgeDomainEvis{}
+			if cValue := helpers.GetFromXPath(v, "vpn-id"); cValue.Exists() {
+				item.VpnId = types.Int64Value(cValue.Int())
+			}
+			data.Evis = append(data.Evis, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/vnis/vni"); value.Exists() {
+		data.Vnis = make([]L2VPNBridgeGroupBridgeDomainVnis, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNBridgeGroupBridgeDomainVnis{}
+			if cValue := helpers.GetFromXPath(v, "vni-id"); cValue.Exists() {
+				item.VniId = types.Int64Value(cValue.Int())
+			}
+			data.Vnis = append(data.Vnis, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mtu"); value.Exists() {
+		data.Mtu = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/broadcast/pps"); value.Exists() {
+		data.StormControlBroadcastPps = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/broadcast/kbps"); value.Exists() {
+		data.StormControlBroadcastKbps = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/multicast/pps"); value.Exists() {
+		data.StormControlMulticastPps = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/multicast/kbps"); value.Exists() {
+		data.StormControlMulticastKbps = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/unknown-unicast/pps"); value.Exists() {
+		data.StormControlUnknownUnicastPps = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/unknown-unicast/kbps"); value.Exists() {
+		data.StormControlUnknownUnicastKbps = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/interface"); value.Exists() {
+		data.Interfaces = make([]L2VPNBridgeGroupBridgeDomainInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNBridgeGroupBridgeDomainInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "split-horizon/group"); cValue.Exists() {
+				item.SplitHorizonGroup = types.BoolValue(true)
+			} else {
+			}
+			data.Interfaces = append(data.Interfaces, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/segment-routing-srv6-evis/evi"); value.Exists() {
+		data.Srv6Evis = make([]L2VPNBridgeGroupBridgeDomainSrv6Evis, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNBridgeGroupBridgeDomainSrv6Evis{}
+			if cValue := helpers.GetFromXPath(v, "vpn-id"); cValue.Exists() {
+				item.VpnId = types.Int64Value(cValue.Int())
+			}
+			data.Srv6Evis = append(data.Srv6Evis, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *L2VPNBridgeGroupBridgeDomainData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/evis/evi"); value.Exists() {
+		data.Evis = make([]L2VPNBridgeGroupBridgeDomainEvis, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNBridgeGroupBridgeDomainEvis{}
+			if cValue := helpers.GetFromXPath(v, "vpn-id"); cValue.Exists() {
+				item.VpnId = types.Int64Value(cValue.Int())
+			}
+			data.Evis = append(data.Evis, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/vnis/vni"); value.Exists() {
+		data.Vnis = make([]L2VPNBridgeGroupBridgeDomainVnis, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNBridgeGroupBridgeDomainVnis{}
+			if cValue := helpers.GetFromXPath(v, "vni-id"); cValue.Exists() {
+				item.VniId = types.Int64Value(cValue.Int())
+			}
+			data.Vnis = append(data.Vnis, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mtu"); value.Exists() {
+		data.Mtu = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/broadcast/pps"); value.Exists() {
+		data.StormControlBroadcastPps = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/broadcast/kbps"); value.Exists() {
+		data.StormControlBroadcastKbps = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/multicast/pps"); value.Exists() {
+		data.StormControlMulticastPps = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/multicast/kbps"); value.Exists() {
+		data.StormControlMulticastKbps = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/unknown-unicast/pps"); value.Exists() {
+		data.StormControlUnknownUnicastPps = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/storm-control/unknown-unicast/kbps"); value.Exists() {
+		data.StormControlUnknownUnicastKbps = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/interface"); value.Exists() {
+		data.Interfaces = make([]L2VPNBridgeGroupBridgeDomainInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNBridgeGroupBridgeDomainInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "split-horizon/group"); cValue.Exists() {
+				item.SplitHorizonGroup = types.BoolValue(true)
+			} else {
+				item.SplitHorizonGroup = types.BoolValue(false)
+			}
+			data.Interfaces = append(data.Interfaces, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/segment-routing-srv6-evis/evi"); value.Exists() {
+		data.Srv6Evis = make([]L2VPNBridgeGroupBridgeDomainSrv6Evis, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNBridgeGroupBridgeDomainSrv6Evis{}
+			if cValue := helpers.GetFromXPath(v, "vpn-id"); cValue.Exists() {
+				item.VpnId = types.Int64Value(cValue.Int())
+			}
+			data.Srv6Evis = append(data.Srv6Evis, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
@@ -546,8 +981,11 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, s
 				found = false
 			}
 			if found {
-				if !state.Interfaces[i].SplitHorizonGroup.IsNull() && data.Interfaces[j].SplitHorizonGroup.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/split-horizon/group", state.getPath(), keyString))
+				// For presence-based booleans, delete if going from true to false or to null
+				if !state.Interfaces[i].SplitHorizonGroup.IsNull() && state.Interfaces[i].SplitHorizonGroup.ValueBool() {
+					if data.Interfaces[j].SplitHorizonGroup.IsNull() || !data.Interfaces[j].SplitHorizonGroup.ValueBool() {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/split-horizon/group", state.getPath(), keyString))
+					}
 				}
 				break
 			}
@@ -644,7 +1082,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, s
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *L2VPNBridgeGroupBridgeDomain) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *L2VPNBridgeGroupBridgeDomain) getEmptyLeafsDelete(ctx context.Context, state *L2VPNBridgeGroupBridgeDomain) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.Srv6Evis {
 		keys := [...]string{"vpn-id"}
@@ -661,8 +1099,12 @@ func (data *L2VPNBridgeGroupBridgeDomain) getEmptyLeafsDelete(ctx context.Contex
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
+		// Only delete if state has true and plan has false
 		if !data.Interfaces[i].SplitHorizonGroup.IsNull() && !data.Interfaces[i].SplitHorizonGroup.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/interface%v/split-horizon/group", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.Interfaces) && !state.Interfaces[i].SplitHorizonGroup.IsNull() && state.Interfaces[i].SplitHorizonGroup.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/interface%v/split-horizon/group", data.getXPath(), keyString))
+			}
 		}
 	}
 	for i := range data.Vnis {
@@ -691,24 +1133,14 @@ func (data *L2VPNBridgeGroupBridgeDomain) getEmptyLeafsDelete(ctx context.Contex
 func (data *L2VPNBridgeGroupBridgeDomain) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Srv6Evis {
-		keys := [...]string{"vpn-id"}
 		keyValues := [...]string{strconv.FormatInt(data.Srv6Evis[i].VpnId.ValueInt64(), 10)}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing-srv6-evis/evi%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing-srv6-evis/evi=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.Interfaces {
-		keys := [...]string{"interface-name"}
 		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/interface%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	if !data.StormControlUnknownUnicastKbps.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/storm-control/unknown-unicast/kbps", data.getPath()))
@@ -732,26 +1164,276 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletePaths(ctx context.Context) []
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/mtu", data.getPath()))
 	}
 	for i := range data.Vnis {
-		keys := [...]string{"vni-id"}
 		keyValues := [...]string{strconv.FormatInt(data.Vnis[i].VniId.ValueInt64(), 10)}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/vnis/vni%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/vnis/vni=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.Evis {
-		keys := [...]string{"vpn-id"}
 		keyValues := [...]string{strconv.FormatInt(data.Evis[i].VpnId.ValueInt64(), 10)}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/evis/evi%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/evis/evi=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *L2VPNBridgeGroupBridgeDomain) addDeletedItemsXML(ctx context.Context, state L2VPNBridgeGroupBridgeDomain, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.Srv6Evis {
+		stateKeys := [...]string{"vpn-id"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.Srv6Evis[i].VpnId.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Srv6Evis[i].VpnId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Srv6Evis {
+			found = true
+			if state.Srv6Evis[i].VpnId.ValueInt64() != data.Srv6Evis[j].VpnId.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/segment-routing-srv6-evis/evi%v", predicates))
+		}
+	}
+	for i := range state.Interfaces {
+		stateKeys := [...]string{"interface-name"}
+		stateKeyValues := [...]string{state.Interfaces[i].InterfaceName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Interfaces[i].InterfaceName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Interfaces {
+			found = true
+			if state.Interfaces[i].InterfaceName.ValueString() != data.Interfaces[j].InterfaceName.ValueString() {
+				found = false
+			}
+			if found {
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Interfaces[i].SplitHorizonGroup.IsNull() && state.Interfaces[i].SplitHorizonGroup.ValueBool() && data.Interfaces[j].SplitHorizonGroup.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/split-horizon/group", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v", predicates))
+		}
+	}
+	if !state.StormControlUnknownUnicastKbps.IsNull() && data.StormControlUnknownUnicastKbps.IsNull() {
+		deletePath := state.getXPath() + "/storm-control/unknown-unicast/kbps"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.StormControlUnknownUnicastPps.IsNull() && data.StormControlUnknownUnicastPps.IsNull() {
+		deletePath := state.getXPath() + "/storm-control/unknown-unicast/pps"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.StormControlMulticastKbps.IsNull() && data.StormControlMulticastKbps.IsNull() {
+		deletePath := state.getXPath() + "/storm-control/multicast/kbps"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.StormControlMulticastPps.IsNull() && data.StormControlMulticastPps.IsNull() {
+		deletePath := state.getXPath() + "/storm-control/multicast/pps"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.StormControlBroadcastKbps.IsNull() && data.StormControlBroadcastKbps.IsNull() {
+		deletePath := state.getXPath() + "/storm-control/broadcast/kbps"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.StormControlBroadcastPps.IsNull() && data.StormControlBroadcastPps.IsNull() {
+		deletePath := state.getXPath() + "/storm-control/broadcast/pps"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Mtu.IsNull() && data.Mtu.IsNull() {
+		deletePath := state.getXPath() + "/mtu"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.Vnis {
+		stateKeys := [...]string{"vni-id"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.Vnis[i].VniId.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Vnis[i].VniId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Vnis {
+			found = true
+			if state.Vnis[i].VniId.ValueInt64() != data.Vnis[j].VniId.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vnis/vni%v", predicates))
+		}
+	}
+	for i := range state.Evis {
+		stateKeys := [...]string{"vpn-id"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.Evis[i].VpnId.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Evis[i].VpnId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Evis {
+			found = true
+			if state.Evis[i].VpnId.ValueInt64() != data.Evis[j].VpnId.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/evis/evi%v", predicates))
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *L2VPNBridgeGroupBridgeDomain) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	for i := range data.Srv6Evis {
+		keys := [...]string{"vpn-id"}
+		keyValues := [...]string{strconv.FormatInt(data.Srv6Evis[i].VpnId.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/segment-routing-srv6-evis/evi%v", predicates))
+	}
+	for i := range data.Interfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/interfaces/interface%v", predicates))
+	}
+	if !data.StormControlUnknownUnicastKbps.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/storm-control/unknown-unicast/kbps")
+	}
+	if !data.StormControlUnknownUnicastPps.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/storm-control/unknown-unicast/pps")
+	}
+	if !data.StormControlMulticastKbps.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/storm-control/multicast/kbps")
+	}
+	if !data.StormControlMulticastPps.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/storm-control/multicast/pps")
+	}
+	if !data.StormControlBroadcastKbps.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/storm-control/broadcast/kbps")
+	}
+	if !data.StormControlBroadcastPps.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/storm-control/broadcast/pps")
+	}
+	if !data.Mtu.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/mtu")
+	}
+	for i := range data.Vnis {
+		keys := [...]string{"vni-id"}
+		keyValues := [...]string{strconv.FormatInt(data.Vnis[i].VniId.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/vnis/vni%v", predicates))
+	}
+	for i := range data.Evis {
+		keys := [...]string{"vpn-id"}
+		keyValues := [...]string{strconv.FormatInt(data.Evis[i].VpnId.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/evis/evi%v", predicates))
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

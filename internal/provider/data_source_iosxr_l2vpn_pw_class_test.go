@@ -20,43 +20,8 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"os"
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrL2VPNPWClass(t *testing.T) {
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_transport_mode_ethernet", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_transport_mode_vlan", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_transport_mode_passthrough", "false"))
-	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_load_balancing_pw_label", "true"))
-	}
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_load_balancing_flow_label_both", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_load_balancing_flow_label_both_static", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_load_balancing_flow_label_code_one7", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_load_balancing_flow_label_code_one7_disable", "true"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrL2VPNPWClassPrerequisitesConfig + testAccDataSourceIosxrL2VPNPWClassConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrL2VPNPWClassPrerequisitesConfig = `
@@ -69,34 +34,3 @@ resource "iosxr_gnmi" "PreReq0" {
 `
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrL2VPNPWClassConfig() string {
-	config := `resource "iosxr_l2vpn_pw_class" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	name = "PWC1"` + "\n"
-	config += `	encapsulation_mpls = true` + "\n"
-	config += `	encapsulation_mpls_transport_mode_ethernet = true` + "\n"
-	config += `	encapsulation_mpls_transport_mode_vlan = false` + "\n"
-	config += `	encapsulation_mpls_transport_mode_passthrough = false` + "\n"
-	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
-		config += `	encapsulation_mpls_load_balancing_pw_label = true` + "\n"
-	}
-	config += `	encapsulation_mpls_load_balancing_flow_label_both = true` + "\n"
-	config += `	encapsulation_mpls_load_balancing_flow_label_both_static = true` + "\n"
-	config += `	encapsulation_mpls_load_balancing_flow_label_code_one7 = true` + "\n"
-	config += `	encapsulation_mpls_load_balancing_flow_label_code_one7_disable = true` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_l2vpn_pw_class" "test" {
-			name = "PWC1"
-			depends_on = [iosxr_l2vpn_pw_class.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

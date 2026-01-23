@@ -20,71 +20,9 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
-import (
-	"os"
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-)
 
 // End of section. //template:end imports
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-
-func TestAccDataSourceIosxrSSH(t *testing.T) {
-	if os.Getenv("SSH") == "" {
-		t.Skip("skipping test, set environment variable SSH")
-	}
-	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_dscp", "48"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_logging", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_rate_limit", "60"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_session_limit", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_v2", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_vrfs.0.vrf_name", "VRF1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_vrfs.0.ipv4_access_list", "ACL1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_vrfs.0.ipv6_access_list", "ACL2"))
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataSourceIosxrSSHConfig(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-		},
-	})
-}
-
-// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 
 // End of section. //template:end testPrerequisites
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-
-func testAccDataSourceIosxrSSHConfig() string {
-	config := `resource "iosxr_ssh" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	server_dscp = 48` + "\n"
-	config += `	server_logging = true` + "\n"
-	config += `	server_rate_limit = 60` + "\n"
-	config += `	server_session_limit = 10` + "\n"
-	config += `	server_v2 = true` + "\n"
-	config += `	server_vrfs = [{` + "\n"
-	config += `		vrf_name = "VRF1"` + "\n"
-	config += `		ipv4_access_list = "ACL1"` + "\n"
-	config += `		ipv6_access_list = "ACL2"` + "\n"
-	config += `	}]` + "\n"
-	config += `}` + "\n"
-
-	config += `
-		data "iosxr_ssh" "test" {
-			depends_on = [iosxr_ssh.test]
-		}
-	`
-	return config
-}
-
-// End of section. //template:end testAccDataSourceConfig

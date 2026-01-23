@@ -25,8 +25,13 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
+	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -76,6 +81,17 @@ func (data TelnetData) getPath() string {
 	return "Cisco-IOS-XR-um-telnet-cfg:/telnet"
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data Telnet) getXPath() string {
+	path := "Cisco-IOS-XR-um-telnet-cfg:/telnet"
+	return path
+}
+
+func (data TelnetData) getXPath() string {
+	path := "Cisco-IOS-XR-um-telnet-cfg:/telnet"
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -123,6 +139,62 @@ func (data Telnet) toBody(ctx context.Context) string {
 }
 
 // End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data Telnet) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.Ipv4ClientSourceInterface.IsNull() && !data.Ipv4ClientSourceInterface.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ipv4/client/source-interface", data.Ipv4ClientSourceInterface.ValueString())
+	}
+	if !data.Ipv6ClientSourceInterface.IsNull() && !data.Ipv6ClientSourceInterface.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ipv6/client/source-interface", data.Ipv6ClientSourceInterface.ValueString())
+	}
+	if len(data.Vrfs) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.Vrfs {
+			cBody := netconf.Body{}
+			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "vrf-name", item.VrfName.ValueString())
+			}
+			if !item.Ipv4ServerMaxServers.IsNull() && !item.Ipv4ServerMaxServers.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "ipv4/server/max-servers", strconv.FormatInt(item.Ipv4ServerMaxServers.ValueInt64(), 10))
+			}
+			if !item.Ipv4ServerAccessList.IsNull() && !item.Ipv4ServerAccessList.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "ipv4/server/access-list", item.Ipv4ServerAccessList.ValueString())
+			}
+			if !item.Ipv6ServerMaxServers.IsNull() && !item.Ipv6ServerMaxServers.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "ipv6/server/max-servers", strconv.FormatInt(item.Ipv6ServerMaxServers.ValueInt64(), 10))
+			}
+			if !item.Ipv6ServerAccessList.IsNull() && !item.Ipv6ServerAccessList.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "ipv6/server/access-list", item.Ipv6ServerAccessList.ValueString())
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"vrfs/vrf", cBody.Res())
+		}
+	}
+	if len(data.VrfsDscp) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.VrfsDscp {
+			cBody := netconf.Body{}
+			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "vrf-name", item.VrfName.ValueString())
+			}
+			if !item.Ipv4Dscp.IsNull() && !item.Ipv4Dscp.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "ipv4/dscp", strconv.FormatInt(item.Ipv4Dscp.ValueInt64(), 10))
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"vrfs/vrf-dscp", cBody.Res())
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
@@ -224,16 +296,120 @@ func (data *Telnet) updateFromBody(ctx context.Context, res []byte) {
 
 // End of section. //template:end updateFromBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *Telnet) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/client/source-interface"); value.Exists() {
+		data.Ipv4ClientSourceInterface = types.StringValue(value.String())
+	} else if data.Ipv4ClientSourceInterface.IsNull() {
+		data.Ipv4ClientSourceInterface = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/client/source-interface"); value.Exists() {
+		data.Ipv6ClientSourceInterface = types.StringValue(value.String())
+	} else if data.Ipv6ClientSourceInterface.IsNull() {
+		data.Ipv6ClientSourceInterface = types.StringNull()
+	}
+	for i := range data.Vrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.Vrfs[i].VrfName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/vrfs/vrf").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "vrf-name"); value.Exists() {
+			data.Vrfs[i].VrfName = types.StringValue(value.String())
+		} else if data.Vrfs[i].VrfName.IsNull() {
+			data.Vrfs[i].VrfName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "ipv4/server/max-servers"); value.Exists() {
+			data.Vrfs[i].Ipv4ServerMaxServers = types.Int64Value(value.Int())
+		} else if data.Vrfs[i].Ipv4ServerMaxServers.IsNull() {
+			data.Vrfs[i].Ipv4ServerMaxServers = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "ipv4/server/access-list"); value.Exists() {
+			data.Vrfs[i].Ipv4ServerAccessList = types.StringValue(value.String())
+		} else if data.Vrfs[i].Ipv4ServerAccessList.IsNull() {
+			data.Vrfs[i].Ipv4ServerAccessList = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "ipv6/server/max-servers"); value.Exists() {
+			data.Vrfs[i].Ipv6ServerMaxServers = types.Int64Value(value.Int())
+		} else if data.Vrfs[i].Ipv6ServerMaxServers.IsNull() {
+			data.Vrfs[i].Ipv6ServerMaxServers = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "ipv6/server/access-list"); value.Exists() {
+			data.Vrfs[i].Ipv6ServerAccessList = types.StringValue(value.String())
+		} else if data.Vrfs[i].Ipv6ServerAccessList.IsNull() {
+			data.Vrfs[i].Ipv6ServerAccessList = types.StringNull()
+		}
+	}
+	for i := range data.VrfsDscp {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.VrfsDscp[i].VrfName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/vrfs/vrf-dscp").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "vrf-name"); value.Exists() {
+			data.VrfsDscp[i].VrfName = types.StringValue(value.String())
+		} else if data.VrfsDscp[i].VrfName.IsNull() {
+			data.VrfsDscp[i].VrfName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "ipv4/dscp"); value.Exists() {
+			data.VrfsDscp[i].Ipv4Dscp = types.Int64Value(value.Int())
+		} else if data.VrfsDscp[i].Ipv4Dscp.IsNull() {
+			data.VrfsDscp[i].Ipv4Dscp = types.Int64Null()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *Telnet) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "ipv4.client.source-interface"); value.Exists() {
+func (data *Telnet) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "ipv4.client.source-interface"); value.Exists() {
 		data.Ipv4ClientSourceInterface = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "ipv6.client.source-interface"); value.Exists() {
+	if value := res.Get(prefix + "ipv6.client.source-interface"); value.Exists() {
 		data.Ipv6ClientSourceInterface = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "vrfs.vrf"); value.Exists() {
+	if value := res.Get(prefix + "vrfs.vrf"); value.Exists() {
 		data.Vrfs = make([]TelnetVrfs, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TelnetVrfs{}
@@ -256,7 +432,7 @@ func (data *Telnet) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "vrfs.vrf-dscp"); value.Exists() {
+	if value := res.Get(prefix + "vrfs.vrf-dscp"); value.Exists() {
 		data.VrfsDscp = make([]TelnetVrfsDscp, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TelnetVrfsDscp{}
@@ -276,14 +452,18 @@ func (data *Telnet) fromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *TelnetData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "ipv4.client.source-interface"); value.Exists() {
+func (data *TelnetData) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "ipv4.client.source-interface"); value.Exists() {
 		data.Ipv4ClientSourceInterface = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "ipv6.client.source-interface"); value.Exists() {
+	if value := res.Get(prefix + "ipv6.client.source-interface"); value.Exists() {
 		data.Ipv6ClientSourceInterface = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "vrfs.vrf"); value.Exists() {
+	if value := res.Get(prefix + "vrfs.vrf"); value.Exists() {
 		data.Vrfs = make([]TelnetVrfs, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TelnetVrfs{}
@@ -306,7 +486,7 @@ func (data *TelnetData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "vrfs.vrf-dscp"); value.Exists() {
+	if value := res.Get(prefix + "vrfs.vrf-dscp"); value.Exists() {
 		data.VrfsDscp = make([]TelnetVrfsDscp, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := TelnetVrfsDscp{}
@@ -323,6 +503,106 @@ func (data *TelnetData) fromBody(ctx context.Context, res []byte) {
 }
 
 // End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *Telnet) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/client/source-interface"); value.Exists() {
+		data.Ipv4ClientSourceInterface = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/client/source-interface"); value.Exists() {
+		data.Ipv6ClientSourceInterface = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/vrfs/vrf"); value.Exists() {
+		data.Vrfs = make([]TelnetVrfs, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := TelnetVrfs{}
+			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv4/server/max-servers"); cValue.Exists() {
+				item.Ipv4ServerMaxServers = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv4/server/access-list"); cValue.Exists() {
+				item.Ipv4ServerAccessList = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv6/server/max-servers"); cValue.Exists() {
+				item.Ipv6ServerMaxServers = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv6/server/access-list"); cValue.Exists() {
+				item.Ipv6ServerAccessList = types.StringValue(cValue.String())
+			}
+			data.Vrfs = append(data.Vrfs, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/vrfs/vrf-dscp"); value.Exists() {
+		data.VrfsDscp = make([]TelnetVrfsDscp, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := TelnetVrfsDscp{}
+			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv4/dscp"); cValue.Exists() {
+				item.Ipv4Dscp = types.Int64Value(cValue.Int())
+			}
+			data.VrfsDscp = append(data.VrfsDscp, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *TelnetData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/client/source-interface"); value.Exists() {
+		data.Ipv4ClientSourceInterface = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/client/source-interface"); value.Exists() {
+		data.Ipv6ClientSourceInterface = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/vrfs/vrf"); value.Exists() {
+		data.Vrfs = make([]TelnetVrfs, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := TelnetVrfs{}
+			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv4/server/max-servers"); cValue.Exists() {
+				item.Ipv4ServerMaxServers = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv4/server/access-list"); cValue.Exists() {
+				item.Ipv4ServerAccessList = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv6/server/max-servers"); cValue.Exists() {
+				item.Ipv6ServerMaxServers = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv6/server/access-list"); cValue.Exists() {
+				item.Ipv6ServerAccessList = types.StringValue(cValue.String())
+			}
+			data.Vrfs = append(data.Vrfs, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/vrfs/vrf-dscp"); value.Exists() {
+		data.VrfsDscp = make([]TelnetVrfsDscp, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := TelnetVrfsDscp{}
+			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv4/dscp"); cValue.Exists() {
+				item.Ipv4Dscp = types.Int64Value(cValue.Int())
+			}
+			data.VrfsDscp = append(data.VrfsDscp, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
@@ -416,7 +696,7 @@ func (data *Telnet) getDeletedItems(ctx context.Context, state Telnet) []string 
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *Telnet) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *Telnet) getEmptyLeafsDelete(ctx context.Context, state *Telnet) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.VrfsDscp {
 		keys := [...]string{"vrf-name"}
@@ -444,24 +724,14 @@ func (data *Telnet) getEmptyLeafsDelete(ctx context.Context) []string {
 func (data *Telnet) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.VrfsDscp {
-		keys := [...]string{"vrf-name"}
 		keyValues := [...]string{data.VrfsDscp[i].VrfName.ValueString()}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/vrfs/vrf-dscp%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/vrfs/vrf-dscp=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.Vrfs {
-		keys := [...]string{"vrf-name"}
 		keyValues := [...]string{data.Vrfs[i].VrfName.ValueString()}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/vrfs/vrf%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/vrfs/vrf=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	if !data.Ipv6ClientSourceInterface.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/client/source-interface", data.getPath()))
@@ -469,7 +739,148 @@ func (data *Telnet) getDeletePaths(ctx context.Context) []string {
 	if !data.Ipv4ClientSourceInterface.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/client/source-interface", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *Telnet) addDeletedItemsXML(ctx context.Context, state Telnet, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.VrfsDscp {
+		stateKeys := [...]string{"vrf-name"}
+		stateKeyValues := [...]string{state.VrfsDscp[i].VrfName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.VrfsDscp[i].VrfName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.VrfsDscp {
+			found = true
+			if state.VrfsDscp[i].VrfName.ValueString() != data.VrfsDscp[j].VrfName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.VrfsDscp[i].Ipv4Dscp.IsNull() && data.VrfsDscp[j].Ipv4Dscp.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf-dscp%v/ipv4/dscp", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf-dscp%v", predicates))
+		}
+	}
+	for i := range state.Vrfs {
+		stateKeys := [...]string{"vrf-name"}
+		stateKeyValues := [...]string{state.Vrfs[i].VrfName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Vrfs[i].VrfName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Vrfs {
+			found = true
+			if state.Vrfs[i].VrfName.ValueString() != data.Vrfs[j].VrfName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.Vrfs[i].Ipv6ServerAccessList.IsNull() && data.Vrfs[j].Ipv6ServerAccessList.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/ipv6/server/access-list", predicates))
+				}
+				if !state.Vrfs[i].Ipv6ServerMaxServers.IsNull() && data.Vrfs[j].Ipv6ServerMaxServers.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/ipv6/server/max-servers", predicates))
+				}
+				if !state.Vrfs[i].Ipv4ServerAccessList.IsNull() && data.Vrfs[j].Ipv4ServerAccessList.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/ipv4/server/access-list", predicates))
+				}
+				if !state.Vrfs[i].Ipv4ServerMaxServers.IsNull() && data.Vrfs[j].Ipv4ServerMaxServers.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v/ipv4/server/max-servers", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/vrfs/vrf%v", predicates))
+		}
+	}
+	if !state.Ipv6ClientSourceInterface.IsNull() && data.Ipv6ClientSourceInterface.IsNull() {
+		deletePath := state.getXPath() + "/ipv6/client/source-interface"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Ipv4ClientSourceInterface.IsNull() && data.Ipv4ClientSourceInterface.IsNull() {
+		deletePath := state.getXPath() + "/ipv4/client/source-interface"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *Telnet) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	for i := range data.VrfsDscp {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.VrfsDscp[i].VrfName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/vrfs/vrf-dscp%v", predicates))
+	}
+	for i := range data.Vrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.Vrfs[i].VrfName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/vrfs/vrf%v", predicates))
+	}
+	if !data.Ipv6ClientSourceInterface.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ipv6/client/source-interface")
+	}
+	if !data.Ipv4ClientSourceInterface.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ipv4/client/source-interface")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

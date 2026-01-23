@@ -23,9 +23,14 @@ package provider
 import (
 	"context"
 	"fmt"
+	"sort"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -70,6 +75,19 @@ func (data EVPNInterfaceData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/evpn/interface/interface[interface-name=%s]", data.InterfaceName.ValueString())
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data EVPNInterface) getXPath() string {
+	path := "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/interface/interface[interface-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.InterfaceName.ValueString()))
+	return path
+}
+
+func (data EVPNInterfaceData) getXPath() string {
+	path := "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/interface/interface[interface-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.InterfaceName.ValueString()))
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -110,6 +128,48 @@ func (data EVPNInterface) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data EVPNInterface) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.InterfaceName.IsNull() && !data.InterfaceName.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/interface-name", data.InterfaceName.ValueString())
+	}
+	if !data.CoreIsolationGroup.IsNull() && !data.CoreIsolationGroup.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/core-isolation-group", strconv.FormatInt(data.CoreIsolationGroup.ValueInt64(), 10))
+	}
+	if !data.EthernetSegmentIdentifierTypeZeroEsi.IsNull() && !data.EthernetSegmentIdentifierTypeZeroEsi.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ethernet-segment/identifier/type/zero/esi", data.EthernetSegmentIdentifierTypeZeroEsi.ValueString())
+	}
+	if !data.EthernetSegmentLoadBalancingModeAllActive.IsNull() && !data.EthernetSegmentLoadBalancingModeAllActive.IsUnknown() {
+		if data.EthernetSegmentLoadBalancingModeAllActive.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ethernet-segment/load-balancing-mode/all-active", "")
+		}
+	}
+	if !data.EthernetSegmentLoadBalancingModePortActive.IsNull() && !data.EthernetSegmentLoadBalancingModePortActive.IsUnknown() {
+		if data.EthernetSegmentLoadBalancingModePortActive.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ethernet-segment/load-balancing-mode/port-active", "")
+		}
+	}
+	if !data.EthernetSegmentLoadBalancingModeSingleActive.IsNull() && !data.EthernetSegmentLoadBalancingModeSingleActive.IsUnknown() {
+		if data.EthernetSegmentLoadBalancingModeSingleActive.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ethernet-segment/load-balancing-mode/single-active", "")
+		}
+	}
+	if !data.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() && !data.EthernetSegmentLoadBalancingModeSingleFlowActive.IsUnknown() {
+		if data.EthernetSegmentLoadBalancingModeSingleFlowActive.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ethernet-segment/load-balancing-mode/single-flow-active", "")
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *EVPNInterface) updateFromBody(ctx context.Context, res []byte) {
@@ -123,74 +183,120 @@ func (data *EVPNInterface) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.EthernetSegmentIdentifierTypeZeroEsi = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ethernet-segment.load-balancing-mode.all-active"); !data.EthernetSegmentLoadBalancingModeAllActive.IsNull() {
-		if value.Exists() {
-			data.EthernetSegmentLoadBalancingModeAllActive = types.BoolValue(true)
-		} else {
-			data.EthernetSegmentLoadBalancingModeAllActive = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "ethernet-segment.load-balancing-mode.all-active"); value.Exists() {
+		data.EthernetSegmentLoadBalancingModeAllActive = types.BoolValue(true)
+	} else if data.EthernetSegmentLoadBalancingModeAllActive.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.EthernetSegmentLoadBalancingModeAllActive = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "ethernet-segment.load-balancing-mode.port-active"); !data.EthernetSegmentLoadBalancingModePortActive.IsNull() {
-		if value.Exists() {
-			data.EthernetSegmentLoadBalancingModePortActive = types.BoolValue(true)
-		} else {
-			data.EthernetSegmentLoadBalancingModePortActive = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "ethernet-segment.load-balancing-mode.port-active"); value.Exists() {
+		data.EthernetSegmentLoadBalancingModePortActive = types.BoolValue(true)
+	} else if data.EthernetSegmentLoadBalancingModePortActive.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.EthernetSegmentLoadBalancingModePortActive = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "ethernet-segment.load-balancing-mode.single-active"); !data.EthernetSegmentLoadBalancingModeSingleActive.IsNull() {
-		if value.Exists() {
-			data.EthernetSegmentLoadBalancingModeSingleActive = types.BoolValue(true)
-		} else {
-			data.EthernetSegmentLoadBalancingModeSingleActive = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "ethernet-segment.load-balancing-mode.single-active"); value.Exists() {
+		data.EthernetSegmentLoadBalancingModeSingleActive = types.BoolValue(true)
+	} else if data.EthernetSegmentLoadBalancingModeSingleActive.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.EthernetSegmentLoadBalancingModeSingleActive = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "ethernet-segment.load-balancing-mode.single-flow-active"); !data.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() {
-		if value.Exists() {
-			data.EthernetSegmentLoadBalancingModeSingleFlowActive = types.BoolValue(true)
-		} else {
-			data.EthernetSegmentLoadBalancingModeSingleFlowActive = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "ethernet-segment.load-balancing-mode.single-flow-active"); value.Exists() {
+		data.EthernetSegmentLoadBalancingModeSingleFlowActive = types.BoolValue(true)
+	} else if data.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.EthernetSegmentLoadBalancingModeSingleFlowActive = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 }
 
 // End of section. //template:end updateFromBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
-func (data *EVPNInterface) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "core-isolation-group"); value.Exists() {
+func (data *EVPNInterface) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interface-name"); value.Exists() {
+		data.InterfaceName = types.StringValue(value.String())
+	} else if data.InterfaceName.IsNull() {
+		data.InterfaceName = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/core-isolation-group"); value.Exists() {
 		data.CoreIsolationGroup = types.Int64Value(value.Int())
+	} else if data.CoreIsolationGroup.IsNull() {
+		data.CoreIsolationGroup = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ethernet-segment.identifier.type.zero.esi"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/identifier/type/zero/esi"); value.Exists() {
 		data.EthernetSegmentIdentifierTypeZeroEsi = types.StringValue(value.String())
+	} else if data.EthernetSegmentIdentifierTypeZeroEsi.IsNull() {
+		data.EthernetSegmentIdentifierTypeZeroEsi = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ethernet-segment.load-balancing-mode.all-active"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/load-balancing-mode/all-active"); value.Exists() {
 		data.EthernetSegmentLoadBalancingModeAllActive = types.BoolValue(true)
 	} else {
-		data.EthernetSegmentLoadBalancingModeAllActive = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.EthernetSegmentLoadBalancingModeAllActive.IsNull() {
+			data.EthernetSegmentLoadBalancingModeAllActive = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "ethernet-segment.load-balancing-mode.port-active"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/load-balancing-mode/port-active"); value.Exists() {
 		data.EthernetSegmentLoadBalancingModePortActive = types.BoolValue(true)
 	} else {
-		data.EthernetSegmentLoadBalancingModePortActive = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.EthernetSegmentLoadBalancingModePortActive.IsNull() {
+			data.EthernetSegmentLoadBalancingModePortActive = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "ethernet-segment.load-balancing-mode.single-active"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/load-balancing-mode/single-active"); value.Exists() {
 		data.EthernetSegmentLoadBalancingModeSingleActive = types.BoolValue(true)
 	} else {
-		data.EthernetSegmentLoadBalancingModeSingleActive = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.EthernetSegmentLoadBalancingModeSingleActive.IsNull() {
+			data.EthernetSegmentLoadBalancingModeSingleActive = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "ethernet-segment.load-balancing-mode.single-flow-active"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/load-balancing-mode/single-flow-active"); value.Exists() {
 		data.EthernetSegmentLoadBalancingModeSingleFlowActive = types.BoolValue(true)
 	} else {
-		data.EthernetSegmentLoadBalancingModeSingleFlowActive = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() {
+			data.EthernetSegmentLoadBalancingModeSingleFlowActive = types.BoolNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *EVPNInterface) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "core-isolation-group"); value.Exists() {
+		data.CoreIsolationGroup = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "ethernet-segment.identifier.type.zero.esi"); value.Exists() {
+		data.EthernetSegmentIdentifierTypeZeroEsi = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "ethernet-segment.load-balancing-mode.all-active"); value.Exists() {
+		data.EthernetSegmentLoadBalancingModeAllActive = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "ethernet-segment.load-balancing-mode.port-active"); value.Exists() {
+		data.EthernetSegmentLoadBalancingModePortActive = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "ethernet-segment.load-balancing-mode.single-active"); value.Exists() {
+		data.EthernetSegmentLoadBalancingModeSingleActive = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "ethernet-segment.load-balancing-mode.single-flow-active"); value.Exists() {
+		data.EthernetSegmentLoadBalancingModeSingleFlowActive = types.BoolValue(true)
 	}
 }
 
@@ -198,52 +304,118 @@ func (data *EVPNInterface) fromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *EVPNInterfaceData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "core-isolation-group"); value.Exists() {
+func (data *EVPNInterfaceData) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "core-isolation-group"); value.Exists() {
 		data.CoreIsolationGroup = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "ethernet-segment.identifier.type.zero.esi"); value.Exists() {
+	if value := res.Get(prefix + "ethernet-segment.identifier.type.zero.esi"); value.Exists() {
 		data.EthernetSegmentIdentifierTypeZeroEsi = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "ethernet-segment.load-balancing-mode.all-active"); value.Exists() {
+	if value := res.Get(prefix + "ethernet-segment.load-balancing-mode.all-active"); value.Exists() {
+		data.EthernetSegmentLoadBalancingModeAllActive = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "ethernet-segment.load-balancing-mode.port-active"); value.Exists() {
+		data.EthernetSegmentLoadBalancingModePortActive = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "ethernet-segment.load-balancing-mode.single-active"); value.Exists() {
+		data.EthernetSegmentLoadBalancingModeSingleActive = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "ethernet-segment.load-balancing-mode.single-flow-active"); value.Exists() {
+		data.EthernetSegmentLoadBalancingModeSingleFlowActive = types.BoolValue(true)
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *EVPNInterface) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/core-isolation-group"); value.Exists() {
+		data.CoreIsolationGroup = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/identifier/type/zero/esi"); value.Exists() {
+		data.EthernetSegmentIdentifierTypeZeroEsi = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/load-balancing-mode/all-active"); value.Exists() {
+		data.EthernetSegmentLoadBalancingModeAllActive = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/load-balancing-mode/port-active"); value.Exists() {
+		data.EthernetSegmentLoadBalancingModePortActive = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/load-balancing-mode/single-active"); value.Exists() {
+		data.EthernetSegmentLoadBalancingModeSingleActive = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/load-balancing-mode/single-flow-active"); value.Exists() {
+		data.EthernetSegmentLoadBalancingModeSingleFlowActive = types.BoolValue(true)
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *EVPNInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/core-isolation-group"); value.Exists() {
+		data.CoreIsolationGroup = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/identifier/type/zero/esi"); value.Exists() {
+		data.EthernetSegmentIdentifierTypeZeroEsi = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/load-balancing-mode/all-active"); value.Exists() {
 		data.EthernetSegmentLoadBalancingModeAllActive = types.BoolValue(true)
 	} else {
 		data.EthernetSegmentLoadBalancingModeAllActive = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "ethernet-segment.load-balancing-mode.port-active"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/load-balancing-mode/port-active"); value.Exists() {
 		data.EthernetSegmentLoadBalancingModePortActive = types.BoolValue(true)
 	} else {
 		data.EthernetSegmentLoadBalancingModePortActive = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "ethernet-segment.load-balancing-mode.single-active"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/load-balancing-mode/single-active"); value.Exists() {
 		data.EthernetSegmentLoadBalancingModeSingleActive = types.BoolValue(true)
 	} else {
 		data.EthernetSegmentLoadBalancingModeSingleActive = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "ethernet-segment.load-balancing-mode.single-flow-active"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/load-balancing-mode/single-flow-active"); value.Exists() {
 		data.EthernetSegmentLoadBalancingModeSingleFlowActive = types.BoolValue(true)
 	} else {
 		data.EthernetSegmentLoadBalancingModeSingleFlowActive = types.BoolValue(false)
 	}
 }
 
-// End of section. //template:end fromBodyData
+// End of section. //template:end fromBodyDataXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *EVPNInterface) getDeletedItems(ctx context.Context, state EVPNInterface) []string {
 	deletedItems := make([]string, 0)
-	if !state.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() && data.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/single-flow-active", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() && state.EthernetSegmentLoadBalancingModeSingleFlowActive.ValueBool() {
+		if data.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() || !data.EthernetSegmentLoadBalancingModeSingleFlowActive.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/single-flow-active", state.getPath()))
+		}
 	}
-	if !state.EthernetSegmentLoadBalancingModeSingleActive.IsNull() && data.EthernetSegmentLoadBalancingModeSingleActive.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/single-active", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.EthernetSegmentLoadBalancingModeSingleActive.IsNull() && state.EthernetSegmentLoadBalancingModeSingleActive.ValueBool() {
+		if data.EthernetSegmentLoadBalancingModeSingleActive.IsNull() || !data.EthernetSegmentLoadBalancingModeSingleActive.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/single-active", state.getPath()))
+		}
 	}
-	if !state.EthernetSegmentLoadBalancingModePortActive.IsNull() && data.EthernetSegmentLoadBalancingModePortActive.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/port-active", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.EthernetSegmentLoadBalancingModePortActive.IsNull() && state.EthernetSegmentLoadBalancingModePortActive.ValueBool() {
+		if data.EthernetSegmentLoadBalancingModePortActive.IsNull() || !data.EthernetSegmentLoadBalancingModePortActive.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/port-active", state.getPath()))
+		}
 	}
-	if !state.EthernetSegmentLoadBalancingModeAllActive.IsNull() && data.EthernetSegmentLoadBalancingModeAllActive.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/all-active", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.EthernetSegmentLoadBalancingModeAllActive.IsNull() && state.EthernetSegmentLoadBalancingModeAllActive.ValueBool() {
+		if data.EthernetSegmentLoadBalancingModeAllActive.IsNull() || !data.EthernetSegmentLoadBalancingModeAllActive.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/all-active", state.getPath()))
+		}
 	}
 	if !state.EthernetSegmentIdentifierTypeZeroEsi.IsNull() && data.EthernetSegmentIdentifierTypeZeroEsi.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero", state.getPath()))
@@ -258,19 +430,31 @@ func (data *EVPNInterface) getDeletedItems(ctx context.Context, state EVPNInterf
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *EVPNInterface) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *EVPNInterface) getEmptyLeafsDelete(ctx context.Context, state *EVPNInterface) []string {
 	emptyLeafsDelete := make([]string, 0)
+	// Only delete if state has true and plan has false
 	if !data.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() && !data.EthernetSegmentLoadBalancingModeSingleFlowActive.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/single-flow-active", data.getPath()))
+		if state != nil && !state.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() && state.EthernetSegmentLoadBalancingModeSingleFlowActive.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/single-flow-active", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.EthernetSegmentLoadBalancingModeSingleActive.IsNull() && !data.EthernetSegmentLoadBalancingModeSingleActive.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/single-active", data.getPath()))
+		if state != nil && !state.EthernetSegmentLoadBalancingModeSingleActive.IsNull() && state.EthernetSegmentLoadBalancingModeSingleActive.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/single-active", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.EthernetSegmentLoadBalancingModePortActive.IsNull() && !data.EthernetSegmentLoadBalancingModePortActive.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/port-active", data.getPath()))
+		if state != nil && !state.EthernetSegmentLoadBalancingModePortActive.IsNull() && state.EthernetSegmentLoadBalancingModePortActive.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/port-active", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.EthernetSegmentLoadBalancingModeAllActive.IsNull() && !data.EthernetSegmentLoadBalancingModeAllActive.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/all-active", data.getPath()))
+		if state != nil && !state.EthernetSegmentLoadBalancingModeAllActive.IsNull() && state.EthernetSegmentLoadBalancingModeAllActive.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/all-active", data.getXPath()))
+		}
 	}
 	return emptyLeafsDelete
 }
@@ -299,7 +483,109 @@ func (data *EVPNInterface) getDeletePaths(ctx context.Context) []string {
 	if !data.CoreIsolationGroup.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/core-isolation-group", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *EVPNInterface) addDeletedItemsXML(ctx context.Context, state EVPNInterface, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() && state.EthernetSegmentLoadBalancingModeSingleFlowActive.ValueBool() && data.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() {
+		deletePath := state.getXPath() + "/ethernet-segment/load-balancing-mode/single-flow-active"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.EthernetSegmentLoadBalancingModeSingleActive.IsNull() && state.EthernetSegmentLoadBalancingModeSingleActive.ValueBool() && data.EthernetSegmentLoadBalancingModeSingleActive.IsNull() {
+		deletePath := state.getXPath() + "/ethernet-segment/load-balancing-mode/single-active"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.EthernetSegmentLoadBalancingModePortActive.IsNull() && state.EthernetSegmentLoadBalancingModePortActive.ValueBool() && data.EthernetSegmentLoadBalancingModePortActive.IsNull() {
+		deletePath := state.getXPath() + "/ethernet-segment/load-balancing-mode/port-active"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.EthernetSegmentLoadBalancingModeAllActive.IsNull() && state.EthernetSegmentLoadBalancingModeAllActive.ValueBool() && data.EthernetSegmentLoadBalancingModeAllActive.IsNull() {
+		deletePath := state.getXPath() + "/ethernet-segment/load-balancing-mode/all-active"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.EthernetSegmentIdentifierTypeZeroEsi.IsNull() && data.EthernetSegmentIdentifierTypeZeroEsi.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/ethernet-segment/identifier/type/zero"
+		predicates := make(map[string]string)
+		predicates["esi"] = fmt.Sprintf("%v", state.EthernetSegmentIdentifierTypeZeroEsi.ValueString())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.CoreIsolationGroup.IsNull() && data.CoreIsolationGroup.IsNull() {
+		deletePath := state.getXPath() + "/core-isolation-group"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *EVPNInterface) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ethernet-segment/load-balancing-mode/single-flow-active")
+	}
+	if !data.EthernetSegmentLoadBalancingModeSingleActive.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ethernet-segment/load-balancing-mode/single-active")
+	}
+	if !data.EthernetSegmentLoadBalancingModePortActive.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ethernet-segment/load-balancing-mode/port-active")
+	}
+	if !data.EthernetSegmentLoadBalancingModeAllActive.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ethernet-segment/load-balancing-mode/all-active")
+	}
+	if !data.EthernetSegmentIdentifierTypeZeroEsi.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ethernet-segment/identifier/type/zero")
+	}
+	if !data.CoreIsolationGroup.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/core-isolation-group")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

@@ -24,7 +24,11 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -59,6 +63,17 @@ func (data SNMPServerMIBData) getPath() string {
 	return "Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server-mibs"
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data SNMPServerMIB) getXPath() string {
+	path := "Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server-mibs"
+	return path
+}
+
+func (data SNMPServerMIBData) getXPath() string {
+	path := "Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server-mibs"
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -80,43 +95,87 @@ func (data SNMPServerMIB) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data SNMPServerMIB) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.IfmibIfaliasLong.IsNull() && !data.IfmibIfaliasLong.IsUnknown() {
+		if data.IfmibIfaliasLong.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long", "")
+		}
+	}
+	if !data.IfindexPersist.IsNull() && !data.IfindexPersist.IsUnknown() {
+		if data.IfindexPersist.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex/persist", "")
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *SNMPServerMIB) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.ifalias.long"); !data.IfmibIfaliasLong.IsNull() {
-		if value.Exists() {
-			data.IfmibIfaliasLong = types.BoolValue(true)
-		} else {
-			data.IfmibIfaliasLong = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.ifalias.long"); value.Exists() {
+		data.IfmibIfaliasLong = types.BoolValue(true)
+	} else if data.IfmibIfaliasLong.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.IfmibIfaliasLong = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex.persist"); !data.IfindexPersist.IsNull() {
-		if value.Exists() {
-			data.IfindexPersist = types.BoolValue(true)
-		} else {
-			data.IfindexPersist = types.BoolValue(false)
-		}
-	} else {
+	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex.persist"); value.Exists() {
+		data.IfindexPersist = types.BoolValue(true)
+	} else if data.IfindexPersist.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.IfindexPersist = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 }
 
 // End of section. //template:end updateFromBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
-func (data *SNMPServerMIB) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.ifalias.long"); value.Exists() {
+func (data *SNMPServerMIB) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long"); value.Exists() {
 		data.IfmibIfaliasLong = types.BoolValue(true)
 	} else {
-		data.IfmibIfaliasLong = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.IfmibIfaliasLong.IsNull() {
+			data.IfmibIfaliasLong = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex.persist"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex/persist"); value.Exists() {
 		data.IfindexPersist = types.BoolValue(true)
 	} else {
-		data.IfindexPersist = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.IfindexPersist.IsNull() {
+			data.IfindexPersist = types.BoolNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *SNMPServerMIB) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.ifalias.long"); value.Exists() {
+		data.IfmibIfaliasLong = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex.persist"); value.Exists() {
+		data.IfindexPersist = types.BoolValue(true)
 	}
 }
 
@@ -124,30 +183,66 @@ func (data *SNMPServerMIB) fromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *SNMPServerMIBData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.ifalias.long"); value.Exists() {
+func (data *SNMPServerMIBData) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.ifalias.long"); value.Exists() {
+		data.IfmibIfaliasLong = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex.persist"); value.Exists() {
+		data.IfindexPersist = types.BoolValue(true)
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *SNMPServerMIB) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long"); value.Exists() {
+		data.IfmibIfaliasLong = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex/persist"); value.Exists() {
+		data.IfindexPersist = types.BoolValue(true)
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *SNMPServerMIBData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long"); value.Exists() {
 		data.IfmibIfaliasLong = types.BoolValue(true)
 	} else {
 		data.IfmibIfaliasLong = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex.persist"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex/persist"); value.Exists() {
 		data.IfindexPersist = types.BoolValue(true)
 	} else {
 		data.IfindexPersist = types.BoolValue(false)
 	}
 }
 
-// End of section. //template:end fromBodyData
+// End of section. //template:end fromBodyDataXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *SNMPServerMIB) getDeletedItems(ctx context.Context, state SNMPServerMIB) []string {
 	deletedItems := make([]string, 0)
-	if !state.IfindexPersist.IsNull() && data.IfindexPersist.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex/persist", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.IfindexPersist.IsNull() && state.IfindexPersist.ValueBool() {
+		if data.IfindexPersist.IsNull() || !data.IfindexPersist.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex/persist", state.getPath()))
+		}
 	}
-	if !state.IfmibIfaliasLong.IsNull() && data.IfmibIfaliasLong.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.IfmibIfaliasLong.IsNull() && state.IfmibIfaliasLong.ValueBool() {
+		if data.IfmibIfaliasLong.IsNull() || !data.IfmibIfaliasLong.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long", state.getPath()))
+		}
 	}
 	return deletedItems
 }
@@ -156,13 +251,19 @@ func (data *SNMPServerMIB) getDeletedItems(ctx context.Context, state SNMPServer
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *SNMPServerMIB) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *SNMPServerMIB) getEmptyLeafsDelete(ctx context.Context, state *SNMPServerMIB) []string {
 	emptyLeafsDelete := make([]string, 0)
+	// Only delete if state has true and plan has false
 	if !data.IfindexPersist.IsNull() && !data.IfindexPersist.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex/persist", data.getPath()))
+		if state != nil && !state.IfindexPersist.IsNull() && state.IfindexPersist.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex/persist", data.getXPath()))
+		}
 	}
+	// Only delete if state has true and plan has false
 	if !data.IfmibIfaliasLong.IsNull() && !data.IfmibIfaliasLong.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long", data.getPath()))
+		if state != nil && !state.IfmibIfaliasLong.IsNull() && state.IfmibIfaliasLong.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long", data.getXPath()))
+		}
 	}
 	return emptyLeafsDelete
 }
@@ -179,7 +280,55 @@ func (data *SNMPServerMIB) getDeletePaths(ctx context.Context) []string {
 	if !data.IfmibIfaliasLong.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *SNMPServerMIB) addDeletedItemsXML(ctx context.Context, state SNMPServerMIB, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.IfindexPersist.IsNull() && state.IfindexPersist.ValueBool() && data.IfindexPersist.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex/persist"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.IfmibIfaliasLong.IsNull() && state.IfmibIfaliasLong.ValueBool() && data.IfmibIfaliasLong.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *SNMPServerMIB) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.IfindexPersist.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex/persist")
+	}
+	if !data.IfmibIfaliasLong.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

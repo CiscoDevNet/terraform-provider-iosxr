@@ -26,6 +26,9 @@ import (
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -67,6 +70,19 @@ func (data ClassMapQoS) getPath() string {
 
 func (data ClassMapQoSData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-policymap-classmap-cfg:/class-map/type/qos[class-map-name=%s]", data.ClassMapName.ValueString())
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data ClassMapQoS) getXPath() string {
+	path := "Cisco-IOS-XR-um-policymap-classmap-cfg:/class-map/type/qos[class-map-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.ClassMapName.ValueString()))
+	return path
+}
+
+func (data ClassMapQoSData) getXPath() string {
+	path := "Cisco-IOS-XR-um-policymap-classmap-cfg:/class-map/type/qos[class-map-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.ClassMapName.ValueString()))
+	return path
 }
 
 // End of section. //template:end getPath
@@ -111,18 +127,68 @@ func (data ClassMapQoS) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data ClassMapQoS) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.ClassMapName.IsNull() && !data.ClassMapName.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/class-map-name", data.ClassMapName.ValueString())
+	}
+	if !data.MatchAny.IsNull() && !data.MatchAny.IsUnknown() {
+		if data.MatchAny.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/match-any", "")
+		}
+	}
+	if !data.Description.IsNull() && !data.Description.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/description", data.Description.ValueString())
+	}
+	if !data.MatchDscp.IsNull() && !data.MatchDscp.IsUnknown() {
+		var values []string
+		data.MatchDscp.ElementsAs(ctx, &values, false)
+		for _, v := range values {
+			body = helpers.AppendFromXPath(body, data.getXPath()+"/match/dscp/value", v)
+		}
+	}
+	if !data.MatchMplsExperimentalTopmost.IsNull() && !data.MatchMplsExperimentalTopmost.IsUnknown() {
+		var values []int
+		data.MatchMplsExperimentalTopmost.ElementsAs(ctx, &values, false)
+		for _, v := range values {
+			body = helpers.AppendFromXPath(body, data.getXPath()+"/match/mpls/experimental/topmost/label", v)
+		}
+	}
+	if !data.MatchQosGroup.IsNull() && !data.MatchQosGroup.IsUnknown() {
+		var values []string
+		data.MatchQosGroup.ElementsAs(ctx, &values, false)
+		for _, v := range values {
+			body = helpers.AppendFromXPath(body, data.getXPath()+"/match/qos-group/id", v)
+		}
+	}
+	if !data.MatchTrafficClass.IsNull() && !data.MatchTrafficClass.IsUnknown() {
+		var values []string
+		data.MatchTrafficClass.ElementsAs(ctx, &values, false)
+		for _, v := range values {
+			body = helpers.AppendFromXPath(body, data.getXPath()+"/match/traffic-class/id", v)
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *ClassMapQoS) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "match-any"); !data.MatchAny.IsNull() {
-		if value.Exists() {
-			data.MatchAny = types.BoolValue(true)
-		} else {
-			data.MatchAny = types.BoolValue(false)
-		}
-	} else {
+	if value := gjson.GetBytes(res, "match-any"); value.Exists() {
+		data.MatchAny = types.BoolValue(true)
+	} else if data.MatchAny.IsNull() {
+		// If currently null, keep as null (field not in config)
 		data.MatchAny = types.BoolNull()
 	}
+	// else: preserve existing value (e.g., false from config)
 	if value := gjson.GetBytes(res, "description"); value.Exists() && !data.Description.IsNull() {
 		data.Description = types.StringValue(value.String())
 	} else {
@@ -152,33 +218,81 @@ func (data *ClassMapQoS) updateFromBody(ctx context.Context, res []byte) {
 
 // End of section. //template:end updateFromBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
-func (data *ClassMapQoS) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "match-any"); value.Exists() {
+func (data *ClassMapQoS) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/class-map-name"); value.Exists() {
+		data.ClassMapName = types.StringValue(value.String())
+	} else if data.ClassMapName.IsNull() {
+		data.ClassMapName = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match-any"); value.Exists() {
 		data.MatchAny = types.BoolValue(true)
 	} else {
-		data.MatchAny = types.BoolValue(false)
+		// If config has false and device doesn't have the field, keep false (don't set to null)
+		// Only set to null if it was already null
+		if data.MatchAny.IsNull() {
+			data.MatchAny = types.BoolNull()
+		}
 	}
-	if value := gjson.GetBytes(res, "description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
+	} else if data.Description.IsNull() {
+		data.Description = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/dscp/value"); value.Exists() {
+		data.MatchDscp = helpers.GetStringListXML(value.Array())
+	} else {
+		data.MatchDscp = types.ListNull(types.StringType)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/mpls/experimental/topmost/label"); value.Exists() {
+		data.MatchMplsExperimentalTopmost = helpers.GetInt64ListXML(value.Array())
+	} else {
+		data.MatchMplsExperimentalTopmost = types.ListNull(types.Int64Type)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/qos-group/id"); value.Exists() {
+		data.MatchQosGroup = helpers.GetStringListXML(value.Array())
+	} else {
+		data.MatchQosGroup = types.ListNull(types.StringType)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/traffic-class/id"); value.Exists() {
+		data.MatchTrafficClass = helpers.GetStringListXML(value.Array())
+	} else {
+		data.MatchTrafficClass = types.ListNull(types.StringType)
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *ClassMapQoS) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "match-any"); value.Exists() {
+		data.MatchAny = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "match.dscp.value"); value.Exists() {
+	if value := res.Get(prefix + "match.dscp.value"); value.Exists() {
 		data.MatchDscp = helpers.GetStringList(value.Array())
 	} else {
 		data.MatchDscp = types.ListNull(types.StringType)
 	}
-	if value := gjson.GetBytes(res, "match.mpls.experimental.topmost.label"); value.Exists() {
+	if value := res.Get(prefix + "match.mpls.experimental.topmost.label"); value.Exists() {
 		data.MatchMplsExperimentalTopmost = helpers.GetInt64List(value.Array())
 	} else {
 		data.MatchMplsExperimentalTopmost = types.ListNull(types.Int64Type)
 	}
-	if value := gjson.GetBytes(res, "match.qos-group.id"); value.Exists() {
+	if value := res.Get(prefix + "match.qos-group.id"); value.Exists() {
 		data.MatchQosGroup = helpers.GetStringList(value.Array())
 	} else {
 		data.MatchQosGroup = types.ListNull(types.StringType)
 	}
-	if value := gjson.GetBytes(res, "match.traffic-class.id"); value.Exists() {
+	if value := res.Get(prefix + "match.traffic-class.id"); value.Exists() {
 		data.MatchTrafficClass = helpers.GetStringList(value.Array())
 	} else {
 		data.MatchTrafficClass = types.ListNull(types.StringType)
@@ -189,31 +303,33 @@ func (data *ClassMapQoS) fromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *ClassMapQoSData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "match-any"); value.Exists() {
-		data.MatchAny = types.BoolValue(true)
-	} else {
-		data.MatchAny = types.BoolValue(false)
+func (data *ClassMapQoSData) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
 	}
-	if value := gjson.GetBytes(res, "description"); value.Exists() {
+	if value := res.Get(prefix + "match-any"); value.Exists() {
+		data.MatchAny = types.BoolValue(true)
+	}
+	if value := res.Get(prefix + "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "match.dscp.value"); value.Exists() {
+	if value := res.Get(prefix + "match.dscp.value"); value.Exists() {
 		data.MatchDscp = helpers.GetStringList(value.Array())
 	} else {
 		data.MatchDscp = types.ListNull(types.StringType)
 	}
-	if value := gjson.GetBytes(res, "match.mpls.experimental.topmost.label"); value.Exists() {
+	if value := res.Get(prefix + "match.mpls.experimental.topmost.label"); value.Exists() {
 		data.MatchMplsExperimentalTopmost = helpers.GetInt64List(value.Array())
 	} else {
 		data.MatchMplsExperimentalTopmost = types.ListNull(types.Int64Type)
 	}
-	if value := gjson.GetBytes(res, "match.qos-group.id"); value.Exists() {
+	if value := res.Get(prefix + "match.qos-group.id"); value.Exists() {
 		data.MatchQosGroup = helpers.GetStringList(value.Array())
 	} else {
 		data.MatchQosGroup = types.ListNull(types.StringType)
 	}
-	if value := gjson.GetBytes(res, "match.traffic-class.id"); value.Exists() {
+	if value := res.Get(prefix + "match.traffic-class.id"); value.Exists() {
 		data.MatchTrafficClass = helpers.GetStringList(value.Array())
 	} else {
 		data.MatchTrafficClass = types.ListNull(types.StringType)
@@ -221,6 +337,74 @@ func (data *ClassMapQoSData) fromBody(ctx context.Context, res []byte) {
 }
 
 // End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *ClassMapQoS) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match-any"); value.Exists() {
+		data.MatchAny = types.BoolValue(true)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/dscp/value"); value.Exists() {
+		data.MatchDscp = helpers.GetStringListXML(value.Array())
+	} else {
+		data.MatchDscp = types.ListNull(types.StringType)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/mpls/experimental/topmost/label"); value.Exists() {
+		data.MatchMplsExperimentalTopmost = helpers.GetInt64ListXML(value.Array())
+	} else {
+		data.MatchMplsExperimentalTopmost = types.ListNull(types.Int64Type)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/qos-group/id"); value.Exists() {
+		data.MatchQosGroup = helpers.GetStringListXML(value.Array())
+	} else {
+		data.MatchQosGroup = types.ListNull(types.StringType)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/traffic-class/id"); value.Exists() {
+		data.MatchTrafficClass = helpers.GetStringListXML(value.Array())
+	} else {
+		data.MatchTrafficClass = types.ListNull(types.StringType)
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *ClassMapQoSData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match-any"); value.Exists() {
+		data.MatchAny = types.BoolValue(true)
+	} else {
+		data.MatchAny = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/dscp/value"); value.Exists() {
+		data.MatchDscp = helpers.GetStringListXML(value.Array())
+	} else {
+		data.MatchDscp = types.ListNull(types.StringType)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/mpls/experimental/topmost/label"); value.Exists() {
+		data.MatchMplsExperimentalTopmost = helpers.GetInt64ListXML(value.Array())
+	} else {
+		data.MatchMplsExperimentalTopmost = types.ListNull(types.Int64Type)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/qos-group/id"); value.Exists() {
+		data.MatchQosGroup = helpers.GetStringListXML(value.Array())
+	} else {
+		data.MatchQosGroup = types.ListNull(types.StringType)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/traffic-class/id"); value.Exists() {
+		data.MatchTrafficClass = helpers.GetStringListXML(value.Array())
+	} else {
+		data.MatchTrafficClass = types.ListNull(types.StringType)
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
@@ -241,8 +425,11 @@ func (data *ClassMapQoS) getDeletedItems(ctx context.Context, state ClassMapQoS)
 	if !state.Description.IsNull() && data.Description.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/description", state.getPath()))
 	}
-	if !state.MatchAny.IsNull() && data.MatchAny.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/match-any", state.getPath()))
+	// For presence-based booleans, delete if going from true to false or to null
+	if !state.MatchAny.IsNull() && state.MatchAny.ValueBool() {
+		if data.MatchAny.IsNull() || !data.MatchAny.ValueBool() {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/match-any", state.getPath()))
+		}
 	}
 	return deletedItems
 }
@@ -251,10 +438,13 @@ func (data *ClassMapQoS) getDeletedItems(ctx context.Context, state ClassMapQoS)
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *ClassMapQoS) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *ClassMapQoS) getEmptyLeafsDelete(ctx context.Context, state *ClassMapQoS) []string {
 	emptyLeafsDelete := make([]string, 0)
+	// Only delete if state has true and plan has false
 	if !data.MatchAny.IsNull() && !data.MatchAny.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/match-any", data.getPath()))
+		if state != nil && !state.MatchAny.IsNull() && state.MatchAny.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/match-any", data.getXPath()))
+		}
 	}
 	return emptyLeafsDelete
 }
@@ -283,7 +473,182 @@ func (data *ClassMapQoS) getDeletePaths(ctx context.Context) []string {
 	if !data.MatchAny.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/match-any", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *ClassMapQoS) addDeletedItemsXML(ctx context.Context, state ClassMapQoS, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.MatchTrafficClass.IsNull() {
+		if data.MatchTrafficClass.IsNull() {
+			var values []string
+			state.MatchTrafficClass.ElementsAs(ctx, &values, false)
+			for _, v := range values {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/traffic-class/id[.=%v]", v))
+			}
+		} else {
+			var dataValues, stateValues []string
+			data.MatchTrafficClass.ElementsAs(ctx, &dataValues, false)
+			state.MatchTrafficClass.ElementsAs(ctx, &stateValues, false)
+			for _, v := range stateValues {
+				found := false
+				for _, vv := range dataValues {
+					if v == vv {
+						found = true
+						break
+					}
+				}
+				if !found {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/traffic-class/id[.=%v]", v))
+				}
+			}
+		}
+	}
+	if !state.MatchQosGroup.IsNull() {
+		if data.MatchQosGroup.IsNull() {
+			var values []string
+			state.MatchQosGroup.ElementsAs(ctx, &values, false)
+			for _, v := range values {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/qos-group/id[.=%v]", v))
+			}
+		} else {
+			var dataValues, stateValues []string
+			data.MatchQosGroup.ElementsAs(ctx, &dataValues, false)
+			state.MatchQosGroup.ElementsAs(ctx, &stateValues, false)
+			for _, v := range stateValues {
+				found := false
+				for _, vv := range dataValues {
+					if v == vv {
+						found = true
+						break
+					}
+				}
+				if !found {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/qos-group/id[.=%v]", v))
+				}
+			}
+		}
+	}
+	if !state.MatchMplsExperimentalTopmost.IsNull() {
+		if data.MatchMplsExperimentalTopmost.IsNull() {
+			var values []string
+			state.MatchMplsExperimentalTopmost.ElementsAs(ctx, &values, false)
+			for _, v := range values {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/mpls/experimental/topmost/label[.=%v]", v))
+			}
+		} else {
+			var dataValues, stateValues []int
+			data.MatchMplsExperimentalTopmost.ElementsAs(ctx, &dataValues, false)
+			state.MatchMplsExperimentalTopmost.ElementsAs(ctx, &stateValues, false)
+			for _, v := range stateValues {
+				found := false
+				for _, vv := range dataValues {
+					if v == vv {
+						found = true
+						break
+					}
+				}
+				if !found {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/mpls/experimental/topmost/label[.=%v]", v))
+				}
+			}
+		}
+	}
+	if !state.MatchDscp.IsNull() {
+		if data.MatchDscp.IsNull() {
+			var values []string
+			state.MatchDscp.ElementsAs(ctx, &values, false)
+			for _, v := range values {
+				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/dscp/value[.=%v]", v))
+			}
+		} else {
+			var dataValues, stateValues []string
+			data.MatchDscp.ElementsAs(ctx, &dataValues, false)
+			state.MatchDscp.ElementsAs(ctx, &stateValues, false)
+			for _, v := range stateValues {
+				found := false
+				for _, vv := range dataValues {
+					if v == vv {
+						found = true
+						break
+					}
+				}
+				if !found {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/dscp/value[.=%v]", v))
+				}
+			}
+		}
+	}
+	if !state.Description.IsNull() && data.Description.IsNull() {
+		deletePath := state.getXPath() + "/description"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.MatchAny.IsNull() && state.MatchAny.ValueBool() && data.MatchAny.IsNull() {
+		deletePath := state.getXPath() + "/match-any"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *ClassMapQoS) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.MatchTrafficClass.IsNull() {
+		var values []string
+		data.MatchTrafficClass.ElementsAs(ctx, &values, false)
+		for _, v := range values {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/match/traffic-class/id[.=%v]", v))
+		}
+	}
+	if !data.MatchQosGroup.IsNull() {
+		var values []string
+		data.MatchQosGroup.ElementsAs(ctx, &values, false)
+		for _, v := range values {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/match/qos-group/id[.=%v]", v))
+		}
+	}
+	if !data.MatchMplsExperimentalTopmost.IsNull() {
+		var values []int64
+		data.MatchMplsExperimentalTopmost.ElementsAs(ctx, &values, false)
+		for _, v := range values {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/match/mpls/experimental/topmost/label[.=%v]", v))
+		}
+	}
+	if !data.MatchDscp.IsNull() {
+		var values []string
+		data.MatchDscp.ElementsAs(ctx, &values, false)
+		for _, v := range values {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/match/dscp/value[.=%v]", v))
+		}
+	}
+	if !data.Description.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/description")
+	}
+	if !data.MatchAny.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/match-any")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

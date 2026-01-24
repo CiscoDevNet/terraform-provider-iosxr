@@ -21,10 +21,12 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 // End of section. //template:end imports
@@ -58,6 +60,12 @@ func TestAccIosxrRouterStaticVRFIPv4Unicast(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_unicast.test", "nexthop_addresses.0.distance_metric", "155"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_unicast.test", "nexthop_addresses.0.track", "TRACK1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_unicast.test", "nexthop_addresses.0.metric", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_unicast.test", "sr_policies.0.sr_policy_name", "sr_te_policy_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_unicast.test", "sr_policies.0.description", "interface-description"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_unicast.test", "sr_policies.0.tag", "103"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_unicast.test", "sr_policies.0.distance_metric", "144"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_unicast.test", "sr_policies.0.track", "TRACK1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_unicast.test", "sr_policies.0.metric", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_unicast.test", "vrfs.0.vrf_name", "VRF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_unicast.test", "vrfs.0.nexthop_interfaces.0.interface_name", "GigabitEthernet0/0/0/3"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_unicast.test", "vrfs.0.nexthop_interfaces.0.description", "interface-description"))
@@ -82,6 +90,12 @@ func TestAccIosxrRouterStaticVRFIPv4Unicast(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_unicast.test", "vrfs.0.nexthop_addresses.0.distance_metric", "155"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_unicast.test", "vrfs.0.nexthop_addresses.0.track", "TRACK1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_unicast.test", "vrfs.0.nexthop_addresses.0.metric", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_unicast.test", "vrfs.0.sr_policies.0.sr_policy_name", "sr_te_policy_2"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_unicast.test", "vrfs.0.sr_policies.0.description", "interface-description"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_unicast.test", "vrfs.0.sr_policies.0.tag", "103"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_unicast.test", "vrfs.0.sr_policies.0.distance_metric", "144"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_unicast.test", "vrfs.0.sr_policies.0.track", "TRACK1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_unicast.test", "vrfs.0.sr_policies.0.metric", "10"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -160,6 +174,14 @@ func testAccIosxrRouterStaticVRFIPv4UnicastConfig_all() string {
 	config += `		track = "TRACK1"` + "\n"
 	config += `		metric = 10` + "\n"
 	config += `		}]` + "\n"
+	config += `	sr_policies = [{` + "\n"
+	config += `		sr_policy_name = "sr_te_policy_1"` + "\n"
+	config += `		description = "interface-description"` + "\n"
+	config += `		tag = 103` + "\n"
+	config += `		distance_metric = 144` + "\n"
+	config += `		track = "TRACK1"` + "\n"
+	config += `		metric = 10` + "\n"
+	config += `		}]` + "\n"
 	config += `	vrfs = [{` + "\n"
 	config += `		vrf_name = "VRF1"` + "\n"
 	config += `		nexthop_interfaces = [{` + "\n"
@@ -191,6 +213,14 @@ func testAccIosxrRouterStaticVRFIPv4UnicastConfig_all() string {
 	config += `			track = "TRACK1"` + "\n"
 	config += `			metric = 10` + "\n"
 	config += `		}]` + "\n"
+	config += `		sr_policies = [{` + "\n"
+	config += `			sr_policy_name = "sr_te_policy_2"` + "\n"
+	config += `			description = "interface-description"` + "\n"
+	config += `			tag = 103` + "\n"
+	config += `			distance_metric = 144` + "\n"
+	config += `			track = "TRACK1"` + "\n"
+	config += `			metric = 10` + "\n"
+	config += `		}]` + "\n"
 	config += `		}]` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
@@ -198,3 +228,29 @@ func testAccIosxrRouterStaticVRFIPv4UnicastConfig_all() string {
 }
 
 // End of section. //template:end testAccConfigAll
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrRouterStaticVRFIPv4UnicastImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		VrfName := primary.Attributes["vrf_name"]
+		PrefixAddress := primary.Attributes["prefix_address"]
+		PrefixLength := primary.Attributes["prefix_length"]
+
+		return fmt.Sprintf("%s,%s,%s", VrfName, PrefixAddress, PrefixLength), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccIosxrRouterStaticVRFIPv4UnicastPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-static-cfg:/router/static/vrfs/vrf[vrf-name=VRF2]"
+	attributes = {
+		"vrf-name" = "VRF2"
+	}
+}
+
+`
+
+// End of section. //template:end testPrerequisites

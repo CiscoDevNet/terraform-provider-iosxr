@@ -20,8 +20,233 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+import (
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
 
 // End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
+
+func TestAccDataSourceIosxrRouterOSPFVRF(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "domain_id_type", "0005"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "domain_id_value", "000000001111"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "domain_id_secondaries.0.type", "0105"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "domain_id_secondaries.0.value", "001122334455"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "domain_tag", "65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "disable_dn_bit_check", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "log_adjacency_changes_detail", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "router_id", "10.11.12.13"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_connected", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_connected_tag", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_connected_metric_type", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_connected_route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_connected_metric", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_connected_lsa_type_summary", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_connected_nssa_only", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_static", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_static_tag", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_static_metric_type", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_static_route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_static_metric_use_rib_metric", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_static_lsa_type_summary", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_static_nssa_only", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_bgp.0.as_number", "65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_bgp.0.tag", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_bgp.0.metric_type", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_bgp.0.route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_bgp.0.preserve_med", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_bgp.0.metric", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_bgp.0.lsa_type_summary", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_bgp.0.nssa_only", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_isis.0.instance_name", "P1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_isis.0.level_1_2", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_isis.0.tag", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_isis.0.metric_type", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_isis.0.route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_isis.0.metric", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_isis.0.lsa_type_summary", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_isis.0.nssa_only", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_ospf.0.instance_name", "OSPF2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_ospf.0.tag", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_ospf.0.metric_type", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_ospf.0.route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_ospf.0.match_internal", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_ospf.0.match_external_two", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_ospf.0.match_nssa_external_two", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_ospf.0.metric", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_ospf.0.lsa_type_summary", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "redistribute_ospf.0.nssa_only", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "distribute_list_in_acl", "ACL_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "distribute_list_out_acl", "ACL_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "distribute_list_out_connected_acl", "ACL_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "distribute_list_out_static_acl", "ACL_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "distribute_list_out_bgp_as", "65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "distribute_list_out_bgp_acl", "ACL_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "distribute_list_out_ospf_instance_name", "OSPF2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "distribute_list_out_ospf_acl", "ACL_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "packet_size", "1400"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "bfd_fast_detect", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "bfd_fast_detect_strict_mode", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "bfd_minimum_interval", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "bfd_multiplier", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "security_ttl", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "security_ttl_hops", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "prefix_suppression", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "prefix_suppression_secondary_address", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "default_information_originate_always", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "default_information_originate_metric", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "default_information_originate_metric_type", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "default_information_originate_route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "default_metric", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "distance_sources.0.address", "192.168.1.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "distance_sources.0.wildcard", "0.0.0.255"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "distance_sources.0.distance", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "distance_sources.0.acl", "ACL_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "distance_ospf_intra_area", "101"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "distance_ospf_inter_area", "102"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "distance_ospf_external", "103"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "auto_cost_reference_bandwidth", "100000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "auto_cost_disable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "ignore_lsa_mospf", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "capability_type7_prefer", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_metric_router_lsa", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_metric_router_lsa_include_stub", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_metric_router_lsa_summary_lsa", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_metric_router_lsa_summary_lsa_metric", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_metric_router_lsa_external_lsa", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_metric_router_lsa_external_lsa_metric", "2000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_metric_router_lsa_on_startup_time", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_metric_router_lsa_on_startup_include_stub", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_metric_router_lsa_on_startup_summary_lsa", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_metric_router_lsa_on_startup_summary_lsa_metric", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_metric_router_lsa_on_startup_external_lsa", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_metric_router_lsa_on_startup_external_lsa_metric", "2000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_metric_router_lsa_on_switchover_time", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_metric_router_lsa_on_switchover_include_stub", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_metric_router_lsa_on_switchover_summary_lsa", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_metric_router_lsa_on_switchover_summary_lsa_metric", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_metric_router_lsa_on_switchover_external_lsa", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_metric_router_lsa_on_switchover_external_lsa_metric", "2000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_metric_router_lsa_on_proc_restart_time", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_metric_router_lsa_on_proc_restart_include_stub", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_metric_router_lsa_on_proc_restart_summary_lsa", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_metric_router_lsa_on_proc_restart_summary_lsa_metric", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_metric_router_lsa_on_proc_restart_external_lsa", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_metric_router_lsa_on_proc_restart_external_lsa_metric", "2000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_lsa", "20000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_lsa_threshold", "75"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_lsa_ignore_time", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_lsa_ignore_count", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_lsa_reset_time", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "timers_throttle_spf_initial_delay", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "timers_throttle_spf_second_delay", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "timers_throttle_spf_maximum_delay", "2000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "timers_throttle_lsa_all_initial_delay", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "timers_throttle_lsa_all_minimum_delay", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "timers_throttle_lsa_all_maximum_delay", "2000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "timers_throttle_fast_reroute", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "timers_lsa_group_pacing", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "timers_lsa_min_arrival", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "timers_lsa_refresh", "2100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "timers_pacing_flood", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "nsf_interval", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "nsf_lifetime", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "nsf_flush_delay_time", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "nsf_ietf", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "nsf_ietf_strict_lsa_checking", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "nsf_ietf_helper_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "address_family_ipv4_unicast", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "maximum_interfaces", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "maximum_paths", "16"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "maximum_redistributed_prefixes", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "maximum_redistributed_prefixes_threshold", "75"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "maximum_redistributed_prefixes_warning_only", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "queue_limit_high", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "queue_limit_medium", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "queue_limit_low", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "queue_dispatch_incoming", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "queue_dispatch_rate_limited_lsa", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "queue_dispatch_flush_lsa", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "queue_dispatch_spf_lsa_limit", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "summary_prefixes.0.address", "192.168.1.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "summary_prefixes.0.mask", "255.255.255.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "summary_prefixes.0.not_advertise", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "spf_prefix_priority_route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "fast_reroute_per_prefix", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "fast_reroute_per_prefix_priority_limit_medium", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "fast_reroute_per_prefix_tiebreaker_downstream_index", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "fast_reroute_per_prefix_tiebreaker_lc_disjoint_index", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_index", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "fast_reroute_per_prefix_tiebreaker_node_protecting_index", "40"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "fast_reroute_per_prefix_tiebreaker_primary_path_index", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "fast_reroute_per_prefix_tiebreaker_secondary_path_index", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "fast_reroute_per_prefix_tiebreaker_interface_disjoint_index", "70"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index", "80"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "fast_reroute_per_prefix_load_sharing_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "fast_reroute_per_prefix_exclude_interfaces.0.interface_name", "GigabitEthernet0/0/0/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "fast_reroute_per_prefix_lfa_candidate_interfaces.0.interface_name", "GigabitEthernet0/0/0/2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "fast_reroute_per_prefix_use_candidate_only_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "fast_reroute_per_link_priority_limit_medium", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "fast_reroute_per_link_exclude_interfaces.0.interface_name", "GigabitEthernet0/0/0/3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "fast_reroute_per_link_lfa_candidate_interfaces.0.interface_name", "GigabitEthernet0/0/0/4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "fast_reroute_per_link_use_candidate_only_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "loopback_stub_network_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "link_down_fast_detect", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "weight", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "microloop_avoidance", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "microloop_avoidance_segment_routing", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "microloop_avoidance_rib_update_delay", "3000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "message_digest_keys.0.key_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "authentication", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "authentication_message_digest", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "authentication_keychain_name", "KEY1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "network_point_to_point", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "mpls_ldp_sync", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "cost", "5000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "cost_fallback_anomaly_delay_igp_metric_value", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "cost_fallback_anomaly_delay_te_metric_value", "600"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "hello_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "dead_interval", "40"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "priority", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "retransmit_interval", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "transmit_delay", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "flood_reduction_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "demand_circuit_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "mtu_ignore_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "database_filter_all_out_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "passive_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "external_out_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "summary_in_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "adjacency_stagger_initial_neighbors", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "adjacency_stagger_simultaneous_neighbors", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "snmp_context", "CONTEXT1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "snmp_trap", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "ucmp_prefix_list", "PREFIX_LIST_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "ucmp_exclude_interfaces.0.interface_name", "GigabitEthernet0/0/0/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "ucmp_delay_interval", "2000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_external_lsa", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_external_lsa_threshold", "75"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "max_external_lsa_suppress_neighbor", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "exchange_timer", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "exchange_timer_hold_time", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf.test", "exchange_timer_recovery_count", "10"))
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { testAccPreCheck(t) },
+		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccDataSourceIosxrRouterOSPFVRFPrerequisitesConfig + testAccDataSourceIosxrRouterOSPFVRFConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
+			},
+		},
+	})
+}
+
+// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRouterOSPFVRFPrerequisitesConfig = `
@@ -32,6 +257,265 @@ resource "iosxr_gnmi" "PreReq0" {
 	}
 }
 
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
+	attributes = {
+		"route-policy-name" = "ROUTE_POLICY_1"
+		"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
+	}
+	depends_on = [iosxr_gnmi.PreReq0, ]
+}
+
 `
 
 // End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
+
+func testAccDataSourceIosxrRouterOSPFVRFConfig() string {
+	config := `resource "iosxr_router_ospf_vrf" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	process_name = "OSPF1"` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	domain_id_type = "0005"` + "\n"
+	config += `	domain_id_value = "000000001111"` + "\n"
+	config += `	domain_id_secondaries = [{` + "\n"
+	config += `		type = "0105"` + "\n"
+	config += `		value = "001122334455"` + "\n"
+	config += `	}]` + "\n"
+	config += `	domain_tag = 65001` + "\n"
+	config += `	disable_dn_bit_check = true` + "\n"
+	config += `	log_adjacency_changes_detail = true` + "\n"
+	config += `	router_id = "10.11.12.13"` + "\n"
+	config += `	redistribute_connected = true` + "\n"
+	config += `	redistribute_connected_tag = 1` + "\n"
+	config += `	redistribute_connected_metric_type = "1"` + "\n"
+	config += `	redistribute_connected_route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `	redistribute_connected_metric = 100` + "\n"
+	config += `	redistribute_connected_lsa_type_summary = true` + "\n"
+	config += `	redistribute_connected_nssa_only = true` + "\n"
+	config += `	redistribute_static = true` + "\n"
+	config += `	redistribute_static_tag = 2` + "\n"
+	config += `	redistribute_static_metric_type = "1"` + "\n"
+	config += `	redistribute_static_route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `	redistribute_static_metric_use_rib_metric = true` + "\n"
+	config += `	redistribute_static_lsa_type_summary = true` + "\n"
+	config += `	redistribute_static_nssa_only = true` + "\n"
+	config += `	redistribute_bgp = [{` + "\n"
+	config += `		as_number = "65001"` + "\n"
+	config += `		tag = 3` + "\n"
+	config += `		metric_type = "1"` + "\n"
+	config += `		route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `		preserve_med = true` + "\n"
+	config += `		metric = 100` + "\n"
+	config += `		lsa_type_summary = true` + "\n"
+	config += `		nssa_only = true` + "\n"
+	config += `	}]` + "\n"
+	config += `	redistribute_isis = [{` + "\n"
+	config += `		instance_name = "P1"` + "\n"
+	config += `		level_1_2 = true` + "\n"
+	config += `		tag = 3` + "\n"
+	config += `		metric_type = "1"` + "\n"
+	config += `		route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `		metric = 100` + "\n"
+	config += `		lsa_type_summary = true` + "\n"
+	config += `		nssa_only = true` + "\n"
+	config += `	}]` + "\n"
+	config += `	redistribute_ospf = [{` + "\n"
+	config += `		instance_name = "OSPF2"` + "\n"
+	config += `		tag = 4` + "\n"
+	config += `		metric_type = "1"` + "\n"
+	config += `		route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `		match_internal = true` + "\n"
+	config += `		match_external_two = true` + "\n"
+	config += `		match_nssa_external_two = true` + "\n"
+	config += `		metric = 100` + "\n"
+	config += `		lsa_type_summary = true` + "\n"
+	config += `		nssa_only = true` + "\n"
+	config += `	}]` + "\n"
+	config += `	distribute_list_in_acl = "ACL_1"` + "\n"
+	config += `	distribute_list_out_acl = "ACL_1"` + "\n"
+	config += `	distribute_list_out_connected_acl = "ACL_1"` + "\n"
+	config += `	distribute_list_out_static_acl = "ACL_1"` + "\n"
+	config += `	distribute_list_out_bgp_as = "65001"` + "\n"
+	config += `	distribute_list_out_bgp_acl = "ACL_1"` + "\n"
+	config += `	distribute_list_out_ospf_instance_name = "OSPF2"` + "\n"
+	config += `	distribute_list_out_ospf_acl = "ACL_1"` + "\n"
+	config += `	packet_size = 1400` + "\n"
+	config += `	bfd_fast_detect = true` + "\n"
+	config += `	bfd_fast_detect_strict_mode = true` + "\n"
+	config += `	bfd_minimum_interval = 300` + "\n"
+	config += `	bfd_multiplier = 3` + "\n"
+	config += `	security_ttl = true` + "\n"
+	config += `	security_ttl_hops = 10` + "\n"
+	config += `	prefix_suppression = true` + "\n"
+	config += `	prefix_suppression_secondary_address = true` + "\n"
+	config += `	default_information_originate_always = true` + "\n"
+	config += `	default_information_originate_metric = 100` + "\n"
+	config += `	default_information_originate_metric_type = 1` + "\n"
+	config += `	default_information_originate_route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `	default_metric = 1000` + "\n"
+	config += `	distance_sources = [{` + "\n"
+	config += `		address = "192.168.1.0"` + "\n"
+	config += `		wildcard = "0.0.0.255"` + "\n"
+	config += `		distance = 100` + "\n"
+	config += `		acl = "ACL_1"` + "\n"
+	config += `	}]` + "\n"
+	config += `	distance_ospf_intra_area = 101` + "\n"
+	config += `	distance_ospf_inter_area = 102` + "\n"
+	config += `	distance_ospf_external = 103` + "\n"
+	config += `	auto_cost_reference_bandwidth = 100000` + "\n"
+	config += `	auto_cost_disable = false` + "\n"
+	config += `	ignore_lsa_mospf = true` + "\n"
+	config += `	capability_type7_prefer = true` + "\n"
+	config += `	max_metric_router_lsa = true` + "\n"
+	config += `	max_metric_router_lsa_include_stub = true` + "\n"
+	config += `	max_metric_router_lsa_summary_lsa = true` + "\n"
+	config += `	max_metric_router_lsa_summary_lsa_metric = 1000` + "\n"
+	config += `	max_metric_router_lsa_external_lsa = true` + "\n"
+	config += `	max_metric_router_lsa_external_lsa_metric = 2000` + "\n"
+	config += `	max_metric_router_lsa_on_startup_time = 300` + "\n"
+	config += `	max_metric_router_lsa_on_startup_include_stub = true` + "\n"
+	config += `	max_metric_router_lsa_on_startup_summary_lsa = true` + "\n"
+	config += `	max_metric_router_lsa_on_startup_summary_lsa_metric = 1000` + "\n"
+	config += `	max_metric_router_lsa_on_startup_external_lsa = true` + "\n"
+	config += `	max_metric_router_lsa_on_startup_external_lsa_metric = 2000` + "\n"
+	config += `	max_metric_router_lsa_on_switchover_time = 300` + "\n"
+	config += `	max_metric_router_lsa_on_switchover_include_stub = true` + "\n"
+	config += `	max_metric_router_lsa_on_switchover_summary_lsa = true` + "\n"
+	config += `	max_metric_router_lsa_on_switchover_summary_lsa_metric = 1000` + "\n"
+	config += `	max_metric_router_lsa_on_switchover_external_lsa = true` + "\n"
+	config += `	max_metric_router_lsa_on_switchover_external_lsa_metric = 2000` + "\n"
+	config += `	max_metric_router_lsa_on_proc_restart_time = 300` + "\n"
+	config += `	max_metric_router_lsa_on_proc_restart_include_stub = true` + "\n"
+	config += `	max_metric_router_lsa_on_proc_restart_summary_lsa = true` + "\n"
+	config += `	max_metric_router_lsa_on_proc_restart_summary_lsa_metric = 1000` + "\n"
+	config += `	max_metric_router_lsa_on_proc_restart_external_lsa = true` + "\n"
+	config += `	max_metric_router_lsa_on_proc_restart_external_lsa_metric = 2000` + "\n"
+	config += `	max_lsa = 20000` + "\n"
+	config += `	max_lsa_threshold = 75` + "\n"
+	config += `	max_lsa_ignore_time = 60` + "\n"
+	config += `	max_lsa_ignore_count = 10` + "\n"
+	config += `	max_lsa_reset_time = 120` + "\n"
+	config += `	timers_throttle_spf_initial_delay = 500` + "\n"
+	config += `	timers_throttle_spf_second_delay = 1000` + "\n"
+	config += `	timers_throttle_spf_maximum_delay = 2000` + "\n"
+	config += `	timers_throttle_lsa_all_initial_delay = 500` + "\n"
+	config += `	timers_throttle_lsa_all_minimum_delay = 1000` + "\n"
+	config += `	timers_throttle_lsa_all_maximum_delay = 2000` + "\n"
+	config += `	timers_throttle_fast_reroute = 1000` + "\n"
+	config += `	timers_lsa_group_pacing = 60` + "\n"
+	config += `	timers_lsa_min_arrival = 60` + "\n"
+	config += `	timers_lsa_refresh = 2100` + "\n"
+	config += `	timers_pacing_flood = 10` + "\n"
+	config += `	nsf_interval = 120` + "\n"
+	config += `	nsf_lifetime = 300` + "\n"
+	config += `	nsf_flush_delay_time = 60` + "\n"
+	config += `	nsf_ietf = true` + "\n"
+	config += `	nsf_ietf_strict_lsa_checking = true` + "\n"
+	config += `	nsf_ietf_helper_disable = true` + "\n"
+	config += `	address_family_ipv4_unicast = true` + "\n"
+	config += `	maximum_interfaces = 500` + "\n"
+	config += `	maximum_paths = 16` + "\n"
+	config += `	maximum_redistributed_prefixes = 1000` + "\n"
+	config += `	maximum_redistributed_prefixes_threshold = 75` + "\n"
+	config += `	maximum_redistributed_prefixes_warning_only = true` + "\n"
+	config += `	queue_limit_high = 1000` + "\n"
+	config += `	queue_limit_medium = 1000` + "\n"
+	config += `	queue_limit_low = 1000` + "\n"
+	config += `	queue_dispatch_incoming = 60` + "\n"
+	config += `	queue_dispatch_rate_limited_lsa = 60` + "\n"
+	config += `	queue_dispatch_flush_lsa = 120` + "\n"
+	config += `	queue_dispatch_spf_lsa_limit = 120` + "\n"
+	config += `	summary_prefixes = [{` + "\n"
+	config += `		address = "192.168.1.0"` + "\n"
+	config += `		mask = "255.255.255.0"` + "\n"
+	config += `		not_advertise = true` + "\n"
+	config += `	}]` + "\n"
+	config += `	spf_prefix_priority_route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `	fast_reroute_per_prefix = true` + "\n"
+	config += `	fast_reroute_per_prefix_priority_limit_medium = true` + "\n"
+	config += `	fast_reroute_per_prefix_tiebreaker_downstream_index = 10` + "\n"
+	config += `	fast_reroute_per_prefix_tiebreaker_lc_disjoint_index = 20` + "\n"
+	config += `	fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_index = 30` + "\n"
+	config += `	fast_reroute_per_prefix_tiebreaker_node_protecting_index = 40` + "\n"
+	config += `	fast_reroute_per_prefix_tiebreaker_primary_path_index = 50` + "\n"
+	config += `	fast_reroute_per_prefix_tiebreaker_secondary_path_index = 60` + "\n"
+	config += `	fast_reroute_per_prefix_tiebreaker_interface_disjoint_index = 70` + "\n"
+	config += `	fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index = 80` + "\n"
+	config += `	fast_reroute_per_prefix_load_sharing_disable = true` + "\n"
+	config += `	fast_reroute_per_prefix_exclude_interfaces = [{` + "\n"
+	config += `		interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	}]` + "\n"
+	config += `	fast_reroute_per_prefix_lfa_candidate_interfaces = [{` + "\n"
+	config += `		interface_name = "GigabitEthernet0/0/0/2"` + "\n"
+	config += `	}]` + "\n"
+	config += `	fast_reroute_per_prefix_use_candidate_only_enable = true` + "\n"
+	config += `	fast_reroute_per_link_priority_limit_medium = true` + "\n"
+	config += `	fast_reroute_per_link_exclude_interfaces = [{` + "\n"
+	config += `		interface_name = "GigabitEthernet0/0/0/3"` + "\n"
+	config += `	}]` + "\n"
+	config += `	fast_reroute_per_link_lfa_candidate_interfaces = [{` + "\n"
+	config += `		interface_name = "GigabitEthernet0/0/0/4"` + "\n"
+	config += `	}]` + "\n"
+	config += `	fast_reroute_per_link_use_candidate_only_enable = true` + "\n"
+	config += `	loopback_stub_network_enable = true` + "\n"
+	config += `	link_down_fast_detect = true` + "\n"
+	config += `	weight = 1000` + "\n"
+	config += `	microloop_avoidance = true` + "\n"
+	config += `	microloop_avoidance_segment_routing = true` + "\n"
+	config += `	microloop_avoidance_rib_update_delay = 3000` + "\n"
+	config += `	authentication_key_encrypted = "110A1016141D4B"` + "\n"
+	config += `	message_digest_keys = [{` + "\n"
+	config += `		key_id = 1` + "\n"
+	config += `		md5_encrypted = "01100F175804"` + "\n"
+	config += `	}]` + "\n"
+	config += `	authentication = true` + "\n"
+	config += `	authentication_message_digest = true` + "\n"
+	config += `	authentication_keychain_name = "KEY1"` + "\n"
+	config += `	network_point_to_point = true` + "\n"
+	config += `	mpls_ldp_sync = false` + "\n"
+	config += `	cost = 5000` + "\n"
+	config += `	cost_fallback_anomaly_delay_igp_metric_value = 500` + "\n"
+	config += `	cost_fallback_anomaly_delay_te_metric_value = 600` + "\n"
+	config += `	hello_interval = 10` + "\n"
+	config += `	dead_interval = 40` + "\n"
+	config += `	priority = 10` + "\n"
+	config += `	retransmit_interval = 1000` + "\n"
+	config += `	transmit_delay = 100` + "\n"
+	config += `	flood_reduction_enable = true` + "\n"
+	config += `	demand_circuit_enable = true` + "\n"
+	config += `	mtu_ignore_enable = true` + "\n"
+	config += `	database_filter_all_out_enable = true` + "\n"
+	config += `	passive_disable = true` + "\n"
+	config += `	external_out_enable = true` + "\n"
+	config += `	summary_in_enable = true` + "\n"
+	config += `	adjacency_stagger_initial_neighbors = 10` + "\n"
+	config += `	adjacency_stagger_simultaneous_neighbors = 20` + "\n"
+	config += `	snmp_context = "CONTEXT1"` + "\n"
+	config += `	snmp_trap = true` + "\n"
+	config += `	ucmp_prefix_list = "PREFIX_LIST_1"` + "\n"
+	config += `	ucmp_exclude_interfaces = [{` + "\n"
+	config += `		interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	}]` + "\n"
+	config += `	ucmp_delay_interval = 2000` + "\n"
+	config += `	max_external_lsa = 1000` + "\n"
+	config += `	max_external_lsa_threshold = 75` + "\n"
+	config += `	max_external_lsa_suppress_neighbor = true` + "\n"
+	config += `	exchange_timer = 60` + "\n"
+	config += `	exchange_timer_hold_time = 120` + "\n"
+	config += `	exchange_timer_recovery_count = 10` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `}` + "\n"
+
+	config += `
+		data "iosxr_router_ospf_vrf" "test" {
+			process_name = "OSPF1"
+			vrf_name = "VRF1"
+			depends_on = [iosxr_router_ospf_vrf.test]
+		}
+	`
+	return config
+}
+
+// End of section. //template:end testAccDataSourceConfig

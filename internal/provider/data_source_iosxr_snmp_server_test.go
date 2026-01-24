@@ -20,9 +20,397 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+import (
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
 
 // End of section. //template:end imports
 
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
+
+func TestAccDataSourceIosxrSNMPServer(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "location", "My location"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "contact", "My contact"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "chassis_id", "Chassis1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "packetsize", "1024"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "trap_timeout", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "queue_length", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "throttle_time", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "overload_control", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "overload_throttle_rate", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "communities.0.view", "VIEW1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "communities.0.ro", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "communities.0.rw", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "communities.0.sdrowner", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "communities.0.systemowner", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "communities.0.ipv4", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "communities.0.ipv6", "ACL2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_snmp_authentication", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_snmp_coldstart", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_snmp_warmstart", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_snmp_linkup", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_snmp_linkdown", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_snmp_all", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_l2vpn_all", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_l2vpn_vc_up", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_l2vpn_vc_down", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_l2vpn_cisco", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_vpls_all", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_vpls_status", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_vpls_full_raise", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_vpls_full_clear", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_bfd", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_config", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_cfm", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_ethernet_oam_events", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_rf", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_sensor", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_mpls_l3vpn_all", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_mpls_l3vpn_vrf_up", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_mpls_l3vpn_vrf_down", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_mpls_l3vpn_mid_threshold_exceeded", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_mpls_l3vpn_max_threshold_exceeded", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_mpls_l3vpn_max_threshold_cleared", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_mpls_l3vpn_max_threshold_reissue_notif_time", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_mpls_traffic_eng_cisco", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_mpls_traffic_eng_cisco_ext_bringup_fail", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_mpls_traffic_eng_cisco_ext_insuff_bw", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_mpls_traffic_eng_cisco_ext_preempt", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_mpls_traffic_eng_cisco_ext_reroute_pending", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_mpls_traffic_eng_cisco_ext_reroute_pending_clear", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_mpls_traffic_eng_down", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_mpls_traffic_eng_p2mp_down", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_mpls_traffic_eng_p2mp_up", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_mpls_traffic_eng_reoptimize", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_mpls_traffic_eng_reroute", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_mpls_traffic_eng_up", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_ntp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_bgp_cbgp_two_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_bgp_enable_cisco_bgp4_mib", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_hsrp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_isis_database_overload", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_isis_manual_address_drops", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_isis_corrupted_lsp_detected", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_isis_attempt_to_exceed_max_sequence", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_isis_id_len_mismatch", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_isis_max_area_addresses_mismatch", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_isis_own_lsp_purge", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_isis_sequence_number_skip", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_isis_authentication_type_failure", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_isis_authentication_failure", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_isis_version_skew", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_isis_area_mismatch", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_isis_rejected_adjacency", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_isis_lsp_too_large_to_propagate", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_isis_orig_lsp_buff_size_mismatch", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_isis_protocols_supported_mismatch", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_isis_adjacency_change", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_isis_lsp_error_detected", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_vrrp_events", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_alarm", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_bridgemib", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_copy_complete", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_entity", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_cisco_entity_ext", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_entity_redundancy_all", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_entity_redundancy_switchover", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_entity_redundancy_status", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_entity_state_switchover", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_entity_state_operstatus", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_flash_insertion", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_flash_removal", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_fru_ctrl", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_ipsla", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_mpls_ldp_down", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_mpls_ldp_up", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_mpls_ldp_threshold", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_pim_neighbor_change", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_pim_interface_state_change", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_pim_invalid_message_received", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_pim_rp_mapping_change", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_power", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_syslog", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_system", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "hosts.0.address", "11.11.11.11"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "hosts.0.traps_unencrypted_strings.0.udp_port", "1100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "hosts.0.traps_unencrypted_strings.0.version_v3_security_level", "auth"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "hosts.0.informs_unencrypted_strings.0.udp_port", "1100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "hosts.0.informs_unencrypted_strings.0.version_v3_security_level", "auth"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "views.0.view_name", "VIEW1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "views.0.mib_view_families.0.name", "1.3.6.1.2.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "views.0.mib_view_families.0.included", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "trap_source", "Loopback10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "trap_source_ipv4", "Loopback0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "trap_source_ipv6", "Loopback1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "trap_source_port", "1200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "trap_throttle_time", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "trap_authentication_vrf_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "trap_delay_timer", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "ipv4_dscp", "ef"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "ipv6_dscp", "ef"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "drop_unknown_user", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "drop_report_acl_ipv4", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "drop_report_acl_ipv6", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "groups.0.group_name", "GROUP12"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "groups.0.v3_priv", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "groups.0.v3_read", "VIEW1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "groups.0.v3_write", "VIEW2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "groups.0.v3_context", "CONTEXT1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "groups.0.v3_notify", "VIEW3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "groups.0.v3_ipv4", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "groups.0.v3_ipv6", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "engine_id_local", "80000009030000C0A80101"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "engine_id_remotes.0.address", "11.11.11.11"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "engine_id_remotes.0.engine_id", "80000009030000C0A80101"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "engine_id_remotes.0.udp_port", "1100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "users.0.user_name", "USER1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "users.0.group_name", "GROUP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "users.0.v3", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "users.0.v3_ipv4", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "users.0.v3_ipv6", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "users.0.v3_systemowner", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "oid_poll_stats", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "timeouts_subagent", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "timeouts_duplicate", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "timeouts_in_qdrop", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "timeouts_threshold", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "timeouts_pdu_stats", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "logging_threshold_oid_processing", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "logging_threshold_pdu_processing", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "inform_retries", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "inform_timeout", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "inform_pending", "10"))
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { testAccPreCheck(t) },
+		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccDataSourceIosxrSNMPServerPrerequisitesConfig + testAccDataSourceIosxrSNMPServerConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
+			},
+		},
+	})
+}
+
+// End of section. //template:end testAccDataSource
+
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccDataSourceIosxrSNMPServerPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-ipv4-access-list-cfg:/ipv4/access-lists/access-list[access-list-name=ACL1]"
+	attributes = {
+		"access-list-name" = "ACL1"
+	}
+	lists = [
+		{
+			name = "sequences/sequence"
+			key = "sequence-number"
+			items = [
+				{
+					"sequence-number" = "10"
+					"permit/protocol" = "ipv4"
+					"permit/source/any" = "<EMPTY>"
+					"permit/destination/any" = "<EMPTY>"
+				},
+			]
+		},
+	]
+}
+
+`
 
 // End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
+
+func testAccDataSourceIosxrSNMPServerConfig() string {
+	config := `resource "iosxr_snmp_server" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	location = "My location"` + "\n"
+	config += `	contact = "My contact"` + "\n"
+	config += `	chassis_id = "Chassis1"` + "\n"
+	config += `	packetsize = 1024` + "\n"
+	config += `	trap_timeout = 10` + "\n"
+	config += `	queue_length = 100` + "\n"
+	config += `	throttle_time = 100` + "\n"
+	config += `	overload_control = 10` + "\n"
+	config += `	overload_throttle_rate = 20` + "\n"
+	config += `	communities = [{` + "\n"
+	config += `		community = "COMMUNITY1"` + "\n"
+	config += `		view = "VIEW1"` + "\n"
+	config += `		ro = true` + "\n"
+	config += `		rw = false` + "\n"
+	config += `		sdrowner = false` + "\n"
+	config += `		systemowner = true` + "\n"
+	config += `		ipv4 = "ACL1"` + "\n"
+	config += `		ipv6 = "ACL2"` + "\n"
+	config += `	}]` + "\n"
+	config += `	traps_snmp_authentication = true` + "\n"
+	config += `	traps_snmp_coldstart = true` + "\n"
+	config += `	traps_snmp_warmstart = true` + "\n"
+	config += `	traps_snmp_linkup = true` + "\n"
+	config += `	traps_snmp_linkdown = true` + "\n"
+	config += `	traps_snmp_all = true` + "\n"
+	config += `	traps_l2vpn_all = true` + "\n"
+	config += `	traps_l2vpn_vc_up = true` + "\n"
+	config += `	traps_l2vpn_vc_down = true` + "\n"
+	config += `	traps_l2vpn_cisco = true` + "\n"
+	config += `	traps_vpls_all = true` + "\n"
+	config += `	traps_vpls_status = true` + "\n"
+	config += `	traps_vpls_full_raise = true` + "\n"
+	config += `	traps_vpls_full_clear = true` + "\n"
+	config += `	traps_bfd = true` + "\n"
+	config += `	traps_config = true` + "\n"
+	config += `	traps_cfm = true` + "\n"
+	config += `	traps_ethernet_oam_events = true` + "\n"
+	config += `	traps_rf = true` + "\n"
+	config += `	traps_sensor = true` + "\n"
+	config += `	traps_mpls_l3vpn_all = true` + "\n"
+	config += `	traps_mpls_l3vpn_vrf_up = true` + "\n"
+	config += `	traps_mpls_l3vpn_vrf_down = true` + "\n"
+	config += `	traps_mpls_l3vpn_mid_threshold_exceeded = true` + "\n"
+	config += `	traps_mpls_l3vpn_max_threshold_exceeded = true` + "\n"
+	config += `	traps_mpls_l3vpn_max_threshold_cleared = true` + "\n"
+	config += `	traps_mpls_l3vpn_max_threshold_reissue_notif_time = 100` + "\n"
+	config += `	traps_mpls_traffic_eng_cisco = true` + "\n"
+	config += `	traps_mpls_traffic_eng_cisco_ext_bringup_fail = true` + "\n"
+	config += `	traps_mpls_traffic_eng_cisco_ext_insuff_bw = true` + "\n"
+	config += `	traps_mpls_traffic_eng_cisco_ext_preempt = true` + "\n"
+	config += `	traps_mpls_traffic_eng_cisco_ext_reroute_pending = true` + "\n"
+	config += `	traps_mpls_traffic_eng_cisco_ext_reroute_pending_clear = true` + "\n"
+	config += `	traps_mpls_traffic_eng_down = true` + "\n"
+	config += `	traps_mpls_traffic_eng_p2mp_down = true` + "\n"
+	config += `	traps_mpls_traffic_eng_p2mp_up = true` + "\n"
+	config += `	traps_mpls_traffic_eng_reoptimize = true` + "\n"
+	config += `	traps_mpls_traffic_eng_reroute = true` + "\n"
+	config += `	traps_mpls_traffic_eng_up = true` + "\n"
+	config += `	traps_ntp = true` + "\n"
+	config += `	traps_bgp_cbgp_two_enable = true` + "\n"
+	config += `	traps_bgp_enable_cisco_bgp4_mib = true` + "\n"
+	config += `	traps_hsrp = true` + "\n"
+	config += `	traps_isis_database_overload = true` + "\n"
+	config += `	traps_isis_manual_address_drops = true` + "\n"
+	config += `	traps_isis_corrupted_lsp_detected = true` + "\n"
+	config += `	traps_isis_attempt_to_exceed_max_sequence = true` + "\n"
+	config += `	traps_isis_id_len_mismatch = true` + "\n"
+	config += `	traps_isis_max_area_addresses_mismatch = true` + "\n"
+	config += `	traps_isis_own_lsp_purge = true` + "\n"
+	config += `	traps_isis_sequence_number_skip = true` + "\n"
+	config += `	traps_isis_authentication_type_failure = true` + "\n"
+	config += `	traps_isis_authentication_failure = true` + "\n"
+	config += `	traps_isis_version_skew = true` + "\n"
+	config += `	traps_isis_area_mismatch = true` + "\n"
+	config += `	traps_isis_rejected_adjacency = true` + "\n"
+	config += `	traps_isis_lsp_too_large_to_propagate = true` + "\n"
+	config += `	traps_isis_orig_lsp_buff_size_mismatch = true` + "\n"
+	config += `	traps_isis_protocols_supported_mismatch = true` + "\n"
+	config += `	traps_isis_adjacency_change = true` + "\n"
+	config += `	traps_isis_lsp_error_detected = true` + "\n"
+	config += `	traps_vrrp_events = true` + "\n"
+	config += `	traps_alarm = true` + "\n"
+	config += `	traps_bridgemib = true` + "\n"
+	config += `	traps_copy_complete = true` + "\n"
+	config += `	traps_entity = true` + "\n"
+	config += `	traps_cisco_entity_ext = true` + "\n"
+	config += `	traps_entity_redundancy_all = true` + "\n"
+	config += `	traps_entity_redundancy_switchover = true` + "\n"
+	config += `	traps_entity_redundancy_status = true` + "\n"
+	config += `	traps_entity_state_switchover = true` + "\n"
+	config += `	traps_entity_state_operstatus = true` + "\n"
+	config += `	traps_flash_insertion = true` + "\n"
+	config += `	traps_flash_removal = true` + "\n"
+	config += `	traps_fru_ctrl = true` + "\n"
+	config += `	traps_ipsla = true` + "\n"
+	config += `	traps_mpls_ldp_down = true` + "\n"
+	config += `	traps_mpls_ldp_up = true` + "\n"
+	config += `	traps_mpls_ldp_threshold = true` + "\n"
+	config += `	traps_pim_neighbor_change = true` + "\n"
+	config += `	traps_pim_interface_state_change = true` + "\n"
+	config += `	traps_pim_invalid_message_received = true` + "\n"
+	config += `	traps_pim_rp_mapping_change = true` + "\n"
+	config += `	traps_power = true` + "\n"
+	config += `	traps_syslog = true` + "\n"
+	config += `	traps_system = true` + "\n"
+	config += `	hosts = [{` + "\n"
+	config += `		address = "11.11.11.11"` + "\n"
+	config += `		traps_unencrypted_strings = [{` + "\n"
+	config += `			community_string = "COMMUNITY1"` + "\n"
+	config += `			udp_port = 1100` + "\n"
+	config += `			version_v3_security_level = "auth"` + "\n"
+	config += `		}]` + "\n"
+	config += `		informs_unencrypted_strings = [{` + "\n"
+	config += `			community_string = "COMMUNITY2"` + "\n"
+	config += `			udp_port = 1100` + "\n"
+	config += `			version_v3_security_level = "auth"` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
+	config += `	views = [{` + "\n"
+	config += `		view_name = "VIEW1"` + "\n"
+	config += `		mib_view_families = [{` + "\n"
+	config += `			name = "1.3.6.1.2.1.1"` + "\n"
+	config += `			included = true` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
+	config += `	trap_source = "Loopback10"` + "\n"
+	config += `	trap_source_ipv4 = "Loopback0"` + "\n"
+	config += `	trap_source_ipv6 = "Loopback1"` + "\n"
+	config += `	trap_source_port = 1200` + "\n"
+	config += `	trap_throttle_time = 100` + "\n"
+	config += `	trap_authentication_vrf_disable = true` + "\n"
+	config += `	trap_delay_timer = 30` + "\n"
+	config += `	ipv4_dscp = "ef"` + "\n"
+	config += `	ipv6_dscp = "ef"` + "\n"
+	config += `	drop_unknown_user = true` + "\n"
+	config += `	drop_report_acl_ipv4 = "ACL1"` + "\n"
+	config += `	drop_report_acl_ipv6 = "ACL1"` + "\n"
+	config += `	groups = [{` + "\n"
+	config += `		group_name = "GROUP12"` + "\n"
+	config += `		v3_priv = true` + "\n"
+	config += `		v3_read = "VIEW1"` + "\n"
+	config += `		v3_write = "VIEW2"` + "\n"
+	config += `		v3_context = "CONTEXT1"` + "\n"
+	config += `		v3_notify = "VIEW3"` + "\n"
+	config += `		v3_ipv4 = "ACL1"` + "\n"
+	config += `		v3_ipv6 = "ACL1"` + "\n"
+	config += `	}]` + "\n"
+	config += `	engine_id_local = "80000009030000C0A80101"` + "\n"
+	config += `	engine_id_remotes = [{` + "\n"
+	config += `		address = "11.11.11.11"` + "\n"
+	config += `		engine_id = "80000009030000C0A80101"` + "\n"
+	config += `		udp_port = 1100` + "\n"
+	config += `	}]` + "\n"
+	config += `	users = [{` + "\n"
+	config += `		user_name = "USER1"` + "\n"
+	config += `		group_name = "GROUP1"` + "\n"
+	config += `		v3 = true` + "\n"
+	config += `		v3_auth_md5_encryption_aes = "073C05626E2A4841141D"` + "\n"
+	config += `		v3_ipv4 = "ACL1"` + "\n"
+	config += `		v3_ipv6 = "ACL1"` + "\n"
+	config += `		v3_systemowner = true` + "\n"
+	config += `	}]` + "\n"
+	config += `	oid_poll_stats = true` + "\n"
+	config += `	timeouts_subagent = 20` + "\n"
+	config += `	timeouts_duplicate = 10` + "\n"
+	config += `	timeouts_in_qdrop = 20` + "\n"
+	config += `	timeouts_threshold = 10` + "\n"
+	config += `	timeouts_pdu_stats = 10` + "\n"
+	config += `	logging_threshold_oid_processing = 10` + "\n"
+	config += `	logging_threshold_pdu_processing = 10` + "\n"
+	config += `	inform_retries = 10` + "\n"
+	config += `	inform_timeout = 10` + "\n"
+	config += `	inform_pending = 10` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+
+	config += `
+		data "iosxr_snmp_server" "test" {
+			depends_on = [iosxr_snmp_server.test]
+		}
+	`
+	return config
+}
+
+// End of section. //template:end testAccDataSourceConfig

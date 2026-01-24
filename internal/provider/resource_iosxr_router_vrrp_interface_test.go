@@ -21,10 +21,12 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 // End of section. //template:end imports
@@ -92,3 +94,26 @@ func testAccIosxrRouterVRRPInterfaceConfig_all() string {
 }
 
 // End of section. //template:end testAccConfigAll
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrRouterVRRPInterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InterfaceName := primary.Attributes["interface_name"]
+
+		return fmt.Sprintf("%s", InterfaceName), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccIosxrRouterVRRPInterfacePrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp"
+	attributes = {
+	}
+}
+
+`
+
+// End of section. //template:end testPrerequisites

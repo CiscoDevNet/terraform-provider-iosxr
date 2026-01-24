@@ -5,7 +5,7 @@ no_delete_attributes: true
 doc_category: QoS
 attributes:
   - yang_name: policy-map-name
-    example: PM1
+    example: PM-QOS
   - yang_name: description
     example: My description
   - yang_name: class
@@ -21,12 +21,196 @@ attributes:
         id: true
         minimum_test_value: '"qos"'
         example: qos
-      - yang_name: set/mpls/experimental/topmost
-        example: 0
-      - yang_name: set/dscp
-        minimum_test_value: '"0"'
-        example: 0
+      - yang_name: bandwidth/value
+        tf_name: bandwidth_value
+        test_tags: [NCS]
+        example: 1
+        exclude_test: true
+      - yang_name: bandwidth/unit
+        tf_name: bandwidth_unit
+        test_tags: [NCS]
+        example: gbps
+        exclude_test: true
+      - yang_name: bandwidth-remaining/value
+        tf_name: bandwidth_remaining_value
+        test_tags: [NCS, C8000]
+        example: 2
+        exclude_test: true
+      - yang_name: bandwidth-remaining/unit
+        tf_name: bandwidth_remaining_unit
+        test_tags: [NCS, C8000]
+        example: ratio
+        exclude_test: true
+      - yang_name: police/rate/value
+        tf_name: police_rate_value
+        example: 5
+      - yang_name: police/rate/unit
+        tf_name: police_rate_unit
+        example: gbps
+      - yang_name: police/burst/value
+        tf_name: police_burst_value
+        test_tags: [XRV9K, NCS]
+        include_example: true
+        example: 500
+      - yang_name: police/burst/unit
+        tf_name: police_burst_unit
+        test_tags: [XRV9K, NCS]
+        include_example: true
+        example: bytes
+      - yang_name: police/peak-rate/value
+        tf_name: police_peak_rate_value
+        example: 6
+      - yang_name: police/peak-rate/unit
+        tf_name: police_peak_rate_unit
+        example: gbps
+      - yang_name: police/peak-burst/value
+        tf_name: police_peak_burst_value
+        test_tags: [XRV9K, NCS]
+        include_example: true
+        example: 1000
+      - yang_name: police/peak-burst/unit
+        tf_name: police_peak_burst_unit
+        test_tags: [XRV9K, NCS]
+        include_example: true
+        example: bytes
+      - yang_name: police/conform-action/transmit
+        tf_name: police_conform_action_transmit
+        test_tags: [XRV9K, C8000]
+        exclude_test: true
+        example: true
+      - yang_name: police/conform-action/drop
+        tf_name: police_conform_action_drop
+        test_tags: [XRV9K, C8000]
+        exclude_test: true
+        example: false
+      - yang_name: police/conform-action/set/cos
+        tf_name: police_conform_action_set_cos
+        test_tags: [XRV9K]
+        exclude_test: true
+        example: 5
+      - yang_name: police/conform-action/set/discard-class
+        tf_name: police_conform_action_set_discard_class
+        test_tags: [XRV9K, C8000]
+        exclude_test: true
+        example: 5
+      - yang_name: police/conform-action/set/dscp
+        tf_name: police_conform_action_set_dscp
+        test_tags: [XRV9K]
+        exclude_test: true
+        example: ef
+      - yang_name: police/conform-action/set/mpls/experimental/imposition
+        tf_name: police_conform_action_set_mpls_experimental_imposition
+        test_tags: [XRV9K]
+        exclude_test: true
+        example: 5
+      - yang_name: police/conform-action/set/mpls/experimental/topmost
+        tf_name: police_conform_action_set_mpls_experimental_topmost
+        test_tags: [XRV9K]
+        exclude_test: true
+        example: 5
+      - yang_name: police/conform-action/set/precedence
+        tf_name: police_conform_action_set_precedence
+        test_tags: [XRV9K]
+        exclude_test: true
+        example: 5
+      - yang_name: police/conform-action/set/qos-group
+        tf_name: police_conform_action_set_qos_group
+        test_tags: [XRV9K]
+        exclude_test: true
+        example: 5
+      - yang_name: police/exceed-action/transmit
+        tf_name: police_exceed_action_transmit
+        test_tags: [XRV9K, C8000]
+        exclude_test: true
+        example: true
+      - yang_name: police/exceed-action/drop
+        tf_name: police_exceed_action_drop
+        test_tags: [XRV9K, C8000]
+        exclude_test: true
+        example: false
+      - yang_name: police/exceed-action/set/cos
+        tf_name: police_exceed_action_set_cos
+        test_tags: [XRV9K]
+        exclude_test: true
+        example: 2
+      - yang_name: police/exceed-action/set/discard-class
+        tf_name: police_exceed_action_set_discard_class
+        test_tags: [XRV9K, C8000]
+        exclude_test: true
+        example: 2
+      - yang_name: police/exceed-action/set/dscp
+        tf_name: police_exceed_action_set_dscp
+        test_tags: [XRV9K]
+        exclude_test: true
+        example: 2
+      - yang_name: police/exceed-action/set/mpls/experimental/imposition
+        tf_name: police_exceed_action_set_mpls_experimental_imposition
+        test_tags: [XRV9K]
+        exclude_test: true
+        example: 2
+      - yang_name: police/exceed-action/set/mpls/experimental/topmost
+        tf_name: police_exceed_action_set_mpls_experimental_topmost
+        test_tags: [XRV9K]
+        exclude_test: true
+        example: 2
+      - yang_name: police/exceed-action/set/precedence
+        tf_name: police_exceed_action_set_precedence
+        test_tags: [XRV9K]
+        exclude_test: true
+        example: 2
+      - yang_name: police/exceed-action/set/qos-group
+        tf_name: police_exceed_action_set_qos_group
+        test_tags: [XRV9K]
+        exclude_test: true
+        example: 2
+      - yang_name: police/violate-action/transmit
+        tf_name: police_violate_action_transmit
+        test_tags: [XRV9K, C8000]
+        exclude_test: true
+        example: true
+      - yang_name: police/violate-action/drop
+        tf_name: police_violate_action_drop
+        test_tags: [XRV9K, C8000]
+        exclude_test: true
+        example: false
+      - yang_name: police/violate-action/set/cos
+        tf_name: police_violate_action_set_cos
+        test_tags: [XRV9K]
+        exclude_test: true
+        example: 1
+      - yang_name: police/violate-action/set/discard-class
+        tf_name: police_violate_action_set_discard_class
+        test_tags: [XRV9K, C8000]
+        exclude_test: true
+        example: 1
+      - yang_name: police/violate-action/set/dscp
+        tf_name: police_violate_action_set_dscp
+        test_tags: [XRV9K]
+        exclude_test: true
+        example: 1
+      - yang_name: police/violate-action/set/mpls/experimental/imposition
+        tf_name: police_violate_action_set_mpls_experimental_imposition
+        test_tags: [XRV9K]
+        exclude_test: true
+        example: 1
+      - yang_name: police/violate-action/set/mpls/experimental/topmost
+        tf_name: police_violate_action_set_mpls_experimental_topmost
+        test_tags: [XRV9K]
+        exclude_test: true
+        example: 1
+      - yang_name: police/violate-action/set/precedence
+        tf_name: police_violate_action_set_precedence
+        test_tags: [XRV9K]
+        exclude_test: true
+        example: 1
+      - yang_name: police/violate-action/set/qos-group
+        tf_name: police_violate_action_set_qos_group
+        test_tags: [XRV9K]
+        exclude_test: true
+        example: 1
       - yang_name: priority/level
+        tf_name: priority_level
+        minimum_test_value: '"1"'
         example: 1
       - yang_name: queue-limits/queue-limit
         tf_name: queue_limits
@@ -37,40 +221,83 @@ attributes:
             example: 100
           - yang_name: unit
             id: true
-            example: us
+            example: ms
+      - yang_name: random-detect-default
+        tf_name: random_detect_default
+        test_tags: [XRV9K]
+        include_example: true
+        example: true
+      - yang_name: random-detect
+        tf_name: random_detect
+        type: List
+        test_tags: [NCS, C8000]
+        include_example: true
+        attributes:
+          - yang_name: minimum-threshold-value
+            id: true
+            test_tags: [NCS, C8000]
+            include_example: true
+            example: 100
+          - yang_name: minimum-threshold-unit
+            id: true
+            test_tags: [NCS, C8000]
+            include_example: true
+            example: ms
+          - yang_name: maximum-threshold-value
+            id: true
+            test_tags: [NCS, C8000]
+            include_example: true
+            example: 200
+          - yang_name: maximum-threshold-unit
+            id: true
+            test_tags: [NCS, C8000]
+            include_example: true
+            example: ms
       - yang_name: service-policy/name
-        example: SERVICEPOLICY
-      - yang_name: police/rate/value
+        tf_name: service_policy_name
+        example: CHILD_POLICY
+      - yang_name: set/traffic-class
+        tf_name: set_traffic_class
+        test_tags: [NCS, C8000]
+        include_example: true
+        example: 1
+      - yang_name: set/cos
+        tf_name: set_cos
+        exclude_test: true
         example: 5
-      - yang_name: police/rate/unit
-        example: gbps
-      - yang_name: police/conform-action/transmit
+      - yang_name: set/discard-class
+        tf_name: set_discard_class
+        test_tags: [XRV9K]
+        include_example: true
+        example: 1
+      - yang_name: set/dscp
+        tf_name: set_dscp
         exclude_test: true
-        example: true
-      - yang_name: police/conform-action/drop
+        example: ef
+      - yang_name: set/mpls/experimental/imposition
+        tf_name: set_mpls_experimental_imposition
         exclude_test: true
-        example: false
-      - yang_name: police/exceed-action/transmit
+        example: 5
+      - yang_name: set/mpls/experimental/topmost
+        tf_name: set_mpls_experimental_topmost
+        example: 5
+      - yang_name: set/precedence
+        tf_name: set_precedence
         exclude_test: true
-        example: true
-      - yang_name: police/exceed-action/drop
+        example: 5
+      - yang_name: set/qos-group
+        tf_name: set_qos_group
         exclude_test: true
-        example: false
-      - yang_name: police/violate-action/transmit
-        exclude_test: true
-        example: true
-      - yang_name: police/violate-action/drop
-        exclude_test: true
-        example: false
+        example: 5
       - yang_name: shape/average/rate/value
-        example: 100
+        example: 1
         exclude_test: true
       - yang_name: shape/average/rate/unit
         example: gbps
         exclude_test: true
-      - yang_name: bandwidth-remaining/unit
-        example: percent
+      - yang_name: shape/average/excess-burst/size
+        example: 200
         exclude_test: true
-      - yang_name: bandwidth-remaining/value
-        example: 1
+      - yang_name: shape/average/excess-burst/unit
+        example: ms
         exclude_test: true

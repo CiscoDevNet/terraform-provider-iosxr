@@ -317,12 +317,15 @@ func (data *DomainVRF) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	if value := gjson.GetBytes(res, "lookup.disable"); value.Exists() {
-		data.LookupDisable = types.BoolValue(true)
-	} else if data.LookupDisable.IsNull() {
-		// If currently null, keep as null (field not in config)
-		data.LookupDisable = types.BoolNull()
+		if !data.LookupDisable.IsNull() {
+			data.LookupDisable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.LookupDisable.IsNull() {
+			data.LookupDisable = types.BoolNull()
+		}
 	}
-	// else: preserve existing value (e.g., false from config)
 	if value := gjson.GetBytes(res, "lookup.source-interface"); value.Exists() && !data.LookupSourceInterface.IsNull() {
 		data.LookupSourceInterface = types.StringValue(value.String())
 	} else {
@@ -489,8 +492,7 @@ func (data *DomainVRF) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/lookup/disable"); value.Exists() {
 		data.LookupDisable = types.BoolValue(true)
 	} else {
-		// If config has false and device doesn't have the field, keep false (don't set to null)
-		// Only set to null if it was already null
+		// For presence-based booleans, only set to null if it's already null
 		if data.LookupDisable.IsNull() {
 			data.LookupDisable = types.BoolNull()
 		}
@@ -635,6 +637,8 @@ func (data *DomainVRF) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "lookup.disable"); value.Exists() {
 		data.LookupDisable = types.BoolValue(true)
+	} else {
+		data.LookupDisable = types.BoolNull()
 	}
 	if value := res.Get(prefix + "lookup.source-interface"); value.Exists() {
 		data.LookupSourceInterface = types.StringValue(value.String())
@@ -718,6 +722,8 @@ func (data *DomainVRFData) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "lookup.disable"); value.Exists() {
 		data.LookupDisable = types.BoolValue(true)
+	} else {
+		data.LookupDisable = types.BoolNull()
 	}
 	if value := res.Get(prefix + "lookup.source-interface"); value.Exists() {
 		data.LookupSourceInterface = types.StringValue(value.String())
@@ -797,6 +803,8 @@ func (data *DomainVRF) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/lookup/disable"); value.Exists() {
 		data.LookupDisable = types.BoolValue(true)
+	} else {
+		data.LookupDisable = types.BoolNull()
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/lookup/source-interface"); value.Exists() {
 		data.LookupSourceInterface = types.StringValue(value.String())
@@ -1053,11 +1061,8 @@ func (data *DomainVRF) getDeletedItems(ctx context.Context, state DomainVRF) []s
 	if !state.LookupSourceInterface.IsNull() && data.LookupSourceInterface.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/lookup/source-interface", state.getPath()))
 	}
-	// For presence-based booleans, delete if going from true to false or to null
-	if !state.LookupDisable.IsNull() && state.LookupDisable.ValueBool() {
-		if data.LookupDisable.IsNull() || !data.LookupDisable.ValueBool() {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/lookup/disable", state.getPath()))
-		}
+	if !state.LookupDisable.IsNull() && data.LookupDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lookup/disable", state.getPath()))
 	}
 	for i := range state.Domains {
 		keys := [...]string{"domain-name", "order"}

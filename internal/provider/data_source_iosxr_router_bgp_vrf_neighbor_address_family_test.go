@@ -20,8 +20,66 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+import (
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
 
 // End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
+
+func TestAccDataSourceIosxrRouterBGPVRFNeighborAddressFamily(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "weight", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "multipath", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "capability_orf_prefix", "both"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "additional_paths_send", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "additional_paths_receive", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "default_originate", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "default_originate_route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "maximum_prefix_limit", "1248576"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "maximum_prefix_threshold", "80"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "maximum_prefix_warning_only", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "next_hop_self", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "route_policy_in", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "route_policy_out", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "orf_route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "replace_private_as", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "remove_private_as_inbound", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "remove_private_as_inbound_entire_aspath", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "remove_private_as", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "remove_private_as_entire_aspath", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "send_community_ebgp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "send_community_gshut_ebgp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "soft_reconfiguration_inbound_always", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "update_out_originator_loopcheck_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "allowas_in", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "allowconfedas_in", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "site_of_origin_four_byte_as_number", "65536"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "site_of_origin_four_byte_as_index", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "as_override", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "aigp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "aigp_send_med", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "aigp_send_cost_community_id", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "aigp_send_cost_community_id_poi_pre_bestpath_transitive", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "slow_peer_static", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "origin_as_validation_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "bestpath_origin_as_allow_invalid", "true"))
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { testAccPreCheck(t) },
+		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccDataSourceIosxrRouterBGPVRFNeighborAddressFamilyPrerequisitesConfig + testAccDataSourceIosxrRouterBGPVRFNeighborAddressFamilyConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
+			},
+		},
+	})
+}
+
+// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRouterBGPVRFNeighborAddressFamilyPrerequisitesConfig = `
@@ -45,6 +103,7 @@ resource "iosxr_gnmi" "PreReq2" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
 	attributes = {
 		"as-number" = "65001"
+		"bgp/router-id" = "22.22.22.22"
 	}
 	lists = [
 		{
@@ -61,6 +120,25 @@ resource "iosxr_gnmi" "PreReq2" {
 }
 
 resource "iosxr_gnmi" "PreReq3" {
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
+	attributes = {
+		"as-number" = "65001"
+	}
+	lists = [
+		{
+			name = "address-families/address-family"
+			key = "af-name"
+			items = [
+				{
+					"af-name" = "vpnv6-unicast"
+				},
+			]
+		},
+	]
+	depends_on = [iosxr_gnmi.PreReq1, ]
+}
+
+resource "iosxr_gnmi" "PreReq4" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF2]"
 	delete = false
 	attributes = {
@@ -90,7 +168,7 @@ resource "iosxr_gnmi" "PreReq3" {
 	depends_on = [iosxr_gnmi.PreReq2, ]
 }
 
-resource "iosxr_gnmi" "PreReq4" {
+resource "iosxr_gnmi" "PreReq5" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
 	attributes = {
 		"route-policy-name" = "ROUTE_POLICY_1"
@@ -101,3 +179,64 @@ resource "iosxr_gnmi" "PreReq4" {
 `
 
 // End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
+
+func testAccDataSourceIosxrRouterBGPVRFNeighborAddressFamilyConfig() string {
+	config := `resource "iosxr_router_bgp_vrf_neighbor_address_family" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	as_number = "65001"` + "\n"
+	config += `	vrf_name = "VRF2"` + "\n"
+	config += `	address = "10.1.1.2"` + "\n"
+	config += `	af_name = "ipv4-unicast"` + "\n"
+	config += `	weight = 100` + "\n"
+	config += `	multipath = true` + "\n"
+	config += `	capability_orf_prefix = "both"` + "\n"
+	config += `	additional_paths_send = true` + "\n"
+	config += `	additional_paths_receive = true` + "\n"
+	config += `	default_originate = true` + "\n"
+	config += `	default_originate_route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `	maximum_prefix_limit = 1248576` + "\n"
+	config += `	maximum_prefix_threshold = 80` + "\n"
+	config += `	maximum_prefix_warning_only = true` + "\n"
+	config += `	next_hop_self = true` + "\n"
+	config += `	route_policy_in = "ROUTE_POLICY_1"` + "\n"
+	config += `	route_policy_out = "ROUTE_POLICY_1"` + "\n"
+	config += `	orf_route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `	replace_private_as = true` + "\n"
+	config += `	remove_private_as_inbound = true` + "\n"
+	config += `	remove_private_as_inbound_entire_aspath = true` + "\n"
+	config += `	remove_private_as = true` + "\n"
+	config += `	remove_private_as_entire_aspath = true` + "\n"
+	config += `	send_community_ebgp = true` + "\n"
+	config += `	send_community_gshut_ebgp = true` + "\n"
+	config += `	soft_reconfiguration_inbound_always = true` + "\n"
+	config += `	update_out_originator_loopcheck_disable = true` + "\n"
+	config += `	allowas_in = 3` + "\n"
+	config += `	allowconfedas_in = 5` + "\n"
+	config += `	site_of_origin_four_byte_as_number = "65536"` + "\n"
+	config += `	site_of_origin_four_byte_as_index = 100` + "\n"
+	config += `	as_override = true` + "\n"
+	config += `	aigp = true` + "\n"
+	config += `	aigp_send_med = true` + "\n"
+	config += `	aigp_send_cost_community_id = 5` + "\n"
+	config += `	aigp_send_cost_community_id_poi_pre_bestpath_transitive = true` + "\n"
+	config += `	slow_peer_static = true` + "\n"
+	config += `	origin_as_validation_disable = true` + "\n"
+	config += `	bestpath_origin_as_allow_invalid = true` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, iosxr_gnmi.PreReq4, iosxr_gnmi.PreReq5, ]` + "\n"
+	config += `}` + "\n"
+
+	config += `
+		data "iosxr_router_bgp_vrf_neighbor_address_family" "test" {
+			as_number = "65001"
+			vrf_name = "VRF2"
+			address = "10.1.1.2"
+			af_name = "ipv4-unicast"
+			depends_on = [iosxr_router_bgp_vrf_neighbor_address_family.test]
+		}
+	`
+	return config
+}
+
+// End of section. //template:end testAccDataSourceConfig

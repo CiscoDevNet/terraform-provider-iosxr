@@ -278,6 +278,62 @@ func (r *RouterStaticIPv4MulticastResource) Schema(ctx context.Context, req reso
 					},
 				},
 			},
+			"sr_policies": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("segment routing policy").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"sr_policy_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("segment routing policy").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("description of the static route").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 30),
+							},
+						},
+						"tag": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set tag for this route").AddIntegerRangeDescription(1, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
+							},
+						},
+						"distance_metric": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Distance metric for this route").AddIntegerRangeDescription(1, 254).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 254),
+							},
+						},
+						"permanent": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Permanent route").String,
+							Optional:            true,
+						},
+						"track": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable object tracking for static route").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set metric for this route").AddIntegerRangeDescription(1, 16777214).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 16777214),
+							},
+						},
+					},
+				},
+			},
 			"vrfs": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Destination VRF").String,
 				Optional:            true,
@@ -420,6 +476,62 @@ func (r *RouterStaticIPv4MulticastResource) Schema(ctx context.Context, req reso
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
 											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+										},
+									},
+									"description": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("description of the static route").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 30),
+										},
+									},
+									"tag": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Set tag for this route").AddIntegerRangeDescription(1, 4294967295).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 4294967295),
+										},
+									},
+									"distance_metric": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Distance metric for this route").AddIntegerRangeDescription(1, 254).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 254),
+										},
+									},
+									"permanent": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Permanent route").String,
+										Optional:            true,
+									},
+									"track": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Enable object tracking for static route").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 32),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+										},
+									},
+									"metric": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Set metric for this route").AddIntegerRangeDescription(1, 16777214).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 16777214),
+										},
+									},
+								},
+							},
+						},
+						"sr_policies": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("segment routing policy").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"sr_policy_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("segment routing policy").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 1024),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 										},
 									},
 									"description": schema.StringAttribute{

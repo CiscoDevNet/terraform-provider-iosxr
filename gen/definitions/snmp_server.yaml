@@ -8,46 +8,247 @@ attributes:
   - yang_name: contact
     minimum_test_value: '"My contact"'
     example: My contact
-  - yang_name: traps/Cisco-IOS-XR-um-mibs-rfmib-cfg:rf
+  - yang_name: chassis-id
+    example: Chassis1
+  - yang_name: packetsize
+    example: 1024
+  - yang_name: trap-timeout
+    example: 10
+  - yang_name: queue-length
+    example: 100
+  - yang_name: throttle-time
+    example: 100
+  - yang_name: overload-control
+    example: 10
+  - yang_name: overload-throttle-rate
+    example: 20
+  - yang_name: community/unencrypted/unencrypted-string
+    tf_name: communities
+    type: List
+    attributes:
+      - yang_name: community-string
+        tf_name: community
+        id: true
+        sensitive: true
+        write_only: true
+        example: COMMUNITY1
+      - yang_name: view
+        example: VIEW1
+      - yang_name: ro
+        type: Bool
+        example: true
+        type_yang_bool: empty-leaf
+      - yang_name: rw
+        type: Bool
+        example: false
+        type_yang_bool: empty-leaf
+      - yang_name: sdrowner
+        type: Bool
+        example: false
+        type_yang_bool: empty-leaf
+      - yang_name: systemowner
+        type: Bool
+        example: true
+        type_yang_bool: empty-leaf
+      - yang_name: ipv4
+        example: ACL1
+      - yang_name: ipv6
+        example: ACL2
+  - yang_name: traps/snmp/authentication
     example: true
-  - yang_name: traps/Cisco-IOS-XR-um-bfd-sbfd-cfg:bfd
+  - yang_name: traps/snmp/coldstart
     example: true
-  - yang_name: traps/Cisco-IOS-XR-um-ntp-cfg:ntp
-    example: true
-  - yang_name: traps/Cisco-IOS-XR-um-ethernet-oam-cfg:ethernet/oam/events
-    example: true
-  - yang_name: traps/Cisco-IOS-XR-um-traps-config-copy-cfg:copy-complete
+  - yang_name: traps/snmp/warmstart
     example: true
   - yang_name: traps/snmp/linkup
     example: true
   - yang_name: traps/snmp/linkdown
     example: true
-  - yang_name: traps/Cisco-IOS-XR-um-traps-power-cfg:power
+  - yang_name: traps/snmp/all
     example: true
-  - yang_name: traps/Cisco-IOS-XR-um-cfg-mibs-cfg:config
-    example: true
-  - yang_name: traps/Cisco-IOS-XR-um-traps-entity-cfg:entity
-    example: true
-  - yang_name: traps/Cisco-IOS-XR-um-traps-system-cfg:system
-    example: true
-  - yang_name: traps/Cisco-IOS-XR-um-traps-bridgemib-cfg:bridgemib
-    example: true
-  - yang_name: traps/Cisco-IOS-XR-um-traps-entity-state-cfg:entity-state/operstatus
-    example: true
-  - yang_name: traps/Cisco-IOS-XR-um-traps-entity-redundancy-cfg:entity-redundancy/all
-    example: true
-  - yang_name: trap-source/both
-    tf_name: trap_source
-    example: Loopback10
   - yang_name: traps/Cisco-IOS-XR-um-l2vpn-cfg:l2vpn/all
     example: true
   - yang_name: traps/Cisco-IOS-XR-um-l2vpn-cfg:l2vpn/vc-up
     example: true
   - yang_name: traps/Cisco-IOS-XR-um-l2vpn-cfg:l2vpn/vc-down
     example: true
+  - yang_name: traps/Cisco-IOS-XR-um-l2vpn-cfg:l2vpn/cisco
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-l2vpn-cfg:vpls/all
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-l2vpn-cfg:vpls/status
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-l2vpn-cfg:vpls/full-raise
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-l2vpn-cfg:vpls/full-clear
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-bfd-sbfd-cfg:bfd
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-cfg-mibs-cfg:config
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-ethernet-cfm-cfg:cfm
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-ethernet-oam-cfg:ethernet/oam/events
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-mibs-rfmib-cfg:rf
+    example: true
   - yang_name: traps/Cisco-IOS-XR-um-mibs-sensormib-cfg:sensor
     example: true
-  - yang_name: traps/Cisco-IOS-XR-um-traps-fru-ctrl-cfg:fru-ctrl
+  - yang_name: traps/Cisco-IOS-XR-um-mpls-l3vpn-cfg:mpls/l3vpn/all
+    tf_name: traps_mpls_l3vpn_all
+    no_augment_config: true
+    type: Bool
+    type_yang_bool: presence
+    description: "Enable all MPLS L3VPN traps"
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-mpls-l3vpn-cfg:mpls/l3vpn/vrf-up
+    tf_name: traps_mpls_l3vpn_vrf_up
+    no_augment_config: true
+    type: Bool
+    type_yang_bool: presence
+    description: "Enable VRF up traps"
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-mpls-l3vpn-cfg:mpls/l3vpn/vrf-down
+    tf_name: traps_mpls_l3vpn_vrf_down
+    no_augment_config: true
+    type: Bool
+    type_yang_bool: presence
+    description: "Enable VRF down traps"
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-mpls-l3vpn-cfg:mpls/l3vpn/mid-threshold-exceeded
+    tf_name: traps_mpls_l3vpn_mid_threshold_exceeded
+    no_augment_config: true
+    type: Bool
+    type_yang_bool: presence
+    description: "Enable mid-threshold exceeded traps"
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-mpls-l3vpn-cfg:mpls/l3vpn/max-threshold-exceeded
+    tf_name: traps_mpls_l3vpn_max_threshold_exceeded
+    no_augment_config: true
+    type: Bool
+    type_yang_bool: presence
+    description: "Enable max-threshold exceeded traps"
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-mpls-l3vpn-cfg:mpls/l3vpn/max-threshold-cleared
+    tf_name: traps_mpls_l3vpn_max_threshold_cleared
+    no_augment_config: true
+    type: Bool
+    type_yang_bool: presence
+    description: "Enable max-threshold cleared traps"
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-mpls-l3vpn-cfg:mpls/l3vpn/max-threshold-reissue-notif-time
+    tf_name: traps_mpls_l3vpn_max_threshold_reissue_notif_time
+    no_augment_config: true
+    type: Int64
+    description: "Time interval (secs) for re-issuing max-threshold notification"
+    min_int: 0
+    max_int: 2147483647
+    example: 100
+  - yang_name: traps/Cisco-IOS-XR-um-mpls-te-cfg:mpls/traffic-eng/cisco
+    tf_name: traps_mpls_traffic_eng_cisco
+    no_augment_config: true
+    type: Bool
+    type_yang_bool: presence
+    description: "MPLS TE tunnel traps in Cisco format (default ietf)"
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-mpls-te-cfg:mpls/traffic-eng/cisco-ext/bringup-fail
+    tf_name: traps_mpls_traffic_eng_cisco_ext_bringup_fail
+    no_augment_config: true
+    type: Bool
+    type_yang_bool: presence
+    description: "Enable MPLS TE tunnel bringup-fail trap"
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-mpls-te-cfg:mpls/traffic-eng/cisco-ext/insuff-bw
+    tf_name: traps_mpls_traffic_eng_cisco_ext_insuff_bw
+    no_augment_config: true
+    type: Bool
+    type_yang_bool: presence
+    description: "Enable MPLS TE tunnel insufficient bandwidth trap"
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-mpls-te-cfg:mpls/traffic-eng/cisco-ext/preempt
+    tf_name: traps_mpls_traffic_eng_cisco_ext_preempt
+    no_augment_config: true
+    type: Bool
+    type_yang_bool: presence
+    description: "Enable MPLS TE tunnel preempt trap"
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-mpls-te-cfg:mpls/traffic-eng/cisco-ext/reroute-pending
+    tf_name: traps_mpls_traffic_eng_cisco_ext_reroute_pending
+    no_augment_config: true
+    type: Bool
+    type_yang_bool: presence
+    description: "Enable MPLS TE tunnel reroute-pending trap"
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-mpls-te-cfg:mpls/traffic-eng/cisco-ext/reroute-pending-clear
+    tf_name: traps_mpls_traffic_eng_cisco_ext_reroute_pending_clear
+    no_augment_config: true
+    type: Bool
+    type_yang_bool: presence
+    description: "Enable MPLS TE tunnel reroute-pending clear trap"
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-mpls-te-cfg:mpls/traffic-eng/down
+    tf_name: traps_mpls_traffic_eng_down
+    no_augment_config: true
+    type: Bool
+    type_yang_bool: presence
+    description: "Enable MPLS TE tunnel down traps"
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-mpls-te-cfg:mpls/traffic-eng/p2mp/down
+    tf_name: traps_mpls_traffic_eng_p2mp_down
+    no_augment_config: true
+    type: Bool
+    type_yang_bool: presence
+    description: "Enable MPLS TE P2MP tunnel destination down traps"
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-mpls-te-cfg:mpls/traffic-eng/p2mp/up
+    tf_name: traps_mpls_traffic_eng_p2mp_up
+    no_augment_config: true
+    type: Bool
+    type_yang_bool: presence
+    description: "Enable MPLS TE P2MP tunnel destination up traps"
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-mpls-te-cfg:mpls/traffic-eng/reoptimize
+    tf_name: traps_mpls_traffic_eng_reoptimize
+    no_augment_config: true
+    type: Bool
+    type_yang_bool: presence
+    description: "Enable MPLS TE tunnel reoptimize traps"
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-mpls-te-cfg:mpls/traffic-eng/reroute
+    tf_name: traps_mpls_traffic_eng_reroute
+    no_augment_config: true
+    type: Bool
+    type_yang_bool: presence
+    description: "Enable MPLS TE tunnel reroute traps"
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-mpls-te-cfg:mpls/traffic-eng/up
+    tf_name: traps_mpls_traffic_eng_up
+    no_augment_config: true
+    type: Bool
+    type_yang_bool: presence
+    description: "Enable MPLS TE tunnel up traps"
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-ntp-cfg:ntp
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two/CBGP-TWO/ENABLE/enable
+    xpath: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two/enable
+    tf_name: traps_bgp_cbgp_two_enable
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two/CBGP-TWO/UPDOWN/updown
+    xpath: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two/updown
+    tf_name: traps_bgp_cbgp_two_updown
+    exclude_test: true
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/ENABLE/CISCO-BGP4-MIB/cisco-bgp4-mib
+    xpath: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/cisco-bgp4-mib
+    tf_name: traps_bgp_enable_updown
+    exclude_test: true
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/ENABLE/UPDOWN/updown
+    xpath: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/updown
+    tf_name: traps_bgp_enable_cisco_bgp4_mib
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-router-hsrp-cfg:hsrp
     example: true
   - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ALL/all
     xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/all
@@ -126,54 +327,168 @@ attributes:
     xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/lsp-error-detected
     tf_name: traps_isis_lsp_error_detected
     example: true
-  - yang_name: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two/CBGP-TWO/ENABLE/enable
-    xpath: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two/enable
-    tf_name: traps_bgp_cbgp_two_enable
+  - yang_name: traps/Cisco-IOS-XR-um-router-vrrp-cfg:vrrp/events
     example: true
-  - yang_name: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two/CBGP-TWO/UPDOWN/updown
-    xpath: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two/updown
-    tf_name: traps_bgp_cbgp_two_updown
-    exclude_test: true
+  - yang_name: traps/Cisco-IOS-XR-um-traps-alarm-cfg:alarm
     example: true
-  - yang_name: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/ENABLE/CISCO-BGP4-MIB/cisco-bgp4-mib
-    xpath: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/cisco-bgp4-mib
-    tf_name: traps_bgp_enable_updown
-    exclude_test: true
+  - yang_name: traps/Cisco-IOS-XR-um-traps-bridgemib-cfg:bridgemib
     example: true
-  - yang_name: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/ENABLE/UPDOWN/updown
-    xpath: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/updown
-    tf_name: traps_bgp_enable_cisco_bgp4_mib
+  - yang_name: traps/Cisco-IOS-XR-um-traps-config-copy-cfg:copy-complete
     example: true
-  - yang_name: users/user
-    tf_name: users
+  - yang_name: traps/Cisco-IOS-XR-um-traps-entity-cfg:entity
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-traps-entity-cfg:cisco-entity-ext
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-traps-entity-redundancy-cfg:entity-redundancy/all
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-traps-entity-redundancy-cfg:entity-redundancy/switchover
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-traps-entity-redundancy-cfg:entity-redundancy/status
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-traps-entity-state-cfg:entity-state/switchover
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-traps-entity-state-cfg:entity-state/operstatus
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-traps-flash-cfg:flash/insertion
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-traps-flash-cfg:flash/removal
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-traps-fru-ctrl-cfg:fru-ctrl
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-traps-ipsla-cfg:ipsla
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-traps-mpls-ldp-cfg:mpls/ldp/down
+    tf_name: traps_mpls_ldp_down
+    no_augment_config: true
+    type: Bool
+    type_yang_bool: presence
+    description: "Enable MPLS LDP session down traps"
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-traps-mpls-ldp-cfg:mpls/ldp/up
+    tf_name: traps_mpls_ldp_up
+    no_augment_config: true
+    type: Bool
+    type_yang_bool: presence
+    description: "Enable MPLS LDP session up traps"
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-traps-mpls-ldp-cfg:mpls/ldp/threshold
+    tf_name: traps_mpls_ldp_threshold
+    no_augment_config: true
+    type: Bool
+    type_yang_bool: presence
+    description: "Enable MPLS LDP threshold traps"
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-traps-pim-cfg:pim/neighbor-change
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-traps-pim-cfg:pim/interface-state-change
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-traps-pim-cfg:pim/invalid-message-received
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-traps-pim-cfg:pim/rp-mapping-change
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-traps-power-cfg:power
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-traps-syslog-cfg:syslog
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-traps-system-cfg:system
+    example: true
+  - yang_name: hosts/host
+    tf_name: hosts
     type: List
     attributes:
-      - yang_name: user-name
+      - yang_name: address
         id: true
-        example: USER1
-      - yang_name: group-name
-        example: GROUP1
-      - yang_name: v3/auth/md5/encryption-aes
-        example: 073C05626E2A4841141D
-      - yang_name: v3/auth/md5/encryption-default
-        exclude_test: true
-        example: 073C05626E2A4841141D
-      - yang_name: v3/auth/sha/encryption-aes
-        example: 073C05626E2A4841231D
-        exclude_test: true
-      - yang_name: v3/auth/sha/encryption-default
-        exclude_test: true
-        example: 073C05626E2A4843341D
-      - yang_name: v3/priv/aes/aes-128/encryption-default
-        example: 073C05626E2A4841141D
-        exclude_test: true
-      - yang_name: v3/priv/aes/aes-128/encryption-aes
-        example: 073C05626E2A4841231D
-        exclude_test: true
-      - yang_name: v3/ipv4
-        example: ACL1
-      - yang_name: v3/systemowner
-        example: true
+        example: 11.11.11.11
+      - yang_name: traps/unencrypted/unencrypted-string
+        tf_name: traps_unencrypted_strings
+        type: List
+        attributes:
+          - yang_name: community-string
+            id: true
+            sensitive: true
+            write_only: true
+            example: COMMUNITY1
+          - yang_name: udp-port
+            example: 1100
+          - yang_name: version/v2c
+            example: true
+            exclude_test: true
+          - yang_name: version/v3/security-level
+            example: auth
+      - yang_name: informs/unencrypted/unencrypted-string
+        tf_name: informs_unencrypted_strings
+        type: List
+        attributes:
+          - yang_name: community-string
+            id: true
+            sensitive: true
+            write_only: true
+            example: COMMUNITY2
+          - yang_name: udp-port
+            example: 1100
+          - yang_name: version/v2c
+            example: true
+            exclude_test: true
+          - yang_name: version/v3/security-level
+            example: auth
+  - yang_name: views/view
+    tf_name: views
+    type: List
+    attributes:
+      - yang_name: view-name
+        id: true
+        example: VIEW1
+      - yang_name: mib-view-families/mib-view-family
+        tf_name: mib_view_families
+        type: List
+        attributes:
+          - yang_name: mib-view-family-name
+            tf_name: name
+            id: true
+            example: "1.3.6.1.2.1.1"
+          - yang_name: included
+            delete_parent: true
+            example: true
+          - yang_name: excluded
+            delete_parent: true
+            exclude_test: true
+            example: true
+  - yang_name: trap-source/both
+    tf_name: trap_source
+    example: Loopback10
+  - yang_name: trap-source/ipv4
+    tf_name: trap_source_ipv4
+    example: Loopback0
+  - yang_name: trap-source/ipv6
+    tf_name: trap_source_ipv6
+    example: Loopback1
+  - yang_name: trap-source/port
+    tf_name: trap_source_port
+    example: 1200
+  - yang_name: trap/throttle-time
+    tf_name: trap_throttle_time
+    example: 100
+  - yang_name: trap/authentication/vrf/disable
+    tf_name: trap_authentication_vrf_disable
+    example: true
+  - yang_name: trap/delay-timer
+    tf_name: trap_delay_timer
+    example: 30
+  - yang_name: ipv4/dscp
+    tf_name: ipv4_dscp
+    example: ef
+  - yang_name: ipv6/dscp
+    tf_name: ipv6_dscp
+    example: ef
+  - yang_name: drop/unknown-user
+    tf_name: drop_unknown_user
+    example: true
+  - yang_name: drop/report/acl/ipv4
+    tf_name: drop_report_acl_ipv4
+    example: ACL1
+  - yang_name: drop/report/acl/ipv6
+    tf_name: drop_report_acl_ipv6
+    example: ACL1
   - yang_name: groups/group
     tf_name: groups
     type: List
@@ -181,7 +496,55 @@ attributes:
       - yang_name: group-name
         id: true
         example: GROUP12
+      - yang_name: v1
+        type: Bool
+        type_yang_bool: presence
+        example: true
+        exclude_test: true
+      - yang_name: v1/read
+        example: VIEW1
+        exclude_test: true
+      - yang_name: v1/write
+        example: VIEW2
+        exclude_test: true
+      - yang_name: v1/context
+        example: CONTEXT1
+        exclude_test: true
+      - yang_name: v1/notify
+        example: VIEW3
+        exclude_test: true
+      - yang_name: v1/ipv4
+        example: ACL1
+        exclude_test: true
+      - yang_name: v1/ipv6
+        example: ACL1
+        exclude_test: true
+      - yang_name: v2c
+        type: Bool
+        type_yang_bool: presence
+        example: true
+        exclude_test: true
+      - yang_name: v2c/read
+        example: VIEW1
+        exclude_test: true
+      - yang_name: v2c/write
+        example: VIEW2
+        exclude_test: true
+      - yang_name: v2c/context
+        example: CONTEXT1
+        exclude_test: true
+      - yang_name: v2c/notify
+        example: VIEW3
+        exclude_test: true
+      - yang_name: v2c/ipv4
+        example: ACL1
+        exclude_test: true
+      - yang_name: v2c/ipv6
+        example: ACL1
+        exclude_test: true
       - yang_name: v3/priv
+        type: Bool
+        type_yang_bool: presence
         example: true
       - yang_name: v3/read
         example: VIEW1
@@ -194,30 +557,191 @@ attributes:
       - yang_name: v3/ipv4
         example: ACL1
       - yang_name: v3/ipv6
-        example: ACL2
-  - yang_name: community/unencrypted/unencrypted-string
-    tf_name: communities
+        example: ACL1
+  - yang_name: engine-id/local
+    tf_name: engine_id_local
+    example: 80000009030000C0A80101
+  - yang_name: engine-id/remotes/remote
+    tf_name: engine_id_remotes
     type: List
     attributes:
-      - yang_name: community-string
-        tf_name: community
+      - yang_name: address
         id: true
-        example: COMMUNITY1
-      - yang_name: view
-        example: VIEW1
-      - yang_name: ro
+        example: 11.11.11.11
+      - yang_name: engine-id
+        example: 80000009030000C0A80101
+      - yang_name: udp-port
+        example: 1100
+  - yang_name: users/user
+    tf_name: users
+    type: List
+    attributes:
+      - yang_name: user-name
+        id: true
+        sensitive: true
+        example: USER1
+      - yang_name: group-name
+        sensitive: true
+        example: GROUP1
+      - yang_name: v1
         example: true
-        type_yang_bool: empty-leaf
-      - yang_name: rw
-        example: false
-        type_yang_bool: empty-leaf
-      - yang_name: sdrowner
-        example: false
-        type_yang_bool: empty-leaf
-      - yang_name: systemowner
-        example: true
-        type_yang_bool: empty-leaf
-      - yang_name: ipv4
+        type: Bool
+        type_yang_bool: presence
+        exclude_test: true
+      - yang_name: v1/ipv4
         example: ACL1
-      - yang_name: ipv6
-        example: ACL2
+        exclude_test: true
+      - yang_name: v1/ipv6
+        example: ACL1
+        exclude_test: true
+      - yang_name: v1/systemowner
+        type: Bool
+        example: true
+        exclude_test: true
+      - yang_name: v2c
+        example: true
+        type: Bool
+        type_yang_bool: presence
+        exclude_test: true
+      - yang_name: v2c/ipv4
+        example: ACL1
+        exclude_test: true
+      - yang_name: v2c/ipv6
+        example: ACL1
+        exclude_test: true
+      - yang_name: v2c/systemowner
+        type: Bool
+        example: true
+        exclude_test: true
+      - yang_name: v3
+        example: true
+        type: Bool
+        type_yang_bool: presence
+      - yang_name: v3/auth/md5/encryption-aes
+        sensitive: true
+        write_only: true
+        example: 073C05626E2A4841141D
+      - yang_name: v3/auth/md5/encryption-default
+        sensitive: true
+        write_only: true
+        example: 073C05626E2A4841141D
+        exclude_test: true
+      - yang_name: v3/auth/sha/encryption-aes
+        sensitive: true
+        write_only: true
+        example: 073C05626E2A4841231D
+        exclude_test: true
+      - yang_name: v3/auth/sha/encryption-default
+        sensitive: true
+        write_only: true
+        example: 073C05626E2A4843341D
+        exclude_test: true
+      - yang_name: v3/auth/sha-256/encryption-aes
+        sensitive: true
+        write_only: true
+        example: 073C05626E2A4841231D
+        exclude_test: true
+      - yang_name: v3/auth/sha-256/encryption-default
+        sensitive: true
+        write_only: true
+        example: 073C05626E2A4843341D
+        exclude_test: true
+      - yang_name: v3/auth/sha-512/encryption-aes
+        sensitive: true
+        write_only: true
+        example: 073C05626E2A4841231D
+        exclude_test: true
+      - yang_name: v3/auth/sha-512/encryption-default
+        sensitive: true
+        write_only: true
+        example: 073C05626E2A4843341D
+        exclude_test: true
+      - yang_name: v3/priv/aes/aes-128/encryption-default
+        sensitive: true
+        write_only: true
+        example: 073C05626E2A4841141D
+        exclude_test: true
+      - yang_name: v3/priv/aes/aes-128/encryption-aes
+        sensitive: true
+        write_only: true
+        example: 073C05626E2A4841231D
+        exclude_test: true
+      - yang_name: v3/priv/aes/aes-192/encryption-default
+        sensitive: true
+        write_only: true
+        example: 073C05626E2A4841141D
+        exclude_test: true
+      - yang_name: v3/priv/aes/aes-192/encryption-aes
+        sensitive: true
+        write_only: true
+        example: 073C05626E2A4841231D
+        exclude_test: true
+      - yang_name: v3/priv/aes/aes-256/encryption-default
+        sensitive: true
+        write_only: true
+        example: 073C05626E2A4841141D
+        exclude_test: true
+      - yang_name: v3/priv/aes/aes-256/encryption-aes
+        sensitive: true
+        write_only: true
+        example: 073C05626E2A4841231D
+        exclude_test: true
+      - yang_name: v3/ipv4
+        example: ACL1
+      - yang_name: v3/ipv6
+        example: ACL1
+      - yang_name: v3/systemowner
+        type: Bool
+        example: true
+  - yang_name: oid-poll-stats
+    tf_name: oid_poll_stats
+    example: true
+  - yang_name: timeouts/subagent
+    tf_name: timeouts_subagent
+    example: 20
+  - yang_name: timeouts/duplicate
+    tf_name: timeouts_duplicate
+    example: 10
+  - yang_name: timeouts/in-qdrop
+    tf_name: timeouts_in_qdrop
+    example: 20
+  - yang_name: timeouts/threshold
+    tf_name: timeouts_threshold
+    example: 10
+  - yang_name: timeouts/pdu/stats
+    tf_name: timeouts_pdu_stats
+    example: 10
+  - yang_name: logging/threshold/oid-processing
+    tf_name: logging_threshold_oid_processing
+    example: 10
+  - yang_name: logging/threshold/pdu-processing
+    tf_name: logging_threshold_pdu_processing
+    example: 10
+  - yang_name: inform/retries
+    tf_name: inform_retries
+    example: 10
+  - yang_name: inform/timeout
+    tf_name: inform_timeout
+    example: 10
+  - yang_name: inform/pending
+    tf_name: inform_pending
+    example: 10
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-ipv4-access-list-cfg:/ipv4/access-lists/access-list[access-list-name=ACL1]
+    attributes:
+      - name: access-list-name
+        value: ACL1
+    lists:
+      - name: sequences/sequence
+        key: sequence-number
+        items:
+          - attributes:
+              - name: sequence-number
+                value: 10
+              - name: permit/protocol
+                value: ipv4
+              - name: permit/source/any
+                value: "<EMPTY>"
+              - name: permit/destination/any
+                value: "<EMPTY>"

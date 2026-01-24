@@ -27,6 +27,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/tidwall/gjson"
 
@@ -77,9 +78,41 @@ func (d *RouterISISInterfaceDataSource) Schema(ctx context.Context, req datasour
 				MarkdownDescription: "Interface to configure",
 				Required:            true,
 			},
+			"mesh_group": schema.Int64Attribute{
+				MarkdownDescription: "Mesh group number",
+				Computed:            true,
+			},
+			"mesh_group_blocked": schema.BoolAttribute{
+				MarkdownDescription: "Block LSPs on this interface",
+				Computed:            true,
+			},
+			"state": schema.StringAttribute{
+				MarkdownDescription: "Do not establish adjacencies over this interface",
+				Computed:            true,
+			},
 			"circuit_type": schema.StringAttribute{
 				MarkdownDescription: "Configure circuit type for interface",
 				Computed:            true,
+			},
+			"csnp_interval": schema.Int64Attribute{
+				MarkdownDescription: "Set CSNP interval",
+				Computed:            true,
+			},
+			"csnp_interval_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set the CSNP interval only at the supplied level",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Set the CSNP interval only at this level",
+							Computed:            true,
+						},
+						"csnp_interval": schema.Int64Attribute{
+							MarkdownDescription: "Set CSNP interval",
+							Computed:            true,
+						},
+					},
+				},
 			},
 			"hello_padding": schema.StringAttribute{
 				MarkdownDescription: "Add padding to IS-IS hello packets",
@@ -100,6 +133,157 @@ func (d *RouterISISInterfaceDataSource) Schema(ctx context.Context, req datasour
 						},
 					},
 				},
+			},
+			"hello_interval": schema.Int64Attribute{
+				MarkdownDescription: "Set Hello interval in seconds",
+				Computed:            true,
+			},
+			"hello_interval_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set hello-interval for IIHs at this level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Set hello-interval for IIHs at this level only",
+							Computed:            true,
+						},
+						"hello_interval": schema.Int64Attribute{
+							MarkdownDescription: "Set Hello interval in seconds",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"hello_multiplier": schema.Int64Attribute{
+				MarkdownDescription: "Set multiplier for Hello holding time",
+				Computed:            true,
+			},
+			"hello_multiplier_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set hello-multiplier for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Set hello-multiplier for IIHs at this level only",
+							Computed:            true,
+						},
+						"hello_multiplier": schema.Int64Attribute{
+							MarkdownDescription: "Set multiplier for Hello holding time",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"lsp_interval": schema.Int64Attribute{
+				MarkdownDescription: "Set LSP transmission interval",
+				Computed:            true,
+			},
+			"lsp_interval_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set LSP transmission interval one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Set LSP transmission interval at this level only",
+							Computed:            true,
+						},
+						"lsp_interval": schema.Int64Attribute{
+							MarkdownDescription: "Set LSP transmission interval",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"hello_password_accept_encrypted": schema.StringAttribute{
+				MarkdownDescription: "Specifies a password will follow",
+				Computed:            true,
+				Sensitive:           true,
+			},
+			"hello_password_accepts_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set hello-password for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Set hello-password for IIHs at this level only",
+							Computed:            true,
+						},
+						"encrypted": schema.StringAttribute{
+							MarkdownDescription: "Specifies a password will follow",
+							Computed:            true,
+							Sensitive:           true,
+						},
+					},
+				},
+			},
+			"hello_password_text_encrypted": schema.StringAttribute{
+				MarkdownDescription: "Specifies a password will follow",
+				Computed:            true,
+				Sensitive:           true,
+			},
+			"hello_password_text_send_only": schema.BoolAttribute{
+				MarkdownDescription: "Do not require authentication of incoming IIHs",
+				Computed:            true,
+				Sensitive:           true,
+			},
+			"hello_password_hmac_md5_encrypted": schema.StringAttribute{
+				MarkdownDescription: "Specifies a password will follow",
+				Computed:            true,
+				Sensitive:           true,
+			},
+			"hello_password_hmac_md5_send_only": schema.BoolAttribute{
+				MarkdownDescription: "Do not require authentication of incoming IIHs",
+				Computed:            true,
+			},
+			"hello_password_keychain_name": schema.StringAttribute{
+				MarkdownDescription: "Specifies a Key Chain name will follow",
+				Computed:            true,
+			},
+			"hello_password_keychain_send_only": schema.BoolAttribute{
+				MarkdownDescription: "Do not require authentication of incoming IIHs",
+				Computed:            true,
+			},
+			"hello_password_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set hello-password for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Set hello-password for one level only",
+							Computed:            true,
+						},
+						"text_encrypted": schema.StringAttribute{
+							MarkdownDescription: "Specifies a password will follow",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"text_send_only": schema.BoolAttribute{
+							MarkdownDescription: "Do not require authentication of incoming IIHs",
+							Computed:            true,
+						},
+						"hmac_md5_encrypted": schema.StringAttribute{
+							MarkdownDescription: "Specifies a password will follow",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"hmac_md5_send_only": schema.BoolAttribute{
+							MarkdownDescription: "Do not require authentication of incoming IIHs",
+							Computed:            true,
+						},
+						"keychain_name": schema.StringAttribute{
+							MarkdownDescription: "Specifies a Key Chain name will follow",
+							Computed:            true,
+						},
+						"keychain_send_only": schema.BoolAttribute{
+							MarkdownDescription: "Do not require authentication of incoming IIHs",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"remote_psnp_delay": schema.Int64Attribute{
+				MarkdownDescription: "Set remote PSNP delay",
+				Computed:            true,
 			},
 			"priority": schema.Int64Attribute{
 				MarkdownDescription: "Set priority for Designated Router election",
@@ -125,89 +309,79 @@ func (d *RouterISISInterfaceDataSource) Schema(ctx context.Context, req datasour
 				MarkdownDescription: "Treat active LAN interface as point-to-point",
 				Computed:            true,
 			},
-			"state": schema.StringAttribute{
-				MarkdownDescription: "Do not establish adjacencies over this interface",
+			"retransmit_interval": schema.Int64Attribute{
+				MarkdownDescription: "Interval between retransmissions of the same LSP",
 				Computed:            true,
 			},
-			"hello_password_accept_encrypted": schema.StringAttribute{
-				MarkdownDescription: "Specifies a password will follow",
-				Computed:            true,
-			},
-			"hello_password_accepts_levels": schema.ListNestedAttribute{
-				MarkdownDescription: "Set hello-password for one level only",
+			"retransmit_interval_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set retransmit-interval for one level only",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"level_number": schema.Int64Attribute{
-							MarkdownDescription: "Set hello-password for IIHs at this level only",
+							MarkdownDescription: "Set retransmit-interval for LSPs at this level only",
 							Computed:            true,
 						},
-						"encrypted": schema.StringAttribute{
-							MarkdownDescription: "Specifies a password will follow",
+						"retransmit_interval": schema.Int64Attribute{
+							MarkdownDescription: "Interval between retransmissions of the same LSP",
 							Computed:            true,
 						},
 					},
 				},
 			},
-			"hello_password_text_encrypted": schema.StringAttribute{
-				MarkdownDescription: "Specifies a password will follow",
+			"retransmit_throttle_interval": schema.Int64Attribute{
+				MarkdownDescription: "Minimum interval betwen retransissions of different LSPs",
 				Computed:            true,
 			},
-			"hello_password_text_send_only": schema.BoolAttribute{
-				MarkdownDescription: "Do not require authentication of incoming IIHs",
-				Computed:            true,
-			},
-			"hello_password_hmac_md5_encrypted": schema.StringAttribute{
-				MarkdownDescription: "Specifies a password will follow",
-				Computed:            true,
-			},
-			"hello_password_hmac_md5_send_only": schema.BoolAttribute{
-				MarkdownDescription: "Do not require authentication of incoming IIHs",
-				Computed:            true,
-			},
-			"hello_password_keychain_name": schema.StringAttribute{
-				MarkdownDescription: "Specifies a Key Chain name will follow",
-				Computed:            true,
-			},
-			"hello_password_keychain_send_only": schema.BoolAttribute{
-				MarkdownDescription: "Do not require authentication of incoming IIHs",
-				Computed:            true,
-			},
-			"hello_password_levels": schema.ListNestedAttribute{
-				MarkdownDescription: "Set hello-password for one level only",
+			"retransmit_throttle_interval_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set retransmit-throttle-interval for one level only",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"level_number": schema.Int64Attribute{
-							MarkdownDescription: "Set hello-password for one level only",
+							MarkdownDescription: "Set retransmit-throttle-interval at this level only",
 							Computed:            true,
 						},
-						"hello_password_text_encrypted": schema.StringAttribute{
-							MarkdownDescription: "Specifies a password will follow",
-							Computed:            true,
-						},
-						"hello_password_text_send_only": schema.BoolAttribute{
-							MarkdownDescription: "Do not require authentication of incoming IIHs",
-							Computed:            true,
-						},
-						"hello_password_hmac_md5_encrypted": schema.StringAttribute{
-							MarkdownDescription: "Specifies a password will follow",
-							Computed:            true,
-						},
-						"hello_password_hmac_md5_send_only": schema.BoolAttribute{
-							MarkdownDescription: "Do not require authentication of incoming IIHs",
-							Computed:            true,
-						},
-						"hello_keychain_name": schema.StringAttribute{
-							MarkdownDescription: "Specifies a Key Chain name will follow",
-							Computed:            true,
-						},
-						"hello_keychain_send_only": schema.BoolAttribute{
-							MarkdownDescription: "Do not require authentication of incoming IIHs",
+						"retransmit_throttle_interval": schema.Int64Attribute{
+							MarkdownDescription: "Minimum interval betwen retransissions of different LSPs",
 							Computed:            true,
 						},
 					},
 				},
+			},
+			"link_down_fast_detect": schema.BoolAttribute{
+				MarkdownDescription: "Enable high priority detection",
+				Computed:            true,
+			},
+			"affinity_flex_algos": schema.ListAttribute{
+				MarkdownDescription: "Affinity names",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"affinity_flex_algos_anomalies": schema.ListAttribute{
+				MarkdownDescription: "Affinities to advertise when there is a link anomaly",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"override_metrics": schema.StringAttribute{
+				MarkdownDescription: "Override the configured link metrics",
+				Computed:            true,
+			},
+			"delay_normalize_interval": schema.Int64Attribute{
+				MarkdownDescription: "Value in microseconds",
+				Computed:            true,
+			},
+			"delay_normalize_offset": schema.Int64Attribute{
+				MarkdownDescription: "Normalization offset",
+				Computed:            true,
+			},
+			"mpls_ldp_sync": schema.BoolAttribute{
+				MarkdownDescription: "Configure LDP ISIS synchronization",
+				Computed:            true,
+			},
+			"mpls_ldp_sync_level": schema.Int64Attribute{
+				MarkdownDescription: "Set LDP synchronization for one level only",
+				Computed:            true,
 			},
 			"bfd_fast_detect_ipv4": schema.BoolAttribute{
 				MarkdownDescription: "Address Family",

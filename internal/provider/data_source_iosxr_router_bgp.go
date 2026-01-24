@@ -73,24 +73,12 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				MarkdownDescription: "bgp as-number",
 				Required:            true,
 			},
-			"default_information_originate": schema.BoolAttribute{
-				MarkdownDescription: "Distribute a default route",
-				Computed:            true,
-			},
 			"default_metric": schema.Int64Attribute{
 				MarkdownDescription: "default redistributed metric",
 				Computed:            true,
 			},
-			"nsr": schema.BoolAttribute{
-				MarkdownDescription: "Enable non-stop-routing support for all neighbors",
-				Computed:            true,
-			},
-			"nsr_disable": schema.BoolAttribute{
-				MarkdownDescription: "Disable non-stop-routing support for all neighbors",
-				Computed:            true,
-			},
-			"bgp_redistribute_internal": schema.BoolAttribute{
-				MarkdownDescription: "Allow redistribution of iBGP into IGPs (dangerous)",
+			"mvpn": schema.BoolAttribute{
+				MarkdownDescription: "Connect to PIM/PIM6",
 				Computed:            true,
 			},
 			"segment_routing_srv6_locator": schema.StringAttribute{
@@ -99,114 +87,6 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 			},
 			"segment_routing_srv6_usid_allocation_wide_local_id_block": schema.BoolAttribute{
 				MarkdownDescription: "Wide LIB allocation",
-				Computed:            true,
-			},
-			"timers_bgp_keepalive_interval": schema.Int64Attribute{
-				MarkdownDescription: "Keepalive interval",
-				Computed:            true,
-			},
-			"timers_bgp_keepalive_zero": schema.BoolAttribute{
-				MarkdownDescription: "Disable keepalives/hold time",
-				Computed:            true,
-			},
-			"timers_bgp_keepalive_zero_holdtime_zero": schema.BoolAttribute{
-				MarkdownDescription: "Disable keepalives/hold time",
-				Computed:            true,
-			},
-			"timers_bgp_keepalive_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
-				MarkdownDescription: "Minimum acceptable holdtime from neighbor",
-				Computed:            true,
-			},
-			"timers_bgp_holdtime": schema.Int64Attribute{
-				MarkdownDescription: "Holdtime",
-				Computed:            true,
-			},
-			"timers_bgp_holdtime_minimum_acceptable_holdtime": schema.Int64Attribute{
-				MarkdownDescription: "Minimum acceptable holdtime from neighbor",
-				Computed:            true,
-			},
-			"bgp_router_id": schema.StringAttribute{
-				MarkdownDescription: "Configure Router-id",
-				Computed:            true,
-			},
-			"bgp_graceful_restart_graceful_reset": schema.BoolAttribute{
-				MarkdownDescription: "Reset gracefully if configuration change forces a peer reset",
-				Computed:            true,
-			},
-			"ibgp_policy_out_enforce_modifications": schema.BoolAttribute{
-				MarkdownDescription: "Allow policy to modify all attributes",
-				Computed:            true,
-			},
-			"bgp_log_neighbor_changes_detail": schema.BoolAttribute{
-				MarkdownDescription: "Include extra detail in change messages",
-				Computed:            true,
-			},
-			"bfd_minimum_interval": schema.Int64Attribute{
-				MarkdownDescription: "Hello interval",
-				Computed:            true,
-			},
-			"bfd_multiplier": schema.Int64Attribute{
-				MarkdownDescription: "Detect multiplier",
-				Computed:            true,
-			},
-			"nexthop_validation_color_extcomm_sr_policy": schema.BoolAttribute{
-				MarkdownDescription: "Enable BGP next-hop reachability validation by SR Policy for color-extcomm paths",
-				Computed:            true,
-			},
-			"nexthop_validation_color_extcomm_disable": schema.BoolAttribute{
-				MarkdownDescription: "Disable next-hop reachability validation for color-extcomm paths",
-				Computed:            true,
-			},
-			"bgp_bestpath_as_path_ignore": schema.BoolAttribute{
-				MarkdownDescription: "Indicates a ignore node is configured.",
-				Computed:            true,
-			},
-			"bgp_bestpath_as_path_multipath_relax": schema.BoolAttribute{
-				MarkdownDescription: "Indicates a multipath-relax node is configured.",
-				Computed:            true,
-			},
-			"bgp_bestpath_cost_community_ignore": schema.BoolAttribute{
-				MarkdownDescription: "Ignore cost-community comparison",
-				Computed:            true,
-			},
-			"bgp_bestpath_compare_routerid": schema.BoolAttribute{
-				MarkdownDescription: "Compare router-id for identical EBGP paths",
-				Computed:            true,
-			},
-			"bgp_bestpath_aigp_ignore": schema.BoolAttribute{
-				MarkdownDescription: "Ignore AIGP attribute",
-				Computed:            true,
-			},
-			"bgp_bestpath_igp_metric_ignore": schema.BoolAttribute{
-				MarkdownDescription: "Ignore IGP metric during path comparison",
-				Computed:            true,
-			},
-			"bgp_bestpath_igp_metric_sr_policy": schema.BoolAttribute{
-				MarkdownDescription: "Use next-hop admin/metric from SR policy at Next Hop metric comparison stage",
-				Computed:            true,
-			},
-			"bgp_bestpath_med_always": schema.BoolAttribute{
-				MarkdownDescription: "Treat missing MED as the least preferred one",
-				Computed:            true,
-			},
-			"bgp_bestpath_med_missing_as_worst": schema.BoolAttribute{
-				MarkdownDescription: "Treat missing MED as the least preferred one",
-				Computed:            true,
-			},
-			"bgp_bestpath_origin_as_use_validity": schema.BoolAttribute{
-				MarkdownDescription: "BGP bestpath selection will use origin-AS validity",
-				Computed:            true,
-			},
-			"bgp_bestpath_origin_as_allow_invalid": schema.BoolAttribute{
-				MarkdownDescription: "BGP bestpath selection will allow 'invalid' origin-AS",
-				Computed:            true,
-			},
-			"bgp_bestpath_sr_policy_prefer": schema.BoolAttribute{
-				MarkdownDescription: "Consider only paths over SR Policy for bestpath selection, eBGP no-color eligible",
-				Computed:            true,
-			},
-			"bgp_bestpath_sr_policy_force": schema.BoolAttribute{
-				MarkdownDescription: "Consider only paths over SR Policy for bestpath selection, eBGP no-color ineligible",
 				Computed:            true,
 			},
 			"neighbors": schema.ListNestedAttribute{
@@ -222,12 +102,24 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							MarkdownDescription: "Set remote AS",
 							Computed:            true,
 						},
-						"description": schema.StringAttribute{
-							MarkdownDescription: "Neighbor specific description",
+						"maximum_peers": schema.Int64Attribute{
+							MarkdownDescription: "Maximum dynamic neighbors",
+							Computed:            true,
+						},
+						"remote_as_list": schema.StringAttribute{
+							MarkdownDescription: "Remote as-list configuration",
+							Computed:            true,
+						},
+						"as_path_loopcheck_out": schema.StringAttribute{
+							MarkdownDescription: "For outbound updates",
 							Computed:            true,
 						},
 						"use_neighbor_group": schema.StringAttribute{
 							MarkdownDescription: "Inherit configuration from a neighbor-group",
+							Computed:            true,
+						},
+						"use_session_group": schema.StringAttribute{
+							MarkdownDescription: "Inherit address-family independent config from a session-group",
 							Computed:            true,
 						},
 						"advertisement_interval_seconds": schema.Int64Attribute{
@@ -238,13 +130,61 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							MarkdownDescription: "time in milliseconds",
 							Computed:            true,
 						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: "Neighbor specific description",
+							Computed:            true,
+						},
 						"ignore_connected_check": schema.BoolAttribute{
 							MarkdownDescription: "Bypass the directly connected nexthop check for single-hop eBGP peering",
+							Computed:            true,
+						},
+						"ignore_connected_check_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevent ignore-connected-check from being inherited from the parent",
 							Computed:            true,
 						},
 						"ebgp_multihop_maximum_hop_count": schema.Int64Attribute{
 							MarkdownDescription: "maximum hop count",
 							Computed:            true,
+						},
+						"ebgp_multihop_mpls": schema.BoolAttribute{
+							MarkdownDescription: "Disable BGP MPLS forwarding",
+							Computed:            true,
+						},
+						"tcp_mss_value": schema.Int64Attribute{
+							MarkdownDescription: "TCP initial maximum segment size",
+							Computed:            true,
+						},
+						"tcp_mss_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevent tcp mss from being inherited from the parent",
+							Computed:            true,
+						},
+						"tcp_mtu_discovery": schema.BoolAttribute{
+							MarkdownDescription: "Enable Path MTU discovery on TCP session",
+							Computed:            true,
+						},
+						"tcp_mtu_discovery_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevent TCP MTU cfg from being inherited from the parent",
+							Computed:            true,
+						},
+						"tcp_ip_only_preferred": schema.BoolAttribute{
+							MarkdownDescription: "Prefer to send BGP control plane traffic on IP",
+							Computed:            true,
+						},
+						"tcp_ip_only_preferred_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Do not inherit this configuration from parent group",
+							Computed:            true,
+						},
+						"bmp_activate_servers": schema.ListNestedAttribute{
+							MarkdownDescription: "Enable BMP connection to particular server",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"server_number": schema.Int64Attribute{
+										MarkdownDescription: "Enable BMP connection to particular server",
+										Computed:            true,
+									},
+								},
+							},
 						},
 						"bfd_minimum_interval": schema.Int64Attribute{
 							MarkdownDescription: "Hello interval",
@@ -266,12 +206,73 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							MarkdownDescription: "Prevent bfd settings from being inherited from the parent",
 							Computed:            true,
 						},
+						"bfd_fast_detect_strict_mode_negotiate": schema.BoolAttribute{
+							MarkdownDescription: "Hold down neighbor session until BFD is up (based on strict-mode capability negotiation)",
+							Computed:            true,
+						},
+						"bfd_fast_detect_strict_mode_negotiate_override": schema.BoolAttribute{
+							MarkdownDescription: "Do not bring up neighbor session until BFD up even if strict-mode capability is not received",
+							Computed:            true,
+						},
+						"keychain_name": schema.StringAttribute{
+							MarkdownDescription: "Name of the key chain - maximum 32 characters",
+							Computed:            true,
+						},
+						"keychain_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevent keychain from being inherited from parent",
+							Computed:            true,
+						},
+						"local_as_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevent local AS from being inherited from parent",
+							Computed:            true,
+						},
+						"local_as": schema.StringAttribute{
+							MarkdownDescription: "AS number",
+							Computed:            true,
+						},
+						"local_as_no_prepend": schema.BoolAttribute{
+							MarkdownDescription: "Do not prepend local AS to announcements from this neighbor",
+							Computed:            true,
+						},
+						"local_as_no_prepend_replace_as": schema.BoolAttribute{
+							MarkdownDescription: "Prepend only local AS to announcements to this neighbor",
+							Computed:            true,
+						},
+						"local_as_no_prepend_replace_as_dual_as": schema.BoolAttribute{
+							MarkdownDescription: "Dual-AS mode",
+							Computed:            true,
+						},
 						"password": schema.StringAttribute{
 							MarkdownDescription: "Specifies an ENCRYPTED password will follow",
 							Computed:            true,
+							Sensitive:           true,
 						},
 						"password_inheritance_disable": schema.BoolAttribute{
 							MarkdownDescription: "Prevent password from being inherited from parent",
+							Computed:            true,
+						},
+						"receive_buffer_size": schema.Int64Attribute{
+							MarkdownDescription: "Receive socket buffer size in bytes",
+							Computed:            true,
+						},
+						"receive_buffer_size_read": schema.Int64Attribute{
+							MarkdownDescription: "BGP Read buffer size in bytes",
+							Computed:            true,
+						},
+						"send_buffer_size": schema.Int64Attribute{
+							MarkdownDescription: "Send socket buffer size in bytes",
+							Computed:            true,
+						},
+						"send_buffer_size_write": schema.Int64Attribute{
+							MarkdownDescription: "BGP Write buffer size in bytes",
+							Computed:            true,
+						},
+						"fast_fallover": schema.BoolAttribute{
+							MarkdownDescription: "Force neighbor to be directly connected. Bring neighbor down if its interface goes down",
+							Computed:            true,
+						},
+						"fast_fallover_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevent this neighbor from inheriting this config from a group it is in",
 							Computed:            true,
 						},
 						"shutdown": schema.BoolAttribute{
@@ -302,12 +303,869 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							MarkdownDescription: "Minimum acceptable holdtime from neighbor",
 							Computed:            true,
 						},
+						"local_address": schema.StringAttribute{
+							MarkdownDescription: "IP address",
+							Computed:            true,
+						},
+						"local_address_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevent local address from being inherited from parent",
+							Computed:            true,
+						},
+						"log_neighbor_changes_detail": schema.BoolAttribute{
+							MarkdownDescription: "detail",
+							Computed:            true,
+						},
+						"log_neighbor_changes_disable": schema.BoolAttribute{
+							MarkdownDescription: "disable",
+							Computed:            true,
+						},
+						"log_neighbor_changes_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevents the log state changes from being inherited from the parent",
+							Computed:            true,
+						},
+						"log_message_in_size": schema.Int64Attribute{
+							MarkdownDescription: "Range for message log buffer size",
+							Computed:            true,
+						},
+						"log_message_in_disable": schema.BoolAttribute{
+							MarkdownDescription: "disable",
+							Computed:            true,
+						},
+						"log_message_in_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevents the log state changes from being inherited from the parent",
+							Computed:            true,
+						},
+						"log_message_out_size": schema.Int64Attribute{
+							MarkdownDescription: "Range for message log buffer size",
+							Computed:            true,
+						},
+						"log_message_out_disable": schema.BoolAttribute{
+							MarkdownDescription: "disable",
+							Computed:            true,
+						},
+						"log_message_out_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevents the log state changes from being inherited from the parent",
+							Computed:            true,
+						},
 						"update_source": schema.StringAttribute{
 							MarkdownDescription: "Source of routing updates",
 							Computed:            true,
 						},
+						"local_address_subnet_prefix": schema.StringAttribute{
+							MarkdownDescription: "IPaddress",
+							Computed:            true,
+						},
+						"local_address_subnet_mask": schema.Int64Attribute{
+							MarkdownDescription: "IP address prefix",
+							Computed:            true,
+						},
+						"dmz_link_bandwidth": schema.BoolAttribute{
+							MarkdownDescription: "Propagate the DMZ link bandwidth",
+							Computed:            true,
+						},
+						"dmz_link_bandwidth_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevent dmz-link-bandwidth from being inherited from the parent",
+							Computed:            true,
+						},
+						"ebgp_recv_extcommunity_dmz": schema.BoolAttribute{
+							MarkdownDescription: "Receive extcommunity dmz link bandwidth from ebgp neighbor",
+							Computed:            true,
+						},
+						"ebgp_recv_extcommunity_dmz_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevent ebgp-send-community-dmz from being inherited from parent",
+							Computed:            true,
+						},
+						"ebgp_send_extcommunity_dmz": schema.BoolAttribute{
+							MarkdownDescription: "Send extended community dmz link bandwidth to ebgp neighbor",
+							Computed:            true,
+						},
+						"ebgp_send_extcommunity_dmz_cumulative": schema.BoolAttribute{
+							MarkdownDescription: "Send cumulative community dmz link bandwidth of all multipaths to ebgp neighbor",
+							Computed:            true,
+						},
+						"ebgp_send_extcommunity_dmz_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevent ebgp-send-extcommunity-dmz from being inherited from parent",
+							Computed:            true,
+						},
 						"ttl_security": schema.BoolAttribute{
 							MarkdownDescription: "Enable EBGP TTL security",
+							Computed:            true,
+						},
+						"ttl_security_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevent ttl-security from being inherited from the parent",
+							Computed:            true,
+						},
+						"session_open_mode": schema.StringAttribute{
+							MarkdownDescription: "Establish BGP session using this TCP open mode",
+							Computed:            true,
+						},
+						"dscp": schema.StringAttribute{
+							MarkdownDescription: "Set IP DSCP (DiffServ CodePoint)",
+							Computed:            true,
+						},
+						"precedence": schema.StringAttribute{
+							MarkdownDescription: "Set precedence",
+							Computed:            true,
+						},
+						"capability_additional_paths_send": schema.BoolAttribute{
+							MarkdownDescription: "Additional paths Send capability",
+							Computed:            true,
+						},
+						"capability_additional_paths_send_disable": schema.BoolAttribute{
+							MarkdownDescription: "Do not advertise additional paths Send capability",
+							Computed:            true,
+						},
+						"capability_additional_paths_receive": schema.BoolAttribute{
+							MarkdownDescription: "Additional paths Receive capability",
+							Computed:            true,
+						},
+						"capability_additional_paths_receive_disable": schema.BoolAttribute{
+							MarkdownDescription: "Do not advertise additional paths Receive capability",
+							Computed:            true,
+						},
+						"capability_suppress_all": schema.BoolAttribute{
+							MarkdownDescription: "All capabilities",
+							Computed:            true,
+						},
+						"capability_suppress_all_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Do not inherit this configuration from parent group",
+							Computed:            true,
+						},
+						"capability_suppress_extended_nexthop_encoding": schema.BoolAttribute{
+							MarkdownDescription: "Extended-nexthop-encoding capabilities (IETF RFC 5549)",
+							Computed:            true,
+						},
+						"capability_suppress_extended_nexthop_encoding_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Do not inherit this configuration from parent group",
+							Computed:            true,
+						},
+						"capability_suppress_four_byte_as": schema.BoolAttribute{
+							MarkdownDescription: "4-byte-as capability",
+							Computed:            true,
+						},
+						"capability_suppress_four_byte_as_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevent capability suppress 4-type-as being inherited from the parent",
+							Computed:            true,
+						},
+						"graceful_restart": schema.BoolAttribute{
+							MarkdownDescription: "Enable graceful restart support for this neighbor",
+							Computed:            true,
+						},
+						"graceful_restart_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable graceful restart support for this neighbor",
+							Computed:            true,
+						},
+						"graceful_restart_helper_only": schema.BoolAttribute{
+							MarkdownDescription: "Enable graceful restart in helper-mode only.Forwarding state will not retained in local restart. Peer's routes will ne retained when peer restarts",
+							Computed:            true,
+						},
+						"graceful_restart_helper_only_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevent GR helper-mode cfg from being inherited from the parent",
+							Computed:            true,
+						},
+						"graceful_restart_restart_time": schema.Int64Attribute{
+							MarkdownDescription: "Restart time advertised to the neighbor",
+							Computed:            true,
+						},
+						"graceful_restart_stalepath_time": schema.Int64Attribute{
+							MarkdownDescription: "Maximum time to wait for restart of GR capable peer",
+							Computed:            true,
+						},
+						"enforce_first_as": schema.StringAttribute{
+							MarkdownDescription: "enforce-first-as",
+							Computed:            true,
+						},
+						"cluster_id_32bit_format": schema.Int64Attribute{
+							MarkdownDescription: "Route-Reflector Cluster-id as 32 bit quantity",
+							Computed:            true,
+						},
+						"cluster_id_ip_format": schema.StringAttribute{
+							MarkdownDescription: "Route-Reflector Cluster-id in IP address format",
+							Computed:            true,
+						},
+						"idle_watch_time": schema.Int64Attribute{
+							MarkdownDescription: "Maximum time to wait for deletion of IDLE state dynamic peer",
+							Computed:            true,
+						},
+						"allowas_in": schema.Int64Attribute{
+							MarkdownDescription: "Number of occurrences of AS number",
+							Computed:            true,
+						},
+						"egress_engineering": schema.BoolAttribute{
+							MarkdownDescription: "Enable egress peer engineering for this neighbor",
+							Computed:            true,
+						},
+						"egress_engineering_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Do not inherit egress-engineering from the parent",
+							Computed:            true,
+						},
+						"peer_sets": schema.ListNestedAttribute{
+							MarkdownDescription: "Assign this neighbor to a peer-set used for egress peer engineering",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"peer": schema.Int64Attribute{
+										MarkdownDescription: "Identity value of peer-set",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"peer_node_sid_index": schema.Int64Attribute{
+							MarkdownDescription: "Segment Index value which is offset of SRLB",
+							Computed:            true,
+						},
+						"ao_key_chain_name": schema.StringAttribute{
+							MarkdownDescription: "Name of the key chain - maximum 32 characters",
+							Computed:            true,
+						},
+						"ao_key_chain_include_tcp_options": schema.StringAttribute{
+							MarkdownDescription: "Include/Exclude other TCP options in the header",
+							Computed:            true,
+						},
+						"ao_key_chain_accept_mismatch": schema.BoolAttribute{
+							MarkdownDescription: "Accept new connection even if AO mismatched",
+							Computed:            true,
+						},
+						"ao_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevent keychain from being inherited from parent",
+							Computed:            true,
+						},
+						"dampening": schema.StringAttribute{
+							MarkdownDescription: "(Deprecated in 7.11.1) Enable route-flap-damping",
+							Computed:            true,
+						},
+						"as_override": schema.StringAttribute{
+							MarkdownDescription: "(Deprecated in 7.11.1) Override matching AS-number while sending update",
+							Computed:            true,
+						},
+						"default_policy_action_in": schema.StringAttribute{
+							MarkdownDescription: "Default action if route does not satisfy inbound route-policy",
+							Computed:            true,
+						},
+						"default_policy_action_out": schema.StringAttribute{
+							MarkdownDescription: "Default action if route does not satisfy outbound route-policy",
+							Computed:            true,
+						},
+						"origin_as_validation_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable RPKI origin-AS validation",
+							Computed:            true,
+						},
+						"send_extended_community_ebgp": schema.BoolAttribute{
+							MarkdownDescription: "Send extended community attribute to this external neighbor",
+							Computed:            true,
+						},
+						"send_extended_community_ebgp_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevent send-extended-community-ebgp from being inherited from parent",
+							Computed:            true,
+						},
+						"bestpath_origin_as_allow_invalid": schema.BoolAttribute{
+							MarkdownDescription: "BGP bestpath selection will allow 'invalid' origin-AS",
+							Computed:            true,
+						},
+						"update_in_filtering_message_buffers": schema.Int64Attribute{
+							MarkdownDescription: "Number of buffers to store filtered update messages (resizing does not take effect after filtering action has started)",
+							Computed:            true,
+						},
+						"update_in_filtering_message_buffers_type": schema.StringAttribute{
+							MarkdownDescription: "buffer-list",
+							Computed:            true,
+						},
+						"update_in_filtering_logging_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable update filtering syslog message",
+							Computed:            true,
+						},
+						"update_in_filtering_attribute_filter_group": schema.StringAttribute{
+							MarkdownDescription: "Attribute-filter group configuration",
+							Computed:            true,
+						},
+						"update_in_labeled_unicast_equivalent": schema.BoolAttribute{
+							MarkdownDescription: "IPv4/IPv6 labeled-unicast inbound updates (paths) treated equivalent to unicast updates (paths)",
+							Computed:            true,
+						},
+						"update_in_labeled_unicast_equivalent_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Do not inherit this configuration from parent group",
+							Computed:            true,
+						},
+						"update_in_error_handling_avoid_reset": schema.StringAttribute{
+							MarkdownDescription: "Avoid neighbor reset during inbound update message error handling",
+							Computed:            true,
+						},
+						"update_in_error_handling_treat_as_withdraw": schema.StringAttribute{
+							MarkdownDescription: "(Deprecated in 7.11.1) Treat NLRIs as withdraws during inbound update message error handling",
+							Computed:            true,
+						},
+						"graceful_maintenance_activate": schema.BoolAttribute{
+							MarkdownDescription: "Routes will be announced with the graceful maintenance attributes while activated either here or under router bgp configuration. While activated, all routes to this neighbor will be announced with the attributes configured here and all routes from this neighbor will be announced to other neighbors with the graceful maintenance attributes configured under those neighbors. The g-shut community will be announced regardless of the other attributes configured here. To allow the g-shut community to be announced to ebgp neighbors, the send-community-gshut-ebgp configuration is also required. Note: changes to the attributes will not take effect while activated.",
+							Computed:            true,
+						},
+						"graceful_maintenance_activate_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevent activate from being inherited from the parent",
+							Computed:            true,
+						},
+						"graceful_maintenance_local_preference": schema.Int64Attribute{
+							MarkdownDescription: "Range of values for Local Preference",
+							Computed:            true,
+						},
+						"graceful_maintenance_local_preference_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevent local preference from being inherited from the parent",
+							Computed:            true,
+						},
+						"graceful_maintenance_as_prepends_number": schema.Int64Attribute{
+							MarkdownDescription: "Range of number of AS prepends",
+							Computed:            true,
+						},
+						"graceful_maintenance_as_prepends_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevent AS prepends from being inherited from the parent",
+							Computed:            true,
+						},
+						"graceful_maintenance_bandwidth_aware_percentage_threshold": schema.Int64Attribute{
+							MarkdownDescription: "Low threshold of effective bandwidth (in kbps) to enter/exit graceful-maintenance",
+							Computed:            true,
+						},
+						"graceful_maintenance_bandwidth_aware_percentage_threshold_high": schema.Int64Attribute{
+							MarkdownDescription: "Optional High threshold of effective bandwidth (in kbps) to exit graceful-maintenance",
+							Computed:            true,
+						},
+						"graceful_maintenance_bandwidth_aware_bandwidth_threshold": schema.Int64Attribute{
+							MarkdownDescription: "Low threshold of effective bandwidth (in kbps) to enter/exit graceful-maintenance",
+							Computed:            true,
+						},
+						"graceful_maintenance_bandwidth_aware_bandwidth_threshold_high": schema.Int64Attribute{
+							MarkdownDescription: "Optional High threshold of effective bandwidth (in kbps) to exit graceful-maintenance",
+							Computed:            true,
+						},
+						"graceful_maintenance_bandwidth_aware_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevent bandwidth-aware from being inherited from the parent",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"graceful_maintenance_activate_all_neighbors": schema.BoolAttribute{
+				MarkdownDescription: "Also neighbors without graceful-maintenance config",
+				Computed:            true,
+			},
+			"graceful_maintenance_activate_retain_routes": schema.BoolAttribute{
+				MarkdownDescription: "Keep BGP routes in RIB once BGP process stops",
+				Computed:            true,
+			},
+			"graceful_maintenance_activate_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "Enable graceful-maintenance on all directly connected ebgp neighbors whose session is going over this interface",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: "Select an interface to configure",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"graceful_maintenance_activate_locations": schema.ListNestedAttribute{
+				MarkdownDescription: "Enable graceful-maintenance on all directly connected ebgp neighbors whose session is going over this line card location",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"location_value": schema.StringAttribute{
+							MarkdownDescription: "location",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"mpls_activate_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "Interface to enable mpls",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: "Select an interface to configure",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"as_league_peers": schema.ListNestedAttribute{
+				MarkdownDescription: "AS League peers mode",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"peer_as_number": schema.StringAttribute{
+							MarkdownDescription: "AS number",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"attribute_filter_groups": schema.ListNestedAttribute{
+				MarkdownDescription: "Attribute-filter group command mode",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"group_name": schema.StringAttribute{
+							MarkdownDescription: "Attribute-filter group name",
+							Computed:            true,
+						},
+						"attribute_code_ranges": schema.ListNestedAttribute{
+							MarkdownDescription: "Attribute code in range",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"start": schema.Int64Attribute{
+										MarkdownDescription: "Attribute code range start",
+										Computed:            true,
+									},
+									"end": schema.Int64Attribute{
+										MarkdownDescription: "Attribute code range end",
+										Computed:            true,
+									},
+									"discard": schema.BoolAttribute{
+										MarkdownDescription: "Discard this attribute",
+										Computed:            true,
+									},
+									"treat_as_withdraw": schema.BoolAttribute{
+										MarkdownDescription: "Treat the update message as a Withdraw",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"as_lists": schema.ListNestedAttribute{
+				MarkdownDescription: "List of AS numbers",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"list_name": schema.StringAttribute{
+							MarkdownDescription: "as-list name",
+							Computed:            true,
+						},
+						"as_numbers": schema.ListNestedAttribute{
+							MarkdownDescription: "AS number",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"as_value": schema.StringAttribute{
+										MarkdownDescription: "AS number",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"default_information_originate": schema.BoolAttribute{
+				MarkdownDescription: "Distribute a default route",
+				Computed:            true,
+			},
+			"socket_receive_buffer_size": schema.Int64Attribute{
+				MarkdownDescription: "Receive socket buffer size in bytes",
+				Computed:            true,
+			},
+			"socket_receive_buffer_size_read": schema.Int64Attribute{
+				MarkdownDescription: "BGP Read buffer size in bytes",
+				Computed:            true,
+			},
+			"socket_send_buffer_size": schema.Int64Attribute{
+				MarkdownDescription: "Send socket buffer size in bytes",
+				Computed:            true,
+			},
+			"socket_send_buffer_size_write": schema.Int64Attribute{
+				MarkdownDescription: "BGP Write buffer size in bytes",
+				Computed:            true,
+			},
+			"nexthop_mpls_forwarding_ibgp": schema.BoolAttribute{
+				MarkdownDescription: "Enable mpls forwarding path for ibgp learnt nexthops",
+				Computed:            true,
+			},
+			"nexthop_validation_color_extcomm_sr_policy": schema.BoolAttribute{
+				MarkdownDescription: "Enable BGP next-hop reachability validation by SR Policy for color-extcomm paths",
+				Computed:            true,
+			},
+			"nexthop_validation_color_extcomm_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable next-hop reachability validation for color-extcomm paths",
+				Computed:            true,
+			},
+			"nexthop_resolution_allow_default": schema.BoolAttribute{
+				MarkdownDescription: "Enable nexthops resolution using default route",
+				Computed:            true,
+			},
+			"nexthop_srte_metric_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable BGP next-hop metric inheritance from SR policy",
+				Computed:            true,
+			},
+			"slow_peer_dynamic": schema.BoolAttribute{
+				MarkdownDescription: "Configure all neighbors as dynamic slow-peer",
+				Computed:            true,
+			},
+			"slow_peer_dynamic_threshold": schema.Int64Attribute{
+				MarkdownDescription: "Threshold (in seconds) to detect neighbors as slow-peer",
+				Computed:            true,
+			},
+			"slow_peer_detection_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable dynamic slow-peer detection",
+				Computed:            true,
+			},
+			"bgp_redistribute_internal": schema.BoolAttribute{
+				MarkdownDescription: "Allow redistribution of iBGP into IGPs (dangerous)",
+				Computed:            true,
+			},
+			"bgp_router_id": schema.StringAttribute{
+				MarkdownDescription: "Configure Router-id",
+				Computed:            true,
+			},
+			"bgp_unsafe_ebgp_policy": schema.BoolAttribute{
+				MarkdownDescription: "Make eBGP neighbors with no policy pass all routes",
+				Computed:            true,
+			},
+			"bgp_scan_time": schema.Int64Attribute{
+				MarkdownDescription: "Configure background scanner interval for this address-family",
+				Computed:            true,
+			},
+			"bgp_read_only": schema.BoolAttribute{
+				MarkdownDescription: "Allow duplicate table config and disable update generation",
+				Computed:            true,
+			},
+			"bgp_lpts_secure_binding": schema.BoolAttribute{
+				MarkdownDescription: "Enable installation of LPTS secure binding for directly connected eBGP neighbor",
+				Computed:            true,
+			},
+			"bgp_as_path_loopcheck": schema.BoolAttribute{
+				MarkdownDescription: "Enable AS-path loop checking for iBGP peers",
+				Computed:            true,
+			},
+			"bgp_auto_policy_soft_reset_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable automatic soft peer reset on policy reconfiguration",
+				Computed:            true,
+			},
+			"bgp_bestpath_cost_community_ignore": schema.BoolAttribute{
+				MarkdownDescription: "Ignore cost-community comparison",
+				Computed:            true,
+			},
+			"bgp_bestpath_compare_routerid": schema.BoolAttribute{
+				MarkdownDescription: "Compare router-id for identical EBGP paths",
+				Computed:            true,
+			},
+			"bgp_bestpath_aigp_ignore": schema.BoolAttribute{
+				MarkdownDescription: "Ignore AIGP attribute",
+				Computed:            true,
+			},
+			"bgp_bestpath_igp_metric_ignore": schema.BoolAttribute{
+				MarkdownDescription: "Ignore IGP metric during path comparison",
+				Computed:            true,
+			},
+			"bgp_bestpath_igp_metric_sr_policy": schema.BoolAttribute{
+				MarkdownDescription: "Use next-hop admin/metric from SR policy at Next Hop metric comparison stage",
+				Computed:            true,
+			},
+			"bgp_bestpath_med_missing_as_worst": schema.BoolAttribute{
+				MarkdownDescription: "Treat missing MED as the least preferred one",
+				Computed:            true,
+			},
+			"bgp_bestpath_med_always": schema.BoolAttribute{
+				MarkdownDescription: "Treat missing MED as the least preferred one",
+				Computed:            true,
+			},
+			"bgp_bestpath_as_path_ignore": schema.BoolAttribute{
+				MarkdownDescription: "Indicates a ignore node is configured.",
+				Computed:            true,
+			},
+			"bgp_bestpath_as_path_multipath_relax": schema.BoolAttribute{
+				MarkdownDescription: "Indicates a multipath-relax node is configured.",
+				Computed:            true,
+			},
+			"bgp_bestpath_origin_as_use_validity": schema.BoolAttribute{
+				MarkdownDescription: "BGP bestpath selection will use origin-AS validity",
+				Computed:            true,
+			},
+			"bgp_bestpath_origin_as_allow_invalid": schema.BoolAttribute{
+				MarkdownDescription: "BGP bestpath selection will allow 'invalid' origin-AS",
+				Computed:            true,
+			},
+			"bgp_bestpath_sr_policy_prefer": schema.BoolAttribute{
+				MarkdownDescription: "Consider only paths over SR Policy for bestpath selection, eBGP no-color eligible",
+				Computed:            true,
+			},
+			"bgp_bestpath_sr_policy_force": schema.BoolAttribute{
+				MarkdownDescription: "Consider only paths over SR Policy for bestpath selection, eBGP no-color ineligible",
+				Computed:            true,
+			},
+			"bgp_cluster_id_32bit_format": schema.Int64Attribute{
+				MarkdownDescription: "Route-Reflector Cluster-id as 32 bit quantity",
+				Computed:            true,
+			},
+			"bgp_cluster_id_ip_format": schema.StringAttribute{
+				MarkdownDescription: "Route-Reflector Cluster-id in IP address format",
+				Computed:            true,
+			},
+			"bgp_default_local_preference": schema.Int64Attribute{
+				MarkdownDescription: "Local preference",
+				Computed:            true,
+			},
+			"bgp_enforce_first_as_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable",
+				Computed:            true,
+			},
+			"bgp_fast_external_fallover_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable",
+				Computed:            true,
+			},
+			"bgp_log_neighbor_changes_detail": schema.BoolAttribute{
+				MarkdownDescription: "Include extra detail in change messages",
+				Computed:            true,
+			},
+			"bgp_log_neighbor_changes_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable logging",
+				Computed:            true,
+			},
+			"bgp_log_message_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable inbound and outbound message logging for all neighbors under the vrf",
+				Computed:            true,
+			},
+			"bgp_log_memory_threshold_warning": schema.Int64Attribute{
+				MarkdownDescription: "warning threshold value (percentage)",
+				Computed:            true,
+			},
+			"bgp_log_memory_threshold_critical": schema.Int64Attribute{
+				MarkdownDescription: "critical threshold value (percentage)",
+				Computed:            true,
+			},
+			"bgp_log_total_paths": schema.Int64Attribute{
+				MarkdownDescription: "Maximum expected path scale",
+				Computed:            true,
+			},
+			"bgp_log_total_paths_warn_threshold": schema.Int64Attribute{
+				MarkdownDescription: "Warning threshold value (percentage)",
+				Computed:            true,
+			},
+			"bgp_multipath_use_cluster_list_length": schema.BoolAttribute{
+				MarkdownDescription: "Use Cluster-List Length in BGP Multipath consideration",
+				Computed:            true,
+			},
+			"bgp_multipath_as_path_ignore_onwards": schema.BoolAttribute{
+				MarkdownDescription: "Ignore everything onwards as-path for multipath selection",
+				Computed:            true,
+			},
+			"bgp_confederation_identifier": schema.StringAttribute{
+				MarkdownDescription: "Set routing domain confederation AS",
+				Computed:            true,
+			},
+			"bgp_confederation_peers": schema.ListNestedAttribute{
+				MarkdownDescription: "Enter peer ASs in BGP confederation mode",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"peer_as_number": schema.StringAttribute{
+							MarkdownDescription: "bgp as-number",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"bgp_graceful_restart_enable": schema.BoolAttribute{
+				MarkdownDescription: "Enable Graceful Restart support",
+				Computed:            true,
+			},
+			"bgp_graceful_restart_purge_time": schema.Int64Attribute{
+				MarkdownDescription: "Time before stale routes are purged.",
+				Computed:            true,
+			},
+			"bgp_graceful_restart_restart_time": schema.Int64Attribute{
+				MarkdownDescription: "Restart time advertised to neighbors",
+				Computed:            true,
+			},
+			"bgp_graceful_restart_stalepath_time": schema.Int64Attribute{
+				MarkdownDescription: "Maximum time to wait for restart of GR capable peers",
+				Computed:            true,
+			},
+			"bgp_graceful_restart_graceful_reset": schema.BoolAttribute{
+				MarkdownDescription: "Reset gracefully if configuration change forces a peer reset",
+				Computed:            true,
+			},
+			"bgp_graceful_restart_retain_nbr_routes_disable": schema.BoolAttribute{
+				MarkdownDescription: "do not retain neighbor routes",
+				Computed:            true,
+			},
+			"bgp_install_diversion": schema.BoolAttribute{
+				MarkdownDescription: "Install diversion path to RIB/CEF",
+				Computed:            true,
+			},
+			"bgp_update_delay": schema.Int64Attribute{
+				MarkdownDescription: "Set the max initial delay for sending updates",
+				Computed:            true,
+			},
+			"bgp_update_delay_always": schema.BoolAttribute{
+				MarkdownDescription: "Keepalive trigger bestpath is disabled and delay is enforced",
+				Computed:            true,
+			},
+			"bgp_maximum_neighbor": schema.Int64Attribute{
+				MarkdownDescription: "Maximum number of neighbors that can be configured",
+				Computed:            true,
+			},
+			"bgp_origin_as_validation_signal_ibgp": schema.BoolAttribute{
+				MarkdownDescription: "Signal origin-AS validity towards iBGP peers",
+				Computed:            true,
+			},
+			"bgp_origin_as_validation_time_off": schema.BoolAttribute{
+				MarkdownDescription: "No automatic prefix validation after an RPKI update",
+				Computed:            true,
+			},
+			"bgp_origin_as_validation_time": schema.Int64Attribute{
+				MarkdownDescription: "Prefix validation time (in seconds)",
+				Computed:            true,
+			},
+			"timers_bgp_keepalive_interval": schema.Int64Attribute{
+				MarkdownDescription: "Keepalive interval",
+				Computed:            true,
+			},
+			"timers_bgp_keepalive_zero": schema.BoolAttribute{
+				MarkdownDescription: "Disable keepalives/hold time",
+				Computed:            true,
+			},
+			"timers_bgp_keepalive_zero_holdtime_zero": schema.BoolAttribute{
+				MarkdownDescription: "Disable keepalives/hold time",
+				Computed:            true,
+			},
+			"timers_bgp_keepalive_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
+				MarkdownDescription: "Minimum acceptable holdtime from neighbor",
+				Computed:            true,
+			},
+			"timers_bgp_holdtime": schema.Int64Attribute{
+				MarkdownDescription: "Holdtime",
+				Computed:            true,
+			},
+			"timers_bgp_holdtime_minimum_acceptable_holdtime": schema.Int64Attribute{
+				MarkdownDescription: "Minimum acceptable holdtime from neighbor",
+				Computed:            true,
+			},
+			"nsr": schema.BoolAttribute{
+				MarkdownDescription: "Enable non-stop-routing support for all neighbors",
+				Computed:            true,
+			},
+			"nsr_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable non-stop-routing support for all neighbors",
+				Computed:            true,
+			},
+			"ibgp_policy_out_enforce_modifications": schema.BoolAttribute{
+				MarkdownDescription: "Allow policy to modify all attributes",
+				Computed:            true,
+			},
+			"openconfig_rib_telemetry": schema.BoolAttribute{
+				MarkdownDescription: "Telemetry streaming enabled for OC RIB model. Also, triggers the setting up of new data structures per latest OCNI model",
+				Computed:            true,
+			},
+			"update_limit": schema.Int64Attribute{
+				MarkdownDescription: "Upper bound on transient memory usage for update generation",
+				Computed:            true,
+			},
+			"update_in_error_handling_basic_ebgp_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable inbound update message basic error handling for EBGP neighbors",
+				Computed:            true,
+			},
+			"update_in_error_handling_basic_ibgp_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable inbound update message basic error handling for IBGP neighbors",
+				Computed:            true,
+			},
+			"update_in_error_handling_extended_ebgp": schema.BoolAttribute{
+				MarkdownDescription: "Inbound update message extended error handling for EBGP neighbors",
+				Computed:            true,
+			},
+			"update_in_error_handling_extended_ibgp": schema.BoolAttribute{
+				MarkdownDescription: "Inbound update message extended error handling for IBGP neighbors",
+				Computed:            true,
+			},
+			"update_out_logging": schema.BoolAttribute{
+				MarkdownDescription: "Enable logging of update generation events",
+				Computed:            true,
+			},
+			"bfd_multiplier": schema.Int64Attribute{
+				MarkdownDescription: "Detect multiplier",
+				Computed:            true,
+			},
+			"bfd_minimum_interval": schema.Int64Attribute{
+				MarkdownDescription: "Hello interval",
+				Computed:            true,
+			},
+			"rpki_routes": schema.ListNestedAttribute{
+				MarkdownDescription: "Configure an RPKI route",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"route_address": schema.StringAttribute{
+							MarkdownDescription: "Network/Minimum prefix length",
+							Computed:            true,
+						},
+						"route_prefix": schema.Int64Attribute{
+							MarkdownDescription: "route prefix",
+							Computed:            true,
+						},
+						"max_length": schema.Int64Attribute{
+							MarkdownDescription: "Maximum prefix length",
+							Computed:            true,
+						},
+						"origin_as": schema.Int64Attribute{
+							MarkdownDescription: "Origin Autonomous System number (in asplain format)",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"rpki_servers": schema.ListNestedAttribute{
+				MarkdownDescription: "Configure RPKI cache-servers",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"server": schema.StringAttribute{
+							MarkdownDescription: "Hostname or IP address",
+							Computed:            true,
+						},
+						"refresh_time_seconds": schema.Int64Attribute{
+							MarkdownDescription: "Refresh time (in seconds)",
+							Computed:            true,
+						},
+						"refresh_time_off": schema.BoolAttribute{
+							MarkdownDescription: "Do not send serial-queries periodically",
+							Computed:            true,
+						},
+						"response_time_seconds": schema.Int64Attribute{
+							MarkdownDescription: "Response time (in seconds)",
+							Computed:            true,
+						},
+						"response_time_off": schema.BoolAttribute{
+							MarkdownDescription: "Wait indefinitely for a response",
+							Computed:            true,
+						},
+						"purge_time": schema.Int64Attribute{
+							MarkdownDescription: "Time to wait after a cache goes down to clean up stale routes",
+							Computed:            true,
+						},
+						"username": schema.StringAttribute{
+							MarkdownDescription: "Specify a (SSH) username for the RPKI cache-server",
+							Computed:            true,
+						},
+						"password": schema.StringAttribute{
+							MarkdownDescription: "Specify a (SSH) password for the RPKI cache-server",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"transport_tcp_port": schema.Int64Attribute{
+							MarkdownDescription: "Specify a port number for the RPKI cache-server transport",
+							Computed:            true,
+						},
+						"transport_ssh_port": schema.Int64Attribute{
+							MarkdownDescription: "Specify a port number for the RPKI cache-server transport",
+							Computed:            true,
+						},
+						"bind_source_interface": schema.StringAttribute{
+							MarkdownDescription: "Select a source interface to bind the RPKI cache-server transport",
+							Computed:            true,
+						},
+						"shutdown": schema.BoolAttribute{
+							MarkdownDescription: "Shutdown the RPKI cache-server",
 							Computed:            true,
 						},
 					},

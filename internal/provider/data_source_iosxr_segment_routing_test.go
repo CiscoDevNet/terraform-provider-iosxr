@@ -20,9 +20,59 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+import (
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
 
 // End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
+
+func TestAccDataSourceIosxrSegmentRouting(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing.test", "local_block_lower_bound", "15000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing.test", "local_block_upper_bound", "15999"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing.test", "global_block_lower_bound", "16000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing.test", "global_block_upper_bound", "29999"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing.test", "enable", "true"))
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { testAccPreCheck(t) },
+		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccDataSourceIosxrSegmentRoutingConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
+			},
+		},
+	})
+}
+
+// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 
 // End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
+
+func testAccDataSourceIosxrSegmentRoutingConfig() string {
+	config := `resource "iosxr_segment_routing" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	local_block_lower_bound = 15000` + "\n"
+	config += `	local_block_upper_bound = 15999` + "\n"
+	config += `	global_block_lower_bound = 16000` + "\n"
+	config += `	global_block_upper_bound = 29999` + "\n"
+	config += `	enable = true` + "\n"
+	config += `}` + "\n"
+
+	config += `
+		data "iosxr_segment_routing" "test" {
+			depends_on = [iosxr_segment_routing.test]
+		}
+	`
+	return config
+}
+
+// End of section. //template:end testAccDataSourceConfig

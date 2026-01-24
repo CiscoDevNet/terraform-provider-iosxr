@@ -23,9 +23,11 @@ package provider
 import (
 	"context"
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -79,12 +81,171 @@ func (r *SNMPServerMIBResource) Schema(ctx context.Context, req resource.SchemaR
 					stringvalidator.OneOf("all", "attributes"),
 				},
 			},
-			"ifmib_ifalias_long": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable support for ifAlias values longer than 64 characters").String,
+			"cbqosmib_cache": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable CBQoSMIB stats data caching").String,
+				Optional:            true,
+			},
+			"cbqosmib_cache_refresh_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Cache refresh time in seconds ").AddIntegerRangeDescription(5, 60).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(5, 60),
+				},
+			},
+			"cbqosmib_cache_service_policy_count": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Number of service-policy stats").AddIntegerRangeDescription(1, 5000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 5000),
+				},
+			},
+			"cbqosmib_persist": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Persist CBQoSMIB config, service-policy and object indices").String,
+				Optional:            true,
+			},
+			"cbqosmib_member_stats": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable bundle member interface statistics retrieval").String,
 				Optional:            true,
 			},
 			"ifindex_persist": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Persist interface indices").String,
+				Optional:            true,
+			},
+			"interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Interface to configure").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Interface to configure").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+							},
+						},
+						"notification_linkupdown_enable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable linkUp and linkDown notification").String,
+							Optional:            true,
+						},
+						"notification_linkupdown_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable linkUp and linkDown notification").String,
+							Optional:            true,
+						},
+						"index_persistence": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Persistency across system reloads").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"trap_link_ietf": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set the varbind of linkupdown trap to the RFC specified varbinds (default cisco)").String,
+				Optional:            true,
+			},
+			"ifmib_ifalias_long": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable support for ifAlias values longer than 64 characters").String,
+				Optional:            true,
+			},
+			"ifmib_stats_cache": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Get cached interface statistics").String,
+				Optional:            true,
+			},
+			"ifmib_ipsubscriber": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable ipsubscriber interfaces in IFMIB").String,
+				Optional:            true,
+			},
+			"ifmib_internal_cache_max_duration": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Change the max duration").AddIntegerRangeDescription(0, 60).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 60),
+				},
+			},
+			"rfmib_entphyindex": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable Entity Physical Index as cRFStatusUnitId and cRFStatusPeerUnitId").String,
+				Optional:            true,
+			},
+			"sensormib_cache": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enables sensormib caching").String,
+				Optional:            true,
+			},
+			"mplstemib_cache_timers_garbage_collect": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Modify MIB cache garbage collect timer").AddIntegerRangeDescription(0, 3600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 3600),
+				},
+			},
+			"mplstemib_cache_timers_refresh": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Modify MIB cache refresh timer").AddIntegerRangeDescription(0, 600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 600),
+				},
+			},
+			"mplsp2mpmib_cache_timer": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Modify MIB cache timer").AddIntegerRangeDescription(0, 600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 600),
+				},
+			},
+			"frrmib_cache_timer": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Modify MIB chache timer").AddIntegerRangeDescription(0, 600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 600),
+				},
+			},
+			"cmplsteextmib_cache_timer": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Modify MIB chache timer").AddIntegerRangeDescription(0, 600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 600),
+				},
+			},
+			"cmplsteextstdmib_cache_timer": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Modify MIB chache timer").AddIntegerRangeDescription(0, 600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 600),
+				},
+			},
+			"mroutemib_send_all_vrf": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("enable sending all vrf interface info for cIpMRouteInterfaceTable").String,
+				Optional:            true,
+			},
+			"notification_log_mib_default": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("To create a default log").String,
+				Optional:            true,
+			},
+			"notification_log_mib_global_age_out": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("GlobalAgeOut is the minutes associated with the mib").AddIntegerRangeDescription(1, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4294967295),
+				},
+			},
+			"notification_log_mib_global_size": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("GlobalSize, max number of notifications that can be logged in all logs").AddIntegerRangeDescription(1, 15000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 15000),
+				},
+			},
+			"notification_log_mib_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("disable, to disable the logging in default log").String,
+				Optional:            true,
+			},
+			"notification_log_mib_size": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("size, The max number of notifications that this log (default) can hold").AddIntegerRangeDescription(1, 15000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 15000),
+				},
+			},
+			"entityindex_persist": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Persist indices").String,
 				Optional:            true,
 			},
 		},

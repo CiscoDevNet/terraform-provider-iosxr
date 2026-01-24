@@ -4,70 +4,144 @@ path: Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp
 doc_category: MPLS
 attributes:
   - yang_name: router-id
+    minimum_test_value: '"1.2.3.4"'
     example: 1.2.3.4
-  - yang_name: address-families/address-family
-    tf_name: address_families
-    type: List
-    attributes:
-      - yang_name: af-name
-        id: true
-        example: ipv4
-      - yang_name: label/local/allocate/for/access-list
-        example: ACL1
-      - yang_name: label/local/allocate/for/host-routes
-        example: true
-        exclude_test: true
-  - yang_name: interfaces/interface
-    tf_name: interfaces
-    type: List
-    attributes:
-      - yang_name: interface-name
-        id: true
-        example: GigabitEthernet0/0/0/1
-  - yang_name: capabilities/sac
+  - yang_name: graceful-restart
     example: true
-  - yang_name: capabilities/sac/ipv4-disable
+    minimum_test_value: true
+  - yang_name: graceful-restart-reconnect-timeout
+    example: 120
+  - yang_name: graceful-restart-forwarding-state-holdtime
+    example: 180
+  - yang_name: graceful-restart-helper-peer/maintain-on-local-reset/for
+    tf_name: graceful_restart_helper_peer_maintain_on_local_reset_for
+    optional: true
+    delete_parent: true
+    example: ACL1
+  - yang_name: ltrace-buffer/multiplier
+    example: 2
+  - yang_name: default-vrf/implicit-ipv4/disable
     example: true
-  - yang_name: capabilities/sac/ipv6-disable
+  - yang_name: session/backoff/backoff-time
+    tf_name: session_backoff_time_initial
+    optional: true
+    delete_parent: true
+    example: 10
+  - yang_name: session/backoff/maximum-session-backoff-time
+    tf_name: session_backoff_time_maximum
+    optional: true
+    delete_parent: true
+    example: 100
+  - yang_name: session/holdtime
+    example: 180
+  - yang_name: session/downstream-on-demand/with
+    example: ACL1
+  - yang_name: session/protection
     example: true
-  - yang_name: capabilities/sac/fec128-disable
+    type: Bool
+    type_yang_bool: presence
+  - yang_name: session/protection/for/for-access-list
+    tf_name: session_protection_for_acl
+    optional: true
+    delete_grandparent: true
+    example: ACL1
+  - yang_name: session/protection/for/duration/holdup-time
+    tf_name: session_protection_for_acl_duration
+    delete_grandparent: true
+    example: 120
+  - yang_name: session/protection/for/duration/infinite
+    tf_name: session_protection_for_acl_duration_infinite
+    delete_grandparent: true
     example: true
-  - yang_name: capabilities/sac/fec129-disable
+    exclude_test: true
+  - yang_name: session/protection/duration/holdup-time
+    tf_name: session_protection_duration
+    example: 120
+    exclude_test: true
+  - yang_name: session/protection/duration/infinite
+    tf_name: session_protection_duration_infinite
     example: true
+    exclude_test: true
+  - yang_name: nsr
+    example: true
+  - yang_name: entropy-label
+    example: true
+  - yang_name: entropy-label-add-el
+    example: true
+  - yang_name: signalling/dscp
+    example: 48
   - yang_name: igp/sync/delay/on-session-up
     example: 10
   - yang_name: igp/sync/delay/on-proc-restart
     example: 100
-  - yang_name: mldp
+  - yang_name: capabilities/sac
     example: true
-  - yang_name: mldp/logging/notifications
+  - yang_name: capabilities/sac/ipv4-disable
+    type: Bool
+    type_yang_bool: presence
     example: true
-  - yang_name: mldp/address-families/address-family
-    tf_name: mldp_address_families
+    exclude_test: true
+  - yang_name: capabilities/sac/ipv6-disable
+    type: Bool
+    type_yang_bool: presence
+    example: true
+    exclude_test: true
+  - yang_name: capabilities/sac/fec128-disable
+    type: Bool
+    type_yang_bool: presence
+    example: true
+    exclude_test: true
+  - yang_name: capabilities/sac/fec129-disable
+    type: Bool
+    type_yang_bool: presence
+    example: true
+    exclude_test: true
+  - yang_name: log/hello-adjacency
+    example: true
+  - yang_name: log/neighbor
+    example: true
+  - yang_name: log/nsr
+    example: true
+  - yang_name: log/graceful-restart
+    example: true
+  - yang_name: log/session-protection
+    example: true
+  - yang_name: discovery/hello/holdtime
+    example: 10
+  - yang_name: discovery/hello/interval
+    example: 3
+  - yang_name: discovery/targeted-hello/holdtime
+    example: 10
+  - yang_name: discovery/targeted-hello/interval
+    example: 3
+  - yang_name: discovery/instance-tlv/disable
+    example: true
+  - yang_name: discovery/ds-tlv/disable
+    example: true
+  - yang_name: discovery/rtr-id-arb-tlv/disable
+    example: true
+  - yang_name: discovery/quick-start/disable
+    example: true
+  - yang_name: neighbor/dual-stack/transport-connection/prefer/ipv4
+    example: true
+  - yang_name: neighbor/dual-stack/transport-connection/max-wait
+    example: 30
+  - yang_name: neighbor/dual-stack/tlv-compliance
+    example: true
+  - yang_name: neighbor/neighbors/neighbor
+    tf_name: neighbors
     type: List
     attributes:
-      - yang_name: af-name
-        tf_name: name
+      - yang_name: neighbor-address
         id: true
-        example: ipv4
-      - yang_name: make-before-break/delay/forwarding-delay
-        tf_name: make_before_break_delay
-        optional: true
-        example: 30
-      - yang_name: forwarding/recursive
+        example: 192.168.2.1
+      - yang_name: label-space-id
+        id: true
+        example: 0
+      - yang_name: password/encrypted
+        sensitive: true
+        write_only: true
+        example: 060506324F41
+      - yang_name: password/disable
+        exclude_test: true
         example: true
-      - yang_name: forwarding/recursive/route-policy
-        example: LDP_POLICY_1
-      - yang_name: recursive-fec/enable
-        tf_name: recursive_fec
-        example: true
-  - yang_name: session/protection
-    example: true
-
-test_prerequisites:
-  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=LDP_POLICY_1]
-    attributes:
-      - name: route-policy-name
-        value: LDP_POLICY_1
-      - name: rpl-route-policy
-        value: "route-policy LDP_POLICY_1\\n  pass\\nend-policy\\n"

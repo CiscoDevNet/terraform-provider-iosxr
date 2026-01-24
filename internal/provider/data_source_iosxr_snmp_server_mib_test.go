@@ -20,9 +20,109 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+import (
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
 
 // End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
+
+func TestAccDataSourceIosxrSNMPServerMIB(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "cbqosmib_cache", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "cbqosmib_cache_refresh_time", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "cbqosmib_cache_service_policy_count", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "cbqosmib_persist", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "cbqosmib_member_stats", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "ifindex_persist", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "interfaces.0.interface_name", "GigabitEthernet0/0/0/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "interfaces.0.notification_linkupdown_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "interfaces.0.index_persistence", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "trap_link_ietf", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "ifmib_ifalias_long", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "ifmib_stats_cache", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "ifmib_ipsubscriber", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "ifmib_internal_cache_max_duration", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "rfmib_entphyindex", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "sensormib_cache", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "mplstemib_cache_timers_garbage_collect", "1800"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "mplstemib_cache_timers_refresh", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "mplsp2mpmib_cache_timer", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "frrmib_cache_timer", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "cmplsteextmib_cache_timer", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "cmplsteextstdmib_cache_timer", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "mroutemib_send_all_vrf", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "notification_log_mib_default", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "notification_log_mib_global_age_out", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "notification_log_mib_global_size", "5000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "notification_log_mib_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "notification_log_mib_size", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "entityindex_persist", "true"))
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { testAccPreCheck(t) },
+		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccDataSourceIosxrSNMPServerMIBConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
+			},
+		},
+	})
+}
+
+// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 
 // End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
+
+func testAccDataSourceIosxrSNMPServerMIBConfig() string {
+	config := `resource "iosxr_snmp_server_mib" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	cbqosmib_cache = true` + "\n"
+	config += `	cbqosmib_cache_refresh_time = 30` + "\n"
+	config += `	cbqosmib_cache_service_policy_count = 100` + "\n"
+	config += `	cbqosmib_persist = true` + "\n"
+	config += `	cbqosmib_member_stats = true` + "\n"
+	config += `	ifindex_persist = true` + "\n"
+	config += `	interfaces = [{` + "\n"
+	config += `		interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `		notification_linkupdown_disable = true` + "\n"
+	config += `		index_persistence = true` + "\n"
+	config += `	}]` + "\n"
+	config += `	trap_link_ietf = true` + "\n"
+	config += `	ifmib_ifalias_long = true` + "\n"
+	config += `	ifmib_stats_cache = true` + "\n"
+	config += `	ifmib_ipsubscriber = true` + "\n"
+	config += `	ifmib_internal_cache_max_duration = 30` + "\n"
+	config += `	rfmib_entphyindex = true` + "\n"
+	config += `	sensormib_cache = true` + "\n"
+	config += `	mplstemib_cache_timers_garbage_collect = 1800` + "\n"
+	config += `	mplstemib_cache_timers_refresh = 300` + "\n"
+	config += `	mplsp2mpmib_cache_timer = 300` + "\n"
+	config += `	frrmib_cache_timer = 300` + "\n"
+	config += `	cmplsteextmib_cache_timer = 300` + "\n"
+	config += `	cmplsteextstdmib_cache_timer = 300` + "\n"
+	config += `	mroutemib_send_all_vrf = true` + "\n"
+	config += `	notification_log_mib_default = true` + "\n"
+	config += `	notification_log_mib_global_age_out = 120` + "\n"
+	config += `	notification_log_mib_global_size = 5000` + "\n"
+	config += `	notification_log_mib_disable = true` + "\n"
+	config += `	notification_log_mib_size = 1000` + "\n"
+	config += `	entityindex_persist = true` + "\n"
+	config += `}` + "\n"
+
+	config += `
+		data "iosxr_snmp_server_mib" "test" {
+			depends_on = [iosxr_snmp_server_mib.test]
+		}
+	`
+	return config
+}
+
+// End of section. //template:end testAccDataSourceConfig

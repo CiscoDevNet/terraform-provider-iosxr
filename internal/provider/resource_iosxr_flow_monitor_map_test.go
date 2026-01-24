@@ -21,10 +21,12 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 // End of section. //template:end imports
@@ -32,8 +34,8 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 
 func TestAccIosxrFlowMonitorMap(t *testing.T) {
-	if os.Getenv("NCS") == "" {
-		t.Skip("skipping test, set environment variable NCS")
+	if os.Getenv("NCS") == "" && os.Getenv("C8000") == "" {
+		t.Skip("skipping test, set environment variable NCS or C8000")
 	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "name", "monitor_map1"))
@@ -131,3 +133,27 @@ func testAccIosxrFlowMonitorMapConfig_all() string {
 }
 
 // End of section. //template:end testAccConfigAll
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrFlowMonitorMapImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Name := primary.Attributes["name"]
+
+		return fmt.Sprintf("%s", Name), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccIosxrFlowMonitorMapPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-flow-cfg:/flow/exporter-maps/exporter-map[exporter-map-name=exporter_map1]"
+	attributes = {
+		"exporter-map-name" = "exporter_map1"
+	}
+}
+
+`
+
+// End of section. //template:end testPrerequisites

@@ -126,8 +126,10 @@ type YamlConfigAttribute struct {
 	Mandatory         bool                  `yaml:"mandatory"`
 	Optional          bool                  `yaml:"optional"`
 	WriteOnly         bool                  `yaml:"write_only"`
+	Sensitive         bool                  `yaml:"sensitive"`
 	ExcludeTest       bool                  `yaml:"exclude_test"`
 	ExcludeExample    bool                  `yaml:"exclude_example"`
+	IncludeExample    bool                  `yaml:"include_example"`
 	Description       string                `yaml:"description"`
 	Example           string                `yaml:"example"`
 	EnumValues        []string              `yaml:"enum_values"`
@@ -199,6 +201,21 @@ func ToGoName(s string) string {
 	return s
 }
 
+// Templating helper function to convert YANG name to GO name
+func ToJsonPath(yangPath, xPath string) string {
+	path := yangPath
+	if xPath != "" {
+		path = xPath
+	}
+
+	// Split by /, escape dots in each segment, then join with .
+	parts := strings.Split(path, "/")
+	for i, part := range parts {
+		parts[i] = strings.ReplaceAll(part, ".", "\\\\.")
+	}
+	return strings.Join(parts, ".")
+}
+
 // Templating helper function to convert string to camel case
 func CamelCase(s string) string {
 	var g []string
@@ -267,6 +284,14 @@ func ImportAttributes(config YamlConfig) []YamlConfigAttribute {
 	return attributes
 }
 
+// Templating helper function to get xpath if available
+func GetXPath(yangPath, xPath string) string {
+	if xPath != "" {
+		return xPath
+	}
+	return yangPath
+}
+
 func GetDeletePath(attribute YamlConfigAttribute) string {
 	path := attribute.XPath
 	if attribute.DeleteGrandparent {
@@ -324,6 +349,22 @@ func ReverseAttributes(attributes []YamlConfigAttribute) []YamlConfigAttribute {
 // Templating helper function to add two integers
 func Add(a, b int) int {
 	return a + b
+}
+
+// Templating helper function to get example dn
+func GetExamplePath(path string, attributes []YamlConfigAttribute) string {
+	a := make([]interface{}, 0, len(attributes))
+	for _, attr := range attributes {
+		if attr.Id || attr.Reference {
+			a = append(a, attr.Example)
+		}
+	}
+	return fmt.Sprintf(path, a...)
+}
+
+// Templating helper function to identify last element of list
+func IsLast(index int, len int) bool {
+	return index+1 == len
 }
 
 // Templating helper function to remove last element of path
@@ -420,7 +461,7 @@ func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 		if leaf.ListAttr != nil {
 			if helpers.Contains([]string{"string", "union", "leafref"}, leaf.Type.Kind.String()) {
 				attr.Type = "StringList"
-			} else if helpers.Contains([]string{"uint8", "uint16", "uint32", "uint64"}, leaf.Type.Kind.String()) {
+			} else if helpers.Contains([]string{"int8", "int16", "int32", "int64", "uint8", "uint16", "uint32", "uint64"}, leaf.Type.Kind.String()) {
 				attr.Type = "Int64List"
 			} else {
 				panic(fmt.Sprintf("Unknown leaf-list type, attribute: %s, type: %s", attr.YangName, leaf.Type.Kind.String()))
@@ -440,16 +481,23 @@ func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 			if len(leaf.Type.Pattern) > 0 {
 				attr.StringPatterns = leaf.Type.Pattern
 			}
-		} else if helpers.Contains([]string{"uint8", "uint16", "uint32", "uint64"}, leaf.Type.Kind.String()) {
+		} else if helpers.Contains([]string{"int8", "int16", "int32", "int64", "uint8", "uint16", "uint32", "uint64"}, leaf.Type.Kind.String()) {
 			attr.Type = "Int64"
 			if leaf.Type.Range != nil {
-				attr.MinInt = int64(leaf.Type.Range[0].Min.Value)
+				if attr.MinInt == 0 {
+					attr.MinInt = int64(leaf.Type.Range[0].Min.Value)
+					if leaf.Type.Range[0].Min.Negative {
+						attr.MinInt = -attr.MinInt
+					}
+				}
 				max := leaf.Type.Range[0].Max.Value
 				// hack to not introduce unsigned types
 				if max > math.MaxInt64 {
 					max = math.MaxInt64
 				}
-				attr.MaxInt = int64(max)
+				if attr.MaxInt == 0 {
+					attr.MaxInt = int64(max)
+				}
 			}
 		} else if helpers.Contains([]string{"boolean", "empty"}, leaf.Type.Kind.String()) {
 			if leaf.Type.Kind.String() == "boolean" {
@@ -478,9 +526,6 @@ func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 		// Trim leading underscores to comply with tfsdk naming rules (must start with letter)
 		tfName = strings.TrimLeft(tfName, "_")
 		attr.TfName = tfName
-		fmt.Printf("AUTO-GENERATED TfName: %s from XPath: %s\n", attr.TfName, attr.XPath)
-	} else {
-		fmt.Printf("USING PROVIDED TfName: %s for YangName: %s\n", attr.TfName, attr.YangName)
 	}
 	if attr.Description == "" {
 		attr.Description = strings.ReplaceAll(leaf.Description, "\n", " ")
@@ -516,6 +561,10 @@ func augmentConfig(config *YamlConfig, modelPaths []string) {
 		return
 	}
 
+	// Print definition/model info
+	fmt.Printf("Processing definition: %s\n", config.Name)
+	//fmt.Printf("Resolving yang model: %s ==> Resolved: %s\n", module, e.Name)
+
 	p := path[len(module)+1:]
 	e = resolvePath(e, p)
 
@@ -540,6 +589,15 @@ func augmentConfig(config *YamlConfig, modelPaths []string) {
 							continue
 						}
 						parseAttribute(ell, &config.Attributes[ia].Attributes[iaa].Attributes[iaaa])
+						if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Type == "List" {
+							elll := resolvePath(ell, config.Attributes[ia].Attributes[iaa].Attributes[iaaa].YangName)
+							for iaaaa := range config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes {
+								if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].NoAugmentConfig {
+									continue
+								}
+								parseAttribute(elll, &config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa])
+							}
+						}
 					}
 				}
 			}
@@ -615,6 +673,7 @@ func renderTemplate(templatePath, outputPath string, config interface{}) {
 		existingScanner := bufio.NewScanner(existingFile)
 		var newContent string
 		currentSectionName := ""
+		processedSections := make(map[string]bool)
 		beginRegex := regexp.MustCompile(`\/\/template:begin\s(.*?)$`)
 		endRegex := regexp.MustCompile(`\/\/template:end\s(.*?)$`)
 		for existingScanner.Scan() {
@@ -623,6 +682,7 @@ func renderTemplate(templatePath, outputPath string, config interface{}) {
 				matches := beginRegex.FindStringSubmatch(line)
 				if len(matches) > 1 && matches[1] != "" {
 					currentSectionName = matches[1]
+					processedSections[currentSectionName] = true
 				} else {
 					newContent += line + "\n"
 				}
@@ -635,6 +695,23 @@ func renderTemplate(templatePath, outputPath string, config interface{}) {
 				}
 			}
 		}
+
+		// Append any new sections from template that weren't in the existing file
+		templateContent := string(output.Bytes())
+		templateScanner := bufio.NewScanner(strings.NewReader(templateContent))
+		for templateScanner.Scan() {
+			line := templateScanner.Text()
+			matches := beginRegex.FindStringSubmatch(line)
+			if len(matches) > 1 && matches[1] != "" {
+				sectionName := matches[1]
+				if !processedSections[sectionName] {
+					newSection := getTemplateSection(templateContent, sectionName)
+					newContent += newSection
+					processedSections[sectionName] = true
+				}
+			}
+		}
+
 		output = bytes.NewBufferString(newContent)
 	}
 	// write to output file

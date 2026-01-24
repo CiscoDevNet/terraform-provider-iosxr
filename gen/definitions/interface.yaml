@@ -23,17 +23,18 @@ attributes:
   - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:point-to-point
     tf_name: ipv4_point_to_point
     example: true
-  - yang_name: Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/input
-    tf_name: service_policy_input
-    test_tags: [XRV9K]
-    type: List
-    attributes:
-      - yang_name: service-policy-name
-        tf_name: name
-        id: true
-        example: PMAP-IN
-  - yang_name: Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/output
-    tf_name: service_policy_output
+  # Commented out due to YANG resolution issues
+  # - yang_name: Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/input
+  #   tf_name: service_policy_input
+  #   test_tags: [XRV9K]
+  #   type: List
+  #   attributes:
+  #     - yang_name: service-policy-name
+  #       tf_name: name
+  #       id: true
+  #       example: PMAP-IN
+  # - yang_name: Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/output
+  #   tf_name: service_policy_output
     test_tags: [XRV9K]
     type: List
     attributes:

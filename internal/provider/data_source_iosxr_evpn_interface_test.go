@@ -20,8 +20,48 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+import (
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
 
 // End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
+
+func TestAccDataSourceIosxrEVPNInterface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "core_isolation_group", "11"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "timers_peering", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "timers_recovery", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "timers_carving", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "timers_ac_debounce", "2000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_esi_zero", "01.01.01.01.01.01.01.01.04"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_load_balancing_mode_port_active", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_force_single_homed", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_service_carving_hrw", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_service_carving_multicast_hrw_s_g", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_service_carving_preference_based_weight", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_service_carving_preference_based_access_driven", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_bgp_rt", "01:01:01:01:01:04"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_convergence_reroute", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_convergence_mac_mobility", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_convergence_nexthop_tracking", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "access_signal_bundle_down", "true"))
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { testAccPreCheck(t) },
+		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccDataSourceIosxrEVPNInterfacePrerequisitesConfig + testAccDataSourceIosxrEVPNInterfaceConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
+			},
+		},
+	})
+}
+
+// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrEVPNInterfacePrerequisitesConfig = `
@@ -34,3 +74,40 @@ resource "iosxr_gnmi" "PreReq0" {
 `
 
 // End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
+
+func testAccDataSourceIosxrEVPNInterfaceConfig() string {
+	config := `resource "iosxr_evpn_interface" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	interface_name = "Bundle-Ether12"` + "\n"
+	config += `	core_isolation_group = 11` + "\n"
+	config += `	timers_peering = 60` + "\n"
+	config += `	timers_recovery = 120` + "\n"
+	config += `	timers_carving = 5` + "\n"
+	config += `	timers_ac_debounce = 2000` + "\n"
+	config += `	ethernet_segment_esi_zero = "01.01.01.01.01.01.01.01.04"` + "\n"
+	config += `	ethernet_segment_load_balancing_mode_port_active = true` + "\n"
+	config += `	ethernet_segment_force_single_homed = true` + "\n"
+	config += `	ethernet_segment_service_carving_hrw = true` + "\n"
+	config += `	ethernet_segment_service_carving_multicast_hrw_s_g = true` + "\n"
+	config += `	ethernet_segment_service_carving_preference_based_weight = 100` + "\n"
+	config += `	ethernet_segment_service_carving_preference_based_access_driven = true` + "\n"
+	config += `	ethernet_segment_bgp_rt = "01:01:01:01:01:04"` + "\n"
+	config += `	ethernet_segment_convergence_reroute = true` + "\n"
+	config += `	ethernet_segment_convergence_mac_mobility = true` + "\n"
+	config += `	ethernet_segment_convergence_nexthop_tracking = true` + "\n"
+	config += `	access_signal_bundle_down = true` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+
+	config += `
+		data "iosxr_evpn_interface" "test" {
+			interface_name = "Bundle-Ether12"
+			depends_on = [iosxr_evpn_interface.test]
+		}
+	`
+	return config
+}
+
+// End of section. //template:end testAccDataSourceConfig

@@ -103,18 +103,39 @@ func (r *RouterBGPNeighborGroupResource) Schema(ctx context.Context, req resourc
 				MarkdownDescription: helpers.NewAttributeDescription("Set remote AS").String,
 				Optional:            true,
 			},
-			"description": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Neighbor specific description").String,
+			"remote_as_list": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Remote as-list configuration").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 1024),
 				},
 			},
-			"update_source": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Source of routing updates").String,
+			"maximum_peers": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum dynamic neighbors").AddIntegerRangeDescription(1, 4095).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4095),
+				},
+			},
+			"as_path_loopcheck_out": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("For outbound updates").AddStringEnumDescription("disable", "enable").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"use_neighbor_group": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Inherit configuration from a neighbor-group").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+				},
+			},
+			"use_session_group": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Inherit address-family independent config from a session-group").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
 				},
 			},
 			"advertisement_interval_seconds": schema.Int64Attribute{
@@ -131,27 +152,85 @@ func (r *RouterBGPNeighborGroupResource) Schema(ctx context.Context, req resourc
 					int64validator.Between(0, 999),
 				},
 			},
-			"ao_key_chain_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Name of the key chain - maximum 32 characters").String,
+			"description": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Neighbor specific description").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.LengthBetween(1, 32),
+					stringvalidator.LengthBetween(1, 1024),
 				},
 			},
-			"ao_key_chain_include_tcp_options": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Include/Exclude other TCP options in the header").AddStringEnumDescription("disable", "enable").String,
+			"ignore_connected_check": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Bypass the directly connected nexthop check for single-hop eBGP peering").String,
 				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("disable", "enable"),
+			},
+			"ignore_connected_check_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent ignore-connected-check from being inherited from the parent").String,
+				Optional:            true,
+			},
+			"ebgp_multihop_maximum_hop_count": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("maximum hop count").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
 				},
 			},
-			"ao_key_chain_accept_mismatch": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Accept new connection even if AO mismatched").String,
+			"ebgp_multihop_mpls": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable BGP MPLS forwarding").String,
 				Optional:            true,
 			},
-			"ao_inheritance_disable": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Prevent keychain from being inherited from parent").String,
+			"tcp_mss_value": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("TCP initial maximum segment size").AddIntegerRangeDescription(68, 10000).String,
 				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(68, 10000),
+				},
+			},
+			"tcp_mss_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent tcp mss from being inherited from the parent").String,
+				Optional:            true,
+			},
+			"tcp_mtu_discovery": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable Path MTU discovery on TCP session").String,
+				Optional:            true,
+			},
+			"tcp_mtu_discovery_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent TCP MTU cfg from being inherited from the parent").String,
+				Optional:            true,
+			},
+			"tcp_ip_only_preferred": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prefer to send BGP control plane traffic on IP").String,
+				Optional:            true,
+			},
+			"tcp_ip_only_preferred_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Do not inherit this configuration from parent group").String,
+				Optional:            true,
+			},
+			"fast_fallover": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Force neighbor to be directly connected. Bring neighbor down if its interface goes down").String,
+				Optional:            true,
+			},
+			"fast_fallover_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent this neighbor from inheriting this config from a group it is in").String,
+				Optional:            true,
+			},
+			"internal_vpn_client": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Preserve iBGP CE neighbor path in ATTR_SET across VPN core").String,
+				Optional:            true,
+			},
+			"bmp_activate_servers": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable BMP connection to particular server").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"server_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable BMP connection to particular server").AddIntegerRangeDescription(1, 8).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 8),
+							},
+						},
+					},
+				},
 			},
 			"bfd_minimum_interval": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Hello interval").AddIntegerRangeDescription(3, 30000).String,
@@ -179,6 +258,25 @@ func (r *RouterBGPNeighborGroupResource) Schema(ctx context.Context, req resourc
 				MarkdownDescription: helpers.NewAttributeDescription("Prevent bfd settings from being inherited from the parent").String,
 				Optional:            true,
 			},
+			"bfd_fast_detect_strict_mode_negotiate": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Hold down neighbor session until BFD is up (based on strict-mode capability negotiation)").String,
+				Optional:            true,
+			},
+			"bfd_fast_detect_strict_mode_negotiate_override": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Do not bring up neighbor session until BFD up even if strict-mode capability is not received").String,
+				Optional:            true,
+			},
+			"keychain_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Name of the key chain - maximum 32 characters").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+				},
+			},
+			"keychain_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent keychain from being inherited from parent").String,
+				Optional:            true,
+			},
 			"local_as_inheritance_disable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Prevent local AS from being inherited from parent").String,
 				Optional:            true,
@@ -191,20 +289,67 @@ func (r *RouterBGPNeighborGroupResource) Schema(ctx context.Context, req resourc
 				MarkdownDescription: helpers.NewAttributeDescription("Do not prepend local AS to announcements from this neighbor").String,
 				Optional:            true,
 			},
-			"local_as_replace_as": schema.BoolAttribute{
+			"local_as_no_prepend_replace_as": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Prepend only local AS to announcements to this neighbor").String,
 				Optional:            true,
 			},
-			"local_as_dual_as": schema.BoolAttribute{
+			"local_as_no_prepend_replace_as_dual_as": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Dual-AS mode").String,
 				Optional:            true,
 			},
 			"password": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specifies an ENCRYPTED password will follow").String,
 				Optional:            true,
+				Sensitive:           true,
 			},
 			"password_inheritance_disable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Prevent password from being inherited from parent").String,
+				Optional:            true,
+			},
+			"receive_buffer_size": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Receive socket buffer size in bytes").AddIntegerRangeDescription(512, 131072).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(512, 131072),
+				},
+			},
+			"receive_buffer_size_read": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("BGP Read buffer size in bytes").AddIntegerRangeDescription(512, 131072).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(512, 131072),
+				},
+			},
+			"send_buffer_size": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Send socket buffer size in bytes").AddIntegerRangeDescription(4096, 131072).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(4096, 131072),
+				},
+			},
+			"send_buffer_size_write": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("BGP Write buffer size in bytes").AddIntegerRangeDescription(4096, 131072).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(4096, 131072),
+				},
+			},
+			"dampening": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("(Deprecated in 7.11.1) Enable route-flap-damping").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"as_override": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("(Deprecated in 7.11.1) Override matching AS-number while sending update").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"shutdown": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Administratively shut down this neighbor").String,
 				Optional:            true,
 			},
 			"timers_keepalive_interval": schema.Int64Attribute{
@@ -243,7 +388,400 @@ func (r *RouterBGPNeighborGroupResource) Schema(ctx context.Context, req resourc
 					int64validator.Between(3, 65535),
 				},
 			},
-			"address_families": schema.ListNestedAttribute{
+			"local_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+				Optional:            true,
+			},
+			"local_address_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent local address from being inherited from parent").String,
+				Optional:            true,
+			},
+			"log_neighbor_changes_detail": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("detail").String,
+				Optional:            true,
+			},
+			"log_neighbor_changes_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("disable").String,
+				Optional:            true,
+			},
+			"log_neighbor_changes_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevents the log state changes from being inherited from the parent").String,
+				Optional:            true,
+			},
+			"log_message_in_size": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Range for message log buffer size").AddIntegerRangeDescription(1, 500).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 500),
+				},
+			},
+			"log_message_in_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("disable").String,
+				Optional:            true,
+			},
+			"log_message_in_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevents the log state changes from being inherited from the parent").String,
+				Optional:            true,
+			},
+			"log_message_out_size": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Range for message log buffer size").AddIntegerRangeDescription(1, 500).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 500),
+				},
+			},
+			"log_message_out_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("disable").String,
+				Optional:            true,
+			},
+			"log_message_out_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevents the log state changes from being inherited from the parent").String,
+				Optional:            true,
+			},
+			"update_source": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Source of routing updates").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+				},
+			},
+			"local_address_subnet_prefix": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPaddress").String,
+				Optional:            true,
+			},
+			"local_address_subnet_mask": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IP address prefix").AddIntegerRangeDescription(0, 128).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 128),
+				},
+			},
+			"dmz_link_bandwidth": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Propagate the DMZ link bandwidth").String,
+				Optional:            true,
+			},
+			"dmz_link_bandwidth_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent dmz-link-bandwidth from being inherited from the parent").String,
+				Optional:            true,
+			},
+			"ebgp_recv_extcommunity_dmz": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Receive extcommunity dmz link bandwidth from ebgp neighbor").String,
+				Optional:            true,
+			},
+			"ebgp_recv_extcommunity_dmz_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent ebgp-send-community-dmz from being inherited from parent").String,
+				Optional:            true,
+			},
+			"ebgp_send_extcommunity_dmz": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Send extended community dmz link bandwidth to ebgp neighbor").String,
+				Optional:            true,
+			},
+			"ebgp_send_extcommunity_dmz_cumulative": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Send cumulative community dmz link bandwidth of all multipaths to ebgp neighbor").String,
+				Optional:            true,
+			},
+			"ebgp_send_extcommunity_dmz_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent ebgp-send-extcommunity-dmz from being inherited from parent").String,
+				Optional:            true,
+			},
+			"ttl_security": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable EBGP TTL security").String,
+				Optional:            true,
+			},
+			"ttl_security_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent ttl-security from being inherited from the parent").String,
+				Optional:            true,
+			},
+			"session_open_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Establish BGP session using this TCP open mode").AddStringEnumDescription("active-only", "both", "passive-only").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("active-only", "both", "passive-only"),
+				},
+			},
+			"dscp": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set IP DSCP (DiffServ CodePoint)").String,
+				Optional:            true,
+			},
+			"precedence": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set precedence").String,
+				Optional:            true,
+			},
+			"capability_additional_paths_send": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Additional paths Send capability").String,
+				Optional:            true,
+			},
+			"capability_additional_paths_send_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Do not advertise additional paths Send capability").String,
+				Optional:            true,
+			},
+			"capability_additional_paths_receive": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Additional paths Receive capability").String,
+				Optional:            true,
+			},
+			"capability_additional_paths_receive_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Do not advertise additional paths Receive capability").String,
+				Optional:            true,
+			},
+			"capability_suppress_all": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("All capabilities").String,
+				Optional:            true,
+			},
+			"capability_suppress_all_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Do not inherit this configuration from parent group").String,
+				Optional:            true,
+			},
+			"capability_suppress_extended_nexthop_encoding": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Extended-nexthop-encoding capabilities (IETF RFC 5549)").String,
+				Optional:            true,
+			},
+			"capability_suppress_extended_nexthop_encoding_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Do not inherit this configuration from parent group").String,
+				Optional:            true,
+			},
+			"capability_suppress_four_byte_as": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("4-byte-as capability").String,
+				Optional:            true,
+			},
+			"capability_suppress_four_byte_as_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent capability suppress 4-type-as being inherited from the parent").String,
+				Optional:            true,
+			},
+			"graceful_restart": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable graceful restart support for this neighbor").String,
+				Optional:            true,
+			},
+			"graceful_restart_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable graceful restart support for this neighbor").String,
+				Optional:            true,
+			},
+			"graceful_restart_helper_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable graceful restart in helper-mode only.Forwarding state will not retained in local restart. Peer's routes will ne retained when peer restarts").String,
+				Optional:            true,
+			},
+			"graceful_restart_helper_only_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent GR helper-mode cfg from being inherited from the parent").String,
+				Optional:            true,
+			},
+			"graceful_restart_restart_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Restart time advertised to the neighbor").AddIntegerRangeDescription(1, 4095).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4095),
+				},
+			},
+			"graceful_restart_stalepath_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum time to wait for restart of GR capable peer").AddIntegerRangeDescription(0, 4095).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4095),
+				},
+			},
+			"enforce_first_as": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("enforce-first-as").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"cluster_id_32bit_format": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Route-Reflector Cluster-id as 32 bit quantity").AddIntegerRangeDescription(1, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4294967295),
+				},
+			},
+			"cluster_id_ip_format": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Route-Reflector Cluster-id in IP address format").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+				},
+			},
+			"idle_watch_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum time to wait for deletion of IDLE state dynamic peer").AddIntegerRangeDescription(30, 1800).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(30, 1800),
+				},
+			},
+			"allowas_in": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Number of occurrences of AS number").AddIntegerRangeDescription(1, 10).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 10),
+				},
+			},
+			"egress_engineering": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable egress peer engineering for this neighbor").String,
+				Optional:            true,
+			},
+			"egress_engineering_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Do not inherit egress-engineering from the parent").String,
+				Optional:            true,
+			},
+			"peer_sets": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Assign this neighbor to a peer-set used for egress peer engineering").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"peer": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Assign this neighbor to a peer-set used for egress peer engineering").AddIntegerRangeDescription(1, 255).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 255),
+							},
+						},
+					},
+				},
+			},
+			"ao_key_chain_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Name of the key chain - maximum 32 characters").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+				},
+			},
+			"ao_key_chain_include_tcp_options": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Include/Exclude other TCP options in the header").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"ao_key_chain_accept_mismatch": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Accept new connection even if AO mismatched").String,
+				Optional:            true,
+			},
+			"ao_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent keychain from being inherited from parent").String,
+				Optional:            true,
+			},
+			"default_policy_action_in": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Default action if route does not satisfy inbound route-policy").AddStringEnumDescription("accept", "reject").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("accept", "reject"),
+				},
+			},
+			"default_policy_action_out": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Default action if route does not satisfy outbound route-policy").AddStringEnumDescription("accept", "reject").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("accept", "reject"),
+				},
+			},
+			"update_in_filtering_message_buffers": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Number of buffers to store filtered update messages (resizing does not take effect after filtering action has started)").AddIntegerRangeDescription(0, 25).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 25),
+				},
+			},
+			"update_in_filtering_message_buffers_type": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("buffer-list").AddStringEnumDescription("buffers-number-enable", "non-circular").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("buffers-number-enable", "non-circular"),
+				},
+			},
+			"update_in_filtering_logging_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable update filtering syslog message").String,
+				Optional:            true,
+			},
+			"update_in_filtering_attribute_filter_group": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Attribute-filter group configuration").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+				},
+			},
+			"update_in_labeled_unicast_equivalent": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4/IPv6 labeled-unicast inbound updates (paths) treated equivalent to unicast updates (paths)").String,
+				Optional:            true,
+			},
+			"update_in_labeled_unicast_equivalent_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Do not inherit this configuration from parent group").String,
+				Optional:            true,
+			},
+			"update_in_error_handling_avoid_reset": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Avoid neighbor reset during inbound update message error handling").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"update_in_error_handling_treat_as_withdraw": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("(Deprecated in 7.11.1) Treat NLRIs as withdraws during inbound update message error handling").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"graceful_maintenance_activate": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Routes will be announced with the graceful maintenance attributes while activated either here or under router bgp configuration. While activated, all routes to this neighbor will be announced with the attributes configured here and all routes from this neighbor will be announced to other neighbors with the graceful maintenance attributes configured under those neighbors. The g-shut community will be announced regardless of the other attributes configured here. To allow the g-shut community to be announced to ebgp neighbors, the send-community-gshut-ebgp configuration is also required. Note: changes to the attributes will not take effect while activated.").String,
+				Optional:            true,
+			},
+			"graceful_maintenance_activate_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent activate from being inherited from the parent").String,
+				Optional:            true,
+			},
+			"graceful_maintenance_local_preference": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Range of values for Local Preference").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"graceful_maintenance_local_preference_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent local preference from being inherited from the parent").String,
+				Optional:            true,
+			},
+			"graceful_maintenance_as_prepends_number": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Range of number of AS prepends").AddIntegerRangeDescription(0, 6).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 6),
+				},
+			},
+			"graceful_maintenance_as_prepends_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent AS prepends from being inherited from the parent").String,
+				Optional:            true,
+			},
+			"graceful_maintenance_bandwidth_aware_percentage_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Low threshold of effective bandwidth (in percentage of max bandwidth) to enter/exit graceful-maintenance").AddIntegerRangeDescription(1, 100).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 100),
+				},
+			},
+			"graceful_maintenance_bandwidth_aware_percentage_threshold_high": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Optional High threshold of effective bandwidth (in kbps) to exit graceful-maintenance").AddIntegerRangeDescription(1, 100).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 100),
+				},
+			},
+			"graceful_maintenance_bandwidth_aware_bandwidth_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Low threshold of effective bandwidth (in kbps) to enter/exit graceful-maintenance").AddIntegerRangeDescription(1, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4294967295),
+				},
+			},
+			"graceful_maintenance_bandwidth_aware_bandwidth_threshold_high": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Optional High threshold of effective bandwidth (in kbps) to exit graceful-maintenance").AddIntegerRangeDescription(1, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4294967295),
+				},
+			},
+			"graceful_maintenance_bandwidth_aware_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent bandwidth-aware from being inherited from the parent").String,
+				Optional:            true,
+			},
+			"address_family": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enter Address Family command mode").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -255,8 +793,96 @@ func (r *RouterBGPNeighborGroupResource) Schema(ctx context.Context, req resourc
 								stringvalidator.OneOf("all-address-family", "ipv4-flowspec", "ipv4-labeled-unicast", "ipv4-mdt", "ipv4-multicast", "ipv4-mvpn", "ipv4-rt-filter", "ipv4-sr-policy", "ipv4-tunnel", "ipv4-unicast", "ipv6-flowspec", "ipv6-labeled-unicast", "ipv6-multicast", "ipv6-mvpn", "ipv6-sr-policy", "ipv6-unicast", "l2vpn-evpn", "l2vpn-mspw", "l2vpn-vpls-vpws", "link-state-link-state", "vpnv4-flowspec", "vpnv4-multicast", "vpnv4-unicast", "vpnv6-flowspec", "vpnv6-multicast", "vpnv6-unicast"),
 							},
 						},
-						"soft_reconfiguration_inbound_always": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Always use soft reconfig, even if route refresh is supported").String,
+						"encapsulation_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify encapsulation type").AddStringEnumDescription("srv6", "vxlan").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("srv6", "vxlan"),
+							},
+						},
+						"weight": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set default weight for routes from this neighbor").AddIntegerRangeDescription(0, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+						"multipath": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Paths from this neighbor is eligible for multipath").String,
+							Optional:            true,
+						},
+						"use_af_group": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Inherit configuration for this address-family from an af-group").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+							},
+						},
+						"capability_orf_prefix": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Capability to RECEIVE the ORF from this neighbor").AddStringEnumDescription("both", "none", "receive", "send").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("both", "none", "receive", "send"),
+							},
+						},
+						"additional_paths_send": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Additional paths Send capability").String,
+							Optional:            true,
+						},
+						"additional_paths_send_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Prevent additional-paths receive from being inherited from the parent").String,
+							Optional:            true,
+						},
+						"additional_paths_receive": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Additional paths Send capability").String,
+							Optional:            true,
+						},
+						"additional_paths_receive_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Prevent additional-paths receive from being inherited from the parent").String,
+							Optional:            true,
+						},
+						"default_originate": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Originate default route to this neighbor").String,
+							Optional:            true,
+						},
+						"default_originate_route_policy": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route policy to specify criteria to originate default").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 255),
+							},
+						},
+						"default_originate_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Prevent default-originate being inherited from a parent group").String,
+							Optional:            true,
+						},
+						"maximum_prefix_limit": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("maximum no. of prefix limit").AddIntegerRangeDescription(1, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
+							},
+						},
+						"maximum_prefix_threshold": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Threshold value (%) at which to generate a warning msg").AddIntegerRangeDescription(1, 100).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 100),
+							},
+						},
+						"maximum_prefix_restart": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Restart time interval").AddIntegerRangeDescription(1, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
+							},
+						},
+						"maximum_prefix_discard_extra_paths": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Discard extra paths when limit is exceeded").String,
+							Optional:            true,
+						},
+						"maximum_prefix_warning_only": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Only give warning message when limit is exceeded").String,
 							Optional:            true,
 						},
 						"next_hop_self": schema.BoolAttribute{
@@ -267,12 +893,16 @@ func (r *RouterBGPNeighborGroupResource) Schema(ctx context.Context, req resourc
 							MarkdownDescription: helpers.NewAttributeDescription("Prevent next-hop-self from being inherited from the parent").String,
 							Optional:            true,
 						},
-						"route_reflector_client": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Configure a neighbor as Route Reflector client").String,
+						"next_hop_unchanged": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Do not overwrite next hop before advertising to eBGP peers").String,
 							Optional:            true,
 						},
-						"route_reflector_client_inheritance_disable": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Prevent route-reflector-client from being inherited from the parent").String,
+						"next_hop_unchanged_multipath": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Do not overwrite nexthop before advertising multipaths").String,
+							Optional:            true,
+						},
+						"next_hop_unchanged_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Prevent next-hop-unchanged from being inherited from the parent").String,
 							Optional:            true,
 						},
 						"route_policy_in": schema.StringAttribute{
@@ -289,12 +919,297 @@ func (r *RouterBGPNeighborGroupResource) Schema(ctx context.Context, req resourc
 								stringvalidator.LengthBetween(1, 255),
 							},
 						},
-						"use_af_group": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Inherit configuration for this address-family from an af-group").String,
+						"orf_route_policy": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route policy to specify ORF and inbound filter").String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.LengthBetween(1, 255),
 							},
+						},
+						"cluster_id_allow_equal": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Accept routes with first cluster-id in list is same as the router's cluster id").String,
+							Optional:            true,
+						},
+						"cluster_id_allow_equal_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Prevent the configuration from being inherited.").String,
+							Optional:            true,
+						},
+						"replace_private_as": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Replace private AS number from outbound updates").String,
+							Optional:            true,
+						},
+						"replace_private_as_internal": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("remove only if all ASes in the path are private").String,
+							Optional:            true,
+						},
+						"remove_private_as_inbound": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Remove private AS number from inbound updates").String,
+							Optional:            true,
+						},
+						"remove_private_as_inbound_entire_aspath": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("remove only if all ASes in the path are private").String,
+							Optional:            true,
+						},
+						"remove_private_as_inbound_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Prevent remove-private-AS from being inherited from the parent").String,
+							Optional:            true,
+						},
+						"remove_private_as": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Remove private AS number from outbound updates").String,
+							Optional:            true,
+						},
+						"remove_private_as_entire_aspath": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("remove only if all ASes in the path are private").String,
+							Optional:            true,
+						},
+						"remove_private_as_internal": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("remove only if all ASes in the path are private").String,
+							Optional:            true,
+						},
+						"route_reflector_client": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure a neighbor as Route Reflector client").String,
+							Optional:            true,
+						},
+						"route_reflector_client_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Prevent route-reflector-client from being inherited from the parent").String,
+							Optional:            true,
+						},
+						"send_community_ebgp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Send community attribute to this external neighbor").String,
+							Optional:            true,
+						},
+						"send_community_ebgp_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Prevent send-community-ebgp from being inherited from the parent").String,
+							Optional:            true,
+						},
+						"send_community_gshut_ebgp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Allow the g-shut community to be sent to this external neighbor").String,
+							Optional:            true,
+						},
+						"send_community_gshut_ebgp_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Prevent send-community-gshut-ebgp from being inherited from the parent").String,
+							Optional:            true,
+						},
+						"send_extended_community_ebgp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Send extended community attribute to this external neighbor").String,
+							Optional:            true,
+						},
+						"send_extended_community_ebgp_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Prevent send-extended-community-ebgp from being inherited from parent").String,
+							Optional:            true,
+						},
+						"soft_reconfiguration_inbound": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Allow inbound soft reconfiguration for this neighbor").String,
+							Optional:            true,
+						},
+						"soft_reconfiguration_inbound_always": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Always use soft reconfig, even if route refresh is supported").String,
+							Optional:            true,
+						},
+						"update_out_originator_loopcheck": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Loop check for same originator which sent the route").String,
+							Optional:            true,
+						},
+						"update_out_originator_loopcheck_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable originator loop check").String,
+							Optional:            true,
+						},
+						"advertise_vpnv4_unicast": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable advertise vpnv4 unicast").String,
+							Optional:            true,
+						},
+						"advertise_vpnv4_unicast_re_originated": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Advertise re-orignated and local routes only").String,
+							Optional:            true,
+						},
+						"advertise_vpnv4_unicast_re_originated_stitching_rt": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Advertise re-originated and local routes with stitching Route-Targets").String,
+							Optional:            true,
+						},
+						"advertise_vpnv6_unicast": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable advertise vpnv6 unicast").String,
+							Optional:            true,
+						},
+						"advertise_vpnv6_unicast_re_originated": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Advertise Re-orignated routes only").String,
+							Optional:            true,
+						},
+						"advertise_vpnv6_unicast_re_originated_stitching_rt": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Advertise re-originated routes with stitching Route-Targets").String,
+							Optional:            true,
+						},
+						"advertise_l2vpn_evpn_re_originated": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Advertise Re-orignated routes only").String,
+							Optional:            true,
+						},
+						"advertise_l2vpn_evpn_re_originated_stitching_rt": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Advertise re-originated routes with stitching Route-Targets").String,
+							Optional:            true,
+						},
+						"segment_routing_srv6_prefix_sid_type4": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable prefix sid version 4 encoding").String,
+							Optional:            true,
+						},
+						"import_stitching_rt": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Import routes using stitching RTs").String,
+							Optional:            true,
+						},
+						"import_stitching_rt_re_originate": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Re-originate imported routes").String,
+							Optional:            true,
+						},
+						"import_stitching_rt_re_originate_stitching_rt": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Reoriginate imported routes by attaching stitching RTs").String,
+							Optional:            true,
+						},
+						"import_re_originate": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Reoriginate imported routes by attaching stitching RTs").String,
+							Optional:            true,
+						},
+						"allowas_in": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Number of occurrences of AS number").AddIntegerRangeDescription(1, 10).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 10),
+							},
+						},
+						"allowconfedas_in": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Number of occurrences of Confederation AS number").AddIntegerRangeDescription(1, 10).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 10),
+							},
+						},
+						"site_of_origin_two_byte_as_number": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("2-byte AS number").String,
+							Optional:            true,
+						},
+						"site_of_origin_two_byte_as_index": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 4294967295),
+							},
+						},
+						"site_of_origin_four_byte_as_number": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("4-byte AS number in asplain format").String,
+							Optional:            true,
+						},
+						"site_of_origin_four_byte_as_index": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ASN4:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+						"site_of_origin_ipv4_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4 address").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+						"site_of_origin_ipv4_address_index": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4Address:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+						"as_override": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Override matching AS-number while sending update").String,
+							Optional:            true,
+						},
+						"as_override_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Prevent as-override from being inherited from the parent").String,
+							Optional:            true,
+						},
+						"aigp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable AIGP").String,
+							Optional:            true,
+						},
+						"aigp_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable AIGP").String,
+							Optional:            true,
+						},
+						"aigp_send_med": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Send AIGP value in MED").String,
+							Optional:            true,
+						},
+						"aigp_send_med_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable aigp send med").String,
+							Optional:            true,
+						},
+						"aigp_send_cost_community_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable aigp send cost-community").String,
+							Optional:            true,
+						},
+						"aigp_send_cost_community_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Cost community ID").AddIntegerRangeDescription(0, 255).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 255),
+							},
+						},
+						"aigp_send_cost_community_id_poi_igp_cost": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Cost community is used after IGP distance to next hop").String,
+							Optional:            true,
+						},
+						"aigp_send_cost_community_id_poi_igp_cost_transitive": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable transitive cost community").String,
+							Optional:            true,
+						},
+						"aigp_send_cost_community_id_poi_pre_bestpath": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Cost community is first step in best path calculation").String,
+							Optional:            true,
+						},
+						"aigp_send_cost_community_id_poi_pre_bestpath_transitive": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable transitive cost community").String,
+							Optional:            true,
+						},
+						"send_multicast_attributes": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Send multicast attributes to this neighbor").String,
+							Optional:            true,
+						},
+						"send_multicast_attributes_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable send multicast attribute").String,
+							Optional:            true,
+						},
+						"accept_own": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Handle self-originated routes with Accept-Own community").String,
+							Optional:            true,
+						},
+						"accept_own_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Prevent item being inherited from a parent group").String,
+							Optional:            true,
+						},
+						"slow_peer_dynamic": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure this neighbor as dynamic slow-peer").String,
+							Optional:            true,
+						},
+						"slow_peer_dynamic_threshold": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Threshold (in seconds) to detect this neighbor as slow-peer").AddIntegerRangeDescription(120, 3600).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(120, 3600),
+							},
+						},
+						"slow_peer_dynamic_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable dynamic slow-peer").String,
+							Optional:            true,
+						},
+						"slow_peer_static": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure this neighbor as static slow-peer").String,
+							Optional:            true,
+						},
+						"origin_as_validation_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable RPKI origin-AS validation").String,
+							Optional:            true,
+						},
+						"bestpath_origin_as_allow_invalid": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("BGP bestpath selection will allow 'invalid' origin-AS").String,
+							Optional:            true,
 						},
 					},
 				},

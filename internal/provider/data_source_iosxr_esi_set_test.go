@@ -20,9 +20,50 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+import (
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 
 // End of section. //template:end testPrerequisites
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
+
+func TestAccDataSourceIosxrESISet(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_esi_set.test", "rpl", "esi-set POLICYSET\n  1234.1234.1234.1234.1234\nend-set\n"))
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { testAccPreCheck(t) },
+		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccDataSourceIosxrESISetConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
+			},
+		},
+	})
+}
+
+// End of section. //template:end testAccDataSource
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
+
+func testAccDataSourceIosxrESISetConfig() string {
+	config := `resource "iosxr_esi_set" "test" {` + "\n"
+	config += `	set_name = "POLICYSET"` + "\n"
+	config += `	rpl = "esi-set POLICYSET\n  1234.1234.1234.1234.1234\nend-set\n"` + "\n"
+	config += `}` + "\n"
+
+	config += `
+		data "iosxr_esi_set" "test" {
+			set_name = "POLICYSET"
+			depends_on = [iosxr_esi_set.test]
+		}
+	`
+	return config
+}
+
+// End of section. //template:end testAccDataSourceConfig

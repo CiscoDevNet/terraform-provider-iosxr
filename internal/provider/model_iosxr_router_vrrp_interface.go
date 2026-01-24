@@ -213,7 +213,6 @@ func (data *RouterVRRPInterface) updateFromBodyXML(ctx context.Context, res xmld
 }
 
 // End of section. //template:end updateFromBodyXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *RouterVRRPInterface) fromBody(ctx context.Context, res gjson.Result) {
@@ -239,7 +238,6 @@ func (data *RouterVRRPInterface) fromBody(ctx context.Context, res gjson.Result)
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *RouterVRRPInterfaceData) fromBody(ctx context.Context, res gjson.Result) {
@@ -265,7 +263,6 @@ func (data *RouterVRRPInterfaceData) fromBody(ctx context.Context, res gjson.Res
 }
 
 // End of section. //template:end fromBodyData
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *RouterVRRPInterface) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -287,7 +284,6 @@ func (data *RouterVRRPInterface) fromBodyXML(ctx context.Context, res xmldot.Res
 }
 
 // End of section. //template:end fromBodyXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *RouterVRRPInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -309,7 +305,6 @@ func (data *RouterVRRPInterfaceData) fromBodyXML(ctx context.Context, res xmldot
 }
 
 // End of section. //template:end fromBodyDataXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *RouterVRRPInterface) getDeletedItems(ctx context.Context, state RouterVRRPInterface) []string {
@@ -333,7 +328,6 @@ func (data *RouterVRRPInterface) getDeletedItems(ctx context.Context, state Rout
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
 func (data *RouterVRRPInterface) getEmptyLeafsDelete(ctx context.Context, state *RouterVRRPInterface) []string {
@@ -342,7 +336,6 @@ func (data *RouterVRRPInterface) getEmptyLeafsDelete(ctx context.Context, state 
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *RouterVRRPInterface) getDeletePaths(ctx context.Context) []string {
@@ -367,7 +360,6 @@ func (data *RouterVRRPInterface) getDeletePaths(ctx context.Context) []string {
 }
 
 // End of section. //template:end getDeletePaths
-
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *RouterVRRPInterface) addDeletedItemsXML(ctx context.Context, state RouterVRRPInterface, body string) string {
@@ -416,7 +408,6 @@ func (data *RouterVRRPInterface) addDeletedItemsXML(ctx context.Context, state R
 }
 
 // End of section. //template:end addDeletedItemsXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *RouterVRRPInterface) addDeletePathsXML(ctx context.Context, body string) string {

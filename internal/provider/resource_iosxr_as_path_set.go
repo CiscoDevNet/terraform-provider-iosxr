@@ -84,7 +84,7 @@ func (r *ASPathSetResource) Schema(ctx context.Context, req resource.SchemaReque
 				},
 			},
 			"rpl": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("AS path set").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configures an AS-PATH set").String,
 				Required:            true,
 			},
 		},

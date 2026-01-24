@@ -39,28 +39,62 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type EVPNInterface struct {
-	Device                                           types.String `tfsdk:"device"`
-	Id                                               types.String `tfsdk:"id"`
-	DeleteMode                                       types.String `tfsdk:"delete_mode"`
-	InterfaceName                                    types.String `tfsdk:"interface_name"`
-	CoreIsolationGroup                               types.Int64  `tfsdk:"core_isolation_group"`
-	EthernetSegmentIdentifierTypeZeroEsi             types.String `tfsdk:"ethernet_segment_identifier_type_zero_esi"`
-	EthernetSegmentLoadBalancingModeAllActive        types.Bool   `tfsdk:"ethernet_segment_load_balancing_mode_all_active"`
-	EthernetSegmentLoadBalancingModePortActive       types.Bool   `tfsdk:"ethernet_segment_load_balancing_mode_port_active"`
-	EthernetSegmentLoadBalancingModeSingleActive     types.Bool   `tfsdk:"ethernet_segment_load_balancing_mode_single_active"`
-	EthernetSegmentLoadBalancingModeSingleFlowActive types.Bool   `tfsdk:"ethernet_segment_load_balancing_mode_single_flow_active"`
+	Device                                                   types.String `tfsdk:"device"`
+	Id                                                       types.String `tfsdk:"id"`
+	DeleteMode                                               types.String `tfsdk:"delete_mode"`
+	InterfaceName                                            types.String `tfsdk:"interface_name"`
+	CoreIsolationGroup                                       types.Int64  `tfsdk:"core_isolation_group"`
+	TimersPeering                                            types.Int64  `tfsdk:"timers_peering"`
+	TimersRecovery                                           types.Int64  `tfsdk:"timers_recovery"`
+	TimersCarving                                            types.Int64  `tfsdk:"timers_carving"`
+	TimersAcDebounce                                         types.Int64  `tfsdk:"timers_ac_debounce"`
+	EthernetSegmentEsiZero                                   types.String `tfsdk:"ethernet_segment_esi_zero"`
+	EthernetSegmentLoadBalancingModeAllActive                types.Bool   `tfsdk:"ethernet_segment_load_balancing_mode_all_active"`
+	EthernetSegmentLoadBalancingModePortActive               types.Bool   `tfsdk:"ethernet_segment_load_balancing_mode_port_active"`
+	EthernetSegmentLoadBalancingModeSingleActive             types.Bool   `tfsdk:"ethernet_segment_load_balancing_mode_single_active"`
+	EthernetSegmentLoadBalancingModeSingleFlowActive         types.Bool   `tfsdk:"ethernet_segment_load_balancing_mode_single_flow_active"`
+	EthernetSegmentForceSingleHomed                          types.Bool   `tfsdk:"ethernet_segment_force_single_homed"`
+	EthernetSegmentServiceCarvingManualPrimary               types.String `tfsdk:"ethernet_segment_service_carving_manual_primary"`
+	EthernetSegmentServiceCarvingManualSecondary             types.String `tfsdk:"ethernet_segment_service_carving_manual_secondary"`
+	EthernetSegmentServiceCarvingHrw                         types.Bool   `tfsdk:"ethernet_segment_service_carving_hrw"`
+	EthernetSegmentServiceCarvingMulticastHrwSG              types.Bool   `tfsdk:"ethernet_segment_service_carving_multicast_hrw_s_g"`
+	EthernetSegmentServiceCarvingMulticastHrwG               types.Bool   `tfsdk:"ethernet_segment_service_carving_multicast_hrw_g"`
+	EthernetSegmentServiceCarvingPreferenceBasedWeight       types.Int64  `tfsdk:"ethernet_segment_service_carving_preference_based_weight"`
+	EthernetSegmentServiceCarvingPreferenceBasedAccessDriven types.Bool   `tfsdk:"ethernet_segment_service_carving_preference_based_access_driven"`
+	EthernetSegmentBgpRt                                     types.String `tfsdk:"ethernet_segment_bgp_rt"`
+	EthernetSegmentConvergenceReroute                        types.Bool   `tfsdk:"ethernet_segment_convergence_reroute"`
+	EthernetSegmentConvergenceMacMobility                    types.Bool   `tfsdk:"ethernet_segment_convergence_mac_mobility"`
+	EthernetSegmentConvergenceNexthopTracking                types.Bool   `tfsdk:"ethernet_segment_convergence_nexthop_tracking"`
+	AccessSignalBundleDown                                   types.Bool   `tfsdk:"access_signal_bundle_down"`
 }
 
 type EVPNInterfaceData struct {
-	Device                                           types.String `tfsdk:"device"`
-	Id                                               types.String `tfsdk:"id"`
-	InterfaceName                                    types.String `tfsdk:"interface_name"`
-	CoreIsolationGroup                               types.Int64  `tfsdk:"core_isolation_group"`
-	EthernetSegmentIdentifierTypeZeroEsi             types.String `tfsdk:"ethernet_segment_identifier_type_zero_esi"`
-	EthernetSegmentLoadBalancingModeAllActive        types.Bool   `tfsdk:"ethernet_segment_load_balancing_mode_all_active"`
-	EthernetSegmentLoadBalancingModePortActive       types.Bool   `tfsdk:"ethernet_segment_load_balancing_mode_port_active"`
-	EthernetSegmentLoadBalancingModeSingleActive     types.Bool   `tfsdk:"ethernet_segment_load_balancing_mode_single_active"`
-	EthernetSegmentLoadBalancingModeSingleFlowActive types.Bool   `tfsdk:"ethernet_segment_load_balancing_mode_single_flow_active"`
+	Device                                                   types.String `tfsdk:"device"`
+	Id                                                       types.String `tfsdk:"id"`
+	InterfaceName                                            types.String `tfsdk:"interface_name"`
+	CoreIsolationGroup                                       types.Int64  `tfsdk:"core_isolation_group"`
+	TimersPeering                                            types.Int64  `tfsdk:"timers_peering"`
+	TimersRecovery                                           types.Int64  `tfsdk:"timers_recovery"`
+	TimersCarving                                            types.Int64  `tfsdk:"timers_carving"`
+	TimersAcDebounce                                         types.Int64  `tfsdk:"timers_ac_debounce"`
+	EthernetSegmentEsiZero                                   types.String `tfsdk:"ethernet_segment_esi_zero"`
+	EthernetSegmentLoadBalancingModeAllActive                types.Bool   `tfsdk:"ethernet_segment_load_balancing_mode_all_active"`
+	EthernetSegmentLoadBalancingModePortActive               types.Bool   `tfsdk:"ethernet_segment_load_balancing_mode_port_active"`
+	EthernetSegmentLoadBalancingModeSingleActive             types.Bool   `tfsdk:"ethernet_segment_load_balancing_mode_single_active"`
+	EthernetSegmentLoadBalancingModeSingleFlowActive         types.Bool   `tfsdk:"ethernet_segment_load_balancing_mode_single_flow_active"`
+	EthernetSegmentForceSingleHomed                          types.Bool   `tfsdk:"ethernet_segment_force_single_homed"`
+	EthernetSegmentServiceCarvingManualPrimary               types.String `tfsdk:"ethernet_segment_service_carving_manual_primary"`
+	EthernetSegmentServiceCarvingManualSecondary             types.String `tfsdk:"ethernet_segment_service_carving_manual_secondary"`
+	EthernetSegmentServiceCarvingHrw                         types.Bool   `tfsdk:"ethernet_segment_service_carving_hrw"`
+	EthernetSegmentServiceCarvingMulticastHrwSG              types.Bool   `tfsdk:"ethernet_segment_service_carving_multicast_hrw_s_g"`
+	EthernetSegmentServiceCarvingMulticastHrwG               types.Bool   `tfsdk:"ethernet_segment_service_carving_multicast_hrw_g"`
+	EthernetSegmentServiceCarvingPreferenceBasedWeight       types.Int64  `tfsdk:"ethernet_segment_service_carving_preference_based_weight"`
+	EthernetSegmentServiceCarvingPreferenceBasedAccessDriven types.Bool   `tfsdk:"ethernet_segment_service_carving_preference_based_access_driven"`
+	EthernetSegmentBgpRt                                     types.String `tfsdk:"ethernet_segment_bgp_rt"`
+	EthernetSegmentConvergenceReroute                        types.Bool   `tfsdk:"ethernet_segment_convergence_reroute"`
+	EthernetSegmentConvergenceMacMobility                    types.Bool   `tfsdk:"ethernet_segment_convergence_mac_mobility"`
+	EthernetSegmentConvergenceNexthopTracking                types.Bool   `tfsdk:"ethernet_segment_convergence_nexthop_tracking"`
+	AccessSignalBundleDown                                   types.Bool   `tfsdk:"access_signal_bundle_down"`
 }
 
 // End of section. //template:end types
@@ -100,8 +134,20 @@ func (data EVPNInterface) toBody(ctx context.Context) string {
 	if !data.CoreIsolationGroup.IsNull() && !data.CoreIsolationGroup.IsUnknown() {
 		body, _ = sjson.Set(body, "core-isolation-group", strconv.FormatInt(data.CoreIsolationGroup.ValueInt64(), 10))
 	}
-	if !data.EthernetSegmentIdentifierTypeZeroEsi.IsNull() && !data.EthernetSegmentIdentifierTypeZeroEsi.IsUnknown() {
-		body, _ = sjson.Set(body, "ethernet-segment.identifier.type.zero.esi", data.EthernetSegmentIdentifierTypeZeroEsi.ValueString())
+	if !data.TimersPeering.IsNull() && !data.TimersPeering.IsUnknown() {
+		body, _ = sjson.Set(body, "timers.peering", strconv.FormatInt(data.TimersPeering.ValueInt64(), 10))
+	}
+	if !data.TimersRecovery.IsNull() && !data.TimersRecovery.IsUnknown() {
+		body, _ = sjson.Set(body, "timers.recovery", strconv.FormatInt(data.TimersRecovery.ValueInt64(), 10))
+	}
+	if !data.TimersCarving.IsNull() && !data.TimersCarving.IsUnknown() {
+		body, _ = sjson.Set(body, "timers.carving", strconv.FormatInt(data.TimersCarving.ValueInt64(), 10))
+	}
+	if !data.TimersAcDebounce.IsNull() && !data.TimersAcDebounce.IsUnknown() {
+		body, _ = sjson.Set(body, "timers.ac-debounce", strconv.FormatInt(data.TimersAcDebounce.ValueInt64(), 10))
+	}
+	if !data.EthernetSegmentEsiZero.IsNull() && !data.EthernetSegmentEsiZero.IsUnknown() {
+		body, _ = sjson.Set(body, "ethernet-segment.identifier.type.zero.esi", data.EthernetSegmentEsiZero.ValueString())
 	}
 	if !data.EthernetSegmentLoadBalancingModeAllActive.IsNull() && !data.EthernetSegmentLoadBalancingModeAllActive.IsUnknown() {
 		if data.EthernetSegmentLoadBalancingModeAllActive.ValueBool() {
@@ -123,6 +169,63 @@ func (data EVPNInterface) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "ethernet-segment.load-balancing-mode.single-flow-active", map[string]string{})
 		}
 	}
+	if !data.EthernetSegmentForceSingleHomed.IsNull() && !data.EthernetSegmentForceSingleHomed.IsUnknown() {
+		if data.EthernetSegmentForceSingleHomed.ValueBool() {
+			body, _ = sjson.Set(body, "ethernet-segment.force.single-homed", map[string]string{})
+		}
+	}
+	if !data.EthernetSegmentServiceCarvingManualPrimary.IsNull() && !data.EthernetSegmentServiceCarvingManualPrimary.IsUnknown() {
+		body, _ = sjson.Set(body, "ethernet-segment.service-carving.manual.primary", data.EthernetSegmentServiceCarvingManualPrimary.ValueString())
+	}
+	if !data.EthernetSegmentServiceCarvingManualSecondary.IsNull() && !data.EthernetSegmentServiceCarvingManualSecondary.IsUnknown() {
+		body, _ = sjson.Set(body, "ethernet-segment.service-carving.manual.secondary", data.EthernetSegmentServiceCarvingManualSecondary.ValueString())
+	}
+	if !data.EthernetSegmentServiceCarvingHrw.IsNull() && !data.EthernetSegmentServiceCarvingHrw.IsUnknown() {
+		if data.EthernetSegmentServiceCarvingHrw.ValueBool() {
+			body, _ = sjson.Set(body, "ethernet-segment.service-carving.hrw", map[string]string{})
+		}
+	}
+	if !data.EthernetSegmentServiceCarvingMulticastHrwSG.IsNull() && !data.EthernetSegmentServiceCarvingMulticastHrwSG.IsUnknown() {
+		if data.EthernetSegmentServiceCarvingMulticastHrwSG.ValueBool() {
+			body, _ = sjson.Set(body, "ethernet-segment.service-carving.multicast.hrw-s-g", map[string]string{})
+		}
+	}
+	if !data.EthernetSegmentServiceCarvingMulticastHrwG.IsNull() && !data.EthernetSegmentServiceCarvingMulticastHrwG.IsUnknown() {
+		if data.EthernetSegmentServiceCarvingMulticastHrwG.ValueBool() {
+			body, _ = sjson.Set(body, "ethernet-segment.service-carving.multicast.hrw-g", map[string]string{})
+		}
+	}
+	if !data.EthernetSegmentServiceCarvingPreferenceBasedWeight.IsNull() && !data.EthernetSegmentServiceCarvingPreferenceBasedWeight.IsUnknown() {
+		body, _ = sjson.Set(body, "ethernet-segment.service-carving.preference-based.weight", strconv.FormatInt(data.EthernetSegmentServiceCarvingPreferenceBasedWeight.ValueInt64(), 10))
+	}
+	if !data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() && !data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsUnknown() {
+		if data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.ValueBool() {
+			body, _ = sjson.Set(body, "ethernet-segment.service-carving.preference-based.access-driven", map[string]string{})
+		}
+	}
+	if !data.EthernetSegmentBgpRt.IsNull() && !data.EthernetSegmentBgpRt.IsUnknown() {
+		body, _ = sjson.Set(body, "ethernet-segment.bgp.route-target", data.EthernetSegmentBgpRt.ValueString())
+	}
+	if !data.EthernetSegmentConvergenceReroute.IsNull() && !data.EthernetSegmentConvergenceReroute.IsUnknown() {
+		if data.EthernetSegmentConvergenceReroute.ValueBool() {
+			body, _ = sjson.Set(body, "ethernet-segment.convergence.reroute", map[string]string{})
+		}
+	}
+	if !data.EthernetSegmentConvergenceMacMobility.IsNull() && !data.EthernetSegmentConvergenceMacMobility.IsUnknown() {
+		if data.EthernetSegmentConvergenceMacMobility.ValueBool() {
+			body, _ = sjson.Set(body, "ethernet-segment.convergence.mac-mobility", map[string]string{})
+		}
+	}
+	if !data.EthernetSegmentConvergenceNexthopTracking.IsNull() && !data.EthernetSegmentConvergenceNexthopTracking.IsUnknown() {
+		if data.EthernetSegmentConvergenceNexthopTracking.ValueBool() {
+			body, _ = sjson.Set(body, "ethernet-segment.convergence.nexthop-tracking", map[string]string{})
+		}
+	}
+	if !data.AccessSignalBundleDown.IsNull() && !data.AccessSignalBundleDown.IsUnknown() {
+		if data.AccessSignalBundleDown.ValueBool() {
+			body, _ = sjson.Set(body, "access-signal.bundle-down", map[string]string{})
+		}
+	}
 	return body
 }
 
@@ -138,8 +241,20 @@ func (data EVPNInterface) toBodyXML(ctx context.Context) string {
 	if !data.CoreIsolationGroup.IsNull() && !data.CoreIsolationGroup.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/core-isolation-group", strconv.FormatInt(data.CoreIsolationGroup.ValueInt64(), 10))
 	}
-	if !data.EthernetSegmentIdentifierTypeZeroEsi.IsNull() && !data.EthernetSegmentIdentifierTypeZeroEsi.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/ethernet-segment/identifier/type/zero/esi", data.EthernetSegmentIdentifierTypeZeroEsi.ValueString())
+	if !data.TimersPeering.IsNull() && !data.TimersPeering.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/timers/peering", strconv.FormatInt(data.TimersPeering.ValueInt64(), 10))
+	}
+	if !data.TimersRecovery.IsNull() && !data.TimersRecovery.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/timers/recovery", strconv.FormatInt(data.TimersRecovery.ValueInt64(), 10))
+	}
+	if !data.TimersCarving.IsNull() && !data.TimersCarving.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/timers/carving", strconv.FormatInt(data.TimersCarving.ValueInt64(), 10))
+	}
+	if !data.TimersAcDebounce.IsNull() && !data.TimersAcDebounce.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/timers/ac-debounce", strconv.FormatInt(data.TimersAcDebounce.ValueInt64(), 10))
+	}
+	if !data.EthernetSegmentEsiZero.IsNull() && !data.EthernetSegmentEsiZero.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ethernet-segment/identifier/type/zero/esi", data.EthernetSegmentEsiZero.ValueString())
 	}
 	if !data.EthernetSegmentLoadBalancingModeAllActive.IsNull() && !data.EthernetSegmentLoadBalancingModeAllActive.IsUnknown() {
 		if data.EthernetSegmentLoadBalancingModeAllActive.ValueBool() {
@@ -161,6 +276,63 @@ func (data EVPNInterface) toBodyXML(ctx context.Context) string {
 			body = helpers.SetFromXPath(body, data.getXPath()+"/ethernet-segment/load-balancing-mode/single-flow-active", "")
 		}
 	}
+	if !data.EthernetSegmentForceSingleHomed.IsNull() && !data.EthernetSegmentForceSingleHomed.IsUnknown() {
+		if data.EthernetSegmentForceSingleHomed.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ethernet-segment/force/single-homed", "")
+		}
+	}
+	if !data.EthernetSegmentServiceCarvingManualPrimary.IsNull() && !data.EthernetSegmentServiceCarvingManualPrimary.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ethernet-segment/service-carving/manual/primary", data.EthernetSegmentServiceCarvingManualPrimary.ValueString())
+	}
+	if !data.EthernetSegmentServiceCarvingManualSecondary.IsNull() && !data.EthernetSegmentServiceCarvingManualSecondary.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ethernet-segment/service-carving/manual/secondary", data.EthernetSegmentServiceCarvingManualSecondary.ValueString())
+	}
+	if !data.EthernetSegmentServiceCarvingHrw.IsNull() && !data.EthernetSegmentServiceCarvingHrw.IsUnknown() {
+		if data.EthernetSegmentServiceCarvingHrw.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ethernet-segment/service-carving/hrw", "")
+		}
+	}
+	if !data.EthernetSegmentServiceCarvingMulticastHrwSG.IsNull() && !data.EthernetSegmentServiceCarvingMulticastHrwSG.IsUnknown() {
+		if data.EthernetSegmentServiceCarvingMulticastHrwSG.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ethernet-segment/service-carving/multicast/hrw-s-g", "")
+		}
+	}
+	if !data.EthernetSegmentServiceCarvingMulticastHrwG.IsNull() && !data.EthernetSegmentServiceCarvingMulticastHrwG.IsUnknown() {
+		if data.EthernetSegmentServiceCarvingMulticastHrwG.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ethernet-segment/service-carving/multicast/hrw-g", "")
+		}
+	}
+	if !data.EthernetSegmentServiceCarvingPreferenceBasedWeight.IsNull() && !data.EthernetSegmentServiceCarvingPreferenceBasedWeight.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ethernet-segment/service-carving/preference-based/weight", strconv.FormatInt(data.EthernetSegmentServiceCarvingPreferenceBasedWeight.ValueInt64(), 10))
+	}
+	if !data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() && !data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsUnknown() {
+		if data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ethernet-segment/service-carving/preference-based/access-driven", "")
+		}
+	}
+	if !data.EthernetSegmentBgpRt.IsNull() && !data.EthernetSegmentBgpRt.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ethernet-segment/bgp/route-target", data.EthernetSegmentBgpRt.ValueString())
+	}
+	if !data.EthernetSegmentConvergenceReroute.IsNull() && !data.EthernetSegmentConvergenceReroute.IsUnknown() {
+		if data.EthernetSegmentConvergenceReroute.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ethernet-segment/convergence/reroute", "")
+		}
+	}
+	if !data.EthernetSegmentConvergenceMacMobility.IsNull() && !data.EthernetSegmentConvergenceMacMobility.IsUnknown() {
+		if data.EthernetSegmentConvergenceMacMobility.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ethernet-segment/convergence/mac-mobility", "")
+		}
+	}
+	if !data.EthernetSegmentConvergenceNexthopTracking.IsNull() && !data.EthernetSegmentConvergenceNexthopTracking.IsUnknown() {
+		if data.EthernetSegmentConvergenceNexthopTracking.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ethernet-segment/convergence/nexthop-tracking", "")
+		}
+	}
+	if !data.AccessSignalBundleDown.IsNull() && !data.AccessSignalBundleDown.IsUnknown() {
+		if data.AccessSignalBundleDown.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/access-signal/bundle-down", "")
+		}
+	}
 	bodyString, err := body.String()
 	if err != nil {
 		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
@@ -178,39 +350,181 @@ func (data *EVPNInterface) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.CoreIsolationGroup = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ethernet-segment.identifier.type.zero.esi"); value.Exists() && !data.EthernetSegmentIdentifierTypeZeroEsi.IsNull() {
-		data.EthernetSegmentIdentifierTypeZeroEsi = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "timers.peering"); value.Exists() && !data.TimersPeering.IsNull() {
+		data.TimersPeering = types.Int64Value(value.Int())
 	} else {
-		data.EthernetSegmentIdentifierTypeZeroEsi = types.StringNull()
+		data.TimersPeering = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "timers.recovery"); value.Exists() && !data.TimersRecovery.IsNull() {
+		data.TimersRecovery = types.Int64Value(value.Int())
+	} else {
+		data.TimersRecovery = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "timers.carving"); value.Exists() && !data.TimersCarving.IsNull() {
+		data.TimersCarving = types.Int64Value(value.Int())
+	} else {
+		data.TimersCarving = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "timers.ac-debounce"); value.Exists() && !data.TimersAcDebounce.IsNull() {
+		data.TimersAcDebounce = types.Int64Value(value.Int())
+	} else {
+		data.TimersAcDebounce = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "ethernet-segment.identifier.type.zero.esi"); value.Exists() && !data.EthernetSegmentEsiZero.IsNull() {
+		data.EthernetSegmentEsiZero = types.StringValue(value.String())
+	} else {
+		data.EthernetSegmentEsiZero = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "ethernet-segment.load-balancing-mode.all-active"); value.Exists() {
-		data.EthernetSegmentLoadBalancingModeAllActive = types.BoolValue(true)
-	} else if data.EthernetSegmentLoadBalancingModeAllActive.IsNull() {
-		// If currently null, keep as null (field not in config)
-		data.EthernetSegmentLoadBalancingModeAllActive = types.BoolNull()
+		if !data.EthernetSegmentLoadBalancingModeAllActive.IsNull() {
+			data.EthernetSegmentLoadBalancingModeAllActive = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.EthernetSegmentLoadBalancingModeAllActive.IsNull() {
+			data.EthernetSegmentLoadBalancingModeAllActive = types.BoolNull()
+		}
 	}
-	// else: preserve existing value (e.g., false from config)
 	if value := gjson.GetBytes(res, "ethernet-segment.load-balancing-mode.port-active"); value.Exists() {
-		data.EthernetSegmentLoadBalancingModePortActive = types.BoolValue(true)
-	} else if data.EthernetSegmentLoadBalancingModePortActive.IsNull() {
-		// If currently null, keep as null (field not in config)
-		data.EthernetSegmentLoadBalancingModePortActive = types.BoolNull()
+		if !data.EthernetSegmentLoadBalancingModePortActive.IsNull() {
+			data.EthernetSegmentLoadBalancingModePortActive = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.EthernetSegmentLoadBalancingModePortActive.IsNull() {
+			data.EthernetSegmentLoadBalancingModePortActive = types.BoolNull()
+		}
 	}
-	// else: preserve existing value (e.g., false from config)
 	if value := gjson.GetBytes(res, "ethernet-segment.load-balancing-mode.single-active"); value.Exists() {
-		data.EthernetSegmentLoadBalancingModeSingleActive = types.BoolValue(true)
-	} else if data.EthernetSegmentLoadBalancingModeSingleActive.IsNull() {
-		// If currently null, keep as null (field not in config)
-		data.EthernetSegmentLoadBalancingModeSingleActive = types.BoolNull()
+		if !data.EthernetSegmentLoadBalancingModeSingleActive.IsNull() {
+			data.EthernetSegmentLoadBalancingModeSingleActive = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.EthernetSegmentLoadBalancingModeSingleActive.IsNull() {
+			data.EthernetSegmentLoadBalancingModeSingleActive = types.BoolNull()
+		}
 	}
-	// else: preserve existing value (e.g., false from config)
 	if value := gjson.GetBytes(res, "ethernet-segment.load-balancing-mode.single-flow-active"); value.Exists() {
-		data.EthernetSegmentLoadBalancingModeSingleFlowActive = types.BoolValue(true)
-	} else if data.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() {
-		// If currently null, keep as null (field not in config)
-		data.EthernetSegmentLoadBalancingModeSingleFlowActive = types.BoolNull()
+		if !data.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() {
+			data.EthernetSegmentLoadBalancingModeSingleFlowActive = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() {
+			data.EthernetSegmentLoadBalancingModeSingleFlowActive = types.BoolNull()
+		}
 	}
-	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "ethernet-segment.force.single-homed"); value.Exists() {
+		if !data.EthernetSegmentForceSingleHomed.IsNull() {
+			data.EthernetSegmentForceSingleHomed = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.EthernetSegmentForceSingleHomed.IsNull() {
+			data.EthernetSegmentForceSingleHomed = types.BoolNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "ethernet-segment.service-carving.manual.primary"); value.Exists() && !data.EthernetSegmentServiceCarvingManualPrimary.IsNull() {
+		data.EthernetSegmentServiceCarvingManualPrimary = types.StringValue(value.String())
+	} else {
+		data.EthernetSegmentServiceCarvingManualPrimary = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ethernet-segment.service-carving.manual.secondary"); value.Exists() && !data.EthernetSegmentServiceCarvingManualSecondary.IsNull() {
+		data.EthernetSegmentServiceCarvingManualSecondary = types.StringValue(value.String())
+	} else {
+		data.EthernetSegmentServiceCarvingManualSecondary = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ethernet-segment.service-carving.hrw"); value.Exists() {
+		if !data.EthernetSegmentServiceCarvingHrw.IsNull() {
+			data.EthernetSegmentServiceCarvingHrw = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.EthernetSegmentServiceCarvingHrw.IsNull() {
+			data.EthernetSegmentServiceCarvingHrw = types.BoolNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "ethernet-segment.service-carving.multicast.hrw-s-g"); value.Exists() {
+		if !data.EthernetSegmentServiceCarvingMulticastHrwSG.IsNull() {
+			data.EthernetSegmentServiceCarvingMulticastHrwSG = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.EthernetSegmentServiceCarvingMulticastHrwSG.IsNull() {
+			data.EthernetSegmentServiceCarvingMulticastHrwSG = types.BoolNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "ethernet-segment.service-carving.multicast.hrw-g"); value.Exists() {
+		if !data.EthernetSegmentServiceCarvingMulticastHrwG.IsNull() {
+			data.EthernetSegmentServiceCarvingMulticastHrwG = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.EthernetSegmentServiceCarvingMulticastHrwG.IsNull() {
+			data.EthernetSegmentServiceCarvingMulticastHrwG = types.BoolNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "ethernet-segment.service-carving.preference-based.weight"); value.Exists() && !data.EthernetSegmentServiceCarvingPreferenceBasedWeight.IsNull() {
+		data.EthernetSegmentServiceCarvingPreferenceBasedWeight = types.Int64Value(value.Int())
+	} else {
+		data.EthernetSegmentServiceCarvingPreferenceBasedWeight = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "ethernet-segment.service-carving.preference-based.access-driven"); value.Exists() {
+		if !data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() {
+			data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() {
+			data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "ethernet-segment.bgp.route-target"); value.Exists() && !data.EthernetSegmentBgpRt.IsNull() {
+		data.EthernetSegmentBgpRt = types.StringValue(value.String())
+	} else {
+		data.EthernetSegmentBgpRt = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ethernet-segment.convergence.reroute"); value.Exists() {
+		if !data.EthernetSegmentConvergenceReroute.IsNull() {
+			data.EthernetSegmentConvergenceReroute = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.EthernetSegmentConvergenceReroute.IsNull() {
+			data.EthernetSegmentConvergenceReroute = types.BoolNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "ethernet-segment.convergence.mac-mobility"); value.Exists() {
+		if !data.EthernetSegmentConvergenceMacMobility.IsNull() {
+			data.EthernetSegmentConvergenceMacMobility = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.EthernetSegmentConvergenceMacMobility.IsNull() {
+			data.EthernetSegmentConvergenceMacMobility = types.BoolNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "ethernet-segment.convergence.nexthop-tracking"); value.Exists() {
+		if !data.EthernetSegmentConvergenceNexthopTracking.IsNull() {
+			data.EthernetSegmentConvergenceNexthopTracking = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.EthernetSegmentConvergenceNexthopTracking.IsNull() {
+			data.EthernetSegmentConvergenceNexthopTracking = types.BoolNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "access-signal.bundle-down"); value.Exists() {
+		if !data.AccessSignalBundleDown.IsNull() {
+			data.AccessSignalBundleDown = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.AccessSignalBundleDown.IsNull() {
+			data.AccessSignalBundleDown = types.BoolNull()
+		}
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -228,16 +542,35 @@ func (data *EVPNInterface) updateFromBodyXML(ctx context.Context, res xmldot.Res
 	} else if data.CoreIsolationGroup.IsNull() {
 		data.CoreIsolationGroup = types.Int64Null()
 	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/peering"); value.Exists() {
+		data.TimersPeering = types.Int64Value(value.Int())
+	} else if data.TimersPeering.IsNull() {
+		data.TimersPeering = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/recovery"); value.Exists() {
+		data.TimersRecovery = types.Int64Value(value.Int())
+	} else if data.TimersRecovery.IsNull() {
+		data.TimersRecovery = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/carving"); value.Exists() {
+		data.TimersCarving = types.Int64Value(value.Int())
+	} else if data.TimersCarving.IsNull() {
+		data.TimersCarving = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/ac-debounce"); value.Exists() {
+		data.TimersAcDebounce = types.Int64Value(value.Int())
+	} else if data.TimersAcDebounce.IsNull() {
+		data.TimersAcDebounce = types.Int64Null()
+	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/identifier/type/zero/esi"); value.Exists() {
-		data.EthernetSegmentIdentifierTypeZeroEsi = types.StringValue(value.String())
-	} else if data.EthernetSegmentIdentifierTypeZeroEsi.IsNull() {
-		data.EthernetSegmentIdentifierTypeZeroEsi = types.StringNull()
+		data.EthernetSegmentEsiZero = types.StringValue(value.String())
+	} else if data.EthernetSegmentEsiZero.IsNull() {
+		data.EthernetSegmentEsiZero = types.StringNull()
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/load-balancing-mode/all-active"); value.Exists() {
 		data.EthernetSegmentLoadBalancingModeAllActive = types.BoolValue(true)
 	} else {
-		// If config has false and device doesn't have the field, keep false (don't set to null)
-		// Only set to null if it was already null
+		// For presence-based booleans, only set to null if it's already null
 		if data.EthernetSegmentLoadBalancingModeAllActive.IsNull() {
 			data.EthernetSegmentLoadBalancingModeAllActive = types.BoolNull()
 		}
@@ -245,8 +578,7 @@ func (data *EVPNInterface) updateFromBodyXML(ctx context.Context, res xmldot.Res
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/load-balancing-mode/port-active"); value.Exists() {
 		data.EthernetSegmentLoadBalancingModePortActive = types.BoolValue(true)
 	} else {
-		// If config has false and device doesn't have the field, keep false (don't set to null)
-		// Only set to null if it was already null
+		// For presence-based booleans, only set to null if it's already null
 		if data.EthernetSegmentLoadBalancingModePortActive.IsNull() {
 			data.EthernetSegmentLoadBalancingModePortActive = types.BoolNull()
 		}
@@ -254,8 +586,7 @@ func (data *EVPNInterface) updateFromBodyXML(ctx context.Context, res xmldot.Res
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/load-balancing-mode/single-active"); value.Exists() {
 		data.EthernetSegmentLoadBalancingModeSingleActive = types.BoolValue(true)
 	} else {
-		// If config has false and device doesn't have the field, keep false (don't set to null)
-		// Only set to null if it was already null
+		// For presence-based booleans, only set to null if it's already null
 		if data.EthernetSegmentLoadBalancingModeSingleActive.IsNull() {
 			data.EthernetSegmentLoadBalancingModeSingleActive = types.BoolNull()
 		}
@@ -263,10 +594,101 @@ func (data *EVPNInterface) updateFromBodyXML(ctx context.Context, res xmldot.Res
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/load-balancing-mode/single-flow-active"); value.Exists() {
 		data.EthernetSegmentLoadBalancingModeSingleFlowActive = types.BoolValue(true)
 	} else {
-		// If config has false and device doesn't have the field, keep false (don't set to null)
-		// Only set to null if it was already null
+		// For presence-based booleans, only set to null if it's already null
 		if data.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() {
 			data.EthernetSegmentLoadBalancingModeSingleFlowActive = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/force/single-homed"); value.Exists() {
+		data.EthernetSegmentForceSingleHomed = types.BoolValue(true)
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.EthernetSegmentForceSingleHomed.IsNull() {
+			data.EthernetSegmentForceSingleHomed = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/service-carving/manual/primary"); value.Exists() {
+		data.EthernetSegmentServiceCarvingManualPrimary = types.StringValue(value.String())
+	} else if data.EthernetSegmentServiceCarvingManualPrimary.IsNull() {
+		data.EthernetSegmentServiceCarvingManualPrimary = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/service-carving/manual/secondary"); value.Exists() {
+		data.EthernetSegmentServiceCarvingManualSecondary = types.StringValue(value.String())
+	} else if data.EthernetSegmentServiceCarvingManualSecondary.IsNull() {
+		data.EthernetSegmentServiceCarvingManualSecondary = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/service-carving/hrw"); value.Exists() {
+		data.EthernetSegmentServiceCarvingHrw = types.BoolValue(true)
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.EthernetSegmentServiceCarvingHrw.IsNull() {
+			data.EthernetSegmentServiceCarvingHrw = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/service-carving/multicast/hrw-s-g"); value.Exists() {
+		data.EthernetSegmentServiceCarvingMulticastHrwSG = types.BoolValue(true)
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.EthernetSegmentServiceCarvingMulticastHrwSG.IsNull() {
+			data.EthernetSegmentServiceCarvingMulticastHrwSG = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/service-carving/multicast/hrw-g"); value.Exists() {
+		data.EthernetSegmentServiceCarvingMulticastHrwG = types.BoolValue(true)
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.EthernetSegmentServiceCarvingMulticastHrwG.IsNull() {
+			data.EthernetSegmentServiceCarvingMulticastHrwG = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/service-carving/preference-based/weight"); value.Exists() {
+		data.EthernetSegmentServiceCarvingPreferenceBasedWeight = types.Int64Value(value.Int())
+	} else if data.EthernetSegmentServiceCarvingPreferenceBasedWeight.IsNull() {
+		data.EthernetSegmentServiceCarvingPreferenceBasedWeight = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/service-carving/preference-based/access-driven"); value.Exists() {
+		data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolValue(true)
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() {
+			data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/bgp/route-target"); value.Exists() {
+		data.EthernetSegmentBgpRt = types.StringValue(value.String())
+	} else if data.EthernetSegmentBgpRt.IsNull() {
+		data.EthernetSegmentBgpRt = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/convergence/reroute"); value.Exists() {
+		data.EthernetSegmentConvergenceReroute = types.BoolValue(true)
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.EthernetSegmentConvergenceReroute.IsNull() {
+			data.EthernetSegmentConvergenceReroute = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/convergence/mac-mobility"); value.Exists() {
+		data.EthernetSegmentConvergenceMacMobility = types.BoolValue(true)
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.EthernetSegmentConvergenceMacMobility.IsNull() {
+			data.EthernetSegmentConvergenceMacMobility = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/convergence/nexthop-tracking"); value.Exists() {
+		data.EthernetSegmentConvergenceNexthopTracking = types.BoolValue(true)
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.EthernetSegmentConvergenceNexthopTracking.IsNull() {
+			data.EthernetSegmentConvergenceNexthopTracking = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-signal/bundle-down"); value.Exists() {
+		data.AccessSignalBundleDown = types.BoolValue(true)
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.AccessSignalBundleDown.IsNull() {
+			data.AccessSignalBundleDown = types.BoolNull()
 		}
 	}
 }
@@ -283,20 +705,97 @@ func (data *EVPNInterface) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "core-isolation-group"); value.Exists() {
 		data.CoreIsolationGroup = types.Int64Value(value.Int())
 	}
+	if value := res.Get(prefix + "timers.peering"); value.Exists() {
+		data.TimersPeering = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "timers.recovery"); value.Exists() {
+		data.TimersRecovery = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "timers.carving"); value.Exists() {
+		data.TimersCarving = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "timers.ac-debounce"); value.Exists() {
+		data.TimersAcDebounce = types.Int64Value(value.Int())
+	}
 	if value := res.Get(prefix + "ethernet-segment.identifier.type.zero.esi"); value.Exists() {
-		data.EthernetSegmentIdentifierTypeZeroEsi = types.StringValue(value.String())
+		data.EthernetSegmentEsiZero = types.StringValue(value.String())
 	}
 	if value := res.Get(prefix + "ethernet-segment.load-balancing-mode.all-active"); value.Exists() {
 		data.EthernetSegmentLoadBalancingModeAllActive = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentLoadBalancingModeAllActive = types.BoolNull()
 	}
 	if value := res.Get(prefix + "ethernet-segment.load-balancing-mode.port-active"); value.Exists() {
 		data.EthernetSegmentLoadBalancingModePortActive = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentLoadBalancingModePortActive = types.BoolNull()
 	}
 	if value := res.Get(prefix + "ethernet-segment.load-balancing-mode.single-active"); value.Exists() {
 		data.EthernetSegmentLoadBalancingModeSingleActive = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentLoadBalancingModeSingleActive = types.BoolNull()
 	}
 	if value := res.Get(prefix + "ethernet-segment.load-balancing-mode.single-flow-active"); value.Exists() {
 		data.EthernetSegmentLoadBalancingModeSingleFlowActive = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentLoadBalancingModeSingleFlowActive = types.BoolNull()
+	}
+	if value := res.Get(prefix + "ethernet-segment.force.single-homed"); value.Exists() {
+		data.EthernetSegmentForceSingleHomed = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentForceSingleHomed = types.BoolNull()
+	}
+	if value := res.Get(prefix + "ethernet-segment.service-carving.manual.primary"); value.Exists() {
+		data.EthernetSegmentServiceCarvingManualPrimary = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "ethernet-segment.service-carving.manual.secondary"); value.Exists() {
+		data.EthernetSegmentServiceCarvingManualSecondary = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "ethernet-segment.service-carving.hrw"); value.Exists() {
+		data.EthernetSegmentServiceCarvingHrw = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentServiceCarvingHrw = types.BoolNull()
+	}
+	if value := res.Get(prefix + "ethernet-segment.service-carving.multicast.hrw-s-g"); value.Exists() {
+		data.EthernetSegmentServiceCarvingMulticastHrwSG = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentServiceCarvingMulticastHrwSG = types.BoolNull()
+	}
+	if value := res.Get(prefix + "ethernet-segment.service-carving.multicast.hrw-g"); value.Exists() {
+		data.EthernetSegmentServiceCarvingMulticastHrwG = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentServiceCarvingMulticastHrwG = types.BoolNull()
+	}
+	if value := res.Get(prefix + "ethernet-segment.service-carving.preference-based.weight"); value.Exists() {
+		data.EthernetSegmentServiceCarvingPreferenceBasedWeight = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "ethernet-segment.service-carving.preference-based.access-driven"); value.Exists() {
+		data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolNull()
+	}
+	if value := res.Get(prefix + "ethernet-segment.bgp.route-target"); value.Exists() {
+		data.EthernetSegmentBgpRt = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "ethernet-segment.convergence.reroute"); value.Exists() {
+		data.EthernetSegmentConvergenceReroute = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentConvergenceReroute = types.BoolNull()
+	}
+	if value := res.Get(prefix + "ethernet-segment.convergence.mac-mobility"); value.Exists() {
+		data.EthernetSegmentConvergenceMacMobility = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentConvergenceMacMobility = types.BoolNull()
+	}
+	if value := res.Get(prefix + "ethernet-segment.convergence.nexthop-tracking"); value.Exists() {
+		data.EthernetSegmentConvergenceNexthopTracking = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentConvergenceNexthopTracking = types.BoolNull()
+	}
+	if value := res.Get(prefix + "access-signal.bundle-down"); value.Exists() {
+		data.AccessSignalBundleDown = types.BoolValue(true)
+	} else {
+		data.AccessSignalBundleDown = types.BoolNull()
 	}
 }
 
@@ -312,20 +811,97 @@ func (data *EVPNInterfaceData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "core-isolation-group"); value.Exists() {
 		data.CoreIsolationGroup = types.Int64Value(value.Int())
 	}
+	if value := res.Get(prefix + "timers.peering"); value.Exists() {
+		data.TimersPeering = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "timers.recovery"); value.Exists() {
+		data.TimersRecovery = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "timers.carving"); value.Exists() {
+		data.TimersCarving = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "timers.ac-debounce"); value.Exists() {
+		data.TimersAcDebounce = types.Int64Value(value.Int())
+	}
 	if value := res.Get(prefix + "ethernet-segment.identifier.type.zero.esi"); value.Exists() {
-		data.EthernetSegmentIdentifierTypeZeroEsi = types.StringValue(value.String())
+		data.EthernetSegmentEsiZero = types.StringValue(value.String())
 	}
 	if value := res.Get(prefix + "ethernet-segment.load-balancing-mode.all-active"); value.Exists() {
 		data.EthernetSegmentLoadBalancingModeAllActive = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentLoadBalancingModeAllActive = types.BoolNull()
 	}
 	if value := res.Get(prefix + "ethernet-segment.load-balancing-mode.port-active"); value.Exists() {
 		data.EthernetSegmentLoadBalancingModePortActive = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentLoadBalancingModePortActive = types.BoolNull()
 	}
 	if value := res.Get(prefix + "ethernet-segment.load-balancing-mode.single-active"); value.Exists() {
 		data.EthernetSegmentLoadBalancingModeSingleActive = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentLoadBalancingModeSingleActive = types.BoolNull()
 	}
 	if value := res.Get(prefix + "ethernet-segment.load-balancing-mode.single-flow-active"); value.Exists() {
 		data.EthernetSegmentLoadBalancingModeSingleFlowActive = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentLoadBalancingModeSingleFlowActive = types.BoolNull()
+	}
+	if value := res.Get(prefix + "ethernet-segment.force.single-homed"); value.Exists() {
+		data.EthernetSegmentForceSingleHomed = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentForceSingleHomed = types.BoolNull()
+	}
+	if value := res.Get(prefix + "ethernet-segment.service-carving.manual.primary"); value.Exists() {
+		data.EthernetSegmentServiceCarvingManualPrimary = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "ethernet-segment.service-carving.manual.secondary"); value.Exists() {
+		data.EthernetSegmentServiceCarvingManualSecondary = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "ethernet-segment.service-carving.hrw"); value.Exists() {
+		data.EthernetSegmentServiceCarvingHrw = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentServiceCarvingHrw = types.BoolNull()
+	}
+	if value := res.Get(prefix + "ethernet-segment.service-carving.multicast.hrw-s-g"); value.Exists() {
+		data.EthernetSegmentServiceCarvingMulticastHrwSG = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentServiceCarvingMulticastHrwSG = types.BoolNull()
+	}
+	if value := res.Get(prefix + "ethernet-segment.service-carving.multicast.hrw-g"); value.Exists() {
+		data.EthernetSegmentServiceCarvingMulticastHrwG = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentServiceCarvingMulticastHrwG = types.BoolNull()
+	}
+	if value := res.Get(prefix + "ethernet-segment.service-carving.preference-based.weight"); value.Exists() {
+		data.EthernetSegmentServiceCarvingPreferenceBasedWeight = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "ethernet-segment.service-carving.preference-based.access-driven"); value.Exists() {
+		data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolNull()
+	}
+	if value := res.Get(prefix + "ethernet-segment.bgp.route-target"); value.Exists() {
+		data.EthernetSegmentBgpRt = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "ethernet-segment.convergence.reroute"); value.Exists() {
+		data.EthernetSegmentConvergenceReroute = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentConvergenceReroute = types.BoolNull()
+	}
+	if value := res.Get(prefix + "ethernet-segment.convergence.mac-mobility"); value.Exists() {
+		data.EthernetSegmentConvergenceMacMobility = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentConvergenceMacMobility = types.BoolNull()
+	}
+	if value := res.Get(prefix + "ethernet-segment.convergence.nexthop-tracking"); value.Exists() {
+		data.EthernetSegmentConvergenceNexthopTracking = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentConvergenceNexthopTracking = types.BoolNull()
+	}
+	if value := res.Get(prefix + "access-signal.bundle-down"); value.Exists() {
+		data.AccessSignalBundleDown = types.BoolValue(true)
+	} else {
+		data.AccessSignalBundleDown = types.BoolNull()
 	}
 }
 
@@ -337,20 +913,97 @@ func (data *EVPNInterface) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/core-isolation-group"); value.Exists() {
 		data.CoreIsolationGroup = types.Int64Value(value.Int())
 	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/peering"); value.Exists() {
+		data.TimersPeering = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/recovery"); value.Exists() {
+		data.TimersRecovery = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/carving"); value.Exists() {
+		data.TimersCarving = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/ac-debounce"); value.Exists() {
+		data.TimersAcDebounce = types.Int64Value(value.Int())
+	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/identifier/type/zero/esi"); value.Exists() {
-		data.EthernetSegmentIdentifierTypeZeroEsi = types.StringValue(value.String())
+		data.EthernetSegmentEsiZero = types.StringValue(value.String())
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/load-balancing-mode/all-active"); value.Exists() {
 		data.EthernetSegmentLoadBalancingModeAllActive = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentLoadBalancingModeAllActive = types.BoolNull()
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/load-balancing-mode/port-active"); value.Exists() {
 		data.EthernetSegmentLoadBalancingModePortActive = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentLoadBalancingModePortActive = types.BoolNull()
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/load-balancing-mode/single-active"); value.Exists() {
 		data.EthernetSegmentLoadBalancingModeSingleActive = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentLoadBalancingModeSingleActive = types.BoolNull()
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/load-balancing-mode/single-flow-active"); value.Exists() {
 		data.EthernetSegmentLoadBalancingModeSingleFlowActive = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentLoadBalancingModeSingleFlowActive = types.BoolNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/force/single-homed"); value.Exists() {
+		data.EthernetSegmentForceSingleHomed = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentForceSingleHomed = types.BoolNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/service-carving/manual/primary"); value.Exists() {
+		data.EthernetSegmentServiceCarvingManualPrimary = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/service-carving/manual/secondary"); value.Exists() {
+		data.EthernetSegmentServiceCarvingManualSecondary = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/service-carving/hrw"); value.Exists() {
+		data.EthernetSegmentServiceCarvingHrw = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentServiceCarvingHrw = types.BoolNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/service-carving/multicast/hrw-s-g"); value.Exists() {
+		data.EthernetSegmentServiceCarvingMulticastHrwSG = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentServiceCarvingMulticastHrwSG = types.BoolNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/service-carving/multicast/hrw-g"); value.Exists() {
+		data.EthernetSegmentServiceCarvingMulticastHrwG = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentServiceCarvingMulticastHrwG = types.BoolNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/service-carving/preference-based/weight"); value.Exists() {
+		data.EthernetSegmentServiceCarvingPreferenceBasedWeight = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/service-carving/preference-based/access-driven"); value.Exists() {
+		data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/bgp/route-target"); value.Exists() {
+		data.EthernetSegmentBgpRt = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/convergence/reroute"); value.Exists() {
+		data.EthernetSegmentConvergenceReroute = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentConvergenceReroute = types.BoolNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/convergence/mac-mobility"); value.Exists() {
+		data.EthernetSegmentConvergenceMacMobility = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentConvergenceMacMobility = types.BoolNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/convergence/nexthop-tracking"); value.Exists() {
+		data.EthernetSegmentConvergenceNexthopTracking = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentConvergenceNexthopTracking = types.BoolNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-signal/bundle-down"); value.Exists() {
+		data.AccessSignalBundleDown = types.BoolValue(true)
+	} else {
+		data.AccessSignalBundleDown = types.BoolNull()
 	}
 }
 
@@ -362,8 +1015,20 @@ func (data *EVPNInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Resul
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/core-isolation-group"); value.Exists() {
 		data.CoreIsolationGroup = types.Int64Value(value.Int())
 	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/peering"); value.Exists() {
+		data.TimersPeering = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/recovery"); value.Exists() {
+		data.TimersRecovery = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/carving"); value.Exists() {
+		data.TimersCarving = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timers/ac-debounce"); value.Exists() {
+		data.TimersAcDebounce = types.Int64Value(value.Int())
+	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/identifier/type/zero/esi"); value.Exists() {
-		data.EthernetSegmentIdentifierTypeZeroEsi = types.StringValue(value.String())
+		data.EthernetSegmentEsiZero = types.StringValue(value.String())
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/load-balancing-mode/all-active"); value.Exists() {
 		data.EthernetSegmentLoadBalancingModeAllActive = types.BoolValue(true)
@@ -385,6 +1050,63 @@ func (data *EVPNInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Resul
 	} else {
 		data.EthernetSegmentLoadBalancingModeSingleFlowActive = types.BoolValue(false)
 	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/force/single-homed"); value.Exists() {
+		data.EthernetSegmentForceSingleHomed = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentForceSingleHomed = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/service-carving/manual/primary"); value.Exists() {
+		data.EthernetSegmentServiceCarvingManualPrimary = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/service-carving/manual/secondary"); value.Exists() {
+		data.EthernetSegmentServiceCarvingManualSecondary = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/service-carving/hrw"); value.Exists() {
+		data.EthernetSegmentServiceCarvingHrw = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentServiceCarvingHrw = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/service-carving/multicast/hrw-s-g"); value.Exists() {
+		data.EthernetSegmentServiceCarvingMulticastHrwSG = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentServiceCarvingMulticastHrwSG = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/service-carving/multicast/hrw-g"); value.Exists() {
+		data.EthernetSegmentServiceCarvingMulticastHrwG = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentServiceCarvingMulticastHrwG = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/service-carving/preference-based/weight"); value.Exists() {
+		data.EthernetSegmentServiceCarvingPreferenceBasedWeight = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/service-carving/preference-based/access-driven"); value.Exists() {
+		data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/bgp/route-target"); value.Exists() {
+		data.EthernetSegmentBgpRt = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/convergence/reroute"); value.Exists() {
+		data.EthernetSegmentConvergenceReroute = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentConvergenceReroute = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/convergence/mac-mobility"); value.Exists() {
+		data.EthernetSegmentConvergenceMacMobility = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentConvergenceMacMobility = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ethernet-segment/convergence/nexthop-tracking"); value.Exists() {
+		data.EthernetSegmentConvergenceNexthopTracking = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentConvergenceNexthopTracking = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-signal/bundle-down"); value.Exists() {
+		data.AccessSignalBundleDown = types.BoolValue(true)
+	} else {
+		data.AccessSignalBundleDown = types.BoolValue(false)
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
@@ -393,32 +1115,71 @@ func (data *EVPNInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Resul
 
 func (data *EVPNInterface) getDeletedItems(ctx context.Context, state EVPNInterface) []string {
 	deletedItems := make([]string, 0)
-	// For presence-based booleans, delete if going from true to false or to null
-	if !state.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() && state.EthernetSegmentLoadBalancingModeSingleFlowActive.ValueBool() {
-		if data.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() || !data.EthernetSegmentLoadBalancingModeSingleFlowActive.ValueBool() {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/single-flow-active", state.getPath()))
-		}
+	if !state.AccessSignalBundleDown.IsNull() && data.AccessSignalBundleDown.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/access-signal/bundle-down", state.getPath()))
 	}
-	// For presence-based booleans, delete if going from true to false or to null
-	if !state.EthernetSegmentLoadBalancingModeSingleActive.IsNull() && state.EthernetSegmentLoadBalancingModeSingleActive.ValueBool() {
-		if data.EthernetSegmentLoadBalancingModeSingleActive.IsNull() || !data.EthernetSegmentLoadBalancingModeSingleActive.ValueBool() {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/single-active", state.getPath()))
-		}
+	if !state.EthernetSegmentConvergenceNexthopTracking.IsNull() && data.EthernetSegmentConvergenceNexthopTracking.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/convergence/nexthop-tracking", state.getPath()))
 	}
-	// For presence-based booleans, delete if going from true to false or to null
-	if !state.EthernetSegmentLoadBalancingModePortActive.IsNull() && state.EthernetSegmentLoadBalancingModePortActive.ValueBool() {
-		if data.EthernetSegmentLoadBalancingModePortActive.IsNull() || !data.EthernetSegmentLoadBalancingModePortActive.ValueBool() {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/port-active", state.getPath()))
-		}
+	if !state.EthernetSegmentConvergenceMacMobility.IsNull() && data.EthernetSegmentConvergenceMacMobility.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/convergence/mac-mobility", state.getPath()))
 	}
-	// For presence-based booleans, delete if going from true to false or to null
-	if !state.EthernetSegmentLoadBalancingModeAllActive.IsNull() && state.EthernetSegmentLoadBalancingModeAllActive.ValueBool() {
-		if data.EthernetSegmentLoadBalancingModeAllActive.IsNull() || !data.EthernetSegmentLoadBalancingModeAllActive.ValueBool() {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/all-active", state.getPath()))
-		}
+	if !state.EthernetSegmentConvergenceReroute.IsNull() && data.EthernetSegmentConvergenceReroute.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/convergence/reroute", state.getPath()))
 	}
-	if !state.EthernetSegmentIdentifierTypeZeroEsi.IsNull() && data.EthernetSegmentIdentifierTypeZeroEsi.IsNull() {
+	if !state.EthernetSegmentBgpRt.IsNull() && data.EthernetSegmentBgpRt.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/bgp", state.getPath()))
+	}
+	if !state.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() && data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/service-carving/preference-based", state.getPath()))
+	}
+	if !state.EthernetSegmentServiceCarvingPreferenceBasedWeight.IsNull() && data.EthernetSegmentServiceCarvingPreferenceBasedWeight.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/service-carving/preference-based", state.getPath()))
+	}
+	if !state.EthernetSegmentServiceCarvingMulticastHrwG.IsNull() && data.EthernetSegmentServiceCarvingMulticastHrwG.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/service-carving/multicast", state.getPath()))
+	}
+	if !state.EthernetSegmentServiceCarvingMulticastHrwSG.IsNull() && data.EthernetSegmentServiceCarvingMulticastHrwSG.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/service-carving/multicast", state.getPath()))
+	}
+	if !state.EthernetSegmentServiceCarvingHrw.IsNull() && data.EthernetSegmentServiceCarvingHrw.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/service-carving/hrw", state.getPath()))
+	}
+	if !state.EthernetSegmentServiceCarvingManualSecondary.IsNull() && data.EthernetSegmentServiceCarvingManualSecondary.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/service-carving/manual/secondary", state.getPath()))
+	}
+	if !state.EthernetSegmentServiceCarvingManualPrimary.IsNull() && data.EthernetSegmentServiceCarvingManualPrimary.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/service-carving/manual/primary", state.getPath()))
+	}
+	if !state.EthernetSegmentForceSingleHomed.IsNull() && data.EthernetSegmentForceSingleHomed.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/force/single-homed", state.getPath()))
+	}
+	if !state.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() && data.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/single-flow-active", state.getPath()))
+	}
+	if !state.EthernetSegmentLoadBalancingModeSingleActive.IsNull() && data.EthernetSegmentLoadBalancingModeSingleActive.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/single-active", state.getPath()))
+	}
+	if !state.EthernetSegmentLoadBalancingModePortActive.IsNull() && data.EthernetSegmentLoadBalancingModePortActive.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/port-active", state.getPath()))
+	}
+	if !state.EthernetSegmentLoadBalancingModeAllActive.IsNull() && data.EthernetSegmentLoadBalancingModeAllActive.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/all-active", state.getPath()))
+	}
+	if !state.EthernetSegmentEsiZero.IsNull() && data.EthernetSegmentEsiZero.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero", state.getPath()))
+	}
+	if !state.TimersAcDebounce.IsNull() && data.TimersAcDebounce.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/ac-debounce", state.getPath()))
+	}
+	if !state.TimersCarving.IsNull() && data.TimersCarving.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/carving", state.getPath()))
+	}
+	if !state.TimersRecovery.IsNull() && data.TimersRecovery.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/recovery", state.getPath()))
+	}
+	if !state.TimersPeering.IsNull() && data.TimersPeering.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/peering", state.getPath()))
 	}
 	if !state.CoreIsolationGroup.IsNull() && data.CoreIsolationGroup.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/core-isolation-group", state.getPath()))
@@ -432,6 +1193,60 @@ func (data *EVPNInterface) getDeletedItems(ctx context.Context, state EVPNInterf
 
 func (data *EVPNInterface) getEmptyLeafsDelete(ctx context.Context, state *EVPNInterface) []string {
 	emptyLeafsDelete := make([]string, 0)
+	// Only delete if state has true and plan has false
+	if !data.AccessSignalBundleDown.IsNull() && !data.AccessSignalBundleDown.ValueBool() {
+		if state != nil && !state.AccessSignalBundleDown.IsNull() && state.AccessSignalBundleDown.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/access-signal/bundle-down", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.EthernetSegmentConvergenceNexthopTracking.IsNull() && !data.EthernetSegmentConvergenceNexthopTracking.ValueBool() {
+		if state != nil && !state.EthernetSegmentConvergenceNexthopTracking.IsNull() && state.EthernetSegmentConvergenceNexthopTracking.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ethernet-segment/convergence/nexthop-tracking", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.EthernetSegmentConvergenceMacMobility.IsNull() && !data.EthernetSegmentConvergenceMacMobility.ValueBool() {
+		if state != nil && !state.EthernetSegmentConvergenceMacMobility.IsNull() && state.EthernetSegmentConvergenceMacMobility.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ethernet-segment/convergence/mac-mobility", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.EthernetSegmentConvergenceReroute.IsNull() && !data.EthernetSegmentConvergenceReroute.ValueBool() {
+		if state != nil && !state.EthernetSegmentConvergenceReroute.IsNull() && state.EthernetSegmentConvergenceReroute.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ethernet-segment/convergence/reroute", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() && !data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.ValueBool() {
+		if state != nil && !state.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() && state.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ethernet-segment/service-carving/preference-based", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.EthernetSegmentServiceCarvingMulticastHrwG.IsNull() && !data.EthernetSegmentServiceCarvingMulticastHrwG.ValueBool() {
+		if state != nil && !state.EthernetSegmentServiceCarvingMulticastHrwG.IsNull() && state.EthernetSegmentServiceCarvingMulticastHrwG.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ethernet-segment/service-carving/multicast", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.EthernetSegmentServiceCarvingMulticastHrwSG.IsNull() && !data.EthernetSegmentServiceCarvingMulticastHrwSG.ValueBool() {
+		if state != nil && !state.EthernetSegmentServiceCarvingMulticastHrwSG.IsNull() && state.EthernetSegmentServiceCarvingMulticastHrwSG.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ethernet-segment/service-carving/multicast", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.EthernetSegmentServiceCarvingHrw.IsNull() && !data.EthernetSegmentServiceCarvingHrw.ValueBool() {
+		if state != nil && !state.EthernetSegmentServiceCarvingHrw.IsNull() && state.EthernetSegmentServiceCarvingHrw.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ethernet-segment/service-carving/hrw", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.EthernetSegmentForceSingleHomed.IsNull() && !data.EthernetSegmentForceSingleHomed.ValueBool() {
+		if state != nil && !state.EthernetSegmentForceSingleHomed.IsNull() && state.EthernetSegmentForceSingleHomed.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ethernet-segment/force/single-homed", data.getXPath()))
+		}
+	}
 	// Only delete if state has true and plan has false
 	if !data.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() && !data.EthernetSegmentLoadBalancingModeSingleFlowActive.ValueBool() {
 		if state != nil && !state.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() && state.EthernetSegmentLoadBalancingModeSingleFlowActive.ValueBool() {
@@ -465,6 +1280,45 @@ func (data *EVPNInterface) getEmptyLeafsDelete(ctx context.Context, state *EVPNI
 
 func (data *EVPNInterface) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
+	if !data.AccessSignalBundleDown.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/access-signal/bundle-down", data.getPath()))
+	}
+	if !data.EthernetSegmentConvergenceNexthopTracking.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/convergence/nexthop-tracking", data.getPath()))
+	}
+	if !data.EthernetSegmentConvergenceMacMobility.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/convergence/mac-mobility", data.getPath()))
+	}
+	if !data.EthernetSegmentConvergenceReroute.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/convergence/reroute", data.getPath()))
+	}
+	if !data.EthernetSegmentBgpRt.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/bgp", data.getPath()))
+	}
+	if !data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/service-carving/preference-based", data.getPath()))
+	}
+	if !data.EthernetSegmentServiceCarvingPreferenceBasedWeight.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/service-carving/preference-based", data.getPath()))
+	}
+	if !data.EthernetSegmentServiceCarvingMulticastHrwG.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/service-carving/multicast", data.getPath()))
+	}
+	if !data.EthernetSegmentServiceCarvingMulticastHrwSG.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/service-carving/multicast", data.getPath()))
+	}
+	if !data.EthernetSegmentServiceCarvingHrw.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/service-carving/hrw", data.getPath()))
+	}
+	if !data.EthernetSegmentServiceCarvingManualSecondary.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/service-carving/manual/secondary", data.getPath()))
+	}
+	if !data.EthernetSegmentServiceCarvingManualPrimary.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/service-carving/manual/primary", data.getPath()))
+	}
+	if !data.EthernetSegmentForceSingleHomed.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/force/single-homed", data.getPath()))
+	}
 	if !data.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/single-flow-active", data.getPath()))
 	}
@@ -477,8 +1331,20 @@ func (data *EVPNInterface) getDeletePaths(ctx context.Context) []string {
 	if !data.EthernetSegmentLoadBalancingModeAllActive.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/all-active", data.getPath()))
 	}
-	if !data.EthernetSegmentIdentifierTypeZeroEsi.IsNull() {
+	if !data.EthernetSegmentEsiZero.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero", data.getPath()))
+	}
+	if !data.TimersAcDebounce.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/ac-debounce", data.getPath()))
+	}
+	if !data.TimersCarving.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/carving", data.getPath()))
+	}
+	if !data.TimersRecovery.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/recovery", data.getPath()))
+	}
+	if !data.TimersPeering.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/peering", data.getPath()))
 	}
 	if !data.CoreIsolationGroup.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/core-isolation-group", data.getPath()))
@@ -495,6 +1361,178 @@ func (data *EVPNInterface) addDeletedItemsXML(ctx context.Context, state EVPNInt
 	deleteXml := ""
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.AccessSignalBundleDown.IsNull() && state.AccessSignalBundleDown.ValueBool() && data.AccessSignalBundleDown.IsNull() {
+		deletePath := state.getXPath() + "/access-signal/bundle-down"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.EthernetSegmentConvergenceNexthopTracking.IsNull() && state.EthernetSegmentConvergenceNexthopTracking.ValueBool() && data.EthernetSegmentConvergenceNexthopTracking.IsNull() {
+		deletePath := state.getXPath() + "/ethernet-segment/convergence/nexthop-tracking"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.EthernetSegmentConvergenceMacMobility.IsNull() && state.EthernetSegmentConvergenceMacMobility.ValueBool() && data.EthernetSegmentConvergenceMacMobility.IsNull() {
+		deletePath := state.getXPath() + "/ethernet-segment/convergence/mac-mobility"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.EthernetSegmentConvergenceReroute.IsNull() && state.EthernetSegmentConvergenceReroute.ValueBool() && data.EthernetSegmentConvergenceReroute.IsNull() {
+		deletePath := state.getXPath() + "/ethernet-segment/convergence/reroute"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.EthernetSegmentBgpRt.IsNull() && data.EthernetSegmentBgpRt.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/ethernet-segment/bgp"
+		predicates := make(map[string]string)
+		predicates["route-target"] = fmt.Sprintf("%v", state.EthernetSegmentBgpRt.ValueString())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() && state.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.ValueBool() && data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/ethernet-segment/service-carving/preference-based"
+		predicates := make(map[string]string)
+		if !state.EthernetSegmentServiceCarvingPreferenceBasedWeight.IsNull() {
+			predicates["weight"] = fmt.Sprintf("%v", state.EthernetSegmentServiceCarvingPreferenceBasedWeight.ValueInt64())
+		}
+		predicates["access-driven"] = fmt.Sprintf("%v", state.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.EthernetSegmentServiceCarvingPreferenceBasedWeight.IsNull() && data.EthernetSegmentServiceCarvingPreferenceBasedWeight.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/ethernet-segment/service-carving/preference-based"
+		predicates := make(map[string]string)
+		if !state.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() {
+			predicates["access-driven"] = fmt.Sprintf("%v", state.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.ValueBool())
+		}
+		predicates["weight"] = fmt.Sprintf("%v", state.EthernetSegmentServiceCarvingPreferenceBasedWeight.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.EthernetSegmentServiceCarvingMulticastHrwG.IsNull() && state.EthernetSegmentServiceCarvingMulticastHrwG.ValueBool() && data.EthernetSegmentServiceCarvingMulticastHrwG.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/ethernet-segment/service-carving/multicast"
+		predicates := make(map[string]string)
+		if !state.EthernetSegmentServiceCarvingMulticastHrwSG.IsNull() {
+			predicates["hrw-s-g"] = fmt.Sprintf("%v", state.EthernetSegmentServiceCarvingMulticastHrwSG.ValueBool())
+		}
+		predicates["hrw-g"] = fmt.Sprintf("%v", state.EthernetSegmentServiceCarvingMulticastHrwG.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.EthernetSegmentServiceCarvingMulticastHrwSG.IsNull() && state.EthernetSegmentServiceCarvingMulticastHrwSG.ValueBool() && data.EthernetSegmentServiceCarvingMulticastHrwSG.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/ethernet-segment/service-carving/multicast"
+		predicates := make(map[string]string)
+		if !state.EthernetSegmentServiceCarvingMulticastHrwG.IsNull() {
+			predicates["hrw-g"] = fmt.Sprintf("%v", state.EthernetSegmentServiceCarvingMulticastHrwG.ValueBool())
+		}
+		predicates["hrw-s-g"] = fmt.Sprintf("%v", state.EthernetSegmentServiceCarvingMulticastHrwSG.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.EthernetSegmentServiceCarvingHrw.IsNull() && state.EthernetSegmentServiceCarvingHrw.ValueBool() && data.EthernetSegmentServiceCarvingHrw.IsNull() {
+		deletePath := state.getXPath() + "/ethernet-segment/service-carving/hrw"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.EthernetSegmentServiceCarvingManualSecondary.IsNull() && data.EthernetSegmentServiceCarvingManualSecondary.IsNull() {
+		deletePath := state.getXPath() + "/ethernet-segment/service-carving/manual/secondary"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.EthernetSegmentServiceCarvingManualPrimary.IsNull() && data.EthernetSegmentServiceCarvingManualPrimary.IsNull() {
+		deletePath := state.getXPath() + "/ethernet-segment/service-carving/manual/primary"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.EthernetSegmentForceSingleHomed.IsNull() && state.EthernetSegmentForceSingleHomed.ValueBool() && data.EthernetSegmentForceSingleHomed.IsNull() {
+		deletePath := state.getXPath() + "/ethernet-segment/force/single-homed"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() && state.EthernetSegmentLoadBalancingModeSingleFlowActive.ValueBool() && data.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() {
 		deletePath := state.getXPath() + "/ethernet-segment/load-balancing-mode/single-flow-active"
@@ -527,11 +1565,11 @@ func (data *EVPNInterface) addDeletedItemsXML(ctx context.Context, state EVPNInt
 			deletedPaths[deletePath] = true
 		}
 	}
-	if !state.EthernetSegmentIdentifierTypeZeroEsi.IsNull() && data.EthernetSegmentIdentifierTypeZeroEsi.IsNull() {
+	if !state.EthernetSegmentEsiZero.IsNull() && data.EthernetSegmentEsiZero.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
 		deletePath := state.getXPath() + "/ethernet-segment/identifier/type/zero"
 		predicates := make(map[string]string)
-		predicates["esi"] = fmt.Sprintf("%v", state.EthernetSegmentIdentifierTypeZeroEsi.ValueString())
+		predicates["esi"] = fmt.Sprintf("%v", state.EthernetSegmentEsiZero.ValueString())
 		// Sort keys to ensure consistent ordering
 		keys := make([]string, 0, len(predicates))
 		for k := range predicates {
@@ -541,6 +1579,34 @@ func (data *EVPNInterface) addDeletedItemsXML(ctx context.Context, state EVPNInt
 		for _, k := range keys {
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.TimersAcDebounce.IsNull() && data.TimersAcDebounce.IsNull() {
+		deletePath := state.getXPath() + "/timers/ac-debounce"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.TimersCarving.IsNull() && data.TimersCarving.IsNull() {
+		deletePath := state.getXPath() + "/timers/carving"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.TimersRecovery.IsNull() && data.TimersRecovery.IsNull() {
+		deletePath := state.getXPath() + "/timers/recovery"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.TimersPeering.IsNull() && data.TimersPeering.IsNull() {
+		deletePath := state.getXPath() + "/timers/peering"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -565,6 +1631,45 @@ func (data *EVPNInterface) addDeletedItemsXML(ctx context.Context, state EVPNInt
 
 func (data *EVPNInterface) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	if !data.AccessSignalBundleDown.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/access-signal/bundle-down")
+	}
+	if !data.EthernetSegmentConvergenceNexthopTracking.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ethernet-segment/convergence/nexthop-tracking")
+	}
+	if !data.EthernetSegmentConvergenceMacMobility.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ethernet-segment/convergence/mac-mobility")
+	}
+	if !data.EthernetSegmentConvergenceReroute.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ethernet-segment/convergence/reroute")
+	}
+	if !data.EthernetSegmentBgpRt.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ethernet-segment/bgp")
+	}
+	if !data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ethernet-segment/service-carving/preference-based")
+	}
+	if !data.EthernetSegmentServiceCarvingPreferenceBasedWeight.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ethernet-segment/service-carving/preference-based")
+	}
+	if !data.EthernetSegmentServiceCarvingMulticastHrwG.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ethernet-segment/service-carving/multicast")
+	}
+	if !data.EthernetSegmentServiceCarvingMulticastHrwSG.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ethernet-segment/service-carving/multicast")
+	}
+	if !data.EthernetSegmentServiceCarvingHrw.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ethernet-segment/service-carving/hrw")
+	}
+	if !data.EthernetSegmentServiceCarvingManualSecondary.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ethernet-segment/service-carving/manual/secondary")
+	}
+	if !data.EthernetSegmentServiceCarvingManualPrimary.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ethernet-segment/service-carving/manual/primary")
+	}
+	if !data.EthernetSegmentForceSingleHomed.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ethernet-segment/force/single-homed")
+	}
 	if !data.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ethernet-segment/load-balancing-mode/single-flow-active")
 	}
@@ -577,8 +1682,20 @@ func (data *EVPNInterface) addDeletePathsXML(ctx context.Context, body string) s
 	if !data.EthernetSegmentLoadBalancingModeAllActive.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ethernet-segment/load-balancing-mode/all-active")
 	}
-	if !data.EthernetSegmentIdentifierTypeZeroEsi.IsNull() {
+	if !data.EthernetSegmentEsiZero.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ethernet-segment/identifier/type/zero")
+	}
+	if !data.TimersAcDebounce.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/timers/ac-debounce")
+	}
+	if !data.TimersCarving.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/timers/carving")
+	}
+	if !data.TimersRecovery.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/timers/recovery")
+	}
+	if !data.TimersPeering.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/timers/peering")
 	}
 	if !data.CoreIsolationGroup.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/core-isolation-group")

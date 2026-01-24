@@ -7,16 +7,134 @@ attributes:
     example: My L2VPN Description
   - yang_name: router-id
     example: 1.2.3.4
+  - yang_name: redundancy/iccp/groups/group
+    tf_name: redundancy_iccp_groups
+    type: List
+    attributes:
+      - yang_name: group-number
+        id: true
+        example: 100
+      - yang_name: interface
+        tf_name: interfaces
+        type: List
+        attributes:
+          - yang_name: interface-name
+            id: true
+            example: Bundle-Ether20
+          - yang_name: primary/vlan
+            example: 10-15
+          - yang_name: secondary/vlan
+            example: 20-25
+          - yang_name: mac-flush/stp-tcn
+            example: true
+          - yang_name: recovery/delay
+            example: 60
+      - yang_name: multi-homing/node-id
+        example: 1
+  - yang_name: flexible-xconnect-service/vlan-unawares/vlan-unaware
+    tf_name: flexible_xconnect_service_vlan_unaware
+    test_tags: [XRD, NCS]
+    include_example: true
+    type: List
+    attributes:
+      - yang_name: service-name
+        id: true
+        example: XC-1
+      - yang_name: interfaces/interface
+        tf_name: interfaces
+        type: List
+        attributes:
+          - yang_name: interface-name
+            id: true
+            example: GigabitEthernet0/0/0/1.100
+      - yang_name: neighbor/evpn/evis/evi
+        tf_name: neighbor_evpn_evis
+        type: List
+        attributes:
+          - yang_name: vpn-id
+            id: true
+            example: 100
+          - yang_name: remote-ac-id
+            id: true
+            example: 1000
+  - yang_name: flexible-xconnect-service/vlan-aware/evis/evi
+    tf_name: flexible_xconnect_service_vlan_aware_evis
+    test_tags: [XRD, NCS]
+    include_example: true
+    type: List
+    attributes:
+      - yang_name: vpn-id
+        id: true
+        example: 200
+      - yang_name: interfaces/interface
+        tf_name: interfaces
+        type: List
+        attributes:
+          - yang_name: interface-name
+            id: true
+            example: GigabitEthernet0/0/0/2.200
+  - yang_name: ignore-mtu-mismatch
+    example: true
+  - yang_name: ignore-mtu-mismatch-ad
+    example: true
+  - yang_name: pw-status/disable
+    example: true
   - yang_name: load-balancing/flow/src-dst-mac
     test_tags: [NCS, XRV9K]
+    include_example: true
     example: false
   - yang_name: load-balancing/flow/src-dst-ip
     test_tags: [NCS, XRV9K]
+    include_example: true
     example: true
-  - yang_name: xconnect/groups/group
-    tf_name: xconnect_groups
-    type: List
-    attributes:
-      - yang_name: group-name
-        id: true
-        example: P2P
+  - yang_name: capability/single-mode
+    exclude_test: true
+    example: true
+  - yang_name: capability/high-mode
+    example: true
+  - yang_name: pw-oam/refresh/transmit
+    example: 20
+  - yang_name: tcn-propagation
+    test_tags: [XRD, NCS]
+    include_example: true
+    example: true
+  - yang_name: pw-grouping
+    example: true
+  - yang_name: neighbors/all/ldp/flap
+    example: true
+  - yang_name: mac/limit/threshold
+    example: 50
+  - yang_name: logging/pseudowire
+    example: true
+  - yang_name: logging/bridge-domain
+    example: true
+  - yang_name: logging/vfi
+    example: true
+  - yang_name: logging/nsr
+    example: true
+  - yang_name: logging/pwhe-replication/disable
+    example: true
+  - yang_name: autodiscovery/bgp/signaling-protocol/bgp/mtu/mismatch/ignore
+    example: true
+  - yang_name: pw-routing/global-id
+    example: 100
+  - yang_name: pw-routing/bgp/rd/two-byte-as-number
+    exclude_test: true
+    example: 65001
+  - yang_name: pw-routing/bgp/rd/two-byte-as-assigned-number
+    exclude_test: true
+    example: 1
+  - yang_name: pw-routing/bgp/rd/four-byte-as-number
+    example: 65536
+  - yang_name: pw-routing/bgp/rd/four-byte-as-assigned-number
+    example: 1
+  - yang_name: pw-routing/bgp/rd/ipv4-address
+    exclude_test: true
+    example: 192.168.1.1
+  - yang_name: pw-routing/bgp/rd/ipv4-address-assigned-number
+    exclude_test: true
+    example: 1
+  - yang_name: snmp/mib/interface/format/external
+    example: true
+  - yang_name: snmp/mib/pseudowire/statistics
+    example: true

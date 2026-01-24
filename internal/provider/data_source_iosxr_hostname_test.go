@@ -20,9 +20,48 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+import (
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 
 // End of section. //template:end testPrerequisites
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
+
+func TestAccDataSourceIosxrHostname(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hostname.test", "system_network_name", "ROUTER-1"))
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { testAccPreCheck(t) },
+		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccDataSourceIosxrHostnameConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
+			},
+		},
+	})
+}
+
+// End of section. //template:end testAccDataSource
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
+
+func testAccDataSourceIosxrHostnameConfig() string {
+	config := `resource "iosxr_hostname" "test" {` + "\n"
+	config += `	system_network_name = "ROUTER-1"` + "\n"
+	config += `}` + "\n"
+
+	config += `
+		data "iosxr_hostname" "test" {
+			depends_on = [iosxr_hostname.test]
+		}
+	`
+	return config
+}
+
+// End of section. //template:end testAccDataSourceConfig

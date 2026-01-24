@@ -20,13 +20,16 @@
 package main
 
 import (
-	"io/ioutil"
+	"fmt"
 	"log"
+	"os"
 	"path/filepath"
 	"strings"
 
 	"gopkg.in/yaml.v3"
 )
+
+var generalResources = []string{"gnmi", "cli"}
 
 const (
 	definitionsPath = "./gen/definitions/"
@@ -38,6 +41,7 @@ type YamlConfig struct {
 }
 
 var docPaths = []string{"./docs/data-sources/", "./docs/resources/"}
+var generalDocPaths = []string{"./docs/data-sources/", "./docs/resources/"}
 
 func SnakeCase(s string) string {
 	var g []string
@@ -51,12 +55,12 @@ func SnakeCase(s string) string {
 }
 
 func main() {
-	items, _ := ioutil.ReadDir(definitionsPath)
+	items, _ := os.ReadDir(definitionsPath)
 	configs := make([]YamlConfig, len(items))
 
 	// Load configs
 	for i, filename := range items {
-		yamlFile, err := ioutil.ReadFile(filepath.Join(definitionsPath, filename.Name()))
+		yamlFile, err := os.ReadFile(filepath.Join(definitionsPath, filename.Name()))
 		if err != nil {
 			log.Fatalf("Error reading file: %v", err)
 		}
@@ -72,7 +76,7 @@ func main() {
 	for i := range configs {
 		for _, path := range docPaths {
 			filename := path + SnakeCase(configs[i].Name) + ".md"
-			content, err := ioutil.ReadFile(filename)
+			content, err := os.ReadFile(filename)
 			if err != nil {
 				log.Fatalf("Error opening documentation: %v", err)
 			}
@@ -80,21 +84,25 @@ func main() {
 			s := string(content)
 			s = strings.ReplaceAll(s, `subcategory: ""`, `subcategory: "`+configs[i].DocCategory+`"`)
 
-			ioutil.WriteFile(filename, []byte(s), 0644)
+			os.WriteFile(filename, []byte(s), 0644)
 		}
 	}
 
-	//update iosxr_gnmi resource and data source
-	for _, path := range docPaths {
-		filename := path + "gnmi.md"
-		content, err := ioutil.ReadFile(filename)
-		if err != nil {
-			log.Fatalf("Error opening documentation: %v", err)
+	// Update general resources with "General" subcategory
+	for _, resource := range generalResources {
+		for _, path := range generalDocPaths {
+			filename := fmt.Sprintf("%s%s.md", path, resource)
+			content, err := os.ReadFile(filename)
+			if err != nil {
+				// Skip if file doesn't exist (e.g., data source may not exist for all resources)
+				if os.IsNotExist(err) {
+					continue
+				}
+				log.Fatalf("Error opening documentation: %v", err)
+			}
+			s := string(content)
+			s = strings.ReplaceAll(s, `subcategory: ""`, `subcategory: "General"`)
+			os.WriteFile(filename, []byte(s), 0644)
 		}
-
-		s := string(content)
-		s = strings.ReplaceAll(s, `subcategory: ""`, `subcategory: "General"`)
-
-		ioutil.WriteFile(filename, []byte(s), 0644)
 	}
 }

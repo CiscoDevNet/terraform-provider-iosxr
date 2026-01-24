@@ -81,12 +81,32 @@ func (d *MPLSOAMDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				MarkdownDescription: "Use Reverse LSP as the control channel",
 				Computed:            true,
 			},
+			"oam_echo_revision_one": schema.BoolAttribute{
+				MarkdownDescription: "draft-ietf-mpls-lsp-ping-03 (initial)",
+				Computed:            true,
+			},
+			"oam_echo_revision_two": schema.BoolAttribute{
+				MarkdownDescription: "draft-ietf-mpls-lsp-ping-03 (rev 1)",
+				Computed:            true,
+			},
+			"oam_echo_revision_three": schema.BoolAttribute{
+				MarkdownDescription: "draft-ietf-mpls-lsp-ping-03 (rev 2)",
+				Computed:            true,
+			},
+			"oam_echo_revision_four": schema.BoolAttribute{
+				MarkdownDescription: "draft-ietf-mpls-lsp-ping-09 (initial)",
+				Computed:            true,
+			},
 			"oam_dpm_pps": schema.Int64Attribute{
 				MarkdownDescription: "DPM packets per second rate - default is 50pps",
 				Computed:            true,
 			},
 			"oam_dpm_interval": schema.Int64Attribute{
 				MarkdownDescription: "Wait time between each iteration of DPM - default is 30mins",
+				Computed:            true,
+			},
+			"oam_dpm_downstream_ecmp_faults": schema.BoolAttribute{
+				MarkdownDescription: "Report downstream mismatches",
 				Computed:            true,
 			},
 		},

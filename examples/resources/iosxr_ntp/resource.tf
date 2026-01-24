@@ -29,22 +29,6 @@ resource "iosxr_ntp" "example" {
       md5_encrypted = "1212000E43"
     }
   ]
-  broadcastdelay = 10
-  trusted_keys = [
-    {
-      key_number = 8
-    }
-  ]
-  update_calendar       = true
-  log_internal_sync     = true
-  source_interface_name = "BVI1"
-  source_vrfs = [
-    {
-      vrf_name       = "source_vrf"
-      interface_name = "BVI1"
-    }
-  ]
-  passive = true
   cmac_authentication_keys = [
     {
       key_number     = 2
@@ -63,6 +47,20 @@ resource "iosxr_ntp" "example" {
       hmac_sha2_encrypted = "091D1C5A4D5041455355547B79777C6663"
     }
   ]
+  broadcastdelay   = 10
+  drift_aging_time = 10
+  drift_file_disk0 = true
+  drift_filename   = "drift.txt"
+  interfaces = [
+    {
+      interface_name        = "Bundle-Ether1"
+      broadcast_client      = true
+      broadcast_destination = "1.2.3.4"
+      broadcast_key         = 1
+      broadcast_version     = 2
+    }
+  ]
+  max_associations = 10
   ipv4_peers_servers = [
     {
       address = "1.2.3.4"
@@ -75,6 +73,98 @@ resource "iosxr_ntp" "example" {
       burst   = true
       iburst  = true
       source  = "GigabitEthernet0/0/0/1"
+    }
+  ]
+  ipv6_peers_servers = [
+    {
+      address      = "2001::1"
+      type         = "peer"
+      version      = 2
+      key          = 1
+      minpoll      = 4
+      maxpoll      = 5
+      prefer       = true
+      burst        = true
+      iburst       = true
+      source       = "GigabitEthernet0/0/0/1"
+      ipv6_address = "2001::1"
+    }
+  ]
+  hostname_peers_servers = [
+    {
+      fqdn_hostname = "ntp.cisco.com"
+      type          = "peer"
+      version       = 2
+      key           = 1
+      minpoll       = 4
+      maxpoll       = 5
+      prefer        = true
+      burst         = true
+      iburst        = true
+      source        = "GigabitEthernet0/0/0/1"
+    }
+  ]
+  peers_servers_vrfs = [
+    {
+      vrf_name = "vrf1"
+      ipv4_peers_servers = [
+        {
+          address = "1.2.3.4"
+          type    = "server"
+          version = 2
+          key     = 1
+          minpoll = 4
+          maxpoll = 5
+          prefer  = true
+          burst   = true
+          iburst  = true
+          source  = "GigabitEthernet0/0/0/1"
+        }
+      ]
+      ipv6_peers_servers = [
+        {
+          address      = "2001::1"
+          type         = "peer"
+          version      = 2
+          key          = 1
+          minpoll      = 4
+          maxpoll      = 5
+          prefer       = true
+          burst        = true
+          iburst       = true
+          source       = "GigabitEthernet0/0/0/1"
+          ipv6_address = "2001::1"
+        }
+      ]
+      hostname_peers_servers = [
+        {
+          fqdn_hostname = "ntp.cisco.com"
+          type          = "peer"
+          version       = 2
+          key           = 1
+          minpoll       = 4
+          maxpoll       = 5
+          prefer        = true
+          burst         = true
+          iburst        = true
+          source        = "GigabitEthernet0/0/0/1"
+        }
+      ]
+    }
+  ]
+  trusted_keys = [
+    {
+      key_number = 8
+    }
+  ]
+  update_calendar       = true
+  log_internal_sync     = true
+  passive               = true
+  source_interface_name = "BVI1"
+  source_vrfs = [
+    {
+      vrf_name       = "source_vrf"
+      interface_name = "BVI1"
     }
   ]
 }

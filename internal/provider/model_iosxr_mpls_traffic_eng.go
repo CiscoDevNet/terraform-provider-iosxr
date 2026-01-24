@@ -110,12 +110,15 @@ func (data MPLSTrafficEng) toBodyXML(ctx context.Context) string {
 
 func (data *MPLSTrafficEng) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "traffic-eng"); value.Exists() {
-		data.TrafficEng = types.BoolValue(true)
-	} else if data.TrafficEng.IsNull() {
-		// If currently null, keep as null (field not in config)
-		data.TrafficEng = types.BoolNull()
+		if !data.TrafficEng.IsNull() {
+			data.TrafficEng = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.TrafficEng.IsNull() {
+			data.TrafficEng = types.BoolNull()
+		}
 	}
-	// else: preserve existing value (e.g., false from config)
 }
 
 // End of section. //template:end updateFromBody
@@ -126,8 +129,7 @@ func (data *MPLSTrafficEng) updateFromBodyXML(ctx context.Context, res xmldot.Re
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/traffic-eng"); value.Exists() {
 		data.TrafficEng = types.BoolValue(true)
 	} else {
-		// If config has false and device doesn't have the field, keep false (don't set to null)
-		// Only set to null if it was already null
+		// For presence-based booleans, only set to null if it's already null
 		if data.TrafficEng.IsNull() {
 			data.TrafficEng = types.BoolNull()
 		}
@@ -135,7 +137,6 @@ func (data *MPLSTrafficEng) updateFromBodyXML(ctx context.Context, res xmldot.Re
 }
 
 // End of section. //template:end updateFromBodyXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *MPLSTrafficEng) fromBody(ctx context.Context, res gjson.Result) {
@@ -145,11 +146,12 @@ func (data *MPLSTrafficEng) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "traffic-eng"); value.Exists() {
 		data.TrafficEng = types.BoolValue(true)
+	} else {
+		data.TrafficEng = types.BoolNull()
 	}
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *MPLSTrafficEngData) fromBody(ctx context.Context, res gjson.Result) {
@@ -159,21 +161,23 @@ func (data *MPLSTrafficEngData) fromBody(ctx context.Context, res gjson.Result) 
 	}
 	if value := res.Get(prefix + "traffic-eng"); value.Exists() {
 		data.TrafficEng = types.BoolValue(true)
+	} else {
+		data.TrafficEng = types.BoolNull()
 	}
 }
 
 // End of section. //template:end fromBodyData
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *MPLSTrafficEng) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/traffic-eng"); value.Exists() {
 		data.TrafficEng = types.BoolValue(true)
+	} else {
+		data.TrafficEng = types.BoolNull()
 	}
 }
 
 // End of section. //template:end fromBodyXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *MPLSTrafficEngData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -185,22 +189,17 @@ func (data *MPLSTrafficEngData) fromBodyXML(ctx context.Context, res xmldot.Resu
 }
 
 // End of section. //template:end fromBodyDataXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *MPLSTrafficEng) getDeletedItems(ctx context.Context, state MPLSTrafficEng) []string {
 	deletedItems := make([]string, 0)
-	// For presence-based booleans, delete if going from true to false or to null
-	if !state.TrafficEng.IsNull() && state.TrafficEng.ValueBool() {
-		if data.TrafficEng.IsNull() || !data.TrafficEng.ValueBool() {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/traffic-eng", state.getPath()))
-		}
+	if !state.TrafficEng.IsNull() && data.TrafficEng.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/traffic-eng", state.getPath()))
 	}
 	return deletedItems
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
 func (data *MPLSTrafficEng) getEmptyLeafsDelete(ctx context.Context, state *MPLSTrafficEng) []string {
@@ -215,7 +214,6 @@ func (data *MPLSTrafficEng) getEmptyLeafsDelete(ctx context.Context, state *MPLS
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *MPLSTrafficEng) getDeletePaths(ctx context.Context) []string {
@@ -228,7 +226,6 @@ func (data *MPLSTrafficEng) getDeletePaths(ctx context.Context) []string {
 }
 
 // End of section. //template:end getDeletePaths
-
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *MPLSTrafficEng) addDeletedItemsXML(ctx context.Context, state MPLSTrafficEng, body string) string {
@@ -250,7 +247,6 @@ func (data *MPLSTrafficEng) addDeletedItemsXML(ctx context.Context, state MPLSTr
 }
 
 // End of section. //template:end addDeletedItemsXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *MPLSTrafficEng) addDeletePathsXML(ctx context.Context, body string) string {

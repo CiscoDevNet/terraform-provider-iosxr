@@ -75,40 +75,18 @@ func (r *SSHResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				},
 			},
 			"delete_mode": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.").AddStringEnumDescription("all", "attributes").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `attributes`.").AddStringEnumDescription("all", "attributes").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("all", "attributes"),
 				},
 			},
-			"server_dscp": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Cisco ssh server DSCP").AddIntegerRangeDescription(0, 63).String,
+			"timeout": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set timeout value for SSH").AddIntegerRangeDescription(5, 120).String,
 				Optional:            true,
 				Validators: []validator.Int64{
-					int64validator.Between(0, 63),
+					int64validator.Between(5, 120),
 				},
-			},
-			"server_logging": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable ssh server logging").String,
-				Optional:            true,
-			},
-			"server_rate_limit": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Cisco sshd rate-limit of service requests").AddIntegerRangeDescription(1, 600).String,
-				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(1, 600),
-				},
-			},
-			"server_session_limit": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Cisco sshd session-limit of service requests").AddIntegerRangeDescription(1, 150).String,
-				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(1, 150),
-				},
-			},
-			"server_v2": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Cisco sshd protocol version 2 ").String,
-				Optional:            true,
 			},
 			"server_vrfs": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Cisco sshd VRF name").String,
@@ -139,6 +117,301 @@ func (r *SSHResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 						},
 					},
 				},
+			},
+			"server_v1": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Cisco sshd protocol version 1 ").String,
+				Optional:            true,
+			},
+			"server_v2": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Cisco sshd protocol version 2 ").String,
+				Optional:            true,
+			},
+			"server_rate_limit": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Cisco sshd rate-limit of service requests").AddIntegerRangeDescription(1, 600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 600),
+				},
+			},
+			"server_disable_hmac_sha2_512": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable sshd hmac-sha2-512-algorithm").String,
+				Optional:            true,
+			},
+			"server_disable_hmac_sha1": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable sshd hmac-sha1-algorithm").String,
+				Optional:            true,
+			},
+			"server_disable_hmac_sha2_256": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable sshd hmac-sha2-256-algorithm").String,
+				Optional:            true,
+			},
+			"server_enable_cipher_aes_cbc": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable ssh server aes-cbc algorithms").String,
+				Optional:            true,
+			},
+			"server_enable_cipher_3des_cbc": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable ssh server 3des-cbc algorithm").String,
+				Optional:            true,
+			},
+			"server_session_limit": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Cisco sshd session-limit of service requests").AddIntegerRangeDescription(1, 150).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 150),
+				},
+			},
+			"server_logging": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable ssh server logging").String,
+				Optional:            true,
+			},
+			"server_dscp": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Cisco ssh server DSCP").AddIntegerRangeDescription(0, 63).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 63),
+				},
+			},
+			"server_netconf_port": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Port to start ssh netconf subsystem service (Default 830)").AddIntegerRangeDescription(1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
+				},
+			},
+			"server_netconf_vrfs": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Cisco netconf VRF name").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vrf_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Cisco netconf VRF name").String,
+							Required:            true,
+						},
+						"ipv4_access_list": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure IPv4 access-list").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 64),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-z0-9A-Z][-_.:a-z0-9A-Z]*`), ""),
+							},
+						},
+						"ipv6_access_list": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure IPv6 access-list").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 64),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-z0-9A-Z][-_.:a-z0-9A-Z]*`), ""),
+							},
+						},
+					},
+				},
+			},
+			"server_netconf_xml": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use Netconf XML stack").String,
+				Optional:            true,
+			},
+			"server_rekey_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configures time-based rekey (default 60 minutes)").AddIntegerRangeDescription(30, 1440).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(30, 1440),
+				},
+			},
+			"server_rekey_volume": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configures volume-based rekey (default 1024MB)").AddIntegerRangeDescription(1024, 4095).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1024, 4095),
+				},
+			},
+			"server_algorithms_key_exchanges": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Key exchange algorithms").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
+			"server_algorithms_host_key_ecdsa_nistp256": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ecdsa-nistp256").String,
+				Optional:            true,
+			},
+			"server_algorithms_host_key_ecdsa_nistp384": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ecdsa-nistp384").String,
+				Optional:            true,
+			},
+			"server_algorithms_host_key_ecdsa_nistp521": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ecdsa-nistp521").String,
+				Optional:            true,
+			},
+			"server_algorithms_host_key_rsa": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("rsa").String,
+				Optional:            true,
+			},
+			"server_algorithms_host_key_dsa": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("dsa").String,
+				Optional:            true,
+			},
+			"server_algorithms_host_key_x509v3_ssh_rsa": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("x509v3-ssh-rsa").String,
+				Optional:            true,
+			},
+			"server_algorithms_host_key_ed25519": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ed25519").String,
+				Optional:            true,
+			},
+			"server_algorithms_host_key_rsa_sha512": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("rsa-sha512").String,
+				Optional:            true,
+			},
+			"server_algorithms_host_key_rsa_sha256": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("rsa-sha256").String,
+				Optional:            true,
+			},
+			"server_algorithms_host_key_ssh_rsa": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ssh-rsa").String,
+				Optional:            true,
+			},
+			"server_algorithms_ciphers": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("cipher algorithms").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
+			"server_max_auth_limit": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("User Configurable max authentication attempts").AddIntegerRangeDescription(3, 20).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(3, 20),
+				},
+			},
+			"server_tcp_window_scale": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set tcp window-scale factor for High Latency links").AddIntegerRangeDescription(1, 14).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 14),
+				},
+			},
+			"server_port_forwarding_local": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable local port forwarding for ssh server").String,
+				Optional:            true,
+			},
+			"server_port": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("User Configurable ssh port (Default 22)").AddIntegerRangeDescription(5520, 5529).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(5520, 5529),
+				},
+			},
+			"server_usernames": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ssh user").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"username": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ssh user").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 800),
+							},
+						},
+						"keystring": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enter public key in ssh format").String,
+							Optional:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 800),
+							},
+						},
+					},
+				},
+			},
+			"client_knownhost": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable the host pubkey check by local database").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 800),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"client_source_interface": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Source interface for ssh client sessions").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+				},
+			},
+			"client_vrf": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Source interface VRF for ssh client sessions").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"client_dscp": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DSCP value for ssh client sessions").AddIntegerRangeDescription(0, 63).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 63),
+				},
+			},
+			"client_rekey_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configures time-based rekey (default 60 minutes)").AddIntegerRangeDescription(30, 1440).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(30, 1440),
+				},
+			},
+			"client_rekey_volume": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configures volume-based rekey (default 1024MB)").AddIntegerRangeDescription(1024, 4095).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1024, 4095),
+				},
+			},
+			"client_disable_hmac_sha1": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable sshd hmac-sha1-algorithm").String,
+				Optional:            true,
+			},
+			"client_disable_hmac_sha2_512": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable ssh hmac-sha2-512-algorithm").String,
+				Optional:            true,
+			},
+			"client_disable_hmac_sha2_256": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable ssh hmac-sha2-256-algorithm").String,
+				Optional:            true,
+			},
+			"client_enable_cipher_aes_cbc": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable ssh client aes-cbc algorithms").String,
+				Optional:            true,
+			},
+			"client_enable_cipher_3des_cbc": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable ssh client 3des-cbc algorithm").String,
+				Optional:            true,
+			},
+			"client_algorithms_key_exchanges": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Key exchange algorithms").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
+			"client_algorithms_ciphers": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Cipher algorithms").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
+			"client_tcp_window_scale": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set tcp window-scale factor for High Latency links").AddIntegerRangeDescription(1, 14).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 14),
+				},
+			},
+			"client_v2": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set ssh client to use version 2 ").String,
+				Optional:            true,
+			},
+			"client_v1": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set ssh client to use version 1 ").String,
+				Optional:            true,
 			},
 		},
 	}
@@ -442,7 +715,7 @@ func (r *SSHResource) Delete(ctx context.Context, req resource.DeleteRequest, re
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
 
 	if device.Managed {
-		deleteMode := "all"
+		deleteMode := "attributes"
 		if state.DeleteMode.ValueString() == "all" {
 			deleteMode = "all"
 		} else if state.DeleteMode.ValueString() == "attributes" {

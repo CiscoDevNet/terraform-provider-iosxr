@@ -77,7 +77,23 @@ func (d *EVPNInterfaceDataSource) Schema(ctx context.Context, req datasource.Sch
 				MarkdownDescription: "Core isolation group",
 				Computed:            true,
 			},
-			"ethernet_segment_identifier_type_zero_esi": schema.StringAttribute{
+			"timers_peering": schema.Int64Attribute{
+				MarkdownDescription: "Interface-specific peering timer",
+				Computed:            true,
+			},
+			"timers_recovery": schema.Int64Attribute{
+				MarkdownDescription: "Interface-specific recovery timer",
+				Computed:            true,
+			},
+			"timers_carving": schema.Int64Attribute{
+				MarkdownDescription: "Interface-specific carving timer",
+				Computed:            true,
+			},
+			"timers_ac_debounce": schema.Int64Attribute{
+				MarkdownDescription: "Interface-specific AC Debounce timer",
+				Computed:            true,
+			},
+			"ethernet_segment_esi_zero": schema.StringAttribute{
 				MarkdownDescription: "ESI value",
 				Computed:            true,
 			},
@@ -95,6 +111,58 @@ func (d *EVPNInterfaceDataSource) Schema(ctx context.Context, req datasource.Sch
 			},
 			"ethernet_segment_load_balancing_mode_single_flow_active": schema.BoolAttribute{
 				MarkdownDescription: "Single-Flow-Active load balancing",
+				Computed:            true,
+			},
+			"ethernet_segment_force_single_homed": schema.BoolAttribute{
+				MarkdownDescription: "Ethernet segment is to remain single-home",
+				Computed:            true,
+			},
+			"ethernet_segment_service_carving_manual_primary": schema.StringAttribute{
+				MarkdownDescription: "Primary services list",
+				Computed:            true,
+			},
+			"ethernet_segment_service_carving_manual_secondary": schema.StringAttribute{
+				MarkdownDescription: "Secondary services list",
+				Computed:            true,
+			},
+			"ethernet_segment_service_carving_hrw": schema.BoolAttribute{
+				MarkdownDescription: "HRW mode of carving services",
+				Computed:            true,
+			},
+			"ethernet_segment_service_carving_multicast_hrw_s_g": schema.BoolAttribute{
+				MarkdownDescription: "HRW s,g mode",
+				Computed:            true,
+			},
+			"ethernet_segment_service_carving_multicast_hrw_g": schema.BoolAttribute{
+				MarkdownDescription: "HRW *,g mode",
+				Computed:            true,
+			},
+			"ethernet_segment_service_carving_preference_based_weight": schema.Int64Attribute{
+				MarkdownDescription: "Preference value",
+				Computed:            true,
+			},
+			"ethernet_segment_service_carving_preference_based_access_driven": schema.BoolAttribute{
+				MarkdownDescription: "Access-Driven DF Election",
+				Computed:            true,
+			},
+			"ethernet_segment_bgp_rt": schema.StringAttribute{
+				MarkdownDescription: "Set ES-Import Route Target",
+				Computed:            true,
+			},
+			"ethernet_segment_convergence_reroute": schema.BoolAttribute{
+				MarkdownDescription: "Redirect unicast traffic to backup peer",
+				Computed:            true,
+			},
+			"ethernet_segment_convergence_mac_mobility": schema.BoolAttribute{
+				MarkdownDescription: "MAC-Mobility triggered reconvergence",
+				Computed:            true,
+			},
+			"ethernet_segment_convergence_nexthop_tracking": schema.BoolAttribute{
+				MarkdownDescription: "Enable EVPN procedures to be influenced by BGP nexthop reachability",
+				Computed:            true,
+			},
+			"access_signal_bundle_down": schema.BoolAttribute{
+				MarkdownDescription: "Signal Bundle Down",
 				Computed:            true,
 			},
 		},

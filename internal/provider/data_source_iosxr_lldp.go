@@ -81,8 +81,52 @@ func (d *LLDPDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				MarkdownDescription: "Delay (in sec) for LLDP initialization on any interface",
 				Computed:            true,
 			},
+			"system_name": schema.StringAttribute{
+				MarkdownDescription: "LLDP system name to advertise",
+				Computed:            true,
+			},
+			"system_description": schema.StringAttribute{
+				MarkdownDescription: "LLDP system description to advertise",
+				Computed:            true,
+			},
+			"chassis_id": schema.StringAttribute{
+				MarkdownDescription: "LLDP chassis ID to advertise",
+				Computed:            true,
+			},
+			"chassis_id_type_chassis_component": schema.BoolAttribute{
+				MarkdownDescription: "Value of entPhysicalAlias object defined in IETF RFC 2737",
+				Computed:            true,
+			},
+			"chassis_id_type_interface_alias": schema.BoolAttribute{
+				MarkdownDescription: "Value of ifAlias object defined in IETF RFC 2863",
+				Computed:            true,
+			},
+			"chassis_id_type_port_component": schema.BoolAttribute{
+				MarkdownDescription: "Value of entPhysicalAlias object defined in IETF RFC 2737",
+				Computed:            true,
+			},
+			"chassis_id_type_mac_address": schema.BoolAttribute{
+				MarkdownDescription: "Value of a unicast source address",
+				Computed:            true,
+			},
+			"chassis_id_type_network_address": schema.BoolAttribute{
+				MarkdownDescription: "Network address associated with a particular chassis",
+				Computed:            true,
+			},
+			"chassis_id_type_interface_name": schema.BoolAttribute{
+				MarkdownDescription: "Value of ifName object defined in IETF RFC 2863",
+				Computed:            true,
+			},
+			"chassis_id_type_local": schema.BoolAttribute{
+				MarkdownDescription: "Chassis identifier based on a locally defined value",
+				Computed:            true,
+			},
 			"subinterfaces_enable": schema.BoolAttribute{
 				MarkdownDescription: "Enable LLDP over Sub-interfaces as well",
+				Computed:            true,
+			},
+			"subinterfaces_tagged": schema.BoolAttribute{
+				MarkdownDescription: "Enable VLAN tagging for LLDP PDU over Sub-interfaces",
 				Computed:            true,
 			},
 			"management_enable": schema.BoolAttribute{

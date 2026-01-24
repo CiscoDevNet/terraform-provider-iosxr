@@ -753,6 +753,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 
 func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
+		//NewGnmiResource,
 		{{- range .}}
 		New{{camelCase .Name}}Resource,
 		{{- end}}
@@ -761,6 +762,7 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 
 func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
+		//NewGnmiDataSource,
 		{{- range .}}
 		New{{camelCase .Name}}DataSource,
 		{{- end}}

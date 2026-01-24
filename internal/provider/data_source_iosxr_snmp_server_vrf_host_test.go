@@ -20,8 +20,33 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+import (
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
 
 // End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
+
+func TestAccDataSourceIosxrSNMPServerVRFHost(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_vrf_host.test", "traps_unencrypted_strings.0.version_v3_security_level", "auth"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_vrf_host.test", "informs_unencrypted_strings.0.version_v3_security_level", "auth"))
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { testAccPreCheck(t) },
+		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccDataSourceIosxrSNMPServerVRFHostPrerequisitesConfig + testAccDataSourceIosxrSNMPServerVRFHostConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
+			},
+		},
+	})
+}
+
+// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrSNMPServerVRFHostPrerequisitesConfig = `
@@ -35,3 +60,33 @@ resource "iosxr_gnmi" "PreReq0" {
 `
 
 // End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
+
+func testAccDataSourceIosxrSNMPServerVRFHostConfig() string {
+	config := `resource "iosxr_snmp_server_vrf_host" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	address = "11.11.11.11"` + "\n"
+	config += `	traps_unencrypted_strings = [{` + "\n"
+	config += `		community_string = "COMMUNITY1"` + "\n"
+	config += `		version_v3_security_level = "auth"` + "\n"
+	config += `	}]` + "\n"
+	config += `	informs_unencrypted_strings = [{` + "\n"
+	config += `		community_string = "COMMUNITY2"` + "\n"
+	config += `		version_v3_security_level = "auth"` + "\n"
+	config += `	}]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+
+	config += `
+		data "iosxr_snmp_server_vrf_host" "test" {
+			vrf_name = "VRF1"
+			address = "11.11.11.11"
+			depends_on = [iosxr_snmp_server_vrf_host.test]
+		}
+	`
+	return config
+}
+
+// End of section. //template:end testAccDataSourceConfig

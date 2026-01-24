@@ -88,6 +88,55 @@ func (r *LoggingVRFResource) Schema(ctx context.Context, req resource.SchemaRequ
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
+			"hostnames": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Name of the logging host").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of the logging host").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9._-]+`), ""),
+							},
+						},
+						"severity": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set severity of  messages for particular remote host/vrf").AddStringEnumDescription("alerts", "critical", "debugging", "emergencies", "error", "info", "notifications", "warning").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("alerts", "critical", "debugging", "emergencies", "error", "info", "notifications", "warning"),
+							},
+						},
+						"port": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set UDP port for this remote host/vrf").AddIntegerRangeDescription(0, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+						"operator": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set severity operator of  messages for particular remote host/vrf").AddStringEnumDescription("equals", "equals-or-higher", "not-equals").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("equals", "equals-or-higher", "not-equals"),
+							},
+						},
+						"facility": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Modify message logging facilities").AddStringEnumDescription("all", "audit", "auth", "authpriv", "console", "daemon", "kern", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7", "mail", "ntp", "syslog", "user").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("all", "audit", "auth", "authpriv", "console", "daemon", "kern", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7", "mail", "ntp", "syslog", "user"),
+							},
+						},
+						"hostname_source_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("hostname source address").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
 			"host_ipv4_addresses": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IPV4 address of the logging host").String,
 				Optional:            true,
@@ -120,6 +169,21 @@ func (r *LoggingVRFResource) Schema(ctx context.Context, req resource.SchemaRequ
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("equals", "equals-or-higher", "not-equals"),
+							},
+						},
+						"facility": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Modify message logging facilities").AddStringEnumDescription("all", "audit", "auth", "authpriv", "console", "daemon", "kern", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7", "mail", "ntp", "syslog", "user").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("all", "audit", "auth", "authpriv", "console", "daemon", "kern", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7", "mail", "ntp", "syslog", "user"),
+							},
+						},
+						"ipv4_source_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPV4 source address of the logging host").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
 							},
 						},
 					},
@@ -158,6 +222,22 @@ func (r *LoggingVRFResource) Schema(ctx context.Context, req resource.SchemaRequ
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("equals", "equals-or-higher", "not-equals"),
+							},
+						},
+						"facility": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Modify message logging facilities").AddStringEnumDescription("all", "audit", "auth", "authpriv", "console", "daemon", "kern", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7", "mail", "ntp", "syslog", "user").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("all", "audit", "auth", "authpriv", "console", "daemon", "kern", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7", "mail", "ntp", "syslog", "user"),
+							},
+						},
+						"ipv6_source_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPV6 source address of the logging host").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
 							},
 						},
 					},

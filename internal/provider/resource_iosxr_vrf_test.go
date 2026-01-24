@@ -21,10 +21,12 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 // End of section. //template:end imports
@@ -35,16 +37,75 @@ func TestAccIosxrVRF(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "vrf_name", "VRF4"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "description", "My VRF Description"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "vpn_id", "1000:1000"))
+	if os.Getenv("XRV9K") != "" || os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "fallback_vrf", "VRF2"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "evpn_route_sync", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_unicast", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_unicast_import_route_policy", "VRF_IMPORT_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_unicast_export_route_policy", "VRF_EXPORT_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_unicast_import_from_bridge_domain_advertise_as_vpn", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_unicast_import_from_vrf_advertise_as_vpn", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_unicast_import_from_vrf_allow_backup", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_unicast_import_from_vrf_allow_best_external", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_unicast_import_from_default_vrf_advertise_as_vpn", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_unicast_import_from_default_vrf_route_policy", "VRF_IMPORT_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_unicast_export_to_vrf_allow_imported_vpn", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_unicast_export_to_vrf_allow_backup", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_unicast_export_to_vrf_allow_best_external", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_unicast_export_to_default_vrf_route_policy", "VRF_EXPORT_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_unicast_export_to_default_vrf_allow_imported_vpn", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_unicast_max_prefix_limit", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_unicast_max_prefix_threshold", "75"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_import_route_policy", "VRF_IMPORT_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_export_route_policy", "VRF_EXPORT_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_import_from_bridge_domain_advertise_as_vpn", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_import_from_vrf_advertise_as_vpn", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_import_from_vrf_allow_backup", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_import_from_vrf_allow_best_external", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_import_from_default_vrf_advertise_as_vpn", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_import_from_default_vrf_route_policy", "VRF_IMPORT_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_export_to_vrf_allow_imported_vpn", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_export_to_vrf_allow_backup", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_export_to_vrf_allow_best_external", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_export_to_default_vrf_route_policy", "VRF_EXPORT_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_export_to_default_vrf_allow_imported_vpn", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_max_prefix_limit", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_max_prefix_threshold", "75"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_flowspec", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_unicast", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_unicast_import_route_policy", "VRF_IMPORT_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_unicast_export_route_policy", "VRF_EXPORT_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_unicast_import_from_bridge_domain_advertise_as_vpn", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_unicast_import_from_vrf_advertise_as_vpn", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_unicast_import_from_vrf_allow_backup", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_unicast_import_from_vrf_allow_best_external", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_unicast_import_from_default_vrf_advertise_as_vpn", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_unicast_import_from_default_vrf_route_policy", "VRF_IMPORT_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_unicast_export_to_vrf_allow_imported_vpn", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_unicast_export_to_vrf_allow_backup", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_unicast_export_to_vrf_allow_best_external", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_unicast_export_to_default_vrf_route_policy", "VRF_EXPORT_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_unicast_export_to_default_vrf_allow_imported_vpn", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_unicast_max_prefix_limit", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_unicast_max_prefix_threshold", "75"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_import_route_policy", "VRF_IMPORT_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_export_route_policy", "VRF_EXPORT_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_import_from_bridge_domain_advertise_as_vpn", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_import_from_vrf_advertise_as_vpn", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_import_from_vrf_allow_backup", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_import_from_vrf_allow_best_external", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_import_from_default_vrf_advertise_as_vpn", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_import_from_default_vrf_route_policy", "VRF_IMPORT_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_export_to_vrf_allow_imported_vpn", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_export_to_vrf_allow_backup", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_export_to_vrf_allow_best_external", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_export_to_default_vrf_route_policy", "VRF_EXPORT_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_export_to_default_vrf_allow_imported_vpn", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_max_prefix_limit", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_max_prefix_threshold", "75"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_flowspec", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "rd_two_byte_as_number", "65001"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "rd_two_byte_as_index", "123"))
@@ -84,6 +145,44 @@ func TestAccIosxrVRF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_unicast_export_route_target_ip_address_format.0.ipv4_address", "1.1.1.1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_unicast_export_route_target_ip_address_format.0.ipv4_address_index", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_unicast_export_route_target_ip_address_format.0.stitching", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_import_route_target_two_byte_as_format.0.two_byte_as_number", "65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_import_route_target_two_byte_as_format.0.asn2_index", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_import_route_target_two_byte_as_format.0.stitching", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_import_route_target_four_byte_as_format.0.four_byte_as_number", "100000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_import_route_target_four_byte_as_format.0.asn4_index", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_import_route_target_four_byte_as_format.0.stitching", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_import_route_target_ip_address_format.0.ipv4_address", "1.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_import_route_target_ip_address_format.0.ipv4_address_index", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_import_route_target_ip_address_format.0.stitching", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_export_route_target_two_byte_as_format.0.two_byte_as_number", "65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_export_route_target_two_byte_as_format.0.asn2_index", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_export_route_target_two_byte_as_format.0.stitching", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_export_route_target_four_byte_as_format.0.four_byte_as_number", "100000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_export_route_target_four_byte_as_format.0.asn4_index", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_export_route_target_four_byte_as_format.0.stitching", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_export_route_target_ip_address_format.0.ipv4_address", "1.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_export_route_target_ip_address_format.0.ipv4_address_index", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv4_multicast_export_route_target_ip_address_format.0.stitching", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_import_route_target_two_byte_as_format.0.two_byte_as_number", "65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_import_route_target_two_byte_as_format.0.asn2_index", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_import_route_target_two_byte_as_format.0.stitching", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_import_route_target_four_byte_as_format.0.four_byte_as_number", "100000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_import_route_target_four_byte_as_format.0.asn4_index", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_import_route_target_four_byte_as_format.0.stitching", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_import_route_target_ip_address_format.0.ipv4_address", "1.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_import_route_target_ip_address_format.0.ipv4_address_index", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_import_route_target_ip_address_format.0.stitching", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_export_route_target_two_byte_as_format.0.two_byte_as_number", "65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_export_route_target_two_byte_as_format.0.asn2_index", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_export_route_target_two_byte_as_format.0.stitching", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_export_route_target_four_byte_as_format.0.four_byte_as_number", "100000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_export_route_target_four_byte_as_format.0.asn4_index", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_export_route_target_four_byte_as_format.0.stitching", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_export_route_target_ip_address_format.0.ipv4_address", "1.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_export_route_target_ip_address_format.0.ipv4_address_index", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "ipv6_multicast_export_route_target_ip_address_format.0.stitching", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "vpn_id", "1000:1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_vrf.test", "remote_route_filtering_disable", "true"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -114,6 +213,7 @@ func TestAccIosxrVRF(t *testing.T) {
 func testAccIosxrVRFConfig_minimum() string {
 	config := `resource "iosxr_vrf" "test" {` + "\n"
 	config += `	vrf_name = "VRF4"` + "\n"
+	config += `	description = "My VRF Description"` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
@@ -127,16 +227,75 @@ func testAccIosxrVRFConfig_all() string {
 	config := `resource "iosxr_vrf" "test" {` + "\n"
 	config += `	vrf_name = "VRF4"` + "\n"
 	config += `	description = "My VRF Description"` + "\n"
-	config += `	vpn_id = "1000:1000"` + "\n"
+	if os.Getenv("XRV9K") != "" || os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	fallback_vrf = "VRF2"` + "\n"
+	}
+	config += `	evpn_route_sync = 100` + "\n"
 	config += `	ipv4_unicast = true` + "\n"
 	config += `	ipv4_unicast_import_route_policy = "VRF_IMPORT_POLICY_1"` + "\n"
 	config += `	ipv4_unicast_export_route_policy = "VRF_EXPORT_POLICY_1"` + "\n"
+	config += `	ipv4_unicast_import_from_bridge_domain_advertise_as_vpn = true` + "\n"
+	config += `	ipv4_unicast_import_from_vrf_advertise_as_vpn = true` + "\n"
+	config += `	ipv4_unicast_import_from_vrf_allow_backup = true` + "\n"
+	config += `	ipv4_unicast_import_from_vrf_allow_best_external = true` + "\n"
+	config += `	ipv4_unicast_import_from_default_vrf_advertise_as_vpn = true` + "\n"
+	config += `	ipv4_unicast_import_from_default_vrf_route_policy = "VRF_IMPORT_POLICY_1"` + "\n"
+	config += `	ipv4_unicast_export_to_vrf_allow_imported_vpn = true` + "\n"
+	config += `	ipv4_unicast_export_to_vrf_allow_backup = true` + "\n"
+	config += `	ipv4_unicast_export_to_vrf_allow_best_external = true` + "\n"
+	config += `	ipv4_unicast_export_to_default_vrf_route_policy = "VRF_EXPORT_POLICY_1"` + "\n"
+	config += `	ipv4_unicast_export_to_default_vrf_allow_imported_vpn = true` + "\n"
+	config += `	ipv4_unicast_max_prefix_limit = 1000` + "\n"
+	config += `	ipv4_unicast_max_prefix_threshold = 75` + "\n"
 	config += `	ipv4_multicast = true` + "\n"
+	config += `	ipv4_multicast_import_route_policy = "VRF_IMPORT_POLICY_1"` + "\n"
+	config += `	ipv4_multicast_export_route_policy = "VRF_EXPORT_POLICY_1"` + "\n"
+	config += `	ipv4_multicast_import_from_bridge_domain_advertise_as_vpn = true` + "\n"
+	config += `	ipv4_multicast_import_from_vrf_advertise_as_vpn = true` + "\n"
+	config += `	ipv4_multicast_import_from_vrf_allow_backup = true` + "\n"
+	config += `	ipv4_multicast_import_from_vrf_allow_best_external = true` + "\n"
+	config += `	ipv4_multicast_import_from_default_vrf_advertise_as_vpn = true` + "\n"
+	config += `	ipv4_multicast_import_from_default_vrf_route_policy = "VRF_IMPORT_POLICY_1"` + "\n"
+	config += `	ipv4_multicast_export_to_vrf_allow_imported_vpn = true` + "\n"
+	config += `	ipv4_multicast_export_to_vrf_allow_backup = true` + "\n"
+	config += `	ipv4_multicast_export_to_vrf_allow_best_external = true` + "\n"
+	config += `	ipv4_multicast_export_to_default_vrf_route_policy = "VRF_EXPORT_POLICY_1"` + "\n"
+	config += `	ipv4_multicast_export_to_default_vrf_allow_imported_vpn = true` + "\n"
+	config += `	ipv4_multicast_max_prefix_limit = 1000` + "\n"
+	config += `	ipv4_multicast_max_prefix_threshold = 75` + "\n"
 	config += `	ipv4_flowspec = true` + "\n"
 	config += `	ipv6_unicast = true` + "\n"
 	config += `	ipv6_unicast_import_route_policy = "VRF_IMPORT_POLICY_1"` + "\n"
 	config += `	ipv6_unicast_export_route_policy = "VRF_EXPORT_POLICY_1"` + "\n"
+	config += `	ipv6_unicast_import_from_bridge_domain_advertise_as_vpn = true` + "\n"
+	config += `	ipv6_unicast_import_from_vrf_advertise_as_vpn = true` + "\n"
+	config += `	ipv6_unicast_import_from_vrf_allow_backup = true` + "\n"
+	config += `	ipv6_unicast_import_from_vrf_allow_best_external = true` + "\n"
+	config += `	ipv6_unicast_import_from_default_vrf_advertise_as_vpn = true` + "\n"
+	config += `	ipv6_unicast_import_from_default_vrf_route_policy = "VRF_IMPORT_POLICY_1"` + "\n"
+	config += `	ipv6_unicast_export_to_vrf_allow_imported_vpn = true` + "\n"
+	config += `	ipv6_unicast_export_to_vrf_allow_backup = true` + "\n"
+	config += `	ipv6_unicast_export_to_vrf_allow_best_external = true` + "\n"
+	config += `	ipv6_unicast_export_to_default_vrf_route_policy = "VRF_EXPORT_POLICY_1"` + "\n"
+	config += `	ipv6_unicast_export_to_default_vrf_allow_imported_vpn = true` + "\n"
+	config += `	ipv6_unicast_max_prefix_limit = 1000` + "\n"
+	config += `	ipv6_unicast_max_prefix_threshold = 75` + "\n"
 	config += `	ipv6_multicast = true` + "\n"
+	config += `	ipv6_multicast_import_route_policy = "VRF_IMPORT_POLICY_1"` + "\n"
+	config += `	ipv6_multicast_export_route_policy = "VRF_EXPORT_POLICY_1"` + "\n"
+	config += `	ipv6_multicast_import_from_bridge_domain_advertise_as_vpn = true` + "\n"
+	config += `	ipv6_multicast_import_from_vrf_advertise_as_vpn = true` + "\n"
+	config += `	ipv6_multicast_import_from_vrf_allow_backup = true` + "\n"
+	config += `	ipv6_multicast_import_from_vrf_allow_best_external = true` + "\n"
+	config += `	ipv6_multicast_import_from_default_vrf_advertise_as_vpn = true` + "\n"
+	config += `	ipv6_multicast_import_from_default_vrf_route_policy = "VRF_IMPORT_POLICY_1"` + "\n"
+	config += `	ipv6_multicast_export_to_vrf_allow_imported_vpn = true` + "\n"
+	config += `	ipv6_multicast_export_to_vrf_allow_backup = true` + "\n"
+	config += `	ipv6_multicast_export_to_vrf_allow_best_external = true` + "\n"
+	config += `	ipv6_multicast_export_to_default_vrf_route_policy = "VRF_EXPORT_POLICY_1"` + "\n"
+	config += `	ipv6_multicast_export_to_default_vrf_allow_imported_vpn = true` + "\n"
+	config += `	ipv6_multicast_max_prefix_limit = 1000` + "\n"
+	config += `	ipv6_multicast_max_prefix_threshold = 75` + "\n"
 	config += `	ipv6_flowspec = true` + "\n"
 	config += `	rd_two_byte_as_number = "65001"` + "\n"
 	config += `	rd_two_byte_as_index = 123` + "\n"
@@ -200,9 +359,104 @@ func testAccIosxrVRFConfig_all() string {
 	config += `		ipv4_address_index = 1` + "\n"
 	config += `		stitching = "enable"` + "\n"
 	config += `		}]` + "\n"
+	config += `	ipv4_multicast_import_route_target_two_byte_as_format = [{` + "\n"
+	config += `		two_byte_as_number = 65001` + "\n"
+	config += `		asn2_index = 1` + "\n"
+	config += `		stitching = "enable"` + "\n"
+	config += `		}]` + "\n"
+	config += `	ipv4_multicast_import_route_target_four_byte_as_format = [{` + "\n"
+	config += `		four_byte_as_number = 100000` + "\n"
+	config += `		asn4_index = 1` + "\n"
+	config += `		stitching = "enable"` + "\n"
+	config += `		}]` + "\n"
+	config += `	ipv4_multicast_import_route_target_ip_address_format = [{` + "\n"
+	config += `		ipv4_address = "1.1.1.1"` + "\n"
+	config += `		ipv4_address_index = 1` + "\n"
+	config += `		stitching = "enable"` + "\n"
+	config += `		}]` + "\n"
+	config += `	ipv4_multicast_export_route_target_two_byte_as_format = [{` + "\n"
+	config += `		two_byte_as_number = 65001` + "\n"
+	config += `		asn2_index = 1` + "\n"
+	config += `		stitching = "enable"` + "\n"
+	config += `		}]` + "\n"
+	config += `	ipv4_multicast_export_route_target_four_byte_as_format = [{` + "\n"
+	config += `		four_byte_as_number = 100000` + "\n"
+	config += `		asn4_index = 1` + "\n"
+	config += `		stitching = "enable"` + "\n"
+	config += `		}]` + "\n"
+	config += `	ipv4_multicast_export_route_target_ip_address_format = [{` + "\n"
+	config += `		ipv4_address = "1.1.1.1"` + "\n"
+	config += `		ipv4_address_index = 1` + "\n"
+	config += `		stitching = "enable"` + "\n"
+	config += `		}]` + "\n"
+	config += `	ipv6_multicast_import_route_target_two_byte_as_format = [{` + "\n"
+	config += `		two_byte_as_number = 65001` + "\n"
+	config += `		asn2_index = 1` + "\n"
+	config += `		stitching = "enable"` + "\n"
+	config += `		}]` + "\n"
+	config += `	ipv6_multicast_import_route_target_four_byte_as_format = [{` + "\n"
+	config += `		four_byte_as_number = 100000` + "\n"
+	config += `		asn4_index = 1` + "\n"
+	config += `		stitching = "enable"` + "\n"
+	config += `		}]` + "\n"
+	config += `	ipv6_multicast_import_route_target_ip_address_format = [{` + "\n"
+	config += `		ipv4_address = "1.1.1.1"` + "\n"
+	config += `		ipv4_address_index = 1` + "\n"
+	config += `		stitching = "enable"` + "\n"
+	config += `		}]` + "\n"
+	config += `	ipv6_multicast_export_route_target_two_byte_as_format = [{` + "\n"
+	config += `		two_byte_as_number = 65001` + "\n"
+	config += `		asn2_index = 1` + "\n"
+	config += `		stitching = "enable"` + "\n"
+	config += `		}]` + "\n"
+	config += `	ipv6_multicast_export_route_target_four_byte_as_format = [{` + "\n"
+	config += `		four_byte_as_number = 100000` + "\n"
+	config += `		asn4_index = 1` + "\n"
+	config += `		stitching = "enable"` + "\n"
+	config += `		}]` + "\n"
+	config += `	ipv6_multicast_export_route_target_ip_address_format = [{` + "\n"
+	config += `		ipv4_address = "1.1.1.1"` + "\n"
+	config += `		ipv4_address_index = 1` + "\n"
+	config += `		stitching = "enable"` + "\n"
+	config += `		}]` + "\n"
+	config += `	vpn_id = "1000:1000"` + "\n"
+	config += `	remote_route_filtering_disable = true` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
 
 // End of section. //template:end testAccConfigAll
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrVRFImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		VrfName := primary.Attributes["vrf_name"]
+
+		return fmt.Sprintf("%s", VrfName), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccIosxrVRFPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=VRF_IMPORT_POLICY_1]"
+	attributes = {
+		"route-policy-name" = "VRF_IMPORT_POLICY_1"
+		"rpl-route-policy" = "route-policy VRF_IMPORT_POLICY_1\n  pass\nend-policy\n"
+	}
+}
+
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=VRF_EXPORT_POLICY_1]"
+	attributes = {
+		"route-policy-name" = "VRF_EXPORT_POLICY_1"
+		"rpl-route-policy" = "route-policy VRF_EXPORT_POLICY_1\n  pass\nend-policy\n"
+	}
+}
+
+`
+
+// End of section. //template:end testPrerequisites

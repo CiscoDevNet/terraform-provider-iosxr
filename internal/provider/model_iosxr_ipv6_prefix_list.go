@@ -57,6 +57,7 @@ type IPv6PrefixListSequences struct {
 	Remark              types.String `tfsdk:"remark"`
 	Permission          types.String `tfsdk:"permission"`
 	Prefix              types.String `tfsdk:"prefix"`
+	Zone                types.String `tfsdk:"zone"`
 	Mask                types.Int64  `tfsdk:"mask"`
 	MatchPrefixLengthEq types.Int64  `tfsdk:"match_prefix_length_eq"`
 	MatchPrefixLengthGe types.Int64  `tfsdk:"match_prefix_length_ge"`
@@ -112,6 +113,9 @@ func (data IPv6PrefixList) toBody(ctx context.Context) string {
 			if !item.Prefix.IsNull() && !item.Prefix.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"prefix", item.Prefix.ValueString())
 			}
+			if !item.Zone.IsNull() && !item.Zone.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"zone", item.Zone.ValueString())
+			}
 			if !item.Mask.IsNull() && !item.Mask.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"mask", strconv.FormatInt(item.Mask.ValueInt64(), 10))
 			}
@@ -153,6 +157,9 @@ func (data IPv6PrefixList) toBodyXML(ctx context.Context) string {
 			}
 			if !item.Prefix.IsNull() && !item.Prefix.IsUnknown() {
 				cBody = helpers.SetFromXPath(cBody, "prefix", item.Prefix.ValueString())
+			}
+			if !item.Zone.IsNull() && !item.Zone.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "zone", item.Zone.ValueString())
 			}
 			if !item.Mask.IsNull() && !item.Mask.IsUnknown() {
 				cBody = helpers.SetFromXPath(cBody, "mask", strconv.FormatInt(item.Mask.ValueInt64(), 10))
@@ -224,6 +231,11 @@ func (data *IPv6PrefixList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].Prefix = types.StringValue(value.String())
 		} else {
 			data.Sequences[i].Prefix = types.StringNull()
+		}
+		if value := r.Get("zone"); value.Exists() && !data.Sequences[i].Zone.IsNull() {
+			data.Sequences[i].Zone = types.StringValue(value.String())
+		} else {
+			data.Sequences[i].Zone = types.StringNull()
 		}
 		if value := r.Get("mask"); value.Exists() && !data.Sequences[i].Mask.IsNull() {
 			data.Sequences[i].Mask = types.Int64Value(value.Int())
@@ -301,6 +313,11 @@ func (data *IPv6PrefixList) updateFromBodyXML(ctx context.Context, res xmldot.Re
 		} else if data.Sequences[i].Prefix.IsNull() {
 			data.Sequences[i].Prefix = types.StringNull()
 		}
+		if value := helpers.GetFromXPath(r, "zone"); value.Exists() {
+			data.Sequences[i].Zone = types.StringValue(value.String())
+		} else if data.Sequences[i].Zone.IsNull() {
+			data.Sequences[i].Zone = types.StringNull()
+		}
 		if value := helpers.GetFromXPath(r, "mask"); value.Exists() {
 			data.Sequences[i].Mask = types.Int64Value(value.Int())
 		} else if data.Sequences[i].Mask.IsNull() {
@@ -325,7 +342,6 @@ func (data *IPv6PrefixList) updateFromBodyXML(ctx context.Context, res xmldot.Re
 }
 
 // End of section. //template:end updateFromBodyXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *IPv6PrefixList) fromBody(ctx context.Context, res gjson.Result) {
@@ -349,6 +365,9 @@ func (data *IPv6PrefixList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("prefix"); cValue.Exists() {
 				item.Prefix = types.StringValue(cValue.String())
 			}
+			if cValue := v.Get("zone"); cValue.Exists() {
+				item.Zone = types.StringValue(cValue.String())
+			}
 			if cValue := v.Get("mask"); cValue.Exists() {
 				item.Mask = types.Int64Value(cValue.Int())
 			}
@@ -368,7 +387,6 @@ func (data *IPv6PrefixList) fromBody(ctx context.Context, res gjson.Result) {
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *IPv6PrefixListData) fromBody(ctx context.Context, res gjson.Result) {
@@ -392,6 +410,9 @@ func (data *IPv6PrefixListData) fromBody(ctx context.Context, res gjson.Result) 
 			if cValue := v.Get("prefix"); cValue.Exists() {
 				item.Prefix = types.StringValue(cValue.String())
 			}
+			if cValue := v.Get("zone"); cValue.Exists() {
+				item.Zone = types.StringValue(cValue.String())
+			}
 			if cValue := v.Get("mask"); cValue.Exists() {
 				item.Mask = types.Int64Value(cValue.Int())
 			}
@@ -411,7 +432,6 @@ func (data *IPv6PrefixListData) fromBody(ctx context.Context, res gjson.Result) 
 }
 
 // End of section. //template:end fromBodyData
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *IPv6PrefixList) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -430,6 +450,9 @@ func (data *IPv6PrefixList) fromBodyXML(ctx context.Context, res xmldot.Result) 
 			}
 			if cValue := helpers.GetFromXPath(v, "prefix"); cValue.Exists() {
 				item.Prefix = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "zone"); cValue.Exists() {
+				item.Zone = types.StringValue(cValue.String())
 			}
 			if cValue := helpers.GetFromXPath(v, "mask"); cValue.Exists() {
 				item.Mask = types.Int64Value(cValue.Int())
@@ -450,7 +473,6 @@ func (data *IPv6PrefixList) fromBodyXML(ctx context.Context, res xmldot.Result) 
 }
 
 // End of section. //template:end fromBodyXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *IPv6PrefixListData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -469,6 +491,9 @@ func (data *IPv6PrefixListData) fromBodyXML(ctx context.Context, res xmldot.Resu
 			}
 			if cValue := helpers.GetFromXPath(v, "prefix"); cValue.Exists() {
 				item.Prefix = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "zone"); cValue.Exists() {
+				item.Zone = types.StringValue(cValue.String())
 			}
 			if cValue := helpers.GetFromXPath(v, "mask"); cValue.Exists() {
 				item.Mask = types.Int64Value(cValue.Int())
@@ -489,7 +514,6 @@ func (data *IPv6PrefixListData) fromBodyXML(ctx context.Context, res xmldot.Resu
 }
 
 // End of section. //template:end fromBodyDataXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *IPv6PrefixList) getDeletedItems(ctx context.Context, state IPv6PrefixList) []string {
@@ -529,6 +553,9 @@ func (data *IPv6PrefixList) getDeletedItems(ctx context.Context, state IPv6Prefi
 				if !state.Sequences[i].Mask.IsNull() && data.Sequences[j].Mask.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/mask", state.getPath(), keyString))
 				}
+				if !state.Sequences[i].Zone.IsNull() && data.Sequences[j].Zone.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/zone", state.getPath(), keyString))
+				}
 				if !state.Sequences[i].Prefix.IsNull() && data.Sequences[j].Prefix.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/prefix", state.getPath(), keyString))
 				}
@@ -549,7 +576,6 @@ func (data *IPv6PrefixList) getDeletedItems(ctx context.Context, state IPv6Prefi
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
 func (data *IPv6PrefixList) getEmptyLeafsDelete(ctx context.Context, state *IPv6PrefixList) []string {
@@ -566,7 +592,6 @@ func (data *IPv6PrefixList) getEmptyLeafsDelete(ctx context.Context, state *IPv6
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *IPv6PrefixList) getDeletePaths(ctx context.Context) []string {
@@ -581,7 +606,6 @@ func (data *IPv6PrefixList) getDeletePaths(ctx context.Context) []string {
 }
 
 // End of section. //template:end getDeletePaths
-
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *IPv6PrefixList) addDeletedItemsXML(ctx context.Context, state IPv6PrefixList, body string) string {
@@ -623,6 +647,9 @@ func (data *IPv6PrefixList) addDeletedItemsXML(ctx context.Context, state IPv6Pr
 				if !state.Sequences[i].Mask.IsNull() && data.Sequences[j].Mask.IsNull() {
 					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/mask", predicates))
 				}
+				if !state.Sequences[i].Zone.IsNull() && data.Sequences[j].Zone.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/zone", predicates))
+				}
 				if !state.Sequences[i].Prefix.IsNull() && data.Sequences[j].Prefix.IsNull() {
 					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/prefix", predicates))
 				}
@@ -646,7 +673,6 @@ func (data *IPv6PrefixList) addDeletedItemsXML(ctx context.Context, state IPv6Pr
 }
 
 // End of section. //template:end addDeletedItemsXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *IPv6PrefixList) addDeletePathsXML(ctx context.Context, body string) string {

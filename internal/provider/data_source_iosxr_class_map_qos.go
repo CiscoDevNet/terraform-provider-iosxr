@@ -74,6 +74,10 @@ func (d *ClassMapQoSDataSource) Schema(ctx context.Context, req datasource.Schem
 				MarkdownDescription: "Name of the class-map",
 				Required:            true,
 			},
+			"match_all": schema.BoolAttribute{
+				MarkdownDescription: "Match all match criteria",
+				Computed:            true,
+			},
 			"match_any": schema.BoolAttribute{
 				MarkdownDescription: "Match any match criteria (default)",
 				Computed:            true,
@@ -82,8 +86,125 @@ func (d *ClassMapQoSDataSource) Schema(ctx context.Context, req datasource.Schem
 				MarkdownDescription: "Set description for this class-map",
 				Computed:            true,
 			},
+			"match_access_group_ipv4": schema.ListAttribute{
+				MarkdownDescription: "IPv4 access list",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"match_access_group_ipv6": schema.ListAttribute{
+				MarkdownDescription: "IPv6 access list",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"match_cos": schema.ListAttribute{
+				MarkdownDescription: "COS value",
+				ElementType:         types.Int64Type,
+				Computed:            true,
+			},
+			"match_cos_inner": schema.ListAttribute{
+				MarkdownDescription: "inner cos value (Upto 8 values)",
+				ElementType:         types.Int64Type,
+				Computed:            true,
+			},
+			"match_destination_address_ipv4": schema.ListNestedAttribute{
+				MarkdownDescription: "IPv4 address",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "IPv4 address.",
+							Computed:            true,
+						},
+						"netmask": schema.StringAttribute{
+							MarkdownDescription: "IPv4 netmask.",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"match_destination_address_ipv6": schema.ListNestedAttribute{
+				MarkdownDescription: "IPv6 address",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "IPv6 address.",
+							Computed:            true,
+						},
+						"prefix_length": schema.Int64Attribute{
+							MarkdownDescription: "Length of the IPv6 Prefix.",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"match_destination_mac": schema.StringAttribute{
+				MarkdownDescription: "MAC Address",
+				Computed:            true,
+			},
+			"match_destination_port": schema.ListAttribute{
+				MarkdownDescription: "destination port",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"match_discard_class": schema.ListAttribute{
+				MarkdownDescription: "Discard CLass Id",
+				ElementType:         types.Int64Type,
+				Computed:            true,
+			},
 			"match_dscp": schema.ListAttribute{
 				MarkdownDescription: "DSCP value",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"match_dscp_ipv4": schema.ListAttribute{
+				MarkdownDescription: "DSCP value",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"match_dscp_ipv6": schema.ListAttribute{
+				MarkdownDescription: "DSCP value",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"match_ethertype": schema.ListAttribute{
+				MarkdownDescription: "Ethertype Value",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"match_fragment_type_dont_fragment": schema.BoolAttribute{
+				MarkdownDescription: "Match don't-Fragment bit",
+				Computed:            true,
+			},
+			"match_fragment_type_first_fragment": schema.BoolAttribute{
+				MarkdownDescription: "Match first fragment bit",
+				Computed:            true,
+			},
+			"match_fragment_type_is_fragment": schema.BoolAttribute{
+				MarkdownDescription: "Match is-fragment bit",
+				Computed:            true,
+			},
+			"match_fragment_type_last_fragment": schema.BoolAttribute{
+				MarkdownDescription: "Match last fragment bit",
+				Computed:            true,
+			},
+			"match_ipv4_icmp_code": schema.ListAttribute{
+				MarkdownDescription: "IPv4 ICMP code",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"match_ipv4_icmp_type": schema.ListAttribute{
+				MarkdownDescription: "IPv4 ICMP type",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"match_ipv6_icmp_code": schema.ListAttribute{
+				MarkdownDescription: "ICMP code",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"match_ipv6_icmp_type": schema.ListAttribute{
+				MarkdownDescription: "ICMP type",
 				ElementType:         types.StringType,
 				Computed:            true,
 			},
@@ -92,13 +213,97 @@ func (d *ClassMapQoSDataSource) Schema(ctx context.Context, req datasource.Schem
 				ElementType:         types.Int64Type,
 				Computed:            true,
 			},
+			"match_packet_length": schema.ListAttribute{
+				MarkdownDescription: "IP Packet Length",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"match_precedence": schema.ListAttribute{
+				MarkdownDescription: "IP precedence",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"match_precedence_ipv4": schema.ListAttribute{
+				MarkdownDescription: "IPV4 precedence",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"match_precedence_ipv6": schema.ListAttribute{
+				MarkdownDescription: "IPV6 precedence",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"match_protocol": schema.ListAttribute{
+				MarkdownDescription: "Protocol Number",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
 			"match_qos_group": schema.ListAttribute{
 				MarkdownDescription: "QoS Group Id",
 				ElementType:         types.StringType,
 				Computed:            true,
 			},
+			"match_source_address_ipv4": schema.ListNestedAttribute{
+				MarkdownDescription: "IPv4 address",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "IPv4 address.",
+							Computed:            true,
+						},
+						"netmask": schema.StringAttribute{
+							MarkdownDescription: "IPv4 netmask.",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"match_source_address_ipv6": schema.ListNestedAttribute{
+				MarkdownDescription: "IPv6 address",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "IPv6 address.",
+							Computed:            true,
+						},
+						"prefix_length": schema.Int64Attribute{
+							MarkdownDescription: "Length of the IPv6 Prefix.",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"match_source_mac": schema.StringAttribute{
+				MarkdownDescription: "MAC Address",
+				Computed:            true,
+			},
+			"match_source_port": schema.ListAttribute{
+				MarkdownDescription: "source port",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"match_tcp_flag": schema.Int64Attribute{
+				MarkdownDescription: "TCP flags value",
+				Computed:            true,
+			},
+			"match_tcp_flag_any": schema.BoolAttribute{
+				MarkdownDescription: "Match based on any bit set",
+				Computed:            true,
+			},
 			"match_traffic_class": schema.ListAttribute{
 				MarkdownDescription: "Traffic Class Id",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"match_vlan": schema.ListAttribute{
+				MarkdownDescription: "Vlan Id",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"match_vlan_inner": schema.ListAttribute{
+				MarkdownDescription: "inner Vlan Id",
 				ElementType:         types.StringType,
 				Computed:            true,
 			},

@@ -74,7 +74,7 @@ func (d *ESISetDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				Required:            true,
 			},
 			"rpl": schema.StringAttribute{
-				MarkdownDescription: "Esi Set",
+				MarkdownDescription: "Configures an ESI set",
 				Computed:            true,
 			},
 		},

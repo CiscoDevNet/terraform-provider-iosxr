@@ -21,10 +21,12 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 // End of section. //template:end imports
@@ -36,7 +38,14 @@ func TestAccIosxrLLDP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "holdtime", "50"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "timer", "6"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "reinit", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "system_name", "Router1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "system_description", "Router1-Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "chassis_id", "FOC22439P72"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "chassis_id_type_local", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "subinterfaces_enable", "true"))
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "subinterfaces_tagged", "true"))
+	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "management_enable", "true"))
 	}
@@ -89,7 +98,14 @@ func testAccIosxrLLDPConfig_all() string {
 	config += `	holdtime = 50` + "\n"
 	config += `	timer = 6` + "\n"
 	config += `	reinit = 3` + "\n"
+	config += `	system_name = "Router1"` + "\n"
+	config += `	system_description = "Router1-Description"` + "\n"
+	config += `	chassis_id = "FOC22439P72"` + "\n"
+	config += `	chassis_id_type_local = true` + "\n"
 	config += `	subinterfaces_enable = true` + "\n"
+	if os.Getenv("NCS") != "" {
+		config += `	subinterfaces_tagged = true` + "\n"
+	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		config += `	management_enable = true` + "\n"
 	}
@@ -105,3 +121,16 @@ func testAccIosxrLLDPConfig_all() string {
 }
 
 // End of section. //template:end testAccConfigAll
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrLLDPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+
+// End of section. //template:end testPrerequisites

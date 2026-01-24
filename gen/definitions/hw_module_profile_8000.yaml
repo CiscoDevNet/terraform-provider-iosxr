@@ -1,0 +1,327 @@
+---
+name: HW Module Profile 8000
+path: Cisco-IOS-XR-um-8000-hw-module-profile-cfg:/hw-module
+doc_category: Cisco 8000 Series
+ds_description: "This data source can read the HW Module Profile configuration on Cisco 8000 series routers."
+res_description: "This resource can manage the HW Module Profile configuration on Cisco 8000 series routers."
+test_tags: [C8000]
+attributes:
+  - yang_name: multicast/route-scale
+    exclude_test: true
+    example: true
+  - yang_name: profile/tcam/fib/ipv4/unicast/percent
+    minimum_test_value: 50
+    example: 50
+  - yang_name: profile/tcam/fib/ipv6/unicast/percent
+    example: 50
+  - yang_name: profile/tcam/format/access-list/ipv4/src-addr
+    delete_parent: true
+    example: true
+  - yang_name: profile/tcam/format/access-list/ipv4/dst-addr
+    delete_parent: true
+    example: true
+  - yang_name: profile/tcam/format/access-list/ipv4/src-port
+    delete_parent: true
+    example: true
+  - yang_name: profile/tcam/format/access-list/ipv4/dst-port
+    delete_parent: true
+    example: true
+  - yang_name: profile/tcam/format/access-list/ipv4/proto
+    delete_parent: true
+    example: true
+  - yang_name: profile/tcam/format/access-list/ipv4/precedence
+    delete_parent: true
+    example: true
+  - yang_name: profile/tcam/format/access-list/ipv4/ttl-match
+    delete_parent: true
+    example: true
+  - yang_name: profile/tcam/format/access-list/ipv4/tcp-flags
+    delete_parent: true
+    example: true
+  - yang_name: profile/tcam/format/access-list/ipv4/frag-bit
+    delete_parent: true
+    example: true
+  - yang_name: profile/tcam/format/access-list/ipv4/src-object-group
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: profile/tcam/format/access-list/ipv4/dst-object-group
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: profile/tcam/format/access-list/ipv4/packet-len
+    delete_parent: true
+    example: true
+  - yang_name: profile/tcam/format/access-list/ipv4/fragment-offset
+    delete_parent: true
+    example: true
+  - yang_name: profile/tcam/format/access-list/ipv4/udf1
+    exclude_test: true
+    example: UDF-1
+  - yang_name: profile/tcam/format/access-list/ipv4/udf2
+    exclude_test: true
+    example: UDF-2
+  - yang_name: profile/tcam/format/access-list/ipv4/udf3
+    exclude_test: true
+    example: UDF-3
+  - yang_name: profile/tcam/format/access-list/ipv4/udf4
+    exclude_test: true
+    example: UDF-4
+  - yang_name: profile/tcam/format/access-list/ipv4/udf5
+    exclude_test: true
+    example: UDF-5
+  - yang_name: profile/tcam/format/access-list/ipv4/udf6
+    exclude_test: true
+    example: UDF-6
+  - yang_name: profile/tcam/format/access-list/ipv4/udf7
+    exclude_test: true
+    example: UDF-7
+  - yang_name: profile/tcam/format/access-list/ipv4/udf8
+    exclude_test: true
+    example: UDF-8
+  - yang_name: profile/tcam/format/access-list/ipv6/src-addr
+    delete_parent: true
+    example: true
+  - yang_name: profile/tcam/format/access-list/ipv6/dst-addr
+    delete_parent: true
+    example: true
+  # src-port is missing from UM after configuration, DDTS to be filed
+  # - yang_name: profile/tcam/format/access-list/ipv6/src-port
+  #   delete_parent: true
+  #   exclude_test: true
+  #   example: true
+  - yang_name: profile/tcam/format/access-list/ipv6/dst-port
+    delete_parent: true
+    example: true
+  - yang_name: profile/tcam/format/access-list/ipv6/next-hdr
+    delete_parent: true
+    example: true
+  - yang_name: profile/tcam/format/access-list/ipv6/traffic-class
+    delete_parent: true
+    example: true
+  - yang_name: profile/tcam/format/access-list/ipv6/frag-bit
+    delete_parent: true
+    example: true
+  - yang_name: profile/tcam/format/access-list/ipv6/tcp-flags
+    delete_parent: true
+    example: true
+  - yang_name: profile/tcam/format/access-list/ipv6/src-object-group
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: profile/tcam/format/access-list/ipv6/dst-object-group
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: profile/tcam/format/access-list/ipv6/packet-len
+    delete_parent: true
+    example: true
+  - yang_name: profile/tcam/format/access-list/ipv6/udf1
+    exclude_test: true
+    example: UDF-1
+  - yang_name: profile/tcam/format/access-list/ipv6/udf2
+    exclude_test: true
+    example: UDF-2
+  - yang_name: profile/tcam/format/access-list/ipv6/udf3
+    exclude_test: true
+    example: UDF-3
+  - yang_name: profile/tcam/format/access-list/ipv6/udf4
+    exclude_test: true
+    example: UDF-4
+  - yang_name: profile/tcam/format/access-list/ipv6/udf5
+    exclude_test: true
+    example: UDF-5
+  - yang_name: profile/tcam/format/access-list/ipv6/udf6
+    exclude_test: true
+    example: UDF-6
+  - yang_name: profile/tcam/format/access-list/ipv6/udf7
+    exclude_test: true
+    example: UDF-7
+  - yang_name: profile/tcam/format/access-list/ipv6/udf8
+    exclude_test: true
+    example: UDF-8
+  - yang_name: profile/qos/voq-mode/four
+    exclude_test: true
+    example: true
+  - yang_name: profile/qos/voq-mode/eight
+    exclude_test: true
+    example: true
+  - yang_name: profile/qos/voq-mode/fair-four
+    exclude_test: true
+    example: true
+  - yang_name: profile/qos/voq-mode/fair-eight
+    example: true
+  - yang_name: profile/qos/l2-mode
+    example: L3
+  - yang_name: profile/qos/low-latency-mode
+    example: 1
+  - yang_name: profile/qos/intra-npu-over-fabric
+    example: disable
+  - yang_name: profile/qos/qos-stats-push-collection
+    example: true
+  - yang_name: profile/qos/high-water-marks
+    example: true
+  - yang_name: profile/cef/dark-bw
+    example: enable
+  - yang_name: profile/cef/sropt
+    example: enable
+  - yang_name: profile/cef/bgplu
+    example: enable
+  - yang_name: profile/cef/bgplu-over-rsvpte
+    exclude_test: true
+    example: enable
+  - yang_name: profile/cef/cbf
+    example: enable
+  - yang_name: profile/cef/forward-class-lists/forward-class-list
+    tf_name: profile_cef_cbf_forward_class_list
+    example: 0
+  - yang_name: profile/cef/ipv6/hop-limit
+    example: punt
+  - yang_name: profile/cef/lpts/acl
+    example: true
+  - yang_name: profile/cef/lpts/pifib-entry-counters
+    example: 256
+  - yang_name: profile/cef/vxlan/ipv6-tnl-scale
+    example: true
+  - yang_name: profile/cef/mplsoudp/scale
+    example: true
+  - yang_name: profile/cef/stats/label/app-default
+    example: dynamic
+  - yang_name: profile/cef/ttl/tunnel-ip/decrement
+    example: disable
+  - yang_name: profile/cef/te-tunnel/highscale-no-ldp-over-te
+    example: true
+  - yang_name: profile/cef/te-tunnel/highscale-ldp-over-te-no-sr-over-srte
+    example: true
+  - yang_name: profile/cef/te-tunnel/label-over-te-counters
+    example: true
+  - yang_name: profile/cef/ip-redirect
+    example: enable
+  - yang_name: profile/cef/unipath-surpf/enable
+    example: true
+  - yang_name: profile/cef/source-rtbh/enable
+    example: true
+  - yang_name: profile/encap-exact/interfaces/interface
+    tf_name: profile_encap_exact_interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: FourHundredGigE0/0/0/0
+  - yang_name: profile/encap-exact/locations/location
+    tf_name: profile_encap_exact_locations
+    type: List
+    attributes:
+      - yang_name: location-name
+        id: true
+        example: 0/RP0/CPU0
+  - yang_name: profile/encap-exact/locations/all
+    delete_parent: true
+    example: true
+  - yang_name: profile/encap-exact/locations/all-virtual
+    delete_parent: true
+    example: true
+  - yang_name: profile/stats/voqs-sharing-counters
+    example: 1
+  - yang_name: profile/stats/no-bvi-ingress
+    example: true
+  - yang_name: profile/stats/acl-permit
+    example: true
+  - yang_name: profile/bw-threshold
+    example: "80"
+  - yang_name: profile/priority-flow-control/locations/location
+    tf_name: profile_priority_flow_control_locations
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: location-name
+        id: true
+        example: 0/RP0/CPU0
+      - yang_name: buffer-extended/traffic-class
+        type: List
+        attributes:
+          - yang_name: traffic-class-id
+            id: true
+            example: 1
+          - yang_name: pause-threshold
+            example: 10
+          - yang_name: pause-threshold-bytes
+            exclude_test: true
+            example: 1024
+          - yang_name: ms
+            example: true
+          - yang_name: ms/headroom
+            example: 4096
+          - yang_name: us
+            exclude_test: true
+            example: true
+          - yang_name: us/headroom
+            exclude_test: true
+            example: 4096
+          - yang_name: kbytes
+            example: true
+          - yang_name: kbytes/headroom
+            exclude_test: true
+            example: 4096
+          - yang_name: mbytes
+            exclude_test: true
+            example: true
+          - yang_name: mbytes/headroom
+            exclude_test: true
+            example: 15
+      - yang_name: buffer-internal/traffic-class
+        type: List
+        attributes:
+          - yang_name: traffic-class-id
+            id: true
+            example: 2
+          - yang_name: pause-threshold
+            example: 307200
+          - yang_name: headroom
+            example: 345600
+          - yang_name: ecn
+            example: 153600
+          - yang_name: max-threshold
+            example: 897408
+          - yang_name: probability-percentage
+            example: 50
+  - yang_name: profile/gue/udp-dest-port/ipv4
+    delete_parent: true
+    example: 7000
+  - yang_name: profile/gue/udp-dest-port/ipv6
+    delete_parent: true
+    example: 8000
+  - yang_name: profile/gue/udp-dest-port/mpls
+    delete_parent: true
+    example: 9000
+  - yang_name: profile/npu/buffer-extended/locations/location
+    tf_name: profile_npu_buffer_extended_locations
+    type: List
+    attributes:
+      - yang_name: location-name
+        id: true
+        example: 0/RP0/CPU0
+      - yang_name: bandwidth-congestion-detection/enable
+        example: true
+      - yang_name: bandwidth-congestion-protect/enable
+        example: true
+  - yang_name: profile/l2fib/pw-stats
+    example: true
+  - yang_name: profile/l2fib/bridge-flush-convergence
+    example: true
+  - yang_name: profile/l2fib/L2-high-scale
+    tf_name: profile_l2fib_higher_scale
+    example: true
+  - yang_name: profile/l2fib/vxlan-dc-leaf
+    exclude_test: true
+    example: true
+  - yang_name: profile/npu-compatibility
+    exclude_test: true
+    example: Q100
+  - yang_name: profile/route/scale/ipv6-unicast/connected-prefix/high
+    example: true
+  - yang_name: profile/flowspec/ipv6-packet-len-enable
+    example: true
+  - yang_name: profile/irb/throughput-optimized
+    exclude_test: true
+    example: true

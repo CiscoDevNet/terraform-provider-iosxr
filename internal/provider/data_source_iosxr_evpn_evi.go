@@ -77,19 +77,11 @@ func (d *EVPNEVIDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				MarkdownDescription: "Description for this EVPN Instance",
 				Computed:            true,
 			},
-			"load_balancing": schema.BoolAttribute{
-				MarkdownDescription: "Configure EVPN Instance load-balancing",
-				Computed:            true,
-			},
-			"load_balancing_flow_label_static": schema.BoolAttribute{
-				MarkdownDescription: "Static configuration of Flow Label",
-				Computed:            true,
-			},
 			"bgp_rd_two_byte_as_number": schema.Int64Attribute{
 				MarkdownDescription: "Two Byte AS Number",
 				Computed:            true,
 			},
-			"bgp_rd_two_byte_as_assigned_number": schema.Int64Attribute{
+			"bgp_rd_two_byte_as_index": schema.Int64Attribute{
 				MarkdownDescription: "AS:nn (hex or decimal format)",
 				Computed:            true,
 			},
@@ -97,7 +89,7 @@ func (d *EVPNEVIDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				MarkdownDescription: "Four Byte AS number",
 				Computed:            true,
 			},
-			"bgp_rd_four_byte_as_assigned_number": schema.Int64Attribute{
+			"bgp_rd_four_byte_as_index": schema.Int64Attribute{
 				MarkdownDescription: "AS:nn (hex or decimal format)",
 				Computed:            true,
 			},
@@ -105,9 +97,57 @@ func (d *EVPNEVIDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				MarkdownDescription: "IP address",
 				Computed:            true,
 			},
-			"bgp_rd_ipv4_address_assigned_number": schema.Int64Attribute{
+			"bgp_rd_ipv4_address_index": schema.Int64Attribute{
 				MarkdownDescription: "IP-address:nn (hex or decimal format)",
 				Computed:            true,
+			},
+			"bgp_route_target_two_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: "Two Byte AS Number Route Target",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"as_number": schema.Int64Attribute{
+							MarkdownDescription: "Two Byte AS Number",
+							Computed:            true,
+						},
+						"assigned_number": schema.Int64Attribute{
+							MarkdownDescription: "AS:nn (hex or decimal format)",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"bgp_route_target_four_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: "Four Byte AS number Route Target",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"as_number": schema.Int64Attribute{
+							MarkdownDescription: "Four Byte AS number",
+							Computed:            true,
+						},
+						"assigned_number": schema.Int64Attribute{
+							MarkdownDescription: "AS:nn (hex or decimal format)",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"bgp_route_target_ipv4_address_format": schema.ListNestedAttribute{
+				MarkdownDescription: "IP address",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"ipv4_address": schema.StringAttribute{
+							MarkdownDescription: "IP address",
+							Computed:            true,
+						},
+						"assigned_number": schema.Int64Attribute{
+							MarkdownDescription: "IP-address:nn (hex or decimal format)",
+							Computed:            true,
+						},
+					},
+				},
 			},
 			"bgp_route_target_import_two_byte_as_format": schema.ListNestedAttribute{
 				MarkdownDescription: "Two Byte AS Number Route Target",
@@ -205,6 +245,14 @@ func (d *EVPNEVIDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 					},
 				},
 			},
+			"bgp_table_policy": schema.StringAttribute{
+				MarkdownDescription: "Configure policy for installation of forwarding data to L2FIB",
+				Computed:            true,
+			},
+			"bgp_implicit_import_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable BGP implicit import",
+				Computed:            true,
+			},
 			"bgp_route_policy_import": schema.StringAttribute{
 				MarkdownDescription: "Import route policy",
 				Computed:            true,
@@ -213,8 +261,32 @@ func (d *EVPNEVIDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				MarkdownDescription: "Export route policy",
 				Computed:            true,
 			},
+			"load_balancing": schema.BoolAttribute{
+				MarkdownDescription: "Configure EVPN Instance load-balancing",
+				Computed:            true,
+			},
+			"load_balancing_flow_label_static": schema.BoolAttribute{
+				MarkdownDescription: "Static configuration of Flow Label",
+				Computed:            true,
+			},
+			"preferred_nexthop_lowest_ip": schema.BoolAttribute{
+				MarkdownDescription: "Lowest nexthop IP is active",
+				Computed:            true,
+			},
+			"preferred_nexthop_highest_ip": schema.BoolAttribute{
+				MarkdownDescription: "Highest nexthop IP is active",
+				Computed:            true,
+			},
+			"preferred_nexthop_modulo": schema.BoolAttribute{
+				MarkdownDescription: "EVI modulo of nexthops cardinality is active",
+				Computed:            true,
+			},
 			"advertise_mac": schema.BoolAttribute{
 				MarkdownDescription: "Configure EVPN Instance MAC advertisement",
+				Computed:            true,
+			},
+			"advertise_mac_bvi_mac": schema.BoolAttribute{
+				MarkdownDescription: "Advertise local MAC and BVI MAC routes",
 				Computed:            true,
 			},
 			"unknown_unicast_suppression": schema.BoolAttribute{
@@ -223,6 +295,42 @@ func (d *EVPNEVIDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 			},
 			"control_word_disable": schema.BoolAttribute{
 				MarkdownDescription: "Disabling control-word",
+				Computed:            true,
+			},
+			"ignore_mtu_mismatch": schema.BoolAttribute{
+				MarkdownDescription: "Ignore mismatch of local and remote MTUs",
+				Computed:            true,
+			},
+			"ignore_mtu_mismatch_disable_deprecated": schema.BoolAttribute{
+				MarkdownDescription: "Disables ingoring mismatch of local and remote MTUs (deprecated)",
+				Computed:            true,
+			},
+			"enforce_mtu_match": schema.BoolAttribute{
+				MarkdownDescription: "Enforce matching of local and remote MTUs",
+				Computed:            true,
+			},
+			"transmit_mtu_zero": schema.BoolAttribute{
+				MarkdownDescription: "Transmit MTU zero to remote instead of actual local MTU",
+				Computed:            true,
+			},
+			"transmit_mtu_zero_disable_deprecated": schema.BoolAttribute{
+				MarkdownDescription: "Disables transmitting MTU zero to remote instead of actual local MTU (deprecated)",
+				Computed:            true,
+			},
+			"transmit_l2_mtu": schema.BoolAttribute{
+				MarkdownDescription: "Transmit L2 MTU of attachment circuit",
+				Computed:            true,
+			},
+			"re_origination_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable route re-origination",
+				Computed:            true,
+			},
+			"multicast_source_connected": schema.BoolAttribute{
+				MarkdownDescription: "Multicast traffic source connected",
+				Computed:            true,
+			},
+			"proxy_igmp_snooping": schema.BoolAttribute{
+				MarkdownDescription: "Proxy mode for IGMP-Snooping (selective multicast)",
 				Computed:            true,
 			},
 			"etree": schema.BoolAttribute{
@@ -235,6 +343,14 @@ func (d *EVPNEVIDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 			},
 			"etree_rt_leaf": schema.BoolAttribute{
 				MarkdownDescription: "Designate EVPN Instance as EVPN E-Tree Route-Target Leaf Site",
+				Computed:            true,
+			},
+			"vpws_single_active_backup_suppression": schema.BoolAttribute{
+				MarkdownDescription: "Disables Non-DF EVI/EAD routes from being advertised in EVPN-VPWS Single-Active. Used for backwards-compatibility.",
+				Computed:            true,
+			},
+			"bvi_coupled_mode": schema.BoolAttribute{
+				MarkdownDescription: "Couples BVI state to the core EVPN Instance state",
 				Computed:            true,
 			},
 		},

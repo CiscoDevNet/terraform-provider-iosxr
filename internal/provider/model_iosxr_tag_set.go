@@ -37,17 +37,17 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type TagSet struct {
-	Device    types.String `tfsdk:"device"`
-	Id        types.String `tfsdk:"id"`
-	SetName   types.String `tfsdk:"set_name"`
-	RplTagSet types.String `tfsdk:"rpl_tag_set"`
+	Device  types.String `tfsdk:"device"`
+	Id      types.String `tfsdk:"id"`
+	SetName types.String `tfsdk:"set_name"`
+	Rpl     types.String `tfsdk:"rpl"`
 }
 
 type TagSetData struct {
-	Device    types.String `tfsdk:"device"`
-	Id        types.String `tfsdk:"id"`
-	SetName   types.String `tfsdk:"set_name"`
-	RplTagSet types.String `tfsdk:"rpl_tag_set"`
+	Device  types.String `tfsdk:"device"`
+	Id      types.String `tfsdk:"id"`
+	SetName types.String `tfsdk:"set_name"`
+	Rpl     types.String `tfsdk:"rpl"`
 }
 
 // End of section. //template:end types
@@ -84,14 +84,25 @@ func (data TagSet) toBody(ctx context.Context) string {
 	if !data.SetName.IsNull() && !data.SetName.IsUnknown() {
 		body, _ = sjson.Set(body, "set-name", data.SetName.ValueString())
 	}
-	if !data.RplTagSet.IsNull() && !data.RplTagSet.IsUnknown() {
-		body, _ = sjson.Set(body, "rpl-tag-set", data.RplTagSet.ValueString())
+	if !data.Rpl.IsNull() && !data.Rpl.IsUnknown() {
+		body, _ = sjson.Set(body, "rpl-tag-set", data.Rpl.ValueString())
 	}
 	return body
 }
 
 // End of section. //template:end toBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
+func (data *TagSet) updateFromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "rpl-tag-set"); value.Exists() && !data.Rpl.IsNull() {
+		data.Rpl = types.StringValue(value.String())
+	} else {
+		data.Rpl = types.StringNull()
+	}
+}
+
+// End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data TagSet) toBodyXML(ctx context.Context) string {
@@ -99,8 +110,8 @@ func (data TagSet) toBodyXML(ctx context.Context) string {
 	if !data.SetName.IsNull() && !data.SetName.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/set-name", data.SetName.ValueString())
 	}
-	if !data.RplTagSet.IsNull() && !data.RplTagSet.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/rpl-tag-set", data.RplTagSet.ValueString())
+	if !data.Rpl.IsNull() && !data.Rpl.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/rpl-tag-set", data.Rpl.ValueString())
 	}
 	bodyString, err := body.String()
 	if err != nil {
@@ -110,19 +121,6 @@ func (data TagSet) toBodyXML(ctx context.Context) string {
 }
 
 // End of section. //template:end toBodyXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
-
-func (data *TagSet) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "rpl-tag-set"); value.Exists() && !data.RplTagSet.IsNull() {
-		data.RplTagSet = types.StringValue(value.String())
-	} else {
-		data.RplTagSet = types.StringNull()
-	}
-}
-
-// End of section. //template:end updateFromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *TagSet) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -132,14 +130,13 @@ func (data *TagSet) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		data.SetName = types.StringNull()
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/rpl-tag-set"); value.Exists() {
-		data.RplTagSet = types.StringValue(value.Raw)
-	} else if data.RplTagSet.IsNull() {
-		data.RplTagSet = types.StringNull()
+		data.Rpl = types.StringValue(value.Raw)
+	} else if data.Rpl.IsNull() {
+		data.Rpl = types.StringNull()
 	}
 }
 
 // End of section. //template:end updateFromBodyXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *TagSet) fromBody(ctx context.Context, res gjson.Result) {
@@ -148,12 +145,11 @@ func (data *TagSet) fromBody(ctx context.Context, res gjson.Result) {
 		prefix += "0."
 	}
 	if value := res.Get(prefix + "rpl-tag-set"); value.Exists() {
-		data.RplTagSet = types.StringValue(value.String())
+		data.Rpl = types.StringValue(value.String())
 	}
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *TagSetData) fromBody(ctx context.Context, res gjson.Result) {
@@ -162,44 +158,40 @@ func (data *TagSetData) fromBody(ctx context.Context, res gjson.Result) {
 		prefix += "0."
 	}
 	if value := res.Get(prefix + "rpl-tag-set"); value.Exists() {
-		data.RplTagSet = types.StringValue(value.String())
+		data.Rpl = types.StringValue(value.String())
 	}
 }
 
 // End of section. //template:end fromBodyData
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *TagSet) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/rpl-tag-set"); value.Exists() {
-		data.RplTagSet = types.StringValue(value.Raw)
+		data.Rpl = types.StringValue(value.Raw)
 	}
 }
 
 // End of section. //template:end fromBodyXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *TagSetData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/rpl-tag-set"); value.Exists() {
-		data.RplTagSet = types.StringValue(value.Raw)
+		data.Rpl = types.StringValue(value.Raw)
 	}
 }
 
 // End of section. //template:end fromBodyDataXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *TagSet) getDeletedItems(ctx context.Context, state TagSet) []string {
 	deletedItems := make([]string, 0)
-	if !state.RplTagSet.IsNull() && data.RplTagSet.IsNull() {
+	if !state.Rpl.IsNull() && data.Rpl.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/rpl-tag-set", state.getPath()))
 	}
 	return deletedItems
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
 func (data *TagSet) getEmptyLeafsDelete(ctx context.Context, state *TagSet) []string {
@@ -208,12 +200,11 @@ func (data *TagSet) getEmptyLeafsDelete(ctx context.Context, state *TagSet) []st
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *TagSet) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.RplTagSet.IsNull() {
+	if !data.Rpl.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/rpl-tag-set", data.getPath()))
 	}
 
@@ -221,14 +212,13 @@ func (data *TagSet) getDeletePaths(ctx context.Context) []string {
 }
 
 // End of section. //template:end getDeletePaths
-
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *TagSet) addDeletedItemsXML(ctx context.Context, state TagSet, body string) string {
 	deleteXml := ""
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
-	if !state.RplTagSet.IsNull() && data.RplTagSet.IsNull() {
+	if !state.Rpl.IsNull() && data.Rpl.IsNull() {
 		deletePath := state.getXPath() + "/rpl-tag-set"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
@@ -242,12 +232,11 @@ func (data *TagSet) addDeletedItemsXML(ctx context.Context, state TagSet, body s
 }
 
 // End of section. //template:end addDeletedItemsXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *TagSet) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
-	if !data.RplTagSet.IsNull() {
+	if !data.Rpl.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/rpl-tag-set")
 	}
 

@@ -85,6 +85,72 @@ func (d *RouterOSPFVRFAreaInterfaceDataSource) Schema(ctx context.Context, req d
 				MarkdownDescription: "Enable routing on an interface ",
 				Required:            true,
 			},
+			"neighbors": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify a neighbor router",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "Specify a neighbor router",
+							Computed:            true,
+						},
+						"database_filter_all_out": schema.BoolAttribute{
+							MarkdownDescription: "Outgoing LSA",
+							Computed:            true,
+						},
+						"priority": schema.Int64Attribute{
+							MarkdownDescription: "OSPF priority of non-broadcast neighbor",
+							Computed:            true,
+						},
+						"poll_interval": schema.Int64Attribute{
+							MarkdownDescription: "OSPF dead-router polling interval",
+							Computed:            true,
+						},
+						"cost": schema.Int64Attribute{
+							MarkdownDescription: "OSPF cost for point-to-multipoint neighbor",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"authentication_key_encrypted": schema.StringAttribute{
+				MarkdownDescription: "Specifies an ENCRYPTED password (key) will follow",
+				Computed:            true,
+				Sensitive:           true,
+			},
+			"message_digest_keys": schema.ListNestedAttribute{
+				MarkdownDescription: "Message digest authentication password (key)",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"key_id": schema.Int64Attribute{
+							MarkdownDescription: "Message digest authentication password (key)",
+							Computed:            true,
+						},
+						"md5_encrypted": schema.StringAttribute{
+							MarkdownDescription: "Specifies an ENCRYPTED password (key) will follow",
+							Computed:            true,
+							Sensitive:           true,
+						},
+					},
+				},
+			},
+			"authentication": schema.BoolAttribute{
+				MarkdownDescription: "Enable authentication",
+				Computed:            true,
+			},
+			"authentication_message_digest": schema.BoolAttribute{
+				MarkdownDescription: "Use message-digest authentication",
+				Computed:            true,
+			},
+			"authentication_keychain_name": schema.StringAttribute{
+				MarkdownDescription: "Specify keychain name",
+				Computed:            true,
+			},
+			"authentication_null": schema.BoolAttribute{
+				MarkdownDescription: "Use no authentication",
+				Computed:            true,
+			},
 			"network_broadcast": schema.BoolAttribute{
 				MarkdownDescription: "Specify OSPF broadcast multi-access network",
 				Computed:            true,
@@ -101,12 +167,108 @@ func (d *RouterOSPFVRFAreaInterfaceDataSource) Schema(ctx context.Context, req d
 				MarkdownDescription: "Specify OSPF point-to-multipoint network",
 				Computed:            true,
 			},
+			"mpls_ldp_sync": schema.BoolAttribute{
+				MarkdownDescription: "Enable LDP IGP synchronization on interfaces",
+				Computed:            true,
+			},
+			"mpls_ldp_sync_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable MPLS LDP sync",
+				Computed:            true,
+			},
 			"cost": schema.Int64Attribute{
 				MarkdownDescription: "Interface cost",
 				Computed:            true,
 			},
+			"cost_fallback": schema.Int64Attribute{
+				MarkdownDescription: "Cost when cumulative bandwidth goes below the theshold",
+				Computed:            true,
+			},
+			"cost_fallback_threshold": schema.Int64Attribute{
+				MarkdownDescription: "Threshold bandwidth when cost-fallback is applied",
+				Computed:            true,
+			},
+			"cost_fallback_anomaly_delay_igp_metric_increment": schema.Int64Attribute{
+				MarkdownDescription: "Increment the IGP cost by the specified value",
+				Computed:            true,
+			},
+			"cost_fallback_anomaly_delay_igp_metric_multiplier": schema.Int64Attribute{
+				MarkdownDescription: "Multiply the IGP cost by the specified value",
+				Computed:            true,
+			},
+			"cost_fallback_anomaly_delay_igp_metric_value": schema.Int64Attribute{
+				MarkdownDescription: "Set the IGP cost to the specified value",
+				Computed:            true,
+			},
+			"cost_fallback_anomaly_delay_igp_metric_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable igp-metric",
+				Computed:            true,
+			},
+			"cost_fallback_anomaly_delay_te_metric_increment": schema.Int64Attribute{
+				MarkdownDescription: "Increment the TE metric by the specified value",
+				Computed:            true,
+			},
+			"cost_fallback_anomaly_delay_te_metric_multiplier": schema.Int64Attribute{
+				MarkdownDescription: "Multiply the TE metric by the specified value",
+				Computed:            true,
+			},
+			"cost_fallback_anomaly_delay_te_metric_value": schema.Int64Attribute{
+				MarkdownDescription: "Set the TE cost to the specified value",
+				Computed:            true,
+			},
+			"cost_fallback_anomaly_delay_te_metric_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable te-metric",
+				Computed:            true,
+			},
+			"hello_interval": schema.Int64Attribute{
+				MarkdownDescription: "Time between HELLO packets",
+				Computed:            true,
+			},
+			"dead_interval": schema.Int64Attribute{
+				MarkdownDescription: "Seconds",
+				Computed:            true,
+			},
 			"priority": schema.Int64Attribute{
 				MarkdownDescription: "Router priority",
+				Computed:            true,
+			},
+			"retransmit_interval": schema.Int64Attribute{
+				MarkdownDescription: "Time between retransmitting lost link state advertisements",
+				Computed:            true,
+			},
+			"transmit_delay": schema.Int64Attribute{
+				MarkdownDescription: "Estimated time needed to send link-state update packet",
+				Computed:            true,
+			},
+			"flood_reduction_enable": schema.BoolAttribute{
+				MarkdownDescription: "Enable flooding reduction",
+				Computed:            true,
+			},
+			"flood_reduction_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable flooding reduction",
+				Computed:            true,
+			},
+			"demand_circuit_enable": schema.BoolAttribute{
+				MarkdownDescription: "Enable demand circuits",
+				Computed:            true,
+			},
+			"demand_circuit_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable demand circuits",
+				Computed:            true,
+			},
+			"mtu_ignore_enable": schema.BoolAttribute{
+				MarkdownDescription: "Ignores the MTU in DBD packets",
+				Computed:            true,
+			},
+			"mtu_ignore_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable ignoring of MTU in DBD packets",
+				Computed:            true,
+			},
+			"database_filter_all_out_enable": schema.BoolAttribute{
+				MarkdownDescription: "Enable filtering",
+				Computed:            true,
+			},
+			"database_filter_all_out_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable filtering",
 				Computed:            true,
 			},
 			"passive_enable": schema.BoolAttribute{
@@ -115,6 +277,358 @@ func (d *RouterOSPFVRFAreaInterfaceDataSource) Schema(ctx context.Context, req d
 			},
 			"passive_disable": schema.BoolAttribute{
 				MarkdownDescription: "Disable passive",
+				Computed:            true,
+			},
+			"distribute_list_acl": schema.StringAttribute{
+				MarkdownDescription: "In-bound access-list name.",
+				Computed:            true,
+			},
+			"distribute_list_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Route Policy to filter OSPF prefixes",
+				Computed:            true,
+			},
+			"packet_size": schema.Int64Attribute{
+				MarkdownDescription: "Customize size of OSPF packets upto MTU",
+				Computed:            true,
+			},
+			"bfd_fast_detect": schema.BoolAttribute{
+				MarkdownDescription: "Enable Fast detection",
+				Computed:            true,
+			},
+			"bfd_fast_detect_strict_mode": schema.BoolAttribute{
+				MarkdownDescription: "Hold down neighbor session until BFD session is up",
+				Computed:            true,
+			},
+			"bfd_fast_detect_disable": schema.BoolAttribute{
+				MarkdownDescription: "Prevent bfd settings from being inherited from the parent",
+				Computed:            true,
+			},
+			"bfd_minimum_interval": schema.Int64Attribute{
+				MarkdownDescription: "Minimum interval",
+				Computed:            true,
+			},
+			"bfd_multiplier": schema.Int64Attribute{
+				MarkdownDescription: "Detect multiplier",
+				Computed:            true,
+			},
+			"security_ttl": schema.BoolAttribute{
+				MarkdownDescription: "Enable ttl security",
+				Computed:            true,
+			},
+			"security_ttl_hops": schema.Int64Attribute{
+				MarkdownDescription: "IP hops",
+				Computed:            true,
+			},
+			"security_ttl_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable TTL security",
+				Computed:            true,
+			},
+			"prefix_suppression": schema.BoolAttribute{
+				MarkdownDescription: "Enable primary address suppression",
+				Computed:            true,
+			},
+			"prefix_suppression_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable primary address suppression",
+				Computed:            true,
+			},
+			"prefix_suppression_secondary_address": schema.BoolAttribute{
+				MarkdownDescription: "Enable secondary address suppression",
+				Computed:            true,
+			},
+			"prefix_suppression_secondary_address_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable secondary address suppression",
+				Computed:            true,
+			},
+			"fast_reroute_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable IP Fast Reroute",
+				Computed:            true,
+			},
+			"fast_reroute_per_link": schema.BoolAttribute{
+				MarkdownDescription: "Enable per-link Computation",
+				Computed:            true,
+			},
+			"fast_reroute_per_link_exclude_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "Exclude an interface from Per-link LFA",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: "Exclude an interface from Per-link LFA",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"fast_reroute_per_link_lfa_candidate_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "Include an interface to LFA candidate in computation",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: "Include an interface to LFA candidate in computation",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"fast_reroute_per_link_use_candidate_only_enable": schema.BoolAttribute{
+				MarkdownDescription: "Enable backup selection from candidate-list only",
+				Computed:            true,
+			},
+			"fast_reroute_per_link_use_candidate_only_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable backup selection from candidate-list only",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix": schema.BoolAttribute{
+				MarkdownDescription: "Enable per-prefix Computation",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_exclude_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "Exclude an interface from Per-prefix LFA",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: "Exclude an interface from Per-prefix LFA",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"fast_reroute_per_prefix_lfa_candidate_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "Include an interface to LFA candidate in computation",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: "Include an interface to LFA candidate in computation",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"fast_reroute_per_prefix_use_candidate_only_enable": schema.BoolAttribute{
+				MarkdownDescription: "Enable backup selection from candidate-list only",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_use_candidate_only_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable backup selection from candidate-list only",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_downstream_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_downstream_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable tiebreaker",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_lc_disjoint_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_lc_disjoint_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable tiebreaker",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable tiebreaker",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_node_protecting_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_node_protecting_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable tiebreaker",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_primary_path_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_primary_path_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable tiebreaker",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_secondary_path_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_secondary_path_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable tiebreaker",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_interface_disjoint_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_interface_disjoint_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable tiebreaker",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_srlg_disjoint_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable tiebreaker",
+				Computed:            true,
+			},
+			"loopback_stub_network_enable": schema.BoolAttribute{
+				MarkdownDescription: "Enable advertising loopback as a stub network",
+				Computed:            true,
+			},
+			"loopback_stub_network_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable advertising loopback as a stub network",
+				Computed:            true,
+			},
+			"link_down_fast_detect": schema.BoolAttribute{
+				MarkdownDescription: "Enable fast or early detection of link-down events",
+				Computed:            true,
+			},
+			"prefix_sid_index": schema.Int64Attribute{
+				MarkdownDescription: "SID Index",
+				Computed:            true,
+			},
+			"prefix_sid_index_explicit_null": schema.BoolAttribute{
+				MarkdownDescription: "Force penultimate hop to send explicit-null label",
+				Computed:            true,
+			},
+			"prefix_sid_index_n_flag_clear": schema.BoolAttribute{
+				MarkdownDescription: "Not a node SID (e.g. for anycast SID use)",
+				Computed:            true,
+			},
+			"prefix_sid_absolute": schema.Int64Attribute{
+				MarkdownDescription: "SID value",
+				Computed:            true,
+			},
+			"prefix_sid_absolute_explicit_null": schema.BoolAttribute{
+				MarkdownDescription: "Force penultimate hop to send explicit-null label",
+				Computed:            true,
+			},
+			"prefix_sid_absolute_n_flag_clear": schema.BoolAttribute{
+				MarkdownDescription: "Not a node SID (e.g. for anycast SID use)",
+				Computed:            true,
+			},
+			"prefix_sid_strict_spf_index": schema.Int64Attribute{
+				MarkdownDescription: "SID Index",
+				Computed:            true,
+			},
+			"prefix_sid_strict_spf_index_explicit_null": schema.BoolAttribute{
+				MarkdownDescription: "Force penultimate hop to send explicit-null label",
+				Computed:            true,
+			},
+			"prefix_sid_strict_spf_index_n_flag_clear": schema.BoolAttribute{
+				MarkdownDescription: "Not a node SID (e.g. for anycast SID use)",
+				Computed:            true,
+			},
+			"prefix_sid_strict_spf_absolute": schema.Int64Attribute{
+				MarkdownDescription: "SID value",
+				Computed:            true,
+			},
+			"prefix_sid_strict_spf_absolute_explicit_null": schema.BoolAttribute{
+				MarkdownDescription: "Force penultimate hop to send explicit-null label",
+				Computed:            true,
+			},
+			"prefix_sid_strict_spf_absolute_n_flag_clear": schema.BoolAttribute{
+				MarkdownDescription: "Not a node SID (e.g. for anycast SID use)",
+				Computed:            true,
+			},
+			"prefix_sid_algorithms": schema.ListNestedAttribute{
+				MarkdownDescription: "Algorithm Specific Prefix SID Configuration",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"algorithm_number": schema.Int64Attribute{
+							MarkdownDescription: "Algorithm Specific Prefix SID Configuration",
+							Computed:            true,
+						},
+						"index": schema.Int64Attribute{
+							MarkdownDescription: "SID Index",
+							Computed:            true,
+						},
+						"index_explicit_null": schema.BoolAttribute{
+							MarkdownDescription: "Force penultimate hop to send explicit-null label",
+							Computed:            true,
+						},
+						"index_n_flag_clear": schema.BoolAttribute{
+							MarkdownDescription: "Not a node SID (e.g. for anycast SID use)",
+							Computed:            true,
+						},
+						"absolute": schema.Int64Attribute{
+							MarkdownDescription: "SID value",
+							Computed:            true,
+						},
+						"absolute_explicit_null": schema.BoolAttribute{
+							MarkdownDescription: "Force penultimate hop to send explicit-null label",
+							Computed:            true,
+						},
+						"absolute_n_flag_clear": schema.BoolAttribute{
+							MarkdownDescription: "Not a node SID (e.g. for anycast SID use)",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"adjacency_sid_indexes": schema.ListNestedAttribute{
+				MarkdownDescription: "SID Index",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"sid_index": schema.Int64Attribute{
+							MarkdownDescription: "SID Index",
+							Computed:            true,
+						},
+						"protected": schema.BoolAttribute{
+							MarkdownDescription: "Protect the static adjacency SID",
+							Computed:            true,
+						},
+						"neighbor_address": schema.StringAttribute{
+							MarkdownDescription: "Provide Neighbor IP address associated with this SID",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"adjacency_sid_absolutes": schema.ListNestedAttribute{
+				MarkdownDescription: "SID value",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"sid_label": schema.Int64Attribute{
+							MarkdownDescription: "SID value",
+							Computed:            true,
+						},
+						"protected": schema.BoolAttribute{
+							MarkdownDescription: "Protect the static adjacency SID",
+							Computed:            true,
+						},
+						"neighbor_address": schema.StringAttribute{
+							MarkdownDescription: "Provide Neighbor IP address associated with this SID",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"weight": schema.Int64Attribute{
+				MarkdownDescription: "Interface weight",
+				Computed:            true,
+			},
+			"advertise_prefix_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Specify the route-policy for conditional advertising",
+				Computed:            true,
+			},
+			"delay_normalize_interval": schema.Int64Attribute{
+				MarkdownDescription: "Normalization interval",
+				Computed:            true,
+			},
+			"delay_normalize_offset": schema.Int64Attribute{
+				MarkdownDescription: "Normalization offset",
 				Computed:            true,
 			},
 		},

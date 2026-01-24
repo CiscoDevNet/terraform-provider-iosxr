@@ -1,0 +1,175 @@
+---
+name: Line Console
+path: Cisco-IOS-XR-um-line-cfg:/line/console
+doc_category: System
+attributes:
+  - yang_name: access-class/ingress
+    tf_name: access_class_ingress
+    example: "CONSOLE_ACL"
+  - yang_name: access-class/egress
+    tf_name: access_class_egress
+    example: "CONSOLE_ACL"
+  - yang_name: disconnect-character
+    description: "Define the disconnect character. Converts to hexadecimal."
+    example: 0x0a
+  - yang_name: escape-character
+    description: "Define the escape character. Converts to hexadecimal."
+    example: 0x0a
+  - yang_name: session-timeout/timeout-interval
+    tf_name: session_timeout
+    optional: true
+    delete_parent: true
+    example: 1440
+  - yang_name: session-timeout/output
+    tf_name: session_timeout_output
+    delete_parent: true
+    example: true
+  - yang_name: transport/input/none
+    tf_name: transport_input_none
+    example: true
+    exclude_test: true
+  - yang_name: transport/input/ssh
+    tf_name: transport_input_ssh
+    minimum_test_value: true
+    example: true
+  - yang_name: transport/input/ssh/telnet
+    tf_name: transport_input_ssh_telnet
+    delete_parent: true
+    example: true
+    exclude_test: true
+  - yang_name: transport/input/telnet
+    tf_name: transport_input_telnet
+    example: true
+    exclude_test: true
+  - yang_name: transport/input/all
+    tf_name: transport_input_all
+    example: true
+    exclude_test: true
+  - yang_name: transport/output/all
+    tf_name: transport_output_all
+    example: true
+    exclude_test: true
+  - yang_name: transport/output/none
+    tf_name: transport_output_none
+    example: true
+    exclude_test: true
+  - yang_name: transport/output/ssh
+    tf_name: transport_output_ssh
+    example: true
+    exclude_test: true
+  - yang_name: transport/output/ssh/telnet
+    tf_name: transport_output_ssh_telnet
+    delete_parent: true
+    example: true
+  - yang_name: transport/output/telnet
+    tf_name: transport_output_telnet
+    example: true
+    exclude_test: true
+  - yang_name: transport/preferred/none
+    tf_name: transport_preferred_none
+    example: true
+    exclude_test: true
+  - yang_name: transport/preferred/telnet
+    tf_name: transport_preferred_telnet
+    example: true
+    exclude_test: true
+  - yang_name: transport/preferred/ssh
+    tf_name: transport_preferred_ssh
+    example: true
+  - yang_name: session-limit
+    example: 15
+  - yang_name: cli/whitespace/completion
+    tf_name: cli_whitespace_completion
+    example: true
+  - yang_name: Cisco-IOS-XR-um-aaa-task-user-cfg:login/authentication
+    tf_name: login_authentication
+    exclude_test: true
+    example: default
+  - yang_name: Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/exec
+    tf_name: authorization_exec
+    exclude_test: true
+    example: default
+  - yang_name: Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/eventmanager
+    tf_name: authorization_eventmanager
+    exclude_test: true
+    example: default
+  - yang_name: Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/commands
+    tf_name: authorization_commands
+    exclude_test: true
+    example: default
+  - yang_name: Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/exec
+    tf_name: accounting_exec
+    exclude_test: true
+    example: default
+  - yang_name: Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/commands
+    tf_name: accounting_commands
+    exclude_test: true
+    example: default
+  - yang_name: Cisco-IOS-XR-um-aaa-task-user-cfg:password/seven
+    tf_name: password_encrypted
+    sensitive: true
+    write_only: true
+    exclude_test: true
+    example: "$1$G6SE$xl.UCckLuYPHiwqwQGGhp0"
+  - yang_name: Cisco-IOS-XR-um-aaa-task-user-cfg:secret/five
+    tf_name: secret_encrypted
+    sensitive: true
+    write_only: true
+    example: "$1$UgkY$I2SEocww.URG7gvDI7oz01"
+  - yang_name: Cisco-IOS-XR-um-aaa-task-user-cfg:timeout/login/response
+    tf_name: timeout_login_response
+    example: 60
+  - yang_name: Cisco-IOS-XR-um-aaa-task-user-cfg:users/group
+    type: List
+    attributes:
+      - yang_name: group-name
+        id: true
+        example: "cisco-support"
+  - yang_name: Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout/timeout-in-minutes
+    tf_name: exec_timeout_minutes
+    optional: true
+    delete_parent: true
+    example: 30
+  - yang_name: Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout/timeout-in-seconds
+    tf_name: exec_timeout_seconds
+    optional: true
+    delete_parent: true
+    example: 0
+  - yang_name: Cisco-IOS-XR-um-line-general-cfg:absolute-timeout
+    tf_name: absolute_timeout
+    example: 3600
+  - yang_name: Cisco-IOS-XR-um-line-general-cfg:width
+    tf_name: width
+    example: 81
+  - yang_name: Cisco-IOS-XR-um-line-general-cfg:length
+    tf_name: length
+    example: 25
+  - yang_name: Cisco-IOS-XR-um-line-timestamp-cfg:timestamp/disable
+    tf_name: timestamp_disable
+    delete_parent: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-line-timestamp-cfg:pager
+    tf_name: pager
+    example: none
+  - yang_name: Cisco-IOS-XR-um-telnet-cfg:telnet/transparent
+    tf_name: telnet_transparent
+    example: true
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-ipv4-access-list-cfg:/ipv4/access-lists/access-list[access-list-name=CONSOLE_ACL]
+    attributes:
+      - name: access-list-name
+        value: CONSOLE_ACL
+    lists:
+      - name: sequences/sequence
+        key: sequence-number
+        items:
+          - attributes:
+              - name: sequence-number
+                value: 10
+              - name: permit/protocol
+                value: ipv4
+              - name: permit/source/any
+                value: "<EMPTY>"
+              - name: permit/destination/any
+                value: "<EMPTY>"

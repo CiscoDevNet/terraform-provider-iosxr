@@ -139,7 +139,6 @@ func (data *PrefixSet) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 }
 
 // End of section. //template:end updateFromBodyXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *PrefixSet) fromBody(ctx context.Context, res gjson.Result) {
@@ -153,7 +152,6 @@ func (data *PrefixSet) fromBody(ctx context.Context, res gjson.Result) {
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *PrefixSetData) fromBody(ctx context.Context, res gjson.Result) {
@@ -167,7 +165,6 @@ func (data *PrefixSetData) fromBody(ctx context.Context, res gjson.Result) {
 }
 
 // End of section. //template:end fromBodyData
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *PrefixSet) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -177,7 +174,6 @@ func (data *PrefixSet) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *PrefixSetData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -187,7 +183,6 @@ func (data *PrefixSetData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyDataXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *PrefixSet) getDeletedItems(ctx context.Context, state PrefixSet) []string {
@@ -199,7 +194,6 @@ func (data *PrefixSet) getDeletedItems(ctx context.Context, state PrefixSet) []s
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
 func (data *PrefixSet) getEmptyLeafsDelete(ctx context.Context, state *PrefixSet) []string {
@@ -208,7 +202,6 @@ func (data *PrefixSet) getEmptyLeafsDelete(ctx context.Context, state *PrefixSet
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *PrefixSet) getDeletePaths(ctx context.Context) []string {
@@ -221,7 +214,6 @@ func (data *PrefixSet) getDeletePaths(ctx context.Context) []string {
 }
 
 // End of section. //template:end getDeletePaths
-
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *PrefixSet) addDeletedItemsXML(ctx context.Context, state PrefixSet, body string) string {
@@ -242,7 +234,6 @@ func (data *PrefixSet) addDeletedItemsXML(ctx context.Context, state PrefixSet, 
 }
 
 // End of section. //template:end addDeletedItemsXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *PrefixSet) addDeletePathsXML(ctx context.Context, body string) string {

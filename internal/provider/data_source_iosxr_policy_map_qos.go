@@ -90,12 +90,160 @@ func (d *PolicyMapQoSDataSource) Schema(ctx context.Context, req datasource.Sche
 							MarkdownDescription: "The type of class-map",
 							Computed:            true,
 						},
-						"set_mpls_experimental_topmost": schema.Int64Attribute{
+						"bandwidth_value": schema.StringAttribute{
+							MarkdownDescription: "Value of bandwidth for this class",
+							Computed:            true,
+						},
+						"bandwidth_unit": schema.StringAttribute{
+							MarkdownDescription: "Unit of bandwidth for this class",
+							Computed:            true,
+						},
+						"bandwidth_remaining_value": schema.StringAttribute{
+							MarkdownDescription: "Bandwidth value",
+							Computed:            true,
+						},
+						"bandwidth_remaining_unit": schema.StringAttribute{
+							MarkdownDescription: "Bandwidth value unit",
+							Computed:            true,
+						},
+						"police_rate_value": schema.StringAttribute{
+							MarkdownDescription: "Committed Information Rate",
+							Computed:            true,
+						},
+						"police_rate_unit": schema.StringAttribute{
+							MarkdownDescription: "Rate unit",
+							Computed:            true,
+						},
+						"police_burst_value": schema.Int64Attribute{
+							MarkdownDescription: "Burst size (BC)",
+							Computed:            true,
+						},
+						"police_burst_unit": schema.StringAttribute{
+							MarkdownDescription: "Burst size unit",
+							Computed:            true,
+						},
+						"police_peak_rate_value": schema.StringAttribute{
+							MarkdownDescription: "Peak Information Rate",
+							Computed:            true,
+						},
+						"police_peak_rate_unit": schema.StringAttribute{
+							MarkdownDescription: "Unit of Peak Information Rate",
+							Computed:            true,
+						},
+						"police_peak_burst_value": schema.Int64Attribute{
+							MarkdownDescription: "Exess burst size (BC)",
+							Computed:            true,
+						},
+						"police_peak_burst_unit": schema.StringAttribute{
+							MarkdownDescription: "Burst size unit",
+							Computed:            true,
+						},
+						"police_conform_action_transmit": schema.BoolAttribute{
+							MarkdownDescription: "Transmit packet",
+							Computed:            true,
+						},
+						"police_conform_action_drop": schema.BoolAttribute{
+							MarkdownDescription: "Drop packet",
+							Computed:            true,
+						},
+						"police_conform_action_set_cos": schema.Int64Attribute{
+							MarkdownDescription: "Sets the specific IEEE 802.1Q Layer 2 CoS value of an outgoing packet. This command should be used by a router if a user wants to mark a packet that is being sent to a switch. Switches can leverage Layer 2 header information, including a CoS value marking. Packets entering an interface cannot be set with a CoS value.",
+							Computed:            true,
+						},
+						"police_conform_action_set_discard_class": schema.Int64Attribute{
+							MarkdownDescription: "Sets the discard class on IPv4 or MPLS packets. The discard-class can be used only in service policies that are attached in the ingress policy.",
+							Computed:            true,
+						},
+						"police_conform_action_set_dscp": schema.StringAttribute{
+							MarkdownDescription: "Set IP DSCP (DiffServ CodePoint)",
+							Computed:            true,
+						},
+						"police_conform_action_set_mpls_experimental_imposition": schema.Int64Attribute{
+							MarkdownDescription: "Sets the experimental value of the MPLS packet imposition labels. Imposition can be used only in service policies that are attached in the ingress policy",
+							Computed:            true,
+						},
+						"police_conform_action_set_mpls_experimental_topmost": schema.Int64Attribute{
 							MarkdownDescription: "Sets the experimental value of the MPLS packet top-most labels.",
 							Computed:            true,
 						},
-						"set_dscp": schema.StringAttribute{
+						"police_conform_action_set_precedence": schema.StringAttribute{
+							MarkdownDescription: "Set IP Precedence",
+							Computed:            true,
+						},
+						"police_conform_action_set_qos_group": schema.Int64Attribute{
+							MarkdownDescription: "Sets the QoS group identifiers on IPv4 or MPLS packets. The set qos-group is supported only on an ingress policy.",
+							Computed:            true,
+						},
+						"police_exceed_action_transmit": schema.BoolAttribute{
+							MarkdownDescription: "Transmit packet",
+							Computed:            true,
+						},
+						"police_exceed_action_drop": schema.BoolAttribute{
+							MarkdownDescription: "Drop packet",
+							Computed:            true,
+						},
+						"police_exceed_action_set_cos": schema.Int64Attribute{
+							MarkdownDescription: "Sets the specific IEEE 802.1Q Layer 2 CoS value of an outgoing packet. This command should be used by a router if a user wants to mark a packet that is being sent to a switch. Switches can leverage Layer 2 header information, including a CoS value marking. Packets entering an interface cannot be set with a CoS value.",
+							Computed:            true,
+						},
+						"police_exceed_action_set_discard_class": schema.Int64Attribute{
+							MarkdownDescription: "Sets the discard class on IPv4 or MPLS packets. The discard-class can be used only in service policies that are attached in the ingress policy.",
+							Computed:            true,
+						},
+						"police_exceed_action_set_dscp": schema.StringAttribute{
 							MarkdownDescription: "Set IP DSCP (DiffServ CodePoint)",
+							Computed:            true,
+						},
+						"police_exceed_action_set_mpls_experimental_imposition": schema.Int64Attribute{
+							MarkdownDescription: "Sets the experimental value of the MPLS packet imposition labels. Imposition can be used only in service policies that are attached in the ingress policy",
+							Computed:            true,
+						},
+						"police_exceed_action_set_mpls_experimental_topmost": schema.Int64Attribute{
+							MarkdownDescription: "Sets the experimental value of the MPLS packet top-most labels.",
+							Computed:            true,
+						},
+						"police_exceed_action_set_precedence": schema.StringAttribute{
+							MarkdownDescription: "Set IP Precedence",
+							Computed:            true,
+						},
+						"police_exceed_action_set_qos_group": schema.Int64Attribute{
+							MarkdownDescription: "Sets the QoS group identifiers on IPv4 or MPLS packets. The set qos-group is supported only on an ingress policy.",
+							Computed:            true,
+						},
+						"police_violate_action_transmit": schema.BoolAttribute{
+							MarkdownDescription: "Transmit packet",
+							Computed:            true,
+						},
+						"police_violate_action_drop": schema.BoolAttribute{
+							MarkdownDescription: "Drop packet",
+							Computed:            true,
+						},
+						"police_violate_action_set_cos": schema.Int64Attribute{
+							MarkdownDescription: "Sets the specific IEEE 802.1Q Layer 2 CoS value of an outgoing packet. This command should be used by a router if a user wants to mark a packet that is being sent to a switch. Switches can leverage Layer 2 header information, including a CoS value marking. Packets entering an interface cannot be set with a CoS value.",
+							Computed:            true,
+						},
+						"police_violate_action_set_discard_class": schema.Int64Attribute{
+							MarkdownDescription: "Sets the discard class on IPv4 or MPLS packets. The discard-class can be used only in service policies that are attached in the ingress policy.",
+							Computed:            true,
+						},
+						"police_violate_action_set_dscp": schema.StringAttribute{
+							MarkdownDescription: "Set IP DSCP (DiffServ CodePoint)",
+							Computed:            true,
+						},
+						"police_violate_action_set_mpls_experimental_imposition": schema.Int64Attribute{
+							MarkdownDescription: "Sets the experimental value of the MPLS packet imposition labels. Imposition can be used only in service policies that are attached in the ingress policy",
+							Computed:            true,
+						},
+						"police_violate_action_set_mpls_experimental_topmost": schema.Int64Attribute{
+							MarkdownDescription: "Sets the experimental value of the MPLS packet top-most labels.",
+							Computed:            true,
+						},
+						"police_violate_action_set_precedence": schema.StringAttribute{
+							MarkdownDescription: "Set IP Precedence",
+							Computed:            true,
+						},
+						"police_violate_action_set_qos_group": schema.Int64Attribute{
+							MarkdownDescription: "Sets the QoS group identifiers on IPv4 or MPLS packets. The set qos-group is supported only on an ingress policy.",
 							Computed:            true,
 						},
 						"priority_level": schema.Int64Attribute{
@@ -118,40 +266,68 @@ func (d *PolicyMapQoSDataSource) Schema(ctx context.Context, req datasource.Sche
 								},
 							},
 						},
+						"random_detect_default": schema.BoolAttribute{
+							MarkdownDescription: "Enable RED with default min and max thresholds",
+							Computed:            true,
+						},
+						"random_detect": schema.ListNestedAttribute{
+							MarkdownDescription: "Enable Random Early Detection. All RED profiles in a class must be based on the same field.",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"minimum_threshold_value": schema.Int64Attribute{
+										MarkdownDescription: "Minimum threshold",
+										Computed:            true,
+									},
+									"minimum_threshold_unit": schema.StringAttribute{
+										MarkdownDescription: "threshold unit",
+										Computed:            true,
+									},
+									"maximum_threshold_value": schema.Int64Attribute{
+										MarkdownDescription: "Maximum threshold",
+										Computed:            true,
+									},
+									"maximum_threshold_unit": schema.StringAttribute{
+										MarkdownDescription: "threshold unit",
+										Computed:            true,
+									},
+								},
+							},
+						},
 						"service_policy_name": schema.StringAttribute{
 							MarkdownDescription: "Name of the child service policy",
 							Computed:            true,
 						},
-						"police_rate_value": schema.StringAttribute{
-							MarkdownDescription: "Committed Information Rate",
+						"set_traffic_class": schema.Int64Attribute{
+							MarkdownDescription: "Sets the Traffic Class identifiers on IPv4 or MPLS packets. The set traffic-class is supported only on an ingress policy.",
 							Computed:            true,
 						},
-						"police_rate_unit": schema.StringAttribute{
-							MarkdownDescription: "Rate unit",
+						"set_cos": schema.Int64Attribute{
+							MarkdownDescription: "Sets the specific IEEE 802.1Q Layer 2 CoS value of an outgoing packet. This command should be used by a router if a user wants to mark a packet that is being sent to a switch. Switches can leverage Layer 2 header information, including a CoS value marking. Packets entering an interface cannot be set with a CoS value.",
 							Computed:            true,
 						},
-						"police_conform_action_transmit": schema.BoolAttribute{
-							MarkdownDescription: "Transmit packet",
+						"set_discard_class": schema.Int64Attribute{
+							MarkdownDescription: "Sets the discard class on IPv4 or MPLS packets. The discard-class can be used only in service policies that are attached in the ingress policy.",
 							Computed:            true,
 						},
-						"police_conform_action_drop": schema.BoolAttribute{
-							MarkdownDescription: "Drop packet",
+						"set_dscp": schema.StringAttribute{
+							MarkdownDescription: "Set IP DSCP (DiffServ CodePoint)",
 							Computed:            true,
 						},
-						"police_exceed_action_transmit": schema.BoolAttribute{
-							MarkdownDescription: "Transmit packet",
+						"set_mpls_experimental_imposition": schema.Int64Attribute{
+							MarkdownDescription: "Sets the experimental value of the MPLS packet imposition labels. Imposition can be used only in service policies that are attached in the ingress policy",
 							Computed:            true,
 						},
-						"police_exceed_action_drop": schema.BoolAttribute{
-							MarkdownDescription: "Drop packet",
+						"set_mpls_experimental_topmost": schema.Int64Attribute{
+							MarkdownDescription: "Sets the experimental value of the MPLS packet top-most labels.",
 							Computed:            true,
 						},
-						"police_violate_action_transmit": schema.BoolAttribute{
-							MarkdownDescription: "Transmit packet",
+						"set_precedence": schema.StringAttribute{
+							MarkdownDescription: "Set IP Precedence",
 							Computed:            true,
 						},
-						"police_violate_action_drop": schema.BoolAttribute{
-							MarkdownDescription: "Drop packet",
+						"set_qos_group": schema.Int64Attribute{
+							MarkdownDescription: "Sets the QoS group identifiers on IPv4 or MPLS packets. The set qos-group is supported only on an ingress policy.",
 							Computed:            true,
 						},
 						"shape_average_rate_value": schema.StringAttribute{
@@ -162,12 +338,12 @@ func (d *PolicyMapQoSDataSource) Schema(ctx context.Context, req datasource.Sche
 							MarkdownDescription: "Shape rate unit",
 							Computed:            true,
 						},
-						"bandwidth_remaining_unit": schema.StringAttribute{
-							MarkdownDescription: "Bandwidth value unit",
+						"shape_average_excess_burst_size": schema.Int64Attribute{
+							MarkdownDescription: "Excess burst size",
 							Computed:            true,
 						},
-						"bandwidth_remaining_value": schema.StringAttribute{
-							MarkdownDescription: "Bandwidth value",
+						"shape_average_excess_burst_unit": schema.StringAttribute{
+							MarkdownDescription: "Unit of Excess burst size",
 							Computed:            true,
 						},
 					},

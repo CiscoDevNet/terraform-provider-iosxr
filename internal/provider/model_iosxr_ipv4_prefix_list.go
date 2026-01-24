@@ -325,7 +325,6 @@ func (data *IPv4PrefixList) updateFromBodyXML(ctx context.Context, res xmldot.Re
 }
 
 // End of section. //template:end updateFromBodyXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *IPv4PrefixList) fromBody(ctx context.Context, res gjson.Result) {
@@ -368,7 +367,6 @@ func (data *IPv4PrefixList) fromBody(ctx context.Context, res gjson.Result) {
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *IPv4PrefixListData) fromBody(ctx context.Context, res gjson.Result) {
@@ -411,7 +409,6 @@ func (data *IPv4PrefixListData) fromBody(ctx context.Context, res gjson.Result) 
 }
 
 // End of section. //template:end fromBodyData
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *IPv4PrefixList) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -450,7 +447,6 @@ func (data *IPv4PrefixList) fromBodyXML(ctx context.Context, res xmldot.Result) 
 }
 
 // End of section. //template:end fromBodyXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *IPv4PrefixListData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -489,7 +485,6 @@ func (data *IPv4PrefixListData) fromBodyXML(ctx context.Context, res xmldot.Resu
 }
 
 // End of section. //template:end fromBodyDataXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *IPv4PrefixList) getDeletedItems(ctx context.Context, state IPv4PrefixList) []string {
@@ -549,7 +544,6 @@ func (data *IPv4PrefixList) getDeletedItems(ctx context.Context, state IPv4Prefi
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
 func (data *IPv4PrefixList) getEmptyLeafsDelete(ctx context.Context, state *IPv4PrefixList) []string {
@@ -566,7 +560,6 @@ func (data *IPv4PrefixList) getEmptyLeafsDelete(ctx context.Context, state *IPv4
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *IPv4PrefixList) getDeletePaths(ctx context.Context) []string {
@@ -581,7 +574,6 @@ func (data *IPv4PrefixList) getDeletePaths(ctx context.Context) []string {
 }
 
 // End of section. //template:end getDeletePaths
-
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *IPv4PrefixList) addDeletedItemsXML(ctx context.Context, state IPv4PrefixList, body string) string {
@@ -646,7 +638,6 @@ func (data *IPv4PrefixList) addDeletedItemsXML(ctx context.Context, state IPv4Pr
 }
 
 // End of section. //template:end addDeletedItemsXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *IPv4PrefixList) addDeletePathsXML(ctx context.Context, body string) string {

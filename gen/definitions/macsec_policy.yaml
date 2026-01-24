@@ -1,0 +1,61 @@
+---
+name: MACSec Policy
+path: Cisco-IOS-XR-um-macsec-cfg:/macsec-policy/policy-names/policy-name[policy-name=%s]
+doc_category: Security
+test_tags: [NCS]
+attributes:
+  - yang_name: policy-name
+    id: true
+    example: POLICY1
+  - yang_name: key-server-priority
+    minimum_test_value: '"100"'
+    example: 100
+  - yang_name: cipher-suite
+    example: GCM-AES-256
+  - yang_name: window-size
+    example: 512
+  - yang_name: conf-offset
+    example: CONF-OFFSET-50
+  - yang_name: security-policy
+    example: must-secure
+  - yang_name: vlan-tags-in-clear
+    example: 1
+  - yang_name: policy-exception
+    example: lacp-in-clear
+  - yang_name: sak-rekey-interval/seconds
+    example: 1800
+  - yang_name: include-icv-indicator
+    example: true
+  - yang_name: delay-protection
+    example: true
+  - yang_name: use-eapol-pae-in-icv
+    example: true
+  - yang_name: suspend-on-request/disable
+    delete_parent: true
+    example: true
+  - yang_name: suspend-for/disable
+    delete_parent: true
+    example: true
+  - yang_name: enable-legacy-fallback
+    example: true
+  - yang_name: enable-legacy-sak-write
+    example: true
+  - yang_name: impose-overhead-on-bundle
+    example: true
+  - yang_name: max-an
+    example: "1"
+  - yang_name: allow/lacp-in-clear
+    example: true
+  - yang_name: allow/pause-frame-in-clear
+    example: true
+  - yang_name: allow/lldp-in-clear
+    example: true
+  - yang_name: ppk
+    example: true
+  - yang_name: ppk/sks-profile
+    example: SKS-PROFILE1
+  - yang_name: logging/sak-rekey/disable
+    delete_parent: true
+    example: true
+  - yang_name: logging/sak-rekey/summary-interval
+    example: 60

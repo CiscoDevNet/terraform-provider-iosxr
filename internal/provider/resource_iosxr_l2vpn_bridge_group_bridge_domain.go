@@ -103,6 +103,20 @@ func (r *L2VPNBridgeGroupBridgeDomainResource) Schema(ctx context.Context, req r
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
+			"mtu": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum transmission unit (payload) for this Bridge Domain").AddIntegerRangeDescription(46, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(46, 65535),
+				},
+			},
+			"description": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Description for Bridge-Domain").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 64),
+				},
+			},
 			"evis": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Ethernet VPN identifier").String,
 				Optional:            true,
@@ -110,6 +124,21 @@ func (r *L2VPNBridgeGroupBridgeDomainResource) Schema(ctx context.Context, req r
 					Attributes: map[string]schema.Attribute{
 						"vpn_id": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Ethernet VPN identifier").AddIntegerRangeDescription(1, 65534).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65534),
+							},
+						},
+					},
+				},
+			},
+			"srv6_evis": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Ethernet VPN identifier for srv6").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vpn_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Ethernet VPN identifier for srv6").AddIntegerRangeDescription(1, 65534).String,
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 65534),
@@ -133,11 +162,64 @@ func (r *L2VPNBridgeGroupBridgeDomainResource) Schema(ctx context.Context, req r
 					},
 				},
 			},
-			"mtu": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Maximum transmission unit (payload) for this Bridge Domain").AddIntegerRangeDescription(46, 65535).String,
+			"coupled_mode": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable coupled mode for the Bridge Domain").String,
 				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(46, 65535),
+			},
+			"transport_mode_vlan_passthrough": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("passthrough incoming tags").String,
+				Optional:            true,
+			},
+			"flooding_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable flooding").String,
+				Optional:            true,
+			},
+			"dynamic_arp_inspection": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Dynamic ARP Inspection").String,
+				Optional:            true,
+			},
+			"dynamic_arp_inspection_logging": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable Logging").String,
+				Optional:            true,
+			},
+			"dynamic_arp_inspection_address_validation_src_mac": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Match Source MAC Address").String,
+				Optional:            true,
+			},
+			"dynamic_arp_inspection_address_validation_dst_mac": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Match Destination MAC Address").String,
+				Optional:            true,
+			},
+			"dynamic_arp_inspection_address_validation_ipv4": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Match IPv4 Address").String,
+				Optional:            true,
+			},
+			"ip_source_guard": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IP Source Guard").String,
+				Optional:            true,
+			},
+			"ip_source_guard_logging": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable Logging").String,
+				Optional:            true,
+			},
+			"igmp_snooping_profile": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Attach an IGMP profile").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"igmp_snooping_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("disable IGMP snooping for the current bridge domain").String,
+				Optional:            true,
+			},
+			"mld_snooping_profile": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Attach a MLD profile").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 			},
 			"storm_control_broadcast_pps": schema.Int64Attribute{
@@ -182,6 +264,18 @@ func (r *L2VPNBridgeGroupBridgeDomainResource) Schema(ctx context.Context, req r
 					int64validator.Between(64, 1280000),
 				},
 			},
+			"multicast_source_ipv4": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Traffic Type IPv4").String,
+				Optional:            true,
+			},
+			"multicast_source_ipv6": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Traffic Type IPv6").String,
+				Optional:            true,
+			},
+			"multicast_source_ipv4_ipv6": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Traffic Type IPv4 and IPv6").String,
+				Optional:            true,
+			},
 			"interfaces": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specify interface name").String,
 				Optional:            true,
@@ -194,23 +288,453 @@ func (r *L2VPNBridgeGroupBridgeDomainResource) Schema(ctx context.Context, req r
 								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
 							},
 						},
+						"dynamic_arp_inspection_logging": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable Logging").String,
+							Optional:            true,
+						},
+						"dynamic_arp_inspection_logging_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("disable logging").String,
+							Optional:            true,
+						},
+						"dynamic_arp_inspection_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable Dynamic Arp Inspection").String,
+							Optional:            true,
+						},
+						"dynamic_arp_inspection_address_validation_src_mac": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Match Source MAC Address").String,
+							Optional:            true,
+						},
+						"dynamic_arp_inspection_address_validation_src_mac_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("disable Source MAC Address check").String,
+							Optional:            true,
+						},
+						"dynamic_arp_inspection_address_validation_dst_mac": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Match Destination MAC Address").String,
+							Optional:            true,
+						},
+						"dynamic_arp_inspection_address_validation_dst_mac_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("disable Destimation MAC Address check").String,
+							Optional:            true,
+						},
+						"dynamic_arp_inspection_address_validation_ipv4": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Match IPv4 Address").String,
+							Optional:            true,
+						},
+						"dynamic_arp_inspection_address_validation_ipv4_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("disable IPV4 Address check").String,
+							Optional:            true,
+						},
+						"flooding_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable flooding").String,
+							Optional:            true,
+						},
+						"igmp_snooping_profile": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Attach an IGMP profile").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"ip_source_guard": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IP Source Guard").String,
+							Optional:            true,
+						},
+						"ip_source_guard_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable IP Source Guard").String,
+							Optional:            true,
+						},
+						"ip_source_guard_logging": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable Logging").String,
+							Optional:            true,
+						},
+						"ip_source_guard_logging_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("disable logging").String,
+							Optional:            true,
+						},
+						"mac_aging_time": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Mac aging").AddIntegerRangeDescription(300, 30000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(300, 30000),
+							},
+						},
+						"mac_aging_type_absolute": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Absolute aging type").String,
+							Optional:            true,
+						},
+						"mac_aging_type_inactivity": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Inactivity aging type").String,
+							Optional:            true,
+						},
+						"mac_learning": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("MAC learning").String,
+							Optional:            true,
+						},
+						"mac_learning_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable MAC learning").String,
+							Optional:            true,
+						},
+						"mac_limit_maximum": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Number of MAC addresses after which MAC limit action is taken").AddIntegerRangeDescription(0, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 4294967295),
+							},
+						},
+						"mac_limit_action_flood": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Stop learning but continue flooding").String,
+							Optional:            true,
+						},
+						"mac_limit_action_no_flood": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Stop learning and stop flooding").String,
+							Optional:            true,
+						},
+						"mac_limit_action_shutdown": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Stop forwarding").String,
+							Optional:            true,
+						},
+						"mac_limit_action_none": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("No action").String,
+							Optional:            true,
+						},
+						"mac_limit_notification_trap": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Generate SNMP trap").String,
+							Optional:            true,
+						},
+						"mac_limit_notification_both": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Generate syslog message and SNMP trap").String,
+							Optional:            true,
+						},
+						"mac_limit_notification_none": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("No notification").String,
+							Optional:            true,
+						},
+						"mac_limit_notification_syslog": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Generate syslog message").String,
+							Optional:            true,
+						},
+						"mac_port_down_flush_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable MAC flush when port goes down").String,
+							Optional:            true,
+						},
+						"mac_secure": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("MAC Secure configuration commands").String,
+							Optional:            true,
+						},
+						"mac_secure_logging": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable Logging").String,
+							Optional:            true,
+						},
+						"mac_secure_logging_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("disable logging").String,
+							Optional:            true,
+						},
+						"mac_secure_action_none": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Forward the violating packet and allow the MAC to be relearned").String,
+							Optional:            true,
+						},
+						"mac_secure_action_shutdown": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Shutdown the violating bridge port").String,
+							Optional:            true,
+						},
+						"mac_secure_action_restrict": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Drop the violating packet and not allow the MAC to be relearned").String,
+							Optional:            true,
+						},
+						"mac_secure_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable MAC Secure").String,
+							Optional:            true,
+						},
+						"mac_secure_shutdown_recovery_timeout": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Recovery timer in second").AddIntegerRangeDescription(10, 3600).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(10, 3600),
+							},
+						},
+						"mac_secure_shutdown_recovery_timeout_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable shutdown recovery timer").String,
+							Optional:            true,
+						},
+						"mld_snooping_profile": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Attach a MLD profile").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"storm_control_broadcast_pps": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set the storm control pps").AddIntegerRangeDescription(1, 160000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 160000),
+							},
+						},
+						"storm_control_broadcast_kbps": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set the storm control kbps").AddIntegerRangeDescription(64, 1280000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(64, 1280000),
+							},
+						},
+						"storm_control_multicast_pps": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set the storm control pps").AddIntegerRangeDescription(1, 160000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 160000),
+							},
+						},
+						"storm_control_multicast_kbps": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set the storm control kbps").AddIntegerRangeDescription(64, 1280000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(64, 1280000),
+							},
+						},
+						"storm_control_unknown_unicast_pps": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set the storm control pps").AddIntegerRangeDescription(1, 160000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 160000),
+							},
+						},
+						"storm_control_unknown_unicast_kbps": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set the storm control kbps").AddIntegerRangeDescription(64, 1280000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(64, 1280000),
+							},
+						},
 						"split_horizon_group": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Configure split-horizon group").String,
+							Optional:            true,
+						},
+						"static_mac_addresses": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Static MAC address").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"mac_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Static MAC address").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"routed_interface": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Assign interface to bridge domain").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Assign interface to bridge domain").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+							},
+						},
+						"split_horizon_group_core": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure BVI under SHG 1").String,
 							Optional:            true,
 						},
 					},
 				},
 			},
-			"srv6_evis": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Ethernet VPN identifier for srv6").String,
+			"shutdown": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("shutdown the Bridge Domain").String,
+				Optional:            true,
+			},
+			"mac_aging_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Mac aging").AddIntegerRangeDescription(300, 30000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(300, 30000),
+				},
+			},
+			"mac_aging_type_absolute": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Absolute aging type").String,
+				Optional:            true,
+			},
+			"mac_static_addresses": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Static MAC address for filtering").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"mac_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Static MAC address for filtering").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
+							},
+						},
+						"drop": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Drop matching packets").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"mac_learning_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable MAC learning").String,
+				Optional:            true,
+			},
+			"mac_withdraw_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable MAC withdraw").String,
+				Optional:            true,
+			},
+			"mac_withdraw_access_pw_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable MAC withdraw on Access PW").String,
+				Optional:            true,
+			},
+			"mac_withdraw_relay": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("MAC withdraw relayed to Access PWs ").String,
+				Optional:            true,
+			},
+			"mac_withdraw_state_down": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("MAC withdraw sent on bridge port down").String,
+				Optional:            true,
+			},
+			"mac_withdraw_optimize": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Optimized LDP MAC withdraw (when port goes down)").String,
+				Optional:            true,
+			},
+			"mac_limit_maximum": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Number of MAC addresses after which MAC limit action is taken").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"mac_limit_action_flood": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Stop learning but continue flooding").String,
+				Optional:            true,
+			},
+			"mac_limit_action_no_flood": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Stop learning and stop flooding").String,
+				Optional:            true,
+			},
+			"mac_limit_action_shutdown": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Stop forwarding").String,
+				Optional:            true,
+			},
+			"mac_limit_notification_trap": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Generate SNMP trap").String,
+				Optional:            true,
+			},
+			"mac_limit_notification_both": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Generate syslog message and SNMP trap").String,
+				Optional:            true,
+			},
+			"mac_limit_notification_none": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("No notification").String,
+				Optional:            true,
+			},
+			"mac_port_down_flush_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable MAC flush when port goes down").String,
+				Optional:            true,
+			},
+			"mac_secure": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("MAC Secure configuration commands").String,
+				Optional:            true,
+			},
+			"mac_secure_logging": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable Logging").String,
+				Optional:            true,
+			},
+			"mac_secure_threshold": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Threshold based mac secure").String,
+				Optional:            true,
+			},
+			"mac_secure_action_none": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Forward the violating packet and allow the MAC to be relearned").String,
+				Optional:            true,
+			},
+			"mac_secure_action_shutdown": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Shutdown the violating bridge port").String,
+				Optional:            true,
+			},
+			"mac_secure_shutdown_recovery_timeout": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Recovery-timer to automatically revert shutdown action").AddIntegerRangeDescription(10, 3600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(10, 3600),
+				},
+			},
+			"neighbors_evpn_evi": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Ethernet VPN Identifier").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"vpn_id": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Ethernet VPN identifier for srv6").AddIntegerRangeDescription(1, 65534).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Configure EVPN Instance VPN ID").AddIntegerRangeDescription(1, 65534).String,
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 65534),
+							},
+						},
+						"target": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify remote attachment circuit identifier").AddIntegerRangeDescription(1, 16777215).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 16777215),
+							},
+						},
+					},
+				},
+			},
+			"efp_visibility": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable multicast for multiple VLANs in the bridge of a BVI").String,
+				Optional:            true,
+			},
+			"etree": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure Bridge Domain  EVPN E-Tree").String,
+				Optional:            true,
+			},
+			"etree_leaf": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Designate Bridge Domain as EVPN E-Tree Leaf").String,
+				Optional:            true,
+			},
+			"member_vnis_vni": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Assign VxLAN Network Identifier to bridge domain").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vni_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Assign VxLAN Network Identifier to bridge domain").AddIntegerRangeDescription(1, 16777215).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 16777215),
+							},
+						},
+						"static_mac_addresses": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Static MAC address").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"mac_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Static MAC address").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
+										},
+									},
+									"next_hop": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Specify the next hop IP address").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+										},
+									},
+								},
 							},
 						},
 					},

@@ -27,11 +27,11 @@ import (
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -84,18 +84,156 @@ func (r *ClassMapQoSResource) Schema(ctx context.Context, req resource.SchemaReq
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"match_any": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Match any match criteria (default)").AddDefaultValueDescription("true").String,
+			"match_all": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Match all match criteria").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             booldefault.StaticBool(true),
+			},
+			"match_any": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Match any match criteria (default)").String,
+				Optional:            true,
 			},
 			"description": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set description for this class-map").String,
 				Optional:            true,
 			},
+			"match_access_group_ipv4": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 access list").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
+			"match_access_group_ipv6": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv6 access list").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
+			"match_cos": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("COS value").String,
+				ElementType:         types.Int64Type,
+				Optional:            true,
+			},
+			"match_cos_inner": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("inner cos value (Upto 8 values)").String,
+				ElementType:         types.Int64Type,
+				Optional:            true,
+			},
+			"match_destination_address_ipv4": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 address").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4 address.").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+						"netmask": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4 netmask.").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+					},
+				},
+			},
+			"match_destination_address_ipv6": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv6 address").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv6 address.").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+							},
+						},
+						"prefix_length": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Length of the IPv6 Prefix.").AddIntegerRangeDescription(0, 128).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 128),
+							},
+						},
+					},
+				},
+			},
+			"match_destination_mac": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("MAC Address").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
+				},
+			},
+			"match_destination_port": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("destination port").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
+			"match_discard_class": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Discard CLass Id").String,
+				ElementType:         types.Int64Type,
+				Optional:            true,
+			},
 			"match_dscp": schema.ListAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("DSCP value").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
+			"match_dscp_ipv4": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DSCP value").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
+			"match_dscp_ipv6": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DSCP value").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
+			"match_ethertype": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Ethertype Value").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
+			"match_fragment_type_dont_fragment": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Match don't-Fragment bit").String,
+				Optional:            true,
+			},
+			"match_fragment_type_first_fragment": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Match first fragment bit").String,
+				Optional:            true,
+			},
+			"match_fragment_type_is_fragment": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Match is-fragment bit").String,
+				Optional:            true,
+			},
+			"match_fragment_type_last_fragment": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Match last fragment bit").String,
+				Optional:            true,
+			},
+			"match_ipv4_icmp_code": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 ICMP code").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
+			"match_ipv4_icmp_type": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 ICMP type").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
+			"match_ipv6_icmp_code": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ICMP code").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
+			"match_ipv6_icmp_type": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ICMP type").String,
 				ElementType:         types.StringType,
 				Optional:            true,
 			},
@@ -104,13 +242,119 @@ func (r *ClassMapQoSResource) Schema(ctx context.Context, req resource.SchemaReq
 				ElementType:         types.Int64Type,
 				Optional:            true,
 			},
+			"match_packet_length": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IP Packet Length").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
+			"match_precedence": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IP precedence").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
+			"match_precedence_ipv4": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPV4 precedence").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
+			"match_precedence_ipv6": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPV6 precedence").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
+			"match_protocol": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Protocol Number").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
 			"match_qos_group": schema.ListAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("QoS Group Id").String,
 				ElementType:         types.StringType,
 				Optional:            true,
 			},
+			"match_source_address_ipv4": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 address").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4 address.").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+						"netmask": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4 netmask.").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+					},
+				},
+			},
+			"match_source_address_ipv6": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv6 address").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv6 address.").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+							},
+						},
+						"prefix_length": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Length of the IPv6 Prefix.").AddIntegerRangeDescription(0, 128).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 128),
+							},
+						},
+					},
+				},
+			},
+			"match_source_mac": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("MAC Address").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
+				},
+			},
+			"match_source_port": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("source port").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
+			"match_tcp_flag": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("TCP flags value").AddIntegerRangeDescription(0, 4095).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4095),
+				},
+			},
+			"match_tcp_flag_any": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Match based on any bit set").String,
+				Optional:            true,
+			},
 			"match_traffic_class": schema.ListAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Traffic Class Id").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
+			"match_vlan": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Vlan Id").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
+			"match_vlan_inner": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("inner Vlan Id").String,
 				ElementType:         types.StringType,
 				Optional:            true,
 			},

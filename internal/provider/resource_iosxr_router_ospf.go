@@ -92,9 +92,100 @@ func (r *RouterOSPFResource) Schema(ctx context.Context, req resource.SchemaRequ
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
+			"mpls_traffic_eng_router_id_ipv4_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("configure this node").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+				},
+			},
+			"mpls_traffic_eng_router_id_interface_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("MPLS TE interface configuration for this OSPF process").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+				},
+			},
+			"mpls_traffic_eng_multicast_intact": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Publish multicast-intact paths to RIB").String,
+				Optional:            true,
+			},
+			"mpls_traffic_eng_autoroute_exclude_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Route Policy to exclude TE paths from routes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"mpls_traffic_eng_igp_intact": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Retain one or more IPv4 nexthops with tunnel nexthops").String,
+				Optional:            true,
+			},
+			"mpls_traffic_eng_ldp_sync_update": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable LDP sync induced metric propagation").String,
+				Optional:            true,
+			},
 			"mpls_ldp_sync": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable LDP IGP synchronization").String,
 				Optional:            true,
+			},
+			"mpls_ldp_sync_igp_shortcuts": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("LDP sync for igp-shortcut tunnels").String,
+				Optional:            true,
+			},
+			"mpls_ldp_auto_config": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable LDP IGP interface auto-configuration").String,
+				Optional:            true,
+			},
+			"cost": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Interface cost").AddIntegerRangeDescription(1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
+				},
+			},
+			"cost_fallback_anomaly_delay_igp_metric_increment": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Increment the IGP cost by the specified value").AddIntegerRangeDescription(1, 65534).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65534),
+				},
+			},
+			"cost_fallback_anomaly_delay_igp_metric_multiplier": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Multiply the IGP cost by the specified value").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"cost_fallback_anomaly_delay_igp_metric_value": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set the IGP cost to the specified value").AddIntegerRangeDescription(1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
+				},
+			},
+			"cost_fallback_anomaly_delay_te_metric_increment": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Increment the TE metric by the specified value").AddIntegerRangeDescription(1, 4294967294).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4294967294),
+				},
+			},
+			"cost_fallback_anomaly_delay_te_metric_multiplier": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Multiply the TE metric by the specified value").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"cost_fallback_anomaly_delay_te_metric_value": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set the TE cost to the specified value").AddIntegerRangeDescription(1, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4294967295),
+				},
 			},
 			"hello_interval": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Time between HELLO packets").AddIntegerRangeDescription(1, 65535).String,
@@ -117,6 +208,36 @@ func (r *RouterOSPFResource) Schema(ctx context.Context, req resource.SchemaRequ
 					int64validator.Between(0, 255),
 				},
 			},
+			"retransmit_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Time between retransmitting lost link state advertisements").AddIntegerRangeDescription(1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
+				},
+			},
+			"transmit_delay": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Estimated time needed to send link-state update packet").AddIntegerRangeDescription(1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
+				},
+			},
+			"flood_reduction_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable OSPF Flood Reduction").String,
+				Optional:            true,
+			},
+			"flood_reduction_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable OSPF Flood Reduction").String,
+				Optional:            true,
+			},
+			"demand_circuit_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable OSPF demand circuit").String,
+				Optional:            true,
+			},
+			"demand_circuit_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable OSPF demand circuit").String,
+				Optional:            true,
+			},
 			"mtu_ignore_enable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Ignores the MTU in DBD packets").String,
 				Optional:            true,
@@ -125,12 +246,28 @@ func (r *RouterOSPFResource) Schema(ctx context.Context, req resource.SchemaRequ
 				MarkdownDescription: helpers.NewAttributeDescription("Disable ignoring the MTU in DBD packets").String,
 				Optional:            true,
 			},
+			"database_filter_all_out_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable filtering").String,
+				Optional:            true,
+			},
+			"database_filter_all_out_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable filtering").String,
+				Optional:            true,
+			},
 			"passive_enable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable passive").String,
 				Optional:            true,
 			},
 			"passive_disable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Disable passive").String,
+				Optional:            true,
+			},
+			"log_adjacency_changes_detail": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Log all state changes").String,
+				Optional:            true,
+			},
+			"log_adjacency_changes_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable logging").String,
 				Optional:            true,
 			},
 			"router_id": schema.StringAttribute{
@@ -159,6 +296,32 @@ func (r *RouterOSPFResource) Schema(ctx context.Context, req resource.SchemaRequ
 					stringvalidator.OneOf("1", "2"),
 				},
 			},
+			"redistribute_connected_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Apply route-policy to redistribution").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"redistribute_connected_metric": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("OSPF default metric").AddIntegerRangeDescription(1, 16777214).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 16777214),
+				},
+			},
+			"redistribute_connected_metric_use_rib_metric": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use metric from RIB").String,
+				Optional:            true,
+			},
+			"redistribute_connected_lsa_type_summary": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("LSA type 3").String,
+				Optional:            true,
+			},
+			"redistribute_connected_nssa_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Redistribute to NSSA areas only").String,
+				Optional:            true,
+			},
 			"redistribute_static": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Redistribute static routes").String,
 				Optional:            true,
@@ -177,69 +340,31 @@ func (r *RouterOSPFResource) Schema(ctx context.Context, req resource.SchemaRequ
 					stringvalidator.OneOf("1", "2"),
 				},
 			},
-			"bfd_fast_detect": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable Fast detection").String,
+			"redistribute_static_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Apply route-policy to redistribution").String,
 				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
 			},
-			"bfd_minimum_interval": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Minimum interval").AddIntegerRangeDescription(3, 30000).String,
+			"redistribute_static_metric": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("OSPF default metric").AddIntegerRangeDescription(1, 16777214).String,
 				Optional:            true,
 				Validators: []validator.Int64{
-					int64validator.Between(3, 30000),
+					int64validator.Between(1, 16777214),
 				},
 			},
-			"bfd_multiplier": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Detect multiplier").AddIntegerRangeDescription(2, 50).String,
-				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(2, 50),
-				},
-			},
-			"default_information_originate": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Distribute a default route").String,
+			"redistribute_static_metric_use_rib_metric": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use metric from RIB").String,
 				Optional:            true,
 			},
-			"default_information_originate_always": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Always advertise default route").String,
+			"redistribute_static_lsa_type_summary": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("LSA type 3").String,
 				Optional:            true,
 			},
-			"default_information_originate_metric_type": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("OSPF metric type for default routes").AddIntegerRangeDescription(1, 2).String,
+			"redistribute_static_nssa_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Redistribute to NSSA areas only").String,
 				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(1, 2),
-				},
-			},
-			"auto_cost_reference_bandwidth": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify reference bandwidth for OSPF cost computations").AddIntegerRangeDescription(1, 2147483647).String,
-				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(1, 2147483647),
-				},
-			},
-			"auto_cost_disable": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Assign OSPF cost based on interface type").String,
-				Optional:            true,
-			},
-			"segment_routing_mpls": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("SR using MPLS dataplane").String,
-				Optional:            true,
-			},
-			"segment_routing_sr_prefer": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Prefer segment routing labels over LDP labels").String,
-				Optional:            true,
-			},
-			"areas": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enter the OSPF area configuration submode").String,
-				Optional:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"area_id": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Enter the OSPF area configuration submode").String,
-							Required:            true,
-						},
-					},
-				},
 			},
 			"redistribute_bgp": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Redistribute BGP routes").String,
@@ -263,6 +388,36 @@ func (r *RouterOSPFResource) Schema(ctx context.Context, req resource.SchemaRequ
 							Validators: []validator.String{
 								stringvalidator.OneOf("1", "2"),
 							},
+						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Apply route-policy to redistribution").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 255),
+							},
+						},
+						"preserve_med": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Preserve med of BGP routes").String,
+							Optional:            true,
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("OSPF default metric").AddIntegerRangeDescription(1, 16777214).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 16777214),
+							},
+						},
+						"metric_use_rib_metric": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use metric from RIB").String,
+							Optional:            true,
+						},
+						"lsa_type_summary": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("LSA type 3").String,
+							Optional:            true,
+						},
+						"nssa_only": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute to NSSA areas only").String,
+							Optional:            true,
 						},
 					},
 				},
@@ -305,6 +460,32 @@ func (r *RouterOSPFResource) Schema(ctx context.Context, req resource.SchemaRequ
 								stringvalidator.OneOf("1", "2"),
 							},
 						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Apply route-policy to redistribution").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 255),
+							},
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("OSPF default metric").AddIntegerRangeDescription(1, 16777214).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 16777214),
+							},
+						},
+						"metric_use_rib_metric": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use metric from RIB").String,
+							Optional:            true,
+						},
+						"lsa_type_summary": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("LSA type 3").String,
+							Optional:            true,
+						},
+						"nssa_only": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute to NSSA areas only").String,
+							Optional:            true,
+						},
 					},
 				},
 			},
@@ -320,18 +501,6 @@ func (r *RouterOSPFResource) Schema(ctx context.Context, req resource.SchemaRequ
 								stringvalidator.LengthBetween(1, 1024),
 							},
 						},
-						"match_internal": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF internal routes").String,
-							Optional:            true,
-						},
-						"match_external": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF external routes").String,
-							Optional:            true,
-						},
-						"match_nssa_external": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
-							Optional:            true,
-						},
 						"tag": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Set tag for routes redistributed into OSPF").AddIntegerRangeDescription(0, 4294967295).String,
 							Optional:            true,
@@ -346,8 +515,1505 @@ func (r *RouterOSPFResource) Schema(ctx context.Context, req resource.SchemaRequ
 								stringvalidator.OneOf("1", "2"),
 							},
 						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Apply route-policy to redistribution").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 255),
+							},
+						},
+						"match_internal": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF internal routes").String,
+							Optional:            true,
+						},
+						"match_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF external routes").String,
+							Optional:            true,
+						},
+						"match_external_one": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute external type 1 routes").String,
+							Optional:            true,
+						},
+						"match_external_two": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute external type 2 routes").String,
+							Optional:            true,
+						},
+						"match_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
+							Optional:            true,
+						},
+						"match_nssa_external_one": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes").String,
+							Optional:            true,
+						},
+						"match_nssa_external_two": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes").String,
+							Optional:            true,
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("OSPF default metric").AddIntegerRangeDescription(1, 16777214).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 16777214),
+							},
+						},
+						"metric_use_rib_metric": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use metric from RIB").String,
+							Optional:            true,
+						},
+						"lsa_type_summary": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("LSA type 3").String,
+							Optional:            true,
+						},
+						"nssa_only": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute to NSSA areas only").String,
+							Optional:            true,
+						},
 					},
 				},
+			},
+			"distribute_list_in_acl": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("In-bound access-list name").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+				},
+			},
+			"distribute_list_in_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Route Policy to filter OSPF prefixes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"distribute_list_out_acl": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("access-list name").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+				},
+			},
+			"distribute_list_out_connected_acl": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("access-list name").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+				},
+			},
+			"distribute_list_out_static_acl": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("access-list name").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+				},
+			},
+			"distribute_list_out_bgp_as": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("bgp as-number").String,
+				Optional:            true,
+			},
+			"distribute_list_out_bgp_acl": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("access-list name").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+				},
+			},
+			"distribute_list_out_ospf_instance_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Open Shortest Path First (OSPF)").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+				},
+			},
+			"distribute_list_out_ospf_acl": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("access-list name").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+				},
+			},
+			"packet_size": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Customize size of OSPF packets upto MTU").AddIntegerRangeDescription(576, 10000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(576, 10000),
+				},
+			},
+			"bfd_fast_detect": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable Fast detection").String,
+				Optional:            true,
+			},
+			"bfd_fast_detect_strict_mode": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Hold down neighbor session until BFD session is up").String,
+				Optional:            true,
+			},
+			"bfd_minimum_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Minimum interval").AddIntegerRangeDescription(3, 30000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(3, 30000),
+				},
+			},
+			"bfd_multiplier": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Detect multiplier").AddIntegerRangeDescription(2, 50).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(2, 50),
+				},
+			},
+			"security_ttl": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable ttl security").String,
+				Optional:            true,
+			},
+			"security_ttl_hops": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IP hops").AddIntegerRangeDescription(1, 254).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 254),
+				},
+			},
+			"prefix_suppression": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable primary address suppression").String,
+				Optional:            true,
+			},
+			"prefix_suppression_secondary_address": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable secondary address suppression").String,
+				Optional:            true,
+			},
+			"default_information_originate": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Distribute a default route").String,
+				Optional:            true,
+			},
+			"default_information_originate_always": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Always advertise default route").String,
+				Optional:            true,
+			},
+			"default_information_originate_metric": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("OSPF default metric").AddIntegerRangeDescription(1, 16777214).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 16777214),
+				},
+			},
+			"default_information_originate_metric_type": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("OSPF metric type for default routes").AddIntegerRangeDescription(1, 2).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 2),
+				},
+			},
+			"default_information_originate_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Apply route-policy to default-information origination").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"default_metric": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Default metric").AddIntegerRangeDescription(1, 16777214).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 16777214),
+				},
+			},
+			"distance_sources": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("source address").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IP Source address").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+						"wildcard": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IP wild card bits -- inverted mask").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+						"distance": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Administrative distance").AddIntegerRangeDescription(1, 255).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 255),
+							},
+						},
+						"acl": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Access Control List name").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"distance_ospf_intra_area": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Intra-area routes").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"distance_ospf_inter_area": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Inter-area routes").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"distance_ospf_external": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("External type 5 and type 7 routes").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"auto_cost_reference_bandwidth": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify reference bandwidth for OSPF cost computations").AddIntegerRangeDescription(1, 2147483647).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 2147483647),
+				},
+			},
+			"auto_cost_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Assign OSPF cost based on interface type").String,
+				Optional:            true,
+			},
+			"ignore_lsa_mospf": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("MOSPF Type 6 LSA").String,
+				Optional:            true,
+			},
+			"capability_opaque_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable Opaque LSA capability").String,
+				Optional:            true,
+			},
+			"capability_lls_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable Link Local Signalling capability").String,
+				Optional:            true,
+			},
+			"capability_type7_prefer": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prefer type7 externals over type5").String,
+				Optional:            true,
+			},
+			"max_metric_router_lsa": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum metric in self-originated router-LSAs").String,
+				Optional:            true,
+			},
+			"max_metric_router_lsa_include_stub": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set maximum metric for stub links in router-LSAs").String,
+				Optional:            true,
+			},
+			"max_metric_router_lsa_summary_lsa": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Override summary-lsa metric with max-metric value").String,
+				Optional:            true,
+			},
+			"max_metric_router_lsa_summary_lsa_metric": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Override summary-lsa metric with max-metric value").AddIntegerRangeDescription(1, 16777215).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 16777215),
+				},
+			},
+			"max_metric_router_lsa_external_lsa": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Override external-lsa metric with max-metric value").String,
+				Optional:            true,
+			},
+			"max_metric_router_lsa_external_lsa_metric": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Override external-lsa metric with max-metric value").AddIntegerRangeDescription(1, 16777215).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 16777215),
+				},
+			},
+			"max_metric_router_lsa_on_startup_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Time in seconds to originate router-LSA with max-metric").AddIntegerRangeDescription(5, 86400).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(5, 86400),
+				},
+			},
+			"max_metric_router_lsa_on_startup_wait_for_bgp": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Let BGP decide when to originate router-LSA with normal metric").String,
+				Optional:            true,
+			},
+			"max_metric_router_lsa_on_startup_include_stub": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set maximum metric for stub links in router-LSAs").String,
+				Optional:            true,
+			},
+			"max_metric_router_lsa_on_startup_summary_lsa": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Overriding metric in summary-LSAs (default 16711680)").String,
+				Optional:            true,
+			},
+			"max_metric_router_lsa_on_startup_summary_lsa_metric": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Overriding metric in summary-LSAs (default 16711680)").AddIntegerRangeDescription(1, 16777215).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 16777215),
+				},
+			},
+			"max_metric_router_lsa_on_startup_external_lsa": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Override external-lsa metric with max-metric value").String,
+				Optional:            true,
+			},
+			"max_metric_router_lsa_on_startup_external_lsa_metric": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Override external-lsa metric with max-metric value").AddIntegerRangeDescription(1, 16777215).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 16777215),
+				},
+			},
+			"max_metric_router_lsa_on_switchover_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Time in seconds to originate router-LSA with max-metric").AddIntegerRangeDescription(5, 86400).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(5, 86400),
+				},
+			},
+			"max_metric_router_lsa_on_switchover_wait_for_bgp": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Let BGP decide when to originate router-LSA with normal metric").String,
+				Optional:            true,
+			},
+			"max_metric_router_lsa_on_switchover_include_stub": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set maximum metric for stub links in router-LSAs").String,
+				Optional:            true,
+			},
+			"max_metric_router_lsa_on_switchover_summary_lsa": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Overriding metric in summary-LSAs (default 16711680)").String,
+				Optional:            true,
+			},
+			"max_metric_router_lsa_on_switchover_summary_lsa_metric": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Overriding metric in summary-LSAs (default 16711680)").AddIntegerRangeDescription(1, 16777215).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 16777215),
+				},
+			},
+			"max_metric_router_lsa_on_switchover_external_lsa": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Override external-lsa metric with max-metric value").String,
+				Optional:            true,
+			},
+			"max_metric_router_lsa_on_switchover_external_lsa_metric": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Override external-lsa metric with max-metric value").AddIntegerRangeDescription(1, 16777215).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 16777215),
+				},
+			},
+			"max_metric_router_lsa_on_proc_restart_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Time in seconds to originate router-LSA with max-metric").AddIntegerRangeDescription(5, 86400).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(5, 86400),
+				},
+			},
+			"max_metric_router_lsa_on_proc_restart_wait_for_bgp": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Let BGP decide when to originate router-LSA with normal metric").String,
+				Optional:            true,
+			},
+			"max_metric_router_lsa_on_proc_restart_include_stub": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set maximum metric for stub links in router-LSAs").String,
+				Optional:            true,
+			},
+			"max_metric_router_lsa_on_proc_restart_summary_lsa": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Overriding metric in summary-LSAs (default 16711680)").String,
+				Optional:            true,
+			},
+			"max_metric_router_lsa_on_proc_restart_summary_lsa_metric": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Overriding metric in summary-LSAs (default 16711680)").AddIntegerRangeDescription(1, 16777215).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 16777215),
+				},
+			},
+			"max_metric_router_lsa_on_proc_restart_external_lsa": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Override external-lsa metric with max-metric value").String,
+				Optional:            true,
+			},
+			"max_metric_router_lsa_on_proc_restart_external_lsa_metric": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Override external-lsa metric with max-metric value").AddIntegerRangeDescription(1, 16777215).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 16777215),
+				},
+			},
+			"max_lsa": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum number of LSAs OSPF process will receive").AddIntegerRangeDescription(1, 4294967294).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4294967294),
+				},
+			},
+			"max_lsa_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Threshold value (%) at which to generate a warning msg").AddIntegerRangeDescription(1, 100).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 100),
+				},
+			},
+			"max_lsa_warning_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Only give warning message when limit is exceeded").String,
+				Optional:            true,
+			},
+			"max_lsa_ignore_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("time during which all adjacencies are suppressed").AddIntegerRangeDescription(1, 17895697).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 17895697),
+				},
+			},
+			"max_lsa_ignore_count": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("maximum number of times adjacencies can be suppressed").AddIntegerRangeDescription(1, 4294967294).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4294967294),
+				},
+			},
+			"max_lsa_reset_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("time after which ignore-count is reset to zero").AddIntegerRangeDescription(2, 35791394).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(2, 35791394),
+				},
+			},
+			"timers_throttle_spf_initial_delay": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("OSPF SPF throttle timers").AddIntegerRangeDescription(1, 600000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 600000),
+				},
+			},
+			"timers_throttle_spf_second_delay": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Delay between first and second SPF calculation in milliseconds").AddIntegerRangeDescription(1, 600000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 600000),
+				},
+			},
+			"timers_throttle_spf_maximum_delay": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum wait time in milliseconds for SPF calculations").AddIntegerRangeDescription(1, 600000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 600000),
+				},
+			},
+			"timers_throttle_lsa_all_initial_delay": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("For all types of OSPF LSAs").AddIntegerRangeDescription(0, 600000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 600000),
+				},
+			},
+			"timers_throttle_lsa_all_minimum_delay": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Minimum delay between originating the same LSA in milliseconds").AddIntegerRangeDescription(1, 600000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 600000),
+				},
+			},
+			"timers_throttle_lsa_all_maximum_delay": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum delay between originating the same LSA in milliseconds").AddIntegerRangeDescription(1, 600000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 600000),
+				},
+			},
+			"timers_throttle_fast_reroute": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Fast-reroute throttle timer").AddIntegerRangeDescription(50, 600000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(50, 600000),
+				},
+			},
+			"timers_lsa_group_pacing": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("OSPF LSA group pacing timer").AddIntegerRangeDescription(10, 1800).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(10, 1800),
+				},
+			},
+			"timers_lsa_min_arrival": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("OSPF MinLSArrival timer").AddIntegerRangeDescription(0, 600000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 600000),
+				},
+			},
+			"timers_lsa_refresh": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("OSPF LSA refresh interval").AddIntegerRangeDescription(1800, 2700).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1800, 2700),
+				},
+			},
+			"timers_pacing_flood": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("OSPF flood pacing timer").AddIntegerRangeDescription(5, 100).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(5, 100),
+				},
+			},
+			"timers_graceful_shutdown_initial_delay": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Delay before starting graceful shutdown").AddIntegerRangeDescription(0, 90).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 90),
+				},
+			},
+			"timers_graceful_shutdown_retain_routes": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Time to keep routes active after graceful shutdown").AddIntegerRangeDescription(0, 90).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 90),
+				},
+			},
+			"nsf_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Minimum interval between NSF restarts (seconds)").AddIntegerRangeDescription(90, 3600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(90, 3600),
+				},
+			},
+			"nsf_lifetime": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum route lifetime following restart (seconds)").AddIntegerRangeDescription(90, 1800).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(90, 1800),
+				},
+			},
+			"nsf_flush_delay_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum time allowed for external route learning (seconds)").AddIntegerRangeDescription(1, 3600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 3600),
+				},
+			},
+			"nsf_cisco": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable Cisco Non Stop Forwarding").String,
+				Optional:            true,
+			},
+			"nsf_cisco_enforce_global": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("For the whole OSPF process").String,
+				Optional:            true,
+			},
+			"nsf_ietf": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable ietf graceful restart").String,
+				Optional:            true,
+			},
+			"nsf_ietf_strict_lsa_checking": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("terminate graceful restart helper mode if lsa changed").String,
+				Optional:            true,
+			},
+			"nsf_ietf_helper_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("router's helper support disabled").String,
+				Optional:            true,
+			},
+			"address_family_ipv4_unicast": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("unicast topology").String,
+				Optional:            true,
+			},
+			"maximum_interfaces": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Limit number of interfaces").AddIntegerRangeDescription(1, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4294967295),
+				},
+			},
+			"maximum_paths": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Limit number of paths").AddIntegerRangeDescription(1, 64).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 64),
+				},
+			},
+			"maximum_redistributed_prefixes": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Limit number of redistributed prefixes").AddIntegerRangeDescription(1, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4294967295),
+				},
+			},
+			"maximum_redistributed_prefixes_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Threshold value (%) at which to generate a warning msg").AddIntegerRangeDescription(1, 100).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 100),
+				},
+			},
+			"maximum_redistributed_prefixes_warning_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Only give warning messsage when limit is exceeded").String,
+				Optional:            true,
+			},
+			"queue_limit_high": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("High watermark for incoming high priority events (hello)").AddIntegerRangeDescription(1000, 30000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1000, 30000),
+				},
+			},
+			"queue_limit_medium": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("High watermark for incoming medium priority events (LSA ACK)").AddIntegerRangeDescription(1000, 30000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1000, 30000),
+				},
+			},
+			"queue_limit_low": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("High watermark for incoming low priority events (DBD/LSUpd/Req)").AddIntegerRangeDescription(1000, 30000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1000, 30000),
+				},
+			},
+			"queue_dispatch_incoming": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Number of continuous incoming events processed").AddIntegerRangeDescription(30, 3000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(30, 3000),
+				},
+			},
+			"queue_dispatch_rate_limited_lsa": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Number of rate-limited LSAs processed").AddIntegerRangeDescription(30, 3000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(30, 3000),
+				},
+			},
+			"queue_dispatch_flush_lsa": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Number of LSAs flushed").AddIntegerRangeDescription(30, 3000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(30, 3000),
+				},
+			},
+			"queue_dispatch_spf_lsa_limit": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Number of summary or external LSAs processed per run").AddIntegerRangeDescription(30, 3000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(30, 3000),
+				},
+			},
+			"summary_prefixes": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure IP address summaries").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IP summary prefix address").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+						"mask": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IP smmary address mask").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+						"not_advertise": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Suppress routes that match the specified prefix/mask pair").String,
+							Optional:            true,
+						},
+						"tag": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set tag").AddIntegerRangeDescription(0, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 4294967295),
+							},
+						},
+					},
+				},
+			},
+			"spf_prefix_priority_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify the route-policy to prioritize route install").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"fast_reroute_per_prefix": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable per-prefix Computation").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_priority_limit_critical": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Compute for critical priority prefixes only").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_priority_limit_high": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Compute for critical & high priority prefixes ").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_priority_limit_medium": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Compute for critical, high & medium priority prefixes ").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_downstream_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set preference order among tiebreakers").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"fast_reroute_per_prefix_tiebreaker_downstream_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable tiebreaker").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_lc_disjoint_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set preference order among tiebreakers").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"fast_reroute_per_prefix_tiebreaker_lc_disjoint_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable tiebreaker").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set preference order among tiebreakers").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable tiebreaker").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_node_protecting_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set preference order among tiebreakers").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"fast_reroute_per_prefix_tiebreaker_node_protecting_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable tiebreaker").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_primary_path_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set preference order among tiebreakers").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"fast_reroute_per_prefix_tiebreaker_primary_path_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable tiebreaker").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_secondary_path_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set preference order among tiebreakers").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"fast_reroute_per_prefix_tiebreaker_secondary_path_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable tiebreaker").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_interface_disjoint_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set preference order among tiebreakers").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"fast_reroute_per_prefix_tiebreaker_interface_disjoint_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable tiebreaker").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set preference order among tiebreakers").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"fast_reroute_per_prefix_tiebreaker_srlg_disjoint_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable tiebreaker").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_load_sharing_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable load sharing").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_srlg_protection_weighted_global": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("weighted global srlg protection").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_exclude_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Exclude an interface from Per-prefix LFA").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Exclude an interface from Per-prefix LFA").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+							},
+						},
+					},
+				},
+			},
+			"fast_reroute_per_prefix_lfa_candidate_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Include an interface to LFA candidate in computation").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Include an interface to LFA candidate in computation").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+							},
+						},
+					},
+				},
+			},
+			"fast_reroute_per_prefix_use_candidate_only_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable backup selection from candidate-list only").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_use_candidate_only_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable backup selection from candidate-list only").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_remote_lfa_tunnel_mpls_ldp": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("MPLS LDP tunnel").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_remote_lfa_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable remote LFA computation").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_remote_lfa_maximum_cost": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum path cost to remote LFA").AddIntegerRangeDescription(1, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4294967295),
+				},
+			},
+			"fast_reroute_per_prefix_ti_lfa_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable TI LFA computation").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_ti_lfa_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable TI LFA computation").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_link": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable per-link Computation").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_link_priority_limit_critical": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Compute for critical priority prefixes only").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_link_priority_limit_high": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Compute for critical & high priority prefixes ").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_link_priority_limit_medium": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Compute for critical, high & medium priority prefixes ").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_link_exclude_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Exclude an interface from Per-link LFA").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Exclude an interface from Per-link LFA").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+							},
+						},
+					},
+				},
+			},
+			"fast_reroute_per_link_lfa_candidate_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Include an interface to LFA candidate in computation").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Include an interface to LFA candidate in computation").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+							},
+						},
+					},
+				},
+			},
+			"fast_reroute_per_link_use_candidate_only_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable backup selection from candidate-list only").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_link_use_candidate_only_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable backup selection from candidate-list only").String,
+				Optional:            true,
+			},
+			"fast_reroute_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable IP Fast Reroute").String,
+				Optional:            true,
+			},
+			"loopback_stub_network_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable advertising loopback as a stub network").String,
+				Optional:            true,
+			},
+			"loopback_stub_network_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable advertising loopback as a stub network").String,
+				Optional:            true,
+			},
+			"link_down_fast_detect": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable fast or early detection of link-down events").String,
+				Optional:            true,
+			},
+			"weight": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Interface weight").AddIntegerRangeDescription(1, 16777214).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 16777214),
+				},
+			},
+			"delay_normalize_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Normalization interval").AddIntegerRangeDescription(1, 16777215).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 16777215),
+				},
+			},
+			"delay_normalize_offset": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Normalization offset").AddIntegerRangeDescription(0, 16777215).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 16777215),
+				},
+			},
+			"microloop_avoidance": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Avoid microloops").String,
+				Optional:            true,
+			},
+			"microloop_avoidance_protected": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Avoid microloops for protected prefixes only").String,
+				Optional:            true,
+			},
+			"microloop_avoidance_segment_routing": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable segment routing microloop avoidance").String,
+				Optional:            true,
+			},
+			"microloop_avoidance_rib_update_delay": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Delay to introduce between SPF and RIB update").AddIntegerRangeDescription(1, 600000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 600000),
+				},
+			},
+			"segment_routing_mpls": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SR using MPLS dataplane").String,
+				Optional:            true,
+			},
+			"segment_routing_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable Segment Routing ").String,
+				Optional:            true,
+			},
+			"segment_routing_global_block_lower_bound": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("MPLS label range for SID allocation").AddIntegerRangeDescription(16000, 1048575).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(16000, 1048575),
+				},
+			},
+			"segment_routing_global_block_upper_bound": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum MPLS label value for Segment Routing").AddIntegerRangeDescription(1, 1048575).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 1048575),
+				},
+			},
+			"segment_routing_prefix_sid_map_advertise_local": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Advertise and use local mapping server entries").String,
+				Optional:            true,
+			},
+			"segment_routing_prefix_sid_map_receive_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable the usage of remote mapping server advertisements").String,
+				Optional:            true,
+			},
+			"segment_routing_sr_prefer": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prefer segment routing labels over LDP labels").String,
+				Optional:            true,
+			},
+			"segment_routing_sr_prefer_prefix_list": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Filter prefixes for which SR preference is applied").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+				},
+			},
+			"segment_routing_forwarding_mpls": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use MPLS for Segment-routing forwarding").String,
+				Optional:            true,
+			},
+			"segment_routing_forwarding_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable Segment-routing on process interfaces").String,
+				Optional:            true,
+			},
+			"affinity_maps": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Affinity attribute name").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"affinity_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Affinity attribute name").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+							},
+						},
+						"bit_position": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Bit position for affinity attribute value").AddIntegerRangeDescription(0, 255).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 255),
+							},
+						},
+					},
+				},
+			},
+			"flex_algos": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Flex Algorithm definition").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Flex Algorithm definition").AddIntegerRangeDescription(128, 255).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(128, 255),
+							},
+						},
+						"priority": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Flex-Algo definition priority").AddIntegerRangeDescription(0, 255).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 255),
+							},
+						},
+						"microloop_avoidance_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable microloop avoidance for Flex-Algo").String,
+							Optional:            true,
+						},
+						"prefix_metric": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Advertise the Flex-Algo Definition").String,
+							Optional:            true,
+						},
+						"metric_type_delay": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use delay as metric").String,
+							Optional:            true,
+						},
+						"metric_type_te_metric": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use te-metric").String,
+							Optional:            true,
+						},
+						"advertise_definition": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Advertise the Flex-Algo Definition").String,
+							Optional:            true,
+						},
+						"fast_reroute_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable Fast ReRoute for Flex-Algo").String,
+							Optional:            true,
+						},
+						"affinity_exclude_any": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Affinity attribute name").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"affinity_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Affinity attribute name").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 32),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+										},
+									},
+								},
+							},
+						},
+						"affinity_include_any": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Affinity attribute name").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"affinity_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Affinity attribute name").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 32),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+										},
+									},
+								},
+							},
+						},
+						"affinity_include_all": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Affinity attribute name").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"affinity_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Affinity attribute name").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 32),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+										},
+									},
+								},
+							},
+						},
+						"srlg_exclude_any": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("srlg name").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"srlg_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("srlg name").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 64),
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"authentication_key_encrypted": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specifies an ENCRYPTED password (key) will follow").String,
+				Optional:            true,
+				Sensitive:           true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+				},
+			},
+			"message_digest_keys": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Message digest authentication password (key)").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"key_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Message digest authentication password (key)").AddIntegerRangeDescription(1, 255).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 255),
+							},
+						},
+						"md5_encrypted": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies an ENCRYPTED password (key) will follow").String,
+							Optional:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+							},
+						},
+					},
+				},
+			},
+			"authentication": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable authentication").String,
+				Optional:            true,
+			},
+			"authentication_message_digest": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use message-digest authentication").String,
+				Optional:            true,
+			},
+			"authentication_keychain_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify keychain name").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+				},
+			},
+			"authentication_null": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use no authentication").String,
+				Optional:            true,
+			},
+			"network_broadcast": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify OSPF broadcast multi-access network").String,
+				Optional:            true,
+			},
+			"network_non_broadcast": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify OSPF NBMA network").String,
+				Optional:            true,
+			},
+			"network_point_to_point": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify OSPF point-to-point network").String,
+				Optional:            true,
+			},
+			"network_point_to_multipoint": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify OSPF point-to-multipoint network").String,
+				Optional:            true,
+			},
+			"external_out_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable advertisement of intra-area routes as external").String,
+				Optional:            true,
+			},
+			"external_out_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable advertisement of intra-area routes as external").String,
+				Optional:            true,
+			},
+			"summary_in_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable advertisement of external prefixes as inter-area").String,
+				Optional:            true,
+			},
+			"summary_in_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable advertisement of external prefixes as inter-area").String,
+				Optional:            true,
+			},
+			"adjacency_stagger_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable stagger OSPF adjacency bring up").String,
+				Optional:            true,
+			},
+			"adjacency_stagger_initial_neighbors": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Initial number of neighbors to bring up per area (default 2)").AddIntegerRangeDescription(1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
+				},
+			},
+			"adjacency_stagger_simultaneous_neighbors": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum simultaneous neighbors to bring up (default 64)").AddIntegerRangeDescription(1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
+				},
+			},
+			"snmp_context": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specified SNMP context for OSPF instance").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9*/_]+`), ""),
+				},
+			},
+			"snmp_trap_rate_limit": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Adjust trap rate-limit parameters").AddIntegerRangeDescription(2, 60).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(2, 60),
+				},
+			},
+			"snmp_trap_rate_limit_max": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Max number of traps sent in window time").AddIntegerRangeDescription(0, 300).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 300),
+				},
+			},
+			"monitor_convergence": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enables OSPF route convergence monitoring").String,
+				Optional:            true,
+			},
+			"monitor_convergence_prefix_list": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enables Individual Prefix Monitoring").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+				},
+			},
+			"monitor_convergence_track_summary_routes": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enables Tracking Summary(Inter-Area) Prefix Monitoring").String,
+				Optional:            true,
+			},
+			"monitor_convergence_track_external_routes": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enables Tracking External(Type-5/7) Prefix Monitoring").String,
+				Optional:            true,
+			},
+			"monitor_convergence_track_ip_frr": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enables Tracking IP-Frr Convergence").String,
+				Optional:            true,
+			},
+			"ucmp": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable ucmp").String,
+				Optional:            true,
+			},
+			"ucmp_variance": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set the Variance for UCMP path metric").AddIntegerRangeDescription(101, 10000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(101, 10000),
+				},
+			},
+			"ucmp_prefix_list": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Filter prefixes for which UCMP path are calculated").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+				},
+			},
+			"ucmp_exclude_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Exclude an interface during UCMP computation").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Exclude an interface during UCMP computation").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+							},
+						},
+					},
+				},
+			},
+			"ucmp_delay_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Interval between SPF and start of the UCMP calculation").AddIntegerRangeDescription(1, 5000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 5000),
+				},
+			},
+			"srlg_admin_weight": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Default admin weight for all SRLG values").AddIntegerRangeDescription(0, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 65535),
+				},
+			},
+			"srlg_names": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Weighted SRLG name configuration").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"srlg_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Weighted SRLG name configuration").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 64),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"admin_weight": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Default admin weight for all SRLG values").AddIntegerRangeDescription(0, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+					},
+				},
+			},
+			"max_external_lsa": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum number of External LSAs per ASBR").AddIntegerRangeDescription(1, 4294967294).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4294967294),
+				},
+			},
+			"max_external_lsa_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Threshold value (%) at which to generate a warning msg").AddIntegerRangeDescription(1, 100).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 100),
+				},
+			},
+			"max_external_lsa_suppress_neighbor": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Suppress the neighbor when limit is crossed").String,
+				Optional:            true,
+			},
+			"max_external_lsa_warning_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Only give warning message when limit is exceeded").String,
+				Optional:            true,
+			},
+			"exchange_timer": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Time after which interface will be brought down if adjacency is stuck in exchange/loading").AddIntegerRangeDescription(1, 35791394).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 35791394),
+				},
+			},
+			"exchange_timer_hold_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Time after which interface will be brought up to recover adjacencies").AddIntegerRangeDescription(1, 35791394).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 35791394),
+				},
+			},
+			"exchange_timer_recovery_count": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Number of times recovery will be attempted").AddIntegerRangeDescription(1, 4294967294).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4294967294),
+				},
+			},
+			"distribute_link_state": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Distribute the link-state database to external services").String,
+				Optional:            true,
+			},
+			"distribute_link_state_instance_id": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set distribution process instance identifier").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"distribute_link_state_throttle": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Throttle time between successive LSA updates").AddIntegerRangeDescription(1, 3600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 3600),
+				},
+			},
+			"distribute_link_state_excl_external": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Filter advertisement of external prefixes").String,
+				Optional:            true,
+			},
+			"distribute_link_state_allow_prefix_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify the route-policy to allow a set of prefixes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"distribute_link_state_follow_on": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Follow on time between successive LSA updates").AddIntegerRangeDescription(1, 3600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 3600),
+				},
+			},
+			"nsr": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable NSR for all VRFs in this process").String,
+				Optional:            true,
+			},
+			"nsr_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable NSR for all VRFs in this process").String,
+				Optional:            true,
+			},
+			"protocol_shutdown": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Shutdown the OSPF protocol").String,
+				Optional:            true,
+			},
+			"protocol_shutdown_host_mode": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Only traffic destined for this box allowed").String,
+				Optional:            true,
+			},
+			"protocol_shutdown_on_reload": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Shutdown post reload only").String,
+				Optional:            true,
 			},
 		},
 	}

@@ -7,18 +7,74 @@ attributes:
     example: Bundle-Ether12
   - yang_name: core-isolation-group
     example: 11
+  - yang_name: timers/peering
+    example: 60
+  - yang_name: timers/recovery
+    example: 120
+  - yang_name: timers/carving
+    example: 5
+  - yang_name: timers/ac-debounce
+    example: 2000
   - yang_name: ethernet-segment/identifier/type/zero/esi
-    type: String
+    tf_name: ethernet_segment_esi_zero
+    optional: true
     delete_parent: true
-    example: 01.00.01.01.00.00.00.01.1
+    example: 01.01.01.01.01.01.01.01.04
   - yang_name: ethernet-segment/load-balancing-mode/all-active
-    example: false
+    exclude_test: true
+    example: true
   - yang_name: ethernet-segment/load-balancing-mode/port-active
-    example: false
+    example: true
   - yang_name: ethernet-segment/load-balancing-mode/single-active
+    exclude_test: true
     example: true
   - yang_name: ethernet-segment/load-balancing-mode/single-flow-active
-    example: false
+    exclude_test: true
+    example: true
+  - yang_name: ethernet-segment/force/single-homed
+    example: true
+  - yang_name: ethernet-segment/service-carving/manual/primary
+    tf_name: ethernet_segment_service_carving_manual_primary
+    optional: true
+    exclude_test: true
+    example: "100-101,103"
+  - yang_name: ethernet-segment/service-carving/manual/secondary
+    tf_name: ethernet_segment_service_carving_manual_secondary
+    optional: true
+    exclude_test: true
+    example: "200-201,203"
+  - yang_name: ethernet-segment/service-carving/hrw
+    tf_name: ethernet_segment_service_carving_hrw
+    example: true
+  - yang_name: ethernet-segment/service-carving/multicast/hrw-s-g
+    tf_name: ethernet_segment_service_carving_multicast_hrw_s_g
+    delete_parent: true
+    example: true
+  - yang_name: ethernet-segment/service-carving/multicast/hrw-g
+    tf_name: ethernet_segment_service_carving_multicast_hrw_g
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: ethernet-segment/service-carving/preference-based/weight
+    tf_name: ethernet_segment_service_carving_preference_based_weight
+    delete_parent: true
+    example: 100
+  - yang_name: ethernet-segment/service-carving/preference-based/access-driven
+    tf_name: ethernet_segment_service_carving_preference_based_access_driven
+    delete_parent: true
+    example: true
+  - yang_name: ethernet-segment/bgp/route-target
+    tf_name: ethernet_segment_bgp_rt
+    delete_parent: true
+    example: "01:01:01:01:01:04"
+  - yang_name: ethernet-segment/convergence/reroute
+    example: true
+  - yang_name: ethernet-segment/convergence/mac-mobility
+    example: true
+  - yang_name: ethernet-segment/convergence/nexthop-tracking
+    example: true
+  - yang_name: access-signal/bundle-down
+    example: true
 
 test_prerequisites:
   - path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn

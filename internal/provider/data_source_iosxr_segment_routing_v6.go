@@ -73,37 +73,13 @@ func (d *SegmentRoutingV6DataSource) Schema(ctx context.Context, req datasource.
 				MarkdownDescription: "Enable SRv6",
 				Computed:            true,
 			},
-			"encapsulation_source_address": schema.StringAttribute{
-				MarkdownDescription: "Configure a source address",
+			"sid_holdtime": schema.Int64Attribute{
+				MarkdownDescription: "Configure SID holdtime for a stale/freed SID",
 				Computed:            true,
 			},
-			"locators": schema.ListNestedAttribute{
-				MarkdownDescription: "Configure a SRv6 locator",
+			"logging_locator_status": schema.BoolAttribute{
+				MarkdownDescription: "Enable logging for locator status changes",
 				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"locator_enable": schema.BoolAttribute{
-							MarkdownDescription: "Enable a SRv6 locator",
-							Computed:            true,
-						},
-						"name": schema.StringAttribute{
-							MarkdownDescription: "Locator name",
-							Computed:            true,
-						},
-						"micro_segment_behavior": schema.StringAttribute{
-							MarkdownDescription: "Specify Locator's behavior",
-							Computed:            true,
-						},
-						"prefix": schema.StringAttribute{
-							MarkdownDescription: "IPv6 Prefix",
-							Computed:            true,
-						},
-						"prefix_length": schema.Int64Attribute{
-							MarkdownDescription: "Prefix length",
-							Computed:            true,
-						},
-					},
-				},
 			},
 			"formats": schema.ListNestedAttribute{
 				MarkdownDescription: "Configure a SRv6 format",
@@ -132,6 +108,62 @@ func (d *SegmentRoutingV6DataSource) Schema(ctx context.Context, req datasource.
 						},
 					},
 				},
+			},
+			"locators": schema.ListNestedAttribute{
+				MarkdownDescription: "Configure a SRv6 locator",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"locator_enable": schema.BoolAttribute{
+							MarkdownDescription: "Enable a SRv6 locator",
+							Computed:            true,
+						},
+						"name": schema.StringAttribute{
+							MarkdownDescription: "Locator name",
+							Computed:            true,
+						},
+						"micro_segment_behavior": schema.StringAttribute{
+							MarkdownDescription: "Specify Locator's behavior",
+							Computed:            true,
+						},
+						"prefix": schema.StringAttribute{
+							MarkdownDescription: "IPv6 Prefix",
+							Computed:            true,
+						},
+						"prefix_length": schema.Int64Attribute{
+							MarkdownDescription: "Prefix length",
+							Computed:            true,
+						},
+						"anycast": schema.BoolAttribute{
+							MarkdownDescription: "Specify locator to be anycast type",
+							Computed:            true,
+						},
+						"algorithm": schema.Int64Attribute{
+							MarkdownDescription: "Specify locator algorithm",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"encapsulation_traffic_class_option": schema.StringAttribute{
+				MarkdownDescription: "Config option",
+				Computed:            true,
+			},
+			"encapsulation_traffic_class_value": schema.Int64Attribute{
+				MarkdownDescription: "Field Value",
+				Computed:            true,
+			},
+			"encapsulation_hop_limit_option": schema.StringAttribute{
+				MarkdownDescription: "Hop-Limit config option",
+				Computed:            true,
+			},
+			"encapsulation_hop_limit_value": schema.Int64Attribute{
+				MarkdownDescription: "Count for Hop-limit",
+				Computed:            true,
+			},
+			"encapsulation_source_address": schema.StringAttribute{
+				MarkdownDescription: "Configure a source address",
+				Computed:            true,
 			},
 		},
 	}

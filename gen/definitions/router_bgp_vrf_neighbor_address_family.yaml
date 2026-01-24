@@ -12,10 +12,29 @@ attributes:
     example: 10.1.1.2
   - yang_name: af-name
     example: ipv4-unicast
-  - yang_name: route-policy/in
-    example: ROUTE_POLICY_1
-  - yang_name: route-policy/out
-    example: ROUTE_POLICY_1
+  - yang_name: encapsulation-type
+    exclude_test: true
+    example: srv6
+  - yang_name: weight
+    example: 100
+  - yang_name: multipath
+    example: true
+  - yang_name: use/af-group
+    exclude_test: true
+    example: AFGROUP1
+  - yang_name: capability/orf/prefix/capability-receive-orf-neighbor
+    tf_name: capability_orf_prefix
+    example: both
+  - yang_name: additional-paths/send
+    example: true
+  - yang_name: additional-paths/send/disable
+    exclude_test: true
+    example: true
+  - yang_name: additional-paths/receive
+    example: true
+  - yang_name: additional-paths/receive/disable
+    exclude_test: true
+    example: true
   - yang_name: default-originate
     example: true
   - yang_name: default-originate/DEFAULT-ORIGINATE/ROUTE-POLICY/route-policy
@@ -29,13 +48,59 @@ attributes:
     delete_parent: true
     exclude_test: true
     example: true
+  - yang_name: maximum-prefix/maximum-prefix-number
+    tf_name: maximum_prefix_limit
+    delete_parent: true
+    optional: true
+    example: 1248576
+  - yang_name: maximum-prefix/threshold-value
+    tf_name: maximum_prefix_threshold
+    delete_parent: true
+    optional: true
+    example: 80
+  - yang_name: maximum-prefix/restart
+    delete_parent: true
+    example: 5
+    exclude_test: true
+  - yang_name: maximum-prefix/discard-extra-paths
+    delete_parent: true
+    example: true
+    exclude_test: true
+  - yang_name: maximum-prefix/warning-only
+    delete_parent: true
+    example: true
   - yang_name: next-hop-self
     example: true
   - yang_name: next-hop-self/inheritance-disable
+    exclude_test: true
     example: true
-  - yang_name: soft-reconfiguration/inbound/always
+  - yang_name: next-hop-unchanged/next-hop-unchanged-enable
+    tf_name: next_hop_unchanged
+    exclude_test: true
     example: true
-  - yang_name: send-community-ebgp/inheritance-disable
+  - yang_name: next-hop-unchanged/multipath
+    exclude_test: true
+    example: true
+  - yang_name: next-hop-unchanged/next-hop-unchanged-enable/inheritance-disable
+    tf_name: next_hop_unchanged_inheritance_disable
+    exclude_test: true
+    example: true
+  - yang_name: route-policy/in
+    example: ROUTE_POLICY_1
+  - yang_name: route-policy/out
+    example: ROUTE_POLICY_1
+  - yang_name: orf/route-policy
+    example: ROUTE_POLICY_1
+  - yang_name: cluster-id/allow-equal
+    exclude_test: true
+    example: true
+  - yang_name: cluster-id/allow-equal/disable
+    exclude_test: true
+    example: true
+  - yang_name: replace-private-as
+    example: true
+  - yang_name: replace-private-as/internal
+    exclude_test: true
     example: true
   - yang_name: remove-private-as/inbound
     tf_name: remove_private_as_inbound
@@ -62,6 +127,249 @@ attributes:
     tf_name: remove_private_as_internal
     example: true
     exclude_test: true
+  - yang_name: route-reflector-client
+    exclude_test: true
+    example: true
+  - yang_name: route-reflector-client/inheritance-disable
+    exclude_test: true
+    example: true
+  - yang_name: send-community-ebgp
+    example: true
+  - yang_name: send-community-ebgp/inheritance-disable
+    exclude_test: true
+    example: true
+  - yang_name: send-community-gshut-ebgp
+    example: true
+  - yang_name: send-community-gshut-ebgp/inheritance-disable
+    exclude_test: true
+    example: true
+  - yang_name: send-extended-community-ebgp
+    exclude_test: true
+    example: true
+  - yang_name: send-extended-community-ebgp/inheritance-disable
+    exclude_test: true
+    example: true
+  - yang_name: soft-reconfiguration/inbound/always
+    example: true
+  - yang_name: update/out/originator-loopcheck
+    exclude_test: true
+    example: true
+  - yang_name: update/out/originator-loopcheck/disable
+    example: true
+  - yang_name: advertise/vpnv4/unicast/enable
+    tf_name: advertise_vpnv4_unicast
+    exclude_test: true
+    example: true
+  - yang_name: advertise/vpnv4/unicast/enable/re-originated
+    tf_name: advertise_vpnv4_unicast_re_originated
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: advertise/vpnv4/unicast/enable/re-originated/stitching-rt
+    tf_name: advertise_vpnv4_unicast_re_originated_stitching_rt
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: advertise/vpnv6/unicast/enable
+    tf_name: advertise_vpnv6_unicast
+    exclude_test: true
+    example: true
+  - yang_name: advertise/vpnv6/unicast/enable/re-originated
+    tf_name: advertise_vpnv6_unicast_re_originated
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: advertise/vpnv6/unicast/enable/re-originated/stitching-rt
+    tf_name: advertise_vpnv6_unicast_re_originated_stitching_rt
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: advertise/l2vpn/evpn/re-originated
+    tf_name: advertise_l2vpn_evpn_re_originated
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: advertise/l2vpn/evpn/re-originated/stitching-rt
+    tf_name: advertise_l2vpn_evpn_re_originated_stitching_rt
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: segment-routing/srv6/prefix-sid-type4
+    tf_name: segment_routing_srv6_prefix_sid_type4
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: import/IMPORT/STITCHING-RT/stitching-rt
+    xpath: import/stitching-rt
+    tf_name: import_stitching_rt
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: import/IMPORT/STITCHING-RT/stitching-rt/re-originate
+    xpath: import/stitching-rt/re-originate
+    tf_name: import_stitching_rt_re_originate
+    exclude_test: true
+    example: true
+  - yang_name: import/IMPORT/STITCHING-RT/stitching-rt/re-originate/stitching-rt
+    xpath: import/stitching-rt/re-originate/stitching-rt
+    tf_name: import_stitching_rt_re_originate_stitching_rt
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: import/IMPORT/RE-ORIGINATE/re-originate
+    xpath: import/re-originate
+    tf_name: import_re_originate
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: allowas-in/number-of-occurrences-of-as-number
+    tf_name: allowas_in
+    example: 3
+  - yang_name: allowconfedas-in/number-of-occurrences-of-confederation-number
+    tf_name: allowconfedas_in
+    example: 5
+  # Device Bug: Does not show in UM output. DDTS to be filed.
+  # - yang_name: long-lived-graceful-restart/capable
+  #   exclude_test: true
+  #   example: true
+  # Device Bug: Rejects set operations on stale-time/send and stale-time/accept with
+  # 'Operation failed'. DDTS to be filed.
+  # - yang_name: long-lived-graceful-restart/stale-time/send
+  #   tf_name: long_lived_graceful_restart_stale_time_send
+  #   delete_parent: true
+  #   example: 120
+  # - yang_name: long-lived-graceful-restart/stale-time/accept
+  #   tf_name: long_lived_graceful_restart_stale_time_accept
+  #   delete_parent: true
+  #   example: 120
+  - yang_name: site-of-origin/SITE-OF-ORIGIN/TWO-BYTE-AS/two-byte-as/two-byte-as-number
+    xpath: site-of-origin/two-byte-as/two-byte-as-number
+    tf_name: site_of_origin_two_byte_as_number
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 65001
+  - yang_name: site-of-origin/SITE-OF-ORIGIN/TWO-BYTE-AS/two-byte-as/asn2-index
+    xpath: site-of-origin/two-byte-as/asn2-index
+    tf_name: site_of_origin_two_byte_as_index
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 100
+  - yang_name: site-of-origin/SITE-OF-ORIGIN/FOUR-BYTE-AS/four-byte-as/four-byte-as-number
+    xpath: site-of-origin/four-byte-as/four-byte-as-number
+    tf_name: site_of_origin_four_byte_as_number
+    optional: true
+    delete_parent: true
+    example: 65536
+  - yang_name: site-of-origin/SITE-OF-ORIGIN/FOUR-BYTE-AS/four-byte-as/asn4-index
+    xpath: site-of-origin/four-byte-as/asn4-index
+    tf_name: site_of_origin_four_byte_as_index
+    optional: true
+    delete_parent: true
+    example: 100
+  - yang_name: site-of-origin/SITE-OF-ORIGIN/IPV4-ADDRESS/ipv4-address/address
+    xpath: site-of-origin/ipv4-address/address
+    tf_name: site_of_origin_ipv4_address
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 192.168.1.1
+  - yang_name: site-of-origin/SITE-OF-ORIGIN/IPV4-ADDRESS/ipv4-address/ipv4address-index
+    xpath: site-of-origin/ipv4-address/ipv4address-index
+    tf_name: site_of_origin_ipv4_address_index
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 100
+  - yang_name: as-override
+    example: true
+  - yang_name: as-override/inheritance-disable
+    example: true
+    exclude_test: true
+  - yang_name: aigp/enable
+    tf_name: aigp
+    example: true
+  - yang_name: aigp/enable/disable
+    tf_name: aigp_disable
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: aigp/send/med
+    example: true
+  - yang_name: aigp/send/med/disable
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: aigp/send/cost-community/COST-COMMUNITY/DISABLE/disable
+    xpath: aigp/send/cost-community/disable
+    tf_name: aigp_send_cost_community_disable
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: aigp/send/cost-community/COST-COMMUNITY/COST-COMMUNITY-ID/cost-community-id/cost-community-id-number
+    xpath: aigp/send/cost-community/cost-community-id/cost-community-id-number
+    tf_name: aigp_send_cost_community_id
+    delete_parent: true
+    example: 5
+  - yang_name: aigp/send/cost-community/COST-COMMUNITY/COST-COMMUNITY-ID/cost-community-id/poi/igp-cost
+    xpath: aigp/send/cost-community/cost-community-id/poi/igp-cost
+    tf_name: aigp_send_cost_community_id_poi_igp_cost
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: aigp/send/cost-community/COST-COMMUNITY/COST-COMMUNITY-ID/cost-community-id/poi/igp-cost/transitive
+    xpath: aigp/send/cost-community/cost-community-id/poi/igp-cost/transitive
+    tf_name: aigp_send_cost_community_id_poi_igp_cost_transitive
+    exclude_test: true
+    example: true
+  - yang_name: aigp/send/cost-community/COST-COMMUNITY/COST-COMMUNITY-ID/cost-community-id/poi/pre-bestpath
+    xpath: aigp/send/cost-community/cost-community-id/poi/pre-bestpath
+    tf_name: aigp_send_cost_community_id_poi_pre_bestpath
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: aigp/send/cost-community/COST-COMMUNITY/COST-COMMUNITY-ID/cost-community-id/poi/pre-bestpath/transitive
+    xpath: aigp/send/cost-community/cost-community-id/poi/pre-bestpath/transitive
+    tf_name: aigp_send_cost_community_id_poi_pre_bestpath_transitive
+    example: true
+  - yang_name: send-multicast-attributes
+    exclude_test: true
+    example: true
+  - yang_name: send-multicast-attributes/disable
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: accept-own
+    exclude_test: true
+    example: true
+  - yang_name: accept-own/inheritance-disable
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: slow-peer/SLOW-PEER/DYNAMIC/dynamic
+    xpath: slow-peer/dynamic
+    tf_name: slow_peer_dynamic
+    exclude_test: true
+    example: true
+  - yang_name: slow-peer/SLOW-PEER/DYNAMIC/dynamic/threshold
+    xpath: slow-peer/dynamic/threshold
+    tf_name: slow_peer_dynamic_threshold
+    exclude_test: true
+    example: 260
+  - yang_name: slow-peer/SLOW-PEER/DYNAMIC/dynamic/disable
+    xpath: slow-peer/dynamic/disable
+    tf_name: slow_peer_dynamic_disable
+    exclude_test: true
+    example: true
+  - yang_name: slow-peer/SLOW-PEER/STATIC/static
+    xpath: slow-peer/static
+    tf_name: slow_peer_static
+    example: true
+  - yang_name: origin-as/validation/disable
+    example: true
+  - yang_name: bestpath/origin-as/allow/invalid
+    example: true
 
 test_prerequisites:
   - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF2]
@@ -79,6 +387,8 @@ test_prerequisites:
     attributes:
       - name: as-number
         value: 65001
+      - name: bgp/router-id
+        value: 22.22.22.22
     lists:
       - name: address-families/address-family
         key: af-name
@@ -86,6 +396,18 @@ test_prerequisites:
           - attributes:
               - name: af-name
                 value: vpnv4-unicast
+    dependencies: [1]
+  - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]
+    attributes:
+      - name: as-number
+        value: 65001
+    lists:
+      - name: address-families/address-family
+        key: af-name
+        items:
+          - attributes:
+              - name: af-name
+                value: vpnv6-unicast
     dependencies: [1]
   - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF2]
     no_delete: true

@@ -1,0 +1,143 @@
+---
+name: Call Home
+path: Cisco-IOS-XR-um-call-home-cfg:/call-home
+doc_category: System
+attributes:
+  - yang_name: service/active
+    tf_name: service_active
+    example: true
+  - yang_name: mail-servers/mail-server
+    tf_name: mail_servers
+    type: List
+    attributes:
+      - yang_name: mail-server-name
+        id: true
+        example: "smtp.example.com"
+      - yang_name: priority
+        example: 1
+  - yang_name: sender/from
+    tf_name: sender_from
+    example: "router@example.com"
+  - yang_name: sender/reply-to
+    tf_name: sender_reply_to
+    example: "admin@example.com"
+  - yang_name: contact-email-addr
+    tf_name: contact_email
+    example: "admin@example.com"
+  - yang_name: contact/smart-licensing
+    tf_name: contact_smart_licensing
+    exclude_test: true
+    example: true
+  - yang_name: phone-number
+    tf_name: phone_number
+    example: "+14085551234"
+  - yang_name: street-address
+    tf_name: street_address
+    example: "170 West Tasman Drive, San Jose, CA 95134"
+  - yang_name: customer-id
+    tf_name: customer_id
+    example: "CUST12345"
+  - yang_name: contract-id
+    tf_name: contract_id
+    example: "CONTRACT67890"
+  - yang_name: site-id
+    tf_name: site_id
+    example: "SITE001"
+  - yang_name: rate-limit
+    tf_name: rate_limit
+    example: 3
+  - yang_name: data-privacy/hostname
+    tf_name: data_privacy_hostname
+    exclude_test: true
+    example: true
+  - yang_name: data-privacy/level/normal
+    tf_name: data_privacy_level_normal
+    example: true
+    exclude_test: true
+  - yang_name: data-privacy/level/high
+    tf_name: data_privacy_level_high
+    example: true
+  - yang_name: http-proxy/server-name
+    tf_name: http_proxy_name
+    optional: true
+    delete_parent: true
+    example: "proxy.example.com"
+  - yang_name: http-proxy/port
+    tf_name: http_proxy_port
+    example: 8080
+  - yang_name: source-interface
+    tf_name: source_interface
+    example: "Loopback0"
+  - yang_name: syslog-throttling
+    tf_name: syslog_throttling
+    example: true
+  - yang_name: vrf
+    tf_name: vrf
+    minimum_test_value: '"OOB"'
+    example: "OOB"
+  - yang_name: aaa-authorization/active
+    tf_name: aaa_authorization
+    example: true
+  - yang_name: aaa-authorization/username
+    tf_name: aaa_authorization_username
+    example: "callhome"
+  - yang_name: profiles/profile
+    tf_name: profiles
+    type: List
+    attributes:
+      - yang_name: profile-name
+        id: true
+        example: "cisco-sl"
+      - yang_name: active
+        example: true
+      - yang_name: destination/addresses/address
+        tf_name: destination_addresses
+        type: List
+        attributes:
+          - yang_name: address-type
+            id: true
+            example: "http"
+          - yang_name: destination-address
+            id: true
+            example: "https://cisco-license.customer.com/Transportgateway/services/DeviceRequestHandler"
+      - yang_name: destination/message-size-limit
+        tf_name: destination_message_size_limit
+        example: 100000
+      - yang_name: destination/preferred-msg-format/short-text
+        tf_name: destination_msg_format_short
+        example: true
+        exclude_test: true
+      - yang_name: destination/preferred-msg-format/long-text
+        tf_name: destination_msg_format_long
+        example: true
+      - yang_name: destination/transport-method/email
+        tf_name: destination_transport_method_email
+        exclude_test: true
+        example: true
+      - yang_name: destination/transport-method/email/disable
+        tf_name: destination_transport_method_email_disable
+        example: true
+      - yang_name: destination/transport-method/http
+        tf_name: destination_transport_method_http
+        example: true
+      - yang_name: destination/transport-method/http/disable
+        tf_name: destination_transport_method_http_disable
+        example: true
+        exclude_test: true
+      - yang_name: reporting/smart-call-home-data
+        tf_name: reporting_smart_call_home_data
+        example: true
+      - yang_name: reporting/smart-call-home-data/disable
+        tf_name: reporting_smart_call_home_data_disable
+        example: true
+        exclude_test: true
+      - yang_name: reporting/smart-licensing-data
+        tf_name: reporting_smart_licensing_data
+        example: true
+      - yang_name: reporting/smart-licensing-data/disable
+        tf_name: reporting_smart_licensing_data_disable
+        example: true
+        exclude_test: true
+      - yang_name: anonymous-reporting-only
+        tf_name: anonymous_reporting_only
+        example: true

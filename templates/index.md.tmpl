@@ -3,11 +3,15 @@
 layout: ""
 page_title: "Provider: IOSXR"
 description: |-
-  The IOSXR provider provides resources to interact with one or more Cisco IOS-XR devices using gNMI or NETCONF protocols.
+  The IOSXR provider provides resources to interact with one or more Cisco IOS-XR devices.
+
 ---
 
 # IOSXR Provider
 
+The IOSXR provider provides resources to interact with one or more Cisco IOS-XR devices. The provider supports the **gNMI** (HTTP/2-based) protocol for device communication by default.
+
+## Device Configuration
 The IOSXR provider provides resources to interact with one or more Cisco IOS-XR devices using gNMI or NETCONF protocols.
 
 ## Supported Protocols
@@ -17,6 +21,9 @@ The provider supports two protocols for device communication:
 - **gNMI (gRPC Network Management Interface)** - Default protocol, recommended for production use
 - **NETCONF** - Alternative protocol for legacy systems or specific use cases
 
+### gNMI (Default)
+
+gNMI is the default protocol and requires the following device configuration:
 ## Device Configuration Requirements
 
 ### For gNMI (Default)
@@ -43,6 +50,16 @@ All resources and data sources have been tested with the following releases.
 | XRd        | 24.4.2  |
 | NCS 5500   | 24.4.2  |
 | Cisco 8000 | 24.4.2  |
+
+## Guides
+
+The following guides are available to help you get started with the IOSXR provider:
+
+- **[Manage Multiple Devices](guides/manage_multiple_devices)** - Learn how to manage multiple IOS-XR devices using provider aliases or the single-provider approach with device-level management control
+- **[Selective Deploy](guides/selective_deploy)** - Deploy configurations to a subset of devices while keeping others in a "frozen" state for staged rollouts and maintenance scenarios
+- **[Importing Resources](guides/importing_resources)** - Import existing device configurations into Terraform state management
+- **[Destroying Resources](guides/destroying_resources)** - Control resource destruction behavior using delete modes
+- **[Changelog](guides/changelog)** - Review version history and breaking changes
 
 ## Example Usage
 

@@ -137,12 +137,15 @@ func (data *IPv4AccessListOptions) updateFromBody(ctx context.Context, res []byt
 		data.LogUpdateRate = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "icmp-off"); value.Exists() {
-		data.IcmpOff = types.BoolValue(true)
-	} else if data.IcmpOff.IsNull() {
-		// If currently null, keep as null (field not in config)
-		data.IcmpOff = types.BoolNull()
+		if !data.IcmpOff.IsNull() {
+			data.IcmpOff = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.IcmpOff.IsNull() {
+			data.IcmpOff = types.BoolNull()
+		}
 	}
-	// else: preserve existing value (e.g., false from config)
 }
 
 // End of section. //template:end updateFromBody
@@ -163,8 +166,7 @@ func (data *IPv4AccessListOptions) updateFromBodyXML(ctx context.Context, res xm
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/icmp-off"); value.Exists() {
 		data.IcmpOff = types.BoolValue(true)
 	} else {
-		// If config has false and device doesn't have the field, keep false (don't set to null)
-		// Only set to null if it was already null
+		// For presence-based booleans, only set to null if it's already null
 		if data.IcmpOff.IsNull() {
 			data.IcmpOff = types.BoolNull()
 		}
@@ -172,7 +174,6 @@ func (data *IPv4AccessListOptions) updateFromBodyXML(ctx context.Context, res xm
 }
 
 // End of section. //template:end updateFromBodyXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *IPv4AccessListOptions) fromBody(ctx context.Context, res gjson.Result) {
@@ -188,11 +189,12 @@ func (data *IPv4AccessListOptions) fromBody(ctx context.Context, res gjson.Resul
 	}
 	if value := res.Get(prefix + "icmp-off"); value.Exists() {
 		data.IcmpOff = types.BoolValue(true)
+	} else {
+		data.IcmpOff = types.BoolNull()
 	}
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *IPv4AccessListOptionsData) fromBody(ctx context.Context, res gjson.Result) {
@@ -208,11 +210,12 @@ func (data *IPv4AccessListOptionsData) fromBody(ctx context.Context, res gjson.R
 	}
 	if value := res.Get(prefix + "icmp-off"); value.Exists() {
 		data.IcmpOff = types.BoolValue(true)
+	} else {
+		data.IcmpOff = types.BoolNull()
 	}
 }
 
 // End of section. //template:end fromBodyData
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *IPv4AccessListOptions) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -224,11 +227,12 @@ func (data *IPv4AccessListOptions) fromBodyXML(ctx context.Context, res xmldot.R
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/icmp-off"); value.Exists() {
 		data.IcmpOff = types.BoolValue(true)
+	} else {
+		data.IcmpOff = types.BoolNull()
 	}
 }
 
 // End of section. //template:end fromBodyXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *IPv4AccessListOptionsData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -246,16 +250,12 @@ func (data *IPv4AccessListOptionsData) fromBodyXML(ctx context.Context, res xmld
 }
 
 // End of section. //template:end fromBodyDataXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *IPv4AccessListOptions) getDeletedItems(ctx context.Context, state IPv4AccessListOptions) []string {
 	deletedItems := make([]string, 0)
-	// For presence-based booleans, delete if going from true to false or to null
-	if !state.IcmpOff.IsNull() && state.IcmpOff.ValueBool() {
-		if data.IcmpOff.IsNull() || !data.IcmpOff.ValueBool() {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/icmp-off", state.getPath()))
-		}
+	if !state.IcmpOff.IsNull() && data.IcmpOff.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/icmp-off", state.getPath()))
 	}
 	if !state.LogUpdateRate.IsNull() && data.LogUpdateRate.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/log-update/rate", state.getPath()))
@@ -267,7 +267,6 @@ func (data *IPv4AccessListOptions) getDeletedItems(ctx context.Context, state IP
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
 func (data *IPv4AccessListOptions) getEmptyLeafsDelete(ctx context.Context, state *IPv4AccessListOptions) []string {
@@ -282,7 +281,6 @@ func (data *IPv4AccessListOptions) getEmptyLeafsDelete(ctx context.Context, stat
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *IPv4AccessListOptions) getDeletePaths(ctx context.Context) []string {
@@ -301,7 +299,6 @@ func (data *IPv4AccessListOptions) getDeletePaths(ctx context.Context) []string 
 }
 
 // End of section. //template:end getDeletePaths
-
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *IPv4AccessListOptions) addDeletedItemsXML(ctx context.Context, state IPv4AccessListOptions, body string) string {
@@ -337,7 +334,6 @@ func (data *IPv4AccessListOptions) addDeletedItemsXML(ctx context.Context, state
 }
 
 // End of section. //template:end addDeletedItemsXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *IPv4AccessListOptions) addDeletePathsXML(ctx context.Context, body string) string {

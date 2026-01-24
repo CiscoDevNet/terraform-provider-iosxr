@@ -20,8 +20,58 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+import (
+	"os"
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
 
 // End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
+
+func TestAccDataSourceIosxrL2VPNPWClass(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_protocol_ldp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_control_word", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_transport_mode_vlan", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_vccv_verification_type_none", "true"))
+	if os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_sequencing_both", "true"))
+	}
+	if os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_sequencing_both_resync", "10"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_preferred_path_sr_te_policy", "sr-policy-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_preferred_path_fallback_disable", "true"))
+	if os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_switching_tlv_hide", "true"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_tag_rewrite_ingress_vlan", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_redundancy_one_way", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_redundancy_initial_delay", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_load_balancing_flow_label_both", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_load_balancing_flow_label_both_static", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_load_balancing_flow_label_code_17", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_load_balancing_flow_label_code_17_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_ipv4_source", "1.2.3.4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "backup_disable_delay", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "mac_withdraw", "true"))
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { testAccPreCheck(t) },
+		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccDataSourceIosxrL2VPNPWClassPrerequisitesConfig + testAccDataSourceIosxrL2VPNPWClassConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
+			},
+		},
+	})
+}
+
+// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrL2VPNPWClassPrerequisitesConfig = `
@@ -34,3 +84,49 @@ resource "iosxr_gnmi" "PreReq0" {
 `
 
 // End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
+
+func testAccDataSourceIosxrL2VPNPWClassConfig() string {
+	config := `resource "iosxr_l2vpn_pw_class" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	name = "PW-CLASS1"` + "\n"
+	config += `	encapsulation_mpls = true` + "\n"
+	config += `	encapsulation_mpls_protocol_ldp = true` + "\n"
+	config += `	encapsulation_mpls_control_word = true` + "\n"
+	config += `	encapsulation_mpls_transport_mode_vlan = true` + "\n"
+	config += `	encapsulation_mpls_vccv_verification_type_none = true` + "\n"
+	if os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
+		config += `	encapsulation_mpls_sequencing_both = true` + "\n"
+	}
+	if os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
+		config += `	encapsulation_mpls_sequencing_both_resync = 10` + "\n"
+	}
+	config += `	encapsulation_mpls_preferred_path_sr_te_policy = "sr-policy-1"` + "\n"
+	config += `	encapsulation_mpls_preferred_path_fallback_disable = true` + "\n"
+	if os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
+		config += `	encapsulation_mpls_switching_tlv_hide = true` + "\n"
+	}
+	config += `	encapsulation_mpls_tag_rewrite_ingress_vlan = 100` + "\n"
+	config += `	encapsulation_mpls_redundancy_one_way = true` + "\n"
+	config += `	encapsulation_mpls_redundancy_initial_delay = 60` + "\n"
+	config += `	encapsulation_mpls_load_balancing_flow_label_both = true` + "\n"
+	config += `	encapsulation_mpls_load_balancing_flow_label_both_static = true` + "\n"
+	config += `	encapsulation_mpls_load_balancing_flow_label_code_17 = true` + "\n"
+	config += `	encapsulation_mpls_load_balancing_flow_label_code_17_disable = true` + "\n"
+	config += `	encapsulation_mpls_ipv4_source = "1.2.3.4"` + "\n"
+	config += `	backup_disable_delay = 10` + "\n"
+	config += `	mac_withdraw = true` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+
+	config += `
+		data "iosxr_l2vpn_pw_class" "test" {
+			name = "PW-CLASS1"
+			depends_on = [iosxr_l2vpn_pw_class.test]
+		}
+	`
+	return config
+}
+
+// End of section. //template:end testAccDataSourceConfig

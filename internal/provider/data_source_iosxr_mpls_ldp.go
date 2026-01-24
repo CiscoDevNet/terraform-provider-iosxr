@@ -73,37 +73,93 @@ func (d *MPLSLDPDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				MarkdownDescription: "Configure router Id",
 				Computed:            true,
 			},
-			"address_families": schema.ListNestedAttribute{
-				MarkdownDescription: "Configure Address Family and its parameters",
+			"graceful_restart": schema.BoolAttribute{
+				MarkdownDescription: "Configure graceful restart feature",
 				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"af_name": schema.StringAttribute{
-							MarkdownDescription: "Configure Address Family and its parameters",
-							Computed:            true,
-						},
-						"label_local_allocate_for_access_list": schema.StringAttribute{
-							MarkdownDescription: "IP access-list",
-							Computed:            true,
-						},
-						"label_local_allocate_for_host_routes": schema.BoolAttribute{
-							MarkdownDescription: "Allocate label for host routes only",
-							Computed:            true,
-						},
-					},
-				},
 			},
-			"interfaces": schema.ListNestedAttribute{
-				MarkdownDescription: "Enable LDP on an interface and enter interface submode",
+			"graceful_restart_reconnect_timeout": schema.Int64Attribute{
+				MarkdownDescription: "Session Reconnect timeout",
 				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"interface_name": schema.StringAttribute{
-							MarkdownDescription: "Enable LDP on an interface and enter interface submode",
-							Computed:            true,
-						},
-					},
-				},
+			},
+			"graceful_restart_forwarding_state_holdtime": schema.Int64Attribute{
+				MarkdownDescription: "Forwarding State holdtime for a restarting LSR",
+				Computed:            true,
+			},
+			"graceful_restart_helper_peer_maintain_on_local_reset_for": schema.StringAttribute{
+				MarkdownDescription: "Access list of LDP Peers",
+				Computed:            true,
+			},
+			"ltrace_buffer_multiplier": schema.Int64Attribute{
+				MarkdownDescription: "Ltrace buffer file size multiplier",
+				Computed:            true,
+			},
+			"default_vrf_implicit_ipv4_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable the implicit enabling for IPv4 address family ",
+				Computed:            true,
+			},
+			"session_backoff_time_initial": schema.Int64Attribute{
+				MarkdownDescription: "Configure session backoff parameters",
+				Computed:            true,
+			},
+			"session_backoff_time_maximum": schema.Int64Attribute{
+				MarkdownDescription: "Maximum session backoff time (seconds)",
+				Computed:            true,
+			},
+			"session_holdtime": schema.Int64Attribute{
+				MarkdownDescription: "Configure session holdtime",
+				Computed:            true,
+			},
+			"session_downstream_on_demand_with": schema.StringAttribute{
+				MarkdownDescription: "Access list of LDP Peers",
+				Computed:            true,
+			},
+			"session_protection": schema.BoolAttribute{
+				MarkdownDescription: "Configure session protection parameters",
+				Computed:            true,
+			},
+			"session_protection_for_acl": schema.StringAttribute{
+				MarkdownDescription: "IP Access list to specify LDP Peers",
+				Computed:            true,
+			},
+			"session_protection_for_acl_duration": schema.Int64Attribute{
+				MarkdownDescription: "Holdup time in seconds",
+				Computed:            true,
+			},
+			"session_protection_for_acl_duration_infinite": schema.BoolAttribute{
+				MarkdownDescription: "Protect session forever after loss of link discovery",
+				Computed:            true,
+			},
+			"session_protection_duration": schema.Int64Attribute{
+				MarkdownDescription: "Holdup time in seconds",
+				Computed:            true,
+			},
+			"session_protection_duration_infinite": schema.BoolAttribute{
+				MarkdownDescription: "Protect session forever after loss of link discovery",
+				Computed:            true,
+			},
+			"nsr": schema.BoolAttribute{
+				MarkdownDescription: "Configure Non-Stop Routing",
+				Computed:            true,
+			},
+			"entropy_label": schema.BoolAttribute{
+				MarkdownDescription: "Configure Entropy Label",
+				Computed:            true,
+			},
+			"entropy_label_add_el": schema.BoolAttribute{
+				MarkdownDescription: "Configure Entropy Label",
+				Computed:            true,
+			},
+			"signalling_dscp": schema.Int64Attribute{
+				MarkdownDescription: "Set DSCP for LDP control packets",
+				Computed:            true,
+			},
+			"igp_sync_delay_on_session_up": schema.Int64Attribute{
+				MarkdownDescription: "Interface sync-up delay after session up",
+				Computed:            true,
+			},
+			"igp_sync_delay_on_proc_restart": schema.Int64Attribute{
+				MarkdownDescription: "Global sync up delay to be used after process restart",
+				Computed:            true,
 			},
 			"capabilities_sac": schema.BoolAttribute{
 				MarkdownDescription: "State Advertisement Control",
@@ -125,53 +181,94 @@ func (d *MPLSLDPDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				MarkdownDescription: "Disable exchanging PW FEC129 label bindings",
 				Computed:            true,
 			},
-			"igp_sync_delay_on_session_up": schema.Int64Attribute{
-				MarkdownDescription: "Interface sync-up delay after session up",
+			"log_hello_adjacency": schema.BoolAttribute{
+				MarkdownDescription: "Hello adjacency events",
 				Computed:            true,
 			},
-			"igp_sync_delay_on_proc_restart": schema.Int64Attribute{
-				MarkdownDescription: "Global sync up delay to be used after process restart",
+			"log_neighbor": schema.BoolAttribute{
+				MarkdownDescription: "Neighbor events",
 				Computed:            true,
 			},
-			"mldp": schema.BoolAttribute{
-				MarkdownDescription: "Configure mLDP parameters",
+			"log_nsr": schema.BoolAttribute{
+				MarkdownDescription: "NSR synchronization events",
 				Computed:            true,
 			},
-			"mldp_logging_notifications": schema.BoolAttribute{
-				MarkdownDescription: "MLDP logging notifications",
+			"log_graceful_restart": schema.BoolAttribute{
+				MarkdownDescription: "Graceful Restart events",
 				Computed:            true,
 			},
-			"mldp_address_families": schema.ListNestedAttribute{
-				MarkdownDescription: "Configure Address Family and its parameters",
+			"log_session_protection": schema.BoolAttribute{
+				MarkdownDescription: "Session Protection events",
+				Computed:            true,
+			},
+			"discovery_hello_holdtime": schema.Int64Attribute{
+				MarkdownDescription: "Hello holdtime",
+				Computed:            true,
+			},
+			"discovery_hello_interval": schema.Int64Attribute{
+				MarkdownDescription: "Hello interval",
+				Computed:            true,
+			},
+			"discovery_targeted_hello_holdtime": schema.Int64Attribute{
+				MarkdownDescription: "Targeted hello holdtime",
+				Computed:            true,
+			},
+			"discovery_targeted_hello_interval": schema.Int64Attribute{
+				MarkdownDescription: "Targeted Hello interval",
+				Computed:            true,
+			},
+			"discovery_instance_tlv_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable transmit and receive processing for TLV",
+				Computed:            true,
+			},
+			"discovery_ds_tlv_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable transmit and receive processing for TLV",
+				Computed:            true,
+			},
+			"discovery_rtr_id_arb_tlv_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable transmit and receive processing for TLV",
+				Computed:            true,
+			},
+			"discovery_quick_start_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable quick discovery",
+				Computed:            true,
+			},
+			"neighbor_dual_stack_transport_connection_prefer_ipv4": schema.BoolAttribute{
+				MarkdownDescription: "IPv4",
+				Computed:            true,
+			},
+			"neighbor_dual_stack_transport_connection_max_wait": schema.Int64Attribute{
+				MarkdownDescription: "Maximum wait for prefered transport connection establishment",
+				Computed:            true,
+			},
+			"neighbor_dual_stack_tlv_compliance": schema.BoolAttribute{
+				MarkdownDescription: "Configure dual-stack tlv compliance checks",
+				Computed:            true,
+			},
+			"neighbors": schema.ListNestedAttribute{
+				MarkdownDescription: "configure this node",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: "Configure Address Family and its parameters",
+						"neighbor_address": schema.StringAttribute{
+							MarkdownDescription: "configure this node",
 							Computed:            true,
 						},
-						"make_before_break_delay": schema.Int64Attribute{
-							MarkdownDescription: "MBB delay",
+						"label_space_id": schema.Int64Attribute{
+							MarkdownDescription: "Label Space Id of neighbor",
 							Computed:            true,
 						},
-						"forwarding_recursive": schema.BoolAttribute{
-							MarkdownDescription: "Enable recursive forwarding",
+						"password_encrypted": schema.StringAttribute{
+							MarkdownDescription: "Specifies an ENCRYPTED password will follow",
 							Computed:            true,
+							Sensitive:           true,
 						},
-						"forwarding_recursive_route_policy": schema.StringAttribute{
-							MarkdownDescription: "Route policy",
-							Computed:            true,
-						},
-						"recursive_fec": schema.BoolAttribute{
-							MarkdownDescription: "MLDP Recursive FEC enable",
+						"password_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disables the global password from this neighbor",
 							Computed:            true,
 						},
 					},
 				},
-			},
-			"session_protection": schema.BoolAttribute{
-				MarkdownDescription: "Configure session protection parameters",
-				Computed:            true,
 			},
 		},
 	}

@@ -21,10 +21,12 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 // End of section. //template:end imports
@@ -36,8 +38,10 @@ func TestAccIosxrMPLSOAM(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_echo_disable_vendor_extension", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_echo_reply_mode_control_channel_allow_reverse_lsp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_echo_revision_four", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_dpm_pps", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_dpm_interval", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_dpm_downstream_ecmp_faults", "true"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -81,10 +85,25 @@ func testAccIosxrMPLSOAMConfig_all() string {
 	config += `	oam = true` + "\n"
 	config += `	oam_echo_disable_vendor_extension = true` + "\n"
 	config += `	oam_echo_reply_mode_control_channel_allow_reverse_lsp = true` + "\n"
+	config += `	oam_echo_revision_four = true` + "\n"
 	config += `	oam_dpm_pps = 10` + "\n"
 	config += `	oam_dpm_interval = 60` + "\n"
+	config += `	oam_dpm_downstream_ecmp_faults = true` + "\n"
 	config += `}` + "\n"
 	return config
 }
 
 // End of section. //template:end testAccConfigAll
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrMPLSOAMImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+
+// End of section. //template:end testPrerequisites

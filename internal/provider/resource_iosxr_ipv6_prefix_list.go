@@ -33,6 +33,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -119,6 +120,16 @@ func (r *IPv6PrefixListResource) Schema(ctx context.Context, req resource.Schema
 								stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
 							},
+						},
+						"zone": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv6 zone if entered with IPv6 address").AddDefaultValueDescription("0").String,
+							Optional:            true,
+							Computed:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+							Default: stringdefault.StaticString("0"),
 						},
 						"mask": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Mask length of IPv6 address").AddIntegerRangeDescription(0, 128).String,

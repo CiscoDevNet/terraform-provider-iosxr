@@ -20,9 +20,92 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+import (
+	"os"
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
 
 // End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
+
+func TestAccDataSourceIosxrLLDP(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "holdtime", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "timer", "6"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "reinit", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "system_name", "Router1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "system_description", "Router1-Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "chassis_id", "FOC22439P72"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "chassis_id_type_local", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "subinterfaces_enable", "true"))
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "subinterfaces_tagged", "true"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "management_enable", "true"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "priorityaddr_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "extended_show_width_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "tlv_select_management_address_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "tlv_select_port_description_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "tlv_select_system_capabilities_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "tlv_select_system_description_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "tlv_select_system_name_disable", "true"))
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { testAccPreCheck(t) },
+		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccDataSourceIosxrLLDPConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
+			},
+		},
+	})
+}
+
+// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 
 // End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
+
+func testAccDataSourceIosxrLLDPConfig() string {
+	config := `resource "iosxr_lldp" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	holdtime = 50` + "\n"
+	config += `	timer = 6` + "\n"
+	config += `	reinit = 3` + "\n"
+	config += `	system_name = "Router1"` + "\n"
+	config += `	system_description = "Router1-Description"` + "\n"
+	config += `	chassis_id = "FOC22439P72"` + "\n"
+	config += `	chassis_id_type_local = true` + "\n"
+	config += `	subinterfaces_enable = true` + "\n"
+	if os.Getenv("NCS") != "" {
+		config += `	subinterfaces_tagged = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+		config += `	management_enable = true` + "\n"
+	}
+	config += `	priorityaddr_enable = true` + "\n"
+	config += `	extended_show_width_enable = true` + "\n"
+	config += `	tlv_select_management_address_disable = true` + "\n"
+	config += `	tlv_select_port_description_disable = true` + "\n"
+	config += `	tlv_select_system_capabilities_disable = true` + "\n"
+	config += `	tlv_select_system_description_disable = true` + "\n"
+	config += `	tlv_select_system_name_disable = true` + "\n"
+	config += `}` + "\n"
+
+	config += `
+		data "iosxr_lldp" "test" {
+			depends_on = [iosxr_lldp.test]
+		}
+	`
+	return config
+}
+
+// End of section. //template:end testAccDataSourceConfig

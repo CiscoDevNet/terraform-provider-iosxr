@@ -7,8 +7,30 @@ attributes:
     example: P1
   - yang_name: interface-name
     example: GigabitEthernet0/0/0/1
+  - yang_name: mesh-group/MESH-GROUP/MESH-GROUP-NUMBER/mesh-group-number
+    xpath: mesh-group/mesh-group-number
+    tf_name: mesh_group
+    example: 1
+  - yang_name: mesh-group/MESH-GROUP/BLOCKED/blocked
+    xpath: mesh-group/blocked
+    tf_name: mesh_group_blocked
+    exclude_test: true
+    example: true
+  - yang_name: state
+    example: "passive"
   - yang_name: circuit-type
     example: level-1
+  - yang_name: csnp-interval
+    example: 10
+  - yang_name: csnp-interval-levels/csnp-interval-level
+    tf_name: csnp_interval_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: csnp-interval
+        example: 10
   - yang_name: hello-padding
     example: "disable"
   - yang_name: hello-padding-levels/hello-padding-level
@@ -20,24 +42,44 @@ attributes:
         example: 1
       - yang_name: hello-padding
         example: "always"
-  - yang_name: priority
-    example: 10
-  - yang_name: priority-levels/priority-level
-    tf_name: priority_levels
+  - yang_name: hello-interval
+    example: 5
+  - yang_name: hello-interval-levels/hello-interval-level
+    tf_name: hello_interval_levels
     type: List
     attributes:
       - yang_name: level-number
         id: true
         example: 1
-      - yang_name: priority
-        example: 64
-  - yang_name: point-to-point
-    example: false
-  - yang_name: state
-    example: "passive"
+      - yang_name: hello-interval
+        example: 5
+  - yang_name: hello-multiplier
+    example: 5
+  - yang_name: hello-multiplier-levels/hello-multiplier-level
+    tf_name: hello_multiplier_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: hello-multiplier
+        example: 5
+  - yang_name: lsp-interval
+    example: 10
+  - yang_name: lsp-interval-levels/lsp-interval-level
+    tf_name: lsp_interval_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: lsp-interval
+        example: 10
   - yang_name: hello-password/accepts/encrypted
     tf_name: hello_password_accept_encrypted
     exclude_test: true
+    sensitive: true
+    write_only: true
     example: "060506324F41584B564B0F49584B"
   - yang_name: hello-password/accepts-levels/accepts-level
     tf_name: hello_password_accepts_levels
@@ -48,12 +90,16 @@ attributes:
         id: true
         example: 1
       - yang_name: encrypted
+        sensitive: true
+        write_only: true
         example: "060506324F41584B564B0F49584B"
   - yang_name: hello-password/hello-password-options/HELLO-PASSWORD-OPTIONS/TEXT/text/hello-password-options/encrypted
     xpath: hello-password/hello-password-options/text/hello-password-options/encrypted
     tf_name: hello_password_text_encrypted
     optional: true
     delete_parent: true
+    sensitive: true
+    write_only: true
     exclude_test: true
     example: "060506324F41584B564B0F49584B"
   - yang_name: hello-password/hello-password-options/HELLO-PASSWORD-OPTIONS/TEXT/text/hello-password-options/send-only
@@ -61,6 +107,7 @@ attributes:
     tf_name: hello_password_text_send_only
     optional: true
     delete_parent: true
+    sensitive: true
     exclude_test: true
     example: true
   - yang_name: hello-password/hello-password-options/HELLO-PASSWORD-OPTIONS/HMAC-MD5/hmac-md5/hello-password-options/encrypted
@@ -68,6 +115,8 @@ attributes:
     tf_name: hello_password_hmac_md5_encrypted
     optional: true
     delete_parent: true
+    sensitive: true
+    write_only: true
     example: "060506324F41584B564B0F49584B"
   - yang_name: hello-password/hello-password-options/HELLO-PASSWORD-OPTIONS/HMAC-MD5/hmac-md5/hello-password-options/send-only
     xpath: hello-password/hello-password-options/hmac-md5/hello-password-options/send-only
@@ -98,44 +147,110 @@ attributes:
         example: 1
       - yang_name: HELLO-PASSWORD-LEVEL/TEXT/text/hello-password-options/encrypted
         xpath: text/hello-password-options/encrypted
-        tf_name: hello_password_text_encrypted
+        tf_name: text_encrypted
         optional: true
         delete_parent: true
+        sensitive: true
+        write_only: true
         example: "060506324F41584B564B0F49584B"
       - yang_name: HELLO-PASSWORD-LEVEL/TEXT/text/hello-password-options/send-only
         xpath: text/hello-password-options/send-only
-        tf_name: hello_password_text_send_only
+        tf_name: text_send_only
         optional: true
         delete_parent: true
         example: true
       - yang_name: HELLO-PASSWORD-LEVEL/HMAC-MD5/hmac-md5/hello-password-options/encrypted
         xpath: hmac-md5/hello-password-options/encrypted
-        tf_name: hello_password_hmac_md5_encrypted
+        tf_name: hmac_md5_encrypted
         optional: true
         delete_parent: true
+        sensitive: true
+        write_only: true
         exclude_test: true
         example: "060506324F41584B564B0F49584B"
       - yang_name: HELLO-PASSWORD-LEVEL/HMAC-MD5/hmac-md5/hello-password-options/send-only
         xpath: hmac-md5/hello-password-options/send-only
-        tf_name: hello_password_hmac_md5_send_only
+        tf_name: hmac_md5_send_only
         optional: true
         delete_parent: true
         exclude_test: true
         example: true
       - yang_name: HELLO-PASSWORD-LEVEL/KEYCHAIN/keychain/keychain-name
         xpath: keychain/keychain-name
-        tf_name: hello_keychain_name
+        tf_name: keychain_name
         delete_parent: true
         optional: true
         exclude_test: true
         example: "KEY_CHAIN_1"
       - yang_name: HELLO-PASSWORD-LEVEL/KEYCHAIN/keychain/send-only
         xpath: keychain/send-only
-        tf_name: hello_keychain_send_only
+        tf_name: keychain_send_only
         optional: true
         delete_parent: true
         exclude_test: true
         example: true
+  - yang_name: remote-psnp-delay
+    tf_name: remote_psnp_delay
+    example: 1000
+  - yang_name: priority
+    example: 10
+  - yang_name: priority-levels/priority-level
+    tf_name: priority_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: priority
+        example: 10
+  - yang_name: point-to-point
+    example: true
+  - yang_name: retransmit-interval
+    example: 50
+  - yang_name: retransmit-interval-levels/retransmit-interval-level
+    tf_name: retransmit_interval_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: retransmit-interval
+        example: 50
+  - yang_name: retransmit-throttle-interval
+    example: 10000
+  - yang_name: retransmit-throttle-interval-levels/retransmit-throttle-interval-level
+    tf_name: retransmit_throttle_interval_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: retransmit-throttle-interval
+        example: 10000
+  - yang_name: link-down/fast-detect
+    tf_name: link_down_fast_detect
+    example: true
+  - yang_name: affinity/flex-algo/flex-algo-argument
+    tf_name: affinity_flex_algos
+    example: "AFFINITY-1"
+  - yang_name: affinity/flex-algo/anomaly
+    tf_name: affinity_flex_algos_anomalies
+    example: "AFFINITY-2"
+  - yang_name: override/metrics
+    tf_name: override_metrics
+    example: "high"
+  - yang_name: delay/normalize/interval/interval-number
+    tf_name: delay_normalize_interval
+    example: 10000
+  - yang_name: delay/normalize/interval/offset
+    tf_name: delay_normalize_offset
+    example: 1000
+  - yang_name: mpls/ldp/sync
+    tf_name: mpls_ldp_sync
+    example: "true"
+  - yang_name: mpls/ldp/sync/level
+    tf_name: mpls_ldp_sync_level
+    example: 1
   - yang_name: bfd/fast-detect/ipv4
     example: true
   - yang_name: bfd/fast-detect/ipv6
@@ -150,3 +265,19 @@ test_prerequisites:
     attributes:
       - name: process-id
         value: P1
+  - path: Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/affinity-maps/affinity-map[affinity-attribute-name=AFFINITY-1]
+    no_delete: true
+    attributes:
+      - name: affinity-attribute-name
+        value: AFFINITY-1
+      - name: bit-position
+        value: 1
+    dependencies: [0]
+  - path: Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/affinity-maps/affinity-map[affinity-attribute-name=AFFINITY-2]
+    no_delete: true
+    attributes:
+      - name: affinity-attribute-name
+        value: AFFINITY-2
+      - name: bit-position
+        value: 2
+    dependencies: [0]

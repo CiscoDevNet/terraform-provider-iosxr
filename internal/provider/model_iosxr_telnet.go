@@ -395,7 +395,6 @@ func (data *Telnet) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end updateFromBodyXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *Telnet) fromBody(ctx context.Context, res gjson.Result) {
@@ -449,7 +448,6 @@ func (data *Telnet) fromBody(ctx context.Context, res gjson.Result) {
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *TelnetData) fromBody(ctx context.Context, res gjson.Result) {
@@ -503,7 +501,6 @@ func (data *TelnetData) fromBody(ctx context.Context, res gjson.Result) {
 }
 
 // End of section. //template:end fromBodyData
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *Telnet) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -553,7 +550,6 @@ func (data *Telnet) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *TelnetData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -603,7 +599,6 @@ func (data *TelnetData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyDataXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *Telnet) getDeletedItems(ctx context.Context, state Telnet) []string {
@@ -693,7 +688,6 @@ func (data *Telnet) getDeletedItems(ctx context.Context, state Telnet) []string 
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
 func (data *Telnet) getEmptyLeafsDelete(ctx context.Context, state *Telnet) []string {
@@ -718,7 +712,6 @@ func (data *Telnet) getEmptyLeafsDelete(ctx context.Context, state *Telnet) []st
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *Telnet) getDeletePaths(ctx context.Context) []string {
@@ -744,7 +737,6 @@ func (data *Telnet) getDeletePaths(ctx context.Context) []string {
 }
 
 // End of section. //template:end getDeletePaths
-
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *Telnet) addDeletedItemsXML(ctx context.Context, state Telnet, body string) string {
@@ -847,7 +839,6 @@ func (data *Telnet) addDeletedItemsXML(ctx context.Context, state Telnet, body s
 }
 
 // End of section. //template:end addDeletedItemsXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *Telnet) addDeletePathsXML(ctx context.Context, body string) string {

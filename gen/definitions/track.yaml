@@ -1,0 +1,259 @@
+---
+name: Track
+path: Cisco-IOS-XR-um-track-cfg:/tracks/track[track-name=%s]
+doc_category: Performance Monitoring
+attributes:
+  - yang_name: track-name
+    example: "TRACK1"
+  - yang_name: delay/up
+    minimum_test_value: 10
+    tf_name: delay_up
+    example: 10
+  - yang_name: delay/down
+    minimum_test_value: 5
+    tf_name: delay_down
+    example: 5
+  - yang_name: type/route/reachability/route/ipv4/address
+    tf_name: route_ipv4_address
+    optional: true
+    exclude_test: true
+    example: "10.1.1.0"
+  - yang_name: type/route/reachability/route/ipv4/mask
+    tf_name: route_ipv4_mask
+    optional: true
+    exclude_test: true
+    example: "255.255.255.0"
+  - yang_name: type/route/reachability/route/address-prefix
+    tf_name: route_address_prefix
+    example: "2001:db8::"
+  - yang_name: type/route/reachability/route/address-prefix-length
+    tf_name: route_address_prefix_length
+    example: 64
+  - yang_name: type/route/reachability/vrf
+    tf_name: route_vrf
+    example: "VRF1"
+  - yang_name: type/line-protocol/state/interface
+    tf_name: line_protocol_state
+    exclude_test: true
+    example: "GigabitEthernet0/0/0/1"
+  - yang_name: type/rtr
+    tf_name: rtr
+    exclude_test: true
+    example: 1
+  - yang_name: type/list/boolean/and/objects/object
+    tf_name: boolean_and_list
+    exclude_test: true
+    type: List
+    attributes:
+      - yang_name: object-name
+        id: true
+        example: "TRACK2"
+      - yang_name: not
+        tf_name: not
+        example: true
+  - yang_name: type/list/boolean/or/objects/object
+    tf_name: boolean_or_list
+    exclude_test: true
+    type: List
+    attributes:
+      - yang_name: object-name
+        id: true
+        example: "TRACK3"
+      - yang_name: not
+        tf_name: not
+        example: true
+  - yang_name: type/list/threshold/percentage/objects/object
+    tf_name: threshold_percentage
+    exclude_test: true
+    type: List
+    attributes:
+      - yang_name: object-name
+        id: true
+        example: "TRACK4"
+      - yang_name: weight
+        example: 10
+  - yang_name: type/list/threshold/percentage/threshold/percentage/up
+    tf_name: threshold_percentage_up
+    exclude_test: true
+    example: 75
+  - yang_name: type/list/threshold/percentage/threshold/percentage/down
+    tf_name: threshold_percentage_down
+    exclude_test: true
+    example: 25
+  - yang_name: type/list/threshold/weight/objects/object
+    tf_name: threshold_weight
+    exclude_test: true
+    type: List
+    attributes:
+      - yang_name: object-name
+        id: true
+        example: "TRACK5"
+      - yang_name: weight
+        tf_name: weight
+        example: 10
+  - yang_name: type/list/threshold/weight/threshold/weight/up
+    tf_name: threshold_weight_up
+    exclude_test: true
+    example: 50
+  - yang_name: type/list/threshold/weight/threshold/weight/down
+    tf_name: threshold_weight_down
+    exclude_test: true
+    example: 20
+  - yang_name: type/list/line-protocol/state/threshold/weight/threshold/weight/up
+    tf_name: line_protocol_weight_up
+    exclude_test: true
+    example: 50
+  - yang_name: type/list/line-protocol/state/threshold/weight/threshold/weight/down
+    tf_name: line_protocol_weight_down
+    exclude_test: true
+    example: 20
+  - yang_name: type/list/line-protocol/state/threshold/weight/interfaces/interface
+    tf_name: line_protocol_weight
+    exclude_test: true
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: "GigabitEthernet0/0/0/4"
+      - yang_name: weight
+        example: 10
+  - yang_name: type/list/line-protocol/state/threshold/percentage/threshold/percentage/up
+    tf_name: line_protocol_percentage_up
+    exclude_test: true
+    example: 75
+  - yang_name: type/list/line-protocol/state/threshold/percentage/threshold/percentage/down
+    tf_name: line_protocol_percentage_down
+    exclude_test: true
+    example: 25
+  - yang_name: type/list/line-protocol/state/threshold/percentage/interfaces/interface
+    tf_name: line_protocol_percentage
+    exclude_test: true
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: "GigabitEthernet0/0/0/5"
+  - yang_name: type/list/line-protocol/state/boolean/and/interfaces/interface
+    tf_name: line_protocol_boolean_and
+    exclude_test: true
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: "GigabitEthernet0/0/0/6"
+  - yang_name: type/list/line-protocol/state/boolean/or/interfaces/interface
+    tf_name: line_protocol_boolean_or
+    exclude_test: true
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: "GigabitEthernet0/0/0/7"
+  - yang_name: type/bfdrtr/rate
+    tf_name: bfd_rate
+    optional: true
+    exclude_test: true
+    example: 100
+  - yang_name: type/bfdrtr/debounce
+    tf_name: bfd_debounce
+    optional: true
+    exclude_test: true
+    example: 3
+  - yang_name: type/bfdrtr/interface
+    tf_name: bfd_interface
+    optional: true
+    exclude_test: true
+    example: "GigabitEthernet0/0/0/1"
+  - yang_name: type/bfdrtr/destaddress
+    tf_name: bfd_destination_address
+    optional: true
+    exclude_test: true
+    example: "10.1.1.1"
+  - yang_name: type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/neighbor
+    tf_name: bgp_neighbor_ipv4_unicast_address
+    optional: true
+    exclude_test: true
+    example: "10.1.1.1"
+  - yang_name: type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/vrf
+    tf_name: bgp_neighbor_ipv4_unicast_vrf_name
+    exclude_test: true
+    example: "VRF1"
+  - yang_name: type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/disable/fib-check
+    tf_name: bgp_neighbor_ipv4_unicast_disable_fib_check
+    exclude_test: true
+    example: true
+  - yang_name: type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/neighbor
+    tf_name: bgp_neighbor_ipv4_labeled_unicast_address
+    optional: true
+    exclude_test: true
+    example: "10.1.1.1"
+  - yang_name: type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/vrf
+    tf_name: bgp_neighbor_ipv4_labeled_unicast_vrf_name
+    exclude_test: true
+    example: "VRF1"
+  - yang_name: type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/disable/fib-check
+    tf_name: bgp_neighbor_ipv4_labeled_unicast_disable_fib_check
+    exclude_test: true
+    example: true
+  - yang_name: type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/neighbor
+    tf_name: bgp_neighbor_ipv6_unicast_address
+    optional: true
+    exclude_test: true
+    example: "2001:db8::1"
+  - yang_name: type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/vrf
+    tf_name: bgp_neighbor_ipv6_unicast_vrf_name
+    exclude_test: true
+    example: "VRF1"
+  - yang_name: type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/disable/fib-check
+    tf_name: bgp_neighbor_ipv6_unicast_disable_fib_check
+    exclude_test: true
+    example: true
+  - yang_name: type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/neighbor
+    tf_name: bgp_neighbor_ipv6_labeled_unicast_address
+    optional: true
+    exclude_test: true
+    example: "2001:db8::1"
+  - yang_name: type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/disable/fib-check
+    tf_name: bgp_neighbor_ipv6_labeled_unicast_disable_fib_check
+    exclude_test: true
+    example: true
+  - yang_name: type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/neighbor
+    tf_name: bgp_neighbor_vpnv4_unicast_address
+    optional: true
+    exclude_test: true
+    example: "10.1.1.2"
+  - yang_name: type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/disable/fib-check
+    tf_name: bgp_neighbor_vpnv4_unicast_disable_fib_check
+    exclude_test: true
+    example: true
+  - yang_name: type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/neighbor
+    tf_name: bgp_neighbor_vpnv6_unicast_address
+    optional: true
+    exclude_test: true
+    example: "2001:db8::2"
+  - yang_name: type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/disable/fib-check
+    tf_name: bgp_neighbor_vpnv6_unicast_disable_fib_check
+    exclude_test: true
+    example: true
+  - yang_name: action/track-down/error-disable/interfaces/interface
+    tf_name: track_down_error_disable_interfaces
+    exclude_test: true
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: "GigabitEthernet0/0/0/2"
+      - yang_name: auto-recover
+        tf_name: auto_recover
+        example: true
+  - yang_name: action/track-up/error-disable/interfaces/interface
+    tf_name: track_up_error_disable_interfaces
+    exclude_test: true
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: "GigabitEthernet0/0/0/2"
+      - yang_name: auto-recover
+        tf_name: auto_recover
+        example: true

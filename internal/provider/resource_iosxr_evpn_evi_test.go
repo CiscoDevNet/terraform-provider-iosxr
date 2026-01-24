@@ -21,10 +21,12 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 // End of section. //template:end imports
@@ -33,24 +35,35 @@ import (
 
 func TestAccIosxrEVPNEVI(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "vpn_id", "1234"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "vpn_id", "101"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "description", "My Description"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "load_balancing", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "load_balancing_flow_label_static", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "bgp_rd_two_byte_as_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "bgp_rd_two_byte_as_assigned_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "bgp_route_target_import_two_byte_as_format.0.as_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "bgp_route_target_import_two_byte_as_format.0.assigned_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "bgp_route_target_export_ipv4_address_format.0.ipv4_address", "1.1.1.1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "bgp_route_target_export_ipv4_address_format.0.assigned_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "bgp_rd_four_byte_as_number", "65536"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "bgp_rd_four_byte_as_index", "101"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "bgp_route_target_import_four_byte_as_format.0.as_number", "65536"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "bgp_route_target_import_four_byte_as_format.0.assigned_number", "101"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "bgp_route_target_export_four_byte_as_format.0.as_number", "65536"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "bgp_route_target_export_four_byte_as_format.0.assigned_number", "101"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "bgp_implicit_import_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "bgp_route_policy_import", "EVI_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "bgp_route_policy_export", "EVI_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "advertise_mac", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "load_balancing", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "load_balancing_flow_label_static", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "preferred_nexthop_modulo", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "advertise_mac_bvi_mac", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "unknown_unicast_suppression", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "control_word_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "ignore_mtu_mismatch", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "ignore_mtu_mismatch_disable_deprecated", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "transmit_mtu_zero", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "transmit_mtu_zero_disable_deprecated", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "re_origination_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "multicast_source_connected", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "proxy_igmp_snooping", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "etree", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "etree_leaf", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "etree_rt_leaf", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "vpws_single_active_backup_suppression", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "bvi_coupled_mode", "true"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -80,7 +93,7 @@ func TestAccIosxrEVPNEVI(t *testing.T) {
 
 func testAccIosxrEVPNEVIConfig_minimum() string {
 	config := `resource "iosxr_evpn_evi" "test" {` + "\n"
-	config += `	vpn_id = 1234` + "\n"
+	config += `	vpn_id = 101` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
@@ -92,31 +105,73 @@ func testAccIosxrEVPNEVIConfig_minimum() string {
 
 func testAccIosxrEVPNEVIConfig_all() string {
 	config := `resource "iosxr_evpn_evi" "test" {` + "\n"
-	config += `	vpn_id = 1234` + "\n"
+	config += `	vpn_id = 101` + "\n"
 	config += `	description = "My Description"` + "\n"
-	config += `	load_balancing = true` + "\n"
-	config += `	load_balancing_flow_label_static = true` + "\n"
-	config += `	bgp_rd_two_byte_as_number = 1` + "\n"
-	config += `	bgp_rd_two_byte_as_assigned_number = 1` + "\n"
-	config += `	bgp_route_target_import_two_byte_as_format = [{` + "\n"
-	config += `		as_number = 1` + "\n"
-	config += `		assigned_number = 1` + "\n"
+	config += `	bgp_rd_four_byte_as_number = 65536` + "\n"
+	config += `	bgp_rd_four_byte_as_index = 101` + "\n"
+	config += `	bgp_route_target_import_four_byte_as_format = [{` + "\n"
+	config += `		as_number = 65536` + "\n"
+	config += `		assigned_number = 101` + "\n"
 	config += `		}]` + "\n"
-	config += `	bgp_route_target_export_ipv4_address_format = [{` + "\n"
-	config += `		ipv4_address = "1.1.1.1"` + "\n"
-	config += `		assigned_number = 1` + "\n"
+	config += `	bgp_route_target_export_four_byte_as_format = [{` + "\n"
+	config += `		as_number = 65536` + "\n"
+	config += `		assigned_number = 101` + "\n"
 	config += `		}]` + "\n"
+	config += `	bgp_implicit_import_disable = true` + "\n"
 	config += `	bgp_route_policy_import = "EVI_POLICY_1"` + "\n"
 	config += `	bgp_route_policy_export = "EVI_POLICY_1"` + "\n"
-	config += `	advertise_mac = true` + "\n"
+	config += `	load_balancing = true` + "\n"
+	config += `	load_balancing_flow_label_static = true` + "\n"
+	config += `	preferred_nexthop_modulo = true` + "\n"
+	config += `	advertise_mac_bvi_mac = true` + "\n"
 	config += `	unknown_unicast_suppression = true` + "\n"
 	config += `	control_word_disable = true` + "\n"
+	config += `	ignore_mtu_mismatch = true` + "\n"
+	config += `	ignore_mtu_mismatch_disable_deprecated = true` + "\n"
+	config += `	transmit_mtu_zero = true` + "\n"
+	config += `	transmit_mtu_zero_disable_deprecated = true` + "\n"
+	config += `	re_origination_disable = true` + "\n"
+	config += `	multicast_source_connected = true` + "\n"
+	config += `	proxy_igmp_snooping = true` + "\n"
 	config += `	etree = true` + "\n"
 	config += `	etree_leaf = false` + "\n"
 	config += `	etree_rt_leaf = true` + "\n"
+	config += `	vpws_single_active_backup_suppression = true` + "\n"
+	config += `	bvi_coupled_mode = true` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
 
 // End of section. //template:end testAccConfigAll
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrEVPNEVIImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		VpnId := primary.Attributes["vpn_id"]
+
+		return fmt.Sprintf("%s", VpnId), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccIosxrEVPNEVIPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=EVI_POLICY_1]"
+	attributes = {
+		"route-policy-name" = "EVI_POLICY_1"
+		"rpl-route-policy" = "route-policy EVI_POLICY_1\n  pass\nend-policy\n"
+	}
+}
+
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
+	attributes = {
+	}
+}
+
+`
+
+// End of section. //template:end testPrerequisites

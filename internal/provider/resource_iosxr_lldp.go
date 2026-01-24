@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
@@ -101,8 +102,67 @@ func (r *LLDPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					int64validator.Between(2, 5),
 				},
 			},
+			"system_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("LLDP system name to advertise").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 256),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9_.-]+`), ""),
+				},
+			},
+			"system_description": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("LLDP system description to advertise").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 256),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9_.-]+`), ""),
+				},
+			},
+			"chassis_id": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("LLDP chassis ID to advertise").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 256),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9_.-:]+`), ""),
+				},
+			},
+			"chassis_id_type_chassis_component": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Value of entPhysicalAlias object defined in IETF RFC 2737").String,
+				Optional:            true,
+			},
+			"chassis_id_type_interface_alias": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Value of ifAlias object defined in IETF RFC 2863").String,
+				Optional:            true,
+			},
+			"chassis_id_type_port_component": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Value of entPhysicalAlias object defined in IETF RFC 2737").String,
+				Optional:            true,
+			},
+			"chassis_id_type_mac_address": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Value of a unicast source address").String,
+				Optional:            true,
+			},
+			"chassis_id_type_network_address": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Network address associated with a particular chassis").String,
+				Optional:            true,
+			},
+			"chassis_id_type_interface_name": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Value of ifName object defined in IETF RFC 2863").String,
+				Optional:            true,
+			},
+			"chassis_id_type_local": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Chassis identifier based on a locally defined value").String,
+				Optional:            true,
+			},
 			"subinterfaces_enable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable LLDP over Sub-interfaces as well").String,
+				Optional:            true,
+			},
+			"subinterfaces_tagged": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable VLAN tagging for LLDP PDU over Sub-interfaces").String,
 				Optional:            true,
 			},
 			"management_enable": schema.BoolAttribute{

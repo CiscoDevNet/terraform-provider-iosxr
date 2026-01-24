@@ -21,10 +21,12 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 // End of section. //template:end imports
@@ -37,6 +39,7 @@ func TestAccIosxrIPv6PrefixList(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_prefix_list.test", "sequences.0.sequence_number", "4096"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_prefix_list.test", "sequences.0.permission", "permit"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_prefix_list.test", "sequences.0.prefix", "2001:db8::"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_prefix_list.test", "sequences.0.zone", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_prefix_list.test", "sequences.0.mask", "32"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_prefix_list.test", "sequences.0.match_prefix_length_ge", "64"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_prefix_list.test", "sequences.0.match_prefix_length_le", "128"))
@@ -85,6 +88,7 @@ func testAccIosxrIPv6PrefixListConfig_all() string {
 	config += `		sequence_number = 4096` + "\n"
 	config += `		permission = "permit"` + "\n"
 	config += `		prefix = "2001:db8::"` + "\n"
+	config += `		zone = "1"` + "\n"
 	config += `		mask = 32` + "\n"
 	config += `		match_prefix_length_ge = 64` + "\n"
 	config += `		match_prefix_length_le = 128` + "\n"
@@ -94,3 +98,18 @@ func testAccIosxrIPv6PrefixListConfig_all() string {
 }
 
 // End of section. //template:end testAccConfigAll
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrIPv6PrefixListImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		PrefixListName := primary.Attributes["prefix_list_name"]
+
+		return fmt.Sprintf("%s", PrefixListName), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+
+// End of section. //template:end testPrerequisites

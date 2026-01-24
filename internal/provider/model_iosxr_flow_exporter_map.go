@@ -45,9 +45,13 @@ type FlowExporterMap struct {
 	DestinationIpv6Address              types.String `tfsdk:"destination_ipv6_address"`
 	DestinationVrf                      types.String `tfsdk:"destination_vrf"`
 	Source                              types.String `tfsdk:"source"`
+	SourceAddressIpv4Address            types.String `tfsdk:"source_address_ipv4_address"`
+	SourceAddressIpv6Address            types.String `tfsdk:"source_address_ipv6_address"`
+	RouterIdIpv4Address                 types.String `tfsdk:"router_id_ipv4_address"`
+	RouterIdIpv6Address                 types.String `tfsdk:"router_id_ipv6_address"`
 	Dscp                                types.Int64  `tfsdk:"dscp"`
-	PacketLength                        types.Int64  `tfsdk:"packet_length"`
 	TransportUdp                        types.Int64  `tfsdk:"transport_udp"`
+	PacketLength                        types.Int64  `tfsdk:"packet_length"`
 	DfbitSet                            types.Bool   `tfsdk:"dfbit_set"`
 	VersionExportFormat                 types.String `tfsdk:"version_export_format"`
 	VersionTemplateDataTimeout          types.Int64  `tfsdk:"version_template_data_timeout"`
@@ -67,9 +71,13 @@ type FlowExporterMapData struct {
 	DestinationIpv6Address              types.String `tfsdk:"destination_ipv6_address"`
 	DestinationVrf                      types.String `tfsdk:"destination_vrf"`
 	Source                              types.String `tfsdk:"source"`
+	SourceAddressIpv4Address            types.String `tfsdk:"source_address_ipv4_address"`
+	SourceAddressIpv6Address            types.String `tfsdk:"source_address_ipv6_address"`
+	RouterIdIpv4Address                 types.String `tfsdk:"router_id_ipv4_address"`
+	RouterIdIpv6Address                 types.String `tfsdk:"router_id_ipv6_address"`
 	Dscp                                types.Int64  `tfsdk:"dscp"`
-	PacketLength                        types.Int64  `tfsdk:"packet_length"`
 	TransportUdp                        types.Int64  `tfsdk:"transport_udp"`
+	PacketLength                        types.Int64  `tfsdk:"packet_length"`
 	DfbitSet                            types.Bool   `tfsdk:"dfbit_set"`
 	VersionExportFormat                 types.String `tfsdk:"version_export_format"`
 	VersionTemplateDataTimeout          types.Int64  `tfsdk:"version_template_data_timeout"`
@@ -127,14 +135,26 @@ func (data FlowExporterMap) toBody(ctx context.Context) string {
 	if !data.Source.IsNull() && !data.Source.IsUnknown() {
 		body, _ = sjson.Set(body, "source", data.Source.ValueString())
 	}
+	if !data.SourceAddressIpv4Address.IsNull() && !data.SourceAddressIpv4Address.IsUnknown() {
+		body, _ = sjson.Set(body, "source-address.ipv4-address", data.SourceAddressIpv4Address.ValueString())
+	}
+	if !data.SourceAddressIpv6Address.IsNull() && !data.SourceAddressIpv6Address.IsUnknown() {
+		body, _ = sjson.Set(body, "source-address.ipv6-address", data.SourceAddressIpv6Address.ValueString())
+	}
+	if !data.RouterIdIpv4Address.IsNull() && !data.RouterIdIpv4Address.IsUnknown() {
+		body, _ = sjson.Set(body, "router-id.router-id-address.ipv4-address", data.RouterIdIpv4Address.ValueString())
+	}
+	if !data.RouterIdIpv6Address.IsNull() && !data.RouterIdIpv6Address.IsUnknown() {
+		body, _ = sjson.Set(body, "router-id.router-id-address.ipv6-address", data.RouterIdIpv6Address.ValueString())
+	}
 	if !data.Dscp.IsNull() && !data.Dscp.IsUnknown() {
 		body, _ = sjson.Set(body, "dscp", strconv.FormatInt(data.Dscp.ValueInt64(), 10))
 	}
-	if !data.PacketLength.IsNull() && !data.PacketLength.IsUnknown() {
-		body, _ = sjson.Set(body, "packet-length", strconv.FormatInt(data.PacketLength.ValueInt64(), 10))
-	}
 	if !data.TransportUdp.IsNull() && !data.TransportUdp.IsUnknown() {
 		body, _ = sjson.Set(body, "transport.udp", strconv.FormatInt(data.TransportUdp.ValueInt64(), 10))
+	}
+	if !data.PacketLength.IsNull() && !data.PacketLength.IsUnknown() {
+		body, _ = sjson.Set(body, "packet-length", strconv.FormatInt(data.PacketLength.ValueInt64(), 10))
 	}
 	if !data.DfbitSet.IsNull() && !data.DfbitSet.IsUnknown() {
 		if data.DfbitSet.ValueBool() {
@@ -189,14 +209,26 @@ func (data FlowExporterMap) toBodyXML(ctx context.Context) string {
 	if !data.Source.IsNull() && !data.Source.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/source", data.Source.ValueString())
 	}
+	if !data.SourceAddressIpv4Address.IsNull() && !data.SourceAddressIpv4Address.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/source-address/ipv4-address", data.SourceAddressIpv4Address.ValueString())
+	}
+	if !data.SourceAddressIpv6Address.IsNull() && !data.SourceAddressIpv6Address.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/source-address/ipv6-address", data.SourceAddressIpv6Address.ValueString())
+	}
+	if !data.RouterIdIpv4Address.IsNull() && !data.RouterIdIpv4Address.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/router-id/router-id-address/ipv4-address", data.RouterIdIpv4Address.ValueString())
+	}
+	if !data.RouterIdIpv6Address.IsNull() && !data.RouterIdIpv6Address.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/router-id/router-id-address/ipv6-address", data.RouterIdIpv6Address.ValueString())
+	}
 	if !data.Dscp.IsNull() && !data.Dscp.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/dscp", strconv.FormatInt(data.Dscp.ValueInt64(), 10))
 	}
-	if !data.PacketLength.IsNull() && !data.PacketLength.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/packet-length", strconv.FormatInt(data.PacketLength.ValueInt64(), 10))
-	}
 	if !data.TransportUdp.IsNull() && !data.TransportUdp.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/transport/udp", strconv.FormatInt(data.TransportUdp.ValueInt64(), 10))
+	}
+	if !data.PacketLength.IsNull() && !data.PacketLength.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/packet-length", strconv.FormatInt(data.PacketLength.ValueInt64(), 10))
 	}
 	if !data.DfbitSet.IsNull() && !data.DfbitSet.IsUnknown() {
 		if data.DfbitSet.ValueBool() {
@@ -259,28 +291,51 @@ func (data *FlowExporterMap) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Source = types.StringNull()
 	}
+	if value := gjson.GetBytes(res, "source-address.ipv4-address"); value.Exists() && !data.SourceAddressIpv4Address.IsNull() {
+		data.SourceAddressIpv4Address = types.StringValue(value.String())
+	} else {
+		data.SourceAddressIpv4Address = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "source-address.ipv6-address"); value.Exists() && !data.SourceAddressIpv6Address.IsNull() {
+		data.SourceAddressIpv6Address = types.StringValue(value.String())
+	} else {
+		data.SourceAddressIpv6Address = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "router-id.router-id-address.ipv4-address"); value.Exists() && !data.RouterIdIpv4Address.IsNull() {
+		data.RouterIdIpv4Address = types.StringValue(value.String())
+	} else {
+		data.RouterIdIpv4Address = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "router-id.router-id-address.ipv6-address"); value.Exists() && !data.RouterIdIpv6Address.IsNull() {
+		data.RouterIdIpv6Address = types.StringValue(value.String())
+	} else {
+		data.RouterIdIpv6Address = types.StringNull()
+	}
 	if value := gjson.GetBytes(res, "dscp"); value.Exists() && !data.Dscp.IsNull() {
 		data.Dscp = types.Int64Value(value.Int())
 	} else {
 		data.Dscp = types.Int64Null()
-	}
-	if value := gjson.GetBytes(res, "packet-length"); value.Exists() && !data.PacketLength.IsNull() {
-		data.PacketLength = types.Int64Value(value.Int())
-	} else {
-		data.PacketLength = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "transport.udp"); value.Exists() && !data.TransportUdp.IsNull() {
 		data.TransportUdp = types.Int64Value(value.Int())
 	} else {
 		data.TransportUdp = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "dfbit.set"); value.Exists() {
-		data.DfbitSet = types.BoolValue(true)
-	} else if data.DfbitSet.IsNull() {
-		// If currently null, keep as null (field not in config)
-		data.DfbitSet = types.BoolNull()
+	if value := gjson.GetBytes(res, "packet-length"); value.Exists() && !data.PacketLength.IsNull() {
+		data.PacketLength = types.Int64Value(value.Int())
+	} else {
+		data.PacketLength = types.Int64Null()
 	}
-	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "dfbit.set"); value.Exists() {
+		if !data.DfbitSet.IsNull() {
+			data.DfbitSet = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.DfbitSet.IsNull() {
+			data.DfbitSet = types.BoolNull()
+		}
+	}
 	if value := gjson.GetBytes(res, "version.export-format"); value.Exists() && !data.VersionExportFormat.IsNull() {
 		data.VersionExportFormat = types.StringValue(value.String())
 	} else {
@@ -353,26 +408,45 @@ func (data *FlowExporterMap) updateFromBodyXML(ctx context.Context, res xmldot.R
 	} else if data.Source.IsNull() {
 		data.Source = types.StringNull()
 	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-address/ipv4-address"); value.Exists() {
+		data.SourceAddressIpv4Address = types.StringValue(value.String())
+	} else if data.SourceAddressIpv4Address.IsNull() {
+		data.SourceAddressIpv4Address = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-address/ipv6-address"); value.Exists() {
+		data.SourceAddressIpv6Address = types.StringValue(value.String())
+	} else if data.SourceAddressIpv6Address.IsNull() {
+		data.SourceAddressIpv6Address = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router-id/router-id-address/ipv4-address"); value.Exists() {
+		data.RouterIdIpv4Address = types.StringValue(value.String())
+	} else if data.RouterIdIpv4Address.IsNull() {
+		data.RouterIdIpv4Address = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router-id/router-id-address/ipv6-address"); value.Exists() {
+		data.RouterIdIpv6Address = types.StringValue(value.String())
+	} else if data.RouterIdIpv6Address.IsNull() {
+		data.RouterIdIpv6Address = types.StringNull()
+	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dscp"); value.Exists() {
 		data.Dscp = types.Int64Value(value.Int())
 	} else if data.Dscp.IsNull() {
 		data.Dscp = types.Int64Null()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/packet-length"); value.Exists() {
-		data.PacketLength = types.Int64Value(value.Int())
-	} else if data.PacketLength.IsNull() {
-		data.PacketLength = types.Int64Null()
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/udp"); value.Exists() {
 		data.TransportUdp = types.Int64Value(value.Int())
 	} else if data.TransportUdp.IsNull() {
 		data.TransportUdp = types.Int64Null()
 	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/packet-length"); value.Exists() {
+		data.PacketLength = types.Int64Value(value.Int())
+	} else if data.PacketLength.IsNull() {
+		data.PacketLength = types.Int64Null()
+	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dfbit/set"); value.Exists() {
 		data.DfbitSet = types.BoolValue(true)
 	} else {
-		// If config has false and device doesn't have the field, keep false (don't set to null)
-		// Only set to null if it was already null
+		// For presence-based booleans, only set to null if it's already null
 		if data.DfbitSet.IsNull() {
 			data.DfbitSet = types.BoolNull()
 		}
@@ -440,17 +514,31 @@ func (data *FlowExporterMap) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "source"); value.Exists() {
 		data.Source = types.StringValue(value.String())
 	}
+	if value := res.Get(prefix + "source-address.ipv4-address"); value.Exists() {
+		data.SourceAddressIpv4Address = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "source-address.ipv6-address"); value.Exists() {
+		data.SourceAddressIpv6Address = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "router-id.router-id-address.ipv4-address"); value.Exists() {
+		data.RouterIdIpv4Address = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "router-id.router-id-address.ipv6-address"); value.Exists() {
+		data.RouterIdIpv6Address = types.StringValue(value.String())
+	}
 	if value := res.Get(prefix + "dscp"); value.Exists() {
 		data.Dscp = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "packet-length"); value.Exists() {
-		data.PacketLength = types.Int64Value(value.Int())
 	}
 	if value := res.Get(prefix + "transport.udp"); value.Exists() {
 		data.TransportUdp = types.Int64Value(value.Int())
 	}
+	if value := res.Get(prefix + "packet-length"); value.Exists() {
+		data.PacketLength = types.Int64Value(value.Int())
+	}
 	if value := res.Get(prefix + "dfbit.set"); value.Exists() {
 		data.DfbitSet = types.BoolValue(true)
+	} else {
+		data.DfbitSet = types.BoolNull()
 	}
 	if value := res.Get(prefix + "version.export-format"); value.Exists() {
 		data.VersionExportFormat = types.StringValue(value.String())
@@ -499,17 +587,31 @@ func (data *FlowExporterMapData) fromBody(ctx context.Context, res gjson.Result)
 	if value := res.Get(prefix + "source"); value.Exists() {
 		data.Source = types.StringValue(value.String())
 	}
+	if value := res.Get(prefix + "source-address.ipv4-address"); value.Exists() {
+		data.SourceAddressIpv4Address = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "source-address.ipv6-address"); value.Exists() {
+		data.SourceAddressIpv6Address = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "router-id.router-id-address.ipv4-address"); value.Exists() {
+		data.RouterIdIpv4Address = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "router-id.router-id-address.ipv6-address"); value.Exists() {
+		data.RouterIdIpv6Address = types.StringValue(value.String())
+	}
 	if value := res.Get(prefix + "dscp"); value.Exists() {
 		data.Dscp = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "packet-length"); value.Exists() {
-		data.PacketLength = types.Int64Value(value.Int())
 	}
 	if value := res.Get(prefix + "transport.udp"); value.Exists() {
 		data.TransportUdp = types.Int64Value(value.Int())
 	}
+	if value := res.Get(prefix + "packet-length"); value.Exists() {
+		data.PacketLength = types.Int64Value(value.Int())
+	}
 	if value := res.Get(prefix + "dfbit.set"); value.Exists() {
 		data.DfbitSet = types.BoolValue(true)
+	} else {
+		data.DfbitSet = types.BoolNull()
 	}
 	if value := res.Get(prefix + "version.export-format"); value.Exists() {
 		data.VersionExportFormat = types.StringValue(value.String())
@@ -554,17 +656,31 @@ func (data *FlowExporterMap) fromBodyXML(ctx context.Context, res xmldot.Result)
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source"); value.Exists() {
 		data.Source = types.StringValue(value.String())
 	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-address/ipv4-address"); value.Exists() {
+		data.SourceAddressIpv4Address = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-address/ipv6-address"); value.Exists() {
+		data.SourceAddressIpv6Address = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router-id/router-id-address/ipv4-address"); value.Exists() {
+		data.RouterIdIpv4Address = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router-id/router-id-address/ipv6-address"); value.Exists() {
+		data.RouterIdIpv6Address = types.StringValue(value.String())
+	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dscp"); value.Exists() {
 		data.Dscp = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/packet-length"); value.Exists() {
-		data.PacketLength = types.Int64Value(value.Int())
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/udp"); value.Exists() {
 		data.TransportUdp = types.Int64Value(value.Int())
 	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/packet-length"); value.Exists() {
+		data.PacketLength = types.Int64Value(value.Int())
+	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dfbit/set"); value.Exists() {
 		data.DfbitSet = types.BoolValue(true)
+	} else {
+		data.DfbitSet = types.BoolNull()
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version/export-format"); value.Exists() {
 		data.VersionExportFormat = types.StringValue(value.String())
@@ -609,14 +725,26 @@ func (data *FlowExporterMapData) fromBodyXML(ctx context.Context, res xmldot.Res
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source"); value.Exists() {
 		data.Source = types.StringValue(value.String())
 	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-address/ipv4-address"); value.Exists() {
+		data.SourceAddressIpv4Address = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-address/ipv6-address"); value.Exists() {
+		data.SourceAddressIpv6Address = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router-id/router-id-address/ipv4-address"); value.Exists() {
+		data.RouterIdIpv4Address = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router-id/router-id-address/ipv6-address"); value.Exists() {
+		data.RouterIdIpv6Address = types.StringValue(value.String())
+	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dscp"); value.Exists() {
 		data.Dscp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/packet-length"); value.Exists() {
-		data.PacketLength = types.Int64Value(value.Int())
-	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/udp"); value.Exists() {
 		data.TransportUdp = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/packet-length"); value.Exists() {
+		data.PacketLength = types.Int64Value(value.Int())
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dfbit/set"); value.Exists() {
 		data.DfbitSet = types.BoolValue(true)
@@ -679,20 +807,29 @@ func (data *FlowExporterMap) getDeletedItems(ctx context.Context, state FlowExpo
 	if !state.VersionExportFormat.IsNull() && data.VersionExportFormat.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/version/export-format", state.getPath()))
 	}
-	// For presence-based booleans, delete if going from true to false or to null
-	if !state.DfbitSet.IsNull() && state.DfbitSet.ValueBool() {
-		if data.DfbitSet.IsNull() || !data.DfbitSet.ValueBool() {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/dfbit/set", state.getPath()))
-		}
-	}
-	if !state.TransportUdp.IsNull() && data.TransportUdp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/transport/udp", state.getPath()))
+	if !state.DfbitSet.IsNull() && data.DfbitSet.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/dfbit/set", state.getPath()))
 	}
 	if !state.PacketLength.IsNull() && data.PacketLength.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/packet-length", state.getPath()))
 	}
+	if !state.TransportUdp.IsNull() && data.TransportUdp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/transport/udp", state.getPath()))
+	}
 	if !state.Dscp.IsNull() && data.Dscp.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/dscp", state.getPath()))
+	}
+	if !state.RouterIdIpv6Address.IsNull() && data.RouterIdIpv6Address.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/router-id/router-id-address/ipv6-address", state.getPath()))
+	}
+	if !state.RouterIdIpv4Address.IsNull() && data.RouterIdIpv4Address.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/router-id/router-id-address/ipv4-address", state.getPath()))
+	}
+	if !state.SourceAddressIpv6Address.IsNull() && data.SourceAddressIpv6Address.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/source-address/ipv6-address", state.getPath()))
+	}
+	if !state.SourceAddressIpv4Address.IsNull() && data.SourceAddressIpv4Address.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/source-address/ipv4-address", state.getPath()))
 	}
 	if !state.Source.IsNull() && data.Source.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/source", state.getPath()))
@@ -757,14 +894,26 @@ func (data *FlowExporterMap) getDeletePaths(ctx context.Context) []string {
 	if !data.DfbitSet.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/dfbit/set", data.getPath()))
 	}
-	if !data.TransportUdp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/transport/udp", data.getPath()))
-	}
 	if !data.PacketLength.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/packet-length", data.getPath()))
 	}
+	if !data.TransportUdp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/transport/udp", data.getPath()))
+	}
 	if !data.Dscp.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/dscp", data.getPath()))
+	}
+	if !data.RouterIdIpv6Address.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id/router-id-address/ipv6-address", data.getPath()))
+	}
+	if !data.RouterIdIpv4Address.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id/router-id-address/ipv4-address", data.getPath()))
+	}
+	if !data.SourceAddressIpv6Address.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/source-address/ipv6-address", data.getPath()))
+	}
+	if !data.SourceAddressIpv4Address.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/source-address/ipv4-address", data.getPath()))
 	}
 	if !data.Source.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/source", data.getPath()))
@@ -854,13 +1003,6 @@ func (data *FlowExporterMap) addDeletedItemsXML(ctx context.Context, state FlowE
 			deletedPaths[deletePath] = true
 		}
 	}
-	if !state.TransportUdp.IsNull() && data.TransportUdp.IsNull() {
-		deletePath := state.getXPath() + "/transport/udp"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
-			deletedPaths[deletePath] = true
-		}
-	}
 	if !state.PacketLength.IsNull() && data.PacketLength.IsNull() {
 		deletePath := state.getXPath() + "/packet-length"
 		if !deletedPaths[deletePath] {
@@ -868,8 +1010,43 @@ func (data *FlowExporterMap) addDeletedItemsXML(ctx context.Context, state FlowE
 			deletedPaths[deletePath] = true
 		}
 	}
+	if !state.TransportUdp.IsNull() && data.TransportUdp.IsNull() {
+		deletePath := state.getXPath() + "/transport/udp"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	if !state.Dscp.IsNull() && data.Dscp.IsNull() {
 		deletePath := state.getXPath() + "/dscp"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.RouterIdIpv6Address.IsNull() && data.RouterIdIpv6Address.IsNull() {
+		deletePath := state.getXPath() + "/router-id/router-id-address/ipv6-address"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.RouterIdIpv4Address.IsNull() && data.RouterIdIpv4Address.IsNull() {
+		deletePath := state.getXPath() + "/router-id/router-id-address/ipv4-address"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.SourceAddressIpv6Address.IsNull() && data.SourceAddressIpv6Address.IsNull() {
+		deletePath := state.getXPath() + "/source-address/ipv6-address"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.SourceAddressIpv4Address.IsNull() && data.SourceAddressIpv4Address.IsNull() {
+		deletePath := state.getXPath() + "/source-address/ipv4-address"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -942,14 +1119,26 @@ func (data *FlowExporterMap) addDeletePathsXML(ctx context.Context, body string)
 	if !data.DfbitSet.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/dfbit/set")
 	}
-	if !data.TransportUdp.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/transport/udp")
-	}
 	if !data.PacketLength.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/packet-length")
 	}
+	if !data.TransportUdp.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/transport/udp")
+	}
 	if !data.Dscp.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/dscp")
+	}
+	if !data.RouterIdIpv6Address.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/router-id/router-id-address/ipv6-address")
+	}
+	if !data.RouterIdIpv4Address.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/router-id/router-id-address/ipv4-address")
+	}
+	if !data.SourceAddressIpv6Address.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/source-address/ipv6-address")
+	}
+	if !data.SourceAddressIpv4Address.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/source-address/ipv4-address")
 	}
 	if !data.Source.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/source")

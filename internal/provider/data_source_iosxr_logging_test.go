@@ -20,9 +20,171 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+import (
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
 
 // End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
+
+func TestAccDataSourceIosxrLogging(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "console", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "trap", "informational"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "monitor", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "console_facility", "all"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "archive_disk0", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "archive_frequency_daily", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "archive_filesize", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "archive_size", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "archive_length", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "archive_severity", "informational"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "archive_threshold", "80"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "ipv4_dscp", "cs6"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "ipv6_dscp", "ef"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "facility_level", "local7"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "buffered_entries_count", "10000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "buffered_size", "4000000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "buffered_level", "debugging"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "buffered_discriminator_match1", "BUFFERED1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "buffered_discriminator_match2", "BUFFERED2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "buffered_discriminator_match3", "BUFFERED3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "buffered_discriminator_nomatch1", "BUFFERED_NOMATCH1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "buffered_discriminator_nomatch2", "BUFFERED_NOMATCH2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "buffered_discriminator_nomatch3", "BUFFERED_NOMATCH3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "container_all", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "container_fetch_timestamp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "file.0.file_name", "logfile1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "file.0.path", "/disk0:"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "file.0.maxfilesize", "1024"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "file.0.severity", "info"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "file.0.local_accounting_send_to_remote_facility_level", "local0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "file.0.discriminator_match1", "MATCH1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "file.0.discriminator_match2", "MATCH2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "file.0.discriminator_match3", "MATCH3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "file.0.discriminator_nomatch1", "NOMATCH1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "file.0.discriminator_nomatch2", "NOMATCH2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "file.0.discriminator_nomatch3", "NOMATCH3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "history", "emergencies"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "history_size", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "hostnameprefix", "HOSTNAME01"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "localfilesize", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "source_interfaces.0.name", "Loopback0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "source_interfaces.0.vrfs.0.name", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "suppress_duplicates", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "format_rfc5424", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "yang", "emergencies"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "suppress_rules.0.rule_name", "RULE1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "suppress_rules.0.alarms.0.message_category", "SECURITY"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "suppress_rules.0.alarms.0.group_name", "SSHD"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "suppress_rules.0.alarms.0.message_code", "INFO"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "suppress_rules.0.apply_all_of_router", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "events_buffer_size", "10000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "filter_matches.0.match", "MATCH1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "events_display_location", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "events_level", "informational"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "events_threshold", "80"))
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { testAccPreCheck(t) },
+		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccDataSourceIosxrLoggingConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
+			},
+		},
+	})
+}
+
+// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 
 // End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
+
+func testAccDataSourceIosxrLoggingConfig() string {
+	config := `resource "iosxr_logging" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	console = "disable"` + "\n"
+	config += `	trap = "informational"` + "\n"
+	config += `	monitor = "disable"` + "\n"
+	config += `	console_facility = "all"` + "\n"
+	config += `	archive_disk0 = true` + "\n"
+	config += `	archive_frequency_daily = true` + "\n"
+	config += `	archive_filesize = 100` + "\n"
+	config += `	archive_size = 500` + "\n"
+	config += `	archive_length = 4` + "\n"
+	config += `	archive_severity = "informational"` + "\n"
+	config += `	archive_threshold = 80` + "\n"
+	config += `	ipv4_dscp = "cs6"` + "\n"
+	config += `	ipv6_dscp = "ef"` + "\n"
+	config += `	facility_level = "local7"` + "\n"
+	config += `	buffered_entries_count = 10000` + "\n"
+	config += `	buffered_size = 4000000` + "\n"
+	config += `	buffered_level = "debugging"` + "\n"
+	config += `	buffered_discriminator_match1 = "BUFFERED1"` + "\n"
+	config += `	buffered_discriminator_match2 = "BUFFERED2"` + "\n"
+	config += `	buffered_discriminator_match3 = "BUFFERED3"` + "\n"
+	config += `	buffered_discriminator_nomatch1 = "BUFFERED_NOMATCH1"` + "\n"
+	config += `	buffered_discriminator_nomatch2 = "BUFFERED_NOMATCH2"` + "\n"
+	config += `	buffered_discriminator_nomatch3 = "BUFFERED_NOMATCH3"` + "\n"
+	config += `	container_all = true` + "\n"
+	config += `	container_fetch_timestamp = true` + "\n"
+	config += `	file = [{` + "\n"
+	config += `		file_name = "logfile1"` + "\n"
+	config += `		path = "/disk0:"` + "\n"
+	config += `		maxfilesize = 1024` + "\n"
+	config += `		severity = "info"` + "\n"
+	config += `		local_accounting_send_to_remote_facility_level = "local0"` + "\n"
+	config += `		discriminator_match1 = "MATCH1"` + "\n"
+	config += `		discriminator_match2 = "MATCH2"` + "\n"
+	config += `		discriminator_match3 = "MATCH3"` + "\n"
+	config += `		discriminator_nomatch1 = "NOMATCH1"` + "\n"
+	config += `		discriminator_nomatch2 = "NOMATCH2"` + "\n"
+	config += `		discriminator_nomatch3 = "NOMATCH3"` + "\n"
+	config += `	}]` + "\n"
+	config += `	history = "emergencies"` + "\n"
+	config += `	history_size = 500` + "\n"
+	config += `	hostnameprefix = "HOSTNAME01"` + "\n"
+	config += `	localfilesize = 1000` + "\n"
+	config += `	source_interfaces = [{` + "\n"
+	config += `		name = "Loopback0"` + "\n"
+	config += `		vrfs = [{` + "\n"
+	config += `			name = "VRF1"` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
+	config += `	suppress_duplicates = true` + "\n"
+	config += `	format_rfc5424 = true` + "\n"
+	config += `	yang = "emergencies"` + "\n"
+	config += `	suppress_rules = [{` + "\n"
+	config += `		rule_name = "RULE1"` + "\n"
+	config += `		alarms = [{` + "\n"
+	config += `			message_category = "SECURITY"` + "\n"
+	config += `			group_name = "SSHD"` + "\n"
+	config += `			message_code = "INFO"` + "\n"
+	config += `		}]` + "\n"
+	config += `		apply_all_of_router = true` + "\n"
+	config += `	}]` + "\n"
+	config += `	events_buffer_size = 10000` + "\n"
+	config += `	filter_matches = [{` + "\n"
+	config += `		match = "MATCH1"` + "\n"
+	config += `	}]` + "\n"
+	config += `	events_display_location = true` + "\n"
+	config += `	events_level = "informational"` + "\n"
+	config += `	events_threshold = 80` + "\n"
+	config += `}` + "\n"
+
+	config += `
+		data "iosxr_logging" "test" {
+			depends_on = [iosxr_logging.test]
+		}
+	`
+	return config
+}
+
+// End of section. //template:end testAccDataSourceConfig

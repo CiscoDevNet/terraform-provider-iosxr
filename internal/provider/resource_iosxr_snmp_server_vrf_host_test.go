@@ -21,10 +21,12 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 // End of section. //template:end imports
@@ -34,8 +36,8 @@ import (
 func TestAccIosxrSNMPServerVRFHost(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server_vrf_host.test", "address", "11.11.11.11"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server_vrf_host.test", "unencrypted_strings.0.community_string", "COMMUNITY1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server_vrf_host.test", "unencrypted_strings.0.version_v3_security_level", "auth"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server_vrf_host.test", "traps_unencrypted_strings.0.version_v3_security_level", "auth"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server_vrf_host.test", "informs_unencrypted_strings.0.version_v3_security_level", "auth"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -67,8 +69,12 @@ func testAccIosxrSNMPServerVRFHostConfig_minimum() string {
 	config := `resource "iosxr_snmp_server_vrf_host" "test" {` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	address = "11.11.11.11"` + "\n"
-	config += `	unencrypted_strings = [{` + "\n"
+	config += `	traps_unencrypted_strings = [{` + "\n"
 	config += `		community_string = "COMMUNITY1"` + "\n"
+	config += `		version_v3_security_level = "auth"` + "\n"
+	config += `		}]` + "\n"
+	config += `	informs_unencrypted_strings = [{` + "\n"
+	config += `		community_string = "COMMUNITY2"` + "\n"
 	config += `		version_v3_security_level = "auth"` + "\n"
 	config += `		}]` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
@@ -84,8 +90,12 @@ func testAccIosxrSNMPServerVRFHostConfig_all() string {
 	config := `resource "iosxr_snmp_server_vrf_host" "test" {` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	address = "11.11.11.11"` + "\n"
-	config += `	unencrypted_strings = [{` + "\n"
+	config += `	traps_unencrypted_strings = [{` + "\n"
 	config += `		community_string = "COMMUNITY1"` + "\n"
+	config += `		version_v3_security_level = "auth"` + "\n"
+	config += `		}]` + "\n"
+	config += `	informs_unencrypted_strings = [{` + "\n"
+	config += `		community_string = "COMMUNITY2"` + "\n"
 	config += `		version_v3_security_level = "auth"` + "\n"
 	config += `		}]` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
@@ -94,3 +104,28 @@ func testAccIosxrSNMPServerVRFHostConfig_all() string {
 }
 
 // End of section. //template:end testAccConfigAll
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrSNMPServerVRFHostImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		VrfName := primary.Attributes["vrf_name"]
+		Address := primary.Attributes["address"]
+
+		return fmt.Sprintf("%s,%s", VrfName, Address), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccIosxrSNMPServerVRFHostPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server/vrfs/vrf[vrf-name=VRF1]"
+	attributes = {
+		"vrf-name" = "VRF1"
+	}
+}
+
+`
+
+// End of section. //template:end testPrerequisites

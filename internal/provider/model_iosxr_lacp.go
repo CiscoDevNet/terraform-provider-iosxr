@@ -144,7 +144,6 @@ func (data *LACP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end updateFromBodyXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *LACP) fromBody(ctx context.Context, res gjson.Result) {
@@ -161,7 +160,6 @@ func (data *LACP) fromBody(ctx context.Context, res gjson.Result) {
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *LACPData) fromBody(ctx context.Context, res gjson.Result) {
@@ -178,7 +176,6 @@ func (data *LACPData) fromBody(ctx context.Context, res gjson.Result) {
 }
 
 // End of section. //template:end fromBodyData
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *LACP) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -191,7 +188,6 @@ func (data *LACP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *LACPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -204,7 +200,6 @@ func (data *LACPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyDataXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *LACP) getDeletedItems(ctx context.Context, state LACP) []string {
@@ -219,7 +214,6 @@ func (data *LACP) getDeletedItems(ctx context.Context, state LACP) []string {
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
 func (data *LACP) getEmptyLeafsDelete(ctx context.Context, state *LACP) []string {
@@ -228,7 +222,6 @@ func (data *LACP) getEmptyLeafsDelete(ctx context.Context, state *LACP) []string
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *LACP) getDeletePaths(ctx context.Context) []string {
@@ -244,7 +237,6 @@ func (data *LACP) getDeletePaths(ctx context.Context) []string {
 }
 
 // End of section. //template:end getDeletePaths
-
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *LACP) addDeletedItemsXML(ctx context.Context, state LACP, body string) string {
@@ -272,7 +264,6 @@ func (data *LACP) addDeletedItemsXML(ctx context.Context, state LACP, body strin
 }
 
 // End of section. //template:end addDeletedItemsXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *LACP) addDeletePathsXML(ctx context.Context, body string) string {

@@ -5,6 +5,26 @@ doc_category: Management
 attributes:
   - yang_name: vrf-name
     example: default
+  - yang_name: host-names/host-name
+    tf_name: hostnames
+    type: List
+    attributes:
+      - yang_name: name
+        id: true
+        minimum_test_value: '"server.cisco.com"'
+        example: server.cisco.com
+      - yang_name: severity
+        minimum_test_value: '"info"'
+        example: info
+      - yang_name: port
+        example: 514
+      - yang_name: operator
+        example: equals
+      - yang_name: facility
+        example: local0
+      - yang_name: hostname-source-address
+        tf_name: hostname_source_address
+        example: "1.1.1.2"
   - yang_name: host-ipv4-addresses/host-ipv4-address
     tf_name: host_ipv4_addresses
     minimum_test_value: '["1.1.1.1"]'
@@ -21,16 +41,36 @@ attributes:
         example: 514
       - yang_name: operator
         example: equals
+      - yang_name: facility
+        example: local0
+      - yang_name: ipv4-source-address
+        tf_name: ipv4_source_address
+        example: "1.1.1.2"
   - yang_name: host-ipv6-addresses/host-ipv6-address
     tf_name: host_ipv6_addresses
     type: List
     attributes:
       - yang_name: ipv6-address
         id: true
-        example: 2001::1
+        example: 2001:db8::1
       - yang_name: severity
         example: info
       - yang_name: port
         example: 514
       - yang_name: operator
         example: equals-or-higher
+      - yang_name: facility
+        example: local0
+      - yang_name: ipv6-source-address
+        tf_name: ipv6_source_address
+        example: "2001:db8::2"
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-domain-cfg:/domain/ipv4/hosts/host[host-name=server.cisco.com]
+    attributes:
+      - name: host-name
+        value: server.cisco.com
+    lists:
+      - name: ip-address
+        values:
+          - "1.1.1.1"

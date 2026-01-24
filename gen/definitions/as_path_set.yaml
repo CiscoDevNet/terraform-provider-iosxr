@@ -8,6 +8,6 @@ attributes:
     example: TEST1
   - yang_name: rplas-path-set
     tf_name: rpl
+    description: "Configures an AS-PATH set"
     read_raw: true
-    description: "AS path set"
     example: "as-path-set TEST1\\n  length ge 10\\nend-set\\n"

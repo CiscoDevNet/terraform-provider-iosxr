@@ -173,19 +173,25 @@ func (data RouterHSRPInterface) toBodyXML(ctx context.Context) string {
 
 func (data *RouterHSRPInterface) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "hsrp.use-bia"); value.Exists() {
-		data.HsrpUseBia = types.BoolValue(true)
-	} else if data.HsrpUseBia.IsNull() {
-		// If currently null, keep as null (field not in config)
-		data.HsrpUseBia = types.BoolNull()
+		if !data.HsrpUseBia.IsNull() {
+			data.HsrpUseBia = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.HsrpUseBia.IsNull() {
+			data.HsrpUseBia = types.BoolNull()
+		}
 	}
-	// else: preserve existing value (e.g., false from config)
 	if value := gjson.GetBytes(res, "hsrp.redirects.disable"); value.Exists() {
-		data.HsrpRedirectsDisable = types.BoolValue(true)
-	} else if data.HsrpRedirectsDisable.IsNull() {
-		// If currently null, keep as null (field not in config)
-		data.HsrpRedirectsDisable = types.BoolNull()
+		if !data.HsrpRedirectsDisable.IsNull() {
+			data.HsrpRedirectsDisable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.HsrpRedirectsDisable.IsNull() {
+			data.HsrpRedirectsDisable = types.BoolNull()
+		}
 	}
-	// else: preserve existing value (e.g., false from config)
 	if value := gjson.GetBytes(res, "hsrp.delay.minimum"); value.Exists() && !data.HsrpDelayMinimum.IsNull() {
 		data.HsrpDelayMinimum = types.Int64Value(value.Int())
 	} else {
@@ -226,8 +232,7 @@ func (data *RouterHSRPInterface) updateFromBodyXML(ctx context.Context, res xmld
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hsrp/use-bia"); value.Exists() {
 		data.HsrpUseBia = types.BoolValue(true)
 	} else {
-		// If config has false and device doesn't have the field, keep false (don't set to null)
-		// Only set to null if it was already null
+		// For presence-based booleans, only set to null if it's already null
 		if data.HsrpUseBia.IsNull() {
 			data.HsrpUseBia = types.BoolNull()
 		}
@@ -235,8 +240,7 @@ func (data *RouterHSRPInterface) updateFromBodyXML(ctx context.Context, res xmld
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hsrp/redirects/disable"); value.Exists() {
 		data.HsrpRedirectsDisable = types.BoolValue(true)
 	} else {
-		// If config has false and device doesn't have the field, keep false (don't set to null)
-		// Only set to null if it was already null
+		// For presence-based booleans, only set to null if it's already null
 		if data.HsrpRedirectsDisable.IsNull() {
 			data.HsrpRedirectsDisable = types.BoolNull()
 		}
@@ -269,7 +273,6 @@ func (data *RouterHSRPInterface) updateFromBodyXML(ctx context.Context, res xmld
 }
 
 // End of section. //template:end updateFromBodyXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *RouterHSRPInterface) fromBody(ctx context.Context, res gjson.Result) {
@@ -279,9 +282,13 @@ func (data *RouterHSRPInterface) fromBody(ctx context.Context, res gjson.Result)
 	}
 	if value := res.Get(prefix + "hsrp.use-bia"); value.Exists() {
 		data.HsrpUseBia = types.BoolValue(true)
+	} else {
+		data.HsrpUseBia = types.BoolNull()
 	}
 	if value := res.Get(prefix + "hsrp.redirects.disable"); value.Exists() {
 		data.HsrpRedirectsDisable = types.BoolValue(true)
+	} else {
+		data.HsrpRedirectsDisable = types.BoolNull()
 	}
 	if value := res.Get(prefix + "hsrp.delay.minimum"); value.Exists() {
 		data.HsrpDelayMinimum = types.Int64Value(value.Int())
@@ -301,7 +308,6 @@ func (data *RouterHSRPInterface) fromBody(ctx context.Context, res gjson.Result)
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *RouterHSRPInterfaceData) fromBody(ctx context.Context, res gjson.Result) {
@@ -311,9 +317,13 @@ func (data *RouterHSRPInterfaceData) fromBody(ctx context.Context, res gjson.Res
 	}
 	if value := res.Get(prefix + "hsrp.use-bia"); value.Exists() {
 		data.HsrpUseBia = types.BoolValue(true)
+	} else {
+		data.HsrpUseBia = types.BoolNull()
 	}
 	if value := res.Get(prefix + "hsrp.redirects.disable"); value.Exists() {
 		data.HsrpRedirectsDisable = types.BoolValue(true)
+	} else {
+		data.HsrpRedirectsDisable = types.BoolNull()
 	}
 	if value := res.Get(prefix + "hsrp.delay.minimum"); value.Exists() {
 		data.HsrpDelayMinimum = types.Int64Value(value.Int())
@@ -333,15 +343,18 @@ func (data *RouterHSRPInterfaceData) fromBody(ctx context.Context, res gjson.Res
 }
 
 // End of section. //template:end fromBodyData
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *RouterHSRPInterface) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hsrp/use-bia"); value.Exists() {
 		data.HsrpUseBia = types.BoolValue(true)
+	} else {
+		data.HsrpUseBia = types.BoolNull()
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hsrp/redirects/disable"); value.Exists() {
 		data.HsrpRedirectsDisable = types.BoolValue(true)
+	} else {
+		data.HsrpRedirectsDisable = types.BoolNull()
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hsrp/delay/minimum"); value.Exists() {
 		data.HsrpDelayMinimum = types.Int64Value(value.Int())
@@ -361,7 +374,6 @@ func (data *RouterHSRPInterface) fromBodyXML(ctx context.Context, res xmldot.Res
 }
 
 // End of section. //template:end fromBodyXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *RouterHSRPInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -393,7 +405,6 @@ func (data *RouterHSRPInterfaceData) fromBodyXML(ctx context.Context, res xmldot
 }
 
 // End of section. //template:end fromBodyDataXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *RouterHSRPInterface) getDeletedItems(ctx context.Context, state RouterHSRPInterface) []string {
@@ -413,23 +424,16 @@ func (data *RouterHSRPInterface) getDeletedItems(ctx context.Context, state Rout
 	if !state.HsrpDelayMinimum.IsNull() && data.HsrpDelayMinimum.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/hsrp/delay/minimum", state.getPath()))
 	}
-	// For presence-based booleans, delete if going from true to false or to null
-	if !state.HsrpRedirectsDisable.IsNull() && state.HsrpRedirectsDisable.ValueBool() {
-		if data.HsrpRedirectsDisable.IsNull() || !data.HsrpRedirectsDisable.ValueBool() {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/hsrp/redirects/disable", state.getPath()))
-		}
+	if !state.HsrpRedirectsDisable.IsNull() && data.HsrpRedirectsDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/hsrp/redirects/disable", state.getPath()))
 	}
-	// For presence-based booleans, delete if going from true to false or to null
-	if !state.HsrpUseBia.IsNull() && state.HsrpUseBia.ValueBool() {
-		if data.HsrpUseBia.IsNull() || !data.HsrpUseBia.ValueBool() {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/hsrp/use-bia", state.getPath()))
-		}
+	if !state.HsrpUseBia.IsNull() && data.HsrpUseBia.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/hsrp/use-bia", state.getPath()))
 	}
 	return deletedItems
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
 func (data *RouterHSRPInterface) getEmptyLeafsDelete(ctx context.Context, state *RouterHSRPInterface) []string {
@@ -450,7 +454,6 @@ func (data *RouterHSRPInterface) getEmptyLeafsDelete(ctx context.Context, state 
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *RouterHSRPInterface) getDeletePaths(ctx context.Context) []string {
@@ -481,7 +484,6 @@ func (data *RouterHSRPInterface) getDeletePaths(ctx context.Context) []string {
 }
 
 // End of section. //template:end getDeletePaths
-
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *RouterHSRPInterface) addDeletedItemsXML(ctx context.Context, state RouterHSRPInterface, body string) string {
@@ -546,7 +548,6 @@ func (data *RouterHSRPInterface) addDeletedItemsXML(ctx context.Context, state R
 }
 
 // End of section. //template:end addDeletedItemsXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *RouterHSRPInterface) addDeletePathsXML(ctx context.Context, body string) string {

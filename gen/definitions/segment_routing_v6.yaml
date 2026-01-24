@@ -4,15 +4,41 @@ path: Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-segment-routing-srv6-
 doc_category: Segment Routing
 attributes:
   - yang_name: enable
-    minimum_test_value: true
+    default_value: true
     example: true
-  - yang_name: encapsulation/source-address
-    example: fccc:0:214::1
+  - yang_name: sid-holdtime
+    minimum_test_value: 10
+    example: 10
+  - yang_name: logging/locator-status
+    example: true
+  - yang_name: formats/formats/format
+    tf_name: formats
+    type: List
+    attributes:
+      - yang_name: name
+        id: true
+        example: "usid-f3216"
+      - yang_name: format-enable
+        default_value: true
+        example: true
+      - yang_name: usid/local-id-block-ranges/lib-start
+        test_tags: [XRV9K, NCS, C8000]
+        exclude_test: true
+        example: 57344
+      - yang_name: usid/local-id-block-ranges/explict-lib-start
+        test_tags: [XRV9K, NCS, C8000]
+        exclude_test: true
+        example: 65024
+      - yang_name: usid/wide-local-id-block-explicit-range
+        test_tags: [XRV9K, NCS, C8000]
+        exclude_test: true
+        example: 65527
   - yang_name: locators/locators/locator
     tf_name: locators
     type: List
     attributes:
       - yang_name: locator-enable
+        default_value: true
         example: true
       - yang_name: name
         id: true
@@ -25,25 +51,28 @@ attributes:
       - yang_name: prefix/prefix-length
         tf_name: prefix_length
         example: 48
-  - yang_name: formats/formats/format
-    tf_name: formats
-    type: List
-    exclude_test: true
-    attributes:
-      - yang_name: name
-        id: true
-        example: "usid-f3216"
-      - yang_name: format-enable
+      - yang_name: anycast
         example: true
-      - yang_name: usid/local-id-block-ranges/lib-start
-        exclude_test: true
-        example: 57344
-      - yang_name: usid/local-id-block-ranges/explict-lib-start
-        exclude_test: true
-        example: 65024
-      - yang_name: usid/wide-local-id-block-explicit-range
-        exclude_test: true
-        example: 65527
+      - yang_name: algorithm
+        example: 128
+  - yang_name: encapsulation/traffic-class/option
+    test_tags: [XRV9K]
+    include_example: true
+    example: value
+  - yang_name: encapsulation/traffic-class/value
+    test_tags: [XRV9K]
+    include_example: true
+    example: 1
+  - yang_name: encapsulation/hop-limit/option
+    test_tags: [XRV9K]
+    include_example: true
+    example: count
+  - yang_name: encapsulation/hop-limit/value
+    test_tags: [XRV9K]
+    include_example: true
+    example: 1
+  - yang_name: encapsulation/source-address
+    example: fccc:0:214::1
 
 test_prerequisites:
   - path: Cisco-IOS-XR-segment-routing-ms-cfg:/sr

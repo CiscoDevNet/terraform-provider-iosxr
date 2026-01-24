@@ -1,9 +1,12 @@
 ---
 name: CDP
 path: Cisco-IOS-XR-um-cdp-cfg:/cdp
-doc_category: System
+doc_category: Management
+test_tags: [XRV9K, XRD, NCS]
 attributes:
   - yang_name: enable
+    type: Bool
+    type_yang_bool: presence
     minimum_test_value: true
     example: true
   - yang_name: holdtime
@@ -11,7 +14,11 @@ attributes:
   - yang_name: timer
     example: 34
   - yang_name: advertise/v1
+    type: Bool
+    type_yang_bool: presence
     delete_parent: true
     example: true
   - yang_name: log/adjacency/changes
+    type: Bool
+    type_yang_bool: presence
     example: true

@@ -42,15 +42,44 @@ import (
 type EVPNSegmentRoutingSRv6EVI struct {
 	Device                                types.String                                                     `tfsdk:"device"`
 	Id                                    types.String                                                     `tfsdk:"id"`
+	DeleteMode                            types.String                                                     `tfsdk:"delete_mode"`
 	VpnId                                 types.Int64                                                      `tfsdk:"vpn_id"`
 	Description                           types.String                                                     `tfsdk:"description"`
+	BgpRdTwoByteAsNumber                  types.Int64                                                      `tfsdk:"bgp_rd_two_byte_as_number"`
+	BgpRdTwoByteAsIndex                   types.Int64                                                      `tfsdk:"bgp_rd_two_byte_as_index"`
+	BgpRdFourByteAsNumber                 types.Int64                                                      `tfsdk:"bgp_rd_four_byte_as_number"`
+	BgpRdFourByteAsIndex                  types.Int64                                                      `tfsdk:"bgp_rd_four_byte_as_index"`
+	BgpRdIpv4Address                      types.String                                                     `tfsdk:"bgp_rd_ipv4_address"`
+	BgpRdIpv4AddressIndex                 types.Int64                                                      `tfsdk:"bgp_rd_ipv4_address_index"`
+	BgpRouteTargetTwoByteAsFormat         []EVPNSegmentRoutingSRv6EVIBgpRouteTargetTwoByteAsFormat         `tfsdk:"bgp_route_target_two_byte_as_format"`
+	BgpRouteTargetFourByteAsFormat        []EVPNSegmentRoutingSRv6EVIBgpRouteTargetFourByteAsFormat        `tfsdk:"bgp_route_target_four_byte_as_format"`
+	BgpRouteTargetIpv4AddressFormat       []EVPNSegmentRoutingSRv6EVIBgpRouteTargetIpv4AddressFormat       `tfsdk:"bgp_route_target_ipv4_address_format"`
 	BgpRouteTargetImportTwoByteAsFormat   []EVPNSegmentRoutingSRv6EVIBgpRouteTargetImportTwoByteAsFormat   `tfsdk:"bgp_route_target_import_two_byte_as_format"`
 	BgpRouteTargetImportFourByteAsFormat  []EVPNSegmentRoutingSRv6EVIBgpRouteTargetImportFourByteAsFormat  `tfsdk:"bgp_route_target_import_four_byte_as_format"`
 	BgpRouteTargetImportIpv4AddressFormat []EVPNSegmentRoutingSRv6EVIBgpRouteTargetImportIpv4AddressFormat `tfsdk:"bgp_route_target_import_ipv4_address_format"`
 	BgpRouteTargetExportTwoByteAsFormat   []EVPNSegmentRoutingSRv6EVIBgpRouteTargetExportTwoByteAsFormat   `tfsdk:"bgp_route_target_export_two_byte_as_format"`
 	BgpRouteTargetExportFourByteAsFormat  []EVPNSegmentRoutingSRv6EVIBgpRouteTargetExportFourByteAsFormat  `tfsdk:"bgp_route_target_export_four_byte_as_format"`
 	BgpRouteTargetExportIpv4AddressFormat []EVPNSegmentRoutingSRv6EVIBgpRouteTargetExportIpv4AddressFormat `tfsdk:"bgp_route_target_export_ipv4_address_format"`
+	BgpTablePolicy                        types.String                                                     `tfsdk:"bgp_table_policy"`
+	BgpImplicitImportDisable              types.Bool                                                       `tfsdk:"bgp_implicit_import_disable"`
+	BgpRoutePolicyImport                  types.String                                                     `tfsdk:"bgp_route_policy_import"`
+	BgpRoutePolicyExport                  types.String                                                     `tfsdk:"bgp_route_policy_export"`
+	PreferredNexthopLowestIp              types.Bool                                                       `tfsdk:"preferred_nexthop_lowest_ip"`
+	PreferredNexthopHighestIp             types.Bool                                                       `tfsdk:"preferred_nexthop_highest_ip"`
+	PreferredNexthopModulo                types.Bool                                                       `tfsdk:"preferred_nexthop_modulo"`
 	AdvertiseMac                          types.Bool                                                       `tfsdk:"advertise_mac"`
+	AdvertiseMacBviMac                    types.Bool                                                       `tfsdk:"advertise_mac_bvi_mac"`
+	UnknownUnicastSuppression             types.Bool                                                       `tfsdk:"unknown_unicast_suppression"`
+	IgnoreMtuMismatch                     types.Bool                                                       `tfsdk:"ignore_mtu_mismatch"`
+	IgnoreMtuMismatchDisableDeprecated    types.Bool                                                       `tfsdk:"ignore_mtu_mismatch_disable_deprecated"`
+	EnforceMtuMatch                       types.Bool                                                       `tfsdk:"enforce_mtu_match"`
+	TransmitMtuZero                       types.Bool                                                       `tfsdk:"transmit_mtu_zero"`
+	TransmitMtuZeroDisableDeprecated      types.Bool                                                       `tfsdk:"transmit_mtu_zero_disable_deprecated"`
+	TransmitL2Mtu                         types.Bool                                                       `tfsdk:"transmit_l2_mtu"`
+	ReOriginationDisable                  types.Bool                                                       `tfsdk:"re_origination_disable"`
+	Etree                                 types.Bool                                                       `tfsdk:"etree"`
+	EtreeRtLeaf                           types.Bool                                                       `tfsdk:"etree_rt_leaf"`
+	BviCoupledMode                        types.Bool                                                       `tfsdk:"bvi_coupled_mode"`
 	Locators                              []EVPNSegmentRoutingSRv6EVILocators                              `tfsdk:"locators"`
 }
 
@@ -59,14 +88,54 @@ type EVPNSegmentRoutingSRv6EVIData struct {
 	Id                                    types.String                                                     `tfsdk:"id"`
 	VpnId                                 types.Int64                                                      `tfsdk:"vpn_id"`
 	Description                           types.String                                                     `tfsdk:"description"`
+	BgpRdTwoByteAsNumber                  types.Int64                                                      `tfsdk:"bgp_rd_two_byte_as_number"`
+	BgpRdTwoByteAsIndex                   types.Int64                                                      `tfsdk:"bgp_rd_two_byte_as_index"`
+	BgpRdFourByteAsNumber                 types.Int64                                                      `tfsdk:"bgp_rd_four_byte_as_number"`
+	BgpRdFourByteAsIndex                  types.Int64                                                      `tfsdk:"bgp_rd_four_byte_as_index"`
+	BgpRdIpv4Address                      types.String                                                     `tfsdk:"bgp_rd_ipv4_address"`
+	BgpRdIpv4AddressIndex                 types.Int64                                                      `tfsdk:"bgp_rd_ipv4_address_index"`
+	BgpRouteTargetTwoByteAsFormat         []EVPNSegmentRoutingSRv6EVIBgpRouteTargetTwoByteAsFormat         `tfsdk:"bgp_route_target_two_byte_as_format"`
+	BgpRouteTargetFourByteAsFormat        []EVPNSegmentRoutingSRv6EVIBgpRouteTargetFourByteAsFormat        `tfsdk:"bgp_route_target_four_byte_as_format"`
+	BgpRouteTargetIpv4AddressFormat       []EVPNSegmentRoutingSRv6EVIBgpRouteTargetIpv4AddressFormat       `tfsdk:"bgp_route_target_ipv4_address_format"`
 	BgpRouteTargetImportTwoByteAsFormat   []EVPNSegmentRoutingSRv6EVIBgpRouteTargetImportTwoByteAsFormat   `tfsdk:"bgp_route_target_import_two_byte_as_format"`
 	BgpRouteTargetImportFourByteAsFormat  []EVPNSegmentRoutingSRv6EVIBgpRouteTargetImportFourByteAsFormat  `tfsdk:"bgp_route_target_import_four_byte_as_format"`
 	BgpRouteTargetImportIpv4AddressFormat []EVPNSegmentRoutingSRv6EVIBgpRouteTargetImportIpv4AddressFormat `tfsdk:"bgp_route_target_import_ipv4_address_format"`
 	BgpRouteTargetExportTwoByteAsFormat   []EVPNSegmentRoutingSRv6EVIBgpRouteTargetExportTwoByteAsFormat   `tfsdk:"bgp_route_target_export_two_byte_as_format"`
 	BgpRouteTargetExportFourByteAsFormat  []EVPNSegmentRoutingSRv6EVIBgpRouteTargetExportFourByteAsFormat  `tfsdk:"bgp_route_target_export_four_byte_as_format"`
 	BgpRouteTargetExportIpv4AddressFormat []EVPNSegmentRoutingSRv6EVIBgpRouteTargetExportIpv4AddressFormat `tfsdk:"bgp_route_target_export_ipv4_address_format"`
+	BgpTablePolicy                        types.String                                                     `tfsdk:"bgp_table_policy"`
+	BgpImplicitImportDisable              types.Bool                                                       `tfsdk:"bgp_implicit_import_disable"`
+	BgpRoutePolicyImport                  types.String                                                     `tfsdk:"bgp_route_policy_import"`
+	BgpRoutePolicyExport                  types.String                                                     `tfsdk:"bgp_route_policy_export"`
+	PreferredNexthopLowestIp              types.Bool                                                       `tfsdk:"preferred_nexthop_lowest_ip"`
+	PreferredNexthopHighestIp             types.Bool                                                       `tfsdk:"preferred_nexthop_highest_ip"`
+	PreferredNexthopModulo                types.Bool                                                       `tfsdk:"preferred_nexthop_modulo"`
 	AdvertiseMac                          types.Bool                                                       `tfsdk:"advertise_mac"`
+	AdvertiseMacBviMac                    types.Bool                                                       `tfsdk:"advertise_mac_bvi_mac"`
+	UnknownUnicastSuppression             types.Bool                                                       `tfsdk:"unknown_unicast_suppression"`
+	IgnoreMtuMismatch                     types.Bool                                                       `tfsdk:"ignore_mtu_mismatch"`
+	IgnoreMtuMismatchDisableDeprecated    types.Bool                                                       `tfsdk:"ignore_mtu_mismatch_disable_deprecated"`
+	EnforceMtuMatch                       types.Bool                                                       `tfsdk:"enforce_mtu_match"`
+	TransmitMtuZero                       types.Bool                                                       `tfsdk:"transmit_mtu_zero"`
+	TransmitMtuZeroDisableDeprecated      types.Bool                                                       `tfsdk:"transmit_mtu_zero_disable_deprecated"`
+	TransmitL2Mtu                         types.Bool                                                       `tfsdk:"transmit_l2_mtu"`
+	ReOriginationDisable                  types.Bool                                                       `tfsdk:"re_origination_disable"`
+	Etree                                 types.Bool                                                       `tfsdk:"etree"`
+	EtreeRtLeaf                           types.Bool                                                       `tfsdk:"etree_rt_leaf"`
+	BviCoupledMode                        types.Bool                                                       `tfsdk:"bvi_coupled_mode"`
 	Locators                              []EVPNSegmentRoutingSRv6EVILocators                              `tfsdk:"locators"`
+}
+type EVPNSegmentRoutingSRv6EVIBgpRouteTargetTwoByteAsFormat struct {
+	AsNumber       types.Int64 `tfsdk:"as_number"`
+	AssignedNumber types.Int64 `tfsdk:"assigned_number"`
+}
+type EVPNSegmentRoutingSRv6EVIBgpRouteTargetFourByteAsFormat struct {
+	AsNumber       types.Int64 `tfsdk:"as_number"`
+	AssignedNumber types.Int64 `tfsdk:"assigned_number"`
+}
+type EVPNSegmentRoutingSRv6EVIBgpRouteTargetIpv4AddressFormat struct {
+	Ipv4Address    types.String `tfsdk:"ipv4_address"`
+	AssignedNumber types.Int64  `tfsdk:"assigned_number"`
 }
 type EVPNSegmentRoutingSRv6EVIBgpRouteTargetImportTwoByteAsFormat struct {
 	AsNumber       types.Int64 `tfsdk:"as_number"`
@@ -134,9 +203,149 @@ func (data EVPNSegmentRoutingSRv6EVI) toBody(ctx context.Context) string {
 	if !data.Description.IsNull() && !data.Description.IsUnknown() {
 		body, _ = sjson.Set(body, "description", data.Description.ValueString())
 	}
+	if !data.BgpRdTwoByteAsNumber.IsNull() && !data.BgpRdTwoByteAsNumber.IsUnknown() {
+		body, _ = sjson.Set(body, "bgp.rd.two-byte-as-number", strconv.FormatInt(data.BgpRdTwoByteAsNumber.ValueInt64(), 10))
+	}
+	if !data.BgpRdTwoByteAsIndex.IsNull() && !data.BgpRdTwoByteAsIndex.IsUnknown() {
+		body, _ = sjson.Set(body, "bgp.rd.two-byte-as-assigned-number", strconv.FormatInt(data.BgpRdTwoByteAsIndex.ValueInt64(), 10))
+	}
+	if !data.BgpRdFourByteAsNumber.IsNull() && !data.BgpRdFourByteAsNumber.IsUnknown() {
+		body, _ = sjson.Set(body, "bgp.rd.four-byte-as-number", strconv.FormatInt(data.BgpRdFourByteAsNumber.ValueInt64(), 10))
+	}
+	if !data.BgpRdFourByteAsIndex.IsNull() && !data.BgpRdFourByteAsIndex.IsUnknown() {
+		body, _ = sjson.Set(body, "bgp.rd.four-byte-as-assigned-number", strconv.FormatInt(data.BgpRdFourByteAsIndex.ValueInt64(), 10))
+	}
+	if !data.BgpRdIpv4Address.IsNull() && !data.BgpRdIpv4Address.IsUnknown() {
+		body, _ = sjson.Set(body, "bgp.rd.ipv4-address", data.BgpRdIpv4Address.ValueString())
+	}
+	if !data.BgpRdIpv4AddressIndex.IsNull() && !data.BgpRdIpv4AddressIndex.IsUnknown() {
+		body, _ = sjson.Set(body, "bgp.rd.ipv4-address-assigned-number", strconv.FormatInt(data.BgpRdIpv4AddressIndex.ValueInt64(), 10))
+	}
+	if !data.BgpTablePolicy.IsNull() && !data.BgpTablePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "bgp.table-policy", data.BgpTablePolicy.ValueString())
+	}
+	if !data.BgpImplicitImportDisable.IsNull() && !data.BgpImplicitImportDisable.IsUnknown() {
+		if data.BgpImplicitImportDisable.ValueBool() {
+			body, _ = sjson.Set(body, "bgp.implicit-import-disable", map[string]string{})
+		}
+	}
+	if !data.BgpRoutePolicyImport.IsNull() && !data.BgpRoutePolicyImport.IsUnknown() {
+		body, _ = sjson.Set(body, "bgp.route-policy.import", data.BgpRoutePolicyImport.ValueString())
+	}
+	if !data.BgpRoutePolicyExport.IsNull() && !data.BgpRoutePolicyExport.IsUnknown() {
+		body, _ = sjson.Set(body, "bgp.route-policy.export", data.BgpRoutePolicyExport.ValueString())
+	}
+	if !data.PreferredNexthopLowestIp.IsNull() && !data.PreferredNexthopLowestIp.IsUnknown() {
+		if data.PreferredNexthopLowestIp.ValueBool() {
+			body, _ = sjson.Set(body, "preferred-nexthop.lowest-ip", map[string]string{})
+		}
+	}
+	if !data.PreferredNexthopHighestIp.IsNull() && !data.PreferredNexthopHighestIp.IsUnknown() {
+		if data.PreferredNexthopHighestIp.ValueBool() {
+			body, _ = sjson.Set(body, "preferred-nexthop.highest-ip", map[string]string{})
+		}
+	}
+	if !data.PreferredNexthopModulo.IsNull() && !data.PreferredNexthopModulo.IsUnknown() {
+		if data.PreferredNexthopModulo.ValueBool() {
+			body, _ = sjson.Set(body, "preferred-nexthop.modulo", map[string]string{})
+		}
+	}
 	if !data.AdvertiseMac.IsNull() && !data.AdvertiseMac.IsUnknown() {
 		if data.AdvertiseMac.ValueBool() {
 			body, _ = sjson.Set(body, "advertise-mac", map[string]string{})
+		}
+	}
+	if !data.AdvertiseMacBviMac.IsNull() && !data.AdvertiseMacBviMac.IsUnknown() {
+		if data.AdvertiseMacBviMac.ValueBool() {
+			body, _ = sjson.Set(body, "advertise-mac.bvi-mac", map[string]string{})
+		}
+	}
+	if !data.UnknownUnicastSuppression.IsNull() && !data.UnknownUnicastSuppression.IsUnknown() {
+		if data.UnknownUnicastSuppression.ValueBool() {
+			body, _ = sjson.Set(body, "unknown-unicast-suppression", map[string]string{})
+		}
+	}
+	if !data.IgnoreMtuMismatch.IsNull() && !data.IgnoreMtuMismatch.IsUnknown() {
+		if data.IgnoreMtuMismatch.ValueBool() {
+			body, _ = sjson.Set(body, "ignore-mtu-mismatch", map[string]string{})
+		}
+	}
+	if !data.IgnoreMtuMismatchDisableDeprecated.IsNull() && !data.IgnoreMtuMismatchDisableDeprecated.IsUnknown() {
+		if data.IgnoreMtuMismatchDisableDeprecated.ValueBool() {
+			body, _ = sjson.Set(body, "ignore-mtu-mismatch.disable-deprecated", map[string]string{})
+		}
+	}
+	if !data.EnforceMtuMatch.IsNull() && !data.EnforceMtuMatch.IsUnknown() {
+		if data.EnforceMtuMatch.ValueBool() {
+			body, _ = sjson.Set(body, "enforce-mtu-match", map[string]string{})
+		}
+	}
+	if !data.TransmitMtuZero.IsNull() && !data.TransmitMtuZero.IsUnknown() {
+		if data.TransmitMtuZero.ValueBool() {
+			body, _ = sjson.Set(body, "transmit-mtu-zero", map[string]string{})
+		}
+	}
+	if !data.TransmitMtuZeroDisableDeprecated.IsNull() && !data.TransmitMtuZeroDisableDeprecated.IsUnknown() {
+		if data.TransmitMtuZeroDisableDeprecated.ValueBool() {
+			body, _ = sjson.Set(body, "transmit-mtu-zero.disable-deprecated", map[string]string{})
+		}
+	}
+	if !data.TransmitL2Mtu.IsNull() && !data.TransmitL2Mtu.IsUnknown() {
+		if data.TransmitL2Mtu.ValueBool() {
+			body, _ = sjson.Set(body, "transmit-l2-mtu", map[string]string{})
+		}
+	}
+	if !data.ReOriginationDisable.IsNull() && !data.ReOriginationDisable.IsUnknown() {
+		if data.ReOriginationDisable.ValueBool() {
+			body, _ = sjson.Set(body, "re-origination-disable", map[string]string{})
+		}
+	}
+	if !data.Etree.IsNull() && !data.Etree.IsUnknown() {
+		if data.Etree.ValueBool() {
+			body, _ = sjson.Set(body, "etree", map[string]string{})
+		}
+	}
+	if !data.EtreeRtLeaf.IsNull() && !data.EtreeRtLeaf.IsUnknown() {
+		if data.EtreeRtLeaf.ValueBool() {
+			body, _ = sjson.Set(body, "etree.rt-leaf", map[string]string{})
+		}
+	}
+	if !data.BviCoupledMode.IsNull() && !data.BviCoupledMode.IsUnknown() {
+		if data.BviCoupledMode.ValueBool() {
+			body, _ = sjson.Set(body, "bvi-coupled-mode", map[string]string{})
+		}
+	}
+	if len(data.BgpRouteTargetTwoByteAsFormat) > 0 {
+		body, _ = sjson.Set(body, "bgp.route-target.export.two-byte-as-rts.two-byte-as-rt", []interface{}{})
+		for index, item := range data.BgpRouteTargetTwoByteAsFormat {
+			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "bgp.route-target.export.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(index)+"."+"two-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
+			}
+			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "bgp.route-target.export.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(index)+"."+"assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.BgpRouteTargetFourByteAsFormat) > 0 {
+		body, _ = sjson.Set(body, "bgp.route-target.four-byte-as-rts.four-byte-as-rt", []interface{}{})
+		for index, item := range data.BgpRouteTargetFourByteAsFormat {
+			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "bgp.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(index)+"."+"four-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
+			}
+			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "bgp.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(index)+"."+"assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.BgpRouteTargetIpv4AddressFormat) > 0 {
+		body, _ = sjson.Set(body, "bgp.route-target.ipv4-address-rts.ipv4-address-rt", []interface{}{})
+		for index, item := range data.BgpRouteTargetIpv4AddressFormat {
+			if !item.Ipv4Address.IsNull() && !item.Ipv4Address.IsUnknown() {
+				body, _ = sjson.Set(body, "bgp.route-target.ipv4-address-rts.ipv4-address-rt"+"."+strconv.Itoa(index)+"."+"ipv4-address", item.Ipv4Address.ValueString())
+			}
+			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "bgp.route-target.ipv4-address-rts.ipv4-address-rt"+"."+strconv.Itoa(index)+"."+"assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+			}
 		}
 	}
 	if len(data.BgpRouteTargetImportTwoByteAsFormat) > 0 {
@@ -233,6 +442,66 @@ func (data EVPNSegmentRoutingSRv6EVI) toBodyXML(ctx context.Context) string {
 	if !data.Description.IsNull() && !data.Description.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/description", data.Description.ValueString())
 	}
+	if !data.BgpRdTwoByteAsNumber.IsNull() && !data.BgpRdTwoByteAsNumber.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/rd/two-byte-as-number", strconv.FormatInt(data.BgpRdTwoByteAsNumber.ValueInt64(), 10))
+	}
+	if !data.BgpRdTwoByteAsIndex.IsNull() && !data.BgpRdTwoByteAsIndex.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/rd/two-byte-as-assigned-number", strconv.FormatInt(data.BgpRdTwoByteAsIndex.ValueInt64(), 10))
+	}
+	if !data.BgpRdFourByteAsNumber.IsNull() && !data.BgpRdFourByteAsNumber.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/rd/four-byte-as-number", strconv.FormatInt(data.BgpRdFourByteAsNumber.ValueInt64(), 10))
+	}
+	if !data.BgpRdFourByteAsIndex.IsNull() && !data.BgpRdFourByteAsIndex.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/rd/four-byte-as-assigned-number", strconv.FormatInt(data.BgpRdFourByteAsIndex.ValueInt64(), 10))
+	}
+	if !data.BgpRdIpv4Address.IsNull() && !data.BgpRdIpv4Address.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/rd/ipv4-address", data.BgpRdIpv4Address.ValueString())
+	}
+	if !data.BgpRdIpv4AddressIndex.IsNull() && !data.BgpRdIpv4AddressIndex.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/rd/ipv4-address-assigned-number", strconv.FormatInt(data.BgpRdIpv4AddressIndex.ValueInt64(), 10))
+	}
+	if len(data.BgpRouteTargetTwoByteAsFormat) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.BgpRouteTargetTwoByteAsFormat {
+			cBody := netconf.Body{}
+			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "two-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
+			}
+			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bgp/route-target/export/two-byte-as-rts/two-byte-as-rt", cBody.Res())
+		}
+	}
+	if len(data.BgpRouteTargetFourByteAsFormat) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.BgpRouteTargetFourByteAsFormat {
+			cBody := netconf.Body{}
+			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "four-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
+			}
+			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bgp/route-target/four-byte-as-rts/four-byte-as-rt", cBody.Res())
+		}
+	}
+	if len(data.BgpRouteTargetIpv4AddressFormat) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.BgpRouteTargetIpv4AddressFormat {
+			cBody := netconf.Body{}
+			if !item.Ipv4Address.IsNull() && !item.Ipv4Address.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "ipv4-address", item.Ipv4Address.ValueString())
+			}
+			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bgp/route-target/ipv4-address-rts/ipv4-address-rt", cBody.Res())
+		}
+	}
 	if len(data.BgpRouteTargetImportTwoByteAsFormat) > 0 {
 		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.BgpRouteTargetImportTwoByteAsFormat {
@@ -317,9 +586,98 @@ func (data EVPNSegmentRoutingSRv6EVI) toBodyXML(ctx context.Context) string {
 			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bgp/route-target/export/ipv4-address-rts/ipv4-address-rt", cBody.Res())
 		}
 	}
+	if !data.BgpTablePolicy.IsNull() && !data.BgpTablePolicy.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/table-policy", data.BgpTablePolicy.ValueString())
+	}
+	if !data.BgpImplicitImportDisable.IsNull() && !data.BgpImplicitImportDisable.IsUnknown() {
+		if data.BgpImplicitImportDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/implicit-import-disable", "")
+		}
+	}
+	if !data.BgpRoutePolicyImport.IsNull() && !data.BgpRoutePolicyImport.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/route-policy/import", data.BgpRoutePolicyImport.ValueString())
+	}
+	if !data.BgpRoutePolicyExport.IsNull() && !data.BgpRoutePolicyExport.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/route-policy/export", data.BgpRoutePolicyExport.ValueString())
+	}
+	if !data.PreferredNexthopLowestIp.IsNull() && !data.PreferredNexthopLowestIp.IsUnknown() {
+		if data.PreferredNexthopLowestIp.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/preferred-nexthop/lowest-ip", "")
+		}
+	}
+	if !data.PreferredNexthopHighestIp.IsNull() && !data.PreferredNexthopHighestIp.IsUnknown() {
+		if data.PreferredNexthopHighestIp.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/preferred-nexthop/highest-ip", "")
+		}
+	}
+	if !data.PreferredNexthopModulo.IsNull() && !data.PreferredNexthopModulo.IsUnknown() {
+		if data.PreferredNexthopModulo.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/preferred-nexthop/modulo", "")
+		}
+	}
 	if !data.AdvertiseMac.IsNull() && !data.AdvertiseMac.IsUnknown() {
 		if data.AdvertiseMac.ValueBool() {
 			body = helpers.SetFromXPath(body, data.getXPath()+"/advertise-mac", "")
+		}
+	}
+	if !data.AdvertiseMacBviMac.IsNull() && !data.AdvertiseMacBviMac.IsUnknown() {
+		if data.AdvertiseMacBviMac.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/advertise-mac/bvi-mac", "")
+		}
+	}
+	if !data.UnknownUnicastSuppression.IsNull() && !data.UnknownUnicastSuppression.IsUnknown() {
+		if data.UnknownUnicastSuppression.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/unknown-unicast-suppression", "")
+		}
+	}
+	if !data.IgnoreMtuMismatch.IsNull() && !data.IgnoreMtuMismatch.IsUnknown() {
+		if data.IgnoreMtuMismatch.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ignore-mtu-mismatch", "")
+		}
+	}
+	if !data.IgnoreMtuMismatchDisableDeprecated.IsNull() && !data.IgnoreMtuMismatchDisableDeprecated.IsUnknown() {
+		if data.IgnoreMtuMismatchDisableDeprecated.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ignore-mtu-mismatch/disable-deprecated", "")
+		}
+	}
+	if !data.EnforceMtuMatch.IsNull() && !data.EnforceMtuMatch.IsUnknown() {
+		if data.EnforceMtuMatch.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/enforce-mtu-match", "")
+		}
+	}
+	if !data.TransmitMtuZero.IsNull() && !data.TransmitMtuZero.IsUnknown() {
+		if data.TransmitMtuZero.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transmit-mtu-zero", "")
+		}
+	}
+	if !data.TransmitMtuZeroDisableDeprecated.IsNull() && !data.TransmitMtuZeroDisableDeprecated.IsUnknown() {
+		if data.TransmitMtuZeroDisableDeprecated.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transmit-mtu-zero/disable-deprecated", "")
+		}
+	}
+	if !data.TransmitL2Mtu.IsNull() && !data.TransmitL2Mtu.IsUnknown() {
+		if data.TransmitL2Mtu.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/transmit-l2-mtu", "")
+		}
+	}
+	if !data.ReOriginationDisable.IsNull() && !data.ReOriginationDisable.IsUnknown() {
+		if data.ReOriginationDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/re-origination-disable", "")
+		}
+	}
+	if !data.Etree.IsNull() && !data.Etree.IsUnknown() {
+		if data.Etree.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/etree", "")
+		}
+	}
+	if !data.EtreeRtLeaf.IsNull() && !data.EtreeRtLeaf.IsUnknown() {
+		if data.EtreeRtLeaf.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/etree/rt-leaf", "")
+		}
+	}
+	if !data.BviCoupledMode.IsNull() && !data.BviCoupledMode.IsUnknown() {
+		if data.BviCoupledMode.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/bvi-coupled-mode", "")
 		}
 	}
 	if len(data.Locators) > 0 {
@@ -354,6 +712,138 @@ func (data *EVPNSegmentRoutingSRv6EVI) updateFromBody(ctx context.Context, res [
 		data.Description = types.StringValue(value.String())
 	} else {
 		data.Description = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "bgp.rd.two-byte-as-number"); value.Exists() && !data.BgpRdTwoByteAsNumber.IsNull() {
+		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
+	} else {
+		data.BgpRdTwoByteAsNumber = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "bgp.rd.two-byte-as-assigned-number"); value.Exists() && !data.BgpRdTwoByteAsIndex.IsNull() {
+		data.BgpRdTwoByteAsIndex = types.Int64Value(value.Int())
+	} else {
+		data.BgpRdTwoByteAsIndex = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "bgp.rd.four-byte-as-number"); value.Exists() && !data.BgpRdFourByteAsNumber.IsNull() {
+		data.BgpRdFourByteAsNumber = types.Int64Value(value.Int())
+	} else {
+		data.BgpRdFourByteAsNumber = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "bgp.rd.four-byte-as-assigned-number"); value.Exists() && !data.BgpRdFourByteAsIndex.IsNull() {
+		data.BgpRdFourByteAsIndex = types.Int64Value(value.Int())
+	} else {
+		data.BgpRdFourByteAsIndex = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "bgp.rd.ipv4-address"); value.Exists() && !data.BgpRdIpv4Address.IsNull() {
+		data.BgpRdIpv4Address = types.StringValue(value.String())
+	} else {
+		data.BgpRdIpv4Address = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "bgp.rd.ipv4-address-assigned-number"); value.Exists() && !data.BgpRdIpv4AddressIndex.IsNull() {
+		data.BgpRdIpv4AddressIndex = types.Int64Value(value.Int())
+	} else {
+		data.BgpRdIpv4AddressIndex = types.Int64Null()
+	}
+	for i := range data.BgpRouteTargetTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "assigned-number"}
+		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "bgp.route-target.export.two-byte-as-rts.two-byte-as-rt").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("two-byte-as-number"); value.Exists() && !data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.IsNull() {
+			data.BgpRouteTargetTwoByteAsFormat[i].AsNumber = types.Int64Value(value.Int())
+		} else {
+			data.BgpRouteTargetTwoByteAsFormat[i].AsNumber = types.Int64Null()
+		}
+		if value := r.Get("assigned-number"); value.Exists() && !data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.IsNull() {
+			data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber = types.Int64Value(value.Int())
+		} else {
+			data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber = types.Int64Null()
+		}
+	}
+	for i := range data.BgpRouteTargetFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "assigned-number"}
+		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "bgp.route-target.four-byte-as-rts.four-byte-as-rt").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("four-byte-as-number"); value.Exists() && !data.BgpRouteTargetFourByteAsFormat[i].AsNumber.IsNull() {
+			data.BgpRouteTargetFourByteAsFormat[i].AsNumber = types.Int64Value(value.Int())
+		} else {
+			data.BgpRouteTargetFourByteAsFormat[i].AsNumber = types.Int64Null()
+		}
+		if value := r.Get("assigned-number"); value.Exists() && !data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.IsNull() {
+			data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber = types.Int64Value(value.Int())
+		} else {
+			data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber = types.Int64Null()
+		}
+	}
+	for i := range data.BgpRouteTargetIpv4AddressFormat {
+		keys := [...]string{"ipv4-address", "assigned-number"}
+		keyValues := [...]string{data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "bgp.route-target.ipv4-address-rts.ipv4-address-rt").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("ipv4-address"); value.Exists() && !data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.IsNull() {
+			data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address = types.StringValue(value.String())
+		} else {
+			data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address = types.StringNull()
+		}
+		if value := r.Get("assigned-number"); value.Exists() && !data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.IsNull() {
+			data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber = types.Int64Value(value.Int())
+		} else {
+			data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber = types.Int64Null()
+		}
 	}
 	for i := range data.BgpRouteTargetImportTwoByteAsFormat {
 		keys := [...]string{"two-byte-as-number", "assigned-number"}
@@ -559,13 +1049,191 @@ func (data *EVPNSegmentRoutingSRv6EVI) updateFromBody(ctx context.Context, res [
 			data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "advertise-mac"); value.Exists() {
-		data.AdvertiseMac = types.BoolValue(true)
-	} else if data.AdvertiseMac.IsNull() {
-		// If currently null, keep as null (field not in config)
-		data.AdvertiseMac = types.BoolNull()
+	if value := gjson.GetBytes(res, "bgp.table-policy"); value.Exists() && !data.BgpTablePolicy.IsNull() {
+		data.BgpTablePolicy = types.StringValue(value.String())
+	} else {
+		data.BgpTablePolicy = types.StringNull()
 	}
-	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "bgp.implicit-import-disable"); value.Exists() {
+		if !data.BgpImplicitImportDisable.IsNull() {
+			data.BgpImplicitImportDisable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.BgpImplicitImportDisable.IsNull() {
+			data.BgpImplicitImportDisable = types.BoolNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "bgp.route-policy.import"); value.Exists() && !data.BgpRoutePolicyImport.IsNull() {
+		data.BgpRoutePolicyImport = types.StringValue(value.String())
+	} else {
+		data.BgpRoutePolicyImport = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "bgp.route-policy.export"); value.Exists() && !data.BgpRoutePolicyExport.IsNull() {
+		data.BgpRoutePolicyExport = types.StringValue(value.String())
+	} else {
+		data.BgpRoutePolicyExport = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "preferred-nexthop.lowest-ip"); value.Exists() {
+		if !data.PreferredNexthopLowestIp.IsNull() {
+			data.PreferredNexthopLowestIp = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.PreferredNexthopLowestIp.IsNull() {
+			data.PreferredNexthopLowestIp = types.BoolNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "preferred-nexthop.highest-ip"); value.Exists() {
+		if !data.PreferredNexthopHighestIp.IsNull() {
+			data.PreferredNexthopHighestIp = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.PreferredNexthopHighestIp.IsNull() {
+			data.PreferredNexthopHighestIp = types.BoolNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "preferred-nexthop.modulo"); value.Exists() {
+		if !data.PreferredNexthopModulo.IsNull() {
+			data.PreferredNexthopModulo = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.PreferredNexthopModulo.IsNull() {
+			data.PreferredNexthopModulo = types.BoolNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "advertise-mac"); value.Exists() {
+		if !data.AdvertiseMac.IsNull() {
+			data.AdvertiseMac = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.AdvertiseMac.IsNull() {
+			data.AdvertiseMac = types.BoolNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "advertise-mac.bvi-mac"); value.Exists() {
+		if !data.AdvertiseMacBviMac.IsNull() {
+			data.AdvertiseMacBviMac = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.AdvertiseMacBviMac.IsNull() {
+			data.AdvertiseMacBviMac = types.BoolNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "unknown-unicast-suppression"); value.Exists() {
+		if !data.UnknownUnicastSuppression.IsNull() {
+			data.UnknownUnicastSuppression = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.UnknownUnicastSuppression.IsNull() {
+			data.UnknownUnicastSuppression = types.BoolNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "ignore-mtu-mismatch"); value.Exists() {
+		if !data.IgnoreMtuMismatch.IsNull() {
+			data.IgnoreMtuMismatch = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.IgnoreMtuMismatch.IsNull() {
+			data.IgnoreMtuMismatch = types.BoolNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "ignore-mtu-mismatch.disable-deprecated"); value.Exists() {
+		if !data.IgnoreMtuMismatchDisableDeprecated.IsNull() {
+			data.IgnoreMtuMismatchDisableDeprecated = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.IgnoreMtuMismatchDisableDeprecated.IsNull() {
+			data.IgnoreMtuMismatchDisableDeprecated = types.BoolNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "enforce-mtu-match"); value.Exists() {
+		if !data.EnforceMtuMatch.IsNull() {
+			data.EnforceMtuMatch = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.EnforceMtuMatch.IsNull() {
+			data.EnforceMtuMatch = types.BoolNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "transmit-mtu-zero"); value.Exists() {
+		if !data.TransmitMtuZero.IsNull() {
+			data.TransmitMtuZero = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.TransmitMtuZero.IsNull() {
+			data.TransmitMtuZero = types.BoolNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "transmit-mtu-zero.disable-deprecated"); value.Exists() {
+		if !data.TransmitMtuZeroDisableDeprecated.IsNull() {
+			data.TransmitMtuZeroDisableDeprecated = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.TransmitMtuZeroDisableDeprecated.IsNull() {
+			data.TransmitMtuZeroDisableDeprecated = types.BoolNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "transmit-l2-mtu"); value.Exists() {
+		if !data.TransmitL2Mtu.IsNull() {
+			data.TransmitL2Mtu = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.TransmitL2Mtu.IsNull() {
+			data.TransmitL2Mtu = types.BoolNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "re-origination-disable"); value.Exists() {
+		if !data.ReOriginationDisable.IsNull() {
+			data.ReOriginationDisable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.ReOriginationDisable.IsNull() {
+			data.ReOriginationDisable = types.BoolNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "etree"); value.Exists() {
+		if !data.Etree.IsNull() {
+			data.Etree = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.Etree.IsNull() {
+			data.Etree = types.BoolNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "etree.rt-leaf"); value.Exists() {
+		if !data.EtreeRtLeaf.IsNull() {
+			data.EtreeRtLeaf = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.EtreeRtLeaf.IsNull() {
+			data.EtreeRtLeaf = types.BoolNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "bvi-coupled-mode"); value.Exists() {
+		if !data.BviCoupledMode.IsNull() {
+			data.BviCoupledMode = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.BviCoupledMode.IsNull() {
+			data.BviCoupledMode = types.BoolNull()
+		}
+	}
 	for i := range data.Locators {
 		keys := [...]string{"locator-name"}
 		keyValues := [...]string{data.Locators[i].LocatorName.ValueString()}
@@ -595,12 +1263,15 @@ func (data *EVPNSegmentRoutingSRv6EVI) updateFromBody(ctx context.Context, res [
 			data.Locators[i].LocatorName = types.StringNull()
 		}
 		if value := r.Get("usid.allocation.wide-local-id-block"); value.Exists() {
-			data.Locators[i].UsidAllocationWideLocalIdBlock = types.BoolValue(true)
-		} else if data.Locators[i].UsidAllocationWideLocalIdBlock.IsNull() {
-			// If currently null, keep as null (field not in config)
-			data.Locators[i].UsidAllocationWideLocalIdBlock = types.BoolNull()
+			if !data.Locators[i].UsidAllocationWideLocalIdBlock.IsNull() {
+				data.Locators[i].UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+			}
+		} else {
+			// For presence-based booleans, only set to null if the attribute is null in state
+			if data.Locators[i].UsidAllocationWideLocalIdBlock.IsNull() {
+				data.Locators[i].UsidAllocationWideLocalIdBlock = types.BoolNull()
+			}
 		}
-		// else: preserve existing value (e.g., false from config)
 	}
 }
 
@@ -618,6 +1289,138 @@ func (data *EVPNSegmentRoutingSRv6EVI) updateFromBodyXML(ctx context.Context, re
 		data.Description = types.StringValue(value.String())
 	} else if data.Description.IsNull() {
 		data.Description = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-number"); value.Exists() {
+		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
+	} else if data.BgpRdTwoByteAsNumber.IsNull() {
+		data.BgpRdTwoByteAsNumber = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
+		data.BgpRdTwoByteAsIndex = types.Int64Value(value.Int())
+	} else if data.BgpRdTwoByteAsIndex.IsNull() {
+		data.BgpRdTwoByteAsIndex = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-number"); value.Exists() {
+		data.BgpRdFourByteAsNumber = types.Int64Value(value.Int())
+	} else if data.BgpRdFourByteAsNumber.IsNull() {
+		data.BgpRdFourByteAsNumber = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
+		data.BgpRdFourByteAsIndex = types.Int64Value(value.Int())
+	} else if data.BgpRdFourByteAsIndex.IsNull() {
+		data.BgpRdFourByteAsIndex = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address"); value.Exists() {
+		data.BgpRdIpv4Address = types.StringValue(value.String())
+	} else if data.BgpRdIpv4Address.IsNull() {
+		data.BgpRdIpv4Address = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
+		data.BgpRdIpv4AddressIndex = types.Int64Value(value.Int())
+	} else if data.BgpRdIpv4AddressIndex.IsNull() {
+		data.BgpRdIpv4AddressIndex = types.Int64Null()
+	}
+	for i := range data.BgpRouteTargetTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "assigned-number"}
+		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "two-byte-as-number"); value.Exists() {
+			data.BgpRouteTargetTwoByteAsFormat[i].AsNumber = types.Int64Value(value.Int())
+		} else if data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.IsNull() {
+			data.BgpRouteTargetTwoByteAsFormat[i].AsNumber = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "assigned-number"); value.Exists() {
+			data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber = types.Int64Value(value.Int())
+		} else if data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.IsNull() {
+			data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber = types.Int64Null()
+		}
+	}
+	for i := range data.BgpRouteTargetFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "assigned-number"}
+		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/four-byte-as-rts/four-byte-as-rt").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "four-byte-as-number"); value.Exists() {
+			data.BgpRouteTargetFourByteAsFormat[i].AsNumber = types.Int64Value(value.Int())
+		} else if data.BgpRouteTargetFourByteAsFormat[i].AsNumber.IsNull() {
+			data.BgpRouteTargetFourByteAsFormat[i].AsNumber = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "assigned-number"); value.Exists() {
+			data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber = types.Int64Value(value.Int())
+		} else if data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.IsNull() {
+			data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber = types.Int64Null()
+		}
+	}
+	for i := range data.BgpRouteTargetIpv4AddressFormat {
+		keys := [...]string{"ipv4-address", "assigned-number"}
+		keyValues := [...]string{data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/ipv4-address-rts/ipv4-address-rt").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "ipv4-address"); value.Exists() {
+			data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address = types.StringValue(value.String())
+		} else if data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.IsNull() {
+			data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "assigned-number"); value.Exists() {
+			data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber = types.Int64Value(value.Int())
+		} else if data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.IsNull() {
+			data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber = types.Int64Null()
+		}
 	}
 	for i := range data.BgpRouteTargetImportTwoByteAsFormat {
 		keys := [...]string{"two-byte-as-number", "assigned-number"}
@@ -823,13 +1626,155 @@ func (data *EVPNSegmentRoutingSRv6EVI) updateFromBodyXML(ctx context.Context, re
 			data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber = types.Int64Null()
 		}
 	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/table-policy"); value.Exists() {
+		data.BgpTablePolicy = types.StringValue(value.String())
+	} else if data.BgpTablePolicy.IsNull() {
+		data.BgpTablePolicy = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/implicit-import-disable"); value.Exists() {
+		data.BgpImplicitImportDisable = types.BoolValue(true)
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.BgpImplicitImportDisable.IsNull() {
+			data.BgpImplicitImportDisable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-policy/import"); value.Exists() {
+		data.BgpRoutePolicyImport = types.StringValue(value.String())
+	} else if data.BgpRoutePolicyImport.IsNull() {
+		data.BgpRoutePolicyImport = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-policy/export"); value.Exists() {
+		data.BgpRoutePolicyExport = types.StringValue(value.String())
+	} else if data.BgpRoutePolicyExport.IsNull() {
+		data.BgpRoutePolicyExport = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/lowest-ip"); value.Exists() {
+		data.PreferredNexthopLowestIp = types.BoolValue(true)
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.PreferredNexthopLowestIp.IsNull() {
+			data.PreferredNexthopLowestIp = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/highest-ip"); value.Exists() {
+		data.PreferredNexthopHighestIp = types.BoolValue(true)
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.PreferredNexthopHighestIp.IsNull() {
+			data.PreferredNexthopHighestIp = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/modulo"); value.Exists() {
+		data.PreferredNexthopModulo = types.BoolValue(true)
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.PreferredNexthopModulo.IsNull() {
+			data.PreferredNexthopModulo = types.BoolNull()
+		}
+	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise-mac"); value.Exists() {
 		data.AdvertiseMac = types.BoolValue(true)
 	} else {
-		// If config has false and device doesn't have the field, keep false (don't set to null)
-		// Only set to null if it was already null
+		// For presence-based booleans, only set to null if it's already null
 		if data.AdvertiseMac.IsNull() {
 			data.AdvertiseMac = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise-mac/bvi-mac"); value.Exists() {
+		data.AdvertiseMacBviMac = types.BoolValue(true)
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.AdvertiseMacBviMac.IsNull() {
+			data.AdvertiseMacBviMac = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/unknown-unicast-suppression"); value.Exists() {
+		data.UnknownUnicastSuppression = types.BoolValue(true)
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.UnknownUnicastSuppression.IsNull() {
+			data.UnknownUnicastSuppression = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ignore-mtu-mismatch"); value.Exists() {
+		data.IgnoreMtuMismatch = types.BoolValue(true)
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.IgnoreMtuMismatch.IsNull() {
+			data.IgnoreMtuMismatch = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ignore-mtu-mismatch/disable-deprecated"); value.Exists() {
+		data.IgnoreMtuMismatchDisableDeprecated = types.BoolValue(true)
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.IgnoreMtuMismatchDisableDeprecated.IsNull() {
+			data.IgnoreMtuMismatchDisableDeprecated = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/enforce-mtu-match"); value.Exists() {
+		data.EnforceMtuMatch = types.BoolValue(true)
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.EnforceMtuMatch.IsNull() {
+			data.EnforceMtuMatch = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transmit-mtu-zero"); value.Exists() {
+		data.TransmitMtuZero = types.BoolValue(true)
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransmitMtuZero.IsNull() {
+			data.TransmitMtuZero = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transmit-mtu-zero/disable-deprecated"); value.Exists() {
+		data.TransmitMtuZeroDisableDeprecated = types.BoolValue(true)
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransmitMtuZeroDisableDeprecated.IsNull() {
+			data.TransmitMtuZeroDisableDeprecated = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transmit-l2-mtu"); value.Exists() {
+		data.TransmitL2Mtu = types.BoolValue(true)
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.TransmitL2Mtu.IsNull() {
+			data.TransmitL2Mtu = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/re-origination-disable"); value.Exists() {
+		data.ReOriginationDisable = types.BoolValue(true)
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ReOriginationDisable.IsNull() {
+			data.ReOriginationDisable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etree"); value.Exists() {
+		data.Etree = types.BoolValue(true)
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Etree.IsNull() {
+			data.Etree = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etree/rt-leaf"); value.Exists() {
+		data.EtreeRtLeaf = types.BoolValue(true)
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.EtreeRtLeaf.IsNull() {
+			data.EtreeRtLeaf = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bvi-coupled-mode"); value.Exists() {
+		data.BviCoupledMode = types.BoolValue(true)
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.BviCoupledMode.IsNull() {
+			data.BviCoupledMode = types.BoolNull()
 		}
 	}
 	for i := range data.Locators {
@@ -884,6 +1829,66 @@ func (data *EVPNSegmentRoutingSRv6EVI) fromBody(ctx context.Context, res gjson.R
 	if value := res.Get(prefix + "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
+	if value := res.Get(prefix + "bgp.rd.two-byte-as-number"); value.Exists() {
+		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "bgp.rd.two-byte-as-assigned-number"); value.Exists() {
+		data.BgpRdTwoByteAsIndex = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "bgp.rd.four-byte-as-number"); value.Exists() {
+		data.BgpRdFourByteAsNumber = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "bgp.rd.four-byte-as-assigned-number"); value.Exists() {
+		data.BgpRdFourByteAsIndex = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "bgp.rd.ipv4-address"); value.Exists() {
+		data.BgpRdIpv4Address = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "bgp.rd.ipv4-address-assigned-number"); value.Exists() {
+		data.BgpRdIpv4AddressIndex = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "bgp.route-target.export.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
+		data.BgpRouteTargetTwoByteAsFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetTwoByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetTwoByteAsFormat{}
+			if cValue := v.Get("two-byte-as-number"); cValue.Exists() {
+				item.AsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetTwoByteAsFormat = append(data.BgpRouteTargetTwoByteAsFormat, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "bgp.route-target.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
+		data.BgpRouteTargetFourByteAsFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetFourByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetFourByteAsFormat{}
+			if cValue := v.Get("four-byte-as-number"); cValue.Exists() {
+				item.AsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetFourByteAsFormat = append(data.BgpRouteTargetFourByteAsFormat, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "bgp.route-target.ipv4-address-rts.ipv4-address-rt"); value.Exists() {
+		data.BgpRouteTargetIpv4AddressFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetIpv4AddressFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetIpv4AddressFormat{}
+			if cValue := v.Get("ipv4-address"); cValue.Exists() {
+				item.Ipv4Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetIpv4AddressFormat = append(data.BgpRouteTargetIpv4AddressFormat, item)
+			return true
+		})
+	}
 	if value := res.Get(prefix + "bgp.route-target.import.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetImportTwoByteAsFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetImportTwoByteAsFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -968,8 +1973,99 @@ func (data *EVPNSegmentRoutingSRv6EVI) fromBody(ctx context.Context, res gjson.R
 			return true
 		})
 	}
+	if value := res.Get(prefix + "bgp.table-policy"); value.Exists() {
+		data.BgpTablePolicy = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "bgp.implicit-import-disable"); value.Exists() {
+		data.BgpImplicitImportDisable = types.BoolValue(true)
+	} else {
+		data.BgpImplicitImportDisable = types.BoolNull()
+	}
+	if value := res.Get(prefix + "bgp.route-policy.import"); value.Exists() {
+		data.BgpRoutePolicyImport = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "bgp.route-policy.export"); value.Exists() {
+		data.BgpRoutePolicyExport = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "preferred-nexthop.lowest-ip"); value.Exists() {
+		data.PreferredNexthopLowestIp = types.BoolValue(true)
+	} else {
+		data.PreferredNexthopLowestIp = types.BoolNull()
+	}
+	if value := res.Get(prefix + "preferred-nexthop.highest-ip"); value.Exists() {
+		data.PreferredNexthopHighestIp = types.BoolValue(true)
+	} else {
+		data.PreferredNexthopHighestIp = types.BoolNull()
+	}
+	if value := res.Get(prefix + "preferred-nexthop.modulo"); value.Exists() {
+		data.PreferredNexthopModulo = types.BoolValue(true)
+	} else {
+		data.PreferredNexthopModulo = types.BoolNull()
+	}
 	if value := res.Get(prefix + "advertise-mac"); value.Exists() {
 		data.AdvertiseMac = types.BoolValue(true)
+	} else {
+		data.AdvertiseMac = types.BoolNull()
+	}
+	if value := res.Get(prefix + "advertise-mac.bvi-mac"); value.Exists() {
+		data.AdvertiseMacBviMac = types.BoolValue(true)
+	} else {
+		data.AdvertiseMacBviMac = types.BoolNull()
+	}
+	if value := res.Get(prefix + "unknown-unicast-suppression"); value.Exists() {
+		data.UnknownUnicastSuppression = types.BoolValue(true)
+	} else {
+		data.UnknownUnicastSuppression = types.BoolNull()
+	}
+	if value := res.Get(prefix + "ignore-mtu-mismatch"); value.Exists() {
+		data.IgnoreMtuMismatch = types.BoolValue(true)
+	} else {
+		data.IgnoreMtuMismatch = types.BoolNull()
+	}
+	if value := res.Get(prefix + "ignore-mtu-mismatch.disable-deprecated"); value.Exists() {
+		data.IgnoreMtuMismatchDisableDeprecated = types.BoolValue(true)
+	} else {
+		data.IgnoreMtuMismatchDisableDeprecated = types.BoolNull()
+	}
+	if value := res.Get(prefix + "enforce-mtu-match"); value.Exists() {
+		data.EnforceMtuMatch = types.BoolValue(true)
+	} else {
+		data.EnforceMtuMatch = types.BoolNull()
+	}
+	if value := res.Get(prefix + "transmit-mtu-zero"); value.Exists() {
+		data.TransmitMtuZero = types.BoolValue(true)
+	} else {
+		data.TransmitMtuZero = types.BoolNull()
+	}
+	if value := res.Get(prefix + "transmit-mtu-zero.disable-deprecated"); value.Exists() {
+		data.TransmitMtuZeroDisableDeprecated = types.BoolValue(true)
+	} else {
+		data.TransmitMtuZeroDisableDeprecated = types.BoolNull()
+	}
+	if value := res.Get(prefix + "transmit-l2-mtu"); value.Exists() {
+		data.TransmitL2Mtu = types.BoolValue(true)
+	} else {
+		data.TransmitL2Mtu = types.BoolNull()
+	}
+	if value := res.Get(prefix + "re-origination-disable"); value.Exists() {
+		data.ReOriginationDisable = types.BoolValue(true)
+	} else {
+		data.ReOriginationDisable = types.BoolNull()
+	}
+	if value := res.Get(prefix + "etree"); value.Exists() {
+		data.Etree = types.BoolValue(true)
+	} else {
+		data.Etree = types.BoolNull()
+	}
+	if value := res.Get(prefix + "etree.rt-leaf"); value.Exists() {
+		data.EtreeRtLeaf = types.BoolValue(true)
+	} else {
+		data.EtreeRtLeaf = types.BoolNull()
+	}
+	if value := res.Get(prefix + "bvi-coupled-mode"); value.Exists() {
+		data.BviCoupledMode = types.BoolValue(true)
+	} else {
+		data.BviCoupledMode = types.BoolNull()
 	}
 	if value := res.Get(prefix + "locators.locator"); value.Exists() {
 		data.Locators = make([]EVPNSegmentRoutingSRv6EVILocators, 0)
@@ -981,7 +2077,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) fromBody(ctx context.Context, res gjson.R
 			if cValue := v.Get("usid.allocation.wide-local-id-block"); cValue.Exists() {
 				item.UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 			} else {
-				item.UsidAllocationWideLocalIdBlock = types.BoolValue(false)
+				item.UsidAllocationWideLocalIdBlock = types.BoolNull()
 			}
 			data.Locators = append(data.Locators, item)
 			return true
@@ -1001,6 +2097,66 @@ func (data *EVPNSegmentRoutingSRv6EVIData) fromBody(ctx context.Context, res gjs
 	if value := res.Get(prefix + "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
+	if value := res.Get(prefix + "bgp.rd.two-byte-as-number"); value.Exists() {
+		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "bgp.rd.two-byte-as-assigned-number"); value.Exists() {
+		data.BgpRdTwoByteAsIndex = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "bgp.rd.four-byte-as-number"); value.Exists() {
+		data.BgpRdFourByteAsNumber = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "bgp.rd.four-byte-as-assigned-number"); value.Exists() {
+		data.BgpRdFourByteAsIndex = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "bgp.rd.ipv4-address"); value.Exists() {
+		data.BgpRdIpv4Address = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "bgp.rd.ipv4-address-assigned-number"); value.Exists() {
+		data.BgpRdIpv4AddressIndex = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "bgp.route-target.export.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
+		data.BgpRouteTargetTwoByteAsFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetTwoByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetTwoByteAsFormat{}
+			if cValue := v.Get("two-byte-as-number"); cValue.Exists() {
+				item.AsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetTwoByteAsFormat = append(data.BgpRouteTargetTwoByteAsFormat, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "bgp.route-target.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
+		data.BgpRouteTargetFourByteAsFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetFourByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetFourByteAsFormat{}
+			if cValue := v.Get("four-byte-as-number"); cValue.Exists() {
+				item.AsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetFourByteAsFormat = append(data.BgpRouteTargetFourByteAsFormat, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "bgp.route-target.ipv4-address-rts.ipv4-address-rt"); value.Exists() {
+		data.BgpRouteTargetIpv4AddressFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetIpv4AddressFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetIpv4AddressFormat{}
+			if cValue := v.Get("ipv4-address"); cValue.Exists() {
+				item.Ipv4Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetIpv4AddressFormat = append(data.BgpRouteTargetIpv4AddressFormat, item)
+			return true
+		})
+	}
 	if value := res.Get(prefix + "bgp.route-target.import.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetImportTwoByteAsFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetImportTwoByteAsFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -1085,8 +2241,99 @@ func (data *EVPNSegmentRoutingSRv6EVIData) fromBody(ctx context.Context, res gjs
 			return true
 		})
 	}
+	if value := res.Get(prefix + "bgp.table-policy"); value.Exists() {
+		data.BgpTablePolicy = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "bgp.implicit-import-disable"); value.Exists() {
+		data.BgpImplicitImportDisable = types.BoolValue(true)
+	} else {
+		data.BgpImplicitImportDisable = types.BoolNull()
+	}
+	if value := res.Get(prefix + "bgp.route-policy.import"); value.Exists() {
+		data.BgpRoutePolicyImport = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "bgp.route-policy.export"); value.Exists() {
+		data.BgpRoutePolicyExport = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "preferred-nexthop.lowest-ip"); value.Exists() {
+		data.PreferredNexthopLowestIp = types.BoolValue(true)
+	} else {
+		data.PreferredNexthopLowestIp = types.BoolNull()
+	}
+	if value := res.Get(prefix + "preferred-nexthop.highest-ip"); value.Exists() {
+		data.PreferredNexthopHighestIp = types.BoolValue(true)
+	} else {
+		data.PreferredNexthopHighestIp = types.BoolNull()
+	}
+	if value := res.Get(prefix + "preferred-nexthop.modulo"); value.Exists() {
+		data.PreferredNexthopModulo = types.BoolValue(true)
+	} else {
+		data.PreferredNexthopModulo = types.BoolNull()
+	}
 	if value := res.Get(prefix + "advertise-mac"); value.Exists() {
 		data.AdvertiseMac = types.BoolValue(true)
+	} else {
+		data.AdvertiseMac = types.BoolNull()
+	}
+	if value := res.Get(prefix + "advertise-mac.bvi-mac"); value.Exists() {
+		data.AdvertiseMacBviMac = types.BoolValue(true)
+	} else {
+		data.AdvertiseMacBviMac = types.BoolNull()
+	}
+	if value := res.Get(prefix + "unknown-unicast-suppression"); value.Exists() {
+		data.UnknownUnicastSuppression = types.BoolValue(true)
+	} else {
+		data.UnknownUnicastSuppression = types.BoolNull()
+	}
+	if value := res.Get(prefix + "ignore-mtu-mismatch"); value.Exists() {
+		data.IgnoreMtuMismatch = types.BoolValue(true)
+	} else {
+		data.IgnoreMtuMismatch = types.BoolNull()
+	}
+	if value := res.Get(prefix + "ignore-mtu-mismatch.disable-deprecated"); value.Exists() {
+		data.IgnoreMtuMismatchDisableDeprecated = types.BoolValue(true)
+	} else {
+		data.IgnoreMtuMismatchDisableDeprecated = types.BoolNull()
+	}
+	if value := res.Get(prefix + "enforce-mtu-match"); value.Exists() {
+		data.EnforceMtuMatch = types.BoolValue(true)
+	} else {
+		data.EnforceMtuMatch = types.BoolNull()
+	}
+	if value := res.Get(prefix + "transmit-mtu-zero"); value.Exists() {
+		data.TransmitMtuZero = types.BoolValue(true)
+	} else {
+		data.TransmitMtuZero = types.BoolNull()
+	}
+	if value := res.Get(prefix + "transmit-mtu-zero.disable-deprecated"); value.Exists() {
+		data.TransmitMtuZeroDisableDeprecated = types.BoolValue(true)
+	} else {
+		data.TransmitMtuZeroDisableDeprecated = types.BoolNull()
+	}
+	if value := res.Get(prefix + "transmit-l2-mtu"); value.Exists() {
+		data.TransmitL2Mtu = types.BoolValue(true)
+	} else {
+		data.TransmitL2Mtu = types.BoolNull()
+	}
+	if value := res.Get(prefix + "re-origination-disable"); value.Exists() {
+		data.ReOriginationDisable = types.BoolValue(true)
+	} else {
+		data.ReOriginationDisable = types.BoolNull()
+	}
+	if value := res.Get(prefix + "etree"); value.Exists() {
+		data.Etree = types.BoolValue(true)
+	} else {
+		data.Etree = types.BoolNull()
+	}
+	if value := res.Get(prefix + "etree.rt-leaf"); value.Exists() {
+		data.EtreeRtLeaf = types.BoolValue(true)
+	} else {
+		data.EtreeRtLeaf = types.BoolNull()
+	}
+	if value := res.Get(prefix + "bvi-coupled-mode"); value.Exists() {
+		data.BviCoupledMode = types.BoolValue(true)
+	} else {
+		data.BviCoupledMode = types.BoolNull()
 	}
 	if value := res.Get(prefix + "locators.locator"); value.Exists() {
 		data.Locators = make([]EVPNSegmentRoutingSRv6EVILocators, 0)
@@ -1098,7 +2345,7 @@ func (data *EVPNSegmentRoutingSRv6EVIData) fromBody(ctx context.Context, res gjs
 			if cValue := v.Get("usid.allocation.wide-local-id-block"); cValue.Exists() {
 				item.UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 			} else {
-				item.UsidAllocationWideLocalIdBlock = types.BoolValue(false)
+				item.UsidAllocationWideLocalIdBlock = types.BoolNull()
 			}
 			data.Locators = append(data.Locators, item)
 			return true
@@ -1114,6 +2361,66 @@ func (data *EVPNSegmentRoutingSRv6EVI) fromBodyXML(ctx context.Context, res xmld
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-number"); value.Exists() {
+		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
+		data.BgpRdTwoByteAsIndex = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-number"); value.Exists() {
+		data.BgpRdFourByteAsNumber = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
+		data.BgpRdFourByteAsIndex = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address"); value.Exists() {
+		data.BgpRdIpv4Address = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
+		data.BgpRdIpv4AddressIndex = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+		data.BgpRouteTargetTwoByteAsFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetTwoByteAsFormat, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetTwoByteAsFormat{}
+			if cValue := helpers.GetFromXPath(v, "two-byte-as-number"); cValue.Exists() {
+				item.AsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetTwoByteAsFormat = append(data.BgpRouteTargetTwoByteAsFormat, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+		data.BgpRouteTargetFourByteAsFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetFourByteAsFormat, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetFourByteAsFormat{}
+			if cValue := helpers.GetFromXPath(v, "four-byte-as-number"); cValue.Exists() {
+				item.AsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetFourByteAsFormat = append(data.BgpRouteTargetFourByteAsFormat, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+		data.BgpRouteTargetIpv4AddressFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetIpv4AddressFormat, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetIpv4AddressFormat{}
+			if cValue := helpers.GetFromXPath(v, "ipv4-address"); cValue.Exists() {
+				item.Ipv4Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetIpv4AddressFormat = append(data.BgpRouteTargetIpv4AddressFormat, item)
+			return true
+		})
+	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetImportTwoByteAsFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetImportTwoByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
@@ -1198,8 +2505,99 @@ func (data *EVPNSegmentRoutingSRv6EVI) fromBodyXML(ctx context.Context, res xmld
 			return true
 		})
 	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/table-policy"); value.Exists() {
+		data.BgpTablePolicy = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/implicit-import-disable"); value.Exists() {
+		data.BgpImplicitImportDisable = types.BoolValue(true)
+	} else {
+		data.BgpImplicitImportDisable = types.BoolNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-policy/import"); value.Exists() {
+		data.BgpRoutePolicyImport = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-policy/export"); value.Exists() {
+		data.BgpRoutePolicyExport = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/lowest-ip"); value.Exists() {
+		data.PreferredNexthopLowestIp = types.BoolValue(true)
+	} else {
+		data.PreferredNexthopLowestIp = types.BoolNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/highest-ip"); value.Exists() {
+		data.PreferredNexthopHighestIp = types.BoolValue(true)
+	} else {
+		data.PreferredNexthopHighestIp = types.BoolNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/modulo"); value.Exists() {
+		data.PreferredNexthopModulo = types.BoolValue(true)
+	} else {
+		data.PreferredNexthopModulo = types.BoolNull()
+	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise-mac"); value.Exists() {
 		data.AdvertiseMac = types.BoolValue(true)
+	} else {
+		data.AdvertiseMac = types.BoolNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise-mac/bvi-mac"); value.Exists() {
+		data.AdvertiseMacBviMac = types.BoolValue(true)
+	} else {
+		data.AdvertiseMacBviMac = types.BoolNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/unknown-unicast-suppression"); value.Exists() {
+		data.UnknownUnicastSuppression = types.BoolValue(true)
+	} else {
+		data.UnknownUnicastSuppression = types.BoolNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ignore-mtu-mismatch"); value.Exists() {
+		data.IgnoreMtuMismatch = types.BoolValue(true)
+	} else {
+		data.IgnoreMtuMismatch = types.BoolNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ignore-mtu-mismatch/disable-deprecated"); value.Exists() {
+		data.IgnoreMtuMismatchDisableDeprecated = types.BoolValue(true)
+	} else {
+		data.IgnoreMtuMismatchDisableDeprecated = types.BoolNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/enforce-mtu-match"); value.Exists() {
+		data.EnforceMtuMatch = types.BoolValue(true)
+	} else {
+		data.EnforceMtuMatch = types.BoolNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transmit-mtu-zero"); value.Exists() {
+		data.TransmitMtuZero = types.BoolValue(true)
+	} else {
+		data.TransmitMtuZero = types.BoolNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transmit-mtu-zero/disable-deprecated"); value.Exists() {
+		data.TransmitMtuZeroDisableDeprecated = types.BoolValue(true)
+	} else {
+		data.TransmitMtuZeroDisableDeprecated = types.BoolNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transmit-l2-mtu"); value.Exists() {
+		data.TransmitL2Mtu = types.BoolValue(true)
+	} else {
+		data.TransmitL2Mtu = types.BoolNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/re-origination-disable"); value.Exists() {
+		data.ReOriginationDisable = types.BoolValue(true)
+	} else {
+		data.ReOriginationDisable = types.BoolNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etree"); value.Exists() {
+		data.Etree = types.BoolValue(true)
+	} else {
+		data.Etree = types.BoolNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etree/rt-leaf"); value.Exists() {
+		data.EtreeRtLeaf = types.BoolValue(true)
+	} else {
+		data.EtreeRtLeaf = types.BoolNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bvi-coupled-mode"); value.Exists() {
+		data.BviCoupledMode = types.BoolValue(true)
+	} else {
+		data.BviCoupledMode = types.BoolNull()
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/locators/locator"); value.Exists() {
 		data.Locators = make([]EVPNSegmentRoutingSRv6EVILocators, 0)
@@ -1211,6 +2609,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) fromBodyXML(ctx context.Context, res xmld
 			if cValue := helpers.GetFromXPath(v, "usid/allocation/wide-local-id-block"); cValue.Exists() {
 				item.UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 			} else {
+				item.UsidAllocationWideLocalIdBlock = types.BoolNull()
 			}
 			data.Locators = append(data.Locators, item)
 			return true
@@ -1226,6 +2625,66 @@ func (data *EVPNSegmentRoutingSRv6EVIData) fromBodyXML(ctx context.Context, res 
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-number"); value.Exists() {
+		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
+		data.BgpRdTwoByteAsIndex = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-number"); value.Exists() {
+		data.BgpRdFourByteAsNumber = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
+		data.BgpRdFourByteAsIndex = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address"); value.Exists() {
+		data.BgpRdIpv4Address = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
+		data.BgpRdIpv4AddressIndex = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+		data.BgpRouteTargetTwoByteAsFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetTwoByteAsFormat, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetTwoByteAsFormat{}
+			if cValue := helpers.GetFromXPath(v, "two-byte-as-number"); cValue.Exists() {
+				item.AsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetTwoByteAsFormat = append(data.BgpRouteTargetTwoByteAsFormat, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+		data.BgpRouteTargetFourByteAsFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetFourByteAsFormat, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetFourByteAsFormat{}
+			if cValue := helpers.GetFromXPath(v, "four-byte-as-number"); cValue.Exists() {
+				item.AsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetFourByteAsFormat = append(data.BgpRouteTargetFourByteAsFormat, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+		data.BgpRouteTargetIpv4AddressFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetIpv4AddressFormat, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetIpv4AddressFormat{}
+			if cValue := helpers.GetFromXPath(v, "ipv4-address"); cValue.Exists() {
+				item.Ipv4Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "assigned-number"); cValue.Exists() {
+				item.AssignedNumber = types.Int64Value(cValue.Int())
+			}
+			data.BgpRouteTargetIpv4AddressFormat = append(data.BgpRouteTargetIpv4AddressFormat, item)
+			return true
+		})
+	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetImportTwoByteAsFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetImportTwoByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
@@ -1310,10 +2769,99 @@ func (data *EVPNSegmentRoutingSRv6EVIData) fromBodyXML(ctx context.Context, res 
 			return true
 		})
 	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/table-policy"); value.Exists() {
+		data.BgpTablePolicy = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/implicit-import-disable"); value.Exists() {
+		data.BgpImplicitImportDisable = types.BoolValue(true)
+	} else {
+		data.BgpImplicitImportDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-policy/import"); value.Exists() {
+		data.BgpRoutePolicyImport = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-policy/export"); value.Exists() {
+		data.BgpRoutePolicyExport = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/lowest-ip"); value.Exists() {
+		data.PreferredNexthopLowestIp = types.BoolValue(true)
+	} else {
+		data.PreferredNexthopLowestIp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/highest-ip"); value.Exists() {
+		data.PreferredNexthopHighestIp = types.BoolValue(true)
+	} else {
+		data.PreferredNexthopHighestIp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/modulo"); value.Exists() {
+		data.PreferredNexthopModulo = types.BoolValue(true)
+	} else {
+		data.PreferredNexthopModulo = types.BoolValue(false)
+	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise-mac"); value.Exists() {
 		data.AdvertiseMac = types.BoolValue(true)
 	} else {
 		data.AdvertiseMac = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise-mac/bvi-mac"); value.Exists() {
+		data.AdvertiseMacBviMac = types.BoolValue(true)
+	} else {
+		data.AdvertiseMacBviMac = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/unknown-unicast-suppression"); value.Exists() {
+		data.UnknownUnicastSuppression = types.BoolValue(true)
+	} else {
+		data.UnknownUnicastSuppression = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ignore-mtu-mismatch"); value.Exists() {
+		data.IgnoreMtuMismatch = types.BoolValue(true)
+	} else {
+		data.IgnoreMtuMismatch = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ignore-mtu-mismatch/disable-deprecated"); value.Exists() {
+		data.IgnoreMtuMismatchDisableDeprecated = types.BoolValue(true)
+	} else {
+		data.IgnoreMtuMismatchDisableDeprecated = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/enforce-mtu-match"); value.Exists() {
+		data.EnforceMtuMatch = types.BoolValue(true)
+	} else {
+		data.EnforceMtuMatch = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transmit-mtu-zero"); value.Exists() {
+		data.TransmitMtuZero = types.BoolValue(true)
+	} else {
+		data.TransmitMtuZero = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transmit-mtu-zero/disable-deprecated"); value.Exists() {
+		data.TransmitMtuZeroDisableDeprecated = types.BoolValue(true)
+	} else {
+		data.TransmitMtuZeroDisableDeprecated = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transmit-l2-mtu"); value.Exists() {
+		data.TransmitL2Mtu = types.BoolValue(true)
+	} else {
+		data.TransmitL2Mtu = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/re-origination-disable"); value.Exists() {
+		data.ReOriginationDisable = types.BoolValue(true)
+	} else {
+		data.ReOriginationDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etree"); value.Exists() {
+		data.Etree = types.BoolValue(true)
+	} else {
+		data.Etree = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etree/rt-leaf"); value.Exists() {
+		data.EtreeRtLeaf = types.BoolValue(true)
+	} else {
+		data.EtreeRtLeaf = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bvi-coupled-mode"); value.Exists() {
+		data.BviCoupledMode = types.BoolValue(true)
+	} else {
+		data.BviCoupledMode = types.BoolValue(false)
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/locators/locator"); value.Exists() {
 		data.Locators = make([]EVPNSegmentRoutingSRv6EVILocators, 0)
@@ -1362,11 +2910,8 @@ func (data *EVPNSegmentRoutingSRv6EVI) getDeletedItems(ctx context.Context, stat
 				found = false
 			}
 			if found {
-				// For presence-based booleans, delete if going from true to false or to null
-				if !state.Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && state.Locators[i].UsidAllocationWideLocalIdBlock.ValueBool() {
-					if data.Locators[j].UsidAllocationWideLocalIdBlock.IsNull() || !data.Locators[j].UsidAllocationWideLocalIdBlock.ValueBool() {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/locators/locator%v/usid/allocation/wide-local-id-block", state.getPath(), keyString))
-					}
+				if !state.Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && data.Locators[j].UsidAllocationWideLocalIdBlock.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/locators/locator%v/usid/allocation/wide-local-id-block", state.getPath(), keyString))
 				}
 				break
 			}
@@ -1375,11 +2920,65 @@ func (data *EVPNSegmentRoutingSRv6EVI) getDeletedItems(ctx context.Context, stat
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/locators/locator%v", state.getPath(), keyString))
 		}
 	}
-	// For presence-based booleans, delete if going from true to false or to null
-	if !state.AdvertiseMac.IsNull() && state.AdvertiseMac.ValueBool() {
-		if data.AdvertiseMac.IsNull() || !data.AdvertiseMac.ValueBool() {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise-mac", state.getPath()))
-		}
+	if !state.BviCoupledMode.IsNull() && data.BviCoupledMode.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bvi-coupled-mode", state.getPath()))
+	}
+	if !state.EtreeRtLeaf.IsNull() && data.EtreeRtLeaf.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/etree/rt-leaf", state.getPath()))
+	}
+	if !state.Etree.IsNull() && data.Etree.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/etree", state.getPath()))
+	}
+	if !state.ReOriginationDisable.IsNull() && data.ReOriginationDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/re-origination-disable", state.getPath()))
+	}
+	if !state.TransmitL2Mtu.IsNull() && data.TransmitL2Mtu.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/transmit-l2-mtu", state.getPath()))
+	}
+	if !state.TransmitMtuZeroDisableDeprecated.IsNull() && data.TransmitMtuZeroDisableDeprecated.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/transmit-mtu-zero/disable-deprecated", state.getPath()))
+	}
+	if !state.TransmitMtuZero.IsNull() && data.TransmitMtuZero.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/transmit-mtu-zero", state.getPath()))
+	}
+	if !state.EnforceMtuMatch.IsNull() && data.EnforceMtuMatch.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/enforce-mtu-match", state.getPath()))
+	}
+	if !state.IgnoreMtuMismatchDisableDeprecated.IsNull() && data.IgnoreMtuMismatchDisableDeprecated.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ignore-mtu-mismatch/disable-deprecated", state.getPath()))
+	}
+	if !state.IgnoreMtuMismatch.IsNull() && data.IgnoreMtuMismatch.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ignore-mtu-mismatch", state.getPath()))
+	}
+	if !state.UnknownUnicastSuppression.IsNull() && data.UnknownUnicastSuppression.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/unknown-unicast-suppression", state.getPath()))
+	}
+	if !state.AdvertiseMacBviMac.IsNull() && data.AdvertiseMacBviMac.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise-mac/bvi-mac", state.getPath()))
+	}
+	if !state.AdvertiseMac.IsNull() && data.AdvertiseMac.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise-mac", state.getPath()))
+	}
+	if !state.PreferredNexthopModulo.IsNull() && data.PreferredNexthopModulo.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/preferred-nexthop/modulo", state.getPath()))
+	}
+	if !state.PreferredNexthopHighestIp.IsNull() && data.PreferredNexthopHighestIp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/preferred-nexthop/highest-ip", state.getPath()))
+	}
+	if !state.PreferredNexthopLowestIp.IsNull() && data.PreferredNexthopLowestIp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/preferred-nexthop/lowest-ip", state.getPath()))
+	}
+	if !state.BgpRoutePolicyExport.IsNull() && data.BgpRoutePolicyExport.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/route-policy/export", state.getPath()))
+	}
+	if !state.BgpRoutePolicyImport.IsNull() && data.BgpRoutePolicyImport.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/route-policy/import", state.getPath()))
+	}
+	if !state.BgpImplicitImportDisable.IsNull() && data.BgpImplicitImportDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/implicit-import-disable", state.getPath()))
+	}
+	if !state.BgpTablePolicy.IsNull() && data.BgpTablePolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/table-policy", state.getPath()))
 	}
 	for i := range state.BgpRouteTargetExportIpv4AddressFormat {
 		keys := [...]string{"ipv4-address", "assigned-number"}
@@ -1597,6 +3196,132 @@ func (data *EVPNSegmentRoutingSRv6EVI) getDeletedItems(ctx context.Context, stat
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt%v", state.getPath(), keyString))
 		}
 	}
+	for i := range state.BgpRouteTargetIpv4AddressFormat {
+		keys := [...]string{"ipv4-address", "assigned-number"}
+		stateKeyValues := [...]string{state.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(state.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.BgpRouteTargetIpv4AddressFormat {
+			found = true
+			if state.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString() != data.BgpRouteTargetIpv4AddressFormat[j].Ipv4Address.ValueString() {
+				found = false
+			}
+			if state.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64() != data.BgpRouteTargetIpv4AddressFormat[j].AssignedNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/route-target/ipv4-address-rts/ipv4-address-rt%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.BgpRouteTargetFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "assigned-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.BgpRouteTargetFourByteAsFormat {
+			found = true
+			if state.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64() != data.BgpRouteTargetFourByteAsFormat[j].AsNumber.ValueInt64() {
+				found = false
+			}
+			if state.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64() != data.BgpRouteTargetFourByteAsFormat[j].AssignedNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/route-target/four-byte-as-rts/four-byte-as-rt%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.BgpRouteTargetTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "assigned-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.BgpRouteTargetTwoByteAsFormat {
+			found = true
+			if state.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64() != data.BgpRouteTargetTwoByteAsFormat[j].AsNumber.ValueInt64() {
+				found = false
+			}
+			if state.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64() != data.BgpRouteTargetTwoByteAsFormat[j].AssignedNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt%v", state.getPath(), keyString))
+		}
+	}
+	if !state.BgpRdIpv4AddressIndex.IsNull() && data.BgpRdIpv4AddressIndex.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/rd/ipv4-address-assigned-number", state.getPath()))
+	}
+	if !state.BgpRdIpv4Address.IsNull() && data.BgpRdIpv4Address.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/rd/ipv4-address", state.getPath()))
+	}
+	if !state.BgpRdFourByteAsIndex.IsNull() && data.BgpRdFourByteAsIndex.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/rd/four-byte-as-assigned-number", state.getPath()))
+	}
+	if !state.BgpRdFourByteAsNumber.IsNull() && data.BgpRdFourByteAsNumber.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/rd/four-byte-as-number", state.getPath()))
+	}
+	if !state.BgpRdTwoByteAsIndex.IsNull() && data.BgpRdTwoByteAsIndex.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/rd/two-byte-as-assigned-number", state.getPath()))
+	}
+	if !state.BgpRdTwoByteAsNumber.IsNull() && data.BgpRdTwoByteAsNumber.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/rd/two-byte-as-number", state.getPath()))
+	}
 	if !state.Description.IsNull() && data.Description.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/description", state.getPath()))
 	}
@@ -1625,9 +3350,105 @@ func (data *EVPNSegmentRoutingSRv6EVI) getEmptyLeafsDelete(ctx context.Context, 
 		}
 	}
 	// Only delete if state has true and plan has false
+	if !data.BviCoupledMode.IsNull() && !data.BviCoupledMode.ValueBool() {
+		if state != nil && !state.BviCoupledMode.IsNull() && state.BviCoupledMode.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bvi-coupled-mode", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.EtreeRtLeaf.IsNull() && !data.EtreeRtLeaf.ValueBool() {
+		if state != nil && !state.EtreeRtLeaf.IsNull() && state.EtreeRtLeaf.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/etree/rt-leaf", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.Etree.IsNull() && !data.Etree.ValueBool() {
+		if state != nil && !state.Etree.IsNull() && state.Etree.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/etree", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.ReOriginationDisable.IsNull() && !data.ReOriginationDisable.ValueBool() {
+		if state != nil && !state.ReOriginationDisable.IsNull() && state.ReOriginationDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/re-origination-disable", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.TransmitL2Mtu.IsNull() && !data.TransmitL2Mtu.ValueBool() {
+		if state != nil && !state.TransmitL2Mtu.IsNull() && state.TransmitL2Mtu.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transmit-l2-mtu", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.TransmitMtuZeroDisableDeprecated.IsNull() && !data.TransmitMtuZeroDisableDeprecated.ValueBool() {
+		if state != nil && !state.TransmitMtuZeroDisableDeprecated.IsNull() && state.TransmitMtuZeroDisableDeprecated.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transmit-mtu-zero/disable-deprecated", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.TransmitMtuZero.IsNull() && !data.TransmitMtuZero.ValueBool() {
+		if state != nil && !state.TransmitMtuZero.IsNull() && state.TransmitMtuZero.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transmit-mtu-zero", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.EnforceMtuMatch.IsNull() && !data.EnforceMtuMatch.ValueBool() {
+		if state != nil && !state.EnforceMtuMatch.IsNull() && state.EnforceMtuMatch.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/enforce-mtu-match", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.IgnoreMtuMismatchDisableDeprecated.IsNull() && !data.IgnoreMtuMismatchDisableDeprecated.ValueBool() {
+		if state != nil && !state.IgnoreMtuMismatchDisableDeprecated.IsNull() && state.IgnoreMtuMismatchDisableDeprecated.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ignore-mtu-mismatch/disable-deprecated", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.IgnoreMtuMismatch.IsNull() && !data.IgnoreMtuMismatch.ValueBool() {
+		if state != nil && !state.IgnoreMtuMismatch.IsNull() && state.IgnoreMtuMismatch.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ignore-mtu-mismatch", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.UnknownUnicastSuppression.IsNull() && !data.UnknownUnicastSuppression.ValueBool() {
+		if state != nil && !state.UnknownUnicastSuppression.IsNull() && state.UnknownUnicastSuppression.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/unknown-unicast-suppression", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.AdvertiseMacBviMac.IsNull() && !data.AdvertiseMacBviMac.ValueBool() {
+		if state != nil && !state.AdvertiseMacBviMac.IsNull() && state.AdvertiseMacBviMac.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise-mac/bvi-mac", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
 	if !data.AdvertiseMac.IsNull() && !data.AdvertiseMac.ValueBool() {
 		if state != nil && !state.AdvertiseMac.IsNull() && state.AdvertiseMac.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise-mac", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.PreferredNexthopModulo.IsNull() && !data.PreferredNexthopModulo.ValueBool() {
+		if state != nil && !state.PreferredNexthopModulo.IsNull() && state.PreferredNexthopModulo.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/preferred-nexthop/modulo", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.PreferredNexthopHighestIp.IsNull() && !data.PreferredNexthopHighestIp.ValueBool() {
+		if state != nil && !state.PreferredNexthopHighestIp.IsNull() && state.PreferredNexthopHighestIp.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/preferred-nexthop/highest-ip", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.PreferredNexthopLowestIp.IsNull() && !data.PreferredNexthopLowestIp.ValueBool() {
+		if state != nil && !state.PreferredNexthopLowestIp.IsNull() && state.PreferredNexthopLowestIp.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/preferred-nexthop/lowest-ip", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.BgpImplicitImportDisable.IsNull() && !data.BgpImplicitImportDisable.ValueBool() {
+		if state != nil && !state.BgpImplicitImportDisable.IsNull() && state.BgpImplicitImportDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bgp/implicit-import-disable", data.getXPath()))
 		}
 	}
 	for i := range data.BgpRouteTargetExportIpv4AddressFormat {
@@ -1678,6 +3499,30 @@ func (data *EVPNSegmentRoutingSRv6EVI) getEmptyLeafsDelete(ctx context.Context, 
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	for i := range data.BgpRouteTargetIpv4AddressFormat {
+		keys := [...]string{"ipv4-address", "assigned-number"}
+		keyValues := [...]string{data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.BgpRouteTargetFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "assigned-number"}
+		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.BgpRouteTargetTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "assigned-number"}
+		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
 	return emptyLeafsDelete
 }
 
@@ -1692,8 +3537,65 @@ func (data *EVPNSegmentRoutingSRv6EVI) getDeletePaths(ctx context.Context) []str
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/locators/locator=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
+	if !data.BviCoupledMode.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bvi-coupled-mode", data.getPath()))
+	}
+	if !data.EtreeRtLeaf.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/etree/rt-leaf", data.getPath()))
+	}
+	if !data.Etree.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/etree", data.getPath()))
+	}
+	if !data.ReOriginationDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/re-origination-disable", data.getPath()))
+	}
+	if !data.TransmitL2Mtu.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/transmit-l2-mtu", data.getPath()))
+	}
+	if !data.TransmitMtuZeroDisableDeprecated.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/transmit-mtu-zero/disable-deprecated", data.getPath()))
+	}
+	if !data.TransmitMtuZero.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/transmit-mtu-zero", data.getPath()))
+	}
+	if !data.EnforceMtuMatch.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/enforce-mtu-match", data.getPath()))
+	}
+	if !data.IgnoreMtuMismatchDisableDeprecated.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ignore-mtu-mismatch/disable-deprecated", data.getPath()))
+	}
+	if !data.IgnoreMtuMismatch.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ignore-mtu-mismatch", data.getPath()))
+	}
+	if !data.UnknownUnicastSuppression.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/unknown-unicast-suppression", data.getPath()))
+	}
+	if !data.AdvertiseMacBviMac.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise-mac/bvi-mac", data.getPath()))
+	}
 	if !data.AdvertiseMac.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise-mac", data.getPath()))
+	}
+	if !data.PreferredNexthopModulo.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/preferred-nexthop/modulo", data.getPath()))
+	}
+	if !data.PreferredNexthopHighestIp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/preferred-nexthop/highest-ip", data.getPath()))
+	}
+	if !data.PreferredNexthopLowestIp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/preferred-nexthop/lowest-ip", data.getPath()))
+	}
+	if !data.BgpRoutePolicyExport.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-policy/export", data.getPath()))
+	}
+	if !data.BgpRoutePolicyImport.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-policy/import", data.getPath()))
+	}
+	if !data.BgpImplicitImportDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/implicit-import-disable", data.getPath()))
+	}
+	if !data.BgpTablePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/table-policy", data.getPath()))
 	}
 	for i := range data.BgpRouteTargetExportIpv4AddressFormat {
 		keyValues := [...]string{data.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
@@ -1724,6 +3626,39 @@ func (data *EVPNSegmentRoutingSRv6EVI) getDeletePaths(ctx context.Context) []str
 		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+	}
+	for i := range data.BgpRouteTargetIpv4AddressFormat {
+		keyValues := [...]string{data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/ipv4-address-rts/ipv4-address-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+	}
+	for i := range data.BgpRouteTargetFourByteAsFormat {
+		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/four-byte-as-rts/four-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+	}
+	for i := range data.BgpRouteTargetTwoByteAsFormat {
+		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+	}
+	if !data.BgpRdIpv4AddressIndex.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/rd/ipv4-address-assigned-number", data.getPath()))
+	}
+	if !data.BgpRdIpv4Address.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/rd/ipv4-address", data.getPath()))
+	}
+	if !data.BgpRdFourByteAsIndex.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/rd/four-byte-as-assigned-number", data.getPath()))
+	}
+	if !data.BgpRdFourByteAsNumber.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/rd/four-byte-as-number", data.getPath()))
+	}
+	if !data.BgpRdTwoByteAsIndex.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/rd/two-byte-as-assigned-number", data.getPath()))
+	}
+	if !data.BgpRdTwoByteAsNumber.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/rd/two-byte-as-number", data.getPath()))
 	}
 	if !data.Description.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/description", data.getPath()))
@@ -1775,8 +3710,157 @@ func (data *EVPNSegmentRoutingSRv6EVI) addDeletedItemsXML(ctx context.Context, s
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.BviCoupledMode.IsNull() && state.BviCoupledMode.ValueBool() && data.BviCoupledMode.IsNull() {
+		deletePath := state.getXPath() + "/bvi-coupled-mode"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.EtreeRtLeaf.IsNull() && state.EtreeRtLeaf.ValueBool() && data.EtreeRtLeaf.IsNull() {
+		deletePath := state.getXPath() + "/etree/rt-leaf"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Etree.IsNull() && state.Etree.ValueBool() && data.Etree.IsNull() {
+		deletePath := state.getXPath() + "/etree"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ReOriginationDisable.IsNull() && state.ReOriginationDisable.ValueBool() && data.ReOriginationDisable.IsNull() {
+		deletePath := state.getXPath() + "/re-origination-disable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.TransmitL2Mtu.IsNull() && state.TransmitL2Mtu.ValueBool() && data.TransmitL2Mtu.IsNull() {
+		deletePath := state.getXPath() + "/transmit-l2-mtu"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.TransmitMtuZeroDisableDeprecated.IsNull() && state.TransmitMtuZeroDisableDeprecated.ValueBool() && data.TransmitMtuZeroDisableDeprecated.IsNull() {
+		deletePath := state.getXPath() + "/transmit-mtu-zero/disable-deprecated"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.TransmitMtuZero.IsNull() && state.TransmitMtuZero.ValueBool() && data.TransmitMtuZero.IsNull() {
+		deletePath := state.getXPath() + "/transmit-mtu-zero"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.EnforceMtuMatch.IsNull() && state.EnforceMtuMatch.ValueBool() && data.EnforceMtuMatch.IsNull() {
+		deletePath := state.getXPath() + "/enforce-mtu-match"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.IgnoreMtuMismatchDisableDeprecated.IsNull() && state.IgnoreMtuMismatchDisableDeprecated.ValueBool() && data.IgnoreMtuMismatchDisableDeprecated.IsNull() {
+		deletePath := state.getXPath() + "/ignore-mtu-mismatch/disable-deprecated"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.IgnoreMtuMismatch.IsNull() && state.IgnoreMtuMismatch.ValueBool() && data.IgnoreMtuMismatch.IsNull() {
+		deletePath := state.getXPath() + "/ignore-mtu-mismatch"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.UnknownUnicastSuppression.IsNull() && state.UnknownUnicastSuppression.ValueBool() && data.UnknownUnicastSuppression.IsNull() {
+		deletePath := state.getXPath() + "/unknown-unicast-suppression"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.AdvertiseMacBviMac.IsNull() && state.AdvertiseMacBviMac.ValueBool() && data.AdvertiseMacBviMac.IsNull() {
+		deletePath := state.getXPath() + "/advertise-mac/bvi-mac"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.AdvertiseMac.IsNull() && state.AdvertiseMac.ValueBool() && data.AdvertiseMac.IsNull() {
 		deletePath := state.getXPath() + "/advertise-mac"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.PreferredNexthopModulo.IsNull() && state.PreferredNexthopModulo.ValueBool() && data.PreferredNexthopModulo.IsNull() {
+		deletePath := state.getXPath() + "/preferred-nexthop/modulo"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.PreferredNexthopHighestIp.IsNull() && state.PreferredNexthopHighestIp.ValueBool() && data.PreferredNexthopHighestIp.IsNull() {
+		deletePath := state.getXPath() + "/preferred-nexthop/highest-ip"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.PreferredNexthopLowestIp.IsNull() && state.PreferredNexthopLowestIp.ValueBool() && data.PreferredNexthopLowestIp.IsNull() {
+		deletePath := state.getXPath() + "/preferred-nexthop/lowest-ip"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BgpRoutePolicyExport.IsNull() && data.BgpRoutePolicyExport.IsNull() {
+		deletePath := state.getXPath() + "/bgp/route-policy/export"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BgpRoutePolicyImport.IsNull() && data.BgpRoutePolicyImport.IsNull() {
+		deletePath := state.getXPath() + "/bgp/route-policy/import"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.BgpImplicitImportDisable.IsNull() && state.BgpImplicitImportDisable.ValueBool() && data.BgpImplicitImportDisable.IsNull() {
+		deletePath := state.getXPath() + "/bgp/implicit-import-disable"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BgpTablePolicy.IsNull() && data.BgpTablePolicy.IsNull() {
+		deletePath := state.getXPath() + "/bgp/table-policy"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -1998,6 +4082,156 @@ func (data *EVPNSegmentRoutingSRv6EVI) addDeletedItemsXML(ctx context.Context, s
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt%v", predicates))
 		}
 	}
+	for i := range state.BgpRouteTargetIpv4AddressFormat {
+		stateKeys := [...]string{"ipv4-address", "assigned-number"}
+		stateKeyValues := [...]string{state.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(state.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.BgpRouteTargetIpv4AddressFormat {
+			found = true
+			if state.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString() != data.BgpRouteTargetIpv4AddressFormat[j].Ipv4Address.ValueString() {
+				found = false
+			}
+			if state.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64() != data.BgpRouteTargetIpv4AddressFormat[j].AssignedNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/bgp/route-target/ipv4-address-rts/ipv4-address-rt%v", predicates))
+		}
+	}
+	for i := range state.BgpRouteTargetFourByteAsFormat {
+		stateKeys := [...]string{"four-byte-as-number", "assigned-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.BgpRouteTargetFourByteAsFormat {
+			found = true
+			if state.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64() != data.BgpRouteTargetFourByteAsFormat[j].AsNumber.ValueInt64() {
+				found = false
+			}
+			if state.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64() != data.BgpRouteTargetFourByteAsFormat[j].AssignedNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/bgp/route-target/four-byte-as-rts/four-byte-as-rt%v", predicates))
+		}
+	}
+	for i := range state.BgpRouteTargetTwoByteAsFormat {
+		stateKeys := [...]string{"two-byte-as-number", "assigned-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.BgpRouteTargetTwoByteAsFormat {
+			found = true
+			if state.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64() != data.BgpRouteTargetTwoByteAsFormat[j].AsNumber.ValueInt64() {
+				found = false
+			}
+			if state.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64() != data.BgpRouteTargetTwoByteAsFormat[j].AssignedNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt%v", predicates))
+		}
+	}
+	if !state.BgpRdIpv4AddressIndex.IsNull() && data.BgpRdIpv4AddressIndex.IsNull() {
+		deletePath := state.getXPath() + "/bgp/rd/ipv4-address-assigned-number"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BgpRdIpv4Address.IsNull() && data.BgpRdIpv4Address.IsNull() {
+		deletePath := state.getXPath() + "/bgp/rd/ipv4-address"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BgpRdFourByteAsIndex.IsNull() && data.BgpRdFourByteAsIndex.IsNull() {
+		deletePath := state.getXPath() + "/bgp/rd/four-byte-as-assigned-number"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BgpRdFourByteAsNumber.IsNull() && data.BgpRdFourByteAsNumber.IsNull() {
+		deletePath := state.getXPath() + "/bgp/rd/four-byte-as-number"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BgpRdTwoByteAsIndex.IsNull() && data.BgpRdTwoByteAsIndex.IsNull() {
+		deletePath := state.getXPath() + "/bgp/rd/two-byte-as-assigned-number"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BgpRdTwoByteAsNumber.IsNull() && data.BgpRdTwoByteAsNumber.IsNull() {
+		deletePath := state.getXPath() + "/bgp/rd/two-byte-as-number"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	if !state.Description.IsNull() && data.Description.IsNull() {
 		deletePath := state.getXPath() + "/description"
 		if !deletedPaths[deletePath] {
@@ -2027,8 +4261,65 @@ func (data *EVPNSegmentRoutingSRv6EVI) addDeletePathsXML(ctx context.Context, bo
 
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/locators/locator%v", predicates))
 	}
+	if !data.BviCoupledMode.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bvi-coupled-mode")
+	}
+	if !data.EtreeRtLeaf.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/etree/rt-leaf")
+	}
+	if !data.Etree.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/etree")
+	}
+	if !data.ReOriginationDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/re-origination-disable")
+	}
+	if !data.TransmitL2Mtu.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/transmit-l2-mtu")
+	}
+	if !data.TransmitMtuZeroDisableDeprecated.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/transmit-mtu-zero/disable-deprecated")
+	}
+	if !data.TransmitMtuZero.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/transmit-mtu-zero")
+	}
+	if !data.EnforceMtuMatch.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/enforce-mtu-match")
+	}
+	if !data.IgnoreMtuMismatchDisableDeprecated.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ignore-mtu-mismatch/disable-deprecated")
+	}
+	if !data.IgnoreMtuMismatch.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ignore-mtu-mismatch")
+	}
+	if !data.UnknownUnicastSuppression.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/unknown-unicast-suppression")
+	}
+	if !data.AdvertiseMacBviMac.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/advertise-mac/bvi-mac")
+	}
 	if !data.AdvertiseMac.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/advertise-mac")
+	}
+	if !data.PreferredNexthopModulo.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/preferred-nexthop/modulo")
+	}
+	if !data.PreferredNexthopHighestIp.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/preferred-nexthop/highest-ip")
+	}
+	if !data.PreferredNexthopLowestIp.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/preferred-nexthop/lowest-ip")
+	}
+	if !data.BgpRoutePolicyExport.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bgp/route-policy/export")
+	}
+	if !data.BgpRoutePolicyImport.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bgp/route-policy/import")
+	}
+	if !data.BgpImplicitImportDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bgp/implicit-import-disable")
+	}
+	if !data.BgpTablePolicy.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bgp/table-policy")
 	}
 	for i := range data.BgpRouteTargetExportIpv4AddressFormat {
 		keys := [...]string{"ipv4-address", "assigned-number"}
@@ -2089,6 +4380,54 @@ func (data *EVPNSegmentRoutingSRv6EVI) addDeletePathsXML(ctx context.Context, bo
 		}
 
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt%v", predicates))
+	}
+	for i := range data.BgpRouteTargetIpv4AddressFormat {
+		keys := [...]string{"ipv4-address", "assigned-number"}
+		keyValues := [...]string{data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/bgp/route-target/ipv4-address-rts/ipv4-address-rt%v", predicates))
+	}
+	for i := range data.BgpRouteTargetFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "assigned-number"}
+		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/bgp/route-target/four-byte-as-rts/four-byte-as-rt%v", predicates))
+	}
+	for i := range data.BgpRouteTargetTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "assigned-number"}
+		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt%v", predicates))
+	}
+	if !data.BgpRdIpv4AddressIndex.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bgp/rd/ipv4-address-assigned-number")
+	}
+	if !data.BgpRdIpv4Address.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bgp/rd/ipv4-address")
+	}
+	if !data.BgpRdFourByteAsIndex.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bgp/rd/four-byte-as-assigned-number")
+	}
+	if !data.BgpRdFourByteAsNumber.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bgp/rd/four-byte-as-number")
+	}
+	if !data.BgpRdTwoByteAsIndex.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bgp/rd/two-byte-as-assigned-number")
+	}
+	if !data.BgpRdTwoByteAsNumber.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bgp/rd/two-byte-as-number")
 	}
 	if !data.Description.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/description")

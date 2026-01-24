@@ -20,8 +20,161 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+import (
+	"os"
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
 
 // End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
+
+func TestAccDataSourceIosxrL2VPNBridgeGroupBridgeDomain(t *testing.T) {
+	if os.Getenv("XRD") == "" && os.Getenv("NCS") == "" && os.Getenv("C8000") == "" {
+		t.Skip("skipping test, set environment variable XRD or NCS or C8000")
+	}
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "mtu", "1500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "description", "Bridge domain description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "evis.0.vpn_id", "1234"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "coupled_mode", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "transport_mode_vlan_passthrough", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "flooding_disable", "true"))
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "dynamic_arp_inspection", "true"))
+	}
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "dynamic_arp_inspection_logging", "true"))
+	}
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "dynamic_arp_inspection_address_validation_src_mac", "true"))
+	}
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "dynamic_arp_inspection_address_validation_dst_mac", "true"))
+	}
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "dynamic_arp_inspection_address_validation_ipv4", "true"))
+	}
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "ip_source_guard", "true"))
+	}
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "ip_source_guard_logging", "true"))
+	}
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "igmp_snooping_profile", "PROFILE_1"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "mld_snooping_profile", "PROFILE_2"))
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "multicast_source_ipv4_ipv6", "true"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "interfaces.0.interface_name", "Bundle-Ether11.1234"))
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "interfaces.0.dynamic_arp_inspection_logging_disable", "true"))
+	}
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "interfaces.0.dynamic_arp_inspection_address_validation_src_mac_disable", "true"))
+	}
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "interfaces.0.dynamic_arp_inspection_address_validation_dst_mac_disable", "true"))
+	}
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "interfaces.0.dynamic_arp_inspection_address_validation_ipv4_disable", "true"))
+	}
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "interfaces.0.flooding_disable", "true"))
+	}
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "interfaces.0.igmp_snooping_profile", "PROFILE_1"))
+	}
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "interfaces.0.ip_source_guard", "true"))
+	}
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "interfaces.0.ip_source_guard_logging", "true"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "interfaces.0.mac_aging_time", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "interfaces.0.mac_aging_type_inactivity", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "interfaces.0.mac_learning", "true"))
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "interfaces.0.mac_limit_maximum", "1000"))
+	}
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "interfaces.0.mac_limit_action_no_flood", "true"))
+	}
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "interfaces.0.mac_limit_notification_both", "true"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "interfaces.0.mac_port_down_flush_disable", "true"))
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "interfaces.0.mac_secure", "true"))
+	}
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "interfaces.0.mac_secure_logging_disable", "true"))
+	}
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "interfaces.0.mac_secure_action_shutdown", "true"))
+	}
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "interfaces.0.mac_secure_shutdown_recovery_timeout", "300"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "interfaces.0.mld_snooping_profile", "PROFILE_2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "interfaces.0.split_horizon_group", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "interfaces.0.static_mac_addresses.0.mac_address", "aa:bb:cc:dd:ee:ff"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "shutdown", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "mac_aging_time", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "mac_aging_type_absolute", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "mac_learning_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "mac_withdraw_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "mac_withdraw_access_pw_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "mac_withdraw_relay", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "mac_withdraw_state_down", "true"))
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "mac_limit_maximum", "1000"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "mac_limit_action_shutdown", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "mac_limit_notification_both", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "mac_port_down_flush_disable", "true"))
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "mac_secure", "true"))
+	}
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "mac_secure_logging", "true"))
+	}
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "mac_secure_threshold", "true"))
+	}
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "mac_secure_action_shutdown", "true"))
+	}
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "mac_secure_shutdown_recovery_timeout", "60"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "neighbors_evpn_evi.0.vpn_id", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "neighbors_evpn_evi.0.target", "400"))
+	if os.Getenv("NCS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "efp_visibility", "true"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "etree", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "etree_leaf", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "member_vnis_vni.0.vni_id", "1234"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "member_vnis_vni.0.static_mac_addresses.0.mac_address", "aa:bb:cc:dd:ee:04"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "member_vnis_vni.0.static_mac_addresses.0.next_hop", "10.1.1.3"))
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { testAccPreCheck(t) },
+		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccDataSourceIosxrL2VPNBridgeGroupBridgeDomainPrerequisitesConfig + testAccDataSourceIosxrL2VPNBridgeGroupBridgeDomainConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
+			},
+		},
+	})
+}
+
+// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrL2VPNBridgeGroupBridgeDomainPrerequisitesConfig = `
@@ -42,3 +195,163 @@ resource "iosxr_gnmi" "PreReq1" {
 `
 
 // End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
+
+func testAccDataSourceIosxrL2VPNBridgeGroupBridgeDomainConfig() string {
+	config := `resource "iosxr_l2vpn_bridge_group_bridge_domain" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	bridge_group_name = "BG123"` + "\n"
+	config += `	bridge_domain_name = "BD123"` + "\n"
+	config += `	mtu = 1500` + "\n"
+	config += `	description = "Bridge domain description"` + "\n"
+	config += `	evis = [{` + "\n"
+	config += `		vpn_id = 1234` + "\n"
+	config += `	}]` + "\n"
+	config += `	coupled_mode = true` + "\n"
+	config += `	transport_mode_vlan_passthrough = true` + "\n"
+	config += `	flooding_disable = true` + "\n"
+	if os.Getenv("NCS") != "" {
+		config += `	dynamic_arp_inspection = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" {
+		config += `	dynamic_arp_inspection_logging = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" {
+		config += `	dynamic_arp_inspection_address_validation_src_mac = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" {
+		config += `	dynamic_arp_inspection_address_validation_dst_mac = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" {
+		config += `	dynamic_arp_inspection_address_validation_ipv4 = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" {
+		config += `	ip_source_guard = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" {
+		config += `	ip_source_guard_logging = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" {
+		config += `	igmp_snooping_profile = "PROFILE_1"` + "\n"
+	}
+	config += `	mld_snooping_profile = "PROFILE_2"` + "\n"
+	if os.Getenv("NCS") != "" {
+		config += `	multicast_source_ipv4_ipv6 = true` + "\n"
+	}
+	config += `	interfaces = [{` + "\n"
+	config += `		interface_name = "Bundle-Ether11.1234"` + "\n"
+	if os.Getenv("NCS") != "" {
+		config += `		dynamic_arp_inspection_logging_disable = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" {
+		config += `		dynamic_arp_inspection_address_validation_src_mac_disable = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" {
+		config += `		dynamic_arp_inspection_address_validation_dst_mac_disable = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" {
+		config += `		dynamic_arp_inspection_address_validation_ipv4_disable = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" {
+		config += `		flooding_disable = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" {
+		config += `		igmp_snooping_profile = "PROFILE_1"` + "\n"
+	}
+	if os.Getenv("NCS") != "" {
+		config += `		ip_source_guard = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" {
+		config += `		ip_source_guard_logging = true` + "\n"
+	}
+	config += `		mac_aging_time = 300` + "\n"
+	config += `		mac_aging_type_inactivity = true` + "\n"
+	config += `		mac_learning = true` + "\n"
+	if os.Getenv("NCS") != "" {
+		config += `		mac_limit_maximum = 1000` + "\n"
+	}
+	if os.Getenv("NCS") != "" {
+		config += `		mac_limit_action_no_flood = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" {
+		config += `		mac_limit_notification_both = true` + "\n"
+	}
+	config += `		mac_port_down_flush_disable = true` + "\n"
+	if os.Getenv("NCS") != "" {
+		config += `		mac_secure = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" {
+		config += `		mac_secure_logging_disable = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" {
+		config += `		mac_secure_action_shutdown = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" {
+		config += `		mac_secure_shutdown_recovery_timeout = 300` + "\n"
+	}
+	config += `		mld_snooping_profile = "PROFILE_2"` + "\n"
+	config += `		split_horizon_group = true` + "\n"
+	config += `		static_mac_addresses = [{` + "\n"
+	config += `			mac_address = "aa:bb:cc:dd:ee:ff"` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
+	config += `	shutdown = false` + "\n"
+	config += `	mac_aging_time = 300` + "\n"
+	config += `	mac_aging_type_absolute = true` + "\n"
+	config += `	mac_learning_disable = true` + "\n"
+	config += `	mac_withdraw_disable = true` + "\n"
+	config += `	mac_withdraw_access_pw_disable = true` + "\n"
+	config += `	mac_withdraw_relay = true` + "\n"
+	config += `	mac_withdraw_state_down = true` + "\n"
+	if os.Getenv("NCS") != "" {
+		config += `	mac_limit_maximum = 1000` + "\n"
+	}
+	config += `	mac_limit_action_shutdown = true` + "\n"
+	config += `	mac_limit_notification_both = true` + "\n"
+	config += `	mac_port_down_flush_disable = true` + "\n"
+	if os.Getenv("NCS") != "" {
+		config += `	mac_secure = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" {
+		config += `	mac_secure_logging = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" {
+		config += `	mac_secure_threshold = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" {
+		config += `	mac_secure_action_shutdown = true` + "\n"
+	}
+	if os.Getenv("NCS") != "" {
+		config += `	mac_secure_shutdown_recovery_timeout = 60` + "\n"
+	}
+	config += `	neighbors_evpn_evi = [{` + "\n"
+	config += `		vpn_id = 300` + "\n"
+	config += `		target = 400` + "\n"
+	config += `	}]` + "\n"
+	if os.Getenv("NCS") != "" {
+		config += `	efp_visibility = true` + "\n"
+	}
+	config += `	etree = true` + "\n"
+	config += `	etree_leaf = true` + "\n"
+	config += `	member_vnis_vni = [{` + "\n"
+	config += `		vni_id = 1234` + "\n"
+	config += `		static_mac_addresses = [{` + "\n"
+	config += `			mac_address = "aa:bb:cc:dd:ee:04"` + "\n"
+	config += `			next_hop = "10.1.1.3"` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `}` + "\n"
+
+	config += `
+		data "iosxr_l2vpn_bridge_group_bridge_domain" "test" {
+			bridge_group_name = "BG123"
+			bridge_domain_name = "BD123"
+			depends_on = [iosxr_l2vpn_bridge_group_bridge_domain.test]
+		}
+	`
+	return config
+}
+
+// End of section. //template:end testAccDataSourceConfig

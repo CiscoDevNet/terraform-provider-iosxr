@@ -7,6 +7,8 @@ attributes:
     exclude_example: true
     example: false
   - yang_name: echo/latency/detect
+    type: Bool
+    type_yang_bool: presence
     minimum_test_value: true
     example: true
   - yang_name: echo/latency/detect/percentage
@@ -16,6 +18,8 @@ attributes:
     delete_parent: true
     example: 10
   - yang_name: echo/startup/validate/force
+    type: Bool
+    type_yang_bool: presence
     delete_parent: true
     example: true
   - yang_name: echo/ipv4/source/ipv4-address
@@ -28,7 +32,8 @@ attributes:
     example: true
   - yang_name: multipath/include/locations/location
     tf_name: multipath_locations
-    test_tags: [NCS, C8000, XRV9K]
+    test_tags: [XRV9K, NCS]
+    include_example: true
     type: List
     attributes:
       - yang_name: location-id
@@ -45,11 +50,15 @@ attributes:
   - yang_name: dampening/threshold
     example: 60000
   - yang_name: dampening/extensions/down-monitoring
+    type: Bool
+    type_yang_bool: presence
     example: true
   - yang_name: dampening/disable
     exclude_example: true
     example: false
   - yang_name: dampening/bundle-member/l3-only-mode
+    type: Bool
+    type_yang_bool: presence
     example: true
   - yang_name: dampening/bundle-member/initial-wait
     example: 5184
@@ -59,6 +68,8 @@ attributes:
     example: 7184
   - yang_name: bundle/coexistence/bob-blb
     example: inherit
+  - yang_name: ipv6/checksum/disable
+    example: true
   - yang_name: interfaces/interface
     tf_name: interfaces
     type: List
@@ -87,5 +98,3 @@ attributes:
         example: 30000
       - yang_name: multiplier
         example: 40
-  - yang_name: ipv6/checksum/disable
-    example: true

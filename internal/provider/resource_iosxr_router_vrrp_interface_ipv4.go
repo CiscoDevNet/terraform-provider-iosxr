@@ -139,9 +139,18 @@ func (r *RouterVRRPInterfaceIPv4Resource) Schema(ctx context.Context, req resour
 			"text_authentication": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set plain text authentication string").String,
 				Optional:            true,
+				Sensitive:           true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 8),
 					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"unicast_peer": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable Unicast (Multicast will be disabled) of VRRP to a Peer").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
 				},
 			},
 			"secondary_addresses": schema.ListNestedAttribute{

@@ -4,8 +4,8 @@ resource "iosxr_flow_exporter_map" "example" {
   destination_vrf                         = "VRF1"
   source                                  = "GigabitEthernet0/0/0/1"
   dscp                                    = 62
-  packet_length                           = 512
   transport_udp                           = 1033
+  packet_length                           = 512
   dfbit_set                               = true
   version_export_format                   = "v9"
   version_template_data_timeout           = 1024

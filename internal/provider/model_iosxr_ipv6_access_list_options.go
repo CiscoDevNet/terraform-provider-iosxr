@@ -43,6 +43,7 @@ type IPv6AccessListOptions struct {
 	DeleteMode         types.String `tfsdk:"delete_mode"`
 	LogUpdateThreshold types.Int64  `tfsdk:"log_update_threshold"`
 	LogUpdateRate      types.Int64  `tfsdk:"log_update_rate"`
+	LogUpdateDisable   types.Bool   `tfsdk:"log_update_disable"`
 	IcmpOff            types.Bool   `tfsdk:"icmp_off"`
 }
 
@@ -51,6 +52,7 @@ type IPv6AccessListOptionsData struct {
 	Id                 types.String `tfsdk:"id"`
 	LogUpdateThreshold types.Int64  `tfsdk:"log_update_threshold"`
 	LogUpdateRate      types.Int64  `tfsdk:"log_update_rate"`
+	LogUpdateDisable   types.Bool   `tfsdk:"log_update_disable"`
 	IcmpOff            types.Bool   `tfsdk:"icmp_off"`
 }
 
@@ -89,6 +91,11 @@ func (data IPv6AccessListOptions) toBody(ctx context.Context) string {
 	if !data.LogUpdateRate.IsNull() && !data.LogUpdateRate.IsUnknown() {
 		body, _ = sjson.Set(body, "log-update.rate", strconv.FormatInt(data.LogUpdateRate.ValueInt64(), 10))
 	}
+	if !data.LogUpdateDisable.IsNull() && !data.LogUpdateDisable.IsUnknown() {
+		if data.LogUpdateDisable.ValueBool() {
+			body, _ = sjson.Set(body, "log-update.disable", []interface{}{nil})
+		}
+	}
 	if !data.IcmpOff.IsNull() && !data.IcmpOff.IsUnknown() {
 		if data.IcmpOff.ValueBool() {
 			body, _ = sjson.Set(body, "icmp-off", map[string]string{})
@@ -98,30 +105,6 @@ func (data IPv6AccessListOptions) toBody(ctx context.Context) string {
 }
 
 // End of section. //template:end toBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
-
-func (data IPv6AccessListOptions) toBodyXML(ctx context.Context) string {
-	body := netconf.Body{}
-	if !data.LogUpdateThreshold.IsNull() && !data.LogUpdateThreshold.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/log-update/threshold", strconv.FormatInt(data.LogUpdateThreshold.ValueInt64(), 10))
-	}
-	if !data.LogUpdateRate.IsNull() && !data.LogUpdateRate.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/log-update/rate", strconv.FormatInt(data.LogUpdateRate.ValueInt64(), 10))
-	}
-	if !data.IcmpOff.IsNull() && !data.IcmpOff.IsUnknown() {
-		if data.IcmpOff.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/icmp-off", "")
-		}
-	}
-	bodyString, err := body.String()
-	if err != nil {
-		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
-	}
-	return bodyString
-}
-
-// End of section. //template:end toBodyXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
@@ -136,17 +119,57 @@ func (data *IPv6AccessListOptions) updateFromBody(ctx context.Context, res []byt
 	} else {
 		data.LogUpdateRate = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "icmp-off"); value.Exists() {
-		data.IcmpOff = types.BoolValue(true)
-	} else if data.IcmpOff.IsNull() {
-		// If currently null, keep as null (field not in config)
-		data.IcmpOff = types.BoolNull()
+	if value := gjson.GetBytes(res, "log-update.disable"); value.Exists() {
+		if !data.LogUpdateDisable.IsNull() {
+			data.LogUpdateDisable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.LogUpdateDisable.IsNull() {
+			data.LogUpdateDisable = types.BoolNull()
+		}
 	}
-	// else: preserve existing value (e.g., false from config)
+	if value := gjson.GetBytes(res, "icmp-off"); value.Exists() {
+		if !data.IcmpOff.IsNull() {
+			data.IcmpOff = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.IcmpOff.IsNull() {
+			data.IcmpOff = types.BoolNull()
+		}
+	}
 }
 
 // End of section. //template:end updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
+func (data IPv6AccessListOptions) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.LogUpdateThreshold.IsNull() && !data.LogUpdateThreshold.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/log-update/threshold", strconv.FormatInt(data.LogUpdateThreshold.ValueInt64(), 10))
+	}
+	if !data.LogUpdateRate.IsNull() && !data.LogUpdateRate.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/log-update/rate", strconv.FormatInt(data.LogUpdateRate.ValueInt64(), 10))
+	}
+	if !data.LogUpdateDisable.IsNull() && !data.LogUpdateDisable.IsUnknown() {
+		if data.LogUpdateDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/log-update/disable", "")
+		}
+	}
+	if !data.IcmpOff.IsNull() && !data.IcmpOff.IsUnknown() {
+		if data.IcmpOff.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/icmp-off", "")
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *IPv6AccessListOptions) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -160,11 +183,18 @@ func (data *IPv6AccessListOptions) updateFromBodyXML(ctx context.Context, res xm
 	} else if data.LogUpdateRate.IsNull() {
 		data.LogUpdateRate = types.Int64Null()
 	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/log-update/disable"); value.Exists() {
+		data.LogUpdateDisable = types.BoolValue(true)
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.LogUpdateDisable.IsNull() {
+			data.LogUpdateDisable = types.BoolNull()
+		}
+	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/icmp-off"); value.Exists() {
 		data.IcmpOff = types.BoolValue(true)
 	} else {
-		// If config has false and device doesn't have the field, keep false (don't set to null)
-		// Only set to null if it was already null
+		// For presence-based booleans, only set to null if it's already null
 		if data.IcmpOff.IsNull() {
 			data.IcmpOff = types.BoolNull()
 		}
@@ -172,7 +202,6 @@ func (data *IPv6AccessListOptions) updateFromBodyXML(ctx context.Context, res xm
 }
 
 // End of section. //template:end updateFromBodyXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *IPv6AccessListOptions) fromBody(ctx context.Context, res gjson.Result) {
@@ -186,13 +215,19 @@ func (data *IPv6AccessListOptions) fromBody(ctx context.Context, res gjson.Resul
 	if value := res.Get(prefix + "log-update.rate"); value.Exists() {
 		data.LogUpdateRate = types.Int64Value(value.Int())
 	}
+	if value := res.Get(prefix + "log-update.disable"); value.Exists() {
+		data.LogUpdateDisable = types.BoolValue(true)
+	} else {
+		data.LogUpdateDisable = types.BoolNull()
+	}
 	if value := res.Get(prefix + "icmp-off"); value.Exists() {
 		data.IcmpOff = types.BoolValue(true)
+	} else {
+		data.IcmpOff = types.BoolNull()
 	}
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *IPv6AccessListOptionsData) fromBody(ctx context.Context, res gjson.Result) {
@@ -206,13 +241,19 @@ func (data *IPv6AccessListOptionsData) fromBody(ctx context.Context, res gjson.R
 	if value := res.Get(prefix + "log-update.rate"); value.Exists() {
 		data.LogUpdateRate = types.Int64Value(value.Int())
 	}
+	if value := res.Get(prefix + "log-update.disable"); value.Exists() {
+		data.LogUpdateDisable = types.BoolValue(true)
+	} else {
+		data.LogUpdateDisable = types.BoolNull()
+	}
 	if value := res.Get(prefix + "icmp-off"); value.Exists() {
 		data.IcmpOff = types.BoolValue(true)
+	} else {
+		data.IcmpOff = types.BoolNull()
 	}
 }
 
 // End of section. //template:end fromBodyData
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *IPv6AccessListOptions) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -222,13 +263,19 @@ func (data *IPv6AccessListOptions) fromBodyXML(ctx context.Context, res xmldot.R
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/log-update/rate"); value.Exists() {
 		data.LogUpdateRate = types.Int64Value(value.Int())
 	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/log-update/disable"); value.Exists() {
+		data.LogUpdateDisable = types.BoolValue(true)
+	} else {
+		data.LogUpdateDisable = types.BoolNull()
+	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/icmp-off"); value.Exists() {
 		data.IcmpOff = types.BoolValue(true)
+	} else {
+		data.IcmpOff = types.BoolNull()
 	}
 }
 
 // End of section. //template:end fromBodyXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *IPv6AccessListOptionsData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -238,6 +285,11 @@ func (data *IPv6AccessListOptionsData) fromBodyXML(ctx context.Context, res xmld
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/log-update/rate"); value.Exists() {
 		data.LogUpdateRate = types.Int64Value(value.Int())
 	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/log-update/disable"); value.Exists() {
+		data.LogUpdateDisable = types.BoolValue(true)
+	} else {
+		data.LogUpdateDisable = types.BoolValue(false)
+	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/icmp-off"); value.Exists() {
 		data.IcmpOff = types.BoolValue(true)
 	} else {
@@ -246,16 +298,15 @@ func (data *IPv6AccessListOptionsData) fromBodyXML(ctx context.Context, res xmld
 }
 
 // End of section. //template:end fromBodyDataXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *IPv6AccessListOptions) getDeletedItems(ctx context.Context, state IPv6AccessListOptions) []string {
 	deletedItems := make([]string, 0)
-	// For presence-based booleans, delete if going from true to false or to null
-	if !state.IcmpOff.IsNull() && state.IcmpOff.ValueBool() {
-		if data.IcmpOff.IsNull() || !data.IcmpOff.ValueBool() {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/icmp-off", state.getPath()))
-		}
+	if !state.IcmpOff.IsNull() && data.IcmpOff.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/icmp-off", state.getPath()))
+	}
+	if !state.LogUpdateDisable.IsNull() && data.LogUpdateDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/log-update/disable", state.getPath()))
 	}
 	if !state.LogUpdateRate.IsNull() && data.LogUpdateRate.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/log-update/rate", state.getPath()))
@@ -267,7 +318,6 @@ func (data *IPv6AccessListOptions) getDeletedItems(ctx context.Context, state IP
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
 func (data *IPv6AccessListOptions) getEmptyLeafsDelete(ctx context.Context, state *IPv6AccessListOptions) []string {
@@ -278,17 +328,25 @@ func (data *IPv6AccessListOptions) getEmptyLeafsDelete(ctx context.Context, stat
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/icmp-off", data.getXPath()))
 		}
 	}
+	// Only delete if state has true and plan has false
+	if !data.LogUpdateDisable.IsNull() && !data.LogUpdateDisable.ValueBool() {
+		if state != nil && !state.LogUpdateDisable.IsNull() && state.LogUpdateDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log-update/disable", data.getXPath()))
+		}
+	}
 	return emptyLeafsDelete
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *IPv6AccessListOptions) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.IcmpOff.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/icmp-off", data.getPath()))
+	}
+	if !data.LogUpdateDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/log-update/disable", data.getPath()))
 	}
 	if !data.LogUpdateRate.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/log-update/rate", data.getPath()))
@@ -301,7 +359,6 @@ func (data *IPv6AccessListOptions) getDeletePaths(ctx context.Context) []string 
 }
 
 // End of section. //template:end getDeletePaths
-
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *IPv6AccessListOptions) addDeletedItemsXML(ctx context.Context, state IPv6AccessListOptions, body string) string {
@@ -311,6 +368,14 @@ func (data *IPv6AccessListOptions) addDeletedItemsXML(ctx context.Context, state
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.IcmpOff.IsNull() && state.IcmpOff.ValueBool() && data.IcmpOff.IsNull() {
 		deletePath := state.getXPath() + "/icmp-off"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.LogUpdateDisable.IsNull() && state.LogUpdateDisable.ValueBool() && data.LogUpdateDisable.IsNull() {
+		deletePath := state.getXPath() + "/log-update/disable"
 		if !deletedPaths[deletePath] {
 			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
 			deletedPaths[deletePath] = true
@@ -337,13 +402,15 @@ func (data *IPv6AccessListOptions) addDeletedItemsXML(ctx context.Context, state
 }
 
 // End of section. //template:end addDeletedItemsXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *IPv6AccessListOptions) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
 	if !data.IcmpOff.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/icmp-off")
+	}
+	if !data.LogUpdateDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/log-update/disable")
 	}
 	if !data.LogUpdateRate.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/log-update/rate")

@@ -21,10 +21,12 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 // End of section. //template:end imports
@@ -85,3 +87,28 @@ func testAccIosxrRoutePolicyConfig_all() string {
 }
 
 // End of section. //template:end testAccConfigAll
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrRoutePolicyImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		RoutePolicyName := primary.Attributes["route_policy_name"]
+
+		return fmt.Sprintf("%s", RoutePolicyName), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccIosxrRoutePolicyPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/prefix-sets/prefix-set[set-name=PREFIX_SET_1]"
+	attributes = {
+		"set-name" = "PREFIX_SET_1"
+		"rpl-prefix-set" = "prefix-set PREFIX_SET_1\n  10.1.1.0/26 ge 26,\n  10.1.2.0/26 ge 26\nend-set\n"
+	}
+}
+
+`
+
+// End of section. //template:end testPrerequisites

@@ -21,10 +21,12 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 // End of section. //template:end imports
@@ -38,7 +40,7 @@ func TestAccIosxrRouterVRRPInterfaceIPv4(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv4.test", "address", "1.1.1.1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv4.test", "priority", "250"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv4.test", "name", "TEST"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv4.test", "text_authentication", "password"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv4.test", "unicast_peer", "1.1.1.2"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv4.test", "secondary_addresses.0.address", "2.2.2.2"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv4.test", "timer_advertisement_seconds", "123"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv4.test", "timer_force", "false"))
@@ -100,6 +102,7 @@ func testAccIosxrRouterVRRPInterfaceIPv4Config_all() string {
 	config += `	priority = 250` + "\n"
 	config += `	name = "TEST"` + "\n"
 	config += `	text_authentication = "password"` + "\n"
+	config += `	unicast_peer = "1.1.1.2"` + "\n"
 	config += `	secondary_addresses = [{` + "\n"
 	config += `		address = "2.2.2.2"` + "\n"
 	config += `		}]` + "\n"
@@ -123,3 +126,36 @@ func testAccIosxrRouterVRRPInterfaceIPv4Config_all() string {
 }
 
 // End of section. //template:end testAccConfigAll
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrRouterVRRPInterfaceIPv4ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InterfaceName := primary.Attributes["interface_name"]
+		VrrpId := primary.Attributes["vrrp_id"]
+		Version := primary.Attributes["version"]
+
+		return fmt.Sprintf("%s,%s,%s", InterfaceName, VrrpId, Version), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccIosxrRouterVRRPInterfaceIPv4PrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp"
+	attributes = {
+	}
+}
+
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]"
+	attributes = {
+		"interface-name" = "GigabitEthernet0/0/0/1"
+	}
+	depends_on = [iosxr_gnmi.PreReq0, ]
+}
+
+`
+
+// End of section. //template:end testPrerequisites

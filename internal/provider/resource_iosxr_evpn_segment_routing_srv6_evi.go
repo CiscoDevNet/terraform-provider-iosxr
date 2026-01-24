@@ -76,6 +76,13 @@ func (r *EVPNSegmentRoutingSRv6EVIResource) Schema(ctx context.Context, req reso
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"delete_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.").AddStringEnumDescription("all", "attributes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("all", "attributes"),
+				},
+			},
 			"vpn_id": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Configure EVPN Instance VPN ID").AddIntegerRangeDescription(1, 65534).String,
 				Required:            true,
@@ -91,6 +98,116 @@ func (r *EVPNSegmentRoutingSRv6EVIResource) Schema(ctx context.Context, req reso
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 64),
+				},
+			},
+			"bgp_rd_two_byte_as_number": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number").AddIntegerRangeDescription(1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
+				},
+			},
+			"bgp_rd_two_byte_as_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("AS:nn (hex or decimal format)").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"bgp_rd_four_byte_as_number": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number").AddIntegerRangeDescription(65536, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(65536, 4294967295),
+				},
+			},
+			"bgp_rd_four_byte_as_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("AS:nn (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 65535),
+				},
+			},
+			"bgp_rd_ipv4_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+				},
+			},
+			"bgp_rd_ipv4_address_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IP-address:nn (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 65535),
+				},
+			},
+			"bgp_route_target_two_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number Route Target").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"as_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number").AddIntegerRangeDescription(1, 65535).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
+							},
+						},
+						"assigned_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("AS:nn (hex or decimal format)").AddIntegerRangeDescription(0, 4294967295).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 4294967295),
+							},
+						},
+					},
+				},
+			},
+			"bgp_route_target_four_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number Route Target").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"as_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number").AddIntegerRangeDescription(65536, 4294967295).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(65536, 4294967295),
+							},
+						},
+						"assigned_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("AS:nn (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+					},
+				},
+			},
+			"bgp_route_target_ipv4_address_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"ipv4_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+						"assigned_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IP-address:nn (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+					},
 				},
 			},
 			"bgp_route_target_import_two_byte_as_format": schema.ListNestedAttribute{
@@ -227,8 +344,93 @@ func (r *EVPNSegmentRoutingSRv6EVIResource) Schema(ctx context.Context, req reso
 					},
 				},
 			},
+			"bgp_table_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure policy for installation of forwarding data to L2FIB").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"bgp_implicit_import_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable BGP implicit import").String,
+				Optional:            true,
+			},
+			"bgp_route_policy_import": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Import route policy").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"bgp_route_policy_export": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Export route policy").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"preferred_nexthop_lowest_ip": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Lowest nexthop IP is active").String,
+				Optional:            true,
+			},
+			"preferred_nexthop_highest_ip": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Highest nexthop IP is active").String,
+				Optional:            true,
+			},
+			"preferred_nexthop_modulo": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("EVI modulo of nexthops cardinality is active").String,
+				Optional:            true,
+			},
 			"advertise_mac": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Configure EVPN Instance MAC advertisement").String,
+				Optional:            true,
+			},
+			"advertise_mac_bvi_mac": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Advertise local MAC and BVI MAC routes").String,
+				Optional:            true,
+			},
+			"unknown_unicast_suppression": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enabling unknown unicast suppression").String,
+				Optional:            true,
+			},
+			"ignore_mtu_mismatch": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Ignore mismatch of local and remote MTUs").String,
+				Optional:            true,
+			},
+			"ignore_mtu_mismatch_disable_deprecated": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disables ingoring mismatch of local and remote MTUs (deprecated)").String,
+				Optional:            true,
+			},
+			"enforce_mtu_match": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enforce matching of local and remote MTUs").String,
+				Optional:            true,
+			},
+			"transmit_mtu_zero": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Transmit MTU zero to remote instead of actual local MTU").String,
+				Optional:            true,
+			},
+			"transmit_mtu_zero_disable_deprecated": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disables transmitting MTU zero to remote instead of actual local MTU (deprecated)").String,
+				Optional:            true,
+			},
+			"transmit_l2_mtu": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Transmit L2 MTU of attachment circuit").String,
+				Optional:            true,
+			},
+			"re_origination_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable route re-origination").String,
+				Optional:            true,
+			},
+			"etree": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure EVPN Instance E-Tree").String,
+				Optional:            true,
+			},
+			"etree_rt_leaf": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Designate EVPN Instance as EVPN E-Tree Route-Target Leaf Site").String,
+				Optional:            true,
+			},
+			"bvi_coupled_mode": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Couples BVI state to the core EVPN Instance state").String,
 				Optional:            true,
 			},
 			"locators": schema.ListNestedAttribute{
@@ -555,6 +757,11 @@ func (r *EVPNSegmentRoutingSRv6EVIResource) Delete(ctx context.Context, req reso
 
 	if device.Managed {
 		deleteMode := "all"
+		if state.DeleteMode.ValueString() == "all" {
+			deleteMode = "all"
+		} else if state.DeleteMode.ValueString() == "attributes" {
+			deleteMode = "attributes"
+		}
 
 		if deleteMode == "all" {
 			if device.Protocol == "gnmi" {

@@ -94,8 +94,12 @@ func (d *IPv4AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "Match only packets with exact protocol numbers",
 							Computed:            true,
 						},
-						"permit_igmp_type": schema.StringAttribute{
-							MarkdownDescription: "Match on IGMP message",
+						"permit_range_start_protocol": schema.StringAttribute{
+							MarkdownDescription: "An IPv4 Protocol",
+							Computed:            true,
+						},
+						"permit_range_end_protocol": schema.StringAttribute{
+							MarkdownDescription: "An IPv4 Protocol",
 							Computed:            true,
 						},
 						"permit_precedence": schema.StringAttribute{
@@ -104,30 +108,6 @@ func (d *IPv4AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 						},
 						"permit_fragment_type": schema.StringAttribute{
 							MarkdownDescription: "Fragment type for a packet",
-							Computed:            true,
-						},
-						"permit_fragments": schema.BoolAttribute{
-							MarkdownDescription: "Check non-initial fragments",
-							Computed:            true,
-						},
-						"permit_counter": schema.StringAttribute{
-							MarkdownDescription: "counter for this ACE",
-							Computed:            true,
-						},
-						"permit_default": schema.BoolAttribute{
-							MarkdownDescription: "Use specified default nexthop on match against this entry",
-							Computed:            true,
-						},
-						"permit_capture": schema.BoolAttribute{
-							MarkdownDescription: "Capture matched packet",
-							Computed:            true,
-						},
-						"permit_range_start_protocol": schema.StringAttribute{
-							MarkdownDescription: "An IPv4 Protocol",
-							Computed:            true,
-						},
-						"permit_range_end_protocol": schema.StringAttribute{
-							MarkdownDescription: "An IPv4 Protocol",
 							Computed:            true,
 						},
 						"permit_source_address": schema.StringAttribute{
@@ -246,6 +226,10 @@ func (d *IPv4AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "ICMP message code",
 							Computed:            true,
 						},
+						"permit_igmp_type": schema.StringAttribute{
+							MarkdownDescription: "Match on IGMP message",
+							Computed:            true,
+						},
 						"permit_dscp": schema.StringAttribute{
 							MarkdownDescription: "Match packets with given DSCP value(s)",
 							Computed:            true,
@@ -346,6 +330,10 @@ func (d *IPv4AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "fragment-offset value",
 							Computed:            true,
 						},
+						"permit_fragments": schema.BoolAttribute{
+							MarkdownDescription: "Check non-initial fragments",
+							Computed:            true,
+						},
 						"permit_police_value": schema.Int64Attribute{
 							MarkdownDescription: "Police value",
 							Computed:            true,
@@ -364,6 +352,10 @@ func (d *IPv4AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 						},
 						"permit_police_priority": schema.StringAttribute{
 							MarkdownDescription: "Set Priority option on this entry",
+							Computed:            true,
+						},
+						"permit_default": schema.BoolAttribute{
+							MarkdownDescription: "Use specified default nexthop on match against this entry",
 							Computed:            true,
 						},
 						"permit_nexthop1_ipv4": schema.StringAttribute{
@@ -402,6 +394,14 @@ func (d *IPv4AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "Specific VRF Name for this nexthop",
 							Computed:            true,
 						},
+						"permit_capture": schema.BoolAttribute{
+							MarkdownDescription: "Capture matched packet",
+							Computed:            true,
+						},
+						"permit_counter": schema.StringAttribute{
+							MarkdownDescription: "counter for this ACE",
+							Computed:            true,
+						},
 						"permit_log": schema.BoolAttribute{
 							MarkdownDescription: "Log matches against this entry",
 							Computed:            true,
@@ -418,11 +418,31 @@ func (d *IPv4AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "Set ttl value",
 							Computed:            true,
 						},
+						"deny_protocol": schema.StringAttribute{
+							MarkdownDescription: "An IPv4 Protocol",
+							Computed:            true,
+						},
 						"deny_eq": schema.StringAttribute{
 							MarkdownDescription: "Match only packets with exact protocol numbers",
 							Computed:            true,
 						},
-						"deny_protocol": schema.StringAttribute{
+						"deny_precedence": schema.StringAttribute{
+							MarkdownDescription: "Match packets with given precedence",
+							Computed:            true,
+						},
+						"deny_fragment_type": schema.StringAttribute{
+							MarkdownDescription: "Fragment type for a packet",
+							Computed:            true,
+						},
+						"deny_counter": schema.StringAttribute{
+							MarkdownDescription: "counter for this ACE",
+							Computed:            true,
+						},
+						"deny_range_start_protocol": schema.StringAttribute{
+							MarkdownDescription: "An IPv4 Protocol",
+							Computed:            true,
+						},
+						"deny_range_end_protocol": schema.StringAttribute{
 							MarkdownDescription: "An IPv4 Protocol",
 							Computed:            true,
 						},
@@ -530,50 +550,6 @@ func (d *IPv4AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "Port number",
 							Computed:            true,
 						},
-						"deny_igmp_type": schema.StringAttribute{
-							MarkdownDescription: "Match on IGMP message",
-							Computed:            true,
-						},
-						"deny_precedence": schema.StringAttribute{
-							MarkdownDescription: "Match packets with given precedence",
-							Computed:            true,
-						},
-						"deny_fragment_type": schema.StringAttribute{
-							MarkdownDescription: "Fragment type for a packet",
-							Computed:            true,
-						},
-						"deny_fragments": schema.BoolAttribute{
-							MarkdownDescription: "Check non-initial fragments",
-							Computed:            true,
-						},
-						"deny_counter": schema.StringAttribute{
-							MarkdownDescription: "counter for this ACE",
-							Computed:            true,
-						},
-						"deny_default": schema.BoolAttribute{
-							MarkdownDescription: "Use specified default nexthop on match against this entry",
-							Computed:            true,
-						},
-						"deny_capture": schema.BoolAttribute{
-							MarkdownDescription: "Capture matched packet",
-							Computed:            true,
-						},
-						"deny_icmp_off": schema.BoolAttribute{
-							MarkdownDescription: "Do not generate the ICMP message",
-							Computed:            true,
-						},
-						"deny_icmp_on": schema.BoolAttribute{
-							MarkdownDescription: "Generate the ICMP message",
-							Computed:            true,
-						},
-						"deny_range_start_protocol": schema.StringAttribute{
-							MarkdownDescription: "An IPv4 Protocol",
-							Computed:            true,
-						},
-						"deny_range_end_protocol": schema.StringAttribute{
-							MarkdownDescription: "An IPv4 Protocol",
-							Computed:            true,
-						},
 						"deny_icmp_message_type_name": schema.StringAttribute{
 							MarkdownDescription: "ICMP message type",
 							Computed:            true,
@@ -584,6 +560,10 @@ func (d *IPv4AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 						},
 						"deny_icmp_message_code": schema.Int64Attribute{
 							MarkdownDescription: "ICMP message code",
+							Computed:            true,
+						},
+						"deny_igmp_type": schema.StringAttribute{
+							MarkdownDescription: "Match on IGMP message",
 							Computed:            true,
 						},
 						"deny_dscp": schema.StringAttribute{
@@ -686,6 +666,10 @@ func (d *IPv4AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "fragment-offset value",
 							Computed:            true,
 						},
+						"deny_fragments": schema.BoolAttribute{
+							MarkdownDescription: "Check non-initial fragments",
+							Computed:            true,
+						},
 						"deny_police_value": schema.Int64Attribute{
 							MarkdownDescription: "Police value",
 							Computed:            true,
@@ -704,6 +688,10 @@ func (d *IPv4AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 						},
 						"deny_police_priority": schema.StringAttribute{
 							MarkdownDescription: "Set Priority option on this entry",
+							Computed:            true,
+						},
+						"deny_default": schema.BoolAttribute{
+							MarkdownDescription: "Use specified default nexthop on match against this entry",
 							Computed:            true,
 						},
 						"deny_nexthop1_ipv4": schema.StringAttribute{
@@ -742,6 +730,10 @@ func (d *IPv4AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "Specific VRF Name for this nexthop",
 							Computed:            true,
 						},
+						"deny_capture": schema.BoolAttribute{
+							MarkdownDescription: "Capture matched packet",
+							Computed:            true,
+						},
 						"deny_log": schema.BoolAttribute{
 							MarkdownDescription: "Log matches against this entry",
 							Computed:            true,
@@ -756,6 +748,14 @@ func (d *IPv4AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 						},
 						"deny_set_ttl": schema.Int64Attribute{
 							MarkdownDescription: "Set ttl value",
+							Computed:            true,
+						},
+						"deny_icmp_off": schema.BoolAttribute{
+							MarkdownDescription: "Do not generate the ICMP message",
+							Computed:            true,
+						},
+						"deny_icmp_on": schema.BoolAttribute{
+							MarkdownDescription: "Generate the ICMP message",
 							Computed:            true,
 						},
 					},

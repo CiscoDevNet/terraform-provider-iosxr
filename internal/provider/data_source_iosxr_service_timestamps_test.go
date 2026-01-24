@@ -20,9 +20,70 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+import (
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
 
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 
 // End of section. //template:end testPrerequisites
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
+
+func TestAccDataSourceIosxrServiceTimestamps(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "debug_datetime_localtime", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "debug_datetime_msec", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "debug_datetime_show_timezone", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "debug_datetime_year", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "debug_uptime", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "debug_disable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "log_datetime_localtime", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "log_datetime_msec", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "log_datetime_show_timezone", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "log_datetime_year", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "log_uptime", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "log_disable", "false"))
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { testAccPreCheck(t) },
+		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccDataSourceIosxrServiceTimestampsConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
+			},
+		},
+	})
+}
+
+// End of section. //template:end testAccDataSource
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
+
+func testAccDataSourceIosxrServiceTimestampsConfig() string {
+	config := `resource "iosxr_service_timestamps" "test" {` + "\n"
+	config += `	debug_datetime_localtime = true` + "\n"
+	config += `	debug_datetime_msec = true` + "\n"
+	config += `	debug_datetime_show_timezone = true` + "\n"
+	config += `	debug_datetime_year = true` + "\n"
+	config += `	debug_uptime = true` + "\n"
+	config += `	debug_disable = false` + "\n"
+	config += `	log_datetime_localtime = true` + "\n"
+	config += `	log_datetime_msec = true` + "\n"
+	config += `	log_datetime_show_timezone = true` + "\n"
+	config += `	log_datetime_year = true` + "\n"
+	config += `	log_uptime = true` + "\n"
+	config += `	log_disable = false` + "\n"
+	config += `}` + "\n"
+
+	config += `
+		data "iosxr_service_timestamps" "test" {
+			depends_on = [iosxr_service_timestamps.test]
+		}
+	`
+	return config
+}
+
+// End of section. //template:end testAccDataSourceConfig

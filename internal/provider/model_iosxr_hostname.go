@@ -124,7 +124,6 @@ func (data *Hostname) updateFromBodyXML(ctx context.Context, res xmldot.Result) 
 }
 
 // End of section. //template:end updateFromBodyXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *Hostname) fromBody(ctx context.Context, res gjson.Result) {
@@ -138,7 +137,6 @@ func (data *Hostname) fromBody(ctx context.Context, res gjson.Result) {
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *HostnameData) fromBody(ctx context.Context, res gjson.Result) {
@@ -152,7 +150,6 @@ func (data *HostnameData) fromBody(ctx context.Context, res gjson.Result) {
 }
 
 // End of section. //template:end fromBodyData
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *Hostname) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -162,7 +159,6 @@ func (data *Hostname) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *HostnameData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -172,7 +168,6 @@ func (data *HostnameData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyDataXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *Hostname) getDeletedItems(ctx context.Context, state Hostname) []string {
@@ -184,7 +179,6 @@ func (data *Hostname) getDeletedItems(ctx context.Context, state Hostname) []str
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
 func (data *Hostname) getEmptyLeafsDelete(ctx context.Context, state *Hostname) []string {
@@ -193,7 +187,6 @@ func (data *Hostname) getEmptyLeafsDelete(ctx context.Context, state *Hostname) 
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *Hostname) getDeletePaths(ctx context.Context) []string {
@@ -206,7 +199,6 @@ func (data *Hostname) getDeletePaths(ctx context.Context) []string {
 }
 
 // End of section. //template:end getDeletePaths
-
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *Hostname) addDeletedItemsXML(ctx context.Context, state Hostname, body string) string {
@@ -227,7 +219,6 @@ func (data *Hostname) addDeletedItemsXML(ctx context.Context, state Hostname, bo
 }
 
 // End of section. //template:end addDeletedItemsXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *Hostname) addDeletePathsXML(ctx context.Context, body string) string {

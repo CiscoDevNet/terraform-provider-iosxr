@@ -84,7 +84,7 @@ func (r *CommunitySetResource) Schema(ctx context.Context, req resource.SchemaRe
 				},
 			},
 			"rpl": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configures a community-set").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configures a community set").String,
 				Required:            true,
 			},
 		},

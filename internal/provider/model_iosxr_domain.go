@@ -319,12 +319,15 @@ func (data *Domain) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	if value := gjson.GetBytes(res, "lookup.disable"); value.Exists() {
-		data.LookupDisable = types.BoolValue(true)
-	} else if data.LookupDisable.IsNull() {
-		// If currently null, keep as null (field not in config)
-		data.LookupDisable = types.BoolNull()
+		if !data.LookupDisable.IsNull() {
+			data.LookupDisable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.LookupDisable.IsNull() {
+			data.LookupDisable = types.BoolNull()
+		}
 	}
-	// else: preserve existing value (e.g., false from config)
 	if value := gjson.GetBytes(res, "lookup.source-interface"); value.Exists() && !data.LookupSourceInterface.IsNull() {
 		data.LookupSourceInterface = types.StringValue(value.String())
 	} else {
@@ -443,12 +446,15 @@ func (data *Domain) updateFromBody(ctx context.Context, res []byte) {
 		data.Multicast = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "default-flows.disable"); value.Exists() {
-		data.DefaultFlowsDisable = types.BoolValue(true)
-	} else if data.DefaultFlowsDisable.IsNull() {
-		// If currently null, keep as null (field not in config)
-		data.DefaultFlowsDisable = types.BoolNull()
+		if !data.DefaultFlowsDisable.IsNull() {
+			data.DefaultFlowsDisable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.DefaultFlowsDisable.IsNull() {
+			data.DefaultFlowsDisable = types.BoolNull()
+		}
 	}
-	// else: preserve existing value (e.g., false from config)
 }
 
 // End of section. //template:end updateFromBody
@@ -493,8 +499,7 @@ func (data *Domain) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/lookup/disable"); value.Exists() {
 		data.LookupDisable = types.BoolValue(true)
 	} else {
-		// If config has false and device doesn't have the field, keep false (don't set to null)
-		// Only set to null if it was already null
+		// For presence-based booleans, only set to null if it's already null
 		if data.LookupDisable.IsNull() {
 			data.LookupDisable = types.BoolNull()
 		}
@@ -615,8 +620,7 @@ func (data *Domain) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-flows/disable"); value.Exists() {
 		data.DefaultFlowsDisable = types.BoolValue(true)
 	} else {
-		// If config has false and device doesn't have the field, keep false (don't set to null)
-		// Only set to null if it was already null
+		// For presence-based booleans, only set to null if it's already null
 		if data.DefaultFlowsDisable.IsNull() {
 			data.DefaultFlowsDisable = types.BoolNull()
 		}
@@ -648,6 +652,8 @@ func (data *Domain) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "lookup.disable"); value.Exists() {
 		data.LookupDisable = types.BoolValue(true)
+	} else {
+		data.LookupDisable = types.BoolNull()
 	}
 	if value := res.Get(prefix + "lookup.source-interface"); value.Exists() {
 		data.LookupSourceInterface = types.StringValue(value.String())
@@ -706,6 +712,8 @@ func (data *Domain) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "default-flows.disable"); value.Exists() {
 		data.DefaultFlowsDisable = types.BoolValue(true)
+	} else {
+		data.DefaultFlowsDisable = types.BoolNull()
 	}
 }
 
@@ -734,6 +742,8 @@ func (data *DomainData) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "lookup.disable"); value.Exists() {
 		data.LookupDisable = types.BoolValue(true)
+	} else {
+		data.LookupDisable = types.BoolNull()
 	}
 	if value := res.Get(prefix + "lookup.source-interface"); value.Exists() {
 		data.LookupSourceInterface = types.StringValue(value.String())
@@ -792,6 +802,8 @@ func (data *DomainData) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "default-flows.disable"); value.Exists() {
 		data.DefaultFlowsDisable = types.BoolValue(true)
+	} else {
+		data.DefaultFlowsDisable = types.BoolNull()
 	}
 }
 
@@ -816,6 +828,8 @@ func (data *Domain) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/lookup/disable"); value.Exists() {
 		data.LookupDisable = types.BoolValue(true)
+	} else {
+		data.LookupDisable = types.BoolNull()
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/lookup/source-interface"); value.Exists() {
 		data.LookupSourceInterface = types.StringValue(value.String())
@@ -874,6 +888,8 @@ func (data *Domain) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-flows/disable"); value.Exists() {
 		data.DefaultFlowsDisable = types.BoolValue(true)
+	} else {
+		data.DefaultFlowsDisable = types.BoolNull()
 	}
 }
 
@@ -969,11 +985,8 @@ func (data *DomainData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 
 func (data *Domain) getDeletedItems(ctx context.Context, state Domain) []string {
 	deletedItems := make([]string, 0)
-	// For presence-based booleans, delete if going from true to false or to null
-	if !state.DefaultFlowsDisable.IsNull() && state.DefaultFlowsDisable.ValueBool() {
-		if data.DefaultFlowsDisable.IsNull() || !data.DefaultFlowsDisable.ValueBool() {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/default-flows/disable", state.getPath()))
-		}
+	if !state.DefaultFlowsDisable.IsNull() && data.DefaultFlowsDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-flows/disable", state.getPath()))
 	}
 	if !state.Multicast.IsNull() && data.Multicast.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/multicast", state.getPath()))
@@ -1086,11 +1099,8 @@ func (data *Domain) getDeletedItems(ctx context.Context, state Domain) []string 
 	if !state.LookupSourceInterface.IsNull() && data.LookupSourceInterface.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/lookup/source-interface", state.getPath()))
 	}
-	// For presence-based booleans, delete if going from true to false or to null
-	if !state.LookupDisable.IsNull() && state.LookupDisable.ValueBool() {
-		if data.LookupDisable.IsNull() || !data.LookupDisable.ValueBool() {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/lookup/disable", state.getPath()))
-		}
+	if !state.LookupDisable.IsNull() && data.LookupDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lookup/disable", state.getPath()))
 	}
 	for i := range state.Domains {
 		keys := [...]string{"domain-name", "order"}

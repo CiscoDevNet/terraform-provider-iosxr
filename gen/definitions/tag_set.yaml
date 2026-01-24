@@ -7,6 +7,7 @@ attributes:
   - yang_name: set-name
     example: TAG_SET_1
   - yang_name: rpl-tag-set
+    tf_name: rpl
+    description: "Configures a tag set"
     read_raw: true
-    description: "Configures a tag-set"
     example: "tag-set TAG_SET_1\\n  4297\\nend-set\\n"

@@ -89,45 +89,134 @@ func (r *MPLSLDPResource) Schema(ctx context.Context, req resource.SchemaRequest
 					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
 				},
 			},
-			"address_families": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure Address Family and its parameters").String,
+			"graceful_restart": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure graceful restart feature").String,
 				Optional:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"af_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Configure Address Family and its parameters").AddStringEnumDescription("ipv4", "ipv6").String,
-							Required:            true,
-							Validators: []validator.String{
-								stringvalidator.OneOf("ipv4", "ipv6"),
-							},
-						},
-						"label_local_allocate_for_access_list": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("IP access-list").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 1024),
-							},
-						},
-						"label_local_allocate_for_host_routes": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Allocate label for host routes only").String,
-							Optional:            true,
-						},
-					},
+			},
+			"graceful_restart_reconnect_timeout": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Session Reconnect timeout").AddIntegerRangeDescription(60, 1800).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(60, 1800),
 				},
 			},
-			"interfaces": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable LDP on an interface and enter interface submode").String,
+			"graceful_restart_forwarding_state_holdtime": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Forwarding State holdtime for a restarting LSR").AddIntegerRangeDescription(60, 1800).String,
 				Optional:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"interface_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Enable LDP on an interface and enter interface submode").String,
-							Required:            true,
-							Validators: []validator.String{
-								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
-							},
-						},
-					},
+				Validators: []validator.Int64{
+					int64validator.Between(60, 1800),
+				},
+			},
+			"graceful_restart_helper_peer_maintain_on_local_reset_for": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Access list of LDP Peers").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+				},
+			},
+			"ltrace_buffer_multiplier": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Ltrace buffer file size multiplier").AddIntegerRangeDescription(1, 5).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 5),
+				},
+			},
+			"default_vrf_implicit_ipv4_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable the implicit enabling for IPv4 address family ").String,
+				Optional:            true,
+			},
+			"session_backoff_time_initial": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure session backoff parameters").AddIntegerRangeDescription(5, 2147483).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(5, 2147483),
+				},
+			},
+			"session_backoff_time_maximum": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum session backoff time (seconds)").AddIntegerRangeDescription(5, 2147483).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(5, 2147483),
+				},
+			},
+			"session_holdtime": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure session holdtime").AddIntegerRangeDescription(15, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(15, 65535),
+				},
+			},
+			"session_downstream_on_demand_with": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Access list of LDP Peers").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+				},
+			},
+			"session_protection": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure session protection parameters").String,
+				Optional:            true,
+			},
+			"session_protection_for_acl": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IP Access list to specify LDP Peers").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+				},
+			},
+			"session_protection_for_acl_duration": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Holdup time in seconds").AddIntegerRangeDescription(30, 2147483).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(30, 2147483),
+				},
+			},
+			"session_protection_for_acl_duration_infinite": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Protect session forever after loss of link discovery").String,
+				Optional:            true,
+			},
+			"session_protection_duration": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Holdup time in seconds").AddIntegerRangeDescription(30, 2147483).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(30, 2147483),
+				},
+			},
+			"session_protection_duration_infinite": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Protect session forever after loss of link discovery").String,
+				Optional:            true,
+			},
+			"nsr": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure Non-Stop Routing").String,
+				Optional:            true,
+			},
+			"entropy_label": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure Entropy Label").String,
+				Optional:            true,
+			},
+			"entropy_label_add_el": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure Entropy Label").String,
+				Optional:            true,
+			},
+			"signalling_dscp": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set DSCP for LDP control packets").AddIntegerRangeDescription(0, 63).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 63),
+				},
+			},
+			"igp_sync_delay_on_session_up": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Interface sync-up delay after session up").AddIntegerRangeDescription(5, 300).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(5, 300),
+				},
+			},
+			"igp_sync_delay_on_proc_restart": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Global sync up delay to be used after process restart").AddIntegerRangeDescription(60, 600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(60, 600),
 				},
 			},
 			"capabilities_sac": schema.BoolAttribute{
@@ -150,68 +239,116 @@ func (r *MPLSLDPResource) Schema(ctx context.Context, req resource.SchemaRequest
 				MarkdownDescription: helpers.NewAttributeDescription("Disable exchanging PW FEC129 label bindings").String,
 				Optional:            true,
 			},
-			"igp_sync_delay_on_session_up": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Interface sync-up delay after session up").AddIntegerRangeDescription(5, 300).String,
+			"log_hello_adjacency": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Hello adjacency events").String,
+				Optional:            true,
+			},
+			"log_neighbor": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Neighbor events").String,
+				Optional:            true,
+			},
+			"log_nsr": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("NSR synchronization events").String,
+				Optional:            true,
+			},
+			"log_graceful_restart": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Graceful Restart events").String,
+				Optional:            true,
+			},
+			"log_session_protection": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Session Protection events").String,
+				Optional:            true,
+			},
+			"discovery_hello_holdtime": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Hello holdtime").AddIntegerRangeDescription(1, 65535).String,
 				Optional:            true,
 				Validators: []validator.Int64{
-					int64validator.Between(5, 300),
+					int64validator.Between(1, 65535),
 				},
 			},
-			"igp_sync_delay_on_proc_restart": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Global sync up delay to be used after process restart").AddIntegerRangeDescription(60, 600).String,
+			"discovery_hello_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Hello interval").AddIntegerRangeDescription(1, 65535).String,
 				Optional:            true,
 				Validators: []validator.Int64{
-					int64validator.Between(60, 600),
+					int64validator.Between(1, 65535),
 				},
 			},
-			"mldp": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure mLDP parameters").String,
+			"discovery_targeted_hello_holdtime": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Targeted hello holdtime").AddIntegerRangeDescription(1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
+				},
+			},
+			"discovery_targeted_hello_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Targeted Hello interval").AddIntegerRangeDescription(1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
+				},
+			},
+			"discovery_instance_tlv_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable transmit and receive processing for TLV").String,
 				Optional:            true,
 			},
-			"mldp_logging_notifications": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("MLDP logging notifications").String,
+			"discovery_ds_tlv_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable transmit and receive processing for TLV").String,
 				Optional:            true,
 			},
-			"mldp_address_families": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure Address Family and its parameters").String,
+			"discovery_rtr_id_arb_tlv_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable transmit and receive processing for TLV").String,
+				Optional:            true,
+			},
+			"discovery_quick_start_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable quick discovery").String,
+				Optional:            true,
+			},
+			"neighbor_dual_stack_transport_connection_prefer_ipv4": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4").String,
+				Optional:            true,
+			},
+			"neighbor_dual_stack_transport_connection_max_wait": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum wait for prefered transport connection establishment").AddIntegerRangeDescription(0, 60).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 60),
+				},
+			},
+			"neighbor_dual_stack_tlv_compliance": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure dual-stack tlv compliance checks").String,
+				Optional:            true,
+			},
+			"neighbors": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("configure this node").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Configure Address Family and its parameters").AddStringEnumDescription("ipv4").String,
+						"neighbor_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("configure this node").String,
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("ipv4"),
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
 							},
 						},
-						"make_before_break_delay": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("MBB delay").AddIntegerRangeDescription(0, 600).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(0, 600),
-							},
+						"label_space_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Label Space Id of neighbor").String,
+							Required:            true,
 						},
-						"forwarding_recursive": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Enable recursive forwarding").String,
+						"password_encrypted": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies an ENCRYPTED password will follow").String,
 							Optional:            true,
-						},
-						"forwarding_recursive_route_policy": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Route policy").String,
-							Optional:            true,
+							Sensitive:           true,
 							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 255),
+								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
 							},
 						},
-						"recursive_fec": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("MLDP Recursive FEC enable").String,
+						"password_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disables the global password from this neighbor").String,
 							Optional:            true,
 						},
 					},
 				},
-			},
-			"session_protection": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure session protection parameters").String,
-				Optional:            true,
 			},
 		},
 	}

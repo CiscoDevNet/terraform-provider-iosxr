@@ -89,9 +89,505 @@ func (d *PCEDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 					},
 				},
 			},
-			"peer_filter_ipv4_access_list": schema.StringAttribute{
-				MarkdownDescription: "Access-list for IPv4 peer filtering",
+			"state_sync_ipv6s": schema.ListNestedAttribute{
+				MarkdownDescription: "IPv6 address",
 				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "IPv6 address",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"tcp_buffer_size": schema.Int64Attribute{
+				MarkdownDescription: "Size of buffer in bytes",
+				Computed:            true,
+			},
+			"password_encrypted": schema.StringAttribute{
+				MarkdownDescription: "Specify unencrypted password",
+				Computed:            true,
+				Sensitive:           true,
+			},
+			"tcp_ao_keychain_name": schema.StringAttribute{
+				MarkdownDescription: "Configure global AO keychain based authentication",
+				Computed:            true,
+			},
+			"tcp_ao_include_tcp_options": schema.BoolAttribute{
+				MarkdownDescription: "Include other TCP options in the header",
+				Computed:            true,
+			},
+			"tcp_ao_accept_ao_mismatch_connection": schema.BoolAttribute{
+				MarkdownDescription: "Accept new connection even if Authentication Option mismatched",
+				Computed:            true,
+			},
+			"disjoint_path_maximum_attempts": schema.Int64Attribute{
+				MarkdownDescription: "Maximum number of attempts during disjoint path computation (default: 1000)",
+				Computed:            true,
+			},
+			"disjoint_path_group_ids": schema.ListNestedAttribute{
+				MarkdownDescription: "Group ID",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"group_id": schema.Int64Attribute{
+							MarkdownDescription: "Group ID",
+							Computed:            true,
+						},
+						"link_disjoint": schema.BoolAttribute{
+							MarkdownDescription: "Enable Link Disjointness",
+							Computed:            true,
+						},
+						"link_disjoint_strict": schema.BoolAttribute{
+							MarkdownDescription: "Disable Fallback",
+							Computed:            true,
+						},
+						"link_disjoint_lsp_one_pcc_address_type": schema.StringAttribute{
+							MarkdownDescription: "Address type",
+							Computed:            true,
+						},
+						"link_disjoint_lsp_one_pcc_ip_address": schema.StringAttribute{
+							MarkdownDescription: "IP address of PCC",
+							Computed:            true,
+						},
+						"link_disjoint_lsp_one_pcc_lsp_name": schema.StringAttribute{
+							MarkdownDescription: "Name of label switched path",
+							Computed:            true,
+						},
+						"link_disjoint_lsp_one_pcc_shortest_path": schema.BoolAttribute{
+							MarkdownDescription: "Set LSP to follow shortest-path",
+							Computed:            true,
+						},
+						"link_disjoint_lsp_one_pcc_exclude_srlg": schema.Int64Attribute{
+							MarkdownDescription: "Exclude SRLG",
+							Computed:            true,
+						},
+						"link_disjoint_lsp_two_pcc_address_type": schema.StringAttribute{
+							MarkdownDescription: "Address type",
+							Computed:            true,
+						},
+						"link_disjoint_lsp_two_pcc_ip_address": schema.StringAttribute{
+							MarkdownDescription: "IP address of PCC",
+							Computed:            true,
+						},
+						"link_disjoint_lsp_two_pcc_lsp_name": schema.StringAttribute{
+							MarkdownDescription: "Name of label switched path",
+							Computed:            true,
+						},
+						"link_disjoint_lsp_two_pcc_exclude_srlg": schema.Int64Attribute{
+							MarkdownDescription: "Exclude SRLG",
+							Computed:            true,
+						},
+						"link_disjoint_sub_ids": schema.ListNestedAttribute{
+							MarkdownDescription: "Sub ID",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"sub_id": schema.Int64Attribute{
+										MarkdownDescription: "Sub ID",
+										Computed:            true,
+									},
+									"strict": schema.BoolAttribute{
+										MarkdownDescription: "Disable Fallback",
+										Computed:            true,
+									},
+									"lsp_one_pcc_address_type": schema.StringAttribute{
+										MarkdownDescription: "Address type",
+										Computed:            true,
+									},
+									"lsp_one_pcc_ip_address": schema.StringAttribute{
+										MarkdownDescription: "IP address of PCC",
+										Computed:            true,
+									},
+									"lsp_one_pcc_lsp_name": schema.StringAttribute{
+										MarkdownDescription: "Name of label switched path",
+										Computed:            true,
+									},
+									"lsp_one_pcc_shortest_path": schema.BoolAttribute{
+										MarkdownDescription: "Set LSP to follow shortest-path",
+										Computed:            true,
+									},
+									"lsp_one_pcc_exclude_srlg": schema.Int64Attribute{
+										MarkdownDescription: "Exclude SRLG",
+										Computed:            true,
+									},
+									"lsp_two_pcc_address_type": schema.StringAttribute{
+										MarkdownDescription: "Address type",
+										Computed:            true,
+									},
+									"lsp_two_pcc_ip_address": schema.StringAttribute{
+										MarkdownDescription: "IP address of PCC",
+										Computed:            true,
+									},
+									"lsp_two_pcc_lsp_name": schema.StringAttribute{
+										MarkdownDescription: "Name of label switched path",
+										Computed:            true,
+									},
+									"lsp_two_pcc_exclude_srlg": schema.Int64Attribute{
+										MarkdownDescription: "Exclude SRLG",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"node_disjoint": schema.BoolAttribute{
+							MarkdownDescription: "Enable Node Disjointness",
+							Computed:            true,
+						},
+						"node_disjoint_strict": schema.BoolAttribute{
+							MarkdownDescription: "Disable Fallback",
+							Computed:            true,
+						},
+						"node_disjoint_lsp_one_pcc_address_type": schema.StringAttribute{
+							MarkdownDescription: "Address type",
+							Computed:            true,
+						},
+						"node_disjoint_lsp_one_pcc_ip_address": schema.StringAttribute{
+							MarkdownDescription: "IP address of PCC",
+							Computed:            true,
+						},
+						"node_disjoint_lsp_one_pcc_lsp_name": schema.StringAttribute{
+							MarkdownDescription: "Name of label switched path",
+							Computed:            true,
+						},
+						"node_disjoint_lsp_one_pcc_shortest_path": schema.BoolAttribute{
+							MarkdownDescription: "Set LSP to follow shortest-path",
+							Computed:            true,
+						},
+						"node_disjoint_lsp_one_pcc_exclude_srlg": schema.Int64Attribute{
+							MarkdownDescription: "Exclude SRLG",
+							Computed:            true,
+						},
+						"node_disjoint_lsp_two_pcc_address_type": schema.StringAttribute{
+							MarkdownDescription: "Address type",
+							Computed:            true,
+						},
+						"node_disjoint_lsp_two_pcc_ip_address": schema.StringAttribute{
+							MarkdownDescription: "IP address of PCC",
+							Computed:            true,
+						},
+						"node_disjoint_lsp_two_pcc_lsp_name": schema.StringAttribute{
+							MarkdownDescription: "Name of label switched path",
+							Computed:            true,
+						},
+						"node_disjoint_lsp_two_pcc_exclude_srlg": schema.Int64Attribute{
+							MarkdownDescription: "Exclude SRLG",
+							Computed:            true,
+						},
+						"node_disjoint_sub_ids": schema.ListNestedAttribute{
+							MarkdownDescription: "Sub ID",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"sub_id": schema.Int64Attribute{
+										MarkdownDescription: "Sub ID",
+										Computed:            true,
+									},
+									"strict": schema.BoolAttribute{
+										MarkdownDescription: "Disable Fallback",
+										Computed:            true,
+									},
+									"lsp_one_pcc_address_type": schema.StringAttribute{
+										MarkdownDescription: "Address type",
+										Computed:            true,
+									},
+									"lsp_one_pcc_ip_address": schema.StringAttribute{
+										MarkdownDescription: "IP address of PCC",
+										Computed:            true,
+									},
+									"lsp_one_pcc_lsp_name": schema.StringAttribute{
+										MarkdownDescription: "Name of label switched path",
+										Computed:            true,
+									},
+									"lsp_one_pcc_shortest_path": schema.BoolAttribute{
+										MarkdownDescription: "Set LSP to follow shortest-path",
+										Computed:            true,
+									},
+									"lsp_one_pcc_exclude_srlg": schema.Int64Attribute{
+										MarkdownDescription: "Exclude SRLG",
+										Computed:            true,
+									},
+									"lsp_two_pcc_address_type": schema.StringAttribute{
+										MarkdownDescription: "Address type",
+										Computed:            true,
+									},
+									"lsp_two_pcc_ip_address": schema.StringAttribute{
+										MarkdownDescription: "IP address of PCC",
+										Computed:            true,
+									},
+									"lsp_two_pcc_lsp_name": schema.StringAttribute{
+										MarkdownDescription: "Name of label switched path",
+										Computed:            true,
+									},
+									"lsp_two_pcc_exclude_srlg": schema.Int64Attribute{
+										MarkdownDescription: "Exclude SRLG",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"srlg_disjoint": schema.BoolAttribute{
+							MarkdownDescription: "Enable SRLG Disjointness",
+							Computed:            true,
+						},
+						"srlg_disjoint_strict": schema.BoolAttribute{
+							MarkdownDescription: "Disable Fallback",
+							Computed:            true,
+						},
+						"srlg_disjoint_lsp_one_pcc_address_type": schema.StringAttribute{
+							MarkdownDescription: "Address type",
+							Computed:            true,
+						},
+						"srlg_disjoint_lsp_one_pcc_ip_address": schema.StringAttribute{
+							MarkdownDescription: "IP address of PCC",
+							Computed:            true,
+						},
+						"srlg_disjoint_lsp_one_pcc_lsp_name": schema.StringAttribute{
+							MarkdownDescription: "Name of label switched path",
+							Computed:            true,
+						},
+						"srlg_disjoint_lsp_one_pcc_shortest_path": schema.BoolAttribute{
+							MarkdownDescription: "Set LSP to follow shortest-path",
+							Computed:            true,
+						},
+						"srlg_disjoint_lsp_one_pcc_exclude_srlg": schema.Int64Attribute{
+							MarkdownDescription: "Exclude SRLG",
+							Computed:            true,
+						},
+						"srlg_disjoint_lsp_two_pcc_address_type": schema.StringAttribute{
+							MarkdownDescription: "Address type",
+							Computed:            true,
+						},
+						"srlg_disjoint_lsp_two_pcc_ip_address": schema.StringAttribute{
+							MarkdownDescription: "IP address of PCC",
+							Computed:            true,
+						},
+						"srlg_disjoint_lsp_two_pcc_lsp_name": schema.StringAttribute{
+							MarkdownDescription: "Name of label switched path",
+							Computed:            true,
+						},
+						"srlg_disjoint_lsp_two_pcc_exclude_srlg": schema.Int64Attribute{
+							MarkdownDescription: "Exclude SRLG",
+							Computed:            true,
+						},
+						"srlg_disjoint_sub_ids": schema.ListNestedAttribute{
+							MarkdownDescription: "Sub ID",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"sub_id": schema.Int64Attribute{
+										MarkdownDescription: "Sub ID",
+										Computed:            true,
+									},
+									"strict": schema.BoolAttribute{
+										MarkdownDescription: "Disable Fallback",
+										Computed:            true,
+									},
+									"lsp_one_pcc_address_type": schema.StringAttribute{
+										MarkdownDescription: "Address type",
+										Computed:            true,
+									},
+									"lsp_one_pcc_ip_address": schema.StringAttribute{
+										MarkdownDescription: "IP address of PCC",
+										Computed:            true,
+									},
+									"lsp_one_pcc_lsp_name": schema.StringAttribute{
+										MarkdownDescription: "Name of label switched path",
+										Computed:            true,
+									},
+									"lsp_one_pcc_shortest_path": schema.BoolAttribute{
+										MarkdownDescription: "Set LSP to follow shortest-path",
+										Computed:            true,
+									},
+									"lsp_one_pcc_exclude_srlg": schema.Int64Attribute{
+										MarkdownDescription: "Exclude SRLG",
+										Computed:            true,
+									},
+									"lsp_two_pcc_address_type": schema.StringAttribute{
+										MarkdownDescription: "Address type",
+										Computed:            true,
+									},
+									"lsp_two_pcc_ip_address": schema.StringAttribute{
+										MarkdownDescription: "IP address of PCC",
+										Computed:            true,
+									},
+									"lsp_two_pcc_lsp_name": schema.StringAttribute{
+										MarkdownDescription: "Name of label switched path",
+										Computed:            true,
+									},
+									"lsp_two_pcc_exclude_srlg": schema.Int64Attribute{
+										MarkdownDescription: "Exclude SRLG",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"srlg_node_disjoint": schema.BoolAttribute{
+							MarkdownDescription: "Enable SRLG Node Disjointness",
+							Computed:            true,
+						},
+						"srlg_node_disjoint_strict": schema.BoolAttribute{
+							MarkdownDescription: "Disable Fallback",
+							Computed:            true,
+						},
+						"srlg_node_disjoint_lsp_one_pcc_address_type": schema.StringAttribute{
+							MarkdownDescription: "Address type",
+							Computed:            true,
+						},
+						"srlg_node_disjoint_lsp_one_pcc_ip_address": schema.StringAttribute{
+							MarkdownDescription: "IP address of PCC",
+							Computed:            true,
+						},
+						"srlg_node_disjoint_lsp_one_pcc_lsp_name": schema.StringAttribute{
+							MarkdownDescription: "Name of label switched path",
+							Computed:            true,
+						},
+						"srlg_node_disjoint_lsp_one_pcc_shortest_path": schema.BoolAttribute{
+							MarkdownDescription: "Set LSP to follow shortest-path",
+							Computed:            true,
+						},
+						"srlg_node_disjoint_lsp_one_pcc_exclude_srlg": schema.Int64Attribute{
+							MarkdownDescription: "Exclude SRLG",
+							Computed:            true,
+						},
+						"srlg_node_disjoint_lsp_two_pcc_address_type": schema.StringAttribute{
+							MarkdownDescription: "Address type",
+							Computed:            true,
+						},
+						"srlg_node_disjoint_lsp_two_pcc_ip_address": schema.StringAttribute{
+							MarkdownDescription: "IP address of PCC",
+							Computed:            true,
+						},
+						"srlg_node_disjoint_lsp_two_pcc_lsp_name": schema.StringAttribute{
+							MarkdownDescription: "Name of label switched path",
+							Computed:            true,
+						},
+						"srlg_node_disjoint_lsp_two_pcc_exclude_srlg": schema.Int64Attribute{
+							MarkdownDescription: "Exclude SRLG",
+							Computed:            true,
+						},
+						"srlg_node_disjoint_sub_ids": schema.ListNestedAttribute{
+							MarkdownDescription: "Sub ID",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"sub_id": schema.Int64Attribute{
+										MarkdownDescription: "Sub ID",
+										Computed:            true,
+									},
+									"strict": schema.BoolAttribute{
+										MarkdownDescription: "Disable Fallback",
+										Computed:            true,
+									},
+									"lsp_one_pcc_address_type": schema.StringAttribute{
+										MarkdownDescription: "Address type",
+										Computed:            true,
+									},
+									"lsp_one_pcc_ip_address": schema.StringAttribute{
+										MarkdownDescription: "IP address of PCC",
+										Computed:            true,
+									},
+									"lsp_one_pcc_lsp_name": schema.StringAttribute{
+										MarkdownDescription: "Name of label switched path",
+										Computed:            true,
+									},
+									"lsp_one_pcc_shortest_path": schema.BoolAttribute{
+										MarkdownDescription: "Set LSP to follow shortest-path",
+										Computed:            true,
+									},
+									"lsp_one_pcc_exclude_srlg": schema.Int64Attribute{
+										MarkdownDescription: "Exclude SRLG",
+										Computed:            true,
+									},
+									"lsp_two_pcc_address_type": schema.StringAttribute{
+										MarkdownDescription: "Address type",
+										Computed:            true,
+									},
+									"lsp_two_pcc_ip_address": schema.StringAttribute{
+										MarkdownDescription: "IP address of PCC",
+										Computed:            true,
+									},
+									"lsp_two_pcc_lsp_name": schema.StringAttribute{
+										MarkdownDescription: "Name of label switched path",
+										Computed:            true,
+									},
+									"lsp_two_pcc_exclude_srlg": schema.Int64Attribute{
+										MarkdownDescription: "Exclude SRLG",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"peer_ipv4s": schema.ListNestedAttribute{
+				MarkdownDescription: "IPv4 address family",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "IPv4 address family",
+							Computed:            true,
+						},
+						"password_encrypted": schema.StringAttribute{
+							MarkdownDescription: "Specify unencrypted password",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"tcp_ao_keychain_name": schema.StringAttribute{
+							MarkdownDescription: "Configure AO keychain based authentication",
+							Computed:            true,
+						},
+						"tcp_ao_include_tcp_options": schema.BoolAttribute{
+							MarkdownDescription: "Include other TCP options in the header",
+							Computed:            true,
+						},
+						"tcp_ao_accept_ao_mismatch_connection": schema.BoolAttribute{
+							MarkdownDescription: "Accept new connection even if Authentication Option mismatched",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"peer_ipv6s": schema.ListNestedAttribute{
+				MarkdownDescription: "IPv6 address family",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "IPv6 address family",
+							Computed:            true,
+						},
+						"password_encrypted": schema.StringAttribute{
+							MarkdownDescription: "Specify unencrypted password",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"tcp_ao_keychain_name": schema.StringAttribute{
+							MarkdownDescription: "Configure AO keychain based authentication",
+							Computed:            true,
+						},
+						"tcp_ao_include_tcp_options": schema.BoolAttribute{
+							MarkdownDescription: "Include other TCP options in the header",
+							Computed:            true,
+						},
+						"tcp_ao_accept_ao_mismatch_connection": schema.BoolAttribute{
+							MarkdownDescription: "Accept new connection even if Authentication Option mismatched",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"netconf_ssh_user": schema.StringAttribute{
+				MarkdownDescription: "Specify SSH username that will be used to log on to routers",
+				Computed:            true,
+			},
+			"netconf_ssh_password_encrypted": schema.StringAttribute{
+				MarkdownDescription: "Specify unencrypted password",
+				Computed:            true,
+				Sensitive:           true,
 			},
 			"api_authentication_digest": schema.BoolAttribute{
 				MarkdownDescription: "Use HTTP Digest authentication (MD5)",
@@ -99,6 +595,10 @@ func (d *PCEDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 			},
 			"api_sibling_ipv4": schema.StringAttribute{
 				MarkdownDescription: "IPv4 address of the PCE sibling",
+				Computed:            true,
+			},
+			"api_vrf": schema.StringAttribute{
+				MarkdownDescription: "VRF for northbound API and PCE sibling connections.",
 				Computed:            true,
 			},
 			"api_users": schema.ListNestedAttribute{
@@ -113,9 +613,486 @@ func (d *PCEDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 						"password_encrypted": schema.StringAttribute{
 							MarkdownDescription: "Specify unencrypted password",
 							Computed:            true,
+							Sensitive:           true,
 						},
 					},
 				},
+			},
+			"api_ipv4_address": schema.StringAttribute{
+				MarkdownDescription: "NB-API server IPv4 address",
+				Computed:            true,
+			},
+			"api_ipv6_address": schema.StringAttribute{
+				MarkdownDescription: "NB-API server IPv6 address",
+				Computed:            true,
+			},
+			"timers_reoptimization": schema.Int64Attribute{
+				MarkdownDescription: "Topology reoptimization interval",
+				Computed:            true,
+			},
+			"timers_keepalive": schema.Int64Attribute{
+				MarkdownDescription: "Keepalive interval",
+				Computed:            true,
+			},
+			"timers_minimum_peer_keepalive": schema.Int64Attribute{
+				MarkdownDescription: "Minimum acceptable peer proposed keepalive interval",
+				Computed:            true,
+			},
+			"timers_peer_zombie": schema.Int64Attribute{
+				MarkdownDescription: "Keep LSP peer in zombie state after disconnect",
+				Computed:            true,
+			},
+			"timers_init_verify_restart": schema.Int64Attribute{
+				MarkdownDescription: "Timer to wait for topology convergence after topology starts populating for restart case",
+				Computed:            true,
+			},
+			"timers_init_verify_switchover": schema.Int64Attribute{
+				MarkdownDescription: "Timer to wait for topology convergence after topology starts populating for switchover case",
+				Computed:            true,
+			},
+			"timers_init_verify_startup": schema.Int64Attribute{
+				MarkdownDescription: "Timer to wait for topology convergence after topology starts populating for startup case",
+				Computed:            true,
+			},
+			"backoff_ratio": schema.Int64Attribute{
+				MarkdownDescription: "Backoff common ratio",
+				Computed:            true,
+			},
+			"backoff_difference": schema.Int64Attribute{
+				MarkdownDescription: "Backoff common difference",
+				Computed:            true,
+			},
+			"backoff_threshold": schema.Int64Attribute{
+				MarkdownDescription: "Backoff threshold",
+				Computed:            true,
+			},
+			"logging_no_path": schema.BoolAttribute{
+				MarkdownDescription: "logging no-path messages",
+				Computed:            true,
+			},
+			"logging_fallback": schema.BoolAttribute{
+				MarkdownDescription: "logging fallback messages",
+				Computed:            true,
+			},
+			"logging_pcep_pcerr_received": schema.BoolAttribute{
+				MarkdownDescription: "logging of received PCErr messages",
+				Computed:            true,
+			},
+			"logging_pcep_api_send_queue_congestion_disable": schema.BoolAttribute{
+				MarkdownDescription: "disable messages",
+				Computed:            true,
+			},
+			"logging_pcep_disjointness_status": schema.BoolAttribute{
+				MarkdownDescription: "logging of disjointness status related messages",
+				Computed:            true,
+			},
+			"segment_routing_strict_sid_only": schema.BoolAttribute{
+				MarkdownDescription: "Use strict sids only",
+				Computed:            true,
+			},
+			"srte_affinity_bitmaps": schema.ListNestedAttribute{
+				MarkdownDescription: "Affinity color name",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"affinity_color_name": schema.StringAttribute{
+							MarkdownDescription: "Affinity color name",
+							Computed:            true,
+						},
+						"affinity_bit_position": schema.Int64Attribute{
+							MarkdownDescription: "Affinity attribute bit position",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"srte_segment_lists": schema.ListNestedAttribute{
+				MarkdownDescription: "Segment-list name",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"segment_list_name": schema.StringAttribute{
+							MarkdownDescription: "Segment-list name",
+							Computed:            true,
+						},
+						"indexes": schema.ListNestedAttribute{
+							MarkdownDescription: "Next entry index",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"index_number": schema.Int64Attribute{
+										MarkdownDescription: "Next entry index",
+										Computed:            true,
+									},
+									"mpls_label": schema.Int64Attribute{
+										MarkdownDescription: "MPLS label configuration",
+										Computed:            true,
+									},
+									"mpls_adjacency": schema.StringAttribute{
+										MarkdownDescription: "Specify hop address",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"srte_ipv4_peers": schema.ListNestedAttribute{
+				MarkdownDescription: "IPv4 address of the PCEP peer",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "IPv4 address of the PCEP peer",
+							Computed:            true,
+						},
+						"policies": schema.ListNestedAttribute{
+							MarkdownDescription: "Name of SR-TE Policy",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"policy_name": schema.StringAttribute{
+										MarkdownDescription: "Name of SR-TE Policy",
+										Computed:            true,
+									},
+									"candidate_paths_append_sid_mpls": schema.Int64Attribute{
+										MarkdownDescription: "MPLS label",
+										Computed:            true,
+									},
+									"candidate_paths_preferences": schema.ListNestedAttribute{
+										MarkdownDescription: "Policy path-option preference entry",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"preference_id": schema.Int64Attribute{
+													MarkdownDescription: "Policy path-option preference entry",
+													Computed:            true,
+												},
+												"dynamic_mpls": schema.BoolAttribute{
+													MarkdownDescription: "MPLS path type",
+													Computed:            true,
+												},
+												"dynamic_metric_type_te": schema.BoolAttribute{
+													MarkdownDescription: "TE metric type",
+													Computed:            true,
+												},
+												"dynamic_metric_type_igp": schema.BoolAttribute{
+													MarkdownDescription: "IGP metric type",
+													Computed:            true,
+												},
+												"dynamic_metric_type_latency": schema.BoolAttribute{
+													MarkdownDescription: "Latency metric type",
+													Computed:            true,
+												},
+												"dynamic_metric_type_hopcount": schema.BoolAttribute{
+													MarkdownDescription: "Hopcount metric type",
+													Computed:            true,
+												},
+												"dynamic_metric_sid_limit": schema.Int64Attribute{
+													MarkdownDescription: "SID limit",
+													Computed:            true,
+												},
+												"explicit_segment_list_names": schema.ListNestedAttribute{
+													MarkdownDescription: "Identifying name for Segment-list",
+													Computed:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"segment_list_name": schema.StringAttribute{
+																MarkdownDescription: "Identifying name for Segment-list",
+																Computed:            true,
+															},
+														},
+													},
+												},
+												"constraints_segments_sid_algorithm": schema.Int64Attribute{
+													MarkdownDescription: "Prefix-SID algorithm",
+													Computed:            true,
+												},
+												"constraints_segments_protection_protected_preferred": schema.BoolAttribute{
+													MarkdownDescription: "Protected adj-SID preferred (default)",
+													Computed:            true,
+												},
+												"constraints_segments_protection_protected_only": schema.BoolAttribute{
+													MarkdownDescription: "Protected adj-SID only",
+													Computed:            true,
+												},
+												"constraints_segments_protection_unprotected_only": schema.BoolAttribute{
+													MarkdownDescription: "Unprotected adj-SID only",
+													Computed:            true,
+												},
+												"constraints_segments_protection_unprotected_preferred": schema.BoolAttribute{
+													MarkdownDescription: "Unprotected adj-SID preferred",
+													Computed:            true,
+												},
+											},
+										},
+									},
+									"candidate_paths_affinity_include_any_colors": schema.ListNestedAttribute{
+										MarkdownDescription: "Affinity color name",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"affinity_color_name": schema.StringAttribute{
+													MarkdownDescription: "Affinity color name",
+													Computed:            true,
+												},
+											},
+										},
+									},
+									"candidate_paths_affinity_include_all_colors": schema.ListNestedAttribute{
+										MarkdownDescription: "Affinity color name",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"affinity_color_name": schema.StringAttribute{
+													MarkdownDescription: "Affinity color name",
+													Computed:            true,
+												},
+											},
+										},
+									},
+									"candidate_paths_affinity_exclude_colors": schema.ListNestedAttribute{
+										MarkdownDescription: "Affinity color name",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"affinity_color_name": schema.StringAttribute{
+													MarkdownDescription: "Affinity color name",
+													Computed:            true,
+												},
+											},
+										},
+									},
+									"color": schema.Int64Attribute{
+										MarkdownDescription: "Specify color for policy",
+										Computed:            true,
+									},
+									"end_point_ipv4": schema.StringAttribute{
+										MarkdownDescription: "IPv4 address",
+										Computed:            true,
+									},
+									"binding_sid_mpls": schema.Int64Attribute{
+										MarkdownDescription: "MPLS label",
+										Computed:            true,
+									},
+									"shutdown": schema.BoolAttribute{
+										MarkdownDescription: "Policy admin-shutdown",
+										Computed:            true,
+									},
+									"profile_id": schema.Int64Attribute{
+										MarkdownDescription: "Policy configuration profile that the PCC should apply to this policy",
+										Computed:            true,
+									},
+									"path_selection_protected": schema.BoolAttribute{
+										MarkdownDescription: "Use local protected if possible",
+										Computed:            true,
+									},
+									"path_selection_unprotected": schema.BoolAttribute{
+										MarkdownDescription: "Force use of unprotected adjacency SIDs",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"srte_cspf_anycast_sid_inclusion": schema.BoolAttribute{
+				MarkdownDescription: "Enable Anycast SID Inclusion for all policies",
+				Computed:            true,
+			},
+			"srte_cspf_sr_native": schema.BoolAttribute{
+				MarkdownDescription: "Enable SR native algorithm",
+				Computed:            true,
+			},
+			"srte_cspf_sr_native_force": schema.BoolAttribute{
+				MarkdownDescription: "Must use this algorithm for all path computations",
+				Computed:            true,
+			},
+			"srte_p2mp_endpoint_sets": schema.ListNestedAttribute{
+				MarkdownDescription: "Endpoint-set configuration",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"endpoint_set_name": schema.StringAttribute{
+							MarkdownDescription: "Endpoint-set configuration",
+							Computed:            true,
+						},
+						"ipv4s": schema.ListNestedAttribute{
+							MarkdownDescription: "Specify the address AFI",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"address": schema.StringAttribute{
+										MarkdownDescription: "Specify the address AFI",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"srte_p2mp_policies": schema.ListNestedAttribute{
+				MarkdownDescription: "Policy configuration",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"policy_name": schema.StringAttribute{
+							MarkdownDescription: "Policy configuration",
+							Computed:            true,
+						},
+						"color": schema.Int64Attribute{
+							MarkdownDescription: "Specify color for policy",
+							Computed:            true,
+						},
+						"endpoint_set": schema.StringAttribute{
+							MarkdownDescription: "Policy endpoint-set",
+							Computed:            true,
+						},
+						"source_ipv4": schema.StringAttribute{
+							MarkdownDescription: "IPv4 address",
+							Computed:            true,
+						},
+						"shutdown": schema.BoolAttribute{
+							MarkdownDescription: "Policy admin-shutdown",
+							Computed:            true,
+						},
+						"fast_reroute_lfa": schema.BoolAttribute{
+							MarkdownDescription: "LFA Fast Re-route",
+							Computed:            true,
+						},
+						"treesid_mpls": schema.Int64Attribute{
+							MarkdownDescription: "MPLS label",
+							Computed:            true,
+						},
+						"candidate_paths_constraints_affinity_include_any_colors": schema.ListNestedAttribute{
+							MarkdownDescription: "Affinity color name",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"affinity_color_name": schema.StringAttribute{
+										MarkdownDescription: "Affinity color name",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"candidate_paths_constraints_affinity_include_all_colors": schema.ListNestedAttribute{
+							MarkdownDescription: "Affinity color name",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"affinity_color_name": schema.StringAttribute{
+										MarkdownDescription: "Affinity color name",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"candidate_paths_constraints_affinity_exclude_colors": schema.ListNestedAttribute{
+							MarkdownDescription: "Affinity color name",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"affinity_color_name": schema.StringAttribute{
+										MarkdownDescription: "Affinity color name",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"candidate_paths_preferences": schema.ListNestedAttribute{
+							MarkdownDescription: "Policy path preference entry",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"preference_id": schema.Int64Attribute{
+										MarkdownDescription: "Policy path preference entry",
+										Computed:            true,
+									},
+									"dynamic": schema.BoolAttribute{
+										MarkdownDescription: "Dynamically computed path",
+										Computed:            true,
+									},
+									"dynamic_metric_type_te": schema.BoolAttribute{
+										MarkdownDescription: "TE metric type",
+										Computed:            true,
+									},
+									"dynamic_metric_type_igp": schema.BoolAttribute{
+										MarkdownDescription: "IGP metric type",
+										Computed:            true,
+									},
+									"dynamic_metric_type_latency": schema.BoolAttribute{
+										MarkdownDescription: "Latency metric type",
+										Computed:            true,
+									},
+									"dynamic_metric_type_hopcount": schema.BoolAttribute{
+										MarkdownDescription: "Use the least number of hops for path computation",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"srte_p2mp_timers_reoptimization": schema.Int64Attribute{
+				MarkdownDescription: "How often to reoptimize all P2MP paths.",
+				Computed:            true,
+			},
+			"srte_p2mp_timers_cleanup": schema.Int64Attribute{
+				MarkdownDescription: "Delay before node is excluded from P2MP path computation after PCEP connection with it goes away",
+				Computed:            true,
+			},
+			"srte_p2mp_label_range_min": schema.Int64Attribute{
+				MarkdownDescription: "Minimum value of label range",
+				Computed:            true,
+			},
+			"srte_p2mp_label_range_max": schema.Int64Attribute{
+				MarkdownDescription: "Maximum value of label range",
+				Computed:            true,
+			},
+			"srte_p2mp_multipath_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable load balancing of SR P2MP across ECMP paths",
+				Computed:            true,
+			},
+			"srte_p2mp_fast_reroute_lfa": schema.BoolAttribute{
+				MarkdownDescription: "LFA Fast Re-route",
+				Computed:            true,
+			},
+			"srte_p2mp_frr_node_set_from_ipv4s": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify the address AFI",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "Specify the address AFI",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"srte_p2mp_frr_node_set_to_ipv4s": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify the address AFI",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "Specify the address AFI",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"peer_filter_ipv4_access_list": schema.StringAttribute{
+				MarkdownDescription: "Access-list for IPv4 peer filtering",
+				Computed:            true,
+			},
+			"hierarchical_underlay_enable_all": schema.BoolAttribute{
+				MarkdownDescription: "Use all available tunnels as underlay",
+				Computed:            true,
 			},
 		},
 	}

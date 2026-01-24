@@ -85,6 +85,151 @@ func (r *KeyChainResource) Schema(ctx context.Context, req resource.SchemaReques
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
+			"accept_tolerance_value": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure a tolerance-value").AddIntegerRangeDescription(1, 8640000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 8640000),
+				},
+			},
+			"accept_tolerance_infinite": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Never expires").String,
+				Optional:            true,
+			},
+			"macsec_keys": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure CKN for macsec PSK").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"ckn": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure CKN for macsec PSK").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(2, 64),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"key_string_password": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enter encrypted CAK as hex string").String,
+							Optional:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+							},
+						},
+						"key_string_password6": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enter encrypted type6 password").String,
+							Optional:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+							},
+						},
+						"key_string_cryptographic_algorithm": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Cryptographic Algorithm").AddStringEnumDescription("aes-128-cmac", "aes-256-cmac").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("aes-128-cmac", "aes-256-cmac"),
+							},
+						},
+						"lifetime_start_time_hour": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Start time hour").AddIntegerRangeDescription(0, 23).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 23),
+							},
+						},
+						"lifetime_start_time_minute": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Start time minute").AddIntegerRangeDescription(0, 59).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 59),
+							},
+						},
+						"lifetime_start_time_second": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Start time second").AddIntegerRangeDescription(0, 59).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 59),
+							},
+						},
+						"lifetime_start_time_month": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Month of the year").AddStringEnumDescription("april", "august", "december", "february", "january", "july", "june", "march", "may", "november", "october", "september").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("april", "august", "december", "february", "january", "july", "june", "march", "may", "november", "october", "september"),
+							},
+						},
+						"lifetime_start_time_day_of_month": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Day of the month").AddIntegerRangeDescription(1, 31).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 31),
+							},
+						},
+						"lifetime_start_time_year": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Year").AddIntegerRangeDescription(1993, 2035).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1993, 2035),
+							},
+						},
+						"lifetime_end_time_hour": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("End time hour").AddIntegerRangeDescription(0, 23).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 23),
+							},
+						},
+						"lifetime_end_time_minute": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("End time minute").AddIntegerRangeDescription(0, 59).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 59),
+							},
+						},
+						"lifetime_end_time_second": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("End time second").AddIntegerRangeDescription(0, 59).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 59),
+							},
+						},
+						"lifetime_end_time_month": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Month of the year").AddStringEnumDescription("april", "august", "december", "february", "january", "july", "june", "march", "may", "november", "october", "september").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("april", "august", "december", "february", "january", "july", "june", "march", "may", "november", "october", "september"),
+							},
+						},
+						"lifetime_end_time_day_of_month": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Day of the month").AddIntegerRangeDescription(1, 31).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 31),
+							},
+						},
+						"lifetime_end_time_year": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Year").AddIntegerRangeDescription(1993, 2035).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1993, 2035),
+							},
+						},
+						"lifetime_duration": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Lifetime duration").AddIntegerRangeDescription(1, 2147483646).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 2147483646),
+							},
+						},
+						"lifetime_infinite": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Never expires").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
 			"keys": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Configure a Key").String,
 				Optional:            true,
@@ -102,6 +247,15 @@ func (r *KeyChainResource) Schema(ctx context.Context, req resource.SchemaReques
 						"key_string_password": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Encrypted key string (even number of characters with first two as digits and sum less than 53, and rest of the characters should be hex digits)").String,
 							Optional:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+							},
+						},
+						"key_string_password6": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enter encrypted type6 password").String,
+							Optional:            true,
+							Sensitive:           true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
 							},
@@ -134,13 +288,6 @@ func (r *KeyChainResource) Schema(ctx context.Context, req resource.SchemaReques
 								int64validator.Between(0, 59),
 							},
 						},
-						"accept_lifetime_start_time_day_of_month": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Day of the month").AddIntegerRangeDescription(1, 31).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(1, 31),
-							},
-						},
 						"accept_lifetime_start_time_month": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Month of the year").AddStringEnumDescription("april", "august", "december", "february", "january", "july", "june", "march", "may", "november", "october", "september").String,
 							Optional:            true,
@@ -148,11 +295,67 @@ func (r *KeyChainResource) Schema(ctx context.Context, req resource.SchemaReques
 								stringvalidator.OneOf("april", "august", "december", "february", "january", "july", "june", "march", "may", "november", "october", "september"),
 							},
 						},
+						"accept_lifetime_start_time_day_of_month": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Day of the month").AddIntegerRangeDescription(1, 31).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 31),
+							},
+						},
 						"accept_lifetime_start_time_year": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Year").AddIntegerRangeDescription(1993, 2035).String,
 							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1993, 2035),
+							},
+						},
+						"accept_lifetime_end_time_hour": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("End time hour").AddIntegerRangeDescription(0, 23).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 23),
+							},
+						},
+						"accept_lifetime_end_time_minute": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("End time minute").AddIntegerRangeDescription(0, 59).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 59),
+							},
+						},
+						"accept_lifetime_end_time_second": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("End time second").AddIntegerRangeDescription(0, 59).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 59),
+							},
+						},
+						"accept_lifetime_end_time_month": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Month of the year").AddStringEnumDescription("april", "august", "december", "february", "january", "july", "june", "march", "may", "november", "october", "september").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("april", "august", "december", "february", "january", "july", "june", "march", "may", "november", "october", "september"),
+							},
+						},
+						"accept_lifetime_end_time_day_of_month": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Day of the month").AddIntegerRangeDescription(1, 31).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 31),
+							},
+						},
+						"accept_lifetime_end_time_year": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Year").AddIntegerRangeDescription(1993, 2035).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1993, 2035),
+							},
+						},
+						"accept_lifetime_duration": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Lifetime duration").AddIntegerRangeDescription(1, 2147483646).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 2147483646),
 							},
 						},
 						"accept_lifetime_infinite": schema.BoolAttribute{
@@ -180,18 +383,18 @@ func (r *KeyChainResource) Schema(ctx context.Context, req resource.SchemaReques
 								int64validator.Between(0, 59),
 							},
 						},
-						"send_lifetime_start_time_day_of_month": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Day of the month").AddIntegerRangeDescription(1, 31).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(1, 31),
-							},
-						},
 						"send_lifetime_start_time_month": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Month of the year").AddStringEnumDescription("april", "august", "december", "february", "january", "july", "june", "march", "may", "november", "october", "september").String,
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("april", "august", "december", "february", "january", "july", "june", "march", "may", "november", "october", "september"),
+							},
+						},
+						"send_lifetime_start_time_day_of_month": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Day of the month").AddIntegerRangeDescription(1, 31).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 31),
 							},
 						},
 						"send_lifetime_start_time_year": schema.Int64Attribute{
@@ -201,12 +404,69 @@ func (r *KeyChainResource) Schema(ctx context.Context, req resource.SchemaReques
 								int64validator.Between(1993, 2035),
 							},
 						},
+						"send_lifetime_end_time_hour": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("End time hour").AddIntegerRangeDescription(0, 23).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 23),
+							},
+						},
+						"send_lifetime_end_time_minute": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("End time minute").AddIntegerRangeDescription(0, 59).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 59),
+							},
+						},
+						"send_lifetime_end_time_second": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("End time second").AddIntegerRangeDescription(0, 59).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 59),
+							},
+						},
+						"send_lifetime_end_time_month": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Month of the year").AddStringEnumDescription("april", "august", "december", "february", "january", "july", "june", "march", "may", "november", "october", "september").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("april", "august", "december", "february", "january", "july", "june", "march", "may", "november", "october", "september"),
+							},
+						},
+						"send_lifetime_end_time_day_of_month": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Day of the month").AddIntegerRangeDescription(1, 31).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 31),
+							},
+						},
+						"send_lifetime_end_time_year": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Year").AddIntegerRangeDescription(1993, 2035).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1993, 2035),
+							},
+						},
+						"send_lifetime_duration": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Lifetime duration").AddIntegerRangeDescription(1, 2147483646).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 2147483646),
+							},
+						},
 						"send_lifetime_infinite": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Never expires").String,
 							Optional:            true,
 						},
 					},
 				},
+			},
+			"timezone_local": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Router Local Timezone").String,
+				Optional:            true,
+			},
+			"timezone_gmt": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("GMT (UTC) Timezone").String,
+				Optional:            true,
 			},
 		},
 	}

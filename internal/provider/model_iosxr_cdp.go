@@ -152,12 +152,15 @@ func (data CDP) toBodyXML(ctx context.Context) string {
 
 func (data *CDP) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "enable"); value.Exists() {
-		data.Enable = types.BoolValue(true)
-	} else if data.Enable.IsNull() {
-		// If currently null, keep as null (field not in config)
-		data.Enable = types.BoolNull()
+		if !data.Enable.IsNull() {
+			data.Enable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.Enable.IsNull() {
+			data.Enable = types.BoolNull()
+		}
 	}
-	// else: preserve existing value (e.g., false from config)
 	if value := gjson.GetBytes(res, "holdtime"); value.Exists() && !data.Holdtime.IsNull() {
 		data.Holdtime = types.Int64Value(value.Int())
 	} else {
@@ -169,19 +172,25 @@ func (data *CDP) updateFromBody(ctx context.Context, res []byte) {
 		data.Timer = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "advertise.v1"); value.Exists() {
-		data.AdvertiseV1 = types.BoolValue(true)
-	} else if data.AdvertiseV1.IsNull() {
-		// If currently null, keep as null (field not in config)
-		data.AdvertiseV1 = types.BoolNull()
+		if !data.AdvertiseV1.IsNull() {
+			data.AdvertiseV1 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.AdvertiseV1.IsNull() {
+			data.AdvertiseV1 = types.BoolNull()
+		}
 	}
-	// else: preserve existing value (e.g., false from config)
 	if value := gjson.GetBytes(res, "log.adjacency.changes"); value.Exists() {
-		data.LogAdjacencyChanges = types.BoolValue(true)
-	} else if data.LogAdjacencyChanges.IsNull() {
-		// If currently null, keep as null (field not in config)
-		data.LogAdjacencyChanges = types.BoolNull()
+		if !data.LogAdjacencyChanges.IsNull() {
+			data.LogAdjacencyChanges = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if the attribute is null in state
+		if data.LogAdjacencyChanges.IsNull() {
+			data.LogAdjacencyChanges = types.BoolNull()
+		}
 	}
-	// else: preserve existing value (e.g., false from config)
 }
 
 // End of section. //template:end updateFromBody
@@ -192,8 +201,7 @@ func (data *CDP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/enable"); value.Exists() {
 		data.Enable = types.BoolValue(true)
 	} else {
-		// If config has false and device doesn't have the field, keep false (don't set to null)
-		// Only set to null if it was already null
+		// For presence-based booleans, only set to null if it's already null
 		if data.Enable.IsNull() {
 			data.Enable = types.BoolNull()
 		}
@@ -211,8 +219,7 @@ func (data *CDP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise/v1"); value.Exists() {
 		data.AdvertiseV1 = types.BoolValue(true)
 	} else {
-		// If config has false and device doesn't have the field, keep false (don't set to null)
-		// Only set to null if it was already null
+		// For presence-based booleans, only set to null if it's already null
 		if data.AdvertiseV1.IsNull() {
 			data.AdvertiseV1 = types.BoolNull()
 		}
@@ -220,8 +227,7 @@ func (data *CDP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/log/adjacency/changes"); value.Exists() {
 		data.LogAdjacencyChanges = types.BoolValue(true)
 	} else {
-		// If config has false and device doesn't have the field, keep false (don't set to null)
-		// Only set to null if it was already null
+		// For presence-based booleans, only set to null if it's already null
 		if data.LogAdjacencyChanges.IsNull() {
 			data.LogAdjacencyChanges = types.BoolNull()
 		}
@@ -239,6 +245,8 @@ func (data *CDP) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "enable"); value.Exists() {
 		data.Enable = types.BoolValue(true)
+	} else {
+		data.Enable = types.BoolNull()
 	}
 	if value := res.Get(prefix + "holdtime"); value.Exists() {
 		data.Holdtime = types.Int64Value(value.Int())
@@ -248,9 +256,13 @@ func (data *CDP) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "advertise.v1"); value.Exists() {
 		data.AdvertiseV1 = types.BoolValue(true)
+	} else {
+		data.AdvertiseV1 = types.BoolNull()
 	}
 	if value := res.Get(prefix + "log.adjacency.changes"); value.Exists() {
 		data.LogAdjacencyChanges = types.BoolValue(true)
+	} else {
+		data.LogAdjacencyChanges = types.BoolNull()
 	}
 }
 
@@ -265,6 +277,8 @@ func (data *CDPData) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "enable"); value.Exists() {
 		data.Enable = types.BoolValue(true)
+	} else {
+		data.Enable = types.BoolNull()
 	}
 	if value := res.Get(prefix + "holdtime"); value.Exists() {
 		data.Holdtime = types.Int64Value(value.Int())
@@ -274,9 +288,13 @@ func (data *CDPData) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "advertise.v1"); value.Exists() {
 		data.AdvertiseV1 = types.BoolValue(true)
+	} else {
+		data.AdvertiseV1 = types.BoolNull()
 	}
 	if value := res.Get(prefix + "log.adjacency.changes"); value.Exists() {
 		data.LogAdjacencyChanges = types.BoolValue(true)
+	} else {
+		data.LogAdjacencyChanges = types.BoolNull()
 	}
 }
 
@@ -287,6 +305,8 @@ func (data *CDPData) fromBody(ctx context.Context, res gjson.Result) {
 func (data *CDP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/enable"); value.Exists() {
 		data.Enable = types.BoolValue(true)
+	} else {
+		data.Enable = types.BoolNull()
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/holdtime"); value.Exists() {
 		data.Holdtime = types.Int64Value(value.Int())
@@ -296,9 +316,13 @@ func (data *CDP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise/v1"); value.Exists() {
 		data.AdvertiseV1 = types.BoolValue(true)
+	} else {
+		data.AdvertiseV1 = types.BoolNull()
 	}
 	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/log/adjacency/changes"); value.Exists() {
 		data.LogAdjacencyChanges = types.BoolValue(true)
+	} else {
+		data.LogAdjacencyChanges = types.BoolNull()
 	}
 }
 
@@ -336,17 +360,11 @@ func (data *CDPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 
 func (data *CDP) getDeletedItems(ctx context.Context, state CDP) []string {
 	deletedItems := make([]string, 0)
-	// For presence-based booleans, delete if going from true to false or to null
-	if !state.LogAdjacencyChanges.IsNull() && state.LogAdjacencyChanges.ValueBool() {
-		if data.LogAdjacencyChanges.IsNull() || !data.LogAdjacencyChanges.ValueBool() {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/log/adjacency/changes", state.getPath()))
-		}
+	if !state.LogAdjacencyChanges.IsNull() && data.LogAdjacencyChanges.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/adjacency/changes", state.getPath()))
 	}
-	// For presence-based booleans, delete if going from true to false or to null
-	if !state.AdvertiseV1.IsNull() && state.AdvertiseV1.ValueBool() {
-		if data.AdvertiseV1.IsNull() || !data.AdvertiseV1.ValueBool() {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise", state.getPath()))
-		}
+	if !state.AdvertiseV1.IsNull() && data.AdvertiseV1.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise", state.getPath()))
 	}
 	if !state.Timer.IsNull() && data.Timer.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/timer", state.getPath()))
@@ -354,11 +372,8 @@ func (data *CDP) getDeletedItems(ctx context.Context, state CDP) []string {
 	if !state.Holdtime.IsNull() && data.Holdtime.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/holdtime", state.getPath()))
 	}
-	// For presence-based booleans, delete if going from true to false or to null
-	if !state.Enable.IsNull() && state.Enable.ValueBool() {
-		if data.Enable.IsNull() || !data.Enable.ValueBool() {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/enable", state.getPath()))
-		}
+	if !state.Enable.IsNull() && data.Enable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/enable", state.getPath()))
 	}
 	return deletedItems
 }

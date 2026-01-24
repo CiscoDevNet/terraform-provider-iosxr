@@ -1,7 +1,7 @@
 ---
 name: Domain VRF
 path: Cisco-IOS-XR-um-domain-cfg:/domain/vrfs/vrf[vrf-name=%s]
-doc_category: System
+doc_category: Management
 attributes:
   - yang_name: vrf-name
     example: TEST-VRF

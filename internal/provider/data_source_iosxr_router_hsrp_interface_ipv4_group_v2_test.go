@@ -20,8 +20,46 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+import (
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
 
 // End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
+
+func TestAccDataSourceIosxrRouterHSRPInterfaceIPv4GroupV2(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v2.test", "address", "33.33.33.3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v2.test", "address_learn", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v2.test", "secondary_ipv4_addresses.0.address", "10.10.1.2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v2.test", "priority", "133"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v2.test", "preempt_delay", "3100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v2.test", "track_interfaces.0.track_name", "GigabitEthernet0/0/0/7"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v2.test", "track_interfaces.0.priority_decrement", "66"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v2.test", "track_objects.0.object_name", "OBJECT2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v2.test", "track_objects.0.priority_decrement", "77"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v2.test", "timers_seconds", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v2.test", "timers_seconds_holdtime", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v2.test", "mac_address", "00:01:00:02:00:02"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v2.test", "name", "NAME22"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v2.test", "bfd_fast_detect_peer_ipv4", "45.45.45.4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv4_group_v2.test", "bfd_fast_detect_peer_interface", "GigabitEthernet0/0/0/1"))
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { testAccPreCheck(t) },
+		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccDataSourceIosxrRouterHSRPInterfaceIPv4GroupV2PrerequisitesConfig + testAccDataSourceIosxrRouterHSRPInterfaceIPv4GroupV2Config(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
+			},
+		},
+	})
+}
+
+// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRouterHSRPInterfaceIPv4GroupV2PrerequisitesConfig = `
@@ -35,3 +73,46 @@ resource "iosxr_gnmi" "PreReq0" {
 `
 
 // End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
+
+func testAccDataSourceIosxrRouterHSRPInterfaceIPv4GroupV2Config() string {
+	config := `resource "iosxr_router_hsrp_interface_ipv4_group_v2" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	group_id = 2345` + "\n"
+	config += `	address = "33.33.33.3"` + "\n"
+	config += `	address_learn = false` + "\n"
+	config += `	secondary_ipv4_addresses = [{` + "\n"
+	config += `		address = "10.10.1.2"` + "\n"
+	config += `	}]` + "\n"
+	config += `	priority = 133` + "\n"
+	config += `	preempt_delay = 3100` + "\n"
+	config += `	track_interfaces = [{` + "\n"
+	config += `		track_name = "GigabitEthernet0/0/0/7"` + "\n"
+	config += `		priority_decrement = 66` + "\n"
+	config += `	}]` + "\n"
+	config += `	track_objects = [{` + "\n"
+	config += `		object_name = "OBJECT2"` + "\n"
+	config += `		priority_decrement = 77` + "\n"
+	config += `	}]` + "\n"
+	config += `	timers_seconds = 10` + "\n"
+	config += `	timers_seconds_holdtime = 30` + "\n"
+	config += `	mac_address = "00:01:00:02:00:02"` + "\n"
+	config += `	name = "NAME22"` + "\n"
+	config += `	bfd_fast_detect_peer_ipv4 = "45.45.45.4"` + "\n"
+	config += `	bfd_fast_detect_peer_interface = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+
+	config += `
+		data "iosxr_router_hsrp_interface_ipv4_group_v2" "test" {
+			interface_name = "GigabitEthernet0/0/0/1"
+			group_id = 2345
+			depends_on = [iosxr_router_hsrp_interface_ipv4_group_v2.test]
+		}
+	`
+	return config
+}
+
+// End of section. //template:end testAccDataSourceConfig

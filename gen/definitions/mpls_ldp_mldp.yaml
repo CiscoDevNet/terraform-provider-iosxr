@@ -1,0 +1,88 @@
+---
+name: MPLS LDP MLDP
+path: Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp/mldp
+doc_category: MPLS
+attributes:
+  - yang_name: logging/notifications
+    minimum_test_value: true
+    example: true
+  - yang_name: logging/internal
+    example: true
+  - yang_name: address-families/address-family
+    tf_name: address_family
+    type: List
+    attributes:
+      - yang_name: af-name
+        tf_name: name
+        id: true
+        example: ipv4
+      - yang_name: statics/static
+        tf_name: statics
+        type: List
+        attributes:
+          - yang_name: lsp-address
+            id: true
+            example: 192.168.2.1
+          - yang_name: p2mp
+            example: 5
+          - yang_name: mp2mp
+            exclude_test: true
+            example: 5
+      - yang_name: make-before-break/delay/forwarding-delay
+        tf_name: make_before_break_delay
+        optional: true
+        example: 60
+      - yang_name: make-before-break/delay/delete-delay
+        tf_name: make_before_break_delete_delay
+        example: 40
+      - yang_name: make-before-break/route-policy
+        tf_name: make_before_break_route_policy
+        example: LDP_POLICY_1
+      - yang_name: carrier-supporting-carrier
+        example: true
+      - yang_name: mofrr
+        tf_name: mofrr_enable
+        example: true
+      - yang_name: mofrr/route-policy
+        tf_name: mofrr_route_policy
+        example: LDP_POLICY_1
+      - yang_name: recursive-fec/enable
+        example: true
+      - yang_name: recursive-fec/route-policy
+        example: LDP_POLICY_1
+      - yang_name: neighbors/in/route-policy
+        tf_name: neighbors_route_policy_in
+        example: LDP_POLICY_1
+      - yang_name: neighbors/out/route-policy
+        tf_name: neighbors_route_policy_out
+        example: LDP_POLICY_1
+      - yang_name: neighbors/neighbor
+        tf_name: neighbors
+        type: List
+        attributes:
+          - yang_name: neighbor-address
+            id: true
+            example: 192.168.2.1
+          - yang_name: in/route-policy
+            tf_name: neighbor_route_policy_in
+            example: LDP_POLICY_1
+          - yang_name: out/route-policy
+            tf_name: neighbor_route_policy_out
+            example: LDP_POLICY_1
+      - yang_name: forwarding/recursive
+        example: true
+      - yang_name: forwarding/recursive/route-policy
+        tf_name: forwarding_recursive_route_policy
+        example: LDP_POLICY_1
+      - yang_name: rib/unicast-always
+        tf_name: rib_unicast_always
+        example: true
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp
+  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=LDP_POLICY_1]
+    attributes:
+      - name: route-policy-name
+        value: LDP_POLICY_1
+      - name: rpl-route-policy
+        value: "route-policy LDP_POLICY_1\\n  pass\\nend-policy\\n"

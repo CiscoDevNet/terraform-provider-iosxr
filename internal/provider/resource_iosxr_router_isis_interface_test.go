@@ -5,7 +5,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     https://mozilla.org/MPL/2.0/
+//	https://mozilla.org/MPL/2.0/
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,10 +21,12 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 // End of section. //template:end imports
@@ -34,20 +36,46 @@ import (
 func TestAccIosxrRouterISISInterface(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "interface_name", "GigabitEthernet0/0/0/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "mesh_group", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "state", "passive"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "circuit_type", "level-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "csnp_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "csnp_interval_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "csnp_interval_levels.0.csnp_interval", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_padding", "disable"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_padding_levels.0.level_number", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_padding_levels.0.hello_padding", "always"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "priority", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "priority_levels.0.level_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "priority_levels.0.priority", "64"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "point_to_point", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "state", "passive"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_password_hmac_md5_encrypted", "060506324F41584B564B0F49584B"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_interval", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_interval_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_interval_levels.0.hello_interval", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_multiplier", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_multiplier_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_multiplier_levels.0.hello_multiplier", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "lsp_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "lsp_interval_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "lsp_interval_levels.0.lsp_interval", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_password_hmac_md5_send_only", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_password_levels.0.level_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_password_levels.0.hello_password_text_encrypted", "060506324F41584B564B0F49584B"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_password_levels.0.hello_password_text_send_only", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_password_levels.0.text_send_only", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "remote_psnp_delay", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "priority", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "priority_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "priority_levels.0.priority", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "point_to_point", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "retransmit_interval", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "retransmit_interval_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "retransmit_interval_levels.0.retransmit_interval", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "retransmit_throttle_interval", "10000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "retransmit_throttle_interval_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "retransmit_throttle_interval_levels.0.retransmit_throttle_interval", "10000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "link_down_fast_detect", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "affinity_flex_algos.0", "AFFINITY-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "affinity_flex_algos_anomalies.0", "AFFINITY-2"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "override_metrics", "high"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "delay_normalize_interval", "10000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "delay_normalize_offset", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "mpls_ldp_sync", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "mpls_ldp_sync_level", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "bfd_fast_detect_ipv4", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "bfd_fast_detect_ipv6", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "bfd_minimum_interval", "50"))
@@ -77,13 +105,60 @@ func TestAccIosxrRouterISISInterface(t *testing.T) {
 
 // End of section. //template:end testAcc
 
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrRouterISISInterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		ProcessId := primary.Attributes["process_id"]
+		InterfaceName := primary.Attributes["interface_name"]
+
+		return fmt.Sprintf("%s,%s", ProcessId, InterfaceName), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccIosxrRouterISISInterfacePrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]"
+	attributes = {
+		"process-id" = "P1"
+	}
+}
+
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/affinity-maps/affinity-map[affinity-attribute-name=AFFINITY-1]"
+	delete = false
+	attributes = {
+		"affinity-attribute-name" = "AFFINITY-1"
+		"bit-position" = "1"
+	}
+	depends_on = [iosxr_gnmi.PreReq0, ]
+}
+
+resource "iosxr_gnmi" "PreReq2" {
+	path = "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/affinity-maps/affinity-map[affinity-attribute-name=AFFINITY-2]"
+	delete = false
+	attributes = {
+		"affinity-attribute-name" = "AFFINITY-2"
+		"bit-position" = "2"
+	}
+	depends_on = [iosxr_gnmi.PreReq0, ]
+}
+
+`
+
+// End of section. //template:end testPrerequisites
+
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 
 func testAccIosxrRouterISISInterfaceConfig_minimum() string {
 	config := `resource "iosxr_router_isis_interface" "test" {` + "\n"
 	config += `	process_id = "P1"` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -96,31 +171,71 @@ func testAccIosxrRouterISISInterfaceConfig_all() string {
 	config := `resource "iosxr_router_isis_interface" "test" {` + "\n"
 	config += `	process_id = "P1"` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	mesh_group = 1` + "\n"
+	config += `	state = "passive"` + "\n"
 	config += `	circuit_type = "level-1"` + "\n"
+	config += `	csnp_interval = 10` + "\n"
+	config += `	csnp_interval_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		csnp_interval = 10` + "\n"
+	config += `		}]` + "\n"
 	config += `	hello_padding = "disable"` + "\n"
 	config += `	hello_padding_levels = [{` + "\n"
 	config += `		level_number = 1` + "\n"
 	config += `		hello_padding = "always"` + "\n"
 	config += `		}]` + "\n"
-	config += `	priority = 10` + "\n"
-	config += `	priority_levels = [{` + "\n"
+	config += `	hello_interval = 5` + "\n"
+	config += `	hello_interval_levels = [{` + "\n"
 	config += `		level_number = 1` + "\n"
-	config += `		priority = 64` + "\n"
+	config += `		hello_interval = 5` + "\n"
 	config += `		}]` + "\n"
-	config += `	point_to_point = false` + "\n"
-	config += `	state = "passive"` + "\n"
+	config += `	hello_multiplier = 5` + "\n"
+	config += `	hello_multiplier_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		hello_multiplier = 5` + "\n"
+	config += `		}]` + "\n"
+	config += `	lsp_interval = 10` + "\n"
+	config += `	lsp_interval_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		lsp_interval = 10` + "\n"
+	config += `		}]` + "\n"
 	config += `	hello_password_hmac_md5_encrypted = "060506324F41584B564B0F49584B"` + "\n"
 	config += `	hello_password_hmac_md5_send_only = true` + "\n"
 	config += `	hello_password_levels = [{` + "\n"
 	config += `		level_number = 1` + "\n"
-	config += `		hello_password_text_encrypted = "060506324F41584B564B0F49584B"` + "\n"
-	config += `		hello_password_text_send_only = true` + "\n"
+	config += `		text_encrypted = "060506324F41584B564B0F49584B"` + "\n"
+	config += `		text_send_only = true` + "\n"
 	config += `		}]` + "\n"
+	config += `	remote_psnp_delay = 1000` + "\n"
+	config += `	priority = 10` + "\n"
+	config += `	priority_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		priority = 10` + "\n"
+	config += `		}]` + "\n"
+	config += `	point_to_point = true` + "\n"
+	config += `	retransmit_interval = 50` + "\n"
+	config += `	retransmit_interval_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		retransmit_interval = 50` + "\n"
+	config += `		}]` + "\n"
+	config += `	retransmit_throttle_interval = 10000` + "\n"
+	config += `	retransmit_throttle_interval_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		retransmit_throttle_interval = 10000` + "\n"
+	config += `		}]` + "\n"
+	config += `	link_down_fast_detect = true` + "\n"
+	config += `	affinity_flex_algos = ["AFFINITY-1"]` + "\n"
+	config += `	affinity_flex_algos_anomalies = ["AFFINITY-2"]` + "\n"
+	config += `	override_metrics = "high"` + "\n"
+	config += `	delay_normalize_interval = 10000` + "\n"
+	config += `	delay_normalize_offset = 1000` + "\n"
+	config += `	mpls_ldp_sync = true` + "\n"
+	config += `	mpls_ldp_sync_level = 1` + "\n"
 	config += `	bfd_fast_detect_ipv4 = true` + "\n"
 	config += `	bfd_fast_detect_ipv6 = true` + "\n"
 	config += `	bfd_minimum_interval = 50` + "\n"
 	config += `	bfd_multiplier = 3` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

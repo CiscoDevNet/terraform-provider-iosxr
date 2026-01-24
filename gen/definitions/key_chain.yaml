@@ -8,6 +8,73 @@ attributes:
     tf_name: name
     id: true
     example: KEY11
+  - yang_name: accept-tolerance/tolerance-value
+    tf_name: accept_tolerance_value
+    example: 1000
+  - yang_name: accept-tolerance/infinite
+    tf_name: accept_tolerance_infinite
+    exclude_test: true
+    example: true
+  - yang_name: macsec/keys/key
+    tf_name: macsec_keys
+    type: List
+    attributes:
+      - yang_name: ckn
+        id: true
+        example: 01
+      - yang_name: key-string/password
+        sensitive: true
+        write_only: true
+        example: 115949554642595C577A7F747D63637244574E535806580851040D531C465C0851020204055A0957540903554657520A5C575770151F08480746115A08552F7A22
+      - yang_name: key-string/password6
+        sensitive: true
+        write_only: true
+        exclude_test: true
+        example: 00071A150754
+      - yang_name: key-string/cryptographic-algorithm
+        example: aes-256-cmac
+      - yang_name: lifetime/start-time/hour
+        optional: true
+        example: 11
+      - yang_name: lifetime/start-time/minute
+        optional: true
+        example: 52
+      - yang_name: lifetime/start-time/second
+        optional: true
+        example: 55
+      - yang_name: lifetime/start-time/month
+        optional: true
+        example: january
+      - yang_name: lifetime/start-time/day-of-month
+        optional: true
+        example: 21
+      - yang_name: lifetime/start-time/year
+        optional: true
+        example: 2023
+      - yang_name: lifetime/end-time/hour
+        optional: true
+        example: 11
+      - yang_name: lifetime/end-time/minute
+        optional: true
+        example: 52
+      - yang_name: lifetime/end-time/second
+        optional: true
+        example: 55
+      - yang_name: lifetime/end-time/month
+        optional: true
+        example: january
+      - yang_name: lifetime/end-time/day-of-month
+        optional: true
+        example: 21
+      - yang_name: lifetime/end-time/year
+        optional: true
+        example: 2026
+      - yang_name: lifetime/duration
+        exclude_test: true
+        example: 86400
+      - yang_name: lifetime/infinite
+        exclude_test: true
+        example: true
   - yang_name: keys/key
     tf_name: keys
     type: List
@@ -16,6 +83,13 @@ attributes:
         id: true
         example: 1
       - yang_name: key-string/password
+        sensitive: true
+        write_only: true
+        exclude_test: true
+        example: 00071A150754
+      - yang_name: key-string/password6
+        sensitive: true
+        write_only: true
         example: 00071A150754
       - yang_name: cryptographic-algorithm
         example: hmac-md5
@@ -28,16 +102,38 @@ attributes:
       - yang_name: accept-lifetime/start-time/second
         optional: true
         example: 55
-      - yang_name: accept-lifetime/start-time/day-of-month
-        optional: true
-        example: 21
       - yang_name: accept-lifetime/start-time/month
         optional: true
         example: january
+      - yang_name: accept-lifetime/start-time/day-of-month
+        optional: true
+        example: 21
       - yang_name: accept-lifetime/start-time/year
         optional: true
         example: 2023
+      - yang_name: accept-lifetime/end-time/hour
+        optional: true
+        example: 11
+      - yang_name: accept-lifetime/end-time/minute
+        optional: true
+        example: 52
+      - yang_name: accept-lifetime/end-time/second
+        optional: true
+        example: 55
+      - yang_name: accept-lifetime/end-time/month
+        optional: true
+        example: january
+      - yang_name: accept-lifetime/end-time/day-of-month
+        optional: true
+        example: 21
+      - yang_name: accept-lifetime/end-time/year
+        optional: true
+        example: 2026
+      - yang_name: accept-lifetime/duration
+        exclude_test: true
+        example: 86400
       - yang_name: accept-lifetime/infinite
+        exclude_test: true
         example: true
       - yang_name: send-lifetime/start-time/hour
         optional: true
@@ -48,14 +144,41 @@ attributes:
       - yang_name: send-lifetime/start-time/second
         optional: true
         example: 22
-      - yang_name: send-lifetime/start-time/day-of-month
-        optional: true
-        example: 15
       - yang_name: send-lifetime/start-time/month
         optional: true
         example: january
+      - yang_name: send-lifetime/start-time/day-of-month
+        optional: true
+        example: 15
       - yang_name: send-lifetime/start-time/year
         optional: true
         example: 2023
+      - yang_name: send-lifetime/end-time/hour
+        optional: true
+        example: 8
+      - yang_name: send-lifetime/end-time/minute
+        optional: true
+        example: 36
+      - yang_name: send-lifetime/end-time/second
+        optional: true
+        example: 22
+      - yang_name: send-lifetime/end-time/month
+        optional: true
+        example: january
+      - yang_name: send-lifetime/end-time/day-of-month
+        optional: true
+        example: 15
+      - yang_name: send-lifetime/end-time/year
+        optional: true
+        example: 2026
+      - yang_name: send-lifetime/duration
+        exclude_test: true
+        example: 86400
       - yang_name: send-lifetime/infinite
+        exclude_test: true
         example: true
+  - yang_name: timezone/local
+    example: true
+  - yang_name: timezone/gmt
+    exclude_test: true
+    example: true

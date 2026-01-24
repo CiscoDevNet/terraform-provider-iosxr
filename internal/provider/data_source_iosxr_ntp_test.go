@@ -20,9 +20,295 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+import (
+	"os"
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
 
 // End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
+
+func TestAccDataSourceIosxrNTP(t *testing.T) {
+	if os.Getenv("NCS") == "" && os.Getenv("XRV9K") == "" && os.Getenv("C8000") == "" {
+		t.Skip("skipping test, set environment variable NCS or XRV9K or C8000")
+	}
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "ipv4_precedence", "network"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "ipv6_dscp", "af11"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "access_group_ipv6_peer", "peer1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "access_group_ipv6_query_only", "query1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "access_group_ipv6_serve", "serve1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "access_group_ipv6_serve_only", "serve-only123"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "access_group_ipv4_peer", "peer1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "access_group_ipv4_query_only", "query1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "access_group_ipv4_serve", "serve1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "access_group_ipv4_serve_only", "serve-only123"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "access_group_vrfs.0.vrf_name", "ntp_vrf"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "access_group_vrfs.0.ipv6_peer", "peer1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "access_group_vrfs.0.ipv6_query_only", "query1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "access_group_vrfs.0.ipv6_serve", "serve1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "access_group_vrfs.0.ipv6_serve_only", "serve-only123"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "access_group_vrfs.0.ipv4_peer", "peer1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "access_group_vrfs.0.ipv4_query_only", "query1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "access_group_vrfs.0.ipv4_serve", "serve1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "access_group_vrfs.0.ipv4_serve_only", "serve-only123"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "authenticate", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "authentication_keys.0.key_number", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "cmac_authentication_keys.0.key_number", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "hmac_sha1_authentication_keys.0.key_number", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "hmac_sha2_authentication_keys.0.key_number", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "broadcastdelay", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "drift_aging_time", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "drift_file_disk0", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "drift_filename", "drift.txt"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "interfaces.0.interface_name", "Bundle-Ether1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "interfaces.0.broadcast_client", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "interfaces.0.broadcast_destination", "1.2.3.4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "interfaces.0.broadcast_key", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "interfaces.0.broadcast_version", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "max_associations", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "ipv4_peers_servers.0.address", "1.2.3.4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "ipv4_peers_servers.0.type", "server"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "ipv4_peers_servers.0.version", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "ipv4_peers_servers.0.key", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "ipv4_peers_servers.0.minpoll", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "ipv4_peers_servers.0.maxpoll", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "ipv4_peers_servers.0.prefer", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "ipv4_peers_servers.0.burst", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "ipv4_peers_servers.0.iburst", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "ipv4_peers_servers.0.source", "GigabitEthernet0/0/0/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "ipv6_peers_servers.0.address", "2001::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "ipv6_peers_servers.0.type", "peer"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "ipv6_peers_servers.0.version", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "ipv6_peers_servers.0.key", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "ipv6_peers_servers.0.minpoll", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "ipv6_peers_servers.0.maxpoll", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "ipv6_peers_servers.0.prefer", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "ipv6_peers_servers.0.burst", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "ipv6_peers_servers.0.iburst", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "ipv6_peers_servers.0.source", "GigabitEthernet0/0/0/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "ipv6_peers_servers.0.ipv6_address", "2001::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "hostname_peers_servers.0.fqdn_hostname", "ntp.cisco.com"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "hostname_peers_servers.0.type", "peer"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "hostname_peers_servers.0.version", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "hostname_peers_servers.0.key", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "hostname_peers_servers.0.minpoll", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "hostname_peers_servers.0.maxpoll", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "hostname_peers_servers.0.prefer", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "hostname_peers_servers.0.burst", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "hostname_peers_servers.0.iburst", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "hostname_peers_servers.0.source", "GigabitEthernet0/0/0/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.vrf_name", "vrf1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.ipv4_peers_servers.0.address", "1.2.3.4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.ipv4_peers_servers.0.type", "server"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.ipv4_peers_servers.0.version", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.ipv4_peers_servers.0.key", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.ipv4_peers_servers.0.minpoll", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.ipv4_peers_servers.0.maxpoll", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.ipv4_peers_servers.0.prefer", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.ipv4_peers_servers.0.burst", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.ipv4_peers_servers.0.iburst", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.ipv4_peers_servers.0.source", "GigabitEthernet0/0/0/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.ipv6_peers_servers.0.address", "2001::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.ipv6_peers_servers.0.type", "peer"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.ipv6_peers_servers.0.version", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.ipv6_peers_servers.0.key", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.ipv6_peers_servers.0.minpoll", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.ipv6_peers_servers.0.maxpoll", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.ipv6_peers_servers.0.prefer", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.ipv6_peers_servers.0.burst", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.ipv6_peers_servers.0.iburst", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.ipv6_peers_servers.0.source", "GigabitEthernet0/0/0/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.ipv6_peers_servers.0.ipv6_address", "2001::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.hostname_peers_servers.0.fqdn_hostname", "ntp.cisco.com"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.hostname_peers_servers.0.type", "peer"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.hostname_peers_servers.0.version", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.hostname_peers_servers.0.key", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.hostname_peers_servers.0.minpoll", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.hostname_peers_servers.0.maxpoll", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.hostname_peers_servers.0.prefer", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.hostname_peers_servers.0.burst", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.hostname_peers_servers.0.iburst", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "peers_servers_vrfs.0.hostname_peers_servers.0.source", "GigabitEthernet0/0/0/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "trusted_keys.0.key_number", "8"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "update_calendar", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "log_internal_sync", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "passive", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "source_interface_name", "BVI1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "source_vrfs.0.vrf_name", "source_vrf"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "source_vrfs.0.interface_name", "BVI1"))
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { testAccPreCheck(t) },
+		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccDataSourceIosxrNTPConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
+			},
+		},
+	})
+}
+
+// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 
 // End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
+
+func testAccDataSourceIosxrNTPConfig() string {
+	config := `resource "iosxr_ntp" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	ipv4_precedence = "network"` + "\n"
+	config += `	ipv6_dscp = "af11"` + "\n"
+	config += `	access_group_ipv6_peer = "peer1"` + "\n"
+	config += `	access_group_ipv6_query_only = "query1"` + "\n"
+	config += `	access_group_ipv6_serve = "serve1"` + "\n"
+	config += `	access_group_ipv6_serve_only = "serve-only123"` + "\n"
+	config += `	access_group_ipv4_peer = "peer1"` + "\n"
+	config += `	access_group_ipv4_query_only = "query1"` + "\n"
+	config += `	access_group_ipv4_serve = "serve1"` + "\n"
+	config += `	access_group_ipv4_serve_only = "serve-only123"` + "\n"
+	config += `	access_group_vrfs = [{` + "\n"
+	config += `		vrf_name = "ntp_vrf"` + "\n"
+	config += `		ipv6_peer = "peer1"` + "\n"
+	config += `		ipv6_query_only = "query1"` + "\n"
+	config += `		ipv6_serve = "serve1"` + "\n"
+	config += `		ipv6_serve_only = "serve-only123"` + "\n"
+	config += `		ipv4_peer = "peer1"` + "\n"
+	config += `		ipv4_query_only = "query1"` + "\n"
+	config += `		ipv4_serve = "serve1"` + "\n"
+	config += `		ipv4_serve_only = "serve-only123"` + "\n"
+	config += `	}]` + "\n"
+	config += `	authenticate = true` + "\n"
+	config += `	authentication_keys = [{` + "\n"
+	config += `		key_number = 10` + "\n"
+	config += `		md5_encrypted = "1212000E43"` + "\n"
+	config += `	}]` + "\n"
+	config += `	cmac_authentication_keys = [{` + "\n"
+	config += `		key_number = 2` + "\n"
+	config += `		cmac_encrypted = "135445415F59527D737D78626771475240"` + "\n"
+	config += `	}]` + "\n"
+	config += `	hmac_sha1_authentication_keys = [{` + "\n"
+	config += `		key_number = 3` + "\n"
+	config += `		hmac_sha1_encrypted = "101F5B4A5142445C545D7A7A767B676074"` + "\n"
+	config += `	}]` + "\n"
+	config += `	hmac_sha2_authentication_keys = [{` + "\n"
+	config += `		key_number = 4` + "\n"
+	config += `		hmac_sha2_encrypted = "091D1C5A4D5041455355547B79777C6663"` + "\n"
+	config += `	}]` + "\n"
+	config += `	broadcastdelay = 10` + "\n"
+	config += `	drift_aging_time = 10` + "\n"
+	config += `	drift_file_disk0 = true` + "\n"
+	config += `	drift_filename = "drift.txt"` + "\n"
+	config += `	interfaces = [{` + "\n"
+	config += `		interface_name = "Bundle-Ether1"` + "\n"
+	config += `		broadcast_client = true` + "\n"
+	config += `		broadcast_destination = "1.2.3.4"` + "\n"
+	config += `		broadcast_key = 1` + "\n"
+	config += `		broadcast_version = 2` + "\n"
+	config += `	}]` + "\n"
+	config += `	max_associations = 10` + "\n"
+	config += `	ipv4_peers_servers = [{` + "\n"
+	config += `		address = "1.2.3.4"` + "\n"
+	config += `		type = "server"` + "\n"
+	config += `		version = 2` + "\n"
+	config += `		key = 1` + "\n"
+	config += `		minpoll = 4` + "\n"
+	config += `		maxpoll = 5` + "\n"
+	config += `		prefer = true` + "\n"
+	config += `		burst = true` + "\n"
+	config += `		iburst = true` + "\n"
+	config += `		source = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	}]` + "\n"
+	config += `	ipv6_peers_servers = [{` + "\n"
+	config += `		address = "2001::1"` + "\n"
+	config += `		type = "peer"` + "\n"
+	config += `		version = 2` + "\n"
+	config += `		key = 1` + "\n"
+	config += `		minpoll = 4` + "\n"
+	config += `		maxpoll = 5` + "\n"
+	config += `		prefer = true` + "\n"
+	config += `		burst = true` + "\n"
+	config += `		iburst = true` + "\n"
+	config += `		source = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `		ipv6_address = "2001::1"` + "\n"
+	config += `	}]` + "\n"
+	config += `	hostname_peers_servers = [{` + "\n"
+	config += `		fqdn_hostname = "ntp.cisco.com"` + "\n"
+	config += `		type = "peer"` + "\n"
+	config += `		version = 2` + "\n"
+	config += `		key = 1` + "\n"
+	config += `		minpoll = 4` + "\n"
+	config += `		maxpoll = 5` + "\n"
+	config += `		prefer = true` + "\n"
+	config += `		burst = true` + "\n"
+	config += `		iburst = true` + "\n"
+	config += `		source = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	}]` + "\n"
+	config += `	peers_servers_vrfs = [{` + "\n"
+	config += `		vrf_name = "vrf1"` + "\n"
+	config += `		ipv4_peers_servers = [{` + "\n"
+	config += `			address = "1.2.3.4"` + "\n"
+	config += `			type = "server"` + "\n"
+	config += `			version = 2` + "\n"
+	config += `			key = 1` + "\n"
+	config += `			minpoll = 4` + "\n"
+	config += `			maxpoll = 5` + "\n"
+	config += `			prefer = true` + "\n"
+	config += `			burst = true` + "\n"
+	config += `			iburst = true` + "\n"
+	config += `			source = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `		}]` + "\n"
+	config += `		ipv6_peers_servers = [{` + "\n"
+	config += `			address = "2001::1"` + "\n"
+	config += `			type = "peer"` + "\n"
+	config += `			version = 2` + "\n"
+	config += `			key = 1` + "\n"
+	config += `			minpoll = 4` + "\n"
+	config += `			maxpoll = 5` + "\n"
+	config += `			prefer = true` + "\n"
+	config += `			burst = true` + "\n"
+	config += `			iburst = true` + "\n"
+	config += `			source = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `			ipv6_address = "2001::1"` + "\n"
+	config += `		}]` + "\n"
+	config += `		hostname_peers_servers = [{` + "\n"
+	config += `			fqdn_hostname = "ntp.cisco.com"` + "\n"
+	config += `			type = "peer"` + "\n"
+	config += `			version = 2` + "\n"
+	config += `			key = 1` + "\n"
+	config += `			minpoll = 4` + "\n"
+	config += `			maxpoll = 5` + "\n"
+	config += `			prefer = true` + "\n"
+	config += `			burst = true` + "\n"
+	config += `			iburst = true` + "\n"
+	config += `			source = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
+	config += `	trusted_keys = [{` + "\n"
+	config += `		key_number = 8` + "\n"
+	config += `	}]` + "\n"
+	config += `	update_calendar = true` + "\n"
+	config += `	log_internal_sync = true` + "\n"
+	config += `	passive = true` + "\n"
+	config += `	source_interface_name = "BVI1"` + "\n"
+	config += `	source_vrfs = [{` + "\n"
+	config += `		vrf_name = "source_vrf"` + "\n"
+	config += `		interface_name = "BVI1"` + "\n"
+	config += `	}]` + "\n"
+	config += `}` + "\n"
+
+	config += `
+		data "iosxr_ntp" "test" {
+			depends_on = [iosxr_ntp.test]
+		}
+	`
+	return config
+}
+
+// End of section. //template:end testAccDataSourceConfig

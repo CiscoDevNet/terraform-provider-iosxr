@@ -103,19 +103,97 @@ func (r *RouterHSRPInterfaceIPv6GroupV2Resource) Schema(ctx context.Context, req
 					int64planmodifier.RequiresReplace(),
 				},
 			},
-			"name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("MGO session name").String,
+			"addresses": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Global HSRP IPv6 address").String,
 				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.LengthBetween(1, 800),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set Global HSRP IPv6 address").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+							},
+						},
+					},
 				},
 			},
-			"mac_address": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Use specified mac address for the virtual router").String,
+			"address_link_local_ipv6_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("HSRP IPv6 linklocal address").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+				},
+			},
+			"address_link_local_autoconfig": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Autoconfigure the HSRP IPv6 linklocal address").String,
+				Optional:            true,
+			},
+			"address_link_local_autoconfig_legacy_compatible": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Autoconfigure for Legacy compatibility (with IOS/NX-OS)").String,
+				Optional:            true,
+			},
+			"priority": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Priority level").AddIntegerRangeDescription(0, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 255),
+				},
+			},
+			"preempt_delay": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Wait before preempting").AddIntegerRangeDescription(0, 3600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 3600),
+				},
+			},
+			"track_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure tracking").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"track_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure tracking").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+							},
+						},
+						"priority_decrement": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Priority decrement").AddIntegerRangeDescription(1, 255).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 255),
+							},
+						},
+					},
+				},
+			},
+			"track_objects": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Object tracking").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"object_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Object tracking").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 800),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"priority_decrement": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Priority decrement").AddIntegerRangeDescription(1, 255).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 255),
+							},
+						},
+					},
 				},
 			},
 			"timers_seconds": schema.Int64Attribute{
@@ -146,18 +224,19 @@ func (r *RouterHSRPInterfaceIPv6GroupV2Resource) Schema(ctx context.Context, req
 					int64validator.Between(100, 3000),
 				},
 			},
-			"preempt_delay": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Wait before preempting").AddIntegerRangeDescription(0, 3600).String,
+			"mac_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use specified mac address for the virtual router").String,
 				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(0, 3600),
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
 				},
 			},
-			"priority": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Priority level").AddIntegerRangeDescription(0, 255).String,
+			"name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("MGO session name").String,
 				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(0, 255),
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 800),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 			},
 			"bfd_fast_detect_peer_ipv6": schema.StringAttribute{
@@ -174,85 +253,6 @@ func (r *RouterHSRPInterfaceIPv6GroupV2Resource) Schema(ctx context.Context, req
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
-				},
-			},
-			"track_objects": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Object tracking").String,
-				Optional:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"object_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Object tracking").String,
-							Required:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 800),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
-							},
-						},
-						"priority_decrement": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Priority decrement").AddIntegerRangeDescription(1, 255).String,
-							Required:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(1, 255),
-							},
-						},
-					},
-				},
-			},
-			"track_interfaces": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure tracking").String,
-				Optional:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"track_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Configure tracking").String,
-							Required:            true,
-							Validators: []validator.String{
-								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
-							},
-						},
-						"priority_decrement": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Priority decrement").AddIntegerRangeDescription(1, 255).String,
-							Required:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(1, 255),
-							},
-						},
-					},
-				},
-			},
-			"addresses": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Global HSRP IPv6 address").String,
-				Optional:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"address": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Set Global HSRP IPv6 address").String,
-							Required:            true,
-							Validators: []validator.String{
-								stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
-								stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
-							},
-						},
-					},
-				},
-			},
-			"address_link_local_autoconfig": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Autoconfigure the HSRP IPv6 linklocal address").String,
-				Optional:            true,
-			},
-			"address_link_local_autoconfig_legacy_compatible": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Autoconfigure for Legacy compatibility (with IOS/NX-OS)").String,
-				Optional:            true,
-			},
-			"address_link_local_ipv6_address": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("HSRP IPv6 linklocal address").String,
-				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
-					stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
 				},
 			},
 		},

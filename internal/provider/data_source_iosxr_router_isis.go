@@ -27,6 +27,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/tidwall/gjson"
 
@@ -73,8 +74,40 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Process ID",
 				Required:            true,
 			},
-			"is_type": schema.StringAttribute{
-				MarkdownDescription: "Area type (level)",
+			"segment_routing_global_block_lower_bound": schema.Int64Attribute{
+				MarkdownDescription: "The lower bound of the SRGB",
+				Computed:            true,
+			},
+			"segment_routing_global_block_upper_bound": schema.Int64Attribute{
+				MarkdownDescription: "The upper bound SRGB",
+				Computed:            true,
+			},
+			"receive_application_flex_algo_delay_app_only": schema.BoolAttribute{
+				MarkdownDescription: "ASLA to take precedence",
+				Computed:            true,
+			},
+			"lsp_refresh_interval": schema.Int64Attribute{
+				MarkdownDescription: "Set LSP refresh interval",
+				Computed:            true,
+			},
+			"lsp_refresh_interval_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set LSP refresh interval for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Level",
+							Computed:            true,
+						},
+						"lsp_refresh_interval": schema.Int64Attribute{
+							MarkdownDescription: "Set LSP refresh interval",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"oor_set_overload_bit_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable setting of overload-bit when OOR. ISIS will continue to participate in forwarding but its decision will be based on an incomplete link-state database. It may lead to routing loops and other forwarding failures. NOT recommended.",
 				Computed:            true,
 			},
 			"set_overload_bit": schema.BoolAttribute{
@@ -125,8 +158,36 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 					},
 				},
 			},
+			"lsp_mtu": schema.Int64Attribute{
+				MarkdownDescription: "Set maximum LSP size",
+				Computed:            true,
+			},
+			"lsp_mtu_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set LSP size for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Level",
+							Computed:            true,
+						},
+						"lsp_mtu": schema.Int64Attribute{
+							MarkdownDescription: "Set maximum LSP size",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"extended_admin_group": schema.StringAttribute{
+				MarkdownDescription: "Code-point for Extended Administrative Group subTLV",
+				Computed:            true,
+			},
 			"nsr": schema.BoolAttribute{
 				MarkdownDescription: "Enable NSR",
+				Computed:            true,
+			},
+			"nsr_restart_time": schema.Int64Attribute{
+				MarkdownDescription: "Maximum time allowed to resync following NSR",
 				Computed:            true,
 			},
 			"nsf_cisco": schema.BoolAttribute{
@@ -149,9 +210,25 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "# of times T1 can expire waiting for the restart ACK",
 				Computed:            true,
 			},
-			"log_adjacency_changes": schema.BoolAttribute{
-				MarkdownDescription: "Enable logging adjacency state changes",
+			"lsp_check_interval": schema.Int64Attribute{
+				MarkdownDescription: "Set LSP checksum check interval",
 				Computed:            true,
+			},
+			"lsp_check_interval_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set LSP check interval for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Level",
+							Computed:            true,
+						},
+						"lsp_check_interval": schema.Int64Attribute{
+							MarkdownDescription: "LSP checksum check interval time in seconds",
+							Computed:            true,
+						},
+					},
+				},
 			},
 			"lsp_gen_interval_maximum_wait": schema.Int64Attribute{
 				MarkdownDescription: "Maximum delay before generating an LSP [5000]",
@@ -165,19 +242,124 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Secondary delay before generating an LSP [200]",
 				Computed:            true,
 			},
-			"lsp_refresh_interval": schema.Int64Attribute{
-				MarkdownDescription: "Set LSP refresh interval",
+			"lsp_gen_interval_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set LSP generation interval for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Level",
+							Computed:            true,
+						},
+						"initial_wait": schema.Int64Attribute{
+							MarkdownDescription: "Initial delay before generating an LSP [50]",
+							Computed:            true,
+						},
+						"secondary_wait": schema.Int64Attribute{
+							MarkdownDescription: "Secondary delay before generating an LSP [200]",
+							Computed:            true,
+						},
+						"maximum_wait": schema.Int64Attribute{
+							MarkdownDescription: "Maximum delay before generating an LSP [5000]",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"adjacency_stagger": schema.BoolAttribute{
+				MarkdownDescription: "Stagger ISIS adjacency bring up",
 				Computed:            true,
 			},
-			"max_lsp_lifetime": schema.Int64Attribute{
-				MarkdownDescription: "Set maximum LSP lifetime",
+			"adjacency_stagger_initial_neighbors": schema.Int64Attribute{
+				MarkdownDescription: "Initial number of neighbors to bring up (default 2)",
 				Computed:            true,
+			},
+			"adjacency_stagger_max_neighbors": schema.Int64Attribute{
+				MarkdownDescription: "Maximum simultaneous neighbors to bring up (default 64)",
+				Computed:            true,
+			},
+			"hostname_dynamic_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable dynamic hostname resolution",
+				Computed:            true,
+			},
+			"is_type": schema.StringAttribute{
+				MarkdownDescription: "Area type (level)",
+				Computed:            true,
+			},
+			"multi_part_tlv_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable advertising multi-part TLVs",
+				Computed:            true,
+			},
+			"multi_part_tlv_disable_neighbor": schema.BoolAttribute{
+				MarkdownDescription: "Disable advertisement of multi-part neighbor TLVs",
+				Computed:            true,
+			},
+			"multi_part_tlv_disable_prefix_tlvs": schema.BoolAttribute{
+				MarkdownDescription: "Disable advertisement of multi-part prefix TLVs",
+				Computed:            true,
+			},
+			"multi_part_tlv_disable_router_capability": schema.BoolAttribute{
+				MarkdownDescription: "Disable advertisement of multi-part router capability TLVs",
+				Computed:            true,
+			},
+			"multi_part_tlv_disable_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Disable advertising multi-part TLVs for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Level",
+							Computed:            true,
+						},
+						"neighbor": schema.BoolAttribute{
+							MarkdownDescription: "Disable advertisement of multi-part neighbor TLVs",
+							Computed:            true,
+						},
+						"prefix_tlvs": schema.BoolAttribute{
+							MarkdownDescription: "Disable advertisement of multi-part prefix TLVs",
+							Computed:            true,
+						},
+						"router_capability": schema.BoolAttribute{
+							MarkdownDescription: "Disable advertisement of multi-part router capability TLVs",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"log_adjacency_changes": schema.BoolAttribute{
+				MarkdownDescription: "Enable logging adjacency state changes",
+				Computed:            true,
+			},
+			"log_pdu_drops": schema.BoolAttribute{
+				MarkdownDescription: "Enable logging PDU drops",
+				Computed:            true,
+			},
+			"log_format_brief": schema.BoolAttribute{
+				MarkdownDescription: "Don't add additional information to ISIS log messages",
+				Computed:            true,
+			},
+			"log_sizes": schema.ListNestedAttribute{
+				MarkdownDescription: "Set size of the log buffer",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"log_type": schema.StringAttribute{
+							MarkdownDescription: "Log type",
+							Computed:            true,
+						},
+						"size_number": schema.Int64Attribute{
+							MarkdownDescription: "Maximum number of log entries",
+							Computed:            true,
+						},
+					},
+				},
 			},
 			"lsp_password_accept_encrypted": schema.StringAttribute{
 				MarkdownDescription: "Specifies a password will follow",
 				Computed:            true,
+				Sensitive:           true,
 			},
-			"lsp_password_levels": schema.ListNestedAttribute{
+			"lsp_password_accept_levels": schema.ListNestedAttribute{
 				MarkdownDescription: "Set lsp-password for one level only",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -189,6 +371,7 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 						"encrypted": schema.StringAttribute{
 							MarkdownDescription: "Specifies a password will follow",
 							Computed:            true,
+							Sensitive:           true,
 						},
 					},
 				},
@@ -196,6 +379,7 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 			"lsp_password_text_encrypted": schema.StringAttribute{
 				MarkdownDescription: "Specifies a password will follow",
 				Computed:            true,
+				Sensitive:           true,
 			},
 			"lsp_password_text_send_only": schema.BoolAttribute{
 				MarkdownDescription: "specify SNP packets authentication mode",
@@ -212,6 +396,7 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 			"lsp_password_hmac_md5_encrypted": schema.StringAttribute{
 				MarkdownDescription: "Specifies a password will follow",
 				Computed:            true,
+				Sensitive:           true,
 			},
 			"lsp_password_hmac_md5_send_only": schema.BoolAttribute{
 				MarkdownDescription: "specify SNP packets authentication mode",
@@ -241,8 +426,210 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Enable purge originator identification",
 				Computed:            true,
 			},
+			"lsp_password_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Configure the area password",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Level",
+							Computed:            true,
+						},
+						"text_encrypted": schema.StringAttribute{
+							MarkdownDescription: "Specifies a password will follow",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"text_send_only": schema.BoolAttribute{
+							MarkdownDescription: "specify SNP packets authentication mode",
+							Computed:            true,
+						},
+						"text_snp_send_only": schema.BoolAttribute{
+							MarkdownDescription: "Authenticate outgoing SNPs, no check on incoming SNPs",
+							Computed:            true,
+						},
+						"text_enable_poi": schema.BoolAttribute{
+							MarkdownDescription: "Enable purge originator identification",
+							Computed:            true,
+						},
+						"hmac_md5_encrypted": schema.StringAttribute{
+							MarkdownDescription: "Specifies a password will follow",
+							Computed:            true,
+							Sensitive:           true,
+						},
+						"hmac_md5_send_only": schema.BoolAttribute{
+							MarkdownDescription: "specify SNP packets authentication mode",
+							Computed:            true,
+						},
+						"hmac_md5_snp_send_only": schema.BoolAttribute{
+							MarkdownDescription: "Authenticate outgoing SNPs, no check on incoming SNPs",
+							Computed:            true,
+						},
+						"hmac_md5_enable_poi": schema.BoolAttribute{
+							MarkdownDescription: "Enable purge originator identification",
+							Computed:            true,
+						},
+						"keychain_name": schema.StringAttribute{
+							MarkdownDescription: "Specifies a Key Chain name will follow",
+							Computed:            true,
+						},
+						"keychain_send_only": schema.BoolAttribute{
+							MarkdownDescription: "specify SNP packets authentication mode",
+							Computed:            true,
+						},
+						"keychain_snp_send_only": schema.BoolAttribute{
+							MarkdownDescription: "Authenticate outgoing SNPs, no check on incoming SNPs",
+							Computed:            true,
+						},
+						"keychain_enable_poi": schema.BoolAttribute{
+							MarkdownDescription: "Enable purge originator identification",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"authentication_check_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable authentication check",
+				Computed:            true,
+			},
+			"iid_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable instance-id",
+				Computed:            true,
+			},
+			"mpls_ldp_sync": schema.BoolAttribute{
+				MarkdownDescription: "Configure LDP ISIS synchronization",
+				Computed:            true,
+			},
+			"mpls_ldp_sync_level": schema.Int64Attribute{
+				MarkdownDescription: "Set LDP synchronization for one level only",
+				Computed:            true,
+			},
+			"protocol_shutdown": schema.BoolAttribute{
+				MarkdownDescription: "Protocol Shutdown. ISIS will set overload-bit and isolate itself by not forming adjacencies.",
+				Computed:            true,
+			},
+			"min_lsp_arrival_initial_wait": schema.Int64Attribute{
+				MarkdownDescription: "Initial delay expected to take since last LSP [50]",
+				Computed:            true,
+			},
+			"min_lsp_arrival_secondary_wait": schema.Int64Attribute{
+				MarkdownDescription: "Secondary delay expected to take since last LSP [200]",
+				Computed:            true,
+			},
+			"min_lsp_arrival_maximum_wait": schema.Int64Attribute{
+				MarkdownDescription: "Maximum delay expected to take since last LSP [5000]",
+				Computed:            true,
+			},
+			"min_lsp_arrival_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set LSP arrival time for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Level",
+							Computed:            true,
+						},
+						"initial_wait": schema.Int64Attribute{
+							MarkdownDescription: "Initial delay expected to take since last LSP [50]",
+							Computed:            true,
+						},
+						"secondary_wait": schema.Int64Attribute{
+							MarkdownDescription: "Secondary delay expected to take since last LSP [200]",
+							Computed:            true,
+						},
+						"maximum_wait": schema.Int64Attribute{
+							MarkdownDescription: "Maximum delay expected to take since last LSP [5000]",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"max_metric": schema.BoolAttribute{
+				MarkdownDescription: "Signal other routers to use us as transit option of last resort",
+				Computed:            true,
+			},
+			"max_metric_on_startup_advertise": schema.Int64Attribute{
+				MarkdownDescription: "Time in seconds to advertise maximum metric after reboot",
+				Computed:            true,
+			},
+			"max_metric_on_startup_wait_for_bgp": schema.BoolAttribute{
+				MarkdownDescription: "Set maximum metric on startup until BGP signals convergence, or timeout",
+				Computed:            true,
+			},
+			"max_metric_external": schema.BoolAttribute{
+				MarkdownDescription: "Override metric of prefixes learned from another protocol with maximum metric",
+				Computed:            true,
+			},
+			"max_metric_interlevel": schema.BoolAttribute{
+				MarkdownDescription: "Override metric of prefixes learned from another ISIS level with maximum metric",
+				Computed:            true,
+			},
+			"max_metric_default_route": schema.BoolAttribute{
+				MarkdownDescription: "Override default route metric with maximum metric",
+				Computed:            true,
+			},
+			"max_metric_srv6_locator": schema.BoolAttribute{
+				MarkdownDescription: "Override segment routing ipv6 locator metric with maximum metric",
+				Computed:            true,
+			},
+			"max_metric_te": schema.BoolAttribute{
+				MarkdownDescription: "Apply max-metric to TE metric",
+				Computed:            true,
+			},
+			"max_metric_delay": schema.BoolAttribute{
+				MarkdownDescription: "Apply max-metric to delay metric",
+				Computed:            true,
+			},
+			"max_metric_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set maximum metric for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Level",
+							Computed:            true,
+						},
+						"on_startup_advertise": schema.Int64Attribute{
+							MarkdownDescription: "Time in seconds to advertise maximum metric after reboot",
+							Computed:            true,
+						},
+						"on_startup_wait_for_bgp": schema.BoolAttribute{
+							MarkdownDescription: "Set maximum metric on startup until BGP signals convergence, or timeout",
+							Computed:            true,
+						},
+						"external": schema.BoolAttribute{
+							MarkdownDescription: "Override metric of prefixes learned from another protocol with maximum metric",
+							Computed:            true,
+						},
+						"interlevel": schema.BoolAttribute{
+							MarkdownDescription: "Override metric of prefixes learned from another ISIS level with maximum metric",
+							Computed:            true,
+						},
+						"default_route": schema.BoolAttribute{
+							MarkdownDescription: "Override default route metric with maximum metric",
+							Computed:            true,
+						},
+						"srv6_locator": schema.BoolAttribute{
+							MarkdownDescription: "Override segment routing ipv6 locator metric with maximum metric",
+							Computed:            true,
+						},
+						"te": schema.BoolAttribute{
+							MarkdownDescription: "Apply max-metric to TE metric",
+							Computed:            true,
+						},
+						"delay": schema.BoolAttribute{
+							MarkdownDescription: "Apply max-metric to delay metric",
+							Computed:            true,
+						},
+					},
+				},
+			},
 			"distribute_link_state": schema.BoolAttribute{
 				MarkdownDescription: "Distribute the link-state database to external services",
+				Computed:            true,
+			},
+			"distribute_link_state_level": schema.Int64Attribute{
+				MarkdownDescription: "Set distribution for one level only",
 				Computed:            true,
 			},
 			"distribute_link_state_instance_id": schema.Int64Attribute{
@@ -253,45 +640,61 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Set throttle update in seconds",
 				Computed:            true,
 			},
-			"distribute_link_state_level": schema.Int64Attribute{
-				MarkdownDescription: "Set distribution for one level only",
+			"distribute_link_state_exclude_interarea": schema.BoolAttribute{
+				MarkdownDescription: "Don't distribute ISIS inter-area prefixes",
 				Computed:            true,
 			},
-			"affinity_maps": schema.ListNestedAttribute{
-				MarkdownDescription: "Affinity map configuration",
+			"distribute_link_state_exclude_external": schema.BoolAttribute{
+				MarkdownDescription: "Don't distribute ISIS external prefixes",
+				Computed:            true,
+			},
+			"distribute_link_state_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Distribute prefixes based on a route policy",
+				Computed:            true,
+			},
+			"max_lsp_lifetime": schema.Int64Attribute{
+				MarkdownDescription: "Set maximum LSP lifetime",
+				Computed:            true,
+			},
+			"max_lsp_lifetime_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set LSP regeneration interval for one level only",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: "Affinity attribute name",
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Level",
 							Computed:            true,
 						},
-						"bit_position": schema.Int64Attribute{
-							MarkdownDescription: "Bit position for affinity attribute value",
+						"max_lsp_lifetime": schema.Int64Attribute{
+							MarkdownDescription: "Set maximum LSP lifetime",
 							Computed:            true,
 						},
 					},
 				},
 			},
-			"flex_algos": schema.ListNestedAttribute{
-				MarkdownDescription: "Flex Algorithm definition",
+			"instance_id": schema.Int64Attribute{
+				MarkdownDescription: "ISIS-MI instance id",
 				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"number": schema.Int64Attribute{
-							MarkdownDescription: "Algorithm number",
-							Computed:            true,
-						},
-						"advertise_definition": schema.BoolAttribute{
-							MarkdownDescription: "Advertise the Flex-Algo Definition",
-							Computed:            true,
-						},
-						"metric_type": schema.StringAttribute{
-							MarkdownDescription: "Metric-type used by flex-algo calculation",
-							Computed:            true,
-						},
-					},
-				},
+			},
+			"hello_padding": schema.StringAttribute{
+				MarkdownDescription: "Add padding to IS-IS hello packets",
+				Computed:            true,
+			},
+			"lsp_fast_flooding": schema.BoolAttribute{
+				MarkdownDescription: "Enable and enter LSP fast flooding submode",
+				Computed:            true,
+			},
+			"lsp_fast_flooding_max_lsp_tx": schema.Int64Attribute{
+				MarkdownDescription: "Set maximum LSP transmit rate",
+				Computed:            true,
+			},
+			"lsp_fast_flooding_remote_psnp_delay": schema.Int64Attribute{
+				MarkdownDescription: "Set remote PSNP delay",
+				Computed:            true,
+			},
+			"psnp_interval": schema.Int64Attribute{
+				MarkdownDescription: "Longest wait to send PSNP",
+				Computed:            true,
 			},
 			"nets": schema.ListNestedAttribute{
 				MarkdownDescription: "A Network Entity Title (NET) for this process",
@@ -305,46 +708,193 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 					},
 				},
 			},
-			"interfaces": schema.ListNestedAttribute{
-				MarkdownDescription: "Enter the IS-IS interface configuration submode",
+			"affinity_maps": schema.ListNestedAttribute{
+				MarkdownDescription: "Affinity map configuration",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"interface_name": schema.StringAttribute{
-							MarkdownDescription: "Interface to configure",
+						"affinity_name": schema.StringAttribute{
+							MarkdownDescription: "Affinity attribute name",
 							Computed:            true,
 						},
-						"circuit_type": schema.StringAttribute{
-							MarkdownDescription: "Configure circuit type for interface",
+						"bit_position": schema.Int64Attribute{
+							MarkdownDescription: "Bit position for affinity attribute value",
 							Computed:            true,
 						},
-						"hello_padding": schema.StringAttribute{
-							MarkdownDescription: "Add padding to IS-IS hello packets",
+					},
+				},
+			},
+			"ignore_lsp_errors_disable": schema.BoolAttribute{
+				MarkdownDescription: "Purge LSPs with failed checksums",
+				Computed:            true,
+			},
+			"purge_transmit_strict": schema.BoolAttribute{
+				MarkdownDescription: "Only authentication TLV is allowed",
+				Computed:            true,
+			},
+			"purge_transmit_strict_strict_value": schema.StringAttribute{
+				MarkdownDescription: "Only authentication TLV is allowed",
+				Computed:            true,
+			},
+			"srlg_admin_weight": schema.Int64Attribute{
+				MarkdownDescription: "Administrative weight for all SRLGs, default is 1000",
+				Computed:            true,
+			},
+			"srlg_names": schema.ListNestedAttribute{
+				MarkdownDescription: "SRLG Name",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"srlg_name": schema.StringAttribute{
+							MarkdownDescription: "SRLG Name",
 							Computed:            true,
 						},
-						"priority_levels": schema.ListNestedAttribute{
-							MarkdownDescription: "Set priority for one level only",
+						"admin_weight": schema.Int64Attribute{
+							MarkdownDescription: "Administrative weight: default inherited from the global admin-weight",
+							Computed:            true,
+						},
+						"static_ipv4_addresses": schema.ListNestedAttribute{
+							MarkdownDescription: "IPv4 address",
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"level_number": schema.Int64Attribute{
-										MarkdownDescription: "Set priority for this level only",
+									"local_end_point": schema.StringAttribute{
+										MarkdownDescription: "IPv4 address of local end-point of the link",
 										Computed:            true,
 									},
-									"priority": schema.Int64Attribute{
-										MarkdownDescription: "Set priority for Designated Router election",
+									"remote_end_point": schema.StringAttribute{
+										MarkdownDescription: "IPv4 address of remote end-point of the link",
 										Computed:            true,
 									},
 								},
 							},
 						},
-						"point_to_point": schema.BoolAttribute{
-							MarkdownDescription: "Treat active LAN interface as point-to-point",
+					},
+				},
+			},
+			"flex_algos": schema.ListNestedAttribute{
+				MarkdownDescription: "Flex Algorithm definition",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"number": schema.Int64Attribute{
+							MarkdownDescription: "Algorithm number",
 							Computed:            true,
 						},
-						"state": schema.StringAttribute{
-							MarkdownDescription: "Do not establish adjacencies over this interface",
+						"minimum_bandwidth": schema.Int64Attribute{
+							MarkdownDescription: "Specify minimum link bandwidth",
 							Computed:            true,
+						},
+						"maximum_delay": schema.Int64Attribute{
+							MarkdownDescription: "Specify maximum link delay",
+							Computed:            true,
+						},
+						"priority": schema.Int64Attribute{
+							MarkdownDescription: "Flex-Algo definition priority",
+							Computed:            true,
+						},
+						"metric_type": schema.StringAttribute{
+							MarkdownDescription: "Metric-type used by flex-algo calculation",
+							Computed:            true,
+						},
+						"advertise_definition": schema.BoolAttribute{
+							MarkdownDescription: "Advertise the Flex-Algo Definition",
+							Computed:            true,
+						},
+						"prefix_metric": schema.BoolAttribute{
+							MarkdownDescription: "Use Flex-Algo Prefix Metric",
+							Computed:            true,
+						},
+						"auto_cost_reference_bandwidth": schema.Int64Attribute{
+							MarkdownDescription: "The reference bandwidth value (kbits/sec)",
+							Computed:            true,
+						},
+						"auto_cost_reference_bandwidth_granularity": schema.Int64Attribute{
+							MarkdownDescription: "Granularity",
+							Computed:            true,
+						},
+						"auto_cost_reference_group_mode": schema.BoolAttribute{
+							MarkdownDescription: "Enable Group mode for bandwidth metric computation",
+							Computed:            true,
+						},
+						"affinity_exclude_any": schema.ListAttribute{
+							MarkdownDescription: "Affinity to exclude",
+							ElementType:         types.StringType,
+							Computed:            true,
+						},
+						"affinity_include_any": schema.ListAttribute{
+							MarkdownDescription: "Affinity to include",
+							ElementType:         types.StringType,
+							Computed:            true,
+						},
+						"affinity_include_all": schema.ListAttribute{
+							MarkdownDescription: "Affinity to include",
+							ElementType:         types.StringType,
+							Computed:            true,
+						},
+						"affinity_reverse_exclude_any": schema.ListAttribute{
+							MarkdownDescription: "Reverse affinity to exclude",
+							ElementType:         types.StringType,
+							Computed:            true,
+						},
+						"affinity_reverse_include_any": schema.ListAttribute{
+							MarkdownDescription: "Reverse affinity to include",
+							ElementType:         types.StringType,
+							Computed:            true,
+						},
+						"affinity_reverse_include_all": schema.ListAttribute{
+							MarkdownDescription: "Reverse affinity to include",
+							ElementType:         types.StringType,
+							Computed:            true,
+						},
+						"srlg_exclude_any": schema.ListAttribute{
+							MarkdownDescription: "SRLG to exclude",
+							ElementType:         types.StringType,
+							Computed:            true,
+						},
+						"fast_reroute_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable Fast ReRoute for Flex-Algo",
+							Computed:            true,
+						},
+						"microloop_avoidance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable Microloop Avoidance for Flex-Algo",
+							Computed:            true,
+						},
+						"data_plane_segment_routing": schema.BoolAttribute{
+							MarkdownDescription: "Segment Routing",
+							Computed:            true,
+						},
+						"data_plane_ip": schema.BoolAttribute{
+							MarkdownDescription: "IP",
+							Computed:            true,
+						},
+						"ucmp_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable Unequal Cost Load Balancing (UCMP) for Flex-Algo",
+							Computed:            true,
+						},
+						"address_family": schema.ListNestedAttribute{
+							MarkdownDescription: "Enter the IS-IS Flex-Algo address-family configuration submode",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"af_name": schema.StringAttribute{
+										MarkdownDescription: "af-name",
+										Computed:            true,
+									},
+									"saf_name": schema.StringAttribute{
+										MarkdownDescription: "saf-name",
+										Computed:            true,
+									},
+									"maximum_paths": schema.Int64Attribute{
+										MarkdownDescription: "Number of paths",
+										Computed:            true,
+									},
+									"maximum_paths_route_policy": schema.StringAttribute{
+										MarkdownDescription: "Filter routes based on a route policy",
+										Computed:            true,
+									},
+								},
+							},
 						},
 					},
 				},

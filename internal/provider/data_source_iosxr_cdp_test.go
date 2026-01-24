@@ -20,9 +20,63 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+import (
+	"os"
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
 
 // End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
+
+func TestAccDataSourceIosxrCDP(t *testing.T) {
+	if os.Getenv("XRV9K") == "" && os.Getenv("XRD") == "" && os.Getenv("NCS") == "" {
+		t.Skip("skipping test, set environment variable XRV9K or XRD or NCS")
+	}
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_cdp.test", "enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_cdp.test", "holdtime", "12"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_cdp.test", "timer", "34"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_cdp.test", "advertise_v1", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_cdp.test", "log_adjacency_changes", "true"))
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { testAccPreCheck(t) },
+		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccDataSourceIosxrCDPConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
+			},
+		},
+	})
+}
+
+// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 
 // End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
+
+func testAccDataSourceIosxrCDPConfig() string {
+	config := `resource "iosxr_cdp" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	enable = true` + "\n"
+	config += `	holdtime = 12` + "\n"
+	config += `	timer = 34` + "\n"
+	config += `	advertise_v1 = true` + "\n"
+	config += `	log_adjacency_changes = true` + "\n"
+	config += `}` + "\n"
+
+	config += `
+		data "iosxr_cdp" "test" {
+			depends_on = [iosxr_cdp.test]
+		}
+	`
+	return config
+}
+
+// End of section. //template:end testAccDataSourceConfig

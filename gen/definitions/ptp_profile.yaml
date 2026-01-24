@@ -1,0 +1,297 @@
+---
+name: PTP Profile
+path: Cisco-IOS-XR-um-ptp-cfg:/ptp/profiles/profile[profile-name=%s]
+doc_category: Timing
+test_tags: [NCS, C8000]
+attributes:
+  - yang_name: profile-name
+    example: "Profile-1"
+  - yang_name: port/state/subordinate-only
+    tf_name: port_state_slave_only
+    example: true
+    exclude_test: true
+  - yang_name: port/state/primary-only
+    tf_name: port_state_master_only
+    example: true
+  - yang_name: port/state/any
+    exclude_test: true
+    example: true
+  # source/
+  - yang_name: source/ipv4/address
+    tf_name: source_ipv4_address
+    example: "10.1.1.1"
+  - yang_name: source/ipv6/address
+    tf_name: source_ipv6_address
+    example: "2001:db8::1"
+  # multicast/
+  - yang_name: multicast
+    example: true
+  - yang_name: multicast/mixed
+    delete_parent: true
+    example: true
+  - yang_name: multicast/disable
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: multicast/target-address/ethernet/mac-address-01-1b-19-00-00-00
+    delete_parent: true
+    example: true
+  - yang_name: multicast/target-address/ethernet/mac-address-01-80-c2-00-00-0e
+    delete_parent: true
+    exclude_test: true
+    example: true
+  # transport/
+  - yang_name: transport/ipv4
+    exclude_test: true
+    example: true
+  - yang_name: transport/ipv6
+    exclude_test: true
+    example: true
+  - yang_name: transport/ethernet
+    example: true
+  # clock/
+  - yang_name: clock/operation/one-step
+    example: true
+  - yang_name: clock/operation/two-step
+    exclude_test: true
+    example: true
+  # announce/
+  - yang_name: announce/interval
+    example: 2
+    exclude_test: true
+  - yang_name: announce/frequency
+    exclude_test: true
+    example: 4
+  - yang_name: announce/timeout
+    example: 5
+  - yang_name: announce/grant-duration
+    example: 300
+  # sync/
+  - yang_name: sync/interval
+    example: 2
+  - yang_name: sync/frequency
+    exclude_test: true
+    example: 4
+  - yang_name: sync/grant-duration
+    example: 300
+  - yang_name: sync/timeout
+    example: 3000
+  # delay-request/
+  - yang_name: delay-request/interval
+    example: 2
+  - yang_name: delay-request/frequency
+    exclude_test: true
+    example: 4
+  - yang_name: cos
+    example: 6
+  - yang_name: event-cos
+    tf_name: cos_event
+    example: 6
+  - yang_name: general-cos
+    tf_name: cos_general
+    example: 6
+  - yang_name: dscp
+    example: 46
+  - yang_name: event-dscp
+    tf_name: dscp_event
+    example: 46
+  - yang_name: general-dscp
+    tf_name: dscp_general
+    example: 46
+  - yang_name: ipv4-ttl
+    example: 10
+  - yang_name: ipv6-hop-limit
+    example: 10
+  - yang_name: delay-asymmetry
+    tf_name: delay_asymmetry_value
+    example: 1000
+  - yang_name: nanoseconds
+    tf_name: delay_asymmetry_unit_nanoseconds
+    exclude_test: true
+    example: true
+  - yang_name: microseconds
+    tf_name: delay_asymmetry_unit_microseconds
+    example: true
+  - yang_name: milliseconds
+    tf_name: delay_asymmetry_unit_milliseconds
+    exclude_test: true
+    example: true
+  # delay-response/
+  - yang_name: delay-response/grant-duration
+    example: 300
+  - yang_name: delay-response/timeout
+    example: 3000
+  # unicast-grant/
+  - yang_name: unicast-grant/invalid-request/reduce
+    example: true
+  - yang_name: unicast-grant/invalid-request/deny
+    exclude_test: true
+    example: true
+  # subordinate/
+  - yang_name: subordinate/ipv4s/ipv4-non-negotiated
+    tf_name: slave_ipv4s
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "10.2.2.2"
+      - yang_name: non-negotiated
+        example: true
+  - yang_name: subordinate/ipv6s/ipv6
+    tf_name: slave_ipv6s
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8::2"
+      - yang_name: non-negotiated
+        example: true
+  - yang_name: subordinate/ethernets/ethernet
+    tf_name: slave_ethernets
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "00:11:22:33:44:55"
+      - yang_name: non-negotiated
+        example: true
+  # primary/
+  - yang_name: primary/ipv4s/ipv4
+    tf_name: master_ipv4s
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "10.3.3.3"
+      - yang_name: priority
+        example: 100
+      - yang_name: clock-class
+        example: 6
+      - yang_name: multicast
+        example: true
+      - yang_name: multicast/mixed
+        delete_parent: true
+        example: true
+      - yang_name: non-negotiated
+        example: true
+      - yang_name: delay-asymmetry
+        example: 50
+      - yang_name: nanoseconds
+        exclude_test: true
+        example: true
+      - yang_name: microseconds
+        example: true
+      - yang_name: milliseconds
+        exclude_test: true
+        example: true
+  - yang_name: primary/ipv6s/ipv6
+    tf_name: master_ipv6s
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8::3"
+      - yang_name: priority
+        example: 100
+      - yang_name: clock-class
+        example: 6
+      - yang_name: multicast
+        example: true
+      - yang_name: multicast/mixed
+        delete_parent: true
+        example: true
+      - yang_name: non-negotiated
+        example: true
+      - yang_name: delay-asymmetry
+        example: 50
+      - yang_name: nanoseconds
+        exclude_test: true
+        example: true
+      - yang_name: microseconds
+        example: true
+      - yang_name: milliseconds
+        exclude_test: true
+        example: true
+  - yang_name: primary/ethernets/ethernet
+    tf_name: master_ethernets
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "aa:bb:cc:dd:ee:f4"
+      - yang_name: priority
+        example: 100
+      - yang_name: clock-class
+        example: 6
+      - yang_name: multicast
+        example: true
+      - yang_name: multicast/mixed
+        delete_parent: true
+        example: true
+      - yang_name: non-negotiated
+        example: true
+      - yang_name: delay-asymmetry
+        example: 50
+      - yang_name: nanoseconds
+        exclude_test: true
+        example: true
+      - yang_name: microseconds
+        example: true
+      - yang_name: milliseconds
+        exclude_test: true
+        example: true
+  # interop/
+  - yang_name: interop/profile/default
+    exclude_test: true
+    example: true
+  - yang_name: interop/profile/g-8265-1
+    exclude_test: true
+    example: true
+  - yang_name: interop/profile/g-8275-1
+    exclude_test: true
+    example: true
+  - yang_name: interop/profile/g-8275-2
+    example: true
+  - yang_name: interop/domain
+    example: 24
+  - yang_name: interop/egress-conversion/priority1
+    example: 128
+  - yang_name: interop/egress-conversion/priority2
+    example: 128
+  - yang_name: interop/egress-conversion/clock-accuracy
+    example: 33
+  - yang_name: interop/egress-conversion/offset-scaled-log-variance
+    example: 5
+  - yang_name: interop/egress-conversion/clock-class/default
+    example: 6
+  - yang_name: interop/egress-conversion/clock-class/mappings/mapping
+    tf_name: interop_egress_conversion_clock_class_mappings
+    type: List
+    attributes:
+      - yang_name: clock-class-to-map-from
+        id: true
+        example: 6
+      - yang_name: clock-class-to-map-to
+        example: 13
+  - yang_name: interop/ingress-conversion/priority1
+    example: 128
+  - yang_name: interop/ingress-conversion/priority2
+    example: 128
+  - yang_name: interop/ingress-conversion/clock-accuracy
+    example: 33
+  - yang_name: interop/ingress-conversion/offset-scaled-log-variance
+    example: 5
+  - yang_name: interop/ingress-conversion/clock-class/default
+    example: 6
+  - yang_name: interop/ingress-conversion/clock-class/mappings/mapping
+    tf_name: interop_ingress_conversion_clock_class_mappings
+    type: List
+    attributes:
+      - yang_name: clock-class-to-map-from
+        id: true
+        example: 13
+      - yang_name: clock-class-to-map-to
+        example: 6
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-ptp-cfg:/ptp

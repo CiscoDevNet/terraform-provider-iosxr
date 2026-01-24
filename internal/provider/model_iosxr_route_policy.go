@@ -139,7 +139,6 @@ func (data *RoutePolicy) updateFromBodyXML(ctx context.Context, res xmldot.Resul
 }
 
 // End of section. //template:end updateFromBodyXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *RoutePolicy) fromBody(ctx context.Context, res gjson.Result) {
@@ -153,7 +152,6 @@ func (data *RoutePolicy) fromBody(ctx context.Context, res gjson.Result) {
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *RoutePolicyData) fromBody(ctx context.Context, res gjson.Result) {
@@ -167,7 +165,6 @@ func (data *RoutePolicyData) fromBody(ctx context.Context, res gjson.Result) {
 }
 
 // End of section. //template:end fromBodyData
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *RoutePolicy) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -177,7 +174,6 @@ func (data *RoutePolicy) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *RoutePolicyData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -187,7 +183,6 @@ func (data *RoutePolicyData) fromBodyXML(ctx context.Context, res xmldot.Result)
 }
 
 // End of section. //template:end fromBodyDataXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *RoutePolicy) getDeletedItems(ctx context.Context, state RoutePolicy) []string {
@@ -199,7 +194,6 @@ func (data *RoutePolicy) getDeletedItems(ctx context.Context, state RoutePolicy)
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
 func (data *RoutePolicy) getEmptyLeafsDelete(ctx context.Context, state *RoutePolicy) []string {
@@ -208,7 +202,6 @@ func (data *RoutePolicy) getEmptyLeafsDelete(ctx context.Context, state *RoutePo
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *RoutePolicy) getDeletePaths(ctx context.Context) []string {
@@ -221,7 +214,6 @@ func (data *RoutePolicy) getDeletePaths(ctx context.Context) []string {
 }
 
 // End of section. //template:end getDeletePaths
-
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *RoutePolicy) addDeletedItemsXML(ctx context.Context, state RoutePolicy, body string) string {
@@ -242,7 +234,6 @@ func (data *RoutePolicy) addDeletedItemsXML(ctx context.Context, state RoutePoli
 }
 
 // End of section. //template:end addDeletedItemsXML
-
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *RoutePolicy) addDeletePathsXML(ctx context.Context, body string) string {

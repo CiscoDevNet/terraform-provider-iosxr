@@ -1,7 +1,7 @@
 ---
 name: Domain
 path: Cisco-IOS-XR-um-domain-cfg:/domain
-doc_category: System
+doc_category: Management
 attributes:
   - yang_name: list/domain
     tf_name: domains

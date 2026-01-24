@@ -20,40 +20,112 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+import (
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
 
 // End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
+
+func TestAccDataSourceIosxrEVPNSegmentRoutingSRv6EVI(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "bgp_rd_four_byte_as_number", "65536"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "bgp_rd_four_byte_as_index", "103"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_import_four_byte_as_format.0.as_number", "65536"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_import_four_byte_as_format.0.assigned_number", "103"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_export_four_byte_as_format.0.as_number", "65536"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_export_four_byte_as_format.0.assigned_number", "103"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_policy_import", "EVI_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_policy_export", "EVI_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "preferred_nexthop_modulo", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "unknown_unicast_suppression", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "ignore_mtu_mismatch", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "ignore_mtu_mismatch_disable_deprecated", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "transmit_mtu_zero", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "transmit_mtu_zero_disable_deprecated", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "re_origination_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "etree", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "etree_rt_leaf", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "locators.0.locator_name", "LOC12"))
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { testAccPreCheck(t) },
+		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig + testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
+			},
+		},
+	})
+}
+
+// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=EVI_POLICY_1]"
+	attributes = {
+		"route-policy-name" = "EVI_POLICY_1"
+		"rpl-route-policy" = "route-policy EVI_POLICY_1\n  pass\nend-policy\n"
+	}
+}
+
+resource "iosxr_gnmi" "PreReq1" {
 	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
 	attributes = {
 	}
 }
 
-resource "iosxr_gnmi" "PreReq1" {
-	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/segment-routing/srv6"
-	attributes = {
-	}
-	depends_on = [iosxr_gnmi.PreReq0, ]
-}
-
-resource "iosxr_gnmi" "PreReq2" {
-	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/segment-routing/srv6/locators/locator[locator-name=LOC1]"
-	attributes = {
-		"locator-name" = "LOC1"
-	}
-	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]
-}
-
-resource "iosxr_gnmi" "PreReq3" {
-	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/interface/interface[interface-name=GigabitEthernet0/0/0/1]"
-	attributes = {
-		"ethernet-segment/identifier/type/zero/esi" = "01.02.03.04.05.06.07.08.09"
-	}
-	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]
-}
-
 `
 
 // End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
+
+func testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIConfig() string {
+	config := `resource "iosxr_evpn_segment_routing_srv6_evi" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	vpn_id = 103` + "\n"
+	config += `	description = "My Description"` + "\n"
+	config += `	bgp_rd_four_byte_as_number = 65536` + "\n"
+	config += `	bgp_rd_four_byte_as_index = 103` + "\n"
+	config += `	bgp_route_target_import_four_byte_as_format = [{` + "\n"
+	config += `		as_number = 65536` + "\n"
+	config += `		assigned_number = 103` + "\n"
+	config += `	}]` + "\n"
+	config += `	bgp_route_target_export_four_byte_as_format = [{` + "\n"
+	config += `		as_number = 65536` + "\n"
+	config += `		assigned_number = 103` + "\n"
+	config += `	}]` + "\n"
+	config += `	bgp_route_policy_import = "EVI_POLICY_1"` + "\n"
+	config += `	bgp_route_policy_export = "EVI_POLICY_1"` + "\n"
+	config += `	preferred_nexthop_modulo = true` + "\n"
+	config += `	unknown_unicast_suppression = true` + "\n"
+	config += `	ignore_mtu_mismatch = true` + "\n"
+	config += `	ignore_mtu_mismatch_disable_deprecated = true` + "\n"
+	config += `	transmit_mtu_zero = true` + "\n"
+	config += `	transmit_mtu_zero_disable_deprecated = true` + "\n"
+	config += `	re_origination_disable = true` + "\n"
+	config += `	etree = true` + "\n"
+	config += `	etree_rt_leaf = true` + "\n"
+	config += `	locators = [{` + "\n"
+	config += `		locator_name = "LOC12"` + "\n"
+	config += `	}]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `}` + "\n"
+
+	config += `
+		data "iosxr_evpn_segment_routing_srv6_evi" "test" {
+			vpn_id = 103
+			depends_on = [iosxr_evpn_segment_routing_srv6_evi.test]
+		}
+	`
+	return config
+}
+
+// End of section. //template:end testAccDataSourceConfig

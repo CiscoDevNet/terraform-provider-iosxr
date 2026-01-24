@@ -20,8 +20,57 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+import (
+	"os"
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
 
 // End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
+
+func TestAccDataSourceIosxrFlowMonitorMap(t *testing.T) {
+	if os.Getenv("NCS") == "" && os.Getenv("C8000") == "" {
+		t.Skip("skipping test, set environment variable NCS or C8000")
+	}
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "exporters.0.name", "exporter_map1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "option_outphysint", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "option_filtered", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "option_bgpattr", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "option_outbundlemember", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "record_mpls_labels", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "cache_entries", "5000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "cache_timeout_active", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "cache_timeout_inactive", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "cache_timeout_update", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "cache_timeout_rate_limit", "5000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "cache_immediate", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "hw_cache_timeout_inactive", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "sflow_options", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "sflow_options_extended_router", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "sflow_options_extended_gateway", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "sflow_options_extended_ipv4_tunnel_egress", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "sflow_options_extended_ipv6_tunnel_egress", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "sflow_options_if_counters_polling_interval", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "sflow_options_sample_header_size", "128"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "sflow_options_input_ifindex", "physical"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "sflow_options_output_ifindex", "physical"))
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { testAccPreCheck(t) },
+		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccDataSourceIosxrFlowMonitorMapPrerequisitesConfig + testAccDataSourceIosxrFlowMonitorMapConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
+			},
+		},
+	})
+}
+
+// End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrFlowMonitorMapPrerequisitesConfig = `
@@ -35,3 +84,46 @@ resource "iosxr_gnmi" "PreReq0" {
 `
 
 // End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
+
+func testAccDataSourceIosxrFlowMonitorMapConfig() string {
+	config := `resource "iosxr_flow_monitor_map" "test" {` + "\n"
+	config += `	name = "monitor_map1"` + "\n"
+	config += `	exporters = [{` + "\n"
+	config += `		name = "exporter_map1"` + "\n"
+	config += `	}]` + "\n"
+	config += `	option_outphysint = true` + "\n"
+	config += `	option_filtered = true` + "\n"
+	config += `	option_bgpattr = true` + "\n"
+	config += `	option_outbundlemember = true` + "\n"
+	config += `	record_mpls_labels = 2` + "\n"
+	config += `	cache_entries = 5000` + "\n"
+	config += `	cache_timeout_active = 1` + "\n"
+	config += `	cache_timeout_inactive = 0` + "\n"
+	config += `	cache_timeout_update = 1` + "\n"
+	config += `	cache_timeout_rate_limit = 5000` + "\n"
+	config += `	cache_immediate = true` + "\n"
+	config += `	hw_cache_timeout_inactive = 50` + "\n"
+	config += `	sflow_options = true` + "\n"
+	config += `	sflow_options_extended_router = true` + "\n"
+	config += `	sflow_options_extended_gateway = true` + "\n"
+	config += `	sflow_options_extended_ipv4_tunnel_egress = true` + "\n"
+	config += `	sflow_options_extended_ipv6_tunnel_egress = true` + "\n"
+	config += `	sflow_options_if_counters_polling_interval = 5` + "\n"
+	config += `	sflow_options_sample_header_size = 128` + "\n"
+	config += `	sflow_options_input_ifindex = "physical"` + "\n"
+	config += `	sflow_options_output_ifindex = "physical"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+
+	config += `
+		data "iosxr_flow_monitor_map" "test" {
+			name = "monitor_map1"
+			depends_on = [iosxr_flow_monitor_map.test]
+		}
+	`
+	return config
+}
+
+// End of section. //template:end testAccDataSourceConfig

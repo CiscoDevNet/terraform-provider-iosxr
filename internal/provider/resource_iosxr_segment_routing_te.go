@@ -32,7 +32,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -81,6 +83,244 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 					stringvalidator.OneOf("all", "attributes"),
 				},
 			},
+			"te_latency": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use TE-latency algorithm").String,
+				Optional:            true,
+			},
+			"max_install_standby_paths": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow additional candidate paths to warm up non forwarding LSPs").AddIntegerRangeDescription(1, 3).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 3),
+				},
+			},
+			"kshortest_paths": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum number of attempted paths for cumulative bounds (default 100)").AddIntegerRangeDescription(1, 200).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 200),
+				},
+			},
+			"separate_next_hop": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use Next Hop Separation in Forwarding").String,
+				Optional:            true,
+			},
+			"maximum_sid_depth": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum SID Depth Configuration").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"effective_metric_admin_distance_metric_types": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative distance advertised for this metric type").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"metric_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("MetricType").AddStringEnumDescription("default", "hopcount", "igp", "latency", "te").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("default", "hopcount", "igp", "latency", "te"),
+							},
+						},
+						"admin_distance": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("AdminDistance").AddIntegerRangeDescription(1, 255).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 255),
+							},
+						},
+					},
+				},
+			},
+			"effective_metric_admin_distance_flex_algo_metric_types": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative distance advertised for this metric type").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"metric_type": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("FlexAlgoMetricType").AddIntegerRangeDescription(0, 255).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 255),
+							},
+						},
+						"admin_distance": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("AdminDistance").AddIntegerRangeDescription(1, 255).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 255),
+							},
+						},
+					},
+				},
+			},
+			"steering_labeled_services_disable_on_demand_policies": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable steering for labeled services for on-demand policies").String,
+				Optional:            true,
+			},
+			"steering_labeled_services_disable_all_policies": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable steering for labeled services for all policies").String,
+				Optional:            true,
+			},
+			"steering_labeled_services_disable_pcep_policies": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable steering for labeled services for PCE initiated policies").String,
+				Optional:            true,
+			},
+			"steering_labeled_services_disable_local_policies": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable steering for labeled services for local policies").String,
+				Optional:            true,
+			},
+			"steering_labeled_services_disable_bgp_sr_te_policies": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable steering for labeled services for BGP-SRTE policies").String,
+				Optional:            true,
+			},
+			"segment_lists_srv6_topology_check": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable topology check for all SRv6 segment-lists").String,
+				Optional:            true,
+			},
+			"segment_lists_srv6_sid_format": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Segment-lists configuration").AddStringEnumDescription("micro-sid").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("micro-sid"),
+				},
+			},
+			"segment_lists_srv6_explicit_segments": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Segment-list configuration").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"path_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Segment-list name").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 128),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"srv6_segments": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("SRv6 segment configuration for the given index").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"index": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Segment index").AddIntegerRangeDescription(1, 65535).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65535),
+										},
+									},
+									"address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IPv6 Address").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+										},
+									},
+									"hop_type": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("SRv6 hop type").AddStringEnumDescription("srv6sid").AddDefaultValueDescription("srv6sid").String,
+										Optional:            true,
+										Computed:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("srv6sid"),
+										},
+										Default: stringdefault.StaticString("srv6sid"),
+									},
+								},
+							},
+						},
+						"srv6_topology_check": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable Topology check for the given SRv6 segment-list").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"segment_lists_sr_mpls_explicit_segments": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Segment-list configuration").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"path_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Segment-list name").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 128),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"sr_mpls_segments": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure Segment/hop at the index").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"index": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Segment index").AddIntegerRangeDescription(1, 65535).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65535),
+										},
+									},
+									"type": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Segment/hop type").AddStringEnumDescription("ip-adjacency-address", "ipv4-address", "mpls-label").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("ip-adjacency-address", "ipv4-address", "mpls-label"),
+										},
+									},
+									"address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP Address").String,
+										Optional:            true,
+									},
+									"mpls_label": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("MPLS Label").AddIntegerRangeDescription(0, 1048575).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 1048575),
+										},
+									},
+									"adjacency_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP Adjacency Address").String,
+										Optional:            true,
+									},
+									"address_type": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP address types").AddIntegerRangeDescription(0, 32).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 32),
+										},
+									},
+									"interface_identifier": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Interface Identifier").AddIntegerRangeDescription(1, 65535).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65535),
+										},
+									},
+									"prefix_length": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Prefix Length").AddIntegerRangeDescription(0, 32).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 32),
+										},
+									},
+									"validate_flag": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Validate No Validate").AddIntegerRangeDescription(0, 1).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 1),
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 			"logging_pcep_peer_status": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable logging for pcep peer status").String,
 				Optional:            true,
@@ -89,26 +329,359 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 				MarkdownDescription: helpers.NewAttributeDescription("Enable logging for policy status").String,
 				Optional:            true,
 			},
-			"pcc_report_all": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Report all local SR policies to connected PCEP peers").String,
-				Optional:            true,
-			},
-			"pcc_source_address": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Local source IP address to use on PCEP sessions").String,
-				Optional:            true,
-			},
-			"pcc_delegation_timeout": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Maximum time delegated SR-TE policies can remain up without an active connection to a PCE").AddIntegerRangeDescription(0, 1576800000).String,
+			"cspf_cache_size": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure maximum size of the CSPF cache size in MiB").AddIntegerRangeDescription(100, 100000).String,
 				Optional:            true,
 				Validators: []validator.Int64{
-					int64validator.Between(0, 1576800000),
+					int64validator.Between(100, 100000),
 				},
+			},
+			"timers_candidate_path_cleanup_delay": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Delay before cleaning up candidate paths").AddIntegerRangeDescription(0, 86400).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 86400),
+				},
+			},
+			"timers_initial_verify_restart": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Timer to wait for topology convergence after topology starts populating for restart case").AddIntegerRangeDescription(10, 10000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(10, 10000),
+				},
+			},
+			"timers_initial_verify_switchover": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Timer to wait for topology convergence after topology starts populating for switchover case").AddIntegerRangeDescription(10, 10000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(10, 10000),
+				},
+			},
+			"timers_initial_verify_startup": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Timer to wait for topology convergence after topology starts populating for startup case").AddIntegerRangeDescription(10, 10000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(10, 10000),
+				},
+			},
+			"timers_delete_delay": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Delete delay value in seconds").AddIntegerRangeDescription(0, 3600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 3600),
+				},
+			},
+			"timers_cleanup_delay": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Delay before cleaning up previous path").AddIntegerRangeDescription(0, 300).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 300),
+				},
+			},
+			"timers_install_delay": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Delay before switching to a reoptimized path").AddIntegerRangeDescription(0, 300).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 300),
+				},
+			},
+			"timers_periodic_reoptimization": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("How often to perform periodic reoptimization of policies").AddIntegerRangeDescription(0, 86400).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 86400),
+				},
+			},
+			"resource_lists": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Resource-list configuration").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"path_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Resource-list name").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 128),
+							},
+						},
+						"resources": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure Resource at the index").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"index": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Resource index").AddIntegerRangeDescription(1, 65535).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65535),
+										},
+									},
+									"type": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Resource type").AddStringEnumDescription("ipv4-address").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("ipv4-address"),
+										},
+									},
+									"address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IPv4 Address").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"distribute_link_state": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Distribute policy information to BGP link-state").String,
+				Optional:            true,
+			},
+			"distribute_link_state_throttle": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set throttle update in seconds (default: 0 seconds)").AddIntegerRangeDescription(1, 20).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 20),
+				},
+			},
+			"distribute_link_state_report_candidate_path_inactive": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable reporting of inactive candidate paths").String,
+				Optional:            true,
+			},
+			"bfd_timers_session_bringup": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("How long to wait for new BFD session to come up").AddIntegerRangeDescription(10, 3600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(10, 3600),
+				},
+			},
+			"binding_sid_rules_explicit": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Binding sid explicit rule").AddStringEnumDescription("enforce-srlb", "fallback-dynamic").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enforce-srlb", "fallback-dynamic"),
+				},
+			},
+			"binding_sid_rules_dynamic": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Binding SID dynamic rule. Applicable for SR-MPLS and SRv6 policies").AddStringEnumDescription("disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable"),
+				},
+			},
+			"interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SR-TE interface").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("SR-TE Interface name").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+							},
+						},
+						"affinities": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set user defined interface attribute flags").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"affinity_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Interface affinity names").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 32),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+										},
+									},
+								},
+							},
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Interface TE metric configuration").AddIntegerRangeDescription(0, 2147483647).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 2147483647),
+							},
+						},
+					},
+				},
+			},
+			"pce_peers_ipv4": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("PCE peer").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"pce_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Remote PCE address").String,
+							Required:            true,
+						},
+						"password_encrypted": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("PCC Peer MD5 Password").String,
+							Optional:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 25),
+							},
+						},
+						"pce_group": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of the PCE group - maximum 16 characters").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 16),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"precedence": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Precedence value of this PCE").AddIntegerRangeDescription(0, 255).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 255),
+							},
+						},
+						"tcp_ao_keychain": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of the keychain").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+							},
+						},
+						"tcp_ao_include_tcp_options": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Include other TCP options in the header").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"pce_peers_ipv6": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("PCE peer").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"pce_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Remote PCE address").String,
+							Required:            true,
+						},
+						"password_encrypted": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("PCC Peer MD5 Password").String,
+							Optional:            true,
+							Sensitive:           true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 25),
+							},
+						},
+						"pce_group": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of the PCE group - maximum 16 characters").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 16),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"precedence": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Precedence value of this PCE").AddIntegerRangeDescription(0, 255).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 255),
+							},
+						},
+						"tcp_ao_keychain": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of the keychain").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+							},
+						},
+						"tcp_ao_include_tcp_options": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Include other TCP options in the header").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"pcc_profiles": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Path profile configuration").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"profile_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Profile unique identifier").AddIntegerRangeDescription(1, 65534).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65534),
+							},
+						},
+						"steering_invalidation_drop": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable path invalidation drop").String,
+							Optional:            true,
+						},
+						"auto_route_include_all_ipv4": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Include all IPv4 prefixes to autoroute").String,
+							Optional:            true,
+						},
+						"auto_route_include_all_ipv6": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Include all eligible IPv6 prefixes").String,
+							Optional:            true,
+						},
+						"auto_route_force_sr_include": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Force SR traffic over autoroute policy").String,
+							Optional:            true,
+						},
+						"auto_route_forward_class": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Forward class associated with the policy").AddIntegerRangeDescription(0, 7).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 7),
+							},
+						},
+						"auto_route_metric_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Metric type").AddStringEnumDescription("constant", "relative").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("constant", "relative"),
+							},
+						},
+						"auto_route_metric_relative_value": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Autoroute relative metric").AddIntegerRangeDescription(-10, 10).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(-10, 10),
+							},
+						},
+						"auto_route_metric_constant_value": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Autoroute constant metric").AddIntegerRangeDescription(1, 2147483647).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 2147483647),
+							},
+						},
+					},
+				},
+			},
+			"pcc_redundancy_pcc_centric": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable PCC centric model, where PCC only allows the lowest precedence PCE to initiate policies. THIS COMMAND IS DEPRECATED").String,
+				Optional:            true,
+			},
+			"pcc_redundancy_pce_centric": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable PCE centric model").String,
+				Optional:            true,
 			},
 			"pcc_dead_timer": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Amount of time after which the peer can declare this session down, if no PCEP message has been received").AddIntegerRangeDescription(1, 255).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 255),
+				},
+			},
+			"pcc_keepalive_timer": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum time between two consecutive PCEP messages sent by this node").AddIntegerRangeDescription(0, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 255),
 				},
 			},
 			"pcc_initiated_state": schema.Int64Attribute{
@@ -125,113 +698,95 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 					int64validator.Between(0, 180),
 				},
 			},
-			"pce_peers": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("PCE peer").String,
+			"pcc_delegation_timeout": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum time delegated SR-TE policies can remain up without an active connection to a PCE").AddIntegerRangeDescription(0, 1576800000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 1576800000),
+				},
+			},
+			"pcc_report_all": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Report all local SR policies to connected PCEP peers").String,
+				Optional:            true,
+			},
+			"pcc_source_address_ipv4": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Local source IP address to use on PCEP sessions").String,
+				Optional:            true,
+			},
+			"pcc_source_address_ipv6": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Local source IP address to use on PCEP sessions").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+				},
+			},
+			"traces": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Trace count for provided buffer").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"pce_address": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Remote PCE address").String,
+						"buffer_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Buffer name").String,
 							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 15),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
 						},
-						"precedence": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Precedence value of this PCE").AddIntegerRangeDescription(0, 255).String,
-							Optional:            true,
+						"trace_count": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Trace count").AddIntegerRangeDescription(0, 1000000).String,
+							Required:            true,
 							Validators: []validator.Int64{
-								int64validator.Between(0, 255),
+								int64validator.Between(0, 1000000),
 							},
 						},
 					},
 				},
 			},
-			"on_demand_colors": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("On-demand color configuration").String,
+			"path_disable_algo_checks_strict_spf_areas": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IGP area").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"dynamic_anycast_sid_inclusion": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Anycast Prefix SID Inclusion. Applicable for SR-MPLS and SRv6 policies").String,
-							Optional:            true,
-						},
-						"dynamic_metric_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Metric Type").AddStringEnumDescription("hopcount", "igp", "latency", "te").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.OneOf("hopcount", "igp", "latency", "te"),
-							},
-						},
-						"color": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Color").AddIntegerRangeDescription(1, 4294967295).String,
+						"area_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Area identifier").AddIntegerRangeDescription(0, 4294967295).String,
 							Required:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(1, 4294967295),
-							},
-						},
-						"srv6_enable": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("True only").String,
-							Optional:            true,
-						},
-						"srv6_locator_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("SRv6 locator name").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 64),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
-							},
-						},
-						"srv6_locator_behavior": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("SRv6 USID Behavior").AddStringEnumDescription("ub6-encaps-reduced", "ub6-insert-reduced").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.OneOf("ub6-encaps-reduced", "ub6-insert-reduced"),
-							},
-						},
-						"srv6_locator_binding_sid_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Binding Segment ID type").AddStringEnumDescription("srv6-dynamic").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.OneOf("srv6-dynamic"),
-							},
-						},
-						"source_address": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Source address").String,
-							Required:            true,
-						},
-						"source_address_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("IP address type").AddStringEnumDescription("end-point-type-ipv4", "end-point-type-ipv6").String,
-							Required:            true,
-							Validators: []validator.String{
-								stringvalidator.OneOf("end-point-type-ipv4", "end-point-type-ipv6"),
-							},
-						},
-						"effective_metric_enable": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("True only").String,
-							Optional:            true,
-						},
-						"effective_metric_value": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Integer value of metric").AddIntegerRangeDescription(0, 4294967295).String,
-							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 4294967295),
 							},
 						},
-						"effective_metric_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Metric type, advertised to other protocols").AddStringEnumDescription("default", "hopcount", "igp", "latency", "te").String,
-							Optional:            true,
+						"protocol": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IGP protocol").AddStringEnumDescription("ospf").String,
+							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("default", "hopcount", "igp", "latency", "te"),
+								stringvalidator.OneOf("ospf"),
 							},
 						},
-						"constraint_segments_protection_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Protection Type").AddStringEnumDescription("protected-only", "protected-preferred", "unprotected-only", "unprotected-preferred").String,
-							Optional:            true,
+					},
+				},
+			},
+			"path_disable_algo_checks_strict_spf_all_areas": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable check for all IGP areas").String,
+				Optional:            true,
+			},
+			"affinity_maps": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Affinity-map entry").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"affinity_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Affinity-map bit-position").String,
+							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("protected-only", "protected-preferred", "unprotected-only", "unprotected-preferred"),
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
-						"constraint_segments_sid_algorithm": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("'0' for regular SIDs, '1' for strict-spf SIDs, '128' - '255' for flexible algorithm SIDs").AddIntegerRangeDescription(0, 255).String,
-							Optional:            true,
+						"bit_position": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Affinity-map bit-position").AddIntegerRangeDescription(0, 255).String,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 255),
 							},
@@ -239,48 +794,23 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 					},
 				},
 			},
-			"policies": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Policy configuration").String,
+			"candidate_paths": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configurations for candidate paths of specific type.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"policy_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Policy name").String,
+						"path_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Candidate-path type").AddStringEnumDescription("candidate-path-type-all", "candidate-path-type-bgp-odn", "candidate-path-type-bgp-srte", "candidate-path-type-local", "candidate-path-type-pcep").String,
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 59),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+								stringvalidator.OneOf("candidate-path-type-all", "candidate-path-type-bgp-odn", "candidate-path-type-bgp-srte", "candidate-path-type-local", "candidate-path-type-pcep"),
 							},
 						},
-						"srv6_enable": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("True only").String,
+						"source_address_selection": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("True only").AddDefaultValueDescription("true").String,
 							Optional:            true,
-						},
-						"srv6_locator_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("SRv6 locator name").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 64),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
-							},
-						},
-						"srv6_locator_binding_sid_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Binding Segment ID type").AddStringEnumDescription("srv6-dynamic").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.OneOf("srv6-dynamic"),
-							},
-						},
-						"srv6_locator_behavior": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("SRv6 USID Behavior").AddStringEnumDescription("ub6-encaps-reduced", "ub6-insert-reduced").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.OneOf("ub6-encaps-reduced", "ub6-insert-reduced"),
-							},
-						},
-						"source_address": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Source address").String,
-							Required:            true,
+							Computed:            true,
+							Default:             booldefault.StaticBool(true),
 						},
 						"source_address_type": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IP address type").AddStringEnumDescription("end-point-type-ipv4", "end-point-type-ipv6").String,
@@ -289,25 +819,40 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 								stringvalidator.OneOf("end-point-type-ipv4", "end-point-type-ipv6"),
 							},
 						},
-						"policy_color_endpoint_color": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Color").AddIntegerRangeDescription(1, 4294967295).String,
-							Required:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(1, 4294967295),
-							},
-						},
-						"policy_color_endpoint_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("End point type").AddStringEnumDescription("end-point-type-ipv4", "end-point-type-ipv6").String,
-							Required:            true,
-							Validators: []validator.String{
-								stringvalidator.OneOf("end-point-type-ipv4", "end-point-type-ipv6"),
-							},
-						},
-						"policy_color_endpoint_address": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("End point address").String,
+						"source_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Source address").String,
 							Required:            true,
 						},
 					},
+				},
+			},
+			"srv6_locator": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SRv6 locator name").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 64),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"srv6_locator_binding_sid_type": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Binding Segment ID type").AddStringEnumDescription("srv6-dynamic").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("srv6-dynamic"),
+				},
+			},
+			"srv6_locator_behavior": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SRv6 USID Behavior").AddStringEnumDescription("ub6-encaps-reduced", "ub6-insert-reduced").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("ub6-encaps-reduced", "ub6-insert-reduced"),
+				},
+			},
+			"srv6_maximum_sid_depth": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SRv6 Maximum SID Depth Configuration").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
 				},
 			},
 		},

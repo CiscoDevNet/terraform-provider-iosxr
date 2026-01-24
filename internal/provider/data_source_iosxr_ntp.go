@@ -177,61 +177,10 @@ func (d *NTPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 						"md5_encrypted": schema.StringAttribute{
 							MarkdownDescription: "Specify an encrypted key",
 							Computed:            true,
+							Sensitive:           true,
 						},
 					},
 				},
-			},
-			"broadcastdelay": schema.Int64Attribute{
-				MarkdownDescription: "Estimated round-trip delay",
-				Computed:            true,
-			},
-			"max_associations": schema.Int64Attribute{
-				MarkdownDescription: "Set maximum number of associations",
-				Computed:            true,
-			},
-			"trusted_keys": schema.ListNestedAttribute{
-				MarkdownDescription: "Key numbers for trusted time sources",
-				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"key_number": schema.Int64Attribute{
-							MarkdownDescription: "Key numbers for trusted time sources",
-							Computed:            true,
-						},
-					},
-				},
-			},
-			"update_calendar": schema.BoolAttribute{
-				MarkdownDescription: "Periodically update calendar with NTP time",
-				Computed:            true,
-			},
-			"log_internal_sync": schema.BoolAttribute{
-				MarkdownDescription: "Logs internal synchronization changes",
-				Computed:            true,
-			},
-			"source_interface_name": schema.StringAttribute{
-				MarkdownDescription: "default interface",
-				Computed:            true,
-			},
-			"source_vrfs": schema.ListNestedAttribute{
-				MarkdownDescription: "Specify non-default VRF",
-				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"vrf_name": schema.StringAttribute{
-							MarkdownDescription: "Specify non-default VRF",
-							Computed:            true,
-						},
-						"interface_name": schema.StringAttribute{
-							MarkdownDescription: "default interface for the VRF",
-							Computed:            true,
-						},
-					},
-				},
-			},
-			"passive": schema.BoolAttribute{
-				MarkdownDescription: "Enable the passive associations",
-				Computed:            true,
 			},
 			"cmac_authentication_keys": schema.ListNestedAttribute{
 				MarkdownDescription: "CMAC Authentication key for trusted time sources",
@@ -245,6 +194,7 @@ func (d *NTPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 						"cmac_encrypted": schema.StringAttribute{
 							MarkdownDescription: "Specify an encrypted key",
 							Computed:            true,
+							Sensitive:           true,
 						},
 					},
 				},
@@ -261,6 +211,7 @@ func (d *NTPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 						"hmac_sha1_encrypted": schema.StringAttribute{
 							MarkdownDescription: "Specify an encrypted key",
 							Computed:            true,
+							Sensitive:           true,
 						},
 					},
 				},
@@ -277,9 +228,50 @@ func (d *NTPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 						"hmac_sha2_encrypted": schema.StringAttribute{
 							MarkdownDescription: "Specify an encrypted key",
 							Computed:            true,
+							Sensitive:           true,
 						},
 					},
 				},
+			},
+			"broadcastdelay": schema.Int64Attribute{
+				MarkdownDescription: "Estimated round-trip delay",
+				Computed:            true,
+			},
+			"drift_aging_time": schema.Int64Attribute{
+				MarkdownDescription: "Aging time",
+				Computed:            true,
+			},
+			"drift_file_bootflash": schema.BoolAttribute{
+				MarkdownDescription: "drift in bootflash: file system",
+				Computed:            true,
+			},
+			"drift_file_compactflash": schema.BoolAttribute{
+				MarkdownDescription: "drift in compactflash: file system",
+				Computed:            true,
+			},
+			"drift_file_usb": schema.BoolAttribute{
+				MarkdownDescription: "drift in usb: file system",
+				Computed:            true,
+			},
+			"drift_file_disk0": schema.BoolAttribute{
+				MarkdownDescription: "drift in disk0: file system",
+				Computed:            true,
+			},
+			"drift_file_disk1": schema.BoolAttribute{
+				MarkdownDescription: "drift in disk1: file system",
+				Computed:            true,
+			},
+			"drift_file_disk2": schema.BoolAttribute{
+				MarkdownDescription: "drift in disk2: file system",
+				Computed:            true,
+			},
+			"drift_file_harddisk": schema.BoolAttribute{
+				MarkdownDescription: "drift in harddisk: file system",
+				Computed:            true,
+			},
+			"drift_filename": schema.StringAttribute{
+				MarkdownDescription: "drift in file",
+				Computed:            true,
 			},
 			"interfaces": schema.ListNestedAttribute{
 				MarkdownDescription: "Configure NTP on an interface",
@@ -288,6 +280,10 @@ func (d *NTPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 					Attributes: map[string]schema.Attribute{
 						"interface_name": schema.StringAttribute{
 							MarkdownDescription: "Configure NTP on an interface",
+							Computed:            true,
+						},
+						"broadcast_client": schema.BoolAttribute{
+							MarkdownDescription: "Listen to NTP broadcasts",
 							Computed:            true,
 						},
 						"broadcast_destination": schema.StringAttribute{
@@ -359,6 +355,10 @@ func (d *NTPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 			},
 			"primary_reference_clock": schema.BoolAttribute{
 				MarkdownDescription: "Use a primary reference clock as clock source",
+				Computed:            true,
+			},
+			"max_associations": schema.Int64Attribute{
+				MarkdownDescription: "Set maximum number of associations",
 				Computed:            true,
 			},
 			"ipv4_peers_servers": schema.ListNestedAttribute{
@@ -456,6 +456,54 @@ func (d *NTPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 						},
 						"ipv6_address": schema.StringAttribute{
 							MarkdownDescription: "IPv6 address (must be same as key node 'address')",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"hostname_peers_servers": schema.ListNestedAttribute{
+				MarkdownDescription: "FQDN hostname",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"fqdn_hostname": schema.StringAttribute{
+							MarkdownDescription: "Peer/server hostname",
+							Computed:            true,
+						},
+						"type": schema.StringAttribute{
+							MarkdownDescription: "Specify peer/server",
+							Computed:            true,
+						},
+						"version": schema.Int64Attribute{
+							MarkdownDescription: "Configure NTP version",
+							Computed:            true,
+						},
+						"key": schema.Int64Attribute{
+							MarkdownDescription: "Configure peer authentication key",
+							Computed:            true,
+						},
+						"minpoll": schema.Int64Attribute{
+							MarkdownDescription: "Configure minimum polling rate",
+							Computed:            true,
+						},
+						"maxpoll": schema.Int64Attribute{
+							MarkdownDescription: "Configure maximum polling rate",
+							Computed:            true,
+						},
+						"prefer": schema.BoolAttribute{
+							MarkdownDescription: "Prefer this peer when possible",
+							Computed:            true,
+						},
+						"burst": schema.BoolAttribute{
+							MarkdownDescription: "Use burst mode",
+							Computed:            true,
+						},
+						"iburst": schema.BoolAttribute{
+							MarkdownDescription: "Use initial burst mode",
+							Computed:            true,
+						},
+						"source": schema.StringAttribute{
+							MarkdownDescription: "Interface for source address",
 							Computed:            true,
 						},
 					},
@@ -569,6 +617,98 @@ func (d *NTPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 									},
 								},
 							},
+						},
+						"hostname_peers_servers": schema.ListNestedAttribute{
+							MarkdownDescription: "FQDN hostname",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"fqdn_hostname": schema.StringAttribute{
+										MarkdownDescription: "Peer/server hostname",
+										Computed:            true,
+									},
+									"type": schema.StringAttribute{
+										MarkdownDescription: "Specify peer/server",
+										Computed:            true,
+									},
+									"version": schema.Int64Attribute{
+										MarkdownDescription: "Configure NTP version",
+										Computed:            true,
+									},
+									"key": schema.Int64Attribute{
+										MarkdownDescription: "Configure peer authentication key",
+										Computed:            true,
+									},
+									"minpoll": schema.Int64Attribute{
+										MarkdownDescription: "Configure minimum polling rate",
+										Computed:            true,
+									},
+									"maxpoll": schema.Int64Attribute{
+										MarkdownDescription: "Configure maximum polling rate",
+										Computed:            true,
+									},
+									"prefer": schema.BoolAttribute{
+										MarkdownDescription: "Prefer this peer when possible",
+										Computed:            true,
+									},
+									"burst": schema.BoolAttribute{
+										MarkdownDescription: "Use burst mode",
+										Computed:            true,
+									},
+									"iburst": schema.BoolAttribute{
+										MarkdownDescription: "Use initial burst mode",
+										Computed:            true,
+									},
+									"source": schema.StringAttribute{
+										MarkdownDescription: "Interface for source address",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"trusted_keys": schema.ListNestedAttribute{
+				MarkdownDescription: "Key numbers for trusted time sources",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"key_number": schema.Int64Attribute{
+							MarkdownDescription: "Key numbers for trusted time sources",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"update_calendar": schema.BoolAttribute{
+				MarkdownDescription: "Periodically update calendar with NTP time",
+				Computed:            true,
+			},
+			"log_internal_sync": schema.BoolAttribute{
+				MarkdownDescription: "Logs internal synchronization changes",
+				Computed:            true,
+			},
+			"passive": schema.BoolAttribute{
+				MarkdownDescription: "Enable the passive associations",
+				Computed:            true,
+			},
+			"source_interface_name": schema.StringAttribute{
+				MarkdownDescription: "default interface",
+				Computed:            true,
+			},
+			"source_vrfs": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify non-default VRF",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vrf_name": schema.StringAttribute{
+							MarkdownDescription: "Specify non-default VRF",
+							Computed:            true,
+						},
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: "default interface for the VRF",
+							Computed:            true,
 						},
 					},
 				},

@@ -21,10 +21,12 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 // End of section. //template:end imports
@@ -32,8 +34,8 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 
 func TestAccIosxrFlowExporterMap(t *testing.T) {
-	if os.Getenv("NCS") == "" {
-		t.Skip("skipping test, set environment variable NCS")
+	if os.Getenv("NCS") == "" && os.Getenv("C8000") == "" {
+		t.Skip("skipping test, set environment variable NCS or C8000")
 	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "name", "exporter_map1"))
@@ -41,8 +43,8 @@ func TestAccIosxrFlowExporterMap(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "destination_vrf", "VRF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "source", "GigabitEthernet0/0/0/1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "dscp", "62"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "packet_length", "512"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "transport_udp", "1033"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "packet_length", "512"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "dfbit_set", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "version_export_format", "v9"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "version_template_data_timeout", "1024"))
@@ -99,8 +101,8 @@ func testAccIosxrFlowExporterMapConfig_all() string {
 	config += `	destination_vrf = "VRF1"` + "\n"
 	config += `	source = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	dscp = 62` + "\n"
-	config += `	packet_length = 512` + "\n"
 	config += `	transport_udp = 1033` + "\n"
+	config += `	packet_length = 512` + "\n"
 	config += `	dfbit_set = true` + "\n"
 	config += `	version_export_format = "v9"` + "\n"
 	config += `	version_template_data_timeout = 1024` + "\n"
@@ -116,3 +118,27 @@ func testAccIosxrFlowExporterMapConfig_all() string {
 }
 
 // End of section. //template:end testAccConfigAll
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrFlowExporterMapImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Name := primary.Attributes["name"]
+
+		return fmt.Sprintf("%s", Name), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccIosxrFlowExporterMapPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
+	attributes = {
+		"vrf-name" = "VRF1"
+	}
+}
+
+`
+
+// End of section. //template:end testPrerequisites

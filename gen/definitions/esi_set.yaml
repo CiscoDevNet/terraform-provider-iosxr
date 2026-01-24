@@ -8,4 +8,5 @@ attributes:
     example: POLICYSET
   - yang_name: esi-set-as-text
     tf_name: rpl
+    description: "Configures an ESI set"
     example: "esi-set POLICYSET\\n  1234.1234.1234.1234.1234\\nend-set\\n"

@@ -11,28 +11,251 @@ attributes:
     example: ipv4
   - yang_name: saf-name
     example: unicast
-  - yang_name: fast-reroute/enable/per-prefix
-    tf_name: fast_reroute_per_prefix
-    example: true
-  - yang_name: fast-reroute/enable/per-link
-    tf_name: fast_reroute_per_link
-    example: true
+  - yang_name: metric/METRIC/MAXIMUM/maximum
+    xpath: metric/maximum
+    tf_name: metric_maximum
+    optional: true
     exclude_test: true
-  - yang_name: fast-reroute/enable-levels/enable-level
-    tf_name: fast_reroute_levels
+    example: true
+  - yang_name: metric/METRIC/DEFAULT-METRIC/default-metric
+    xpath: metric/default-metric
+    tf_name: metric_default
+    optional: true
+    example: 500
+  - yang_name: metric-levels/metric-level
+    tf_name: metric_levels
     type: List
     attributes:
       - yang_name: level-number
         id: true
         example: 1
-      - yang_name: per-prefix
-        example: true
-      - yang_name: per-link
-        example: true
+      - yang_name: METRIC/DEFAULT-METRIC/default-metric
+        xpath: default-metric
+        tf_name: metric_default
+        optional: true
+        example: 600
+      - yang_name: METRIC/MAXIMUM/maximum
+        xpath: maximum
+        tf_name: metric_maximum
+        optional: true
         exclude_test: true
+        example: true
+  - yang_name: te-metric/flex-algo
+    tf_name: te_metric_flex_algo
+    example: 128
+  - yang_name: te-metric/flex-algo-levels/flex-algo-level
+    tf_name: te_metric_flex_algo_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: flex-algo
+        example: 128
+  - yang_name: bandwidth-metric/flex-algo
+    tf_name: bandwidth_metric_flex_algo
+    example: 129
+  - yang_name: bandwidth-metric/flex-algo-levels/flex-algo-level
+    tf_name: bandwidth_metric_flex_algo_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: flex-algo
+        example: 129
+  - yang_name: generic-metric/flex-algo/types/type
+    tf_name: generic_metric_flex_algos
+    type: List
+    attributes:
+      - yang_name: type-number
+        tf_name: type
+        id: true
+        example: 130
+      - yang_name: flex-algo-metric-value
+        tf_name: metric
+        example: 5000
+  - yang_name: generic-metric/flex-algo-levels/flex-algo-level
+    tf_name: generic_metric_flex_algo_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: types/type
+        tf_name: flex_algos_types
+        type: List
+        attributes:
+          - yang_name: type-number
+            tf_name: type
+            id: true
+            example: 130
+          - yang_name: flex-algo-metric-value
+            tf_name: metric
+            example: 5000
+  - yang_name: mpls/ldp/sync
+    tf_name: mpls_ldp_sync
+    example: true
+  - yang_name: mpls/ldp/sync/level
+    tf_name: mpls_ldp_sync_level
+    example: 1
   - yang_name: tag
     tf_name: tag
     example: 100
+  - yang_name: tag-levels/tag-level
+    tf_name: tag_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: tag
+        example: 100
+  - yang_name: prefix-sid/strict-spf/STRICT-SPF/INDEX/index/index-id
+    xpath: prefix-sid/strict-spf/index/index-id
+    tf_name: prefix_sid_strict_spf_index_id
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 100
+  - yang_name: prefix-sid/strict-spf/STRICT-SPF/INDEX/index/php-disable
+    xpath: prefix-sid/strict-spf/index/php-disable
+    tf_name: prefix_sid_strict_spf_index_php_disable
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: prefix-sid/strict-spf/STRICT-SPF/INDEX/index/explicit-null
+    xpath: prefix-sid/strict-spf/index/explicit-null
+    tf_name: prefix_sid_strict_spf_index_explicit_null
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: prefix-sid/strict-spf/STRICT-SPF/INDEX/index/n-flag-clear
+    xpath: prefix-sid/strict-spf/index/n-flag-clear
+    tf_name: prefix_sid_strict_spf_index_n_flag_clear
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: prefix-sid/strict-spf/STRICT-SPF/ABSOLUTE/absolute/absolute-id
+    xpath: prefix-sid/strict-spf/absolute/absolute-id
+    tf_name: prefix_sid_strict_spf_absolute_id
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 16100
+  - yang_name: prefix-sid/strict-spf/STRICT-SPF/ABSOLUTE/absolute/php-disable
+    xpath: prefix-sid/strict-spf/absolute/php-disable
+    tf_name: prefix_sid_strict_spf_absolute_php_disable
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: prefix-sid/strict-spf/STRICT-SPF/ABSOLUTE/absolute/explicit-null
+    xpath: prefix-sid/strict-spf/absolute/explicit-null
+    tf_name: prefix_sid_strict_spf_absolute_explicit_null
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: prefix-sid/strict-spf/STRICT-SPF/ABSOLUTE/absolute/n-flag-clear
+    xpath: prefix-sid/strict-spf/absolute/n-flag-clear
+    tf_name: prefix_sid_strict_spf_absolute_n_flag_clear
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: prefix-sid/PREFIX-SID/INDEX/index/index-id
+    xpath: prefix-sid/index/index-id
+    tf_name: prefix_sid_index_id
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 100
+  - yang_name: prefix-sid/PREFIX-SID/INDEX/index/php-disable
+    xpath: prefix-sid/index/php-disable
+    tf_name: prefix_sid_index_php_disable
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: prefix-sid/PREFIX-SID/INDEX/index/explicit-null
+    xpath: prefix-sid/index/explicit-null
+    tf_name: prefix_sid_index_explicit_null
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: prefix-sid/PREFIX-SID/INDEX/index/n-flag-clear
+    xpath: prefix-sid/index/n-flag-clear
+    tf_name: prefix_sid_index_n_flag_clear
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: prefix-sid/PREFIX-SID/ABSOLUTE/absolute/absolute-id
+    xpath: prefix-sid/absolute/absolute-id
+    tf_name: prefix_sid_absolute_id
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 16100
+  - yang_name: prefix-sid/PREFIX-SID/ABSOLUTE/absolute/php-disable
+    xpath: prefix-sid/absolute/php-disable
+    tf_name: prefix_sid_absolute_php_disable
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: prefix-sid/PREFIX-SID/ABSOLUTE/absolute/explicit-null
+    xpath: prefix-sid/absolute/explicit-null
+    tf_name: prefix_sid_absolute_explicit_null
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: prefix-sid/PREFIX-SID/ABSOLUTE/absolute/n-flag-clear
+    xpath: prefix-sid/absolute/n-flag-clear
+    tf_name: prefix_sid_absolute_n_flag_clear
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: prefix-sid/algorithms/algorithm
+    tf_name: prefix_sid_algorithms
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: algorithm-number
+        tf_name: algorithm
+        id: true
+        example: 131
+      - yang_name: ALGORITHM/INDEX/index/index-id
+        xpath: index/index-id
+        tf_name: index_id
+        example: 200
+      - yang_name: ALGORITHM/INDEX/index/php-disable
+        xpath: index/php-disable
+        tf_name: index_php_disable
+        example: true
+      - yang_name: ALGORITHM/INDEX/index/explicit-null
+        xpath: index/explicit-null
+        tf_name: index_explicit_null
+        example: true
+      - yang_name: ALGORITHM/INDEX/index/n-flag-clear
+        xpath: index/n-flag-clear
+        tf_name: index_n_flag_clear
+        example: true
+      - yang_name: ALGORITHM/ABSOLUTE/absolute/absolute-id
+        xpath: absolute/absolute-id
+        tf_name: absolute_id
+        exclude_test: true
+        example: 16200
+      - yang_name: ALGORITHM/ABSOLUTE/absolute/php-disable
+        xpath: absolute/php-disable
+        tf_name: absolute_php_disable
+        exclude_test: true
+        example: true
+      - yang_name: ALGORITHM/ABSOLUTE/absolute/explicit-null
+        xpath: absolute/explicit-null
+        tf_name: absolute_explicit_null
+        exclude_test: true
+        example: true
+      - yang_name: ALGORITHM/ABSOLUTE/absolute/n-flag-clear
+        xpath: absolute/n-flag-clear
+        tf_name: absolute_n_flag_clear
+        exclude_test: true
+        example: true
   - yang_name: adjacency-sid/indices/index
     tf_name: adjacency_sid_indices
     exclude_test: true
@@ -53,6 +276,174 @@ attributes:
         example: 24200
       - yang_name: protected
         example: true
+  - yang_name: fast-reroute/enable/per-prefix
+    tf_name: fast_reroute_per_prefix
+    example: true
+  - yang_name: fast-reroute/enable/per-link
+    tf_name: fast_reroute_per_link
+    example: true
+    exclude_test: true
+  - yang_name: fast-reroute/enable-levels/enable-level
+    tf_name: fast_reroute_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: per-prefix
+        example: true
+      - yang_name: per-link
+        example: true
+        exclude_test: true
+  - yang_name: fast-reroute/per-prefix/tiebreaker/default-backup-path
+    tf_name: fast_reroute_per_prefix_tiebreaker_default
+    exclude_test: true
+    example: true
+  - yang_name: fast-reroute/per-prefix/tiebreaker/default-backup-path-levels/default-backup-path-level
+    tf_name: fast_reroute_per_prefix_tiebreaker_default_levels
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+  - yang_name: fast-reroute/per-prefix/tiebreaker/node-protecting/index
+    tf_name: fast_reroute_per_prefix_tiebreaker_node_protecting_index
+    example: 10
+  - yang_name: fast-reroute/per-prefix/tiebreaker/node-protecting-levels/node-protecting-level
+    tf_name: fast_reroute_per_prefix_tiebreaker_node_protecting_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: index
+        example: 10
+  - yang_name: fast-reroute/per-prefix/tiebreaker/srlg-disjoint/index
+    tf_name: fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index
+    example: 20
+  - yang_name: fast-reroute/per-prefix/tiebreaker/srlg-disjoint-levels/srlg-disjoint-level
+    tf_name: fast_reroute_per_prefix_tiebreaker_srlg_disjoint_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: index
+        example: 20
+  - yang_name: fast-reroute/per-prefix/tiebreaker/lc-disjoint/index
+    tf_name: fast_reroute_per_prefix_tiebreaker_lc_disjoint_index
+    example: 30
+  - yang_name: fast-reroute/per-prefix/tiebreaker/lc-disjoint-levels/lc-disjoint-level
+    tf_name: fast_reroute_per_prefix_tiebreaker_lc_disjoint_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: index
+        example: 30
+  - yang_name: fast-reroute/per-prefix/remote-lfa/maximum-metric
+    tf_name: fast_reroute_per_prefix_remote_lfa_maximum_metric
+    example: 100
+  - yang_name: fast-reroute/per-prefix/remote-lfa/maximum-metric-levels/maximum-metric-level
+    tf_name: fast_reroute_per_prefix_remote_lfa_maximum_metric_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: maximum-metric
+        example: 100
+  - yang_name: fast-reroute/per-prefix/remote-lfa/tunnel/mpls-ldp
+    tf_name: fast_reroute_per_prefix_remote_lfa_tunnel_mpls_ldp
+    example: true
+  - yang_name: fast-reroute/per-prefix/remote-lfa/tunnel/mpls-ldp-levels/mpls-ldp-level
+    tf_name: fast_reroute_per_prefix_remote_lfa_tunnel_mpls_ldp_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+  - yang_name: fast-reroute/per-prefix/ti-lfa
+    tf_name: fast_reroute_per_prefix_ti_lfa
+    example: true
+  - yang_name: fast-reroute/per-prefix/ti-lfa-levels/ti-lfa-level
+    tf_name: fast_reroute_per_prefix_ti_lfa_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+  - yang_name: fast-reroute/per-prefix/exclude/interfaces/interface
+    tf_name: fast_reroute_per_prefix_exclude_interfaces
+    type: List
+    attributes:
+      - yang_name: exclude-interface-name
+        tf_name: interface_name
+        id: true
+        example: GigabitEthernet0/0/0/2
+      - yang_name: level
+        example: 1
+  - yang_name: fast-reroute/per-prefix/lfa-candidate/interfaces/interface
+    tf_name: fast_reroute_per_prefix_lfa_candidate_interfaces
+    type: List
+    attributes:
+      - yang_name: lfa-interface-name
+        tf_name: interface_name
+        id: true
+        example: GigabitEthernet0/0/0/3
+      - yang_name: level
+        example: 1
+  - yang_name: fast-reroute/per-link/exclude/interfaces/interface
+    tf_name: fast_reroute_per_link_exclude_interfaces
+    type: List
+    attributes:
+      - yang_name: exclude-interface-name
+        tf_name: interface_name
+        id: true
+        example: GigabitEthernet0/0/0/2
+      - yang_name: level
+        example: 1
+  - yang_name: fast-reroute/per-link/lfa-candidate/interfaces/interface
+    tf_name: fast_reroute_per_link_lfa_candidate_interfaces
+    type: List
+    attributes:
+      - yang_name: lfa-interface-name
+        tf_name: interface_name
+        id: true
+        example: GigabitEthernet0/0/0/3
+      - yang_name: level
+        example: 1
+  - yang_name: link-group/link-group-string
+    tf_name: link_group_name
+    example: LINK_GROUP_1
+  - yang_name: link-group/level
+    tf_name: link_group_level
+    example: 1
+  - yang_name: weight
+    example: 500
+  - yang_name: weight-levels/weight-level
+    tf_name: weight_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: weight
+        example: 500
+  - yang_name: auto-metric/proactive-protect
+    tf_name: auto_metric_proactive_protect_metric
+    example: 500
+  - yang_name: auto-metric/proactive-protect-levels/proactive-protect-level
+    tf_name: auto_metric_proactive_protect_metric_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: proactive-protect
+        example: 500
   - yang_name: advertise/prefix-advertisement/route-policy
     tf_name: advertise_prefix_route_policy
     example: ROUTE_POLICY_1
@@ -65,36 +456,6 @@ attributes:
         example: 1
       - yang_name: route-policy
         example: ROUTE_POLICY_2
-  - yang_name: metric/METRIC/DEFAULT-METRIC/default-metric
-    xpath: metric/default-metric
-    tf_name: metric_default
-    optional: true
-    example: 500
-  - yang_name: metric/METRIC/MAXIMUM/maximum
-    xpath: metric/maximum
-    tf_name: metric_maximum
-    optional: true
-    exclude_test: true
-    example: true
-  - yang_name: metric-levels/metric-level
-    tf_name: metric_levels
-    exclude_test: true
-    type: List
-    attributes:
-      - yang_name: level-number
-        id: true
-        example: 1
-      - yang_name: METRIC/DEFAULT-METRIC/default-metric
-        xpath: metric-levels/metric-level/default-metric
-        tf_name: metric_default
-        optional: true
-        example: 600
-      - yang_name: METRIC/MAXIMUM/maximum
-        xpath: metric-levels/metric-level/maximum
-        tf_name: metric_maximum
-        optional: true
-        exclude_test: true
-        example: true
 
 test_prerequisites:
   - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]
@@ -109,12 +470,26 @@ test_prerequisites:
         value: ROUTE_POLICY_2
       - name: rpl-route-policy
         value: "route-policy ROUTE_POLICY_2\\n  pass\\nend-policy\\n"
+    dependencies: [0]
   - path: Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]
     attributes:
       - name: process-id
         value: P1
+    dependencies: [1]
+  - path: Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/address-families/address-family[af-name=ipv4][saf-name=unicast]
+    attributes:
+      - name: af-name
+        value: ipv4
+      - name: saf-name
+        value: unicast
+    dependencies: [2]
+  - path: Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/address-families/address-family[af-name=ipv4][saf-name=unicast]
+    attributes:
+      - name: segment-routing/mpls/enable
+        value: <NULL>
+    dependencies: [3]
   - path: Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]
     attributes:
       - name: interface-name
         value: GigabitEthernet0/0/0/1
-    dependencies: [2]
+    dependencies: [4]

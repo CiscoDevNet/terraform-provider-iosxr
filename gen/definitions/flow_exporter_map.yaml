@@ -3,7 +3,7 @@ name: Flow Exporter Map
 path: Cisco-IOS-XR-um-flow-cfg:/flow/exporter-maps/exporter-map[exporter-map-name=%s]
 no_delete_attributes: true
 doc_category: Flow
-test_tags: [NCS]
+test_tags: [NCS, C8000]
 attributes:
   - yang_name: exporter-map-name
     tf_name: name
@@ -18,12 +18,28 @@ attributes:
     example: VRF1
   - yang_name: source
     example: GigabitEthernet0/0/0/1
+  - yang_name: source-address/ipv4-address
+    tf_name: source_address_ipv4_address
+    example: 192.0.2.1
+    exclude_test: true
+  - yang_name: source-address/ipv6-address
+    tf_name: source_address_ipv6_address
+    example: 2001:db8::1
+    exclude_test: true
+  - yang_name: router-id/router-id-address/ipv4-address
+    tf_name: router_id_ipv4_address
+    example: 192.0.2.1
+    exclude_test: true
+  - yang_name: router-id/router-id-address/ipv6-address
+    tf_name: router_id_ipv6_address
+    example: 2001:db8::1
+    exclude_test: true
   - yang_name: dscp
     example: 62
-  - yang_name: packet-length
-    example: 512
   - yang_name: transport/udp
     example: 1033
+  - yang_name: packet-length
+    example: 512
   - yang_name: dfbit/set
     example: true
   - yang_name: version/export-format

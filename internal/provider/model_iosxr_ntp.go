@@ -1249,13 +1249,21 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.Interfaces[i].InterfaceName = types.StringNull()
 		}
 		if value := r.Get("broadcast-client"); value.Exists() {
-			if !data.Interfaces[i].BroadcastClient.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].BroadcastClient.IsNull() && !data.Interfaces[i].BroadcastClient.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].BroadcastClient = types.BoolValue(false)
+			} else if !data.Interfaces[i].BroadcastClient.IsNull() {
 				data.Interfaces[i].BroadcastClient = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].BroadcastClient.IsNull() {
 				data.Interfaces[i].BroadcastClient = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].BroadcastClient = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("broadcast.destination"); value.Exists() && !data.Interfaces[i].BroadcastDestination.IsNull() {
@@ -1274,13 +1282,21 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.Interfaces[i].BroadcastVersion = types.Int64Null()
 		}
 		if value := r.Get("disable"); value.Exists() {
-			if !data.Interfaces[i].Disable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].Disable.IsNull() && !data.Interfaces[i].Disable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].Disable = types.BoolValue(false)
+			} else if !data.Interfaces[i].Disable.IsNull() {
 				data.Interfaces[i].Disable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].Disable.IsNull() {
 				data.Interfaces[i].Disable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].Disable = types.BoolValue(false)
 			}
 		}
 	}
@@ -1341,13 +1357,18 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 				data.InterfaceVrfs[i].Interfaces[ci].InterfaceName = types.StringNull()
 			}
 			if value := cr.Get("broadcast-client"); value.Exists() {
-				if !data.InterfaceVrfs[i].Interfaces[ci].BroadcastClient.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.InterfaceVrfs[i].Interfaces[ci].BroadcastClient.IsNull() && !data.InterfaceVrfs[i].Interfaces[ci].BroadcastClient.ValueBool() {
+					data.InterfaceVrfs[i].Interfaces[ci].BroadcastClient = types.BoolValue(false)
+				} else if !data.InterfaceVrfs[i].Interfaces[ci].BroadcastClient.IsNull() {
 					data.InterfaceVrfs[i].Interfaces[ci].BroadcastClient = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.InterfaceVrfs[i].Interfaces[ci].BroadcastClient.IsNull() {
 					data.InterfaceVrfs[i].Interfaces[ci].BroadcastClient = types.BoolNull()
+				} else {
+					data.InterfaceVrfs[i].Interfaces[ci].BroadcastClient = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("broadcast.destination"); value.Exists() && !data.InterfaceVrfs[i].Interfaces[ci].BroadcastDestination.IsNull() {
@@ -1366,13 +1387,18 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 				data.InterfaceVrfs[i].Interfaces[ci].BroadcastVersion = types.Int64Null()
 			}
 			if value := cr.Get("disable"); value.Exists() {
-				if !data.InterfaceVrfs[i].Interfaces[ci].Disable.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.InterfaceVrfs[i].Interfaces[ci].Disable.IsNull() && !data.InterfaceVrfs[i].Interfaces[ci].Disable.ValueBool() {
+					data.InterfaceVrfs[i].Interfaces[ci].Disable = types.BoolValue(false)
+				} else if !data.InterfaceVrfs[i].Interfaces[ci].Disable.IsNull() {
 					data.InterfaceVrfs[i].Interfaces[ci].Disable = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.InterfaceVrfs[i].Interfaces[ci].Disable.IsNull() {
 					data.InterfaceVrfs[i].Interfaces[ci].Disable = types.BoolNull()
+				} else {
+					data.InterfaceVrfs[i].Interfaces[ci].Disable = types.BoolValue(false)
 				}
 			}
 		}
@@ -1451,33 +1477,57 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.Ipv4PeersServers[i].Maxpoll = types.Int64Null()
 		}
 		if value := r.Get("prefer"); value.Exists() {
-			if !data.Ipv4PeersServers[i].Prefer.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Ipv4PeersServers[i].Prefer.IsNull() && !data.Ipv4PeersServers[i].Prefer.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Ipv4PeersServers[i].Prefer = types.BoolValue(false)
+			} else if !data.Ipv4PeersServers[i].Prefer.IsNull() {
 				data.Ipv4PeersServers[i].Prefer = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Ipv4PeersServers[i].Prefer.IsNull() {
 				data.Ipv4PeersServers[i].Prefer = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Ipv4PeersServers[i].Prefer = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("burst"); value.Exists() {
-			if !data.Ipv4PeersServers[i].Burst.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Ipv4PeersServers[i].Burst.IsNull() && !data.Ipv4PeersServers[i].Burst.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Ipv4PeersServers[i].Burst = types.BoolValue(false)
+			} else if !data.Ipv4PeersServers[i].Burst.IsNull() {
 				data.Ipv4PeersServers[i].Burst = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Ipv4PeersServers[i].Burst.IsNull() {
 				data.Ipv4PeersServers[i].Burst = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Ipv4PeersServers[i].Burst = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("iburst"); value.Exists() {
-			if !data.Ipv4PeersServers[i].Iburst.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Ipv4PeersServers[i].Iburst.IsNull() && !data.Ipv4PeersServers[i].Iburst.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Ipv4PeersServers[i].Iburst = types.BoolValue(false)
+			} else if !data.Ipv4PeersServers[i].Iburst.IsNull() {
 				data.Ipv4PeersServers[i].Iburst = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Ipv4PeersServers[i].Iburst.IsNull() {
 				data.Ipv4PeersServers[i].Iburst = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Ipv4PeersServers[i].Iburst = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("source"); value.Exists() && !data.Ipv4PeersServers[i].Source.IsNull() {
@@ -1540,33 +1590,57 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.Ipv6PeersServers[i].Maxpoll = types.Int64Null()
 		}
 		if value := r.Get("prefer"); value.Exists() {
-			if !data.Ipv6PeersServers[i].Prefer.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Ipv6PeersServers[i].Prefer.IsNull() && !data.Ipv6PeersServers[i].Prefer.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Ipv6PeersServers[i].Prefer = types.BoolValue(false)
+			} else if !data.Ipv6PeersServers[i].Prefer.IsNull() {
 				data.Ipv6PeersServers[i].Prefer = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Ipv6PeersServers[i].Prefer.IsNull() {
 				data.Ipv6PeersServers[i].Prefer = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Ipv6PeersServers[i].Prefer = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("burst"); value.Exists() {
-			if !data.Ipv6PeersServers[i].Burst.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Ipv6PeersServers[i].Burst.IsNull() && !data.Ipv6PeersServers[i].Burst.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Ipv6PeersServers[i].Burst = types.BoolValue(false)
+			} else if !data.Ipv6PeersServers[i].Burst.IsNull() {
 				data.Ipv6PeersServers[i].Burst = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Ipv6PeersServers[i].Burst.IsNull() {
 				data.Ipv6PeersServers[i].Burst = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Ipv6PeersServers[i].Burst = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("iburst"); value.Exists() {
-			if !data.Ipv6PeersServers[i].Iburst.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Ipv6PeersServers[i].Iburst.IsNull() && !data.Ipv6PeersServers[i].Iburst.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Ipv6PeersServers[i].Iburst = types.BoolValue(false)
+			} else if !data.Ipv6PeersServers[i].Iburst.IsNull() {
 				data.Ipv6PeersServers[i].Iburst = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Ipv6PeersServers[i].Iburst.IsNull() {
 				data.Ipv6PeersServers[i].Iburst = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Ipv6PeersServers[i].Iburst = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("source"); value.Exists() && !data.Ipv6PeersServers[i].Source.IsNull() {
@@ -1634,33 +1708,57 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.HostnamePeersServers[i].Maxpoll = types.Int64Null()
 		}
 		if value := r.Get("prefer"); value.Exists() {
-			if !data.HostnamePeersServers[i].Prefer.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.HostnamePeersServers[i].Prefer.IsNull() && !data.HostnamePeersServers[i].Prefer.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.HostnamePeersServers[i].Prefer = types.BoolValue(false)
+			} else if !data.HostnamePeersServers[i].Prefer.IsNull() {
 				data.HostnamePeersServers[i].Prefer = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.HostnamePeersServers[i].Prefer.IsNull() {
 				data.HostnamePeersServers[i].Prefer = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.HostnamePeersServers[i].Prefer = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("burst"); value.Exists() {
-			if !data.HostnamePeersServers[i].Burst.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.HostnamePeersServers[i].Burst.IsNull() && !data.HostnamePeersServers[i].Burst.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.HostnamePeersServers[i].Burst = types.BoolValue(false)
+			} else if !data.HostnamePeersServers[i].Burst.IsNull() {
 				data.HostnamePeersServers[i].Burst = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.HostnamePeersServers[i].Burst.IsNull() {
 				data.HostnamePeersServers[i].Burst = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.HostnamePeersServers[i].Burst = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("iburst"); value.Exists() {
-			if !data.HostnamePeersServers[i].Iburst.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.HostnamePeersServers[i].Iburst.IsNull() && !data.HostnamePeersServers[i].Iburst.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.HostnamePeersServers[i].Iburst = types.BoolValue(false)
+			} else if !data.HostnamePeersServers[i].Iburst.IsNull() {
 				data.HostnamePeersServers[i].Iburst = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.HostnamePeersServers[i].Iburst.IsNull() {
 				data.HostnamePeersServers[i].Iburst = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.HostnamePeersServers[i].Iburst = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("source"); value.Exists() && !data.HostnamePeersServers[i].Source.IsNull() {
@@ -1751,33 +1849,48 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 				data.PeersServersVrfs[i].Ipv4PeersServers[ci].Maxpoll = types.Int64Null()
 			}
 			if value := cr.Get("prefer"); value.Exists() {
-				if !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Prefer.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Prefer.IsNull() && !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Prefer.ValueBool() {
+					data.PeersServersVrfs[i].Ipv4PeersServers[ci].Prefer = types.BoolValue(false)
+				} else if !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Prefer.IsNull() {
 					data.PeersServersVrfs[i].Ipv4PeersServers[ci].Prefer = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.PeersServersVrfs[i].Ipv4PeersServers[ci].Prefer.IsNull() {
 					data.PeersServersVrfs[i].Ipv4PeersServers[ci].Prefer = types.BoolNull()
+				} else {
+					data.PeersServersVrfs[i].Ipv4PeersServers[ci].Prefer = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("burst"); value.Exists() {
-				if !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Burst.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Burst.IsNull() && !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Burst.ValueBool() {
+					data.PeersServersVrfs[i].Ipv4PeersServers[ci].Burst = types.BoolValue(false)
+				} else if !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Burst.IsNull() {
 					data.PeersServersVrfs[i].Ipv4PeersServers[ci].Burst = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.PeersServersVrfs[i].Ipv4PeersServers[ci].Burst.IsNull() {
 					data.PeersServersVrfs[i].Ipv4PeersServers[ci].Burst = types.BoolNull()
+				} else {
+					data.PeersServersVrfs[i].Ipv4PeersServers[ci].Burst = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("iburst"); value.Exists() {
-				if !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Iburst.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Iburst.IsNull() && !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Iburst.ValueBool() {
+					data.PeersServersVrfs[i].Ipv4PeersServers[ci].Iburst = types.BoolValue(false)
+				} else if !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Iburst.IsNull() {
 					data.PeersServersVrfs[i].Ipv4PeersServers[ci].Iburst = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.PeersServersVrfs[i].Ipv4PeersServers[ci].Iburst.IsNull() {
 					data.PeersServersVrfs[i].Ipv4PeersServers[ci].Iburst = types.BoolNull()
+				} else {
+					data.PeersServersVrfs[i].Ipv4PeersServers[ci].Iburst = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("source"); value.Exists() && !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Source.IsNull() {
@@ -1840,33 +1953,48 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Maxpoll = types.Int64Null()
 			}
 			if value := cr.Get("prefer"); value.Exists() {
-				if !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Prefer.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Prefer.IsNull() && !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Prefer.ValueBool() {
+					data.PeersServersVrfs[i].Ipv6PeersServers[ci].Prefer = types.BoolValue(false)
+				} else if !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Prefer.IsNull() {
 					data.PeersServersVrfs[i].Ipv6PeersServers[ci].Prefer = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.PeersServersVrfs[i].Ipv6PeersServers[ci].Prefer.IsNull() {
 					data.PeersServersVrfs[i].Ipv6PeersServers[ci].Prefer = types.BoolNull()
+				} else {
+					data.PeersServersVrfs[i].Ipv6PeersServers[ci].Prefer = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("burst"); value.Exists() {
-				if !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Burst.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Burst.IsNull() && !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Burst.ValueBool() {
+					data.PeersServersVrfs[i].Ipv6PeersServers[ci].Burst = types.BoolValue(false)
+				} else if !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Burst.IsNull() {
 					data.PeersServersVrfs[i].Ipv6PeersServers[ci].Burst = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.PeersServersVrfs[i].Ipv6PeersServers[ci].Burst.IsNull() {
 					data.PeersServersVrfs[i].Ipv6PeersServers[ci].Burst = types.BoolNull()
+				} else {
+					data.PeersServersVrfs[i].Ipv6PeersServers[ci].Burst = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("iburst"); value.Exists() {
-				if !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Iburst.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Iburst.IsNull() && !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Iburst.ValueBool() {
+					data.PeersServersVrfs[i].Ipv6PeersServers[ci].Iburst = types.BoolValue(false)
+				} else if !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Iburst.IsNull() {
 					data.PeersServersVrfs[i].Ipv6PeersServers[ci].Iburst = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.PeersServersVrfs[i].Ipv6PeersServers[ci].Iburst.IsNull() {
 					data.PeersServersVrfs[i].Ipv6PeersServers[ci].Iburst = types.BoolNull()
+				} else {
+					data.PeersServersVrfs[i].Ipv6PeersServers[ci].Iburst = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("source"); value.Exists() && !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Source.IsNull() {
@@ -1934,33 +2062,48 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 				data.PeersServersVrfs[i].HostnamePeersServers[ci].Maxpoll = types.Int64Null()
 			}
 			if value := cr.Get("prefer"); value.Exists() {
-				if !data.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer.IsNull() && !data.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer.ValueBool() {
+					data.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer = types.BoolValue(false)
+				} else if !data.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer.IsNull() {
 					data.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer.IsNull() {
 					data.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer = types.BoolNull()
+				} else {
+					data.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("burst"); value.Exists() {
-				if !data.PeersServersVrfs[i].HostnamePeersServers[ci].Burst.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.PeersServersVrfs[i].HostnamePeersServers[ci].Burst.IsNull() && !data.PeersServersVrfs[i].HostnamePeersServers[ci].Burst.ValueBool() {
+					data.PeersServersVrfs[i].HostnamePeersServers[ci].Burst = types.BoolValue(false)
+				} else if !data.PeersServersVrfs[i].HostnamePeersServers[ci].Burst.IsNull() {
 					data.PeersServersVrfs[i].HostnamePeersServers[ci].Burst = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.PeersServersVrfs[i].HostnamePeersServers[ci].Burst.IsNull() {
 					data.PeersServersVrfs[i].HostnamePeersServers[ci].Burst = types.BoolNull()
+				} else {
+					data.PeersServersVrfs[i].HostnamePeersServers[ci].Burst = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("iburst"); value.Exists() {
-				if !data.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst.IsNull() && !data.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst.ValueBool() {
+					data.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst = types.BoolValue(false)
+				} else if !data.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst.IsNull() {
 					data.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst.IsNull() {
 					data.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst = types.BoolNull()
+				} else {
+					data.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("source"); value.Exists() && !data.PeersServersVrfs[i].HostnamePeersServers[ci].Source.IsNull() {
@@ -4101,7 +4244,7 @@ func (data *NTP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("broadcast-client"); cValue.Exists() {
 				item.BroadcastClient = types.BoolValue(true)
 			} else {
-				item.BroadcastClient = types.BoolNull()
+				item.BroadcastClient = types.BoolValue(false)
 			}
 			if cValue := v.Get("broadcast.destination"); cValue.Exists() {
 				item.BroadcastDestination = types.StringValue(cValue.String())
@@ -4115,7 +4258,7 @@ func (data *NTP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("disable"); cValue.Exists() {
 				item.Disable = types.BoolValue(true)
 			} else {
-				item.Disable = types.BoolNull()
+				item.Disable = types.BoolValue(false)
 			}
 			data.Interfaces = append(data.Interfaces, item)
 			return true
@@ -4138,7 +4281,7 @@ func (data *NTP) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("broadcast-client"); ccValue.Exists() {
 						cItem.BroadcastClient = types.BoolValue(true)
 					} else {
-						cItem.BroadcastClient = types.BoolNull()
+						cItem.BroadcastClient = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("broadcast.destination"); ccValue.Exists() {
 						cItem.BroadcastDestination = types.StringValue(ccValue.String())
@@ -4152,7 +4295,7 @@ func (data *NTP) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("disable"); ccValue.Exists() {
 						cItem.Disable = types.BoolValue(true)
 					} else {
-						cItem.Disable = types.BoolNull()
+						cItem.Disable = types.BoolValue(false)
 					}
 					item.Interfaces = append(item.Interfaces, cItem)
 					return true
@@ -4198,17 +4341,17 @@ func (data *NTP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("prefer"); cValue.Exists() {
 				item.Prefer = types.BoolValue(true)
 			} else {
-				item.Prefer = types.BoolNull()
+				item.Prefer = types.BoolValue(false)
 			}
 			if cValue := v.Get("burst"); cValue.Exists() {
 				item.Burst = types.BoolValue(true)
 			} else {
-				item.Burst = types.BoolNull()
+				item.Burst = types.BoolValue(false)
 			}
 			if cValue := v.Get("iburst"); cValue.Exists() {
 				item.Iburst = types.BoolValue(true)
 			} else {
-				item.Iburst = types.BoolNull()
+				item.Iburst = types.BoolValue(false)
 			}
 			if cValue := v.Get("source"); cValue.Exists() {
 				item.Source = types.StringValue(cValue.String())
@@ -4242,17 +4385,17 @@ func (data *NTP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("prefer"); cValue.Exists() {
 				item.Prefer = types.BoolValue(true)
 			} else {
-				item.Prefer = types.BoolNull()
+				item.Prefer = types.BoolValue(false)
 			}
 			if cValue := v.Get("burst"); cValue.Exists() {
 				item.Burst = types.BoolValue(true)
 			} else {
-				item.Burst = types.BoolNull()
+				item.Burst = types.BoolValue(false)
 			}
 			if cValue := v.Get("iburst"); cValue.Exists() {
 				item.Iburst = types.BoolValue(true)
 			} else {
-				item.Iburst = types.BoolNull()
+				item.Iburst = types.BoolValue(false)
 			}
 			if cValue := v.Get("source"); cValue.Exists() {
 				item.Source = types.StringValue(cValue.String())
@@ -4289,17 +4432,17 @@ func (data *NTP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("prefer"); cValue.Exists() {
 				item.Prefer = types.BoolValue(true)
 			} else {
-				item.Prefer = types.BoolNull()
+				item.Prefer = types.BoolValue(false)
 			}
 			if cValue := v.Get("burst"); cValue.Exists() {
 				item.Burst = types.BoolValue(true)
 			} else {
-				item.Burst = types.BoolNull()
+				item.Burst = types.BoolValue(false)
 			}
 			if cValue := v.Get("iburst"); cValue.Exists() {
 				item.Iburst = types.BoolValue(true)
 			} else {
-				item.Iburst = types.BoolNull()
+				item.Iburst = types.BoolValue(false)
 			}
 			if cValue := v.Get("source"); cValue.Exists() {
 				item.Source = types.StringValue(cValue.String())
@@ -4340,17 +4483,17 @@ func (data *NTP) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("prefer"); ccValue.Exists() {
 						cItem.Prefer = types.BoolValue(true)
 					} else {
-						cItem.Prefer = types.BoolNull()
+						cItem.Prefer = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("burst"); ccValue.Exists() {
 						cItem.Burst = types.BoolValue(true)
 					} else {
-						cItem.Burst = types.BoolNull()
+						cItem.Burst = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("iburst"); ccValue.Exists() {
 						cItem.Iburst = types.BoolValue(true)
 					} else {
-						cItem.Iburst = types.BoolNull()
+						cItem.Iburst = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("source"); ccValue.Exists() {
 						cItem.Source = types.StringValue(ccValue.String())
@@ -4384,17 +4527,17 @@ func (data *NTP) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("prefer"); ccValue.Exists() {
 						cItem.Prefer = types.BoolValue(true)
 					} else {
-						cItem.Prefer = types.BoolNull()
+						cItem.Prefer = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("burst"); ccValue.Exists() {
 						cItem.Burst = types.BoolValue(true)
 					} else {
-						cItem.Burst = types.BoolNull()
+						cItem.Burst = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("iburst"); ccValue.Exists() {
 						cItem.Iburst = types.BoolValue(true)
 					} else {
-						cItem.Iburst = types.BoolNull()
+						cItem.Iburst = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("source"); ccValue.Exists() {
 						cItem.Source = types.StringValue(ccValue.String())
@@ -4431,17 +4574,17 @@ func (data *NTP) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("prefer"); ccValue.Exists() {
 						cItem.Prefer = types.BoolValue(true)
 					} else {
-						cItem.Prefer = types.BoolNull()
+						cItem.Prefer = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("burst"); ccValue.Exists() {
 						cItem.Burst = types.BoolValue(true)
 					} else {
-						cItem.Burst = types.BoolNull()
+						cItem.Burst = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("iburst"); ccValue.Exists() {
 						cItem.Iburst = types.BoolValue(true)
 					} else {
-						cItem.Iburst = types.BoolNull()
+						cItem.Iburst = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("source"); ccValue.Exists() {
 						cItem.Source = types.StringValue(ccValue.String())

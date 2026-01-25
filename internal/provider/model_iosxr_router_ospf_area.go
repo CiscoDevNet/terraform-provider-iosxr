@@ -1361,23 +1361,39 @@ func (data *RouterOSPFArea) updateFromBody(ctx context.Context, res []byte) {
 			data.Ranges[i].Mask = types.StringNull()
 		}
 		if value := r.Get("advertise"); value.Exists() {
-			if !data.Ranges[i].Advertise.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Ranges[i].Advertise.IsNull() && !data.Ranges[i].Advertise.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Ranges[i].Advertise = types.BoolValue(false)
+			} else if !data.Ranges[i].Advertise.IsNull() {
 				data.Ranges[i].Advertise = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Ranges[i].Advertise.IsNull() {
 				data.Ranges[i].Advertise = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Ranges[i].Advertise = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("not-advertise"); value.Exists() {
-			if !data.Ranges[i].NotAdvertise.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Ranges[i].NotAdvertise.IsNull() && !data.Ranges[i].NotAdvertise.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Ranges[i].NotAdvertise = types.BoolValue(false)
+			} else if !data.Ranges[i].NotAdvertise.IsNull() {
 				data.Ranges[i].NotAdvertise = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Ranges[i].NotAdvertise.IsNull() {
 				data.Ranges[i].NotAdvertise = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Ranges[i].NotAdvertise = types.BoolValue(false)
 			}
 		}
 	}
@@ -1523,13 +1539,18 @@ func (data *RouterOSPFArea) updateFromBody(ctx context.Context, res []byte) {
 				data.MultiAreaInterfaces[i].Neighbors[ci].Address = types.StringNull()
 			}
 			if value := cr.Get("database-filter.all.out"); value.Exists() {
-				if !data.MultiAreaInterfaces[i].Neighbors[ci].DatabaseFilterAllOut.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.MultiAreaInterfaces[i].Neighbors[ci].DatabaseFilterAllOut.IsNull() && !data.MultiAreaInterfaces[i].Neighbors[ci].DatabaseFilterAllOut.ValueBool() {
+					data.MultiAreaInterfaces[i].Neighbors[ci].DatabaseFilterAllOut = types.BoolValue(false)
+				} else if !data.MultiAreaInterfaces[i].Neighbors[ci].DatabaseFilterAllOut.IsNull() {
 					data.MultiAreaInterfaces[i].Neighbors[ci].DatabaseFilterAllOut = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.MultiAreaInterfaces[i].Neighbors[ci].DatabaseFilterAllOut.IsNull() {
 					data.MultiAreaInterfaces[i].Neighbors[ci].DatabaseFilterAllOut = types.BoolNull()
+				} else {
+					data.MultiAreaInterfaces[i].Neighbors[ci].DatabaseFilterAllOut = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("poll-interval"); value.Exists() {
@@ -1573,23 +1594,39 @@ func (data *RouterOSPFArea) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		if value := r.Get("authentication"); value.Exists() {
-			if !data.MultiAreaInterfaces[i].Authentication.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiAreaInterfaces[i].Authentication.IsNull() && !data.MultiAreaInterfaces[i].Authentication.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiAreaInterfaces[i].Authentication = types.BoolValue(false)
+			} else if !data.MultiAreaInterfaces[i].Authentication.IsNull() {
 				data.MultiAreaInterfaces[i].Authentication = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiAreaInterfaces[i].Authentication.IsNull() {
 				data.MultiAreaInterfaces[i].Authentication = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiAreaInterfaces[i].Authentication = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("authentication.message-digest"); value.Exists() {
-			if !data.MultiAreaInterfaces[i].AuthenticationMessageDigest.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiAreaInterfaces[i].AuthenticationMessageDigest.IsNull() && !data.MultiAreaInterfaces[i].AuthenticationMessageDigest.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiAreaInterfaces[i].AuthenticationMessageDigest = types.BoolValue(false)
+			} else if !data.MultiAreaInterfaces[i].AuthenticationMessageDigest.IsNull() {
 				data.MultiAreaInterfaces[i].AuthenticationMessageDigest = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiAreaInterfaces[i].AuthenticationMessageDigest.IsNull() {
 				data.MultiAreaInterfaces[i].AuthenticationMessageDigest = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiAreaInterfaces[i].AuthenticationMessageDigest = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("authentication.keychain-name"); value.Exists() && !data.MultiAreaInterfaces[i].AuthenticationKeychainName.IsNull() {
@@ -1598,13 +1635,21 @@ func (data *RouterOSPFArea) updateFromBody(ctx context.Context, res []byte) {
 			data.MultiAreaInterfaces[i].AuthenticationKeychainName = types.StringNull()
 		}
 		if value := r.Get("authentication.null"); value.Exists() {
-			if !data.MultiAreaInterfaces[i].AuthenticationNull.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiAreaInterfaces[i].AuthenticationNull.IsNull() && !data.MultiAreaInterfaces[i].AuthenticationNull.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiAreaInterfaces[i].AuthenticationNull = types.BoolValue(false)
+			} else if !data.MultiAreaInterfaces[i].AuthenticationNull.IsNull() {
 				data.MultiAreaInterfaces[i].AuthenticationNull = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiAreaInterfaces[i].AuthenticationNull.IsNull() {
 				data.MultiAreaInterfaces[i].AuthenticationNull = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiAreaInterfaces[i].AuthenticationNull = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("cost"); value.Exists() && !data.MultiAreaInterfaces[i].Cost.IsNull() {
@@ -1643,43 +1688,75 @@ func (data *RouterOSPFArea) updateFromBody(ctx context.Context, res []byte) {
 			data.MultiAreaInterfaces[i].TransmitDelay = types.Int64Null()
 		}
 		if value := r.Get("mtu-ignore.enable"); value.Exists() {
-			if !data.MultiAreaInterfaces[i].MtuIgnoreEnable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiAreaInterfaces[i].MtuIgnoreEnable.IsNull() && !data.MultiAreaInterfaces[i].MtuIgnoreEnable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiAreaInterfaces[i].MtuIgnoreEnable = types.BoolValue(false)
+			} else if !data.MultiAreaInterfaces[i].MtuIgnoreEnable.IsNull() {
 				data.MultiAreaInterfaces[i].MtuIgnoreEnable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiAreaInterfaces[i].MtuIgnoreEnable.IsNull() {
 				data.MultiAreaInterfaces[i].MtuIgnoreEnable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiAreaInterfaces[i].MtuIgnoreEnable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("mtu-ignore.disable"); value.Exists() {
-			if !data.MultiAreaInterfaces[i].MtuIgnoreDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiAreaInterfaces[i].MtuIgnoreDisable.IsNull() && !data.MultiAreaInterfaces[i].MtuIgnoreDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiAreaInterfaces[i].MtuIgnoreDisable = types.BoolValue(false)
+			} else if !data.MultiAreaInterfaces[i].MtuIgnoreDisable.IsNull() {
 				data.MultiAreaInterfaces[i].MtuIgnoreDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiAreaInterfaces[i].MtuIgnoreDisable.IsNull() {
 				data.MultiAreaInterfaces[i].MtuIgnoreDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiAreaInterfaces[i].MtuIgnoreDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("database-filter.all.out.enable"); value.Exists() {
-			if !data.MultiAreaInterfaces[i].DatabaseFilterAllOutEnable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiAreaInterfaces[i].DatabaseFilterAllOutEnable.IsNull() && !data.MultiAreaInterfaces[i].DatabaseFilterAllOutEnable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiAreaInterfaces[i].DatabaseFilterAllOutEnable = types.BoolValue(false)
+			} else if !data.MultiAreaInterfaces[i].DatabaseFilterAllOutEnable.IsNull() {
 				data.MultiAreaInterfaces[i].DatabaseFilterAllOutEnable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiAreaInterfaces[i].DatabaseFilterAllOutEnable.IsNull() {
 				data.MultiAreaInterfaces[i].DatabaseFilterAllOutEnable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiAreaInterfaces[i].DatabaseFilterAllOutEnable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("database-filter.all.out.disable"); value.Exists() {
-			if !data.MultiAreaInterfaces[i].DatabaseFilterAllOutDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiAreaInterfaces[i].DatabaseFilterAllOutDisable.IsNull() && !data.MultiAreaInterfaces[i].DatabaseFilterAllOutDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiAreaInterfaces[i].DatabaseFilterAllOutDisable = types.BoolValue(false)
+			} else if !data.MultiAreaInterfaces[i].DatabaseFilterAllOutDisable.IsNull() {
 				data.MultiAreaInterfaces[i].DatabaseFilterAllOutDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiAreaInterfaces[i].DatabaseFilterAllOutDisable.IsNull() {
 				data.MultiAreaInterfaces[i].DatabaseFilterAllOutDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiAreaInterfaces[i].DatabaseFilterAllOutDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("distribute-list.access-list"); value.Exists() && !data.MultiAreaInterfaces[i].DistributeListAcl.IsNull() {
@@ -1698,13 +1775,21 @@ func (data *RouterOSPFArea) updateFromBody(ctx context.Context, res []byte) {
 			data.MultiAreaInterfaces[i].PacketSize = types.Int64Null()
 		}
 		if value := r.Get("fast-reroute.per-link.enable"); value.Exists() {
-			if !data.MultiAreaInterfaces[i].FastReroutePerLink.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiAreaInterfaces[i].FastReroutePerLink.IsNull() && !data.MultiAreaInterfaces[i].FastReroutePerLink.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiAreaInterfaces[i].FastReroutePerLink = types.BoolValue(false)
+			} else if !data.MultiAreaInterfaces[i].FastReroutePerLink.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerLink = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiAreaInterfaces[i].FastReroutePerLink.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerLink = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiAreaInterfaces[i].FastReroutePerLink = types.BoolValue(false)
 			}
 		}
 		for ci := range data.MultiAreaInterfaces[i].FastReroutePerLinkExcludeInterfaces {
@@ -1766,43 +1851,75 @@ func (data *RouterOSPFArea) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		if value := r.Get("fast-reroute.per-link.use-candidate-only.enable"); value.Exists() {
-			if !data.MultiAreaInterfaces[i].FastReroutePerLinkUseCandidateOnlyEnable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiAreaInterfaces[i].FastReroutePerLinkUseCandidateOnlyEnable.IsNull() && !data.MultiAreaInterfaces[i].FastReroutePerLinkUseCandidateOnlyEnable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiAreaInterfaces[i].FastReroutePerLinkUseCandidateOnlyEnable = types.BoolValue(false)
+			} else if !data.MultiAreaInterfaces[i].FastReroutePerLinkUseCandidateOnlyEnable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerLinkUseCandidateOnlyEnable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiAreaInterfaces[i].FastReroutePerLinkUseCandidateOnlyEnable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerLinkUseCandidateOnlyEnable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiAreaInterfaces[i].FastReroutePerLinkUseCandidateOnlyEnable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("fast-reroute.per-link.use-candidate-only.disable"); value.Exists() {
-			if !data.MultiAreaInterfaces[i].FastReroutePerLinkUseCandidateOnlyDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiAreaInterfaces[i].FastReroutePerLinkUseCandidateOnlyDisable.IsNull() && !data.MultiAreaInterfaces[i].FastReroutePerLinkUseCandidateOnlyDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiAreaInterfaces[i].FastReroutePerLinkUseCandidateOnlyDisable = types.BoolValue(false)
+			} else if !data.MultiAreaInterfaces[i].FastReroutePerLinkUseCandidateOnlyDisable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerLinkUseCandidateOnlyDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiAreaInterfaces[i].FastReroutePerLinkUseCandidateOnlyDisable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerLinkUseCandidateOnlyDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiAreaInterfaces[i].FastReroutePerLinkUseCandidateOnlyDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("fast-reroute.disable"); value.Exists() {
-			if !data.MultiAreaInterfaces[i].FastRerouteDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiAreaInterfaces[i].FastRerouteDisable.IsNull() && !data.MultiAreaInterfaces[i].FastRerouteDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiAreaInterfaces[i].FastRerouteDisable = types.BoolValue(false)
+			} else if !data.MultiAreaInterfaces[i].FastRerouteDisable.IsNull() {
 				data.MultiAreaInterfaces[i].FastRerouteDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiAreaInterfaces[i].FastRerouteDisable.IsNull() {
 				data.MultiAreaInterfaces[i].FastRerouteDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiAreaInterfaces[i].FastRerouteDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("fast-reroute.per-prefix.enable"); value.Exists() {
-			if !data.MultiAreaInterfaces[i].FastReroutePerPrefix.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiAreaInterfaces[i].FastReroutePerPrefix.IsNull() && !data.MultiAreaInterfaces[i].FastReroutePerPrefix.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiAreaInterfaces[i].FastReroutePerPrefix = types.BoolValue(false)
+			} else if !data.MultiAreaInterfaces[i].FastReroutePerPrefix.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefix = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiAreaInterfaces[i].FastReroutePerPrefix.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefix = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiAreaInterfaces[i].FastReroutePerPrefix = types.BoolValue(false)
 			}
 		}
 		for ci := range data.MultiAreaInterfaces[i].FastReroutePerPrefixExcludeInterfaces {
@@ -1864,43 +1981,75 @@ func (data *RouterOSPFArea) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		if value := r.Get("fast-reroute.per-prefix.use-candidate-only.enable"); value.Exists() {
-			if !data.MultiAreaInterfaces[i].FastReroutePerPrefixUseCandidateOnlyEnable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiAreaInterfaces[i].FastReroutePerPrefixUseCandidateOnlyEnable.IsNull() && !data.MultiAreaInterfaces[i].FastReroutePerPrefixUseCandidateOnlyEnable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixUseCandidateOnlyEnable = types.BoolValue(false)
+			} else if !data.MultiAreaInterfaces[i].FastReroutePerPrefixUseCandidateOnlyEnable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefixUseCandidateOnlyEnable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiAreaInterfaces[i].FastReroutePerPrefixUseCandidateOnlyEnable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefixUseCandidateOnlyEnable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixUseCandidateOnlyEnable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("fast-reroute.per-prefix.use-candidate-only.disable"); value.Exists() {
-			if !data.MultiAreaInterfaces[i].FastReroutePerPrefixUseCandidateOnlyDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiAreaInterfaces[i].FastReroutePerPrefixUseCandidateOnlyDisable.IsNull() && !data.MultiAreaInterfaces[i].FastReroutePerPrefixUseCandidateOnlyDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixUseCandidateOnlyDisable = types.BoolValue(false)
+			} else if !data.MultiAreaInterfaces[i].FastReroutePerPrefixUseCandidateOnlyDisable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefixUseCandidateOnlyDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiAreaInterfaces[i].FastReroutePerPrefixUseCandidateOnlyDisable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefixUseCandidateOnlyDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixUseCandidateOnlyDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("fast-reroute.per-prefix.remote-lfa.tunnel.mpls-ldp"); value.Exists() {
-			if !data.MultiAreaInterfaces[i].FastReroutePerPrefixRemoteLfaTunnelMplsLdp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiAreaInterfaces[i].FastReroutePerPrefixRemoteLfaTunnelMplsLdp.IsNull() && !data.MultiAreaInterfaces[i].FastReroutePerPrefixRemoteLfaTunnelMplsLdp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixRemoteLfaTunnelMplsLdp = types.BoolValue(false)
+			} else if !data.MultiAreaInterfaces[i].FastReroutePerPrefixRemoteLfaTunnelMplsLdp.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefixRemoteLfaTunnelMplsLdp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiAreaInterfaces[i].FastReroutePerPrefixRemoteLfaTunnelMplsLdp.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefixRemoteLfaTunnelMplsLdp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixRemoteLfaTunnelMplsLdp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("fast-reroute.per-prefix.remote-lfa.disable"); value.Exists() {
-			if !data.MultiAreaInterfaces[i].FastReroutePerPrefixRemoteLfaDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiAreaInterfaces[i].FastReroutePerPrefixRemoteLfaDisable.IsNull() && !data.MultiAreaInterfaces[i].FastReroutePerPrefixRemoteLfaDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixRemoteLfaDisable = types.BoolValue(false)
+			} else if !data.MultiAreaInterfaces[i].FastReroutePerPrefixRemoteLfaDisable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefixRemoteLfaDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiAreaInterfaces[i].FastReroutePerPrefixRemoteLfaDisable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefixRemoteLfaDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixRemoteLfaDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("fast-reroute.per-prefix.remote-lfa.maximum-cost"); value.Exists() && !data.MultiAreaInterfaces[i].FastReroutePerPrefixRemoteLfaMaximumCost.IsNull() {
@@ -1909,23 +2058,39 @@ func (data *RouterOSPFArea) updateFromBody(ctx context.Context, res []byte) {
 			data.MultiAreaInterfaces[i].FastReroutePerPrefixRemoteLfaMaximumCost = types.Int64Null()
 		}
 		if value := r.Get("fast-reroute.per-prefix.ti-lfa.enable"); value.Exists() {
-			if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiLfaEnable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiLfaEnable.IsNull() && !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiLfaEnable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiLfaEnable = types.BoolValue(false)
+			} else if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiLfaEnable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiLfaEnable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiAreaInterfaces[i].FastReroutePerPrefixTiLfaEnable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiLfaEnable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiLfaEnable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("fast-reroute.per-prefix.ti-lfa.disable"); value.Exists() {
-			if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiLfaDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiLfaDisable.IsNull() && !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiLfaDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiLfaDisable = types.BoolValue(false)
+			} else if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiLfaDisable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiLfaDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiAreaInterfaces[i].FastReroutePerPrefixTiLfaDisable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiLfaDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiLfaDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("fast-reroute.per-prefix.tiebreaker.downstream.index"); value.Exists() && !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerDownstreamIndex.IsNull() {
@@ -1934,13 +2099,21 @@ func (data *RouterOSPFArea) updateFromBody(ctx context.Context, res []byte) {
 			data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerDownstreamIndex = types.Int64Null()
 		}
 		if value := r.Get("fast-reroute.per-prefix.tiebreaker.downstream.disable"); value.Exists() {
-			if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerDownstreamDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerDownstreamDisable.IsNull() && !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerDownstreamDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerDownstreamDisable = types.BoolValue(false)
+			} else if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerDownstreamDisable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerDownstreamDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerDownstreamDisable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerDownstreamDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerDownstreamDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("fast-reroute.per-prefix.tiebreaker.lc-disjoint.index"); value.Exists() && !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerLcDisjointIndex.IsNull() {
@@ -1949,13 +2122,21 @@ func (data *RouterOSPFArea) updateFromBody(ctx context.Context, res []byte) {
 			data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerLcDisjointIndex = types.Int64Null()
 		}
 		if value := r.Get("fast-reroute.per-prefix.tiebreaker.lc-disjoint.disable"); value.Exists() {
-			if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerLcDisjointDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerLcDisjointDisable.IsNull() && !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerLcDisjointDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerLcDisjointDisable = types.BoolValue(false)
+			} else if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerLcDisjointDisable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerLcDisjointDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerLcDisjointDisable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerLcDisjointDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerLcDisjointDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("fast-reroute.per-prefix.tiebreaker.lowest-backup-metric.index"); value.Exists() && !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerLowestBackupMetricIndex.IsNull() {
@@ -1964,13 +2145,21 @@ func (data *RouterOSPFArea) updateFromBody(ctx context.Context, res []byte) {
 			data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerLowestBackupMetricIndex = types.Int64Null()
 		}
 		if value := r.Get("fast-reroute.per-prefix.tiebreaker.lowest-backup-metric.disable"); value.Exists() {
-			if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerLowestBackupMetricDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerLowestBackupMetricDisable.IsNull() && !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerLowestBackupMetricDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerLowestBackupMetricDisable = types.BoolValue(false)
+			} else if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerLowestBackupMetricDisable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerLowestBackupMetricDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerLowestBackupMetricDisable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerLowestBackupMetricDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerLowestBackupMetricDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("fast-reroute.per-prefix.tiebreaker.node-protecting.index"); value.Exists() && !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerNodeProtectingIndex.IsNull() {
@@ -1979,13 +2168,21 @@ func (data *RouterOSPFArea) updateFromBody(ctx context.Context, res []byte) {
 			data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerNodeProtectingIndex = types.Int64Null()
 		}
 		if value := r.Get("fast-reroute.per-prefix.tiebreaker.node-protecting.disable"); value.Exists() {
-			if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerNodeProtectingDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerNodeProtectingDisable.IsNull() && !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerNodeProtectingDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerNodeProtectingDisable = types.BoolValue(false)
+			} else if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerNodeProtectingDisable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerNodeProtectingDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerNodeProtectingDisable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerNodeProtectingDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerNodeProtectingDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("fast-reroute.per-prefix.tiebreaker.primary-path.index"); value.Exists() && !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerPrimaryPathIndex.IsNull() {
@@ -1994,13 +2191,21 @@ func (data *RouterOSPFArea) updateFromBody(ctx context.Context, res []byte) {
 			data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerPrimaryPathIndex = types.Int64Null()
 		}
 		if value := r.Get("fast-reroute.per-prefix.tiebreaker.primary-path.disable"); value.Exists() {
-			if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerPrimaryPathDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerPrimaryPathDisable.IsNull() && !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerPrimaryPathDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerPrimaryPathDisable = types.BoolValue(false)
+			} else if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerPrimaryPathDisable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerPrimaryPathDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerPrimaryPathDisable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerPrimaryPathDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerPrimaryPathDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("fast-reroute.per-prefix.tiebreaker.secondary-path.index"); value.Exists() && !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerSecondaryPathIndex.IsNull() {
@@ -2009,13 +2214,21 @@ func (data *RouterOSPFArea) updateFromBody(ctx context.Context, res []byte) {
 			data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerSecondaryPathIndex = types.Int64Null()
 		}
 		if value := r.Get("fast-reroute.per-prefix.tiebreaker.secondary-path.disable"); value.Exists() {
-			if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerSecondaryPathDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerSecondaryPathDisable.IsNull() && !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerSecondaryPathDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerSecondaryPathDisable = types.BoolValue(false)
+			} else if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerSecondaryPathDisable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerSecondaryPathDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerSecondaryPathDisable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerSecondaryPathDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerSecondaryPathDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("fast-reroute.per-prefix.tiebreaker.interface-disjoint.index"); value.Exists() && !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerInterfaceDisjointIndex.IsNull() {
@@ -2024,13 +2237,21 @@ func (data *RouterOSPFArea) updateFromBody(ctx context.Context, res []byte) {
 			data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerInterfaceDisjointIndex = types.Int64Null()
 		}
 		if value := r.Get("fast-reroute.per-prefix.tiebreaker.interface-disjoint.disable"); value.Exists() {
-			if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerInterfaceDisjointDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerInterfaceDisjointDisable.IsNull() && !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerInterfaceDisjointDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerInterfaceDisjointDisable = types.BoolValue(false)
+			} else if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerInterfaceDisjointDisable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerInterfaceDisjointDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerInterfaceDisjointDisable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerInterfaceDisjointDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerInterfaceDisjointDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("fast-reroute.per-prefix.tiebreaker.srlg-disjoint.index"); value.Exists() && !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerSrlgDisjointIndex.IsNull() {
@@ -2039,33 +2260,57 @@ func (data *RouterOSPFArea) updateFromBody(ctx context.Context, res []byte) {
 			data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerSrlgDisjointIndex = types.Int64Null()
 		}
 		if value := r.Get("fast-reroute.per-prefix.tiebreaker.srlg-disjoint.disable"); value.Exists() {
-			if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerSrlgDisjointDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerSrlgDisjointDisable.IsNull() && !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerSrlgDisjointDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerSrlgDisjointDisable = types.BoolValue(false)
+			} else if !data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerSrlgDisjointDisable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerSrlgDisjointDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerSrlgDisjointDisable.IsNull() {
 				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerSrlgDisjointDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiAreaInterfaces[i].FastReroutePerPrefixTiebreakerSrlgDisjointDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("passive.enable"); value.Exists() {
-			if !data.MultiAreaInterfaces[i].PassiveEnable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiAreaInterfaces[i].PassiveEnable.IsNull() && !data.MultiAreaInterfaces[i].PassiveEnable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiAreaInterfaces[i].PassiveEnable = types.BoolValue(false)
+			} else if !data.MultiAreaInterfaces[i].PassiveEnable.IsNull() {
 				data.MultiAreaInterfaces[i].PassiveEnable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiAreaInterfaces[i].PassiveEnable.IsNull() {
 				data.MultiAreaInterfaces[i].PassiveEnable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiAreaInterfaces[i].PassiveEnable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("passive.disable"); value.Exists() {
-			if !data.MultiAreaInterfaces[i].PassiveDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiAreaInterfaces[i].PassiveDisable.IsNull() && !data.MultiAreaInterfaces[i].PassiveDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiAreaInterfaces[i].PassiveDisable = types.BoolValue(false)
+			} else if !data.MultiAreaInterfaces[i].PassiveDisable.IsNull() {
 				data.MultiAreaInterfaces[i].PassiveDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiAreaInterfaces[i].PassiveDisable.IsNull() {
 				data.MultiAreaInterfaces[i].PassiveDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiAreaInterfaces[i].PassiveDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("delay.normalize.interval"); value.Exists() && !data.MultiAreaInterfaces[i].DelayNormalizeInterval.IsNull() {
@@ -3132,23 +3377,39 @@ func (data *RouterOSPFArea) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		if value := r.Get("authentication"); value.Exists() {
-			if !data.VirtualLinks[i].Authentication.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.VirtualLinks[i].Authentication.IsNull() && !data.VirtualLinks[i].Authentication.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.VirtualLinks[i].Authentication = types.BoolValue(false)
+			} else if !data.VirtualLinks[i].Authentication.IsNull() {
 				data.VirtualLinks[i].Authentication = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.VirtualLinks[i].Authentication.IsNull() {
 				data.VirtualLinks[i].Authentication = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.VirtualLinks[i].Authentication = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("authentication.message-digest"); value.Exists() {
-			if !data.VirtualLinks[i].AuthenticationMessageDigest.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.VirtualLinks[i].AuthenticationMessageDigest.IsNull() && !data.VirtualLinks[i].AuthenticationMessageDigest.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.VirtualLinks[i].AuthenticationMessageDigest = types.BoolValue(false)
+			} else if !data.VirtualLinks[i].AuthenticationMessageDigest.IsNull() {
 				data.VirtualLinks[i].AuthenticationMessageDigest = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.VirtualLinks[i].AuthenticationMessageDigest.IsNull() {
 				data.VirtualLinks[i].AuthenticationMessageDigest = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.VirtualLinks[i].AuthenticationMessageDigest = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("authentication.keychain-name"); value.Exists() && !data.VirtualLinks[i].AuthenticationKeychainName.IsNull() {
@@ -3157,13 +3418,21 @@ func (data *RouterOSPFArea) updateFromBody(ctx context.Context, res []byte) {
 			data.VirtualLinks[i].AuthenticationKeychainName = types.StringNull()
 		}
 		if value := r.Get("authentication.null"); value.Exists() {
-			if !data.VirtualLinks[i].AuthenticationNull.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.VirtualLinks[i].AuthenticationNull.IsNull() && !data.VirtualLinks[i].AuthenticationNull.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.VirtualLinks[i].AuthenticationNull = types.BoolValue(false)
+			} else if !data.VirtualLinks[i].AuthenticationNull.IsNull() {
 				data.VirtualLinks[i].AuthenticationNull = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.VirtualLinks[i].AuthenticationNull.IsNull() {
 				data.VirtualLinks[i].AuthenticationNull = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.VirtualLinks[i].AuthenticationNull = types.BoolValue(false)
 			}
 		}
 	}
@@ -5765,12 +6034,12 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("advertise"); cValue.Exists() {
 				item.Advertise = types.BoolValue(true)
 			} else {
-				item.Advertise = types.BoolNull()
+				item.Advertise = types.BoolValue(false)
 			}
 			if cValue := v.Get("not-advertise"); cValue.Exists() {
 				item.NotAdvertise = types.BoolValue(true)
 			} else {
-				item.NotAdvertise = types.BoolNull()
+				item.NotAdvertise = types.BoolValue(false)
 			}
 			data.Ranges = append(data.Ranges, item)
 			return true
@@ -5837,7 +6106,7 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("database-filter.all.out"); ccValue.Exists() {
 						cItem.DatabaseFilterAllOut = types.BoolValue(true)
 					} else {
-						cItem.DatabaseFilterAllOut = types.BoolNull()
+						cItem.DatabaseFilterAllOut = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("poll-interval"); ccValue.Exists() {
 						cItem.PollInterval = types.Int64Value(ccValue.Int())
@@ -5863,12 +6132,12 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("authentication"); cValue.Exists() {
 				item.Authentication = types.BoolValue(true)
 			} else {
-				item.Authentication = types.BoolNull()
+				item.Authentication = types.BoolValue(false)
 			}
 			if cValue := v.Get("authentication.message-digest"); cValue.Exists() {
 				item.AuthenticationMessageDigest = types.BoolValue(true)
 			} else {
-				item.AuthenticationMessageDigest = types.BoolNull()
+				item.AuthenticationMessageDigest = types.BoolValue(false)
 			}
 			if cValue := v.Get("authentication.keychain-name"); cValue.Exists() {
 				item.AuthenticationKeychainName = types.StringValue(cValue.String())
@@ -5876,7 +6145,7 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("authentication.null"); cValue.Exists() {
 				item.AuthenticationNull = types.BoolValue(true)
 			} else {
-				item.AuthenticationNull = types.BoolNull()
+				item.AuthenticationNull = types.BoolValue(false)
 			}
 			if cValue := v.Get("cost"); cValue.Exists() {
 				item.Cost = types.Int64Value(cValue.Int())
@@ -5902,22 +6171,22 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("mtu-ignore.enable"); cValue.Exists() {
 				item.MtuIgnoreEnable = types.BoolValue(true)
 			} else {
-				item.MtuIgnoreEnable = types.BoolNull()
+				item.MtuIgnoreEnable = types.BoolValue(false)
 			}
 			if cValue := v.Get("mtu-ignore.disable"); cValue.Exists() {
 				item.MtuIgnoreDisable = types.BoolValue(true)
 			} else {
-				item.MtuIgnoreDisable = types.BoolNull()
+				item.MtuIgnoreDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("database-filter.all.out.enable"); cValue.Exists() {
 				item.DatabaseFilterAllOutEnable = types.BoolValue(true)
 			} else {
-				item.DatabaseFilterAllOutEnable = types.BoolNull()
+				item.DatabaseFilterAllOutEnable = types.BoolValue(false)
 			}
 			if cValue := v.Get("database-filter.all.out.disable"); cValue.Exists() {
 				item.DatabaseFilterAllOutDisable = types.BoolValue(true)
 			} else {
-				item.DatabaseFilterAllOutDisable = types.BoolNull()
+				item.DatabaseFilterAllOutDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("distribute-list.access-list"); cValue.Exists() {
 				item.DistributeListAcl = types.StringValue(cValue.String())
@@ -5931,7 +6200,7 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("fast-reroute.per-link.enable"); cValue.Exists() {
 				item.FastReroutePerLink = types.BoolValue(true)
 			} else {
-				item.FastReroutePerLink = types.BoolNull()
+				item.FastReroutePerLink = types.BoolValue(false)
 			}
 			if cValue := v.Get("fast-reroute.per-link.exclude.interfaces.interface"); cValue.Exists() {
 				item.FastReroutePerLinkExcludeInterfaces = make([]RouterOSPFAreaMultiAreaInterfacesFastReroutePerLinkExcludeInterfaces, 0)
@@ -5958,22 +6227,22 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("fast-reroute.per-link.use-candidate-only.enable"); cValue.Exists() {
 				item.FastReroutePerLinkUseCandidateOnlyEnable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerLinkUseCandidateOnlyEnable = types.BoolNull()
+				item.FastReroutePerLinkUseCandidateOnlyEnable = types.BoolValue(false)
 			}
 			if cValue := v.Get("fast-reroute.per-link.use-candidate-only.disable"); cValue.Exists() {
 				item.FastReroutePerLinkUseCandidateOnlyDisable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerLinkUseCandidateOnlyDisable = types.BoolNull()
+				item.FastReroutePerLinkUseCandidateOnlyDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("fast-reroute.disable"); cValue.Exists() {
 				item.FastRerouteDisable = types.BoolValue(true)
 			} else {
-				item.FastRerouteDisable = types.BoolNull()
+				item.FastRerouteDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.enable"); cValue.Exists() {
 				item.FastReroutePerPrefix = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefix = types.BoolNull()
+				item.FastReroutePerPrefix = types.BoolValue(false)
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.exclude.interfaces.interface"); cValue.Exists() {
 				item.FastReroutePerPrefixExcludeInterfaces = make([]RouterOSPFAreaMultiAreaInterfacesFastReroutePerPrefixExcludeInterfaces, 0)
@@ -6000,22 +6269,22 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("fast-reroute.per-prefix.use-candidate-only.enable"); cValue.Exists() {
 				item.FastReroutePerPrefixUseCandidateOnlyEnable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefixUseCandidateOnlyEnable = types.BoolNull()
+				item.FastReroutePerPrefixUseCandidateOnlyEnable = types.BoolValue(false)
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.use-candidate-only.disable"); cValue.Exists() {
 				item.FastReroutePerPrefixUseCandidateOnlyDisable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefixUseCandidateOnlyDisable = types.BoolNull()
+				item.FastReroutePerPrefixUseCandidateOnlyDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.remote-lfa.tunnel.mpls-ldp"); cValue.Exists() {
 				item.FastReroutePerPrefixRemoteLfaTunnelMplsLdp = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefixRemoteLfaTunnelMplsLdp = types.BoolNull()
+				item.FastReroutePerPrefixRemoteLfaTunnelMplsLdp = types.BoolValue(false)
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.remote-lfa.disable"); cValue.Exists() {
 				item.FastReroutePerPrefixRemoteLfaDisable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefixRemoteLfaDisable = types.BoolNull()
+				item.FastReroutePerPrefixRemoteLfaDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.remote-lfa.maximum-cost"); cValue.Exists() {
 				item.FastReroutePerPrefixRemoteLfaMaximumCost = types.Int64Value(cValue.Int())
@@ -6023,12 +6292,12 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("fast-reroute.per-prefix.ti-lfa.enable"); cValue.Exists() {
 				item.FastReroutePerPrefixTiLfaEnable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefixTiLfaEnable = types.BoolNull()
+				item.FastReroutePerPrefixTiLfaEnable = types.BoolValue(false)
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.ti-lfa.disable"); cValue.Exists() {
 				item.FastReroutePerPrefixTiLfaDisable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefixTiLfaDisable = types.BoolNull()
+				item.FastReroutePerPrefixTiLfaDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.downstream.index"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerDownstreamIndex = types.Int64Value(cValue.Int())
@@ -6036,7 +6305,7 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.downstream.disable"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerDownstreamDisable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefixTiebreakerDownstreamDisable = types.BoolNull()
+				item.FastReroutePerPrefixTiebreakerDownstreamDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.lc-disjoint.index"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerLcDisjointIndex = types.Int64Value(cValue.Int())
@@ -6044,7 +6313,7 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.lc-disjoint.disable"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerLcDisjointDisable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefixTiebreakerLcDisjointDisable = types.BoolNull()
+				item.FastReroutePerPrefixTiebreakerLcDisjointDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.lowest-backup-metric.index"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex = types.Int64Value(cValue.Int())
@@ -6052,7 +6321,7 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.lowest-backup-metric.disable"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerLowestBackupMetricDisable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefixTiebreakerLowestBackupMetricDisable = types.BoolNull()
+				item.FastReroutePerPrefixTiebreakerLowestBackupMetricDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.node-protecting.index"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerNodeProtectingIndex = types.Int64Value(cValue.Int())
@@ -6060,7 +6329,7 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.node-protecting.disable"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerNodeProtectingDisable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefixTiebreakerNodeProtectingDisable = types.BoolNull()
+				item.FastReroutePerPrefixTiebreakerNodeProtectingDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.primary-path.index"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerPrimaryPathIndex = types.Int64Value(cValue.Int())
@@ -6068,7 +6337,7 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.primary-path.disable"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerPrimaryPathDisable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefixTiebreakerPrimaryPathDisable = types.BoolNull()
+				item.FastReroutePerPrefixTiebreakerPrimaryPathDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.secondary-path.index"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerSecondaryPathIndex = types.Int64Value(cValue.Int())
@@ -6076,7 +6345,7 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.secondary-path.disable"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerSecondaryPathDisable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefixTiebreakerSecondaryPathDisable = types.BoolNull()
+				item.FastReroutePerPrefixTiebreakerSecondaryPathDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.interface-disjoint.index"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerInterfaceDisjointIndex = types.Int64Value(cValue.Int())
@@ -6084,7 +6353,7 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.interface-disjoint.disable"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerInterfaceDisjointDisable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefixTiebreakerInterfaceDisjointDisable = types.BoolNull()
+				item.FastReroutePerPrefixTiebreakerInterfaceDisjointDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.srlg-disjoint.index"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerSrlgDisjointIndex = types.Int64Value(cValue.Int())
@@ -6092,17 +6361,17 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("fast-reroute.per-prefix.tiebreaker.srlg-disjoint.disable"); cValue.Exists() {
 				item.FastReroutePerPrefixTiebreakerSrlgDisjointDisable = types.BoolValue(true)
 			} else {
-				item.FastReroutePerPrefixTiebreakerSrlgDisjointDisable = types.BoolNull()
+				item.FastReroutePerPrefixTiebreakerSrlgDisjointDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("passive.enable"); cValue.Exists() {
 				item.PassiveEnable = types.BoolValue(true)
 			} else {
-				item.PassiveEnable = types.BoolNull()
+				item.PassiveEnable = types.BoolValue(false)
 			}
 			if cValue := v.Get("passive.disable"); cValue.Exists() {
 				item.PassiveDisable = types.BoolValue(true)
 			} else {
-				item.PassiveDisable = types.BoolNull()
+				item.PassiveDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("delay.normalize.interval"); cValue.Exists() {
 				item.DelayNormalizeInterval = types.Int64Value(cValue.Int())
@@ -6633,12 +6902,12 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("authentication"); cValue.Exists() {
 				item.Authentication = types.BoolValue(true)
 			} else {
-				item.Authentication = types.BoolNull()
+				item.Authentication = types.BoolValue(false)
 			}
 			if cValue := v.Get("authentication.message-digest"); cValue.Exists() {
 				item.AuthenticationMessageDigest = types.BoolValue(true)
 			} else {
-				item.AuthenticationMessageDigest = types.BoolNull()
+				item.AuthenticationMessageDigest = types.BoolValue(false)
 			}
 			if cValue := v.Get("authentication.keychain-name"); cValue.Exists() {
 				item.AuthenticationKeychainName = types.StringValue(cValue.String())
@@ -6646,7 +6915,7 @@ func (data *RouterOSPFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("authentication.null"); cValue.Exists() {
 				item.AuthenticationNull = types.BoolValue(true)
 			} else {
-				item.AuthenticationNull = types.BoolNull()
+				item.AuthenticationNull = types.BoolValue(false)
 			}
 			data.VirtualLinks = append(data.VirtualLinks, item)
 			return true

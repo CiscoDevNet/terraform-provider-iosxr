@@ -385,13 +385,21 @@ func (data *BMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.Servers[i].Number = types.Int64Null()
 		}
 		if value := r.Get("shutdown"); value.Exists() {
-			if !data.Servers[i].Shutdown.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Servers[i].Shutdown.IsNull() && !data.Servers[i].Shutdown.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Servers[i].Shutdown = types.BoolValue(false)
+			} else if !data.Servers[i].Shutdown.IsNull() {
 				data.Servers[i].Shutdown = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Servers[i].Shutdown.IsNull() {
 				data.Servers[i].Shutdown = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Servers[i].Shutdown = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("host.host-name"); value.Exists() && !data.Servers[i].Host.IsNull() {
@@ -425,13 +433,21 @@ func (data *BMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.Servers[i].InitialRefreshSpread = types.Int64Null()
 		}
 		if value := r.Get("initial-refresh.skip"); value.Exists() {
-			if !data.Servers[i].InitialRefreshSkip.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Servers[i].InitialRefreshSkip.IsNull() && !data.Servers[i].InitialRefreshSkip.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Servers[i].InitialRefreshSkip = types.BoolValue(false)
+			} else if !data.Servers[i].InitialRefreshSkip.IsNull() {
 				data.Servers[i].InitialRefreshSkip = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Servers[i].InitialRefreshSkip.IsNull() {
 				data.Servers[i].InitialRefreshSkip = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Servers[i].InitialRefreshSkip = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("stats-reporting-period"); value.Exists() && !data.Servers[i].StatsReportingPeriod.IsNull() {
@@ -697,7 +713,7 @@ func (data *BMPServer) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("shutdown"); cValue.Exists() {
 				item.Shutdown = types.BoolValue(true)
 			} else {
-				item.Shutdown = types.BoolNull()
+				item.Shutdown = types.BoolValue(false)
 			}
 			if cValue := v.Get("host.host-name"); cValue.Exists() {
 				item.Host = types.StringValue(cValue.String())
@@ -720,7 +736,7 @@ func (data *BMPServer) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("initial-refresh.skip"); cValue.Exists() {
 				item.InitialRefreshSkip = types.BoolValue(true)
 			} else {
-				item.InitialRefreshSkip = types.BoolNull()
+				item.InitialRefreshSkip = types.BoolValue(false)
 			}
 			if cValue := v.Get("stats-reporting-period"); cValue.Exists() {
 				item.StatsReportingPeriod = types.Int64Value(cValue.Int())

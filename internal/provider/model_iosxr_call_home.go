@@ -717,13 +717,21 @@ func (data *CallHome) updateFromBody(ctx context.Context, res []byte) {
 			data.Profiles[i].ProfileName = types.StringNull()
 		}
 		if value := r.Get("active"); value.Exists() {
-			if !data.Profiles[i].Active.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Profiles[i].Active.IsNull() && !data.Profiles[i].Active.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Profiles[i].Active = types.BoolValue(false)
+			} else if !data.Profiles[i].Active.IsNull() {
 				data.Profiles[i].Active = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Profiles[i].Active.IsNull() {
 				data.Profiles[i].Active = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Profiles[i].Active = types.BoolValue(false)
 			}
 		}
 		for ci := range data.Profiles[i].DestinationAddresses {
@@ -766,113 +774,201 @@ func (data *CallHome) updateFromBody(ctx context.Context, res []byte) {
 			data.Profiles[i].DestinationMessageSizeLimit = types.Int64Null()
 		}
 		if value := r.Get("destination.preferred-msg-format.short-text"); value.Exists() {
-			if !data.Profiles[i].DestinationMsgFormatShort.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Profiles[i].DestinationMsgFormatShort.IsNull() && !data.Profiles[i].DestinationMsgFormatShort.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Profiles[i].DestinationMsgFormatShort = types.BoolValue(false)
+			} else if !data.Profiles[i].DestinationMsgFormatShort.IsNull() {
 				data.Profiles[i].DestinationMsgFormatShort = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Profiles[i].DestinationMsgFormatShort.IsNull() {
 				data.Profiles[i].DestinationMsgFormatShort = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Profiles[i].DestinationMsgFormatShort = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("destination.preferred-msg-format.long-text"); value.Exists() {
-			if !data.Profiles[i].DestinationMsgFormatLong.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Profiles[i].DestinationMsgFormatLong.IsNull() && !data.Profiles[i].DestinationMsgFormatLong.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Profiles[i].DestinationMsgFormatLong = types.BoolValue(false)
+			} else if !data.Profiles[i].DestinationMsgFormatLong.IsNull() {
 				data.Profiles[i].DestinationMsgFormatLong = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Profiles[i].DestinationMsgFormatLong.IsNull() {
 				data.Profiles[i].DestinationMsgFormatLong = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Profiles[i].DestinationMsgFormatLong = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("destination.transport-method.email"); value.Exists() {
-			if !data.Profiles[i].DestinationTransportMethodEmail.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Profiles[i].DestinationTransportMethodEmail.IsNull() && !data.Profiles[i].DestinationTransportMethodEmail.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Profiles[i].DestinationTransportMethodEmail = types.BoolValue(false)
+			} else if !data.Profiles[i].DestinationTransportMethodEmail.IsNull() {
 				data.Profiles[i].DestinationTransportMethodEmail = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Profiles[i].DestinationTransportMethodEmail.IsNull() {
 				data.Profiles[i].DestinationTransportMethodEmail = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Profiles[i].DestinationTransportMethodEmail = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("destination.transport-method.email.disable"); value.Exists() {
-			if !data.Profiles[i].DestinationTransportMethodEmailDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Profiles[i].DestinationTransportMethodEmailDisable.IsNull() && !data.Profiles[i].DestinationTransportMethodEmailDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Profiles[i].DestinationTransportMethodEmailDisable = types.BoolValue(false)
+			} else if !data.Profiles[i].DestinationTransportMethodEmailDisable.IsNull() {
 				data.Profiles[i].DestinationTransportMethodEmailDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Profiles[i].DestinationTransportMethodEmailDisable.IsNull() {
 				data.Profiles[i].DestinationTransportMethodEmailDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Profiles[i].DestinationTransportMethodEmailDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("destination.transport-method.http"); value.Exists() {
-			if !data.Profiles[i].DestinationTransportMethodHttp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Profiles[i].DestinationTransportMethodHttp.IsNull() && !data.Profiles[i].DestinationTransportMethodHttp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Profiles[i].DestinationTransportMethodHttp = types.BoolValue(false)
+			} else if !data.Profiles[i].DestinationTransportMethodHttp.IsNull() {
 				data.Profiles[i].DestinationTransportMethodHttp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Profiles[i].DestinationTransportMethodHttp.IsNull() {
 				data.Profiles[i].DestinationTransportMethodHttp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Profiles[i].DestinationTransportMethodHttp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("destination.transport-method.http.disable"); value.Exists() {
-			if !data.Profiles[i].DestinationTransportMethodHttpDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Profiles[i].DestinationTransportMethodHttpDisable.IsNull() && !data.Profiles[i].DestinationTransportMethodHttpDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Profiles[i].DestinationTransportMethodHttpDisable = types.BoolValue(false)
+			} else if !data.Profiles[i].DestinationTransportMethodHttpDisable.IsNull() {
 				data.Profiles[i].DestinationTransportMethodHttpDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Profiles[i].DestinationTransportMethodHttpDisable.IsNull() {
 				data.Profiles[i].DestinationTransportMethodHttpDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Profiles[i].DestinationTransportMethodHttpDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("reporting.smart-call-home-data"); value.Exists() {
-			if !data.Profiles[i].ReportingSmartCallHomeData.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Profiles[i].ReportingSmartCallHomeData.IsNull() && !data.Profiles[i].ReportingSmartCallHomeData.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Profiles[i].ReportingSmartCallHomeData = types.BoolValue(false)
+			} else if !data.Profiles[i].ReportingSmartCallHomeData.IsNull() {
 				data.Profiles[i].ReportingSmartCallHomeData = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Profiles[i].ReportingSmartCallHomeData.IsNull() {
 				data.Profiles[i].ReportingSmartCallHomeData = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Profiles[i].ReportingSmartCallHomeData = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("reporting.smart-call-home-data.disable"); value.Exists() {
-			if !data.Profiles[i].ReportingSmartCallHomeDataDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Profiles[i].ReportingSmartCallHomeDataDisable.IsNull() && !data.Profiles[i].ReportingSmartCallHomeDataDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Profiles[i].ReportingSmartCallHomeDataDisable = types.BoolValue(false)
+			} else if !data.Profiles[i].ReportingSmartCallHomeDataDisable.IsNull() {
 				data.Profiles[i].ReportingSmartCallHomeDataDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Profiles[i].ReportingSmartCallHomeDataDisable.IsNull() {
 				data.Profiles[i].ReportingSmartCallHomeDataDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Profiles[i].ReportingSmartCallHomeDataDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("reporting.smart-licensing-data"); value.Exists() {
-			if !data.Profiles[i].ReportingSmartLicensingData.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Profiles[i].ReportingSmartLicensingData.IsNull() && !data.Profiles[i].ReportingSmartLicensingData.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Profiles[i].ReportingSmartLicensingData = types.BoolValue(false)
+			} else if !data.Profiles[i].ReportingSmartLicensingData.IsNull() {
 				data.Profiles[i].ReportingSmartLicensingData = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Profiles[i].ReportingSmartLicensingData.IsNull() {
 				data.Profiles[i].ReportingSmartLicensingData = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Profiles[i].ReportingSmartLicensingData = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("reporting.smart-licensing-data.disable"); value.Exists() {
-			if !data.Profiles[i].ReportingSmartLicensingDataDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Profiles[i].ReportingSmartLicensingDataDisable.IsNull() && !data.Profiles[i].ReportingSmartLicensingDataDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Profiles[i].ReportingSmartLicensingDataDisable = types.BoolValue(false)
+			} else if !data.Profiles[i].ReportingSmartLicensingDataDisable.IsNull() {
 				data.Profiles[i].ReportingSmartLicensingDataDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Profiles[i].ReportingSmartLicensingDataDisable.IsNull() {
 				data.Profiles[i].ReportingSmartLicensingDataDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Profiles[i].ReportingSmartLicensingDataDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("anonymous-reporting-only"); value.Exists() {
-			if !data.Profiles[i].AnonymousReportingOnly.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Profiles[i].AnonymousReportingOnly.IsNull() && !data.Profiles[i].AnonymousReportingOnly.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Profiles[i].AnonymousReportingOnly = types.BoolValue(false)
+			} else if !data.Profiles[i].AnonymousReportingOnly.IsNull() {
 				data.Profiles[i].AnonymousReportingOnly = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Profiles[i].AnonymousReportingOnly.IsNull() {
 				data.Profiles[i].AnonymousReportingOnly = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Profiles[i].AnonymousReportingOnly = types.BoolValue(false)
 			}
 		}
 	}
@@ -1331,7 +1427,7 @@ func (data *CallHome) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("active"); cValue.Exists() {
 				item.Active = types.BoolValue(true)
 			} else {
-				item.Active = types.BoolNull()
+				item.Active = types.BoolValue(false)
 			}
 			if cValue := v.Get("destination.addresses.address"); cValue.Exists() {
 				item.DestinationAddresses = make([]CallHomeProfilesDestinationAddresses, 0)
@@ -1353,57 +1449,57 @@ func (data *CallHome) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("destination.preferred-msg-format.short-text"); cValue.Exists() {
 				item.DestinationMsgFormatShort = types.BoolValue(true)
 			} else {
-				item.DestinationMsgFormatShort = types.BoolNull()
+				item.DestinationMsgFormatShort = types.BoolValue(false)
 			}
 			if cValue := v.Get("destination.preferred-msg-format.long-text"); cValue.Exists() {
 				item.DestinationMsgFormatLong = types.BoolValue(true)
 			} else {
-				item.DestinationMsgFormatLong = types.BoolNull()
+				item.DestinationMsgFormatLong = types.BoolValue(false)
 			}
 			if cValue := v.Get("destination.transport-method.email"); cValue.Exists() {
 				item.DestinationTransportMethodEmail = types.BoolValue(true)
 			} else {
-				item.DestinationTransportMethodEmail = types.BoolNull()
+				item.DestinationTransportMethodEmail = types.BoolValue(false)
 			}
 			if cValue := v.Get("destination.transport-method.email.disable"); cValue.Exists() {
 				item.DestinationTransportMethodEmailDisable = types.BoolValue(true)
 			} else {
-				item.DestinationTransportMethodEmailDisable = types.BoolNull()
+				item.DestinationTransportMethodEmailDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("destination.transport-method.http"); cValue.Exists() {
 				item.DestinationTransportMethodHttp = types.BoolValue(true)
 			} else {
-				item.DestinationTransportMethodHttp = types.BoolNull()
+				item.DestinationTransportMethodHttp = types.BoolValue(false)
 			}
 			if cValue := v.Get("destination.transport-method.http.disable"); cValue.Exists() {
 				item.DestinationTransportMethodHttpDisable = types.BoolValue(true)
 			} else {
-				item.DestinationTransportMethodHttpDisable = types.BoolNull()
+				item.DestinationTransportMethodHttpDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("reporting.smart-call-home-data"); cValue.Exists() {
 				item.ReportingSmartCallHomeData = types.BoolValue(true)
 			} else {
-				item.ReportingSmartCallHomeData = types.BoolNull()
+				item.ReportingSmartCallHomeData = types.BoolValue(false)
 			}
 			if cValue := v.Get("reporting.smart-call-home-data.disable"); cValue.Exists() {
 				item.ReportingSmartCallHomeDataDisable = types.BoolValue(true)
 			} else {
-				item.ReportingSmartCallHomeDataDisable = types.BoolNull()
+				item.ReportingSmartCallHomeDataDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("reporting.smart-licensing-data"); cValue.Exists() {
 				item.ReportingSmartLicensingData = types.BoolValue(true)
 			} else {
-				item.ReportingSmartLicensingData = types.BoolNull()
+				item.ReportingSmartLicensingData = types.BoolValue(false)
 			}
 			if cValue := v.Get("reporting.smart-licensing-data.disable"); cValue.Exists() {
 				item.ReportingSmartLicensingDataDisable = types.BoolValue(true)
 			} else {
-				item.ReportingSmartLicensingDataDisable = types.BoolNull()
+				item.ReportingSmartLicensingDataDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("anonymous-reporting-only"); cValue.Exists() {
 				item.AnonymousReportingOnly = types.BoolValue(true)
 			} else {
-				item.AnonymousReportingOnly = types.BoolNull()
+				item.AnonymousReportingOnly = types.BoolValue(false)
 			}
 			data.Profiles = append(data.Profiles, item)
 			return true

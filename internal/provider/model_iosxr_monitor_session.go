@@ -308,13 +308,21 @@ func (data *MonitorSession) updateFromBody(ctx context.Context, res []byte) {
 			data.MonitorSessions[i].DestinationInterface = types.StringNull()
 		}
 		if value := r.Get("destination.pseudowire"); value.Exists() {
-			if !data.MonitorSessions[i].DestinationPseudowire.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MonitorSessions[i].DestinationPseudowire.IsNull() && !data.MonitorSessions[i].DestinationPseudowire.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MonitorSessions[i].DestinationPseudowire = types.BoolValue(false)
+			} else if !data.MonitorSessions[i].DestinationPseudowire.IsNull() {
 				data.MonitorSessions[i].DestinationPseudowire = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MonitorSessions[i].DestinationPseudowire.IsNull() {
 				data.MonitorSessions[i].DestinationPseudowire = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MonitorSessions[i].DestinationPseudowire = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("destination.file.size"); value.Exists() && !data.MonitorSessions[i].DestinationFileSize.IsNull() {
@@ -323,23 +331,39 @@ func (data *MonitorSession) updateFromBody(ctx context.Context, res []byte) {
 			data.MonitorSessions[i].DestinationFileSize = types.Int64Null()
 		}
 		if value := r.Get("destination.file.buffer-type.linear"); value.Exists() {
-			if !data.MonitorSessions[i].DestinationFileBufferTypeLinear.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MonitorSessions[i].DestinationFileBufferTypeLinear.IsNull() && !data.MonitorSessions[i].DestinationFileBufferTypeLinear.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MonitorSessions[i].DestinationFileBufferTypeLinear = types.BoolValue(false)
+			} else if !data.MonitorSessions[i].DestinationFileBufferTypeLinear.IsNull() {
 				data.MonitorSessions[i].DestinationFileBufferTypeLinear = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MonitorSessions[i].DestinationFileBufferTypeLinear.IsNull() {
 				data.MonitorSessions[i].DestinationFileBufferTypeLinear = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MonitorSessions[i].DestinationFileBufferTypeLinear = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("destination.file.format.pcapng"); value.Exists() {
-			if !data.MonitorSessions[i].DestinationFileFormatPcapng.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MonitorSessions[i].DestinationFileFormatPcapng.IsNull() && !data.MonitorSessions[i].DestinationFileFormatPcapng.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MonitorSessions[i].DestinationFileFormatPcapng = types.BoolValue(false)
+			} else if !data.MonitorSessions[i].DestinationFileFormatPcapng.IsNull() {
 				data.MonitorSessions[i].DestinationFileFormatPcapng = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MonitorSessions[i].DestinationFileFormatPcapng.IsNull() {
 				data.MonitorSessions[i].DestinationFileFormatPcapng = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MonitorSessions[i].DestinationFileFormatPcapng = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("destination.file.filter"); value.Exists() && !data.MonitorSessions[i].DestinationFileFilter.IsNull() {
@@ -348,53 +372,93 @@ func (data *MonitorSession) updateFromBody(ctx context.Context, res []byte) {
 			data.MonitorSessions[i].DestinationFileFilter = types.StringNull()
 		}
 		if value := r.Get("destination.file.always-on"); value.Exists() {
-			if !data.MonitorSessions[i].DestinationFileAlwaysOn.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MonitorSessions[i].DestinationFileAlwaysOn.IsNull() && !data.MonitorSessions[i].DestinationFileAlwaysOn.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MonitorSessions[i].DestinationFileAlwaysOn = types.BoolValue(false)
+			} else if !data.MonitorSessions[i].DestinationFileAlwaysOn.IsNull() {
 				data.MonitorSessions[i].DestinationFileAlwaysOn = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MonitorSessions[i].DestinationFileAlwaysOn.IsNull() {
 				data.MonitorSessions[i].DestinationFileAlwaysOn = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MonitorSessions[i].DestinationFileAlwaysOn = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("drops.packet-processing"); value.Exists() {
-			if !data.MonitorSessions[i].DropsPacketProcessing.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MonitorSessions[i].DropsPacketProcessing.IsNull() && !data.MonitorSessions[i].DropsPacketProcessing.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MonitorSessions[i].DropsPacketProcessing = types.BoolValue(false)
+			} else if !data.MonitorSessions[i].DropsPacketProcessing.IsNull() {
 				data.MonitorSessions[i].DropsPacketProcessing = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MonitorSessions[i].DropsPacketProcessing.IsNull() {
 				data.MonitorSessions[i].DropsPacketProcessing = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MonitorSessions[i].DropsPacketProcessing = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("drops.traffic-management"); value.Exists() {
-			if !data.MonitorSessions[i].DropsTrafficManagement.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MonitorSessions[i].DropsTrafficManagement.IsNull() && !data.MonitorSessions[i].DropsTrafficManagement.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MonitorSessions[i].DropsTrafficManagement = types.BoolValue(false)
+			} else if !data.MonitorSessions[i].DropsTrafficManagement.IsNull() {
 				data.MonitorSessions[i].DropsTrafficManagement = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MonitorSessions[i].DropsTrafficManagement.IsNull() {
 				data.MonitorSessions[i].DropsTrafficManagement = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MonitorSessions[i].DropsTrafficManagement = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("drops.rx"); value.Exists() {
-			if !data.MonitorSessions[i].DropsRx.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MonitorSessions[i].DropsRx.IsNull() && !data.MonitorSessions[i].DropsRx.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MonitorSessions[i].DropsRx = types.BoolValue(false)
+			} else if !data.MonitorSessions[i].DropsRx.IsNull() {
 				data.MonitorSessions[i].DropsRx = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MonitorSessions[i].DropsRx.IsNull() {
 				data.MonitorSessions[i].DropsRx = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MonitorSessions[i].DropsRx = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("drops.tx"); value.Exists() {
-			if !data.MonitorSessions[i].DropsTx.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MonitorSessions[i].DropsTx.IsNull() && !data.MonitorSessions[i].DropsTx.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MonitorSessions[i].DropsTx = types.BoolValue(false)
+			} else if !data.MonitorSessions[i].DropsTx.IsNull() {
 				data.MonitorSessions[i].DropsTx = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MonitorSessions[i].DropsTx.IsNull() {
 				data.MonitorSessions[i].DropsTx = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MonitorSessions[i].DropsTx = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("drops.filter"); value.Exists() && !data.MonitorSessions[i].DropsFilter.IsNull() {
@@ -408,13 +472,21 @@ func (data *MonitorSession) updateFromBody(ctx context.Context, res []byte) {
 			data.MonitorSessions[i].RxInterface = types.StringNull()
 		}
 		if value := r.Get("rx.pseudowire"); value.Exists() {
-			if !data.MonitorSessions[i].RxPseudowire.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MonitorSessions[i].RxPseudowire.IsNull() && !data.MonitorSessions[i].RxPseudowire.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MonitorSessions[i].RxPseudowire = types.BoolValue(false)
+			} else if !data.MonitorSessions[i].RxPseudowire.IsNull() {
 				data.MonitorSessions[i].RxPseudowire = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MonitorSessions[i].RxPseudowire.IsNull() {
 				data.MonitorSessions[i].RxPseudowire = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MonitorSessions[i].RxPseudowire = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("tx.interface"); value.Exists() && !data.MonitorSessions[i].TxInterface.IsNull() {
@@ -423,13 +495,21 @@ func (data *MonitorSession) updateFromBody(ctx context.Context, res []byte) {
 			data.MonitorSessions[i].TxInterface = types.StringNull()
 		}
 		if value := r.Get("tx.pseudowire"); value.Exists() {
-			if !data.MonitorSessions[i].TxPseudowire.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MonitorSessions[i].TxPseudowire.IsNull() && !data.MonitorSessions[i].TxPseudowire.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MonitorSessions[i].TxPseudowire = types.BoolValue(false)
+			} else if !data.MonitorSessions[i].TxPseudowire.IsNull() {
 				data.MonitorSessions[i].TxPseudowire = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MonitorSessions[i].TxPseudowire.IsNull() {
 				data.MonitorSessions[i].TxPseudowire = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MonitorSessions[i].TxPseudowire = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("inject-interface"); value.Exists() && !data.MonitorSessions[i].InjectInterface.IsNull() {
@@ -458,23 +538,39 @@ func (data *MonitorSession) updateFromBody(ctx context.Context, res []byte) {
 			data.MonitorSessions[i].MirrorInterval = types.StringNull()
 		}
 		if value := r.Get("protocol-capture.rx"); value.Exists() {
-			if !data.MonitorSessions[i].ProtocolCaptureRx.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MonitorSessions[i].ProtocolCaptureRx.IsNull() && !data.MonitorSessions[i].ProtocolCaptureRx.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MonitorSessions[i].ProtocolCaptureRx = types.BoolValue(false)
+			} else if !data.MonitorSessions[i].ProtocolCaptureRx.IsNull() {
 				data.MonitorSessions[i].ProtocolCaptureRx = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MonitorSessions[i].ProtocolCaptureRx.IsNull() {
 				data.MonitorSessions[i].ProtocolCaptureRx = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MonitorSessions[i].ProtocolCaptureRx = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("protocol-capture.tx"); value.Exists() {
-			if !data.MonitorSessions[i].ProtocolCaptureTx.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MonitorSessions[i].ProtocolCaptureTx.IsNull() && !data.MonitorSessions[i].ProtocolCaptureTx.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MonitorSessions[i].ProtocolCaptureTx = types.BoolValue(false)
+			} else if !data.MonitorSessions[i].ProtocolCaptureTx.IsNull() {
 				data.MonitorSessions[i].ProtocolCaptureTx = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MonitorSessions[i].ProtocolCaptureTx.IsNull() {
 				data.MonitorSessions[i].ProtocolCaptureTx = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MonitorSessions[i].ProtocolCaptureTx = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("protocol-capture.filter"); value.Exists() && !data.MonitorSessions[i].ProtocolCaptureFilter.IsNull() {
@@ -983,7 +1079,7 @@ func (data *MonitorSession) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("destination.pseudowire"); cValue.Exists() {
 				item.DestinationPseudowire = types.BoolValue(true)
 			} else {
-				item.DestinationPseudowire = types.BoolNull()
+				item.DestinationPseudowire = types.BoolValue(false)
 			}
 			if cValue := v.Get("destination.file.size"); cValue.Exists() {
 				item.DestinationFileSize = types.Int64Value(cValue.Int())
@@ -991,12 +1087,12 @@ func (data *MonitorSession) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("destination.file.buffer-type.linear"); cValue.Exists() {
 				item.DestinationFileBufferTypeLinear = types.BoolValue(true)
 			} else {
-				item.DestinationFileBufferTypeLinear = types.BoolNull()
+				item.DestinationFileBufferTypeLinear = types.BoolValue(false)
 			}
 			if cValue := v.Get("destination.file.format.pcapng"); cValue.Exists() {
 				item.DestinationFileFormatPcapng = types.BoolValue(true)
 			} else {
-				item.DestinationFileFormatPcapng = types.BoolNull()
+				item.DestinationFileFormatPcapng = types.BoolValue(false)
 			}
 			if cValue := v.Get("destination.file.filter"); cValue.Exists() {
 				item.DestinationFileFilter = types.StringValue(cValue.String())
@@ -1004,27 +1100,27 @@ func (data *MonitorSession) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("destination.file.always-on"); cValue.Exists() {
 				item.DestinationFileAlwaysOn = types.BoolValue(true)
 			} else {
-				item.DestinationFileAlwaysOn = types.BoolNull()
+				item.DestinationFileAlwaysOn = types.BoolValue(false)
 			}
 			if cValue := v.Get("drops.packet-processing"); cValue.Exists() {
 				item.DropsPacketProcessing = types.BoolValue(true)
 			} else {
-				item.DropsPacketProcessing = types.BoolNull()
+				item.DropsPacketProcessing = types.BoolValue(false)
 			}
 			if cValue := v.Get("drops.traffic-management"); cValue.Exists() {
 				item.DropsTrafficManagement = types.BoolValue(true)
 			} else {
-				item.DropsTrafficManagement = types.BoolNull()
+				item.DropsTrafficManagement = types.BoolValue(false)
 			}
 			if cValue := v.Get("drops.rx"); cValue.Exists() {
 				item.DropsRx = types.BoolValue(true)
 			} else {
-				item.DropsRx = types.BoolNull()
+				item.DropsRx = types.BoolValue(false)
 			}
 			if cValue := v.Get("drops.tx"); cValue.Exists() {
 				item.DropsTx = types.BoolValue(true)
 			} else {
-				item.DropsTx = types.BoolNull()
+				item.DropsTx = types.BoolValue(false)
 			}
 			if cValue := v.Get("drops.filter"); cValue.Exists() {
 				item.DropsFilter = types.StringValue(cValue.String())
@@ -1035,7 +1131,7 @@ func (data *MonitorSession) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("rx.pseudowire"); cValue.Exists() {
 				item.RxPseudowire = types.BoolValue(true)
 			} else {
-				item.RxPseudowire = types.BoolNull()
+				item.RxPseudowire = types.BoolValue(false)
 			}
 			if cValue := v.Get("tx.interface"); cValue.Exists() {
 				item.TxInterface = types.StringValue(cValue.String())
@@ -1043,7 +1139,7 @@ func (data *MonitorSession) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("tx.pseudowire"); cValue.Exists() {
 				item.TxPseudowire = types.BoolValue(true)
 			} else {
-				item.TxPseudowire = types.BoolNull()
+				item.TxPseudowire = types.BoolValue(false)
 			}
 			if cValue := v.Get("inject-interface"); cValue.Exists() {
 				item.InjectInterface = types.StringValue(cValue.String())
@@ -1063,12 +1159,12 @@ func (data *MonitorSession) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("protocol-capture.rx"); cValue.Exists() {
 				item.ProtocolCaptureRx = types.BoolValue(true)
 			} else {
-				item.ProtocolCaptureRx = types.BoolNull()
+				item.ProtocolCaptureRx = types.BoolValue(false)
 			}
 			if cValue := v.Get("protocol-capture.tx"); cValue.Exists() {
 				item.ProtocolCaptureTx = types.BoolValue(true)
 			} else {
-				item.ProtocolCaptureTx = types.BoolNull()
+				item.ProtocolCaptureTx = types.BoolValue(false)
 			}
 			if cValue := v.Get("protocol-capture.filter"); cValue.Exists() {
 				item.ProtocolCaptureFilter = types.StringValue(cValue.String())

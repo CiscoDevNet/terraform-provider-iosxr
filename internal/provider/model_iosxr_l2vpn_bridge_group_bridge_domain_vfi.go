@@ -1148,13 +1148,21 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) updateFromBody(ctx context.Context,
 			data.Neighbors[i].DhcpIpv4SnoopingProfile = types.StringNull()
 		}
 		if value := r.Get("dhcp.ipv4.none"); value.Exists() {
-			if !data.Neighbors[i].DhcpIpv4None.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Neighbors[i].DhcpIpv4None.IsNull() && !data.Neighbors[i].DhcpIpv4None.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Neighbors[i].DhcpIpv4None = types.BoolValue(false)
+			} else if !data.Neighbors[i].DhcpIpv4None.IsNull() {
 				data.Neighbors[i].DhcpIpv4None = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Neighbors[i].DhcpIpv4None.IsNull() {
 				data.Neighbors[i].DhcpIpv4None = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Neighbors[i].DhcpIpv4None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("igmp.snooping.profile"); value.Exists() && !data.Neighbors[i].IgmpSnoopingProfile.IsNull() {
@@ -2426,7 +2434,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) fromBody(ctx context.Context, res g
 			if cValue := v.Get("dhcp.ipv4.none"); cValue.Exists() {
 				item.DhcpIpv4None = types.BoolValue(true)
 			} else {
-				item.DhcpIpv4None = types.BoolNull()
+				item.DhcpIpv4None = types.BoolValue(false)
 			}
 			if cValue := v.Get("igmp.snooping.profile"); cValue.Exists() {
 				item.IgmpSnoopingProfile = types.StringValue(cValue.String())

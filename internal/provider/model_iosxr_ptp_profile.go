@@ -1017,13 +1017,21 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res []byte) {
 			data.SlaveIpv4s[i].Address = types.StringNull()
 		}
 		if value := r.Get("non-negotiated"); value.Exists() {
-			if !data.SlaveIpv4s[i].NonNegotiated.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SlaveIpv4s[i].NonNegotiated.IsNull() && !data.SlaveIpv4s[i].NonNegotiated.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SlaveIpv4s[i].NonNegotiated = types.BoolValue(false)
+			} else if !data.SlaveIpv4s[i].NonNegotiated.IsNull() {
 				data.SlaveIpv4s[i].NonNegotiated = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SlaveIpv4s[i].NonNegotiated.IsNull() {
 				data.SlaveIpv4s[i].NonNegotiated = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SlaveIpv4s[i].NonNegotiated = types.BoolValue(false)
 			}
 		}
 	}
@@ -1056,13 +1064,21 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res []byte) {
 			data.SlaveIpv6s[i].Address = types.StringNull()
 		}
 		if value := r.Get("non-negotiated"); value.Exists() {
-			if !data.SlaveIpv6s[i].NonNegotiated.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SlaveIpv6s[i].NonNegotiated.IsNull() && !data.SlaveIpv6s[i].NonNegotiated.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SlaveIpv6s[i].NonNegotiated = types.BoolValue(false)
+			} else if !data.SlaveIpv6s[i].NonNegotiated.IsNull() {
 				data.SlaveIpv6s[i].NonNegotiated = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SlaveIpv6s[i].NonNegotiated.IsNull() {
 				data.SlaveIpv6s[i].NonNegotiated = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SlaveIpv6s[i].NonNegotiated = types.BoolValue(false)
 			}
 		}
 	}
@@ -1095,13 +1111,21 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res []byte) {
 			data.SlaveEthernets[i].Address = types.StringNull()
 		}
 		if value := r.Get("non-negotiated"); value.Exists() {
-			if !data.SlaveEthernets[i].NonNegotiated.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SlaveEthernets[i].NonNegotiated.IsNull() && !data.SlaveEthernets[i].NonNegotiated.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SlaveEthernets[i].NonNegotiated = types.BoolValue(false)
+			} else if !data.SlaveEthernets[i].NonNegotiated.IsNull() {
 				data.SlaveEthernets[i].NonNegotiated = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SlaveEthernets[i].NonNegotiated.IsNull() {
 				data.SlaveEthernets[i].NonNegotiated = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SlaveEthernets[i].NonNegotiated = types.BoolValue(false)
 			}
 		}
 	}
@@ -1144,33 +1168,57 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res []byte) {
 			data.MasterIpv4s[i].ClockClass = types.Int64Null()
 		}
 		if value := r.Get("multicast"); value.Exists() {
-			if !data.MasterIpv4s[i].Multicast.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MasterIpv4s[i].Multicast.IsNull() && !data.MasterIpv4s[i].Multicast.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MasterIpv4s[i].Multicast = types.BoolValue(false)
+			} else if !data.MasterIpv4s[i].Multicast.IsNull() {
 				data.MasterIpv4s[i].Multicast = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MasterIpv4s[i].Multicast.IsNull() {
 				data.MasterIpv4s[i].Multicast = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MasterIpv4s[i].Multicast = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("multicast.mixed"); value.Exists() {
-			if !data.MasterIpv4s[i].MulticastMixed.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MasterIpv4s[i].MulticastMixed.IsNull() && !data.MasterIpv4s[i].MulticastMixed.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MasterIpv4s[i].MulticastMixed = types.BoolValue(false)
+			} else if !data.MasterIpv4s[i].MulticastMixed.IsNull() {
 				data.MasterIpv4s[i].MulticastMixed = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MasterIpv4s[i].MulticastMixed.IsNull() {
 				data.MasterIpv4s[i].MulticastMixed = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MasterIpv4s[i].MulticastMixed = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("non-negotiated"); value.Exists() {
-			if !data.MasterIpv4s[i].NonNegotiated.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MasterIpv4s[i].NonNegotiated.IsNull() && !data.MasterIpv4s[i].NonNegotiated.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MasterIpv4s[i].NonNegotiated = types.BoolValue(false)
+			} else if !data.MasterIpv4s[i].NonNegotiated.IsNull() {
 				data.MasterIpv4s[i].NonNegotiated = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MasterIpv4s[i].NonNegotiated.IsNull() {
 				data.MasterIpv4s[i].NonNegotiated = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MasterIpv4s[i].NonNegotiated = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("delay-asymmetry"); value.Exists() && !data.MasterIpv4s[i].DelayAsymmetry.IsNull() {
@@ -1179,33 +1227,57 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res []byte) {
 			data.MasterIpv4s[i].DelayAsymmetry = types.Int64Null()
 		}
 		if value := r.Get("nanoseconds"); value.Exists() {
-			if !data.MasterIpv4s[i].Nanoseconds.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MasterIpv4s[i].Nanoseconds.IsNull() && !data.MasterIpv4s[i].Nanoseconds.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MasterIpv4s[i].Nanoseconds = types.BoolValue(false)
+			} else if !data.MasterIpv4s[i].Nanoseconds.IsNull() {
 				data.MasterIpv4s[i].Nanoseconds = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MasterIpv4s[i].Nanoseconds.IsNull() {
 				data.MasterIpv4s[i].Nanoseconds = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MasterIpv4s[i].Nanoseconds = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("microseconds"); value.Exists() {
-			if !data.MasterIpv4s[i].Microseconds.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MasterIpv4s[i].Microseconds.IsNull() && !data.MasterIpv4s[i].Microseconds.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MasterIpv4s[i].Microseconds = types.BoolValue(false)
+			} else if !data.MasterIpv4s[i].Microseconds.IsNull() {
 				data.MasterIpv4s[i].Microseconds = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MasterIpv4s[i].Microseconds.IsNull() {
 				data.MasterIpv4s[i].Microseconds = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MasterIpv4s[i].Microseconds = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("milliseconds"); value.Exists() {
-			if !data.MasterIpv4s[i].Milliseconds.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MasterIpv4s[i].Milliseconds.IsNull() && !data.MasterIpv4s[i].Milliseconds.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MasterIpv4s[i].Milliseconds = types.BoolValue(false)
+			} else if !data.MasterIpv4s[i].Milliseconds.IsNull() {
 				data.MasterIpv4s[i].Milliseconds = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MasterIpv4s[i].Milliseconds.IsNull() {
 				data.MasterIpv4s[i].Milliseconds = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MasterIpv4s[i].Milliseconds = types.BoolValue(false)
 			}
 		}
 	}
@@ -1248,33 +1320,57 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res []byte) {
 			data.MasterIpv6s[i].ClockClass = types.Int64Null()
 		}
 		if value := r.Get("multicast"); value.Exists() {
-			if !data.MasterIpv6s[i].Multicast.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MasterIpv6s[i].Multicast.IsNull() && !data.MasterIpv6s[i].Multicast.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MasterIpv6s[i].Multicast = types.BoolValue(false)
+			} else if !data.MasterIpv6s[i].Multicast.IsNull() {
 				data.MasterIpv6s[i].Multicast = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MasterIpv6s[i].Multicast.IsNull() {
 				data.MasterIpv6s[i].Multicast = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MasterIpv6s[i].Multicast = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("multicast.mixed"); value.Exists() {
-			if !data.MasterIpv6s[i].MulticastMixed.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MasterIpv6s[i].MulticastMixed.IsNull() && !data.MasterIpv6s[i].MulticastMixed.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MasterIpv6s[i].MulticastMixed = types.BoolValue(false)
+			} else if !data.MasterIpv6s[i].MulticastMixed.IsNull() {
 				data.MasterIpv6s[i].MulticastMixed = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MasterIpv6s[i].MulticastMixed.IsNull() {
 				data.MasterIpv6s[i].MulticastMixed = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MasterIpv6s[i].MulticastMixed = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("non-negotiated"); value.Exists() {
-			if !data.MasterIpv6s[i].NonNegotiated.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MasterIpv6s[i].NonNegotiated.IsNull() && !data.MasterIpv6s[i].NonNegotiated.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MasterIpv6s[i].NonNegotiated = types.BoolValue(false)
+			} else if !data.MasterIpv6s[i].NonNegotiated.IsNull() {
 				data.MasterIpv6s[i].NonNegotiated = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MasterIpv6s[i].NonNegotiated.IsNull() {
 				data.MasterIpv6s[i].NonNegotiated = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MasterIpv6s[i].NonNegotiated = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("delay-asymmetry"); value.Exists() && !data.MasterIpv6s[i].DelayAsymmetry.IsNull() {
@@ -1283,33 +1379,57 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res []byte) {
 			data.MasterIpv6s[i].DelayAsymmetry = types.Int64Null()
 		}
 		if value := r.Get("nanoseconds"); value.Exists() {
-			if !data.MasterIpv6s[i].Nanoseconds.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MasterIpv6s[i].Nanoseconds.IsNull() && !data.MasterIpv6s[i].Nanoseconds.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MasterIpv6s[i].Nanoseconds = types.BoolValue(false)
+			} else if !data.MasterIpv6s[i].Nanoseconds.IsNull() {
 				data.MasterIpv6s[i].Nanoseconds = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MasterIpv6s[i].Nanoseconds.IsNull() {
 				data.MasterIpv6s[i].Nanoseconds = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MasterIpv6s[i].Nanoseconds = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("microseconds"); value.Exists() {
-			if !data.MasterIpv6s[i].Microseconds.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MasterIpv6s[i].Microseconds.IsNull() && !data.MasterIpv6s[i].Microseconds.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MasterIpv6s[i].Microseconds = types.BoolValue(false)
+			} else if !data.MasterIpv6s[i].Microseconds.IsNull() {
 				data.MasterIpv6s[i].Microseconds = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MasterIpv6s[i].Microseconds.IsNull() {
 				data.MasterIpv6s[i].Microseconds = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MasterIpv6s[i].Microseconds = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("milliseconds"); value.Exists() {
-			if !data.MasterIpv6s[i].Milliseconds.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MasterIpv6s[i].Milliseconds.IsNull() && !data.MasterIpv6s[i].Milliseconds.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MasterIpv6s[i].Milliseconds = types.BoolValue(false)
+			} else if !data.MasterIpv6s[i].Milliseconds.IsNull() {
 				data.MasterIpv6s[i].Milliseconds = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MasterIpv6s[i].Milliseconds.IsNull() {
 				data.MasterIpv6s[i].Milliseconds = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MasterIpv6s[i].Milliseconds = types.BoolValue(false)
 			}
 		}
 	}
@@ -1352,33 +1472,57 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res []byte) {
 			data.MasterEthernets[i].ClockClass = types.Int64Null()
 		}
 		if value := r.Get("multicast"); value.Exists() {
-			if !data.MasterEthernets[i].Multicast.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MasterEthernets[i].Multicast.IsNull() && !data.MasterEthernets[i].Multicast.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MasterEthernets[i].Multicast = types.BoolValue(false)
+			} else if !data.MasterEthernets[i].Multicast.IsNull() {
 				data.MasterEthernets[i].Multicast = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MasterEthernets[i].Multicast.IsNull() {
 				data.MasterEthernets[i].Multicast = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MasterEthernets[i].Multicast = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("multicast.mixed"); value.Exists() {
-			if !data.MasterEthernets[i].MulticastMixed.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MasterEthernets[i].MulticastMixed.IsNull() && !data.MasterEthernets[i].MulticastMixed.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MasterEthernets[i].MulticastMixed = types.BoolValue(false)
+			} else if !data.MasterEthernets[i].MulticastMixed.IsNull() {
 				data.MasterEthernets[i].MulticastMixed = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MasterEthernets[i].MulticastMixed.IsNull() {
 				data.MasterEthernets[i].MulticastMixed = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MasterEthernets[i].MulticastMixed = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("non-negotiated"); value.Exists() {
-			if !data.MasterEthernets[i].NonNegotiated.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MasterEthernets[i].NonNegotiated.IsNull() && !data.MasterEthernets[i].NonNegotiated.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MasterEthernets[i].NonNegotiated = types.BoolValue(false)
+			} else if !data.MasterEthernets[i].NonNegotiated.IsNull() {
 				data.MasterEthernets[i].NonNegotiated = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MasterEthernets[i].NonNegotiated.IsNull() {
 				data.MasterEthernets[i].NonNegotiated = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MasterEthernets[i].NonNegotiated = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("delay-asymmetry"); value.Exists() && !data.MasterEthernets[i].DelayAsymmetry.IsNull() {
@@ -1387,33 +1531,57 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res []byte) {
 			data.MasterEthernets[i].DelayAsymmetry = types.Int64Null()
 		}
 		if value := r.Get("nanoseconds"); value.Exists() {
-			if !data.MasterEthernets[i].Nanoseconds.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MasterEthernets[i].Nanoseconds.IsNull() && !data.MasterEthernets[i].Nanoseconds.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MasterEthernets[i].Nanoseconds = types.BoolValue(false)
+			} else if !data.MasterEthernets[i].Nanoseconds.IsNull() {
 				data.MasterEthernets[i].Nanoseconds = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MasterEthernets[i].Nanoseconds.IsNull() {
 				data.MasterEthernets[i].Nanoseconds = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MasterEthernets[i].Nanoseconds = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("microseconds"); value.Exists() {
-			if !data.MasterEthernets[i].Microseconds.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MasterEthernets[i].Microseconds.IsNull() && !data.MasterEthernets[i].Microseconds.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MasterEthernets[i].Microseconds = types.BoolValue(false)
+			} else if !data.MasterEthernets[i].Microseconds.IsNull() {
 				data.MasterEthernets[i].Microseconds = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MasterEthernets[i].Microseconds.IsNull() {
 				data.MasterEthernets[i].Microseconds = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MasterEthernets[i].Microseconds = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("milliseconds"); value.Exists() {
-			if !data.MasterEthernets[i].Milliseconds.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MasterEthernets[i].Milliseconds.IsNull() && !data.MasterEthernets[i].Milliseconds.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MasterEthernets[i].Milliseconds = types.BoolValue(false)
+			} else if !data.MasterEthernets[i].Milliseconds.IsNull() {
 				data.MasterEthernets[i].Milliseconds = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MasterEthernets[i].Milliseconds.IsNull() {
 				data.MasterEthernets[i].Milliseconds = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MasterEthernets[i].Milliseconds = types.BoolValue(false)
 			}
 		}
 	}
@@ -3045,7 +3213,7 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolNull()
+				item.NonNegotiated = types.BoolValue(false)
 			}
 			data.SlaveIpv4s = append(data.SlaveIpv4s, item)
 			return true
@@ -3061,7 +3229,7 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolNull()
+				item.NonNegotiated = types.BoolValue(false)
 			}
 			data.SlaveIpv6s = append(data.SlaveIpv6s, item)
 			return true
@@ -3077,7 +3245,7 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolNull()
+				item.NonNegotiated = types.BoolValue(false)
 			}
 			data.SlaveEthernets = append(data.SlaveEthernets, item)
 			return true
@@ -3099,17 +3267,17 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("multicast"); cValue.Exists() {
 				item.Multicast = types.BoolValue(true)
 			} else {
-				item.Multicast = types.BoolNull()
+				item.Multicast = types.BoolValue(false)
 			}
 			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
 				item.MulticastMixed = types.BoolValue(true)
 			} else {
-				item.MulticastMixed = types.BoolNull()
+				item.MulticastMixed = types.BoolValue(false)
 			}
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolNull()
+				item.NonNegotiated = types.BoolValue(false)
 			}
 			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
 				item.DelayAsymmetry = types.Int64Value(cValue.Int())
@@ -3117,17 +3285,17 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("nanoseconds"); cValue.Exists() {
 				item.Nanoseconds = types.BoolValue(true)
 			} else {
-				item.Nanoseconds = types.BoolNull()
+				item.Nanoseconds = types.BoolValue(false)
 			}
 			if cValue := v.Get("microseconds"); cValue.Exists() {
 				item.Microseconds = types.BoolValue(true)
 			} else {
-				item.Microseconds = types.BoolNull()
+				item.Microseconds = types.BoolValue(false)
 			}
 			if cValue := v.Get("milliseconds"); cValue.Exists() {
 				item.Milliseconds = types.BoolValue(true)
 			} else {
-				item.Milliseconds = types.BoolNull()
+				item.Milliseconds = types.BoolValue(false)
 			}
 			data.MasterIpv4s = append(data.MasterIpv4s, item)
 			return true
@@ -3149,17 +3317,17 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("multicast"); cValue.Exists() {
 				item.Multicast = types.BoolValue(true)
 			} else {
-				item.Multicast = types.BoolNull()
+				item.Multicast = types.BoolValue(false)
 			}
 			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
 				item.MulticastMixed = types.BoolValue(true)
 			} else {
-				item.MulticastMixed = types.BoolNull()
+				item.MulticastMixed = types.BoolValue(false)
 			}
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolNull()
+				item.NonNegotiated = types.BoolValue(false)
 			}
 			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
 				item.DelayAsymmetry = types.Int64Value(cValue.Int())
@@ -3167,17 +3335,17 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("nanoseconds"); cValue.Exists() {
 				item.Nanoseconds = types.BoolValue(true)
 			} else {
-				item.Nanoseconds = types.BoolNull()
+				item.Nanoseconds = types.BoolValue(false)
 			}
 			if cValue := v.Get("microseconds"); cValue.Exists() {
 				item.Microseconds = types.BoolValue(true)
 			} else {
-				item.Microseconds = types.BoolNull()
+				item.Microseconds = types.BoolValue(false)
 			}
 			if cValue := v.Get("milliseconds"); cValue.Exists() {
 				item.Milliseconds = types.BoolValue(true)
 			} else {
-				item.Milliseconds = types.BoolNull()
+				item.Milliseconds = types.BoolValue(false)
 			}
 			data.MasterIpv6s = append(data.MasterIpv6s, item)
 			return true
@@ -3199,17 +3367,17 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("multicast"); cValue.Exists() {
 				item.Multicast = types.BoolValue(true)
 			} else {
-				item.Multicast = types.BoolNull()
+				item.Multicast = types.BoolValue(false)
 			}
 			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
 				item.MulticastMixed = types.BoolValue(true)
 			} else {
-				item.MulticastMixed = types.BoolNull()
+				item.MulticastMixed = types.BoolValue(false)
 			}
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolNull()
+				item.NonNegotiated = types.BoolValue(false)
 			}
 			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
 				item.DelayAsymmetry = types.Int64Value(cValue.Int())
@@ -3217,17 +3385,17 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("nanoseconds"); cValue.Exists() {
 				item.Nanoseconds = types.BoolValue(true)
 			} else {
-				item.Nanoseconds = types.BoolNull()
+				item.Nanoseconds = types.BoolValue(false)
 			}
 			if cValue := v.Get("microseconds"); cValue.Exists() {
 				item.Microseconds = types.BoolValue(true)
 			} else {
-				item.Microseconds = types.BoolNull()
+				item.Microseconds = types.BoolValue(false)
 			}
 			if cValue := v.Get("milliseconds"); cValue.Exists() {
 				item.Milliseconds = types.BoolValue(true)
 			} else {
-				item.Milliseconds = types.BoolNull()
+				item.Milliseconds = types.BoolValue(false)
 			}
 			data.MasterEthernets = append(data.MasterEthernets, item)
 			return true

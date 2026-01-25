@@ -553,23 +553,33 @@ func (data *TelemetryModelDriven) updateFromBody(ctx context.Context, res []byte
 				data.DestinationGroups[i].AddressFamily[ci].Encoding = types.StringNull()
 			}
 			if value := cr.Get("protocol.grpc"); value.Exists() {
-				if !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc.IsNull() && !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc.ValueBool() {
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc = types.BoolValue(false)
+				} else if !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc.IsNull() {
 					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc.IsNull() {
 					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc = types.BoolNull()
+				} else {
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("protocol.grpc.no-tls"); value.Exists() {
-				if !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls.IsNull() && !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls.ValueBool() {
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls = types.BoolValue(false)
+				} else if !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls.IsNull() {
 					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls.IsNull() {
 					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls = types.BoolNull()
+				} else {
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("protocol.grpc.tls-hostname"); value.Exists() && !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcTlsHostname.IsNull() {
@@ -578,33 +588,48 @@ func (data *TelemetryModelDriven) updateFromBody(ctx context.Context, res []byte
 				data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcTlsHostname = types.StringNull()
 			}
 			if value := cr.Get("protocol.grpc.gzip"); value.Exists() {
-				if !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip.IsNull() && !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip.ValueBool() {
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip = types.BoolValue(false)
+				} else if !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip.IsNull() {
 					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip.IsNull() {
 					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip = types.BoolNull()
+				} else {
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("protocol.tcp"); value.Exists() {
-				if !data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp.IsNull() && !data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp.ValueBool() {
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp = types.BoolValue(false)
+				} else if !data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp.IsNull() {
 					data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp.IsNull() {
 					data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp = types.BoolNull()
+				} else {
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("protocol.udp"); value.Exists() {
-				if !data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp.IsNull() && !data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp.ValueBool() {
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp = types.BoolValue(false)
+				} else if !data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp.IsNull() {
 					data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp.IsNull() {
 					data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp = types.BoolNull()
+				} else {
+					data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("protocol.udp.packetsize"); value.Exists() {
@@ -657,23 +682,33 @@ func (data *TelemetryModelDriven) updateFromBody(ctx context.Context, res []byte
 				data.DestinationGroups[i].Destinations[ci].Encoding = types.StringNull()
 			}
 			if value := cr.Get("protocol.grpc"); value.Exists() {
-				if !data.DestinationGroups[i].Destinations[ci].ProtocolGrpc.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.DestinationGroups[i].Destinations[ci].ProtocolGrpc.IsNull() && !data.DestinationGroups[i].Destinations[ci].ProtocolGrpc.ValueBool() {
+					data.DestinationGroups[i].Destinations[ci].ProtocolGrpc = types.BoolValue(false)
+				} else if !data.DestinationGroups[i].Destinations[ci].ProtocolGrpc.IsNull() {
 					data.DestinationGroups[i].Destinations[ci].ProtocolGrpc = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.DestinationGroups[i].Destinations[ci].ProtocolGrpc.IsNull() {
 					data.DestinationGroups[i].Destinations[ci].ProtocolGrpc = types.BoolNull()
+				} else {
+					data.DestinationGroups[i].Destinations[ci].ProtocolGrpc = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("protocol.grpc.no-tls"); value.Exists() {
-				if !data.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls.IsNull() && !data.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls.ValueBool() {
+					data.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls = types.BoolValue(false)
+				} else if !data.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls.IsNull() {
 					data.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls.IsNull() {
 					data.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls = types.BoolNull()
+				} else {
+					data.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("protocol.grpc.tls-hostname"); value.Exists() && !data.DestinationGroups[i].Destinations[ci].ProtocolGrpcTlsHostname.IsNull() {
@@ -682,33 +717,48 @@ func (data *TelemetryModelDriven) updateFromBody(ctx context.Context, res []byte
 				data.DestinationGroups[i].Destinations[ci].ProtocolGrpcTlsHostname = types.StringNull()
 			}
 			if value := cr.Get("protocol.grpc.gzip"); value.Exists() {
-				if !data.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip.IsNull() && !data.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip.ValueBool() {
+					data.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip = types.BoolValue(false)
+				} else if !data.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip.IsNull() {
 					data.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip.IsNull() {
 					data.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip = types.BoolNull()
+				} else {
+					data.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("protocol.tcp"); value.Exists() {
-				if !data.DestinationGroups[i].Destinations[ci].ProtocolTcp.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.DestinationGroups[i].Destinations[ci].ProtocolTcp.IsNull() && !data.DestinationGroups[i].Destinations[ci].ProtocolTcp.ValueBool() {
+					data.DestinationGroups[i].Destinations[ci].ProtocolTcp = types.BoolValue(false)
+				} else if !data.DestinationGroups[i].Destinations[ci].ProtocolTcp.IsNull() {
 					data.DestinationGroups[i].Destinations[ci].ProtocolTcp = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.DestinationGroups[i].Destinations[ci].ProtocolTcp.IsNull() {
 					data.DestinationGroups[i].Destinations[ci].ProtocolTcp = types.BoolNull()
+				} else {
+					data.DestinationGroups[i].Destinations[ci].ProtocolTcp = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("protocol.udp"); value.Exists() {
-				if !data.DestinationGroups[i].Destinations[ci].ProtocolUdp.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.DestinationGroups[i].Destinations[ci].ProtocolUdp.IsNull() && !data.DestinationGroups[i].Destinations[ci].ProtocolUdp.ValueBool() {
+					data.DestinationGroups[i].Destinations[ci].ProtocolUdp = types.BoolValue(false)
+				} else if !data.DestinationGroups[i].Destinations[ci].ProtocolUdp.IsNull() {
 					data.DestinationGroups[i].Destinations[ci].ProtocolUdp = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.DestinationGroups[i].Destinations[ci].ProtocolUdp.IsNull() {
 					data.DestinationGroups[i].Destinations[ci].ProtocolUdp = types.BoolNull()
+				} else {
+					data.DestinationGroups[i].Destinations[ci].ProtocolUdp = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("protocol.udp.packetsize"); value.Exists() {
@@ -790,13 +840,18 @@ func (data *TelemetryModelDriven) updateFromBody(ctx context.Context, res []byte
 				data.Subscriptions[i].SensorGroupIds[ci].Mode = types.StringNull()
 			}
 			if value := cr.Get("heartbeat.always"); value.Exists() {
-				if !data.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways.IsNull() && !data.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways.ValueBool() {
+					data.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways = types.BoolValue(false)
+				} else if !data.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways.IsNull() {
 					data.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways.IsNull() {
 					data.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways = types.BoolNull()
+				} else {
+					data.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("heartbeat.interval"); value.Exists() {
@@ -805,13 +860,18 @@ func (data *TelemetryModelDriven) updateFromBody(ctx context.Context, res []byte
 				data.Subscriptions[i].SensorGroupIds[ci].HeartbeatInterval = types.Int64Null()
 			}
 			if value := cr.Get("strict-timer"); value.Exists() {
-				if !data.Subscriptions[i].SensorGroupIds[ci].StrictTimer.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.Subscriptions[i].SensorGroupIds[ci].StrictTimer.IsNull() && !data.Subscriptions[i].SensorGroupIds[ci].StrictTimer.ValueBool() {
+					data.Subscriptions[i].SensorGroupIds[ci].StrictTimer = types.BoolValue(false)
+				} else if !data.Subscriptions[i].SensorGroupIds[ci].StrictTimer.IsNull() {
 					data.Subscriptions[i].SensorGroupIds[ci].StrictTimer = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.Subscriptions[i].SensorGroupIds[ci].StrictTimer.IsNull() {
 					data.Subscriptions[i].SensorGroupIds[ci].StrictTimer = types.BoolNull()
+				} else {
+					data.Subscriptions[i].SensorGroupIds[ci].StrictTimer = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("sample-interval"); value.Exists() {
@@ -1746,12 +1806,12 @@ func (data *TelemetryModelDriven) fromBody(ctx context.Context, res gjson.Result
 					if ccValue := cv.Get("protocol.grpc"); ccValue.Exists() {
 						cItem.ProtocolGrpc = types.BoolValue(true)
 					} else {
-						cItem.ProtocolGrpc = types.BoolNull()
+						cItem.ProtocolGrpc = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("protocol.grpc.no-tls"); ccValue.Exists() {
 						cItem.ProtocolGrpcNoTls = types.BoolValue(true)
 					} else {
-						cItem.ProtocolGrpcNoTls = types.BoolNull()
+						cItem.ProtocolGrpcNoTls = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("protocol.grpc.tls-hostname"); ccValue.Exists() {
 						cItem.ProtocolGrpcTlsHostname = types.StringValue(ccValue.String())
@@ -1759,17 +1819,17 @@ func (data *TelemetryModelDriven) fromBody(ctx context.Context, res gjson.Result
 					if ccValue := cv.Get("protocol.grpc.gzip"); ccValue.Exists() {
 						cItem.ProtocolGrpcGzip = types.BoolValue(true)
 					} else {
-						cItem.ProtocolGrpcGzip = types.BoolNull()
+						cItem.ProtocolGrpcGzip = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("protocol.tcp"); ccValue.Exists() {
 						cItem.ProtocolTcp = types.BoolValue(true)
 					} else {
-						cItem.ProtocolTcp = types.BoolNull()
+						cItem.ProtocolTcp = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("protocol.udp"); ccValue.Exists() {
 						cItem.ProtocolUdp = types.BoolValue(true)
 					} else {
-						cItem.ProtocolUdp = types.BoolNull()
+						cItem.ProtocolUdp = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("protocol.udp.packetsize"); ccValue.Exists() {
 						cItem.ProtocolUdpPacketsize = types.Int64Value(ccValue.Int())
@@ -1797,12 +1857,12 @@ func (data *TelemetryModelDriven) fromBody(ctx context.Context, res gjson.Result
 					if ccValue := cv.Get("protocol.grpc"); ccValue.Exists() {
 						cItem.ProtocolGrpc = types.BoolValue(true)
 					} else {
-						cItem.ProtocolGrpc = types.BoolNull()
+						cItem.ProtocolGrpc = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("protocol.grpc.no-tls"); ccValue.Exists() {
 						cItem.ProtocolGrpcNoTls = types.BoolValue(true)
 					} else {
-						cItem.ProtocolGrpcNoTls = types.BoolNull()
+						cItem.ProtocolGrpcNoTls = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("protocol.grpc.tls-hostname"); ccValue.Exists() {
 						cItem.ProtocolGrpcTlsHostname = types.StringValue(ccValue.String())
@@ -1810,17 +1870,17 @@ func (data *TelemetryModelDriven) fromBody(ctx context.Context, res gjson.Result
 					if ccValue := cv.Get("protocol.grpc.gzip"); ccValue.Exists() {
 						cItem.ProtocolGrpcGzip = types.BoolValue(true)
 					} else {
-						cItem.ProtocolGrpcGzip = types.BoolNull()
+						cItem.ProtocolGrpcGzip = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("protocol.tcp"); ccValue.Exists() {
 						cItem.ProtocolTcp = types.BoolValue(true)
 					} else {
-						cItem.ProtocolTcp = types.BoolNull()
+						cItem.ProtocolTcp = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("protocol.udp"); ccValue.Exists() {
 						cItem.ProtocolUdp = types.BoolValue(true)
 					} else {
-						cItem.ProtocolUdp = types.BoolNull()
+						cItem.ProtocolUdp = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("protocol.udp.packetsize"); ccValue.Exists() {
 						cItem.ProtocolUdpPacketsize = types.Int64Value(ccValue.Int())
@@ -1859,7 +1919,7 @@ func (data *TelemetryModelDriven) fromBody(ctx context.Context, res gjson.Result
 					if ccValue := cv.Get("heartbeat.always"); ccValue.Exists() {
 						cItem.HeartbeatAlways = types.BoolValue(true)
 					} else {
-						cItem.HeartbeatAlways = types.BoolNull()
+						cItem.HeartbeatAlways = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("heartbeat.interval"); ccValue.Exists() {
 						cItem.HeartbeatInterval = types.Int64Value(ccValue.Int())
@@ -1867,7 +1927,7 @@ func (data *TelemetryModelDriven) fromBody(ctx context.Context, res gjson.Result
 					if ccValue := cv.Get("strict-timer"); ccValue.Exists() {
 						cItem.StrictTimer = types.BoolValue(true)
 					} else {
-						cItem.StrictTimer = types.BoolNull()
+						cItem.StrictTimer = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("sample-interval"); ccValue.Exists() {
 						cItem.SampleInterval = types.Int64Value(ccValue.Int())

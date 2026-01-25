@@ -355,33 +355,57 @@ func (data *SNMPServerMIB) updateFromBody(ctx context.Context, res []byte) {
 			data.Interfaces[i].InterfaceName = types.StringNull()
 		}
 		if value := r.Get("notification.linkupdown.enable"); value.Exists() {
-			if !data.Interfaces[i].NotificationLinkupdownEnable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].NotificationLinkupdownEnable.IsNull() && !data.Interfaces[i].NotificationLinkupdownEnable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].NotificationLinkupdownEnable = types.BoolValue(false)
+			} else if !data.Interfaces[i].NotificationLinkupdownEnable.IsNull() {
 				data.Interfaces[i].NotificationLinkupdownEnable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].NotificationLinkupdownEnable.IsNull() {
 				data.Interfaces[i].NotificationLinkupdownEnable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].NotificationLinkupdownEnable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("notification.linkupdown.disable"); value.Exists() {
-			if !data.Interfaces[i].NotificationLinkupdownDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].NotificationLinkupdownDisable.IsNull() && !data.Interfaces[i].NotificationLinkupdownDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].NotificationLinkupdownDisable = types.BoolValue(false)
+			} else if !data.Interfaces[i].NotificationLinkupdownDisable.IsNull() {
 				data.Interfaces[i].NotificationLinkupdownDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].NotificationLinkupdownDisable.IsNull() {
 				data.Interfaces[i].NotificationLinkupdownDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].NotificationLinkupdownDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("index.persistence"); value.Exists() {
-			if !data.Interfaces[i].IndexPersistence.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].IndexPersistence.IsNull() && !data.Interfaces[i].IndexPersistence.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].IndexPersistence = types.BoolValue(false)
+			} else if !data.Interfaces[i].IndexPersistence.IsNull() {
 				data.Interfaces[i].IndexPersistence = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].IndexPersistence.IsNull() {
 				data.Interfaces[i].IndexPersistence = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].IndexPersistence = types.BoolValue(false)
 			}
 		}
 	}
@@ -959,17 +983,17 @@ func (data *SNMPServerMIB) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("notification.linkupdown.enable"); cValue.Exists() {
 				item.NotificationLinkupdownEnable = types.BoolValue(true)
 			} else {
-				item.NotificationLinkupdownEnable = types.BoolNull()
+				item.NotificationLinkupdownEnable = types.BoolValue(false)
 			}
 			if cValue := v.Get("notification.linkupdown.disable"); cValue.Exists() {
 				item.NotificationLinkupdownDisable = types.BoolValue(true)
 			} else {
-				item.NotificationLinkupdownDisable = types.BoolNull()
+				item.NotificationLinkupdownDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("index.persistence"); cValue.Exists() {
 				item.IndexPersistence = types.BoolValue(true)
 			} else {
-				item.IndexPersistence = types.BoolNull()
+				item.IndexPersistence = types.BoolValue(false)
 			}
 			data.Interfaces = append(data.Interfaces, item)
 			return true

@@ -715,23 +715,39 @@ func (data *L2VPNXconnectGroup) updateFromBody(ctx context.Context, res []byte) 
 			}
 		}
 		if value := r.Get("interworking.ipv4"); value.Exists() {
-			if !data.P2ps[i].InterworkingIpv4.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.P2ps[i].InterworkingIpv4.IsNull() && !data.P2ps[i].InterworkingIpv4.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.P2ps[i].InterworkingIpv4 = types.BoolValue(false)
+			} else if !data.P2ps[i].InterworkingIpv4.IsNull() {
 				data.P2ps[i].InterworkingIpv4 = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.P2ps[i].InterworkingIpv4.IsNull() {
 				data.P2ps[i].InterworkingIpv4 = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.P2ps[i].InterworkingIpv4 = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("interworking.ethernet"); value.Exists() {
-			if !data.P2ps[i].InterworkingEthernet.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.P2ps[i].InterworkingEthernet.IsNull() && !data.P2ps[i].InterworkingEthernet.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.P2ps[i].InterworkingEthernet = types.BoolValue(false)
+			} else if !data.P2ps[i].InterworkingEthernet.IsNull() {
 				data.P2ps[i].InterworkingEthernet = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.P2ps[i].InterworkingEthernet.IsNull() {
 				data.P2ps[i].InterworkingEthernet = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.P2ps[i].InterworkingEthernet = types.BoolValue(false)
 			}
 		}
 		for ci := range data.P2ps[i].BackupInterfaces {
@@ -1185,13 +1201,21 @@ func (data *L2VPNXconnectGroup) updateFromBody(ctx context.Context, res []byte) 
 			data.Mp2mps[i].Mtu = types.Int64Null()
 		}
 		if value := r.Get("shutdown"); value.Exists() {
-			if !data.Mp2mps[i].Shutdown.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Mp2mps[i].Shutdown.IsNull() && !data.Mp2mps[i].Shutdown.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Mp2mps[i].Shutdown = types.BoolValue(false)
+			} else if !data.Mp2mps[i].Shutdown.IsNull() {
 				data.Mp2mps[i].Shutdown = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Mp2mps[i].Shutdown.IsNull() {
 				data.Mp2mps[i].Shutdown = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Mp2mps[i].Shutdown = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("l2-encapsulation"); value.Exists() && !data.Mp2mps[i].L2Encapsulation.IsNull() {
@@ -1205,33 +1229,57 @@ func (data *L2VPNXconnectGroup) updateFromBody(ctx context.Context, res []byte) 
 			data.Mp2mps[i].Interworking = types.StringNull()
 		}
 		if value := r.Get("control-word.disable"); value.Exists() {
-			if !data.Mp2mps[i].ControlWordDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Mp2mps[i].ControlWordDisable.IsNull() && !data.Mp2mps[i].ControlWordDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Mp2mps[i].ControlWordDisable = types.BoolValue(false)
+			} else if !data.Mp2mps[i].ControlWordDisable.IsNull() {
 				data.Mp2mps[i].ControlWordDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Mp2mps[i].ControlWordDisable.IsNull() {
 				data.Mp2mps[i].ControlWordDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Mp2mps[i].ControlWordDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("autodiscovery.bgp"); value.Exists() {
-			if !data.Mp2mps[i].AutodiscoveryBgp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Mp2mps[i].AutodiscoveryBgp.IsNull() && !data.Mp2mps[i].AutodiscoveryBgp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Mp2mps[i].AutodiscoveryBgp = types.BoolValue(false)
+			} else if !data.Mp2mps[i].AutodiscoveryBgp.IsNull() {
 				data.Mp2mps[i].AutodiscoveryBgp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Mp2mps[i].AutodiscoveryBgp.IsNull() {
 				data.Mp2mps[i].AutodiscoveryBgp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Mp2mps[i].AutodiscoveryBgp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("autodiscovery.bgp.rd.auto"); value.Exists() {
-			if !data.Mp2mps[i].AutodiscoveryBgpRdAuto.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Mp2mps[i].AutodiscoveryBgpRdAuto.IsNull() && !data.Mp2mps[i].AutodiscoveryBgpRdAuto.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Mp2mps[i].AutodiscoveryBgpRdAuto = types.BoolValue(false)
+			} else if !data.Mp2mps[i].AutodiscoveryBgpRdAuto.IsNull() {
 				data.Mp2mps[i].AutodiscoveryBgpRdAuto = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Mp2mps[i].AutodiscoveryBgpRdAuto.IsNull() {
 				data.Mp2mps[i].AutodiscoveryBgpRdAuto = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Mp2mps[i].AutodiscoveryBgpRdAuto = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("autodiscovery.bgp.rd.two-byte-as-number"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRdTwoByteAsNumber.IsNull() {
@@ -1657,13 +1705,18 @@ func (data *L2VPNXconnectGroup) updateFromBody(ctx context.Context, res []byte) 
 				}
 			}
 			if value := cr.Get("vpws-seamless-integration"); value.Exists() {
-				if !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration.IsNull() && !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration.ValueBool() {
+					data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration = types.BoolValue(false)
+				} else if !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration.IsNull() {
 					data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration.IsNull() {
 					data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration = types.BoolNull()
+				} else {
+					data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration = types.BoolValue(false)
 				}
 			}
 		}
@@ -1673,33 +1726,57 @@ func (data *L2VPNXconnectGroup) updateFromBody(ctx context.Context, res []byte) 
 			data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeRange = types.Int64Null()
 		}
 		if value := r.Get("autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.transmit"); value.Exists() {
-			if !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.IsNull() && !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolValue(false)
+			} else if !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.IsNull() {
 				data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.IsNull() {
 				data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.receive"); value.Exists() {
-			if !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.IsNull() && !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolValue(false)
+			} else if !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.IsNull() {
 				data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.IsNull() {
 				data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.both"); value.Exists() {
-			if !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.IsNull() && !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolValue(false)
+			} else if !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.IsNull() {
 				data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.IsNull() {
 				data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("autodiscovery.bgp.route-policy.export"); value.Exists() && !data.Mp2mps[i].AutodiscoveryBgpRoutePolicyExport.IsNull() {
@@ -2977,12 +3054,12 @@ func (data *L2VPNXconnectGroup) fromBody(ctx context.Context, res gjson.Result) 
 			if cValue := v.Get("interworking.ipv4"); cValue.Exists() {
 				item.InterworkingIpv4 = types.BoolValue(true)
 			} else {
-				item.InterworkingIpv4 = types.BoolNull()
+				item.InterworkingIpv4 = types.BoolValue(false)
 			}
 			if cValue := v.Get("interworking.ethernet"); cValue.Exists() {
 				item.InterworkingEthernet = types.BoolValue(true)
 			} else {
-				item.InterworkingEthernet = types.BoolNull()
+				item.InterworkingEthernet = types.BoolValue(false)
 			}
 			if cValue := v.Get("backup.interface"); cValue.Exists() {
 				item.BackupInterfaces = make([]L2VPNXconnectGroupP2psBackupInterfaces, 0)
@@ -3193,7 +3270,7 @@ func (data *L2VPNXconnectGroup) fromBody(ctx context.Context, res gjson.Result) 
 			if cValue := v.Get("shutdown"); cValue.Exists() {
 				item.Shutdown = types.BoolValue(true)
 			} else {
-				item.Shutdown = types.BoolNull()
+				item.Shutdown = types.BoolValue(false)
 			}
 			if cValue := v.Get("l2-encapsulation"); cValue.Exists() {
 				item.L2Encapsulation = types.StringValue(cValue.String())
@@ -3204,17 +3281,17 @@ func (data *L2VPNXconnectGroup) fromBody(ctx context.Context, res gjson.Result) 
 			if cValue := v.Get("control-word.disable"); cValue.Exists() {
 				item.ControlWordDisable = types.BoolValue(true)
 			} else {
-				item.ControlWordDisable = types.BoolNull()
+				item.ControlWordDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("autodiscovery.bgp"); cValue.Exists() {
 				item.AutodiscoveryBgp = types.BoolValue(true)
 			} else {
-				item.AutodiscoveryBgp = types.BoolNull()
+				item.AutodiscoveryBgp = types.BoolValue(false)
 			}
 			if cValue := v.Get("autodiscovery.bgp.rd.auto"); cValue.Exists() {
 				item.AutodiscoveryBgpRdAuto = types.BoolValue(true)
 			} else {
-				item.AutodiscoveryBgpRdAuto = types.BoolNull()
+				item.AutodiscoveryBgpRdAuto = types.BoolValue(false)
 			}
 			if cValue := v.Get("autodiscovery.bgp.rd.two-byte-as-number"); cValue.Exists() {
 				item.AutodiscoveryBgpRdTwoByteAsNumber = types.Int64Value(cValue.Int())
@@ -3392,7 +3469,7 @@ func (data *L2VPNXconnectGroup) fromBody(ctx context.Context, res gjson.Result) 
 					if ccValue := cv.Get("vpws-seamless-integration"); ccValue.Exists() {
 						cItem.VpwsSeamlessIntegration = types.BoolValue(true)
 					} else {
-						cItem.VpwsSeamlessIntegration = types.BoolNull()
+						cItem.VpwsSeamlessIntegration = types.BoolValue(false)
 					}
 					item.AutodiscoveryBgpSignalingProtocolBgpCeIds = append(item.AutodiscoveryBgpSignalingProtocolBgpCeIds, cItem)
 					return true
@@ -3404,17 +3481,17 @@ func (data *L2VPNXconnectGroup) fromBody(ctx context.Context, res gjson.Result) 
 			if cValue := v.Get("autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.transmit"); cValue.Exists() {
 				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolValue(true)
 			} else {
-				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolNull()
+				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolValue(false)
 			}
 			if cValue := v.Get("autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.receive"); cValue.Exists() {
 				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolValue(true)
 			} else {
-				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolNull()
+				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolValue(false)
 			}
 			if cValue := v.Get("autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.both"); cValue.Exists() {
 				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolValue(true)
 			} else {
-				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolNull()
+				item.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolValue(false)
 			}
 			if cValue := v.Get("autodiscovery.bgp.route-policy.export"); cValue.Exists() {
 				item.AutodiscoveryBgpRoutePolicyExport = types.StringValue(cValue.String())

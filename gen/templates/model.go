@@ -524,13 +524,21 @@ func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte)
 		}
 		{{- else}}
 		if value := r.Get("{{toDotPath .XPath}}"); value.Exists() {
-			if !data.{{$list}}[i].{{toGoName .TfName}}.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.{{$list}}[i].{{toGoName .TfName}}.IsNull() && !data.{{$list}}[i].{{toGoName .TfName}}.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.{{$list}}[i].{{toGoName .TfName}} = types.BoolValue(false)
+			} else if !data.{{$list}}[i].{{toGoName .TfName}}.IsNull() {
 				data.{{$list}}[i].{{toGoName .TfName}} = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.{{$list}}[i].{{toGoName .TfName}}.IsNull() {
 				data.{{$list}}[i].{{toGoName .TfName}} = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.{{$list}}[i].{{toGoName .TfName}} = types.BoolValue(false)
 			}
 		}
 		{{- end}}
@@ -599,25 +607,30 @@ func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte)
 		} else if data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() {
 			data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.Int64Null()
 		}
-			{{- else if eq .Type "Bool"}}
-			{{- if eq .TypeYangBool "boolean"}}
-			if value := cr.Get("{{toDotPath .XPath}}"); value.Exists() {
-				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.BoolValue(value.Bool())
-			} else if data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() {
+		{{- else if eq .Type "Bool"}}
+		{{- if eq .TypeYangBool "boolean"}}
+		if value := cr.Get("{{toDotPath .XPath}}"); value.Exists() {
+			data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.BoolValue(value.Bool())
+		} else if data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() {
+			data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.BoolNull()
+		}
+		{{- else}}
+		if value := cr.Get("{{toDotPath .XPath}}"); value.Exists() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			if !data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() && !data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.ValueBool() {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.BoolValue(false)
+			} else if !data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.BoolValue(true)
+			}
+		} else {
+			// Element doesn't exist on device
+			if data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() {
 				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.BoolNull()
-			}
-			{{- else}}
-			if value := cr.Get("{{toDotPath .XPath}}"); value.Exists() {
-				if !data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() {
-					data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.BoolValue(true)
-				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() {
-					data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.BoolNull()
-				}
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.BoolValue(false)
 			}
-			{{- end}}
+		}
+		{{- end}}
 			{{- else if eq .Type "String"}}
 			if value := cr.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() {
 				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.StringValue({{if .ReadRaw}}value.Raw{{else}}value.String(){{end}})
@@ -683,20 +696,30 @@ func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte)
 				} else {
 					data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = types.Int64Null()
 				}
-				{{- else if eq .Type "Bool"}}
-				if value := ccr.Get("{{toDotPath .XPath}}"); !data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}}.IsNull() {
-					{{- if eq .TypeYangBool "boolean"}}
-					if value.Exists() {
-						data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = types.BoolValue(value.Bool())
-					}
-					{{- else}}
-					if value.Exists() {
-						data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = types.BoolValue(true)
-					}
-					{{- end}}
-				} else {
-					data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = types.BoolNull()
+			{{- else if eq .Type "Bool"}}
+			{{- if eq .TypeYangBool "boolean"}}
+			if value := ccr.Get("{{toDotPath .XPath}}"); value.Exists() {
+				data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = types.BoolValue(value.Bool())
+			} else if data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}}.IsNull() {
+				data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = types.BoolNull()
+			}
+			{{- else}}
+			if value := ccr.Get("{{toDotPath .XPath}}"); value.Exists() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}}.IsNull() && !data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}}.ValueBool() {
+					data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = types.BoolValue(false)
+				} else if !data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}}.IsNull() {
+					data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = types.BoolValue(true)
 				}
+			} else {
+				// Element doesn't exist on device
+				if data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}}.IsNull() {
+					data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = types.BoolNull()
+				} else {
+					data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = types.BoolValue(false)
+				}
+			}
+			{{- end}}
 				{{- else if eq .Type "String"}}
 				if value := ccr.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}}.IsNull() {
 					data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = types.StringValue({{if .ReadRaw}}value.Raw{{else}}value.String(){{end}})
@@ -903,7 +926,11 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res gjson.Result)
 				item.{{toGoName .TfName}} = types.BoolValue(true)
 				{{- end}}
 			} else {
-				item.{{toGoName .TfName}} = types.BoolNull()
+				{{- if eq .TypeYangBool "boolean"}}
+				item.{{toGoName .TfName}} = types.BoolValue(false)
+				{{- else}}
+				item.{{toGoName .TfName}} = types.BoolValue(false)
+				{{- end}}
 			}
 			{{- else if eq .Type "String"}}
 			if cValue := v.Get("{{toDotPath .XPath}}"); cValue.Exists() {
@@ -927,22 +954,22 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res gjson.Result)
 				item.{{toGoName .TfName}} = make([]{{$name}}{{$cname}}{{toGoName .TfName}}, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
 					cItem := {{$name}}{{$cname}}{{toGoName .TfName}}{}
-					{{- range .Attributes}}
-					{{- if not .WriteOnly}}
-					{{- if eq .Type "Int64"}}
-					if ccValue := cv.Get("{{toDotPath .XPath}}"); ccValue.Exists() {
-						cItem.{{toGoName .TfName}} = types.Int64Value(ccValue.Int())
-					}
-					{{- else if eq .Type "Bool"}}
-					if ccValue := cv.Get("{{toDotPath .XPath}}"); ccValue.Exists() {
-						{{- if eq .TypeYangBool "boolean"}}
-						cItem.{{toGoName .TfName}} = types.BoolValue(ccValue.Bool())
-						{{- else}}
-						cItem.{{toGoName .TfName}} = types.BoolValue(true)
-						{{- end}}
-					} else {
-						cItem.{{toGoName .TfName}} = types.BoolNull()
-					}
+				{{- range .Attributes}}
+				{{- if not .WriteOnly}}
+				{{- if eq .Type "Int64"}}
+				if ccValue := cv.Get("{{toDotPath .XPath}}"); ccValue.Exists() {
+					cItem.{{toGoName .TfName}} = types.Int64Value(ccValue.Int())
+				}
+				{{- else if eq .Type "Bool"}}
+				if ccValue := cv.Get("{{toDotPath .XPath}}"); ccValue.Exists() {
+					{{- if eq .TypeYangBool "boolean"}}
+					cItem.{{toGoName .TfName}} = types.BoolValue(ccValue.Bool())
+					{{- else}}
+					cItem.{{toGoName .TfName}} = types.BoolValue(true)
+					{{- end}}
+				} else {
+					cItem.{{toGoName .TfName}} = types.BoolValue(false)
+				}
 					{{- else if eq .Type "String"}}
 					if ccValue := cv.Get("{{toDotPath .XPath}}"); ccValue.Exists() {
 						cItem.{{toGoName .TfName}} = types.StringValue({{if .ReadRaw}}ccValue.Raw{{else}}ccValue.String(){{end}})
@@ -965,22 +992,22 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res gjson.Result)
 					cItem.{{toGoName .TfName}} = make([]{{$name}}{{$cname}}{{$ccname}}{{toGoName .TfName}}, 0)
 					ccValue.ForEach(func(cck, ccv gjson.Result) bool {
 						ccItem := {{$name}}{{$cname}}{{$ccname}}{{toGoName .TfName}}{}
-						{{- range .Attributes}}
-						{{- if and (not .WriteOnly) .TfName .Type}}
-						{{- if eq .Type "Int64"}}
-						if cccValue := ccv.Get("{{toDotPath .XPath}}"); cccValue.Exists() {
-							ccItem.{{toGoName .TfName}} = types.Int64Value(cccValue.Int())
-						}
-						{{- else if eq .Type "Bool"}}
-						if cccValue := ccv.Get("{{toDotPath .XPath}}"); cccValue.Exists() {
-							{{- if eq .TypeYangBool "boolean"}}
-							ccItem.{{toGoName .TfName}} = types.BoolValue(cccValue.Bool())
-							{{- else}}
-							ccItem.{{toGoName .TfName}} = types.BoolValue(true)
-							{{- end}}
-						} else {
-							ccItem.{{toGoName .TfName}} = types.BoolNull()
-						}
+					{{- range .Attributes}}
+					{{- if and (not .WriteOnly) .TfName .Type}}
+					{{- if eq .Type "Int64"}}
+					if cccValue := ccv.Get("{{toDotPath .XPath}}"); cccValue.Exists() {
+						ccItem.{{toGoName .TfName}} = types.Int64Value(cccValue.Int())
+					}
+					{{- else if eq .Type "Bool"}}
+					if cccValue := ccv.Get("{{toDotPath .XPath}}"); cccValue.Exists() {
+						{{- if eq .TypeYangBool "boolean"}}
+						ccItem.{{toGoName .TfName}} = types.BoolValue(cccValue.Bool())
+						{{- else}}
+						ccItem.{{toGoName .TfName}} = types.BoolValue(true)
+						{{- end}}
+					} else {
+						ccItem.{{toGoName .TfName}} = types.BoolValue(false)
+					}
 						{{- else if eq .Type "String"}}
 						if cccValue := ccv.Get("{{toDotPath .XPath}}"); cccValue.Exists() {
 							ccItem.{{toGoName .TfName}} = types.StringValue({{if .ReadRaw}}cccValue.Raw{{else}}cccValue.String(){{end}})

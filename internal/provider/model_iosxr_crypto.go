@@ -1048,13 +1048,21 @@ func (data *Crypto) updateFromBody(ctx context.Context, res []byte) {
 			data.CaTrustpoints[i].EnrollmentUrl = types.StringNull()
 		}
 		if value := r.Get("enrollment.terminal"); value.Exists() {
-			if !data.CaTrustpoints[i].EnrollmentTerminal.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.CaTrustpoints[i].EnrollmentTerminal.IsNull() && !data.CaTrustpoints[i].EnrollmentTerminal.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.CaTrustpoints[i].EnrollmentTerminal = types.BoolValue(false)
+			} else if !data.CaTrustpoints[i].EnrollmentTerminal.IsNull() {
 				data.CaTrustpoints[i].EnrollmentTerminal = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.CaTrustpoints[i].EnrollmentTerminal.IsNull() {
 				data.CaTrustpoints[i].EnrollmentTerminal = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.CaTrustpoints[i].EnrollmentTerminal = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("sftp-username"); value.Exists() && !data.CaTrustpoints[i].SftpUsername.IsNull() {
@@ -1073,33 +1081,57 @@ func (data *Crypto) updateFromBody(ctx context.Context, res []byte) {
 			data.CaTrustpoints[i].AutoEnroll = types.Int64Null()
 		}
 		if value := r.Get("renewal-message-type.pkcsreq"); value.Exists() {
-			if !data.CaTrustpoints[i].RenewalMessageTypePkcsreq.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.CaTrustpoints[i].RenewalMessageTypePkcsreq.IsNull() && !data.CaTrustpoints[i].RenewalMessageTypePkcsreq.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.CaTrustpoints[i].RenewalMessageTypePkcsreq = types.BoolValue(false)
+			} else if !data.CaTrustpoints[i].RenewalMessageTypePkcsreq.IsNull() {
 				data.CaTrustpoints[i].RenewalMessageTypePkcsreq = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.CaTrustpoints[i].RenewalMessageTypePkcsreq.IsNull() {
 				data.CaTrustpoints[i].RenewalMessageTypePkcsreq = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.CaTrustpoints[i].RenewalMessageTypePkcsreq = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("renewal-message-type.renewalreq"); value.Exists() {
-			if !data.CaTrustpoints[i].RenewalMessageTypeRenewalreq.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.CaTrustpoints[i].RenewalMessageTypeRenewalreq.IsNull() && !data.CaTrustpoints[i].RenewalMessageTypeRenewalreq.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.CaTrustpoints[i].RenewalMessageTypeRenewalreq = types.BoolValue(false)
+			} else if !data.CaTrustpoints[i].RenewalMessageTypeRenewalreq.IsNull() {
 				data.CaTrustpoints[i].RenewalMessageTypeRenewalreq = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.CaTrustpoints[i].RenewalMessageTypeRenewalreq.IsNull() {
 				data.CaTrustpoints[i].RenewalMessageTypeRenewalreq = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.CaTrustpoints[i].RenewalMessageTypeRenewalreq = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("skip-challenge-password"); value.Exists() {
-			if !data.CaTrustpoints[i].SkipChallengePassword.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.CaTrustpoints[i].SkipChallengePassword.IsNull() && !data.CaTrustpoints[i].SkipChallengePassword.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.CaTrustpoints[i].SkipChallengePassword = types.BoolValue(false)
+			} else if !data.CaTrustpoints[i].SkipChallengePassword.IsNull() {
 				data.CaTrustpoints[i].SkipChallengePassword = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.CaTrustpoints[i].SkipChallengePassword.IsNull() {
 				data.CaTrustpoints[i].SkipChallengePassword = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.CaTrustpoints[i].SkipChallengePassword = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("rsakeypair"); value.Exists() && !data.CaTrustpoints[i].Rsakeypair.IsNull() {
@@ -1108,13 +1140,21 @@ func (data *Crypto) updateFromBody(ctx context.Context, res []byte) {
 			data.CaTrustpoints[i].Rsakeypair = types.StringNull()
 		}
 		if value := r.Get("crl.optional"); value.Exists() {
-			if !data.CaTrustpoints[i].CrlOptional.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.CaTrustpoints[i].CrlOptional.IsNull() && !data.CaTrustpoints[i].CrlOptional.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.CaTrustpoints[i].CrlOptional = types.BoolValue(false)
+			} else if !data.CaTrustpoints[i].CrlOptional.IsNull() {
 				data.CaTrustpoints[i].CrlOptional = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.CaTrustpoints[i].CrlOptional.IsNull() {
 				data.CaTrustpoints[i].CrlOptional = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.CaTrustpoints[i].CrlOptional = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("query.url"); value.Exists() && !data.CaTrustpoints[i].QueryUrl.IsNull() {
@@ -1128,13 +1168,21 @@ func (data *Crypto) updateFromBody(ctx context.Context, res []byte) {
 			data.CaTrustpoints[i].IpAddress = types.StringNull()
 		}
 		if value := r.Get("ip-address.none"); value.Exists() {
-			if !data.CaTrustpoints[i].IpAddressNone.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.CaTrustpoints[i].IpAddressNone.IsNull() && !data.CaTrustpoints[i].IpAddressNone.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.CaTrustpoints[i].IpAddressNone = types.BoolValue(false)
+			} else if !data.CaTrustpoints[i].IpAddressNone.IsNull() {
 				data.CaTrustpoints[i].IpAddressNone = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.CaTrustpoints[i].IpAddressNone.IsNull() {
 				data.CaTrustpoints[i].IpAddressNone = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.CaTrustpoints[i].IpAddressNone = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("subject-name"); value.Exists() && !data.CaTrustpoints[i].SubjectName.IsNull() {
@@ -1148,23 +1196,39 @@ func (data *Crypto) updateFromBody(ctx context.Context, res []byte) {
 			data.CaTrustpoints[i].SubjectAlternativeName = types.StringNull()
 		}
 		if value := r.Get("serial-number"); value.Exists() {
-			if !data.CaTrustpoints[i].SerialNumber.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.CaTrustpoints[i].SerialNumber.IsNull() && !data.CaTrustpoints[i].SerialNumber.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.CaTrustpoints[i].SerialNumber = types.BoolValue(false)
+			} else if !data.CaTrustpoints[i].SerialNumber.IsNull() {
 				data.CaTrustpoints[i].SerialNumber = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.CaTrustpoints[i].SerialNumber.IsNull() {
 				data.CaTrustpoints[i].SerialNumber = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.CaTrustpoints[i].SerialNumber = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("serial-number.none"); value.Exists() {
-			if !data.CaTrustpoints[i].SerialNumberNone.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.CaTrustpoints[i].SerialNumberNone.IsNull() && !data.CaTrustpoints[i].SerialNumberNone.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.CaTrustpoints[i].SerialNumberNone = types.BoolValue(false)
+			} else if !data.CaTrustpoints[i].SerialNumberNone.IsNull() {
 				data.CaTrustpoints[i].SerialNumberNone = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.CaTrustpoints[i].SerialNumberNone.IsNull() {
 				data.CaTrustpoints[i].SerialNumberNone = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.CaTrustpoints[i].SerialNumberNone = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("vrf"); value.Exists() && !data.CaTrustpoints[i].Vrf.IsNull() {
@@ -1920,7 +1984,7 @@ func (data *Crypto) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("enrollment.terminal"); cValue.Exists() {
 				item.EnrollmentTerminal = types.BoolValue(true)
 			} else {
-				item.EnrollmentTerminal = types.BoolNull()
+				item.EnrollmentTerminal = types.BoolValue(false)
 			}
 			if cValue := v.Get("sftp-username"); cValue.Exists() {
 				item.SftpUsername = types.StringValue(cValue.String())
@@ -1934,17 +1998,17 @@ func (data *Crypto) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("renewal-message-type.pkcsreq"); cValue.Exists() {
 				item.RenewalMessageTypePkcsreq = types.BoolValue(true)
 			} else {
-				item.RenewalMessageTypePkcsreq = types.BoolNull()
+				item.RenewalMessageTypePkcsreq = types.BoolValue(false)
 			}
 			if cValue := v.Get("renewal-message-type.renewalreq"); cValue.Exists() {
 				item.RenewalMessageTypeRenewalreq = types.BoolValue(true)
 			} else {
-				item.RenewalMessageTypeRenewalreq = types.BoolNull()
+				item.RenewalMessageTypeRenewalreq = types.BoolValue(false)
 			}
 			if cValue := v.Get("skip-challenge-password"); cValue.Exists() {
 				item.SkipChallengePassword = types.BoolValue(true)
 			} else {
-				item.SkipChallengePassword = types.BoolNull()
+				item.SkipChallengePassword = types.BoolValue(false)
 			}
 			if cValue := v.Get("rsakeypair"); cValue.Exists() {
 				item.Rsakeypair = types.StringValue(cValue.String())
@@ -1952,7 +2016,7 @@ func (data *Crypto) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("crl.optional"); cValue.Exists() {
 				item.CrlOptional = types.BoolValue(true)
 			} else {
-				item.CrlOptional = types.BoolNull()
+				item.CrlOptional = types.BoolValue(false)
 			}
 			if cValue := v.Get("query.url"); cValue.Exists() {
 				item.QueryUrl = types.StringValue(cValue.String())
@@ -1963,7 +2027,7 @@ func (data *Crypto) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("ip-address.none"); cValue.Exists() {
 				item.IpAddressNone = types.BoolValue(true)
 			} else {
-				item.IpAddressNone = types.BoolNull()
+				item.IpAddressNone = types.BoolValue(false)
 			}
 			if cValue := v.Get("subject-name"); cValue.Exists() {
 				item.SubjectName = types.StringValue(cValue.String())
@@ -1974,12 +2038,12 @@ func (data *Crypto) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("serial-number"); cValue.Exists() {
 				item.SerialNumber = types.BoolValue(true)
 			} else {
-				item.SerialNumber = types.BoolNull()
+				item.SerialNumber = types.BoolValue(false)
 			}
 			if cValue := v.Get("serial-number.none"); cValue.Exists() {
 				item.SerialNumberNone = types.BoolValue(true)
 			} else {
-				item.SerialNumberNone = types.BoolNull()
+				item.SerialNumberNone = types.BoolValue(false)
 			}
 			if cValue := v.Get("vrf"); cValue.Exists() {
 				item.Vrf = types.StringValue(cValue.String())

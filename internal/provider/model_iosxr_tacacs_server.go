@@ -213,13 +213,21 @@ func (data *TACACSServer) updateFromBody(ctx context.Context, res []byte) {
 			data.Hosts[i].HolddownTime = types.Int64Null()
 		}
 		if value := r.Get("single-connection"); value.Exists() {
-			if !data.Hosts[i].SingleConnection.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Hosts[i].SingleConnection.IsNull() && !data.Hosts[i].SingleConnection.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Hosts[i].SingleConnection = types.BoolValue(false)
+			} else if !data.Hosts[i].SingleConnection.IsNull() {
 				data.Hosts[i].SingleConnection = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Hosts[i].SingleConnection.IsNull() {
 				data.Hosts[i].SingleConnection = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Hosts[i].SingleConnection = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("single-connection-idle-timeout"); value.Exists() && !data.Hosts[i].SingleConnectionIdleTimeout.IsNull() {
@@ -436,7 +444,7 @@ func (data *TACACSServer) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("single-connection"); cValue.Exists() {
 				item.SingleConnection = types.BoolValue(true)
 			} else {
-				item.SingleConnection = types.BoolNull()
+				item.SingleConnection = types.BoolValue(false)
 			}
 			if cValue := v.Get("single-connection-idle-timeout"); cValue.Exists() {
 				item.SingleConnectionIdleTimeout = types.Int64Value(cValue.Int())

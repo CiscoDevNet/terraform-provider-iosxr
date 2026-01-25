@@ -256,23 +256,39 @@ func (data *PolicyMapPBR) updateFromBody(ctx context.Context, res []byte) {
 			data.Classes[i].PoliceRateUnit = types.StringNull()
 		}
 		if value := r.Get("drop"); value.Exists() {
-			if !data.Classes[i].Drop.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Classes[i].Drop.IsNull() && !data.Classes[i].Drop.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Classes[i].Drop = types.BoolValue(false)
+			} else if !data.Classes[i].Drop.IsNull() {
 				data.Classes[i].Drop = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Classes[i].Drop.IsNull() {
 				data.Classes[i].Drop = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Classes[i].Drop = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("redirect-ipv4.default-route"); value.Exists() {
-			if !data.Classes[i].RedirectIpv4DefaultRoute.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Classes[i].RedirectIpv4DefaultRoute.IsNull() && !data.Classes[i].RedirectIpv4DefaultRoute.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Classes[i].RedirectIpv4DefaultRoute = types.BoolValue(false)
+			} else if !data.Classes[i].RedirectIpv4DefaultRoute.IsNull() {
 				data.Classes[i].RedirectIpv4DefaultRoute = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Classes[i].RedirectIpv4DefaultRoute.IsNull() {
 				data.Classes[i].RedirectIpv4DefaultRoute = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Classes[i].RedirectIpv4DefaultRoute = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("redirect-ipv4.nexthop1.address"); value.Exists() && !data.Classes[i].RedirectIpv4Nexthop1Address.IsNull() {
@@ -306,13 +322,21 @@ func (data *PolicyMapPBR) updateFromBody(ctx context.Context, res []byte) {
 			data.Classes[i].RedirectIpv4Nexthop3Vrf = types.StringNull()
 		}
 		if value := r.Get("redirect-ipv6.default-route"); value.Exists() {
-			if !data.Classes[i].RedirectIpv6DefaultRoute.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Classes[i].RedirectIpv6DefaultRoute.IsNull() && !data.Classes[i].RedirectIpv6DefaultRoute.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Classes[i].RedirectIpv6DefaultRoute = types.BoolValue(false)
+			} else if !data.Classes[i].RedirectIpv6DefaultRoute.IsNull() {
 				data.Classes[i].RedirectIpv6DefaultRoute = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Classes[i].RedirectIpv6DefaultRoute.IsNull() {
 				data.Classes[i].RedirectIpv6DefaultRoute = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Classes[i].RedirectIpv6DefaultRoute = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("redirect-ipv6.nexthop1.address"); value.Exists() && !data.Classes[i].RedirectIpv6Nexthop1Address.IsNull() {
@@ -361,13 +385,21 @@ func (data *PolicyMapPBR) updateFromBody(ctx context.Context, res []byte) {
 			data.Classes[i].SetForwardClass = types.Int64Null()
 		}
 		if value := r.Get("decapsulate.gre"); value.Exists() {
-			if !data.Classes[i].DecapsulateGre.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Classes[i].DecapsulateGre.IsNull() && !data.Classes[i].DecapsulateGre.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Classes[i].DecapsulateGre = types.BoolValue(false)
+			} else if !data.Classes[i].DecapsulateGre.IsNull() {
 				data.Classes[i].DecapsulateGre = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Classes[i].DecapsulateGre.IsNull() {
 				data.Classes[i].DecapsulateGre = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Classes[i].DecapsulateGre = types.BoolValue(false)
 			}
 		}
 	}
@@ -677,12 +709,12 @@ func (data *PolicyMapPBR) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("drop"); cValue.Exists() {
 				item.Drop = types.BoolValue(true)
 			} else {
-				item.Drop = types.BoolNull()
+				item.Drop = types.BoolValue(false)
 			}
 			if cValue := v.Get("redirect-ipv4.default-route"); cValue.Exists() {
 				item.RedirectIpv4DefaultRoute = types.BoolValue(true)
 			} else {
-				item.RedirectIpv4DefaultRoute = types.BoolNull()
+				item.RedirectIpv4DefaultRoute = types.BoolValue(false)
 			}
 			if cValue := v.Get("redirect-ipv4.nexthop1.address"); cValue.Exists() {
 				item.RedirectIpv4Nexthop1Address = types.StringValue(cValue.String())
@@ -705,7 +737,7 @@ func (data *PolicyMapPBR) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("redirect-ipv6.default-route"); cValue.Exists() {
 				item.RedirectIpv6DefaultRoute = types.BoolValue(true)
 			} else {
-				item.RedirectIpv6DefaultRoute = types.BoolNull()
+				item.RedirectIpv6DefaultRoute = types.BoolValue(false)
 			}
 			if cValue := v.Get("redirect-ipv6.nexthop1.address"); cValue.Exists() {
 				item.RedirectIpv6Nexthop1Address = types.StringValue(cValue.String())
@@ -737,7 +769,7 @@ func (data *PolicyMapPBR) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("decapsulate.gre"); cValue.Exists() {
 				item.DecapsulateGre = types.BoolValue(true)
 			} else {
-				item.DecapsulateGre = types.BoolNull()
+				item.DecapsulateGre = types.BoolValue(false)
 			}
 			data.Classes = append(data.Classes, item)
 			return true

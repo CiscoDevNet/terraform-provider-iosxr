@@ -179,13 +179,21 @@ func (data *SNMPServerVRFHost) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsUnencryptedStrings[i].UdpPort = types.StringNull()
 		}
 		if value := r.Get("version.v2c"); value.Exists() {
-			if !data.TrapsUnencryptedStrings[i].VersionV2c.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.TrapsUnencryptedStrings[i].VersionV2c.IsNull() && !data.TrapsUnencryptedStrings[i].VersionV2c.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.TrapsUnencryptedStrings[i].VersionV2c = types.BoolValue(false)
+			} else if !data.TrapsUnencryptedStrings[i].VersionV2c.IsNull() {
 				data.TrapsUnencryptedStrings[i].VersionV2c = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.TrapsUnencryptedStrings[i].VersionV2c.IsNull() {
 				data.TrapsUnencryptedStrings[i].VersionV2c = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.TrapsUnencryptedStrings[i].VersionV2c = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("version.v3.security-level"); value.Exists() && !data.TrapsUnencryptedStrings[i].VersionV3SecurityLevel.IsNull() {
@@ -223,13 +231,21 @@ func (data *SNMPServerVRFHost) updateFromBody(ctx context.Context, res []byte) {
 			data.InformsUnencryptedStrings[i].UdpPort = types.StringNull()
 		}
 		if value := r.Get("version.v2c"); value.Exists() {
-			if !data.InformsUnencryptedStrings[i].VersionV2c.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.InformsUnencryptedStrings[i].VersionV2c.IsNull() && !data.InformsUnencryptedStrings[i].VersionV2c.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.InformsUnencryptedStrings[i].VersionV2c = types.BoolValue(false)
+			} else if !data.InformsUnencryptedStrings[i].VersionV2c.IsNull() {
 				data.InformsUnencryptedStrings[i].VersionV2c = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.InformsUnencryptedStrings[i].VersionV2c.IsNull() {
 				data.InformsUnencryptedStrings[i].VersionV2c = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.InformsUnencryptedStrings[i].VersionV2c = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("version.v3.security-level"); value.Exists() && !data.InformsUnencryptedStrings[i].VersionV3SecurityLevel.IsNull() {
@@ -414,7 +430,7 @@ func (data *SNMPServerVRFHost) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("version.v2c"); cValue.Exists() {
 				item.VersionV2c = types.BoolValue(true)
 			} else {
-				item.VersionV2c = types.BoolNull()
+				item.VersionV2c = types.BoolValue(false)
 			}
 			if cValue := v.Get("version.v3.security-level"); cValue.Exists() {
 				item.VersionV3SecurityLevel = types.StringValue(cValue.String())
@@ -433,7 +449,7 @@ func (data *SNMPServerVRFHost) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("version.v2c"); cValue.Exists() {
 				item.VersionV2c = types.BoolValue(true)
 			} else {
-				item.VersionV2c = types.BoolNull()
+				item.VersionV2c = types.BoolValue(false)
 			}
 			if cValue := v.Get("version.v3.security-level"); cValue.Exists() {
 				item.VersionV3SecurityLevel = types.StringValue(cValue.String())

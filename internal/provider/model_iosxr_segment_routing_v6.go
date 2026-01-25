@@ -257,13 +257,21 @@ func (data *SegmentRoutingV6) updateFromBody(ctx context.Context, res []byte) {
 			data.Formats[i].Name = types.StringNull()
 		}
 		if value := r.Get("format-enable"); value.Exists() {
-			if !data.Formats[i].FormatEnable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Formats[i].FormatEnable.IsNull() && !data.Formats[i].FormatEnable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Formats[i].FormatEnable = types.BoolValue(false)
+			} else if !data.Formats[i].FormatEnable.IsNull() {
 				data.Formats[i].FormatEnable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Formats[i].FormatEnable.IsNull() {
 				data.Formats[i].FormatEnable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Formats[i].FormatEnable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("usid.local-id-block-ranges.lib-start"); value.Exists() && !data.Formats[i].UsidLocalIdBlockRangesLibStart.IsNull() {
@@ -306,13 +314,21 @@ func (data *SegmentRoutingV6) updateFromBody(ctx context.Context, res []byte) {
 			},
 		)
 		if value := r.Get("locator-enable"); value.Exists() {
-			if !data.Locators[i].LocatorEnable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Locators[i].LocatorEnable.IsNull() && !data.Locators[i].LocatorEnable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Locators[i].LocatorEnable = types.BoolValue(false)
+			} else if !data.Locators[i].LocatorEnable.IsNull() {
 				data.Locators[i].LocatorEnable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Locators[i].LocatorEnable.IsNull() {
 				data.Locators[i].LocatorEnable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Locators[i].LocatorEnable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("name"); value.Exists() && !data.Locators[i].Name.IsNull() {
@@ -336,13 +352,21 @@ func (data *SegmentRoutingV6) updateFromBody(ctx context.Context, res []byte) {
 			data.Locators[i].PrefixLength = types.Int64Null()
 		}
 		if value := r.Get("anycast"); value.Exists() {
-			if !data.Locators[i].Anycast.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Locators[i].Anycast.IsNull() && !data.Locators[i].Anycast.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Locators[i].Anycast = types.BoolValue(false)
+			} else if !data.Locators[i].Anycast.IsNull() {
 				data.Locators[i].Anycast = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Locators[i].Anycast.IsNull() {
 				data.Locators[i].Anycast = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Locators[i].Anycast = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("algorithm"); value.Exists() && !data.Locators[i].Algorithm.IsNull() {
@@ -679,7 +703,7 @@ func (data *SegmentRoutingV6) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("format-enable"); cValue.Exists() {
 				item.FormatEnable = types.BoolValue(true)
 			} else {
-				item.FormatEnable = types.BoolNull()
+				item.FormatEnable = types.BoolValue(false)
 			}
 			if cValue := v.Get("usid.local-id-block-ranges.lib-start"); cValue.Exists() {
 				item.UsidLocalIdBlockRangesLibStart = types.Int64Value(cValue.Int())
@@ -701,7 +725,7 @@ func (data *SegmentRoutingV6) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("locator-enable"); cValue.Exists() {
 				item.LocatorEnable = types.BoolValue(true)
 			} else {
-				item.LocatorEnable = types.BoolNull()
+				item.LocatorEnable = types.BoolValue(false)
 			}
 			if cValue := v.Get("name"); cValue.Exists() {
 				item.Name = types.StringValue(cValue.String())
@@ -718,7 +742,7 @@ func (data *SegmentRoutingV6) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("anycast"); cValue.Exists() {
 				item.Anycast = types.BoolValue(true)
 			} else {
-				item.Anycast = types.BoolNull()
+				item.Anycast = types.BoolValue(false)
 			}
 			if cValue := v.Get("algorithm"); cValue.Exists() {
 				item.Algorithm = types.Int64Value(cValue.Int())

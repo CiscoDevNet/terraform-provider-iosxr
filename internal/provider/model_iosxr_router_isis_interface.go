@@ -793,23 +793,39 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 			data.HelloPasswordLevels[i].LevelNumber = types.Int64Null()
 		}
 		if value := r.Get("text.hello-password-options.send-only"); value.Exists() {
-			if !data.HelloPasswordLevels[i].TextSendOnly.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.HelloPasswordLevels[i].TextSendOnly.IsNull() && !data.HelloPasswordLevels[i].TextSendOnly.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.HelloPasswordLevels[i].TextSendOnly = types.BoolValue(false)
+			} else if !data.HelloPasswordLevels[i].TextSendOnly.IsNull() {
 				data.HelloPasswordLevels[i].TextSendOnly = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.HelloPasswordLevels[i].TextSendOnly.IsNull() {
 				data.HelloPasswordLevels[i].TextSendOnly = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.HelloPasswordLevels[i].TextSendOnly = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("hmac-md5.hello-password-options.send-only"); value.Exists() {
-			if !data.HelloPasswordLevels[i].HmacMd5SendOnly.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.HelloPasswordLevels[i].HmacMd5SendOnly.IsNull() && !data.HelloPasswordLevels[i].HmacMd5SendOnly.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.HelloPasswordLevels[i].HmacMd5SendOnly = types.BoolValue(false)
+			} else if !data.HelloPasswordLevels[i].HmacMd5SendOnly.IsNull() {
 				data.HelloPasswordLevels[i].HmacMd5SendOnly = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.HelloPasswordLevels[i].HmacMd5SendOnly.IsNull() {
 				data.HelloPasswordLevels[i].HmacMd5SendOnly = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.HelloPasswordLevels[i].HmacMd5SendOnly = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("keychain.keychain-name"); value.Exists() && !data.HelloPasswordLevels[i].KeychainName.IsNull() {
@@ -818,13 +834,21 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 			data.HelloPasswordLevels[i].KeychainName = types.StringNull()
 		}
 		if value := r.Get("keychain.send-only"); value.Exists() {
-			if !data.HelloPasswordLevels[i].KeychainSendOnly.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.HelloPasswordLevels[i].KeychainSendOnly.IsNull() && !data.HelloPasswordLevels[i].KeychainSendOnly.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.HelloPasswordLevels[i].KeychainSendOnly = types.BoolValue(false)
+			} else if !data.HelloPasswordLevels[i].KeychainSendOnly.IsNull() {
 				data.HelloPasswordLevels[i].KeychainSendOnly = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.HelloPasswordLevels[i].KeychainSendOnly.IsNull() {
 				data.HelloPasswordLevels[i].KeychainSendOnly = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.HelloPasswordLevels[i].KeychainSendOnly = types.BoolValue(false)
 			}
 		}
 	}
@@ -2039,12 +2063,12 @@ func (data *RouterISISInterface) fromBody(ctx context.Context, res gjson.Result)
 			if cValue := v.Get("text.hello-password-options.send-only"); cValue.Exists() {
 				item.TextSendOnly = types.BoolValue(true)
 			} else {
-				item.TextSendOnly = types.BoolNull()
+				item.TextSendOnly = types.BoolValue(false)
 			}
 			if cValue := v.Get("hmac-md5.hello-password-options.send-only"); cValue.Exists() {
 				item.HmacMd5SendOnly = types.BoolValue(true)
 			} else {
-				item.HmacMd5SendOnly = types.BoolNull()
+				item.HmacMd5SendOnly = types.BoolValue(false)
 			}
 			if cValue := v.Get("keychain.keychain-name"); cValue.Exists() {
 				item.KeychainName = types.StringValue(cValue.String())
@@ -2052,7 +2076,7 @@ func (data *RouterISISInterface) fromBody(ctx context.Context, res gjson.Result)
 			if cValue := v.Get("keychain.send-only"); cValue.Exists() {
 				item.KeychainSendOnly = types.BoolValue(true)
 			} else {
-				item.KeychainSendOnly = types.BoolNull()
+				item.KeychainSendOnly = types.BoolValue(false)
 			}
 			data.HelloPasswordLevels = append(data.HelloPasswordLevels, item)
 			return true

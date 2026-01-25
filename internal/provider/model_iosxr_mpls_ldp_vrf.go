@@ -476,13 +476,21 @@ func (data *MPLSLDPVRF) updateFromBody(ctx context.Context, res []byte) {
 			data.Neighbors[i].LabelSpaceId = types.Int64Null()
 		}
 		if value := r.Get("password.disable"); value.Exists() {
-			if !data.Neighbors[i].PasswordDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Neighbors[i].PasswordDisable.IsNull() && !data.Neighbors[i].PasswordDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Neighbors[i].PasswordDisable = types.BoolValue(false)
+			} else if !data.Neighbors[i].PasswordDisable.IsNull() {
 				data.Neighbors[i].PasswordDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Neighbors[i].PasswordDisable.IsNull() {
 				data.Neighbors[i].PasswordDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Neighbors[i].PasswordDisable = types.BoolValue(false)
 			}
 		}
 	}
@@ -889,23 +897,39 @@ func (data *MPLSLDPVRF) updateFromBody(ctx context.Context, res []byte) {
 			data.Interfaces[i].InterfaceName = types.StringNull()
 		}
 		if value := r.Get("address-family.ipv4"); value.Exists() {
-			if !data.Interfaces[i].AddressFamilyIpv4.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].AddressFamilyIpv4.IsNull() && !data.Interfaces[i].AddressFamilyIpv4.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].AddressFamilyIpv4 = types.BoolValue(false)
+			} else if !data.Interfaces[i].AddressFamilyIpv4.IsNull() {
 				data.Interfaces[i].AddressFamilyIpv4 = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].AddressFamilyIpv4.IsNull() {
 				data.Interfaces[i].AddressFamilyIpv4 = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].AddressFamilyIpv4 = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("address-family.ipv4.discovery.transport-address.interface"); value.Exists() {
-			if !data.Interfaces[i].AddressFamilyIpv4DiscoveryTransportAddressInterface.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].AddressFamilyIpv4DiscoveryTransportAddressInterface.IsNull() && !data.Interfaces[i].AddressFamilyIpv4DiscoveryTransportAddressInterface.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].AddressFamilyIpv4DiscoveryTransportAddressInterface = types.BoolValue(false)
+			} else if !data.Interfaces[i].AddressFamilyIpv4DiscoveryTransportAddressInterface.IsNull() {
 				data.Interfaces[i].AddressFamilyIpv4DiscoveryTransportAddressInterface = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].AddressFamilyIpv4DiscoveryTransportAddressInterface.IsNull() {
 				data.Interfaces[i].AddressFamilyIpv4DiscoveryTransportAddressInterface = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].AddressFamilyIpv4DiscoveryTransportAddressInterface = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("address-family.ipv4.discovery.transport-address.ip-address"); value.Exists() && !data.Interfaces[i].AddressFamilyIpv4DiscoveryTransportAddressIp.IsNull() {
@@ -914,23 +938,39 @@ func (data *MPLSLDPVRF) updateFromBody(ctx context.Context, res []byte) {
 			data.Interfaces[i].AddressFamilyIpv4DiscoveryTransportAddressIp = types.StringNull()
 		}
 		if value := r.Get("address-family.ipv6"); value.Exists() {
-			if !data.Interfaces[i].AddressFamilyIpv6.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].AddressFamilyIpv6.IsNull() && !data.Interfaces[i].AddressFamilyIpv6.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].AddressFamilyIpv6 = types.BoolValue(false)
+			} else if !data.Interfaces[i].AddressFamilyIpv6.IsNull() {
 				data.Interfaces[i].AddressFamilyIpv6 = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].AddressFamilyIpv6.IsNull() {
 				data.Interfaces[i].AddressFamilyIpv6 = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].AddressFamilyIpv6 = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("address-family.ipv6.discovery.transport-address.interface"); value.Exists() {
-			if !data.Interfaces[i].AddressFamilyIpv6DiscoveryTransportAddressInterface.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].AddressFamilyIpv6DiscoveryTransportAddressInterface.IsNull() && !data.Interfaces[i].AddressFamilyIpv6DiscoveryTransportAddressInterface.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].AddressFamilyIpv6DiscoveryTransportAddressInterface = types.BoolValue(false)
+			} else if !data.Interfaces[i].AddressFamilyIpv6DiscoveryTransportAddressInterface.IsNull() {
 				data.Interfaces[i].AddressFamilyIpv6DiscoveryTransportAddressInterface = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].AddressFamilyIpv6DiscoveryTransportAddressInterface.IsNull() {
 				data.Interfaces[i].AddressFamilyIpv6DiscoveryTransportAddressInterface = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].AddressFamilyIpv6DiscoveryTransportAddressInterface = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("address-family.ipv6.discovery.transport-address.ip-address"); value.Exists() && !data.Interfaces[i].AddressFamilyIpv6DiscoveryTransportAddressIp.IsNull() {
@@ -1731,7 +1771,7 @@ func (data *MPLSLDPVRF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("password.disable"); cValue.Exists() {
 				item.PasswordDisable = types.BoolValue(true)
 			} else {
-				item.PasswordDisable = types.BoolNull()
+				item.PasswordDisable = types.BoolValue(false)
 			}
 			data.Neighbors = append(data.Neighbors, item)
 			return true
@@ -1923,12 +1963,12 @@ func (data *MPLSLDPVRF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("address-family.ipv4"); cValue.Exists() {
 				item.AddressFamilyIpv4 = types.BoolValue(true)
 			} else {
-				item.AddressFamilyIpv4 = types.BoolNull()
+				item.AddressFamilyIpv4 = types.BoolValue(false)
 			}
 			if cValue := v.Get("address-family.ipv4.discovery.transport-address.interface"); cValue.Exists() {
 				item.AddressFamilyIpv4DiscoveryTransportAddressInterface = types.BoolValue(true)
 			} else {
-				item.AddressFamilyIpv4DiscoveryTransportAddressInterface = types.BoolNull()
+				item.AddressFamilyIpv4DiscoveryTransportAddressInterface = types.BoolValue(false)
 			}
 			if cValue := v.Get("address-family.ipv4.discovery.transport-address.ip-address"); cValue.Exists() {
 				item.AddressFamilyIpv4DiscoveryTransportAddressIp = types.StringValue(cValue.String())
@@ -1936,12 +1976,12 @@ func (data *MPLSLDPVRF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("address-family.ipv6"); cValue.Exists() {
 				item.AddressFamilyIpv6 = types.BoolValue(true)
 			} else {
-				item.AddressFamilyIpv6 = types.BoolNull()
+				item.AddressFamilyIpv6 = types.BoolValue(false)
 			}
 			if cValue := v.Get("address-family.ipv6.discovery.transport-address.interface"); cValue.Exists() {
 				item.AddressFamilyIpv6DiscoveryTransportAddressInterface = types.BoolValue(true)
 			} else {
-				item.AddressFamilyIpv6DiscoveryTransportAddressInterface = types.BoolNull()
+				item.AddressFamilyIpv6DiscoveryTransportAddressInterface = types.BoolValue(false)
 			}
 			if cValue := v.Get("address-family.ipv6.discovery.transport-address.ip-address"); cValue.Exists() {
 				item.AddressFamilyIpv6DiscoveryTransportAddressIp = types.StringValue(cValue.String())

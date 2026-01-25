@@ -526,13 +526,21 @@ func (data *Track) updateFromBody(ctx context.Context, res []byte) {
 			data.BooleanAndList[i].ObjectName = types.StringNull()
 		}
 		if value := r.Get("not"); value.Exists() {
-			if !data.BooleanAndList[i].Not.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.BooleanAndList[i].Not.IsNull() && !data.BooleanAndList[i].Not.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.BooleanAndList[i].Not = types.BoolValue(false)
+			} else if !data.BooleanAndList[i].Not.IsNull() {
 				data.BooleanAndList[i].Not = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.BooleanAndList[i].Not.IsNull() {
 				data.BooleanAndList[i].Not = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.BooleanAndList[i].Not = types.BoolValue(false)
 			}
 		}
 	}
@@ -565,13 +573,21 @@ func (data *Track) updateFromBody(ctx context.Context, res []byte) {
 			data.BooleanOrList[i].ObjectName = types.StringNull()
 		}
 		if value := r.Get("not"); value.Exists() {
-			if !data.BooleanOrList[i].Not.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.BooleanOrList[i].Not.IsNull() && !data.BooleanOrList[i].Not.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.BooleanOrList[i].Not = types.BoolValue(false)
+			} else if !data.BooleanOrList[i].Not.IsNull() {
 				data.BooleanOrList[i].Not = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.BooleanOrList[i].Not.IsNull() {
 				data.BooleanOrList[i].Not = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.BooleanOrList[i].Not = types.BoolValue(false)
 			}
 		}
 	}
@@ -958,13 +974,21 @@ func (data *Track) updateFromBody(ctx context.Context, res []byte) {
 			data.TrackDownErrorDisableInterfaces[i].InterfaceName = types.StringNull()
 		}
 		if value := r.Get("auto-recover"); value.Exists() {
-			if !data.TrackDownErrorDisableInterfaces[i].AutoRecover.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.TrackDownErrorDisableInterfaces[i].AutoRecover.IsNull() && !data.TrackDownErrorDisableInterfaces[i].AutoRecover.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.TrackDownErrorDisableInterfaces[i].AutoRecover = types.BoolValue(false)
+			} else if !data.TrackDownErrorDisableInterfaces[i].AutoRecover.IsNull() {
 				data.TrackDownErrorDisableInterfaces[i].AutoRecover = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.TrackDownErrorDisableInterfaces[i].AutoRecover.IsNull() {
 				data.TrackDownErrorDisableInterfaces[i].AutoRecover = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.TrackDownErrorDisableInterfaces[i].AutoRecover = types.BoolValue(false)
 			}
 		}
 	}
@@ -997,13 +1021,21 @@ func (data *Track) updateFromBody(ctx context.Context, res []byte) {
 			data.TrackUpErrorDisableInterfaces[i].InterfaceName = types.StringNull()
 		}
 		if value := r.Get("auto-recover"); value.Exists() {
-			if !data.TrackUpErrorDisableInterfaces[i].AutoRecover.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.TrackUpErrorDisableInterfaces[i].AutoRecover.IsNull() && !data.TrackUpErrorDisableInterfaces[i].AutoRecover.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.TrackUpErrorDisableInterfaces[i].AutoRecover = types.BoolValue(false)
+			} else if !data.TrackUpErrorDisableInterfaces[i].AutoRecover.IsNull() {
 				data.TrackUpErrorDisableInterfaces[i].AutoRecover = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.TrackUpErrorDisableInterfaces[i].AutoRecover.IsNull() {
 				data.TrackUpErrorDisableInterfaces[i].AutoRecover = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.TrackUpErrorDisableInterfaces[i].AutoRecover = types.BoolValue(false)
 			}
 		}
 	}
@@ -1878,7 +1910,7 @@ func (data *Track) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("not"); cValue.Exists() {
 				item.Not = types.BoolValue(true)
 			} else {
-				item.Not = types.BoolNull()
+				item.Not = types.BoolValue(false)
 			}
 			data.BooleanAndList = append(data.BooleanAndList, item)
 			return true
@@ -1894,7 +1926,7 @@ func (data *Track) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("not"); cValue.Exists() {
 				item.Not = types.BoolValue(true)
 			} else {
-				item.Not = types.BoolNull()
+				item.Not = types.BoolValue(false)
 			}
 			data.BooleanOrList = append(data.BooleanOrList, item)
 			return true
@@ -2078,7 +2110,7 @@ func (data *Track) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("auto-recover"); cValue.Exists() {
 				item.AutoRecover = types.BoolValue(true)
 			} else {
-				item.AutoRecover = types.BoolNull()
+				item.AutoRecover = types.BoolValue(false)
 			}
 			data.TrackDownErrorDisableInterfaces = append(data.TrackDownErrorDisableInterfaces, item)
 			return true
@@ -2094,7 +2126,7 @@ func (data *Track) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("auto-recover"); cValue.Exists() {
 				item.AutoRecover = types.BoolValue(true)
 			} else {
-				item.AutoRecover = types.BoolNull()
+				item.AutoRecover = types.BoolValue(false)
 			}
 			data.TrackUpErrorDisableInterfaces = append(data.TrackUpErrorDisableInterfaces, item)
 			return true

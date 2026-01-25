@@ -5015,23 +5015,39 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 			data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingBatchSize = types.Int64Null()
 		}
 		if value := r.Get(""); value.Exists() {
-			if !data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding.IsNull() && !data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding = types.BoolValue(false)
+			} else if !data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding.IsNull() {
 				data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding.IsNull() {
 				data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding = types.BoolValue(false)
 			}
 		}
 		if value := r.Get(""); value.Exists() {
-			if !data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() && !data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingIgnorePreferredServer.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingIgnorePreferredServer = types.BoolValue(false)
+			} else if !data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() {
 				data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingIgnorePreferredServer = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() {
 				data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingIgnorePreferredServer = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingIgnorePreferredServer = types.BoolValue(false)
 			}
 		}
 		if value := r.Get(""); value.Exists() && !data.RadiusServerGroups[i].Deadtime.IsNull() {
@@ -5118,23 +5134,33 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 				data.RadiusServerGroups[i].ServerPrivates[ci].IdleTime = types.Int64Null()
 			}
 			if value := cr.Get(""); value.Exists() {
-				if !data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort.IsNull() && !data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort.ValueBool() {
+					data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort = types.BoolValue(false)
+				} else if !data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort.IsNull() {
 					data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort.IsNull() {
 					data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort = types.BoolNull()
+				} else {
+					data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get(""); value.Exists() {
-				if !data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.IsNull() && !data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.ValueBool() {
+					data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort = types.BoolValue(false)
+				} else if !data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.IsNull() {
 					data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.IsNull() {
 					data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort = types.BoolNull()
+				} else {
+					data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort = types.BoolValue(false)
 				}
 			}
 		}
@@ -5149,23 +5175,39 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 			data.RadiusServerGroups[i].SourceInterface = types.StringNull()
 		}
 		if value := r.Get(""); value.Exists() {
-			if !data.RadiusServerGroups[i].AuthorizationRequestAccept.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RadiusServerGroups[i].AuthorizationRequestAccept.IsNull() && !data.RadiusServerGroups[i].AuthorizationRequestAccept.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RadiusServerGroups[i].AuthorizationRequestAccept = types.BoolValue(false)
+			} else if !data.RadiusServerGroups[i].AuthorizationRequestAccept.IsNull() {
 				data.RadiusServerGroups[i].AuthorizationRequestAccept = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RadiusServerGroups[i].AuthorizationRequestAccept.IsNull() {
 				data.RadiusServerGroups[i].AuthorizationRequestAccept = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RadiusServerGroups[i].AuthorizationRequestAccept = types.BoolValue(false)
 			}
 		}
 		if value := r.Get(""); value.Exists() {
-			if !data.RadiusServerGroups[i].AuthorizationRequestReject.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RadiusServerGroups[i].AuthorizationRequestReject.IsNull() && !data.RadiusServerGroups[i].AuthorizationRequestReject.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RadiusServerGroups[i].AuthorizationRequestReject = types.BoolValue(false)
+			} else if !data.RadiusServerGroups[i].AuthorizationRequestReject.IsNull() {
 				data.RadiusServerGroups[i].AuthorizationRequestReject = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RadiusServerGroups[i].AuthorizationRequestReject.IsNull() {
 				data.RadiusServerGroups[i].AuthorizationRequestReject = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RadiusServerGroups[i].AuthorizationRequestReject = types.BoolValue(false)
 			}
 		}
 		if value := r.Get(""); value.Exists() && !data.RadiusServerGroups[i].AuthorizationRequestRadiusAttributeList.IsNull() {
@@ -5174,23 +5216,39 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 			data.RadiusServerGroups[i].AuthorizationRequestRadiusAttributeList = types.StringNull()
 		}
 		if value := r.Get(""); value.Exists() {
-			if !data.RadiusServerGroups[i].AuthorizationReplyAccept.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RadiusServerGroups[i].AuthorizationReplyAccept.IsNull() && !data.RadiusServerGroups[i].AuthorizationReplyAccept.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RadiusServerGroups[i].AuthorizationReplyAccept = types.BoolValue(false)
+			} else if !data.RadiusServerGroups[i].AuthorizationReplyAccept.IsNull() {
 				data.RadiusServerGroups[i].AuthorizationReplyAccept = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RadiusServerGroups[i].AuthorizationReplyAccept.IsNull() {
 				data.RadiusServerGroups[i].AuthorizationReplyAccept = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RadiusServerGroups[i].AuthorizationReplyAccept = types.BoolValue(false)
 			}
 		}
 		if value := r.Get(""); value.Exists() {
-			if !data.RadiusServerGroups[i].AuthorizationReplyReject.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RadiusServerGroups[i].AuthorizationReplyReject.IsNull() && !data.RadiusServerGroups[i].AuthorizationReplyReject.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RadiusServerGroups[i].AuthorizationReplyReject = types.BoolValue(false)
+			} else if !data.RadiusServerGroups[i].AuthorizationReplyReject.IsNull() {
 				data.RadiusServerGroups[i].AuthorizationReplyReject = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RadiusServerGroups[i].AuthorizationReplyReject.IsNull() {
 				data.RadiusServerGroups[i].AuthorizationReplyReject = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RadiusServerGroups[i].AuthorizationReplyReject = types.BoolValue(false)
 			}
 		}
 		if value := r.Get(""); value.Exists() && !data.RadiusServerGroups[i].AuthorizationReplyRadiusAttributeList.IsNull() {
@@ -5199,23 +5257,39 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 			data.RadiusServerGroups[i].AuthorizationReplyRadiusAttributeList = types.StringNull()
 		}
 		if value := r.Get(""); value.Exists() {
-			if !data.RadiusServerGroups[i].AccountingRequestAccept.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RadiusServerGroups[i].AccountingRequestAccept.IsNull() && !data.RadiusServerGroups[i].AccountingRequestAccept.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RadiusServerGroups[i].AccountingRequestAccept = types.BoolValue(false)
+			} else if !data.RadiusServerGroups[i].AccountingRequestAccept.IsNull() {
 				data.RadiusServerGroups[i].AccountingRequestAccept = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RadiusServerGroups[i].AccountingRequestAccept.IsNull() {
 				data.RadiusServerGroups[i].AccountingRequestAccept = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RadiusServerGroups[i].AccountingRequestAccept = types.BoolValue(false)
 			}
 		}
 		if value := r.Get(""); value.Exists() {
-			if !data.RadiusServerGroups[i].AccountingRequestReject.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RadiusServerGroups[i].AccountingRequestReject.IsNull() && !data.RadiusServerGroups[i].AccountingRequestReject.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RadiusServerGroups[i].AccountingRequestReject = types.BoolValue(false)
+			} else if !data.RadiusServerGroups[i].AccountingRequestReject.IsNull() {
 				data.RadiusServerGroups[i].AccountingRequestReject = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RadiusServerGroups[i].AccountingRequestReject.IsNull() {
 				data.RadiusServerGroups[i].AccountingRequestReject = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RadiusServerGroups[i].AccountingRequestReject = types.BoolValue(false)
 			}
 		}
 		if value := r.Get(""); value.Exists() && !data.RadiusServerGroups[i].AccountingRequestRadiusAttributeList.IsNull() {
@@ -5224,23 +5298,39 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 			data.RadiusServerGroups[i].AccountingRequestRadiusAttributeList = types.StringNull()
 		}
 		if value := r.Get(""); value.Exists() {
-			if !data.RadiusServerGroups[i].AccountingReplyAccept.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RadiusServerGroups[i].AccountingReplyAccept.IsNull() && !data.RadiusServerGroups[i].AccountingReplyAccept.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RadiusServerGroups[i].AccountingReplyAccept = types.BoolValue(false)
+			} else if !data.RadiusServerGroups[i].AccountingReplyAccept.IsNull() {
 				data.RadiusServerGroups[i].AccountingReplyAccept = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RadiusServerGroups[i].AccountingReplyAccept.IsNull() {
 				data.RadiusServerGroups[i].AccountingReplyAccept = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RadiusServerGroups[i].AccountingReplyAccept = types.BoolValue(false)
 			}
 		}
 		if value := r.Get(""); value.Exists() {
-			if !data.RadiusServerGroups[i].AccountingReplyReject.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RadiusServerGroups[i].AccountingReplyReject.IsNull() && !data.RadiusServerGroups[i].AccountingReplyReject.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RadiusServerGroups[i].AccountingReplyReject = types.BoolValue(false)
+			} else if !data.RadiusServerGroups[i].AccountingReplyReject.IsNull() {
 				data.RadiusServerGroups[i].AccountingReplyReject = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RadiusServerGroups[i].AccountingReplyReject.IsNull() {
 				data.RadiusServerGroups[i].AccountingReplyReject = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RadiusServerGroups[i].AccountingReplyReject = types.BoolValue(false)
 			}
 		}
 		if value := r.Get(""); value.Exists() && !data.RadiusServerGroups[i].AccountingReplyRadiusAttributeList.IsNull() {
@@ -5409,13 +5499,18 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 				data.TacacsServerGroups[i].ServerPrivates[ci].Port = types.Int64Null()
 			}
 			if value := cr.Get(""); value.Exists() {
-				if !data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection.IsNull() && !data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection.ValueBool() {
+					data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection = types.BoolValue(false)
+				} else if !data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection.IsNull() {
 					data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection.IsNull() {
 					data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection = types.BoolNull()
+				} else {
+					data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get(""); value.Exists() {
@@ -5469,23 +5564,39 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 			data.Usernames[i].Name = types.StringNull()
 		}
 		if value := r.Get("login-history.enable"); value.Exists() {
-			if !data.Usernames[i].LoginHistoryEnable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Usernames[i].LoginHistoryEnable.IsNull() && !data.Usernames[i].LoginHistoryEnable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Usernames[i].LoginHistoryEnable = types.BoolValue(false)
+			} else if !data.Usernames[i].LoginHistoryEnable.IsNull() {
 				data.Usernames[i].LoginHistoryEnable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Usernames[i].LoginHistoryEnable.IsNull() {
 				data.Usernames[i].LoginHistoryEnable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Usernames[i].LoginHistoryEnable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("login-history.disable"); value.Exists() {
-			if !data.Usernames[i].LoginHistoryDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Usernames[i].LoginHistoryDisable.IsNull() && !data.Usernames[i].LoginHistoryDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Usernames[i].LoginHistoryDisable = types.BoolValue(false)
+			} else if !data.Usernames[i].LoginHistoryDisable.IsNull() {
 				data.Usernames[i].LoginHistoryDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Usernames[i].LoginHistoryDisable.IsNull() {
 				data.Usernames[i].LoginHistoryDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Usernames[i].LoginHistoryDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("policy"); value.Exists() && !data.Usernames[i].Policy.IsNull() {
@@ -5494,103 +5605,183 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 			data.Usernames[i].Policy = types.StringNull()
 		}
 		if value := r.Get("group.root-lr"); value.Exists() {
-			if !data.Usernames[i].GroupRootLr.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Usernames[i].GroupRootLr.IsNull() && !data.Usernames[i].GroupRootLr.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Usernames[i].GroupRootLr = types.BoolValue(false)
+			} else if !data.Usernames[i].GroupRootLr.IsNull() {
 				data.Usernames[i].GroupRootLr = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Usernames[i].GroupRootLr.IsNull() {
 				data.Usernames[i].GroupRootLr = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Usernames[i].GroupRootLr = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("group.netadmin"); value.Exists() {
-			if !data.Usernames[i].GroupNetadmin.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Usernames[i].GroupNetadmin.IsNull() && !data.Usernames[i].GroupNetadmin.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Usernames[i].GroupNetadmin = types.BoolValue(false)
+			} else if !data.Usernames[i].GroupNetadmin.IsNull() {
 				data.Usernames[i].GroupNetadmin = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Usernames[i].GroupNetadmin.IsNull() {
 				data.Usernames[i].GroupNetadmin = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Usernames[i].GroupNetadmin = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("group.sysadmin"); value.Exists() {
-			if !data.Usernames[i].GroupSysadmin.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Usernames[i].GroupSysadmin.IsNull() && !data.Usernames[i].GroupSysadmin.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Usernames[i].GroupSysadmin = types.BoolValue(false)
+			} else if !data.Usernames[i].GroupSysadmin.IsNull() {
 				data.Usernames[i].GroupSysadmin = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Usernames[i].GroupSysadmin.IsNull() {
 				data.Usernames[i].GroupSysadmin = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Usernames[i].GroupSysadmin = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("group.serviceadmin"); value.Exists() {
-			if !data.Usernames[i].GroupServiceadmin.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Usernames[i].GroupServiceadmin.IsNull() && !data.Usernames[i].GroupServiceadmin.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Usernames[i].GroupServiceadmin = types.BoolValue(false)
+			} else if !data.Usernames[i].GroupServiceadmin.IsNull() {
 				data.Usernames[i].GroupServiceadmin = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Usernames[i].GroupServiceadmin.IsNull() {
 				data.Usernames[i].GroupServiceadmin = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Usernames[i].GroupServiceadmin = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("group.operator"); value.Exists() {
-			if !data.Usernames[i].GroupOperator.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Usernames[i].GroupOperator.IsNull() && !data.Usernames[i].GroupOperator.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Usernames[i].GroupOperator = types.BoolValue(false)
+			} else if !data.Usernames[i].GroupOperator.IsNull() {
 				data.Usernames[i].GroupOperator = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Usernames[i].GroupOperator.IsNull() {
 				data.Usernames[i].GroupOperator = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Usernames[i].GroupOperator = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("group.cisco-support"); value.Exists() {
-			if !data.Usernames[i].GroupCiscoSupport.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Usernames[i].GroupCiscoSupport.IsNull() && !data.Usernames[i].GroupCiscoSupport.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Usernames[i].GroupCiscoSupport = types.BoolValue(false)
+			} else if !data.Usernames[i].GroupCiscoSupport.IsNull() {
 				data.Usernames[i].GroupCiscoSupport = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Usernames[i].GroupCiscoSupport.IsNull() {
 				data.Usernames[i].GroupCiscoSupport = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Usernames[i].GroupCiscoSupport = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("group.maintenance"); value.Exists() {
-			if !data.Usernames[i].GroupMaintenance.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Usernames[i].GroupMaintenance.IsNull() && !data.Usernames[i].GroupMaintenance.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Usernames[i].GroupMaintenance = types.BoolValue(false)
+			} else if !data.Usernames[i].GroupMaintenance.IsNull() {
 				data.Usernames[i].GroupMaintenance = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Usernames[i].GroupMaintenance.IsNull() {
 				data.Usernames[i].GroupMaintenance = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Usernames[i].GroupMaintenance = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("group.provisioning"); value.Exists() {
-			if !data.Usernames[i].GroupProvisioning.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Usernames[i].GroupProvisioning.IsNull() && !data.Usernames[i].GroupProvisioning.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Usernames[i].GroupProvisioning = types.BoolValue(false)
+			} else if !data.Usernames[i].GroupProvisioning.IsNull() {
 				data.Usernames[i].GroupProvisioning = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Usernames[i].GroupProvisioning.IsNull() {
 				data.Usernames[i].GroupProvisioning = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Usernames[i].GroupProvisioning = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("group.retrieve"); value.Exists() {
-			if !data.Usernames[i].GroupRetrieve.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Usernames[i].GroupRetrieve.IsNull() && !data.Usernames[i].GroupRetrieve.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Usernames[i].GroupRetrieve = types.BoolValue(false)
+			} else if !data.Usernames[i].GroupRetrieve.IsNull() {
 				data.Usernames[i].GroupRetrieve = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Usernames[i].GroupRetrieve.IsNull() {
 				data.Usernames[i].GroupRetrieve = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Usernames[i].GroupRetrieve = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("group.read-only-tg"); value.Exists() {
-			if !data.Usernames[i].GroupReadOnlyTg.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Usernames[i].GroupReadOnlyTg.IsNull() && !data.Usernames[i].GroupReadOnlyTg.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Usernames[i].GroupReadOnlyTg = types.BoolValue(false)
+			} else if !data.Usernames[i].GroupReadOnlyTg.IsNull() {
 				data.Usernames[i].GroupReadOnlyTg = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Usernames[i].GroupReadOnlyTg.IsNull() {
 				data.Usernames[i].GroupReadOnlyTg = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Usernames[i].GroupReadOnlyTg = types.BoolValue(false)
 			}
 		}
 		for ci := range data.Usernames[i].UserGroups {
@@ -5667,3463 +5858,6231 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 			data.Taskgroups[i].Description = types.StringNull()
 		}
 		if value := r.Get("task.read.bgp"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadBgp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadBgp.IsNull() && !data.Taskgroups[i].TaskReadBgp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadBgp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadBgp.IsNull() {
 				data.Taskgroups[i].TaskReadBgp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadBgp.IsNull() {
 				data.Taskgroups[i].TaskReadBgp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadBgp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.ospf"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadOspf.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadOspf.IsNull() && !data.Taskgroups[i].TaskReadOspf.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadOspf = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadOspf.IsNull() {
 				data.Taskgroups[i].TaskReadOspf = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadOspf.IsNull() {
 				data.Taskgroups[i].TaskReadOspf = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadOspf = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.hsrp"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadHsrp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadHsrp.IsNull() && !data.Taskgroups[i].TaskReadHsrp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadHsrp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadHsrp.IsNull() {
 				data.Taskgroups[i].TaskReadHsrp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadHsrp.IsNull() {
 				data.Taskgroups[i].TaskReadHsrp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadHsrp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.isis"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadIsis.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadIsis.IsNull() && !data.Taskgroups[i].TaskReadIsis.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadIsis = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadIsis.IsNull() {
 				data.Taskgroups[i].TaskReadIsis = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadIsis.IsNull() {
 				data.Taskgroups[i].TaskReadIsis = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadIsis = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.route-map"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadRouteMap.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadRouteMap.IsNull() && !data.Taskgroups[i].TaskReadRouteMap.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadRouteMap = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadRouteMap.IsNull() {
 				data.Taskgroups[i].TaskReadRouteMap = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadRouteMap.IsNull() {
 				data.Taskgroups[i].TaskReadRouteMap = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadRouteMap = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.route-policy"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadRoutePolicy.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadRoutePolicy.IsNull() && !data.Taskgroups[i].TaskReadRoutePolicy.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadRoutePolicy = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadRoutePolicy.IsNull() {
 				data.Taskgroups[i].TaskReadRoutePolicy = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadRoutePolicy.IsNull() {
 				data.Taskgroups[i].TaskReadRoutePolicy = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadRoutePolicy = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.static"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadStatic.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadStatic.IsNull() && !data.Taskgroups[i].TaskReadStatic.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadStatic = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadStatic.IsNull() {
 				data.Taskgroups[i].TaskReadStatic = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadStatic.IsNull() {
 				data.Taskgroups[i].TaskReadStatic = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadStatic = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.vrrp"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadVrrp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadVrrp.IsNull() && !data.Taskgroups[i].TaskReadVrrp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadVrrp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadVrrp.IsNull() {
 				data.Taskgroups[i].TaskReadVrrp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadVrrp.IsNull() {
 				data.Taskgroups[i].TaskReadVrrp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadVrrp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.cef"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadCef.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadCef.IsNull() && !data.Taskgroups[i].TaskReadCef.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadCef = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadCef.IsNull() {
 				data.Taskgroups[i].TaskReadCef = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadCef.IsNull() {
 				data.Taskgroups[i].TaskReadCef = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadCef = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.lpts"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadLpts.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadLpts.IsNull() && !data.Taskgroups[i].TaskReadLpts.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadLpts = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadLpts.IsNull() {
 				data.Taskgroups[i].TaskReadLpts = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadLpts.IsNull() {
 				data.Taskgroups[i].TaskReadLpts = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadLpts = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.ipv4"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadIpv4.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadIpv4.IsNull() && !data.Taskgroups[i].TaskReadIpv4.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadIpv4 = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadIpv4.IsNull() {
 				data.Taskgroups[i].TaskReadIpv4 = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadIpv4.IsNull() {
 				data.Taskgroups[i].TaskReadIpv4 = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadIpv4 = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.rib"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadRib.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadRib.IsNull() && !data.Taskgroups[i].TaskReadRib.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadRib = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadRib.IsNull() {
 				data.Taskgroups[i].TaskReadRib = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadRib.IsNull() {
 				data.Taskgroups[i].TaskReadRib = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadRib = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.multicast"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadMulticast.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadMulticast.IsNull() && !data.Taskgroups[i].TaskReadMulticast.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadMulticast = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadMulticast.IsNull() {
 				data.Taskgroups[i].TaskReadMulticast = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadMulticast.IsNull() {
 				data.Taskgroups[i].TaskReadMulticast = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadMulticast = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.mpls-te"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadMplsTe.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadMplsTe.IsNull() && !data.Taskgroups[i].TaskReadMplsTe.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadMplsTe = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadMplsTe.IsNull() {
 				data.Taskgroups[i].TaskReadMplsTe = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadMplsTe.IsNull() {
 				data.Taskgroups[i].TaskReadMplsTe = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadMplsTe = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.mpls-ldp"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadMplsLdp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadMplsLdp.IsNull() && !data.Taskgroups[i].TaskReadMplsLdp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadMplsLdp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadMplsLdp.IsNull() {
 				data.Taskgroups[i].TaskReadMplsLdp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadMplsLdp.IsNull() {
 				data.Taskgroups[i].TaskReadMplsLdp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadMplsLdp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.mpls-static"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadMplsStatic.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadMplsStatic.IsNull() && !data.Taskgroups[i].TaskReadMplsStatic.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadMplsStatic = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadMplsStatic.IsNull() {
 				data.Taskgroups[i].TaskReadMplsStatic = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadMplsStatic.IsNull() {
 				data.Taskgroups[i].TaskReadMplsStatic = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadMplsStatic = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.ouni"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadOuni.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadOuni.IsNull() && !data.Taskgroups[i].TaskReadOuni.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadOuni = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadOuni.IsNull() {
 				data.Taskgroups[i].TaskReadOuni = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadOuni.IsNull() {
 				data.Taskgroups[i].TaskReadOuni = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadOuni = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.fabric"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadFabric.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadFabric.IsNull() && !data.Taskgroups[i].TaskReadFabric.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadFabric = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadFabric.IsNull() {
 				data.Taskgroups[i].TaskReadFabric = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadFabric.IsNull() {
 				data.Taskgroups[i].TaskReadFabric = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadFabric = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.bundle"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadBundle.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadBundle.IsNull() && !data.Taskgroups[i].TaskReadBundle.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadBundle = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadBundle.IsNull() {
 				data.Taskgroups[i].TaskReadBundle = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadBundle.IsNull() {
 				data.Taskgroups[i].TaskReadBundle = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadBundle = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.network"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadNetwork.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadNetwork.IsNull() && !data.Taskgroups[i].TaskReadNetwork.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadNetwork = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadNetwork.IsNull() {
 				data.Taskgroups[i].TaskReadNetwork = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadNetwork.IsNull() {
 				data.Taskgroups[i].TaskReadNetwork = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadNetwork = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.transport"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadTransport.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadTransport.IsNull() && !data.Taskgroups[i].TaskReadTransport.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadTransport = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadTransport.IsNull() {
 				data.Taskgroups[i].TaskReadTransport = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadTransport.IsNull() {
 				data.Taskgroups[i].TaskReadTransport = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadTransport = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.ppp"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadPpp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadPpp.IsNull() && !data.Taskgroups[i].TaskReadPpp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadPpp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadPpp.IsNull() {
 				data.Taskgroups[i].TaskReadPpp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadPpp.IsNull() {
 				data.Taskgroups[i].TaskReadPpp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadPpp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.hdlc"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadHdlc.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadHdlc.IsNull() && !data.Taskgroups[i].TaskReadHdlc.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadHdlc = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadHdlc.IsNull() {
 				data.Taskgroups[i].TaskReadHdlc = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadHdlc.IsNull() {
 				data.Taskgroups[i].TaskReadHdlc = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadHdlc = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.pos-dpt"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadPosDpt.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadPosDpt.IsNull() && !data.Taskgroups[i].TaskReadPosDpt.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadPosDpt = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadPosDpt.IsNull() {
 				data.Taskgroups[i].TaskReadPosDpt = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadPosDpt.IsNull() {
 				data.Taskgroups[i].TaskReadPosDpt = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadPosDpt = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.sonet-sdh"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadSonetSdh.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadSonetSdh.IsNull() && !data.Taskgroups[i].TaskReadSonetSdh.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadSonetSdh = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadSonetSdh.IsNull() {
 				data.Taskgroups[i].TaskReadSonetSdh = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadSonetSdh.IsNull() {
 				data.Taskgroups[i].TaskReadSonetSdh = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadSonetSdh = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.dwdm"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadDwdm.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadDwdm.IsNull() && !data.Taskgroups[i].TaskReadDwdm.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadDwdm = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadDwdm.IsNull() {
 				data.Taskgroups[i].TaskReadDwdm = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadDwdm.IsNull() {
 				data.Taskgroups[i].TaskReadDwdm = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadDwdm = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.tunnel"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadTunnel.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadTunnel.IsNull() && !data.Taskgroups[i].TaskReadTunnel.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadTunnel = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadTunnel.IsNull() {
 				data.Taskgroups[i].TaskReadTunnel = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadTunnel.IsNull() {
 				data.Taskgroups[i].TaskReadTunnel = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadTunnel = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.vlan"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadVlan.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadVlan.IsNull() && !data.Taskgroups[i].TaskReadVlan.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadVlan = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadVlan.IsNull() {
 				data.Taskgroups[i].TaskReadVlan = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadVlan.IsNull() {
 				data.Taskgroups[i].TaskReadVlan = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadVlan = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.qos"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadQos.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadQos.IsNull() && !data.Taskgroups[i].TaskReadQos.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadQos = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadQos.IsNull() {
 				data.Taskgroups[i].TaskReadQos = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadQos.IsNull() {
 				data.Taskgroups[i].TaskReadQos = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadQos = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.acl"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadAcl.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadAcl.IsNull() && !data.Taskgroups[i].TaskReadAcl.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadAcl = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadAcl.IsNull() {
 				data.Taskgroups[i].TaskReadAcl = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadAcl.IsNull() {
 				data.Taskgroups[i].TaskReadAcl = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadAcl = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.aaa"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadAaa.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadAaa.IsNull() && !data.Taskgroups[i].TaskReadAaa.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadAaa = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadAaa.IsNull() {
 				data.Taskgroups[i].TaskReadAaa = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadAaa.IsNull() {
 				data.Taskgroups[i].TaskReadAaa = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadAaa = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.crypto"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadCrypto.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadCrypto.IsNull() && !data.Taskgroups[i].TaskReadCrypto.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadCrypto = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadCrypto.IsNull() {
 				data.Taskgroups[i].TaskReadCrypto = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadCrypto.IsNull() {
 				data.Taskgroups[i].TaskReadCrypto = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadCrypto = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.snmp"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadSnmp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadSnmp.IsNull() && !data.Taskgroups[i].TaskReadSnmp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadSnmp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadSnmp.IsNull() {
 				data.Taskgroups[i].TaskReadSnmp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadSnmp.IsNull() {
 				data.Taskgroups[i].TaskReadSnmp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadSnmp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.config-mgmt"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadConfigMgmt.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadConfigMgmt.IsNull() && !data.Taskgroups[i].TaskReadConfigMgmt.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadConfigMgmt = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadConfigMgmt.IsNull() {
 				data.Taskgroups[i].TaskReadConfigMgmt = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadConfigMgmt.IsNull() {
 				data.Taskgroups[i].TaskReadConfigMgmt = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadConfigMgmt = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.config-services"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadConfigServices.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadConfigServices.IsNull() && !data.Taskgroups[i].TaskReadConfigServices.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadConfigServices = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadConfigServices.IsNull() {
 				data.Taskgroups[i].TaskReadConfigServices = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadConfigServices.IsNull() {
 				data.Taskgroups[i].TaskReadConfigServices = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadConfigServices = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.host-services"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadHostServices.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadHostServices.IsNull() && !data.Taskgroups[i].TaskReadHostServices.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadHostServices = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadHostServices.IsNull() {
 				data.Taskgroups[i].TaskReadHostServices = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadHostServices.IsNull() {
 				data.Taskgroups[i].TaskReadHostServices = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadHostServices = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.boot"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadBoot.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadBoot.IsNull() && !data.Taskgroups[i].TaskReadBoot.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadBoot = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadBoot.IsNull() {
 				data.Taskgroups[i].TaskReadBoot = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadBoot.IsNull() {
 				data.Taskgroups[i].TaskReadBoot = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadBoot = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.fault-mgr"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadFaultMgr.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadFaultMgr.IsNull() && !data.Taskgroups[i].TaskReadFaultMgr.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadFaultMgr = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadFaultMgr.IsNull() {
 				data.Taskgroups[i].TaskReadFaultMgr = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadFaultMgr.IsNull() {
 				data.Taskgroups[i].TaskReadFaultMgr = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadFaultMgr = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.filesystem"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadFilesystem.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadFilesystem.IsNull() && !data.Taskgroups[i].TaskReadFilesystem.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadFilesystem = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadFilesystem.IsNull() {
 				data.Taskgroups[i].TaskReadFilesystem = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadFilesystem.IsNull() {
 				data.Taskgroups[i].TaskReadFilesystem = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadFilesystem = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.interface"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadInterface.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadInterface.IsNull() && !data.Taskgroups[i].TaskReadInterface.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadInterface = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadInterface.IsNull() {
 				data.Taskgroups[i].TaskReadInterface = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadInterface.IsNull() {
 				data.Taskgroups[i].TaskReadInterface = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadInterface = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.ip-services"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadIpServices.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadIpServices.IsNull() && !data.Taskgroups[i].TaskReadIpServices.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadIpServices = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadIpServices.IsNull() {
 				data.Taskgroups[i].TaskReadIpServices = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadIpServices.IsNull() {
 				data.Taskgroups[i].TaskReadIpServices = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadIpServices = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.pkg-mgmt"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadPkgMgmt.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadPkgMgmt.IsNull() && !data.Taskgroups[i].TaskReadPkgMgmt.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadPkgMgmt = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadPkgMgmt.IsNull() {
 				data.Taskgroups[i].TaskReadPkgMgmt = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadPkgMgmt.IsNull() {
 				data.Taskgroups[i].TaskReadPkgMgmt = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadPkgMgmt = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.system"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadSystem.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadSystem.IsNull() && !data.Taskgroups[i].TaskReadSystem.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadSystem = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadSystem.IsNull() {
 				data.Taskgroups[i].TaskReadSystem = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadSystem.IsNull() {
 				data.Taskgroups[i].TaskReadSystem = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadSystem = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.tty-access"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadTtyAccess.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadTtyAccess.IsNull() && !data.Taskgroups[i].TaskReadTtyAccess.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadTtyAccess = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadTtyAccess.IsNull() {
 				data.Taskgroups[i].TaskReadTtyAccess = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadTtyAccess.IsNull() {
 				data.Taskgroups[i].TaskReadTtyAccess = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadTtyAccess = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.basic-services"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadBasicServices.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadBasicServices.IsNull() && !data.Taskgroups[i].TaskReadBasicServices.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadBasicServices = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadBasicServices.IsNull() {
 				data.Taskgroups[i].TaskReadBasicServices = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadBasicServices.IsNull() {
 				data.Taskgroups[i].TaskReadBasicServices = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadBasicServices = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.cdp"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadCdp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadCdp.IsNull() && !data.Taskgroups[i].TaskReadCdp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadCdp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadCdp.IsNull() {
 				data.Taskgroups[i].TaskReadCdp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadCdp.IsNull() {
 				data.Taskgroups[i].TaskReadCdp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadCdp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.diag"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadDiag.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadDiag.IsNull() && !data.Taskgroups[i].TaskReadDiag.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadDiag = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadDiag.IsNull() {
 				data.Taskgroups[i].TaskReadDiag = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadDiag.IsNull() {
 				data.Taskgroups[i].TaskReadDiag = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadDiag = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.ext-access"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadExtAccess.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadExtAccess.IsNull() && !data.Taskgroups[i].TaskReadExtAccess.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadExtAccess = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadExtAccess.IsNull() {
 				data.Taskgroups[i].TaskReadExtAccess = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadExtAccess.IsNull() {
 				data.Taskgroups[i].TaskReadExtAccess = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadExtAccess = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.bcdl"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadBcdl.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadBcdl.IsNull() && !data.Taskgroups[i].TaskReadBcdl.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadBcdl = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadBcdl.IsNull() {
 				data.Taskgroups[i].TaskReadBcdl = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadBcdl.IsNull() {
 				data.Taskgroups[i].TaskReadBcdl = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadBcdl = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.sysmgr"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadSysmgr.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadSysmgr.IsNull() && !data.Taskgroups[i].TaskReadSysmgr.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadSysmgr = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadSysmgr.IsNull() {
 				data.Taskgroups[i].TaskReadSysmgr = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadSysmgr.IsNull() {
 				data.Taskgroups[i].TaskReadSysmgr = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadSysmgr = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.logging"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadLogging.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadLogging.IsNull() && !data.Taskgroups[i].TaskReadLogging.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadLogging = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadLogging.IsNull() {
 				data.Taskgroups[i].TaskReadLogging = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadLogging.IsNull() {
 				data.Taskgroups[i].TaskReadLogging = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadLogging = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.netflow"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadNetflow.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadNetflow.IsNull() && !data.Taskgroups[i].TaskReadNetflow.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadNetflow = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadNetflow.IsNull() {
 				data.Taskgroups[i].TaskReadNetflow = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadNetflow.IsNull() {
 				data.Taskgroups[i].TaskReadNetflow = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadNetflow = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.drivers"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadDrivers.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadDrivers.IsNull() && !data.Taskgroups[i].TaskReadDrivers.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadDrivers = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadDrivers.IsNull() {
 				data.Taskgroups[i].TaskReadDrivers = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadDrivers.IsNull() {
 				data.Taskgroups[i].TaskReadDrivers = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadDrivers = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.fr"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadFr.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadFr.IsNull() && !data.Taskgroups[i].TaskReadFr.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadFr = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadFr.IsNull() {
 				data.Taskgroups[i].TaskReadFr = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadFr.IsNull() {
 				data.Taskgroups[i].TaskReadFr = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadFr = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.monitor"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadMonitor.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadMonitor.IsNull() && !data.Taskgroups[i].TaskReadMonitor.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadMonitor = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadMonitor.IsNull() {
 				data.Taskgroups[i].TaskReadMonitor = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadMonitor.IsNull() {
 				data.Taskgroups[i].TaskReadMonitor = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadMonitor = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.inventory"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadInventory.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadInventory.IsNull() && !data.Taskgroups[i].TaskReadInventory.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadInventory = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadInventory.IsNull() {
 				data.Taskgroups[i].TaskReadInventory = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadInventory.IsNull() {
 				data.Taskgroups[i].TaskReadInventory = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadInventory = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.ipv6"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadIpv6.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadIpv6.IsNull() && !data.Taskgroups[i].TaskReadIpv6.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadIpv6 = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadIpv6.IsNull() {
 				data.Taskgroups[i].TaskReadIpv6 = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadIpv6.IsNull() {
 				data.Taskgroups[i].TaskReadIpv6 = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadIpv6 = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.admin"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadAdmin.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadAdmin.IsNull() && !data.Taskgroups[i].TaskReadAdmin.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadAdmin = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadAdmin.IsNull() {
 				data.Taskgroups[i].TaskReadAdmin = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadAdmin.IsNull() {
 				data.Taskgroups[i].TaskReadAdmin = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadAdmin = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.atm"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadAtm.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadAtm.IsNull() && !data.Taskgroups[i].TaskReadAtm.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadAtm = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadAtm.IsNull() {
 				data.Taskgroups[i].TaskReadAtm = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadAtm.IsNull() {
 				data.Taskgroups[i].TaskReadAtm = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadAtm = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.bfd"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadBfd.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadBfd.IsNull() && !data.Taskgroups[i].TaskReadBfd.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadBfd = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadBfd.IsNull() {
 				data.Taskgroups[i].TaskReadBfd = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadBfd.IsNull() {
 				data.Taskgroups[i].TaskReadBfd = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadBfd = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.rip"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadRip.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadRip.IsNull() && !data.Taskgroups[i].TaskReadRip.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadRip = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadRip.IsNull() {
 				data.Taskgroups[i].TaskReadRip = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadRip.IsNull() {
 				data.Taskgroups[i].TaskReadRip = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadRip = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.eigrp"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadEigrp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadEigrp.IsNull() && !data.Taskgroups[i].TaskReadEigrp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadEigrp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadEigrp.IsNull() {
 				data.Taskgroups[i].TaskReadEigrp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadEigrp.IsNull() {
 				data.Taskgroups[i].TaskReadEigrp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadEigrp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.sbc"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadSbc.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadSbc.IsNull() && !data.Taskgroups[i].TaskReadSbc.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadSbc = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadSbc.IsNull() {
 				data.Taskgroups[i].TaskReadSbc = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadSbc.IsNull() {
 				data.Taskgroups[i].TaskReadSbc = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadSbc = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.firewall"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadFirewall.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadFirewall.IsNull() && !data.Taskgroups[i].TaskReadFirewall.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadFirewall = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadFirewall.IsNull() {
 				data.Taskgroups[i].TaskReadFirewall = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadFirewall.IsNull() {
 				data.Taskgroups[i].TaskReadFirewall = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadFirewall = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.l2vpn"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadL2vpn.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadL2vpn.IsNull() && !data.Taskgroups[i].TaskReadL2vpn.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadL2vpn = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadL2vpn.IsNull() {
 				data.Taskgroups[i].TaskReadL2vpn = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadL2vpn.IsNull() {
 				data.Taskgroups[i].TaskReadL2vpn = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadL2vpn = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.ethernet-services"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadEthernetServices.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadEthernetServices.IsNull() && !data.Taskgroups[i].TaskReadEthernetServices.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadEthernetServices = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadEthernetServices.IsNull() {
 				data.Taskgroups[i].TaskReadEthernetServices = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadEthernetServices.IsNull() {
 				data.Taskgroups[i].TaskReadEthernetServices = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadEthernetServices = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.eem"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadEem.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadEem.IsNull() && !data.Taskgroups[i].TaskReadEem.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadEem = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadEem.IsNull() {
 				data.Taskgroups[i].TaskReadEem = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadEem.IsNull() {
 				data.Taskgroups[i].TaskReadEem = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadEem = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.li"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadLi.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadLi.IsNull() && !data.Taskgroups[i].TaskReadLi.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadLi = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadLi.IsNull() {
 				data.Taskgroups[i].TaskReadLi = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadLi.IsNull() {
 				data.Taskgroups[i].TaskReadLi = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadLi = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.ancp"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadAncp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadAncp.IsNull() && !data.Taskgroups[i].TaskReadAncp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadAncp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadAncp.IsNull() {
 				data.Taskgroups[i].TaskReadAncp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadAncp.IsNull() {
 				data.Taskgroups[i].TaskReadAncp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadAncp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.cgn"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadCgn.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadCgn.IsNull() && !data.Taskgroups[i].TaskReadCgn.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadCgn = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadCgn.IsNull() {
 				data.Taskgroups[i].TaskReadCgn = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadCgn.IsNull() {
 				data.Taskgroups[i].TaskReadCgn = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadCgn = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.call-home"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadCallHome.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadCallHome.IsNull() && !data.Taskgroups[i].TaskReadCallHome.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadCallHome = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadCallHome.IsNull() {
 				data.Taskgroups[i].TaskReadCallHome = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadCallHome.IsNull() {
 				data.Taskgroups[i].TaskReadCallHome = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadCallHome = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.rcmd"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadRcmd.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadRcmd.IsNull() && !data.Taskgroups[i].TaskReadRcmd.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadRcmd = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadRcmd.IsNull() {
 				data.Taskgroups[i].TaskReadRcmd = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadRcmd.IsNull() {
 				data.Taskgroups[i].TaskReadRcmd = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadRcmd = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.vpdn"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadVpdn.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadVpdn.IsNull() && !data.Taskgroups[i].TaskReadVpdn.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadVpdn = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadVpdn.IsNull() {
 				data.Taskgroups[i].TaskReadVpdn = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadVpdn.IsNull() {
 				data.Taskgroups[i].TaskReadVpdn = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadVpdn = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.nps"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadNps.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadNps.IsNull() && !data.Taskgroups[i].TaskReadNps.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadNps = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadNps.IsNull() {
 				data.Taskgroups[i].TaskReadNps = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadNps.IsNull() {
 				data.Taskgroups[i].TaskReadNps = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadNps = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.lisp"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadLisp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadLisp.IsNull() && !data.Taskgroups[i].TaskReadLisp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadLisp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadLisp.IsNull() {
 				data.Taskgroups[i].TaskReadLisp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadLisp.IsNull() {
 				data.Taskgroups[i].TaskReadLisp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadLisp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.pbr"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadPbr.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadPbr.IsNull() && !data.Taskgroups[i].TaskReadPbr.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadPbr = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadPbr.IsNull() {
 				data.Taskgroups[i].TaskReadPbr = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadPbr.IsNull() {
 				data.Taskgroups[i].TaskReadPbr = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadPbr = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.otn"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadOtn.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadOtn.IsNull() && !data.Taskgroups[i].TaskReadOtn.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadOtn = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadOtn.IsNull() {
 				data.Taskgroups[i].TaskReadOtn = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadOtn.IsNull() {
 				data.Taskgroups[i].TaskReadOtn = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadOtn = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.nacm"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadNacm.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadNacm.IsNull() && !data.Taskgroups[i].TaskReadNacm.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadNacm = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadNacm.IsNull() {
 				data.Taskgroups[i].TaskReadNacm = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadNacm.IsNull() {
 				data.Taskgroups[i].TaskReadNacm = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadNacm = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.plat-mgr"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadPlatMgr.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadPlatMgr.IsNull() && !data.Taskgroups[i].TaskReadPlatMgr.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadPlatMgr = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadPlatMgr.IsNull() {
 				data.Taskgroups[i].TaskReadPlatMgr = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadPlatMgr.IsNull() {
 				data.Taskgroups[i].TaskReadPlatMgr = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadPlatMgr = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.cpri"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadCpri.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadCpri.IsNull() && !data.Taskgroups[i].TaskReadCpri.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadCpri = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadCpri.IsNull() {
 				data.Taskgroups[i].TaskReadCpri = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadCpri.IsNull() {
 				data.Taskgroups[i].TaskReadCpri = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadCpri = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.lldp"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadLldp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadLldp.IsNull() && !data.Taskgroups[i].TaskReadLldp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadLldp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadLldp.IsNull() {
 				data.Taskgroups[i].TaskReadLldp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadLldp.IsNull() {
 				data.Taskgroups[i].TaskReadLldp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadLldp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.l2rib"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadL2rib.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadL2rib.IsNull() && !data.Taskgroups[i].TaskReadL2rib.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadL2rib = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadL2rib.IsNull() {
 				data.Taskgroups[i].TaskReadL2rib = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadL2rib.IsNull() {
 				data.Taskgroups[i].TaskReadL2rib = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadL2rib = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.dossier"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadDossier.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadDossier.IsNull() && !data.Taskgroups[i].TaskReadDossier.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadDossier = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadDossier.IsNull() {
 				data.Taskgroups[i].TaskReadDossier = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadDossier.IsNull() {
 				data.Taskgroups[i].TaskReadDossier = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadDossier = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.fti"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadFti.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadFti.IsNull() && !data.Taskgroups[i].TaskReadFti.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadFti = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadFti.IsNull() {
 				data.Taskgroups[i].TaskReadFti = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadFti.IsNull() {
 				data.Taskgroups[i].TaskReadFti = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadFti = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.read.fc"); value.Exists() {
-			if !data.Taskgroups[i].TaskReadFc.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskReadFc.IsNull() && !data.Taskgroups[i].TaskReadFc.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskReadFc = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskReadFc.IsNull() {
 				data.Taskgroups[i].TaskReadFc = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskReadFc.IsNull() {
 				data.Taskgroups[i].TaskReadFc = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskReadFc = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.bgp"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteBgp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteBgp.IsNull() && !data.Taskgroups[i].TaskWriteBgp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteBgp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteBgp.IsNull() {
 				data.Taskgroups[i].TaskWriteBgp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteBgp.IsNull() {
 				data.Taskgroups[i].TaskWriteBgp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteBgp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.ospf"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteOspf.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteOspf.IsNull() && !data.Taskgroups[i].TaskWriteOspf.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteOspf = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteOspf.IsNull() {
 				data.Taskgroups[i].TaskWriteOspf = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteOspf.IsNull() {
 				data.Taskgroups[i].TaskWriteOspf = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteOspf = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.hsrp"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteHsrp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteHsrp.IsNull() && !data.Taskgroups[i].TaskWriteHsrp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteHsrp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteHsrp.IsNull() {
 				data.Taskgroups[i].TaskWriteHsrp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteHsrp.IsNull() {
 				data.Taskgroups[i].TaskWriteHsrp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteHsrp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.isis"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteIsis.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteIsis.IsNull() && !data.Taskgroups[i].TaskWriteIsis.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteIsis = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteIsis.IsNull() {
 				data.Taskgroups[i].TaskWriteIsis = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteIsis.IsNull() {
 				data.Taskgroups[i].TaskWriteIsis = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteIsis = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.route-map"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteRouteMap.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteRouteMap.IsNull() && !data.Taskgroups[i].TaskWriteRouteMap.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteRouteMap = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteRouteMap.IsNull() {
 				data.Taskgroups[i].TaskWriteRouteMap = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteRouteMap.IsNull() {
 				data.Taskgroups[i].TaskWriteRouteMap = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteRouteMap = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.route-policy"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteRoutePolicy.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteRoutePolicy.IsNull() && !data.Taskgroups[i].TaskWriteRoutePolicy.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteRoutePolicy = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteRoutePolicy.IsNull() {
 				data.Taskgroups[i].TaskWriteRoutePolicy = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteRoutePolicy.IsNull() {
 				data.Taskgroups[i].TaskWriteRoutePolicy = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteRoutePolicy = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.static"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteStatic.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteStatic.IsNull() && !data.Taskgroups[i].TaskWriteStatic.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteStatic = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteStatic.IsNull() {
 				data.Taskgroups[i].TaskWriteStatic = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteStatic.IsNull() {
 				data.Taskgroups[i].TaskWriteStatic = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteStatic = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.vrrp"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteVrrp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteVrrp.IsNull() && !data.Taskgroups[i].TaskWriteVrrp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteVrrp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteVrrp.IsNull() {
 				data.Taskgroups[i].TaskWriteVrrp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteVrrp.IsNull() {
 				data.Taskgroups[i].TaskWriteVrrp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteVrrp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.cef"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteCef.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteCef.IsNull() && !data.Taskgroups[i].TaskWriteCef.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteCef = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteCef.IsNull() {
 				data.Taskgroups[i].TaskWriteCef = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteCef.IsNull() {
 				data.Taskgroups[i].TaskWriteCef = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteCef = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.lpts"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteLpts.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteLpts.IsNull() && !data.Taskgroups[i].TaskWriteLpts.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteLpts = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteLpts.IsNull() {
 				data.Taskgroups[i].TaskWriteLpts = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteLpts.IsNull() {
 				data.Taskgroups[i].TaskWriteLpts = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteLpts = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.ipv4"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteIpv4.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteIpv4.IsNull() && !data.Taskgroups[i].TaskWriteIpv4.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteIpv4 = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteIpv4.IsNull() {
 				data.Taskgroups[i].TaskWriteIpv4 = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteIpv4.IsNull() {
 				data.Taskgroups[i].TaskWriteIpv4 = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteIpv4 = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.rib"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteRib.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteRib.IsNull() && !data.Taskgroups[i].TaskWriteRib.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteRib = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteRib.IsNull() {
 				data.Taskgroups[i].TaskWriteRib = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteRib.IsNull() {
 				data.Taskgroups[i].TaskWriteRib = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteRib = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.multicast"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteMulticast.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteMulticast.IsNull() && !data.Taskgroups[i].TaskWriteMulticast.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteMulticast = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteMulticast.IsNull() {
 				data.Taskgroups[i].TaskWriteMulticast = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteMulticast.IsNull() {
 				data.Taskgroups[i].TaskWriteMulticast = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteMulticast = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.mpls-te"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteMplsTe.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteMplsTe.IsNull() && !data.Taskgroups[i].TaskWriteMplsTe.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteMplsTe = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteMplsTe.IsNull() {
 				data.Taskgroups[i].TaskWriteMplsTe = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteMplsTe.IsNull() {
 				data.Taskgroups[i].TaskWriteMplsTe = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteMplsTe = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.mpls-ldp"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteMplsLdp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteMplsLdp.IsNull() && !data.Taskgroups[i].TaskWriteMplsLdp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteMplsLdp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteMplsLdp.IsNull() {
 				data.Taskgroups[i].TaskWriteMplsLdp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteMplsLdp.IsNull() {
 				data.Taskgroups[i].TaskWriteMplsLdp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteMplsLdp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.mpls-static"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteMplsStatic.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteMplsStatic.IsNull() && !data.Taskgroups[i].TaskWriteMplsStatic.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteMplsStatic = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteMplsStatic.IsNull() {
 				data.Taskgroups[i].TaskWriteMplsStatic = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteMplsStatic.IsNull() {
 				data.Taskgroups[i].TaskWriteMplsStatic = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteMplsStatic = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.ouni"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteOuni.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteOuni.IsNull() && !data.Taskgroups[i].TaskWriteOuni.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteOuni = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteOuni.IsNull() {
 				data.Taskgroups[i].TaskWriteOuni = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteOuni.IsNull() {
 				data.Taskgroups[i].TaskWriteOuni = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteOuni = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.fabric"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteFabric.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteFabric.IsNull() && !data.Taskgroups[i].TaskWriteFabric.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteFabric = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteFabric.IsNull() {
 				data.Taskgroups[i].TaskWriteFabric = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteFabric.IsNull() {
 				data.Taskgroups[i].TaskWriteFabric = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteFabric = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.bundle"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteBundle.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteBundle.IsNull() && !data.Taskgroups[i].TaskWriteBundle.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteBundle = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteBundle.IsNull() {
 				data.Taskgroups[i].TaskWriteBundle = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteBundle.IsNull() {
 				data.Taskgroups[i].TaskWriteBundle = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteBundle = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.network"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteNetwork.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteNetwork.IsNull() && !data.Taskgroups[i].TaskWriteNetwork.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteNetwork = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteNetwork.IsNull() {
 				data.Taskgroups[i].TaskWriteNetwork = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteNetwork.IsNull() {
 				data.Taskgroups[i].TaskWriteNetwork = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteNetwork = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.transport"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteTransport.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteTransport.IsNull() && !data.Taskgroups[i].TaskWriteTransport.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteTransport = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteTransport.IsNull() {
 				data.Taskgroups[i].TaskWriteTransport = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteTransport.IsNull() {
 				data.Taskgroups[i].TaskWriteTransport = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteTransport = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.ppp"); value.Exists() {
-			if !data.Taskgroups[i].TaskWritePpp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWritePpp.IsNull() && !data.Taskgroups[i].TaskWritePpp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWritePpp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWritePpp.IsNull() {
 				data.Taskgroups[i].TaskWritePpp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWritePpp.IsNull() {
 				data.Taskgroups[i].TaskWritePpp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWritePpp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.hdlc"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteHdlc.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteHdlc.IsNull() && !data.Taskgroups[i].TaskWriteHdlc.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteHdlc = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteHdlc.IsNull() {
 				data.Taskgroups[i].TaskWriteHdlc = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteHdlc.IsNull() {
 				data.Taskgroups[i].TaskWriteHdlc = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteHdlc = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.pos-dpt"); value.Exists() {
-			if !data.Taskgroups[i].TaskWritePosDpt.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWritePosDpt.IsNull() && !data.Taskgroups[i].TaskWritePosDpt.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWritePosDpt = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWritePosDpt.IsNull() {
 				data.Taskgroups[i].TaskWritePosDpt = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWritePosDpt.IsNull() {
 				data.Taskgroups[i].TaskWritePosDpt = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWritePosDpt = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.sonet-sdh"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteSonetSdh.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteSonetSdh.IsNull() && !data.Taskgroups[i].TaskWriteSonetSdh.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteSonetSdh = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteSonetSdh.IsNull() {
 				data.Taskgroups[i].TaskWriteSonetSdh = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteSonetSdh.IsNull() {
 				data.Taskgroups[i].TaskWriteSonetSdh = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteSonetSdh = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.dwdm"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteDwdm.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteDwdm.IsNull() && !data.Taskgroups[i].TaskWriteDwdm.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteDwdm = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteDwdm.IsNull() {
 				data.Taskgroups[i].TaskWriteDwdm = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteDwdm.IsNull() {
 				data.Taskgroups[i].TaskWriteDwdm = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteDwdm = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.tunnel"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteTunnel.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteTunnel.IsNull() && !data.Taskgroups[i].TaskWriteTunnel.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteTunnel = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteTunnel.IsNull() {
 				data.Taskgroups[i].TaskWriteTunnel = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteTunnel.IsNull() {
 				data.Taskgroups[i].TaskWriteTunnel = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteTunnel = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.vlan"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteVlan.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteVlan.IsNull() && !data.Taskgroups[i].TaskWriteVlan.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteVlan = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteVlan.IsNull() {
 				data.Taskgroups[i].TaskWriteVlan = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteVlan.IsNull() {
 				data.Taskgroups[i].TaskWriteVlan = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteVlan = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.qos"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteQos.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteQos.IsNull() && !data.Taskgroups[i].TaskWriteQos.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteQos = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteQos.IsNull() {
 				data.Taskgroups[i].TaskWriteQos = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteQos.IsNull() {
 				data.Taskgroups[i].TaskWriteQos = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteQos = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.acl"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteAcl.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteAcl.IsNull() && !data.Taskgroups[i].TaskWriteAcl.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteAcl = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteAcl.IsNull() {
 				data.Taskgroups[i].TaskWriteAcl = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteAcl.IsNull() {
 				data.Taskgroups[i].TaskWriteAcl = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteAcl = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.aaa"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteAaa.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteAaa.IsNull() && !data.Taskgroups[i].TaskWriteAaa.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteAaa = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteAaa.IsNull() {
 				data.Taskgroups[i].TaskWriteAaa = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteAaa.IsNull() {
 				data.Taskgroups[i].TaskWriteAaa = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteAaa = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.crypto"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteCrypto.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteCrypto.IsNull() && !data.Taskgroups[i].TaskWriteCrypto.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteCrypto = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteCrypto.IsNull() {
 				data.Taskgroups[i].TaskWriteCrypto = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteCrypto.IsNull() {
 				data.Taskgroups[i].TaskWriteCrypto = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteCrypto = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.snmp"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteSnmp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteSnmp.IsNull() && !data.Taskgroups[i].TaskWriteSnmp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteSnmp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteSnmp.IsNull() {
 				data.Taskgroups[i].TaskWriteSnmp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteSnmp.IsNull() {
 				data.Taskgroups[i].TaskWriteSnmp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteSnmp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.config-mgmt"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteConfigMgmt.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteConfigMgmt.IsNull() && !data.Taskgroups[i].TaskWriteConfigMgmt.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteConfigMgmt = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteConfigMgmt.IsNull() {
 				data.Taskgroups[i].TaskWriteConfigMgmt = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteConfigMgmt.IsNull() {
 				data.Taskgroups[i].TaskWriteConfigMgmt = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteConfigMgmt = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.config-services"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteConfigServices.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteConfigServices.IsNull() && !data.Taskgroups[i].TaskWriteConfigServices.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteConfigServices = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteConfigServices.IsNull() {
 				data.Taskgroups[i].TaskWriteConfigServices = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteConfigServices.IsNull() {
 				data.Taskgroups[i].TaskWriteConfigServices = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteConfigServices = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.host-services"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteHostServices.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteHostServices.IsNull() && !data.Taskgroups[i].TaskWriteHostServices.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteHostServices = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteHostServices.IsNull() {
 				data.Taskgroups[i].TaskWriteHostServices = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteHostServices.IsNull() {
 				data.Taskgroups[i].TaskWriteHostServices = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteHostServices = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.boot"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteBoot.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteBoot.IsNull() && !data.Taskgroups[i].TaskWriteBoot.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteBoot = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteBoot.IsNull() {
 				data.Taskgroups[i].TaskWriteBoot = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteBoot.IsNull() {
 				data.Taskgroups[i].TaskWriteBoot = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteBoot = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.fault-mgr"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteFaultMgr.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteFaultMgr.IsNull() && !data.Taskgroups[i].TaskWriteFaultMgr.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteFaultMgr = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteFaultMgr.IsNull() {
 				data.Taskgroups[i].TaskWriteFaultMgr = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteFaultMgr.IsNull() {
 				data.Taskgroups[i].TaskWriteFaultMgr = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteFaultMgr = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.filesystem"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteFilesystem.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteFilesystem.IsNull() && !data.Taskgroups[i].TaskWriteFilesystem.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteFilesystem = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteFilesystem.IsNull() {
 				data.Taskgroups[i].TaskWriteFilesystem = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteFilesystem.IsNull() {
 				data.Taskgroups[i].TaskWriteFilesystem = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteFilesystem = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.interface"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteInterface.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteInterface.IsNull() && !data.Taskgroups[i].TaskWriteInterface.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteInterface = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteInterface.IsNull() {
 				data.Taskgroups[i].TaskWriteInterface = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteInterface.IsNull() {
 				data.Taskgroups[i].TaskWriteInterface = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteInterface = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.ip-services"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteIpServices.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteIpServices.IsNull() && !data.Taskgroups[i].TaskWriteIpServices.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteIpServices = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteIpServices.IsNull() {
 				data.Taskgroups[i].TaskWriteIpServices = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteIpServices.IsNull() {
 				data.Taskgroups[i].TaskWriteIpServices = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteIpServices = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.pkg-mgmt"); value.Exists() {
-			if !data.Taskgroups[i].TaskWritePkgMgmt.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWritePkgMgmt.IsNull() && !data.Taskgroups[i].TaskWritePkgMgmt.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWritePkgMgmt = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWritePkgMgmt.IsNull() {
 				data.Taskgroups[i].TaskWritePkgMgmt = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWritePkgMgmt.IsNull() {
 				data.Taskgroups[i].TaskWritePkgMgmt = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWritePkgMgmt = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.system"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteSystem.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteSystem.IsNull() && !data.Taskgroups[i].TaskWriteSystem.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteSystem = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteSystem.IsNull() {
 				data.Taskgroups[i].TaskWriteSystem = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteSystem.IsNull() {
 				data.Taskgroups[i].TaskWriteSystem = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteSystem = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.tty-access"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteTtyAccess.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteTtyAccess.IsNull() && !data.Taskgroups[i].TaskWriteTtyAccess.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteTtyAccess = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteTtyAccess.IsNull() {
 				data.Taskgroups[i].TaskWriteTtyAccess = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteTtyAccess.IsNull() {
 				data.Taskgroups[i].TaskWriteTtyAccess = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteTtyAccess = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.basic-services"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteBasicServices.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteBasicServices.IsNull() && !data.Taskgroups[i].TaskWriteBasicServices.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteBasicServices = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteBasicServices.IsNull() {
 				data.Taskgroups[i].TaskWriteBasicServices = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteBasicServices.IsNull() {
 				data.Taskgroups[i].TaskWriteBasicServices = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteBasicServices = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.cdp"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteCdp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteCdp.IsNull() && !data.Taskgroups[i].TaskWriteCdp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteCdp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteCdp.IsNull() {
 				data.Taskgroups[i].TaskWriteCdp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteCdp.IsNull() {
 				data.Taskgroups[i].TaskWriteCdp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteCdp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.diag"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteDiag.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteDiag.IsNull() && !data.Taskgroups[i].TaskWriteDiag.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteDiag = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteDiag.IsNull() {
 				data.Taskgroups[i].TaskWriteDiag = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteDiag.IsNull() {
 				data.Taskgroups[i].TaskWriteDiag = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteDiag = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.ext-access"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteExtAccess.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteExtAccess.IsNull() && !data.Taskgroups[i].TaskWriteExtAccess.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteExtAccess = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteExtAccess.IsNull() {
 				data.Taskgroups[i].TaskWriteExtAccess = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteExtAccess.IsNull() {
 				data.Taskgroups[i].TaskWriteExtAccess = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteExtAccess = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.bcdl"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteBcdl.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteBcdl.IsNull() && !data.Taskgroups[i].TaskWriteBcdl.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteBcdl = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteBcdl.IsNull() {
 				data.Taskgroups[i].TaskWriteBcdl = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteBcdl.IsNull() {
 				data.Taskgroups[i].TaskWriteBcdl = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteBcdl = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.sysmgr"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteSysmgr.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteSysmgr.IsNull() && !data.Taskgroups[i].TaskWriteSysmgr.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteSysmgr = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteSysmgr.IsNull() {
 				data.Taskgroups[i].TaskWriteSysmgr = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteSysmgr.IsNull() {
 				data.Taskgroups[i].TaskWriteSysmgr = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteSysmgr = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.logging"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteLogging.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteLogging.IsNull() && !data.Taskgroups[i].TaskWriteLogging.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteLogging = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteLogging.IsNull() {
 				data.Taskgroups[i].TaskWriteLogging = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteLogging.IsNull() {
 				data.Taskgroups[i].TaskWriteLogging = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteLogging = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.netflow"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteNetflow.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteNetflow.IsNull() && !data.Taskgroups[i].TaskWriteNetflow.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteNetflow = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteNetflow.IsNull() {
 				data.Taskgroups[i].TaskWriteNetflow = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteNetflow.IsNull() {
 				data.Taskgroups[i].TaskWriteNetflow = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteNetflow = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.drivers"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteDrivers.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteDrivers.IsNull() && !data.Taskgroups[i].TaskWriteDrivers.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteDrivers = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteDrivers.IsNull() {
 				data.Taskgroups[i].TaskWriteDrivers = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteDrivers.IsNull() {
 				data.Taskgroups[i].TaskWriteDrivers = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteDrivers = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.fr"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteFr.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteFr.IsNull() && !data.Taskgroups[i].TaskWriteFr.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteFr = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteFr.IsNull() {
 				data.Taskgroups[i].TaskWriteFr = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteFr.IsNull() {
 				data.Taskgroups[i].TaskWriteFr = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteFr = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.monitor"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteMonitor.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteMonitor.IsNull() && !data.Taskgroups[i].TaskWriteMonitor.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteMonitor = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteMonitor.IsNull() {
 				data.Taskgroups[i].TaskWriteMonitor = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteMonitor.IsNull() {
 				data.Taskgroups[i].TaskWriteMonitor = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteMonitor = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.inventory"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteInventory.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteInventory.IsNull() && !data.Taskgroups[i].TaskWriteInventory.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteInventory = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteInventory.IsNull() {
 				data.Taskgroups[i].TaskWriteInventory = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteInventory.IsNull() {
 				data.Taskgroups[i].TaskWriteInventory = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteInventory = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.ipv6"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteIpv6.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteIpv6.IsNull() && !data.Taskgroups[i].TaskWriteIpv6.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteIpv6 = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteIpv6.IsNull() {
 				data.Taskgroups[i].TaskWriteIpv6 = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteIpv6.IsNull() {
 				data.Taskgroups[i].TaskWriteIpv6 = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteIpv6 = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.admin"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteAdmin.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteAdmin.IsNull() && !data.Taskgroups[i].TaskWriteAdmin.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteAdmin = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteAdmin.IsNull() {
 				data.Taskgroups[i].TaskWriteAdmin = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteAdmin.IsNull() {
 				data.Taskgroups[i].TaskWriteAdmin = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteAdmin = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.atm"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteAtm.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteAtm.IsNull() && !data.Taskgroups[i].TaskWriteAtm.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteAtm = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteAtm.IsNull() {
 				data.Taskgroups[i].TaskWriteAtm = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteAtm.IsNull() {
 				data.Taskgroups[i].TaskWriteAtm = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteAtm = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.bfd"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteBfd.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteBfd.IsNull() && !data.Taskgroups[i].TaskWriteBfd.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteBfd = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteBfd.IsNull() {
 				data.Taskgroups[i].TaskWriteBfd = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteBfd.IsNull() {
 				data.Taskgroups[i].TaskWriteBfd = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteBfd = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.rip"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteRip.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteRip.IsNull() && !data.Taskgroups[i].TaskWriteRip.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteRip = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteRip.IsNull() {
 				data.Taskgroups[i].TaskWriteRip = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteRip.IsNull() {
 				data.Taskgroups[i].TaskWriteRip = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteRip = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.eigrp"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteEigrp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteEigrp.IsNull() && !data.Taskgroups[i].TaskWriteEigrp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteEigrp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteEigrp.IsNull() {
 				data.Taskgroups[i].TaskWriteEigrp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteEigrp.IsNull() {
 				data.Taskgroups[i].TaskWriteEigrp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteEigrp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.sbc"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteSbc.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteSbc.IsNull() && !data.Taskgroups[i].TaskWriteSbc.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteSbc = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteSbc.IsNull() {
 				data.Taskgroups[i].TaskWriteSbc = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteSbc.IsNull() {
 				data.Taskgroups[i].TaskWriteSbc = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteSbc = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.firewall"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteFirewall.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteFirewall.IsNull() && !data.Taskgroups[i].TaskWriteFirewall.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteFirewall = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteFirewall.IsNull() {
 				data.Taskgroups[i].TaskWriteFirewall = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteFirewall.IsNull() {
 				data.Taskgroups[i].TaskWriteFirewall = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteFirewall = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.l2vpn"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteL2vpn.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteL2vpn.IsNull() && !data.Taskgroups[i].TaskWriteL2vpn.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteL2vpn = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteL2vpn.IsNull() {
 				data.Taskgroups[i].TaskWriteL2vpn = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteL2vpn.IsNull() {
 				data.Taskgroups[i].TaskWriteL2vpn = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteL2vpn = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.ethernet-services"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteEthernetServices.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteEthernetServices.IsNull() && !data.Taskgroups[i].TaskWriteEthernetServices.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteEthernetServices = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteEthernetServices.IsNull() {
 				data.Taskgroups[i].TaskWriteEthernetServices = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteEthernetServices.IsNull() {
 				data.Taskgroups[i].TaskWriteEthernetServices = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteEthernetServices = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.eem"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteEem.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteEem.IsNull() && !data.Taskgroups[i].TaskWriteEem.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteEem = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteEem.IsNull() {
 				data.Taskgroups[i].TaskWriteEem = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteEem.IsNull() {
 				data.Taskgroups[i].TaskWriteEem = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteEem = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.li"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteLi.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteLi.IsNull() && !data.Taskgroups[i].TaskWriteLi.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteLi = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteLi.IsNull() {
 				data.Taskgroups[i].TaskWriteLi = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteLi.IsNull() {
 				data.Taskgroups[i].TaskWriteLi = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteLi = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.ancp"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteAncp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteAncp.IsNull() && !data.Taskgroups[i].TaskWriteAncp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteAncp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteAncp.IsNull() {
 				data.Taskgroups[i].TaskWriteAncp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteAncp.IsNull() {
 				data.Taskgroups[i].TaskWriteAncp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteAncp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.cgn"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteCgn.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteCgn.IsNull() && !data.Taskgroups[i].TaskWriteCgn.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteCgn = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteCgn.IsNull() {
 				data.Taskgroups[i].TaskWriteCgn = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteCgn.IsNull() {
 				data.Taskgroups[i].TaskWriteCgn = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteCgn = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.call-home"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteCallHome.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteCallHome.IsNull() && !data.Taskgroups[i].TaskWriteCallHome.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteCallHome = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteCallHome.IsNull() {
 				data.Taskgroups[i].TaskWriteCallHome = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteCallHome.IsNull() {
 				data.Taskgroups[i].TaskWriteCallHome = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteCallHome = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.rcmd"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteRcmd.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteRcmd.IsNull() && !data.Taskgroups[i].TaskWriteRcmd.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteRcmd = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteRcmd.IsNull() {
 				data.Taskgroups[i].TaskWriteRcmd = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteRcmd.IsNull() {
 				data.Taskgroups[i].TaskWriteRcmd = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteRcmd = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.vpdn"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteVpdn.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteVpdn.IsNull() && !data.Taskgroups[i].TaskWriteVpdn.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteVpdn = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteVpdn.IsNull() {
 				data.Taskgroups[i].TaskWriteVpdn = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteVpdn.IsNull() {
 				data.Taskgroups[i].TaskWriteVpdn = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteVpdn = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.nps"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteNps.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteNps.IsNull() && !data.Taskgroups[i].TaskWriteNps.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteNps = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteNps.IsNull() {
 				data.Taskgroups[i].TaskWriteNps = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteNps.IsNull() {
 				data.Taskgroups[i].TaskWriteNps = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteNps = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.lisp"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteLisp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteLisp.IsNull() && !data.Taskgroups[i].TaskWriteLisp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteLisp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteLisp.IsNull() {
 				data.Taskgroups[i].TaskWriteLisp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteLisp.IsNull() {
 				data.Taskgroups[i].TaskWriteLisp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteLisp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.pbr"); value.Exists() {
-			if !data.Taskgroups[i].TaskWritePbr.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWritePbr.IsNull() && !data.Taskgroups[i].TaskWritePbr.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWritePbr = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWritePbr.IsNull() {
 				data.Taskgroups[i].TaskWritePbr = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWritePbr.IsNull() {
 				data.Taskgroups[i].TaskWritePbr = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWritePbr = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.otn"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteOtn.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteOtn.IsNull() && !data.Taskgroups[i].TaskWriteOtn.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteOtn = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteOtn.IsNull() {
 				data.Taskgroups[i].TaskWriteOtn = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteOtn.IsNull() {
 				data.Taskgroups[i].TaskWriteOtn = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteOtn = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.nacm"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteNacm.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteNacm.IsNull() && !data.Taskgroups[i].TaskWriteNacm.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteNacm = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteNacm.IsNull() {
 				data.Taskgroups[i].TaskWriteNacm = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteNacm.IsNull() {
 				data.Taskgroups[i].TaskWriteNacm = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteNacm = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.plat-mgr"); value.Exists() {
-			if !data.Taskgroups[i].TaskWritePlatMgr.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWritePlatMgr.IsNull() && !data.Taskgroups[i].TaskWritePlatMgr.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWritePlatMgr = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWritePlatMgr.IsNull() {
 				data.Taskgroups[i].TaskWritePlatMgr = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWritePlatMgr.IsNull() {
 				data.Taskgroups[i].TaskWritePlatMgr = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWritePlatMgr = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.cpri"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteCpri.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteCpri.IsNull() && !data.Taskgroups[i].TaskWriteCpri.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteCpri = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteCpri.IsNull() {
 				data.Taskgroups[i].TaskWriteCpri = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteCpri.IsNull() {
 				data.Taskgroups[i].TaskWriteCpri = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteCpri = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.lldp"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteLldp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteLldp.IsNull() && !data.Taskgroups[i].TaskWriteLldp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteLldp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteLldp.IsNull() {
 				data.Taskgroups[i].TaskWriteLldp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteLldp.IsNull() {
 				data.Taskgroups[i].TaskWriteLldp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteLldp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.l2rib"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteL2rib.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteL2rib.IsNull() && !data.Taskgroups[i].TaskWriteL2rib.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteL2rib = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteL2rib.IsNull() {
 				data.Taskgroups[i].TaskWriteL2rib = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteL2rib.IsNull() {
 				data.Taskgroups[i].TaskWriteL2rib = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteL2rib = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.dossier"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteDossier.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteDossier.IsNull() && !data.Taskgroups[i].TaskWriteDossier.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteDossier = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteDossier.IsNull() {
 				data.Taskgroups[i].TaskWriteDossier = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteDossier.IsNull() {
 				data.Taskgroups[i].TaskWriteDossier = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteDossier = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.fti"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteFti.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteFti.IsNull() && !data.Taskgroups[i].TaskWriteFti.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteFti = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteFti.IsNull() {
 				data.Taskgroups[i].TaskWriteFti = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteFti.IsNull() {
 				data.Taskgroups[i].TaskWriteFti = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteFti = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.write.fc"); value.Exists() {
-			if !data.Taskgroups[i].TaskWriteFc.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskWriteFc.IsNull() && !data.Taskgroups[i].TaskWriteFc.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskWriteFc = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskWriteFc.IsNull() {
 				data.Taskgroups[i].TaskWriteFc = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskWriteFc.IsNull() {
 				data.Taskgroups[i].TaskWriteFc = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskWriteFc = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.bgp"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteBgp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteBgp.IsNull() && !data.Taskgroups[i].TaskExecuteBgp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteBgp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteBgp.IsNull() {
 				data.Taskgroups[i].TaskExecuteBgp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteBgp.IsNull() {
 				data.Taskgroups[i].TaskExecuteBgp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteBgp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.ospf"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteOspf.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteOspf.IsNull() && !data.Taskgroups[i].TaskExecuteOspf.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteOspf = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteOspf.IsNull() {
 				data.Taskgroups[i].TaskExecuteOspf = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteOspf.IsNull() {
 				data.Taskgroups[i].TaskExecuteOspf = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteOspf = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.hsrp"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteHsrp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteHsrp.IsNull() && !data.Taskgroups[i].TaskExecuteHsrp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteHsrp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteHsrp.IsNull() {
 				data.Taskgroups[i].TaskExecuteHsrp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteHsrp.IsNull() {
 				data.Taskgroups[i].TaskExecuteHsrp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteHsrp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.isis"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteIsis.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteIsis.IsNull() && !data.Taskgroups[i].TaskExecuteIsis.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteIsis = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteIsis.IsNull() {
 				data.Taskgroups[i].TaskExecuteIsis = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteIsis.IsNull() {
 				data.Taskgroups[i].TaskExecuteIsis = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteIsis = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.route-map"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteRouteMap.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteRouteMap.IsNull() && !data.Taskgroups[i].TaskExecuteRouteMap.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteRouteMap = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteRouteMap.IsNull() {
 				data.Taskgroups[i].TaskExecuteRouteMap = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteRouteMap.IsNull() {
 				data.Taskgroups[i].TaskExecuteRouteMap = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteRouteMap = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.route-policy"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteRoutePolicy.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteRoutePolicy.IsNull() && !data.Taskgroups[i].TaskExecuteRoutePolicy.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteRoutePolicy = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteRoutePolicy.IsNull() {
 				data.Taskgroups[i].TaskExecuteRoutePolicy = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteRoutePolicy.IsNull() {
 				data.Taskgroups[i].TaskExecuteRoutePolicy = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteRoutePolicy = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.static"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteStatic.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteStatic.IsNull() && !data.Taskgroups[i].TaskExecuteStatic.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteStatic = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteStatic.IsNull() {
 				data.Taskgroups[i].TaskExecuteStatic = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteStatic.IsNull() {
 				data.Taskgroups[i].TaskExecuteStatic = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteStatic = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.vrrp"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteVrrp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteVrrp.IsNull() && !data.Taskgroups[i].TaskExecuteVrrp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteVrrp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteVrrp.IsNull() {
 				data.Taskgroups[i].TaskExecuteVrrp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteVrrp.IsNull() {
 				data.Taskgroups[i].TaskExecuteVrrp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteVrrp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.cef"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteCef.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteCef.IsNull() && !data.Taskgroups[i].TaskExecuteCef.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteCef = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteCef.IsNull() {
 				data.Taskgroups[i].TaskExecuteCef = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteCef.IsNull() {
 				data.Taskgroups[i].TaskExecuteCef = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteCef = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.lpts"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteLpts.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteLpts.IsNull() && !data.Taskgroups[i].TaskExecuteLpts.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteLpts = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteLpts.IsNull() {
 				data.Taskgroups[i].TaskExecuteLpts = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteLpts.IsNull() {
 				data.Taskgroups[i].TaskExecuteLpts = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteLpts = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.ipv4"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteIpv4.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteIpv4.IsNull() && !data.Taskgroups[i].TaskExecuteIpv4.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteIpv4 = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteIpv4.IsNull() {
 				data.Taskgroups[i].TaskExecuteIpv4 = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteIpv4.IsNull() {
 				data.Taskgroups[i].TaskExecuteIpv4 = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteIpv4 = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.rib"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteRib.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteRib.IsNull() && !data.Taskgroups[i].TaskExecuteRib.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteRib = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteRib.IsNull() {
 				data.Taskgroups[i].TaskExecuteRib = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteRib.IsNull() {
 				data.Taskgroups[i].TaskExecuteRib = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteRib = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.multicast"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteMulticast.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteMulticast.IsNull() && !data.Taskgroups[i].TaskExecuteMulticast.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteMulticast = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteMulticast.IsNull() {
 				data.Taskgroups[i].TaskExecuteMulticast = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteMulticast.IsNull() {
 				data.Taskgroups[i].TaskExecuteMulticast = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteMulticast = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.mpls-te"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteMplsTe.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteMplsTe.IsNull() && !data.Taskgroups[i].TaskExecuteMplsTe.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteMplsTe = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteMplsTe.IsNull() {
 				data.Taskgroups[i].TaskExecuteMplsTe = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteMplsTe.IsNull() {
 				data.Taskgroups[i].TaskExecuteMplsTe = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteMplsTe = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.mpls-ldp"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteMplsLdp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteMplsLdp.IsNull() && !data.Taskgroups[i].TaskExecuteMplsLdp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteMplsLdp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteMplsLdp.IsNull() {
 				data.Taskgroups[i].TaskExecuteMplsLdp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteMplsLdp.IsNull() {
 				data.Taskgroups[i].TaskExecuteMplsLdp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteMplsLdp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.mpls-static"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteMplsStatic.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteMplsStatic.IsNull() && !data.Taskgroups[i].TaskExecuteMplsStatic.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteMplsStatic = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteMplsStatic.IsNull() {
 				data.Taskgroups[i].TaskExecuteMplsStatic = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteMplsStatic.IsNull() {
 				data.Taskgroups[i].TaskExecuteMplsStatic = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteMplsStatic = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.ouni"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteOuni.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteOuni.IsNull() && !data.Taskgroups[i].TaskExecuteOuni.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteOuni = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteOuni.IsNull() {
 				data.Taskgroups[i].TaskExecuteOuni = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteOuni.IsNull() {
 				data.Taskgroups[i].TaskExecuteOuni = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteOuni = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.fabric"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteFabric.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteFabric.IsNull() && !data.Taskgroups[i].TaskExecuteFabric.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteFabric = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteFabric.IsNull() {
 				data.Taskgroups[i].TaskExecuteFabric = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteFabric.IsNull() {
 				data.Taskgroups[i].TaskExecuteFabric = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteFabric = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.bundle"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteBundle.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteBundle.IsNull() && !data.Taskgroups[i].TaskExecuteBundle.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteBundle = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteBundle.IsNull() {
 				data.Taskgroups[i].TaskExecuteBundle = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteBundle.IsNull() {
 				data.Taskgroups[i].TaskExecuteBundle = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteBundle = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.network"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteNetwork.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteNetwork.IsNull() && !data.Taskgroups[i].TaskExecuteNetwork.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteNetwork = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteNetwork.IsNull() {
 				data.Taskgroups[i].TaskExecuteNetwork = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteNetwork.IsNull() {
 				data.Taskgroups[i].TaskExecuteNetwork = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteNetwork = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.transport"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteTransport.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteTransport.IsNull() && !data.Taskgroups[i].TaskExecuteTransport.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteTransport = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteTransport.IsNull() {
 				data.Taskgroups[i].TaskExecuteTransport = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteTransport.IsNull() {
 				data.Taskgroups[i].TaskExecuteTransport = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteTransport = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.ppp"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecutePpp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecutePpp.IsNull() && !data.Taskgroups[i].TaskExecutePpp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecutePpp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecutePpp.IsNull() {
 				data.Taskgroups[i].TaskExecutePpp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecutePpp.IsNull() {
 				data.Taskgroups[i].TaskExecutePpp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecutePpp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.hdlc"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteHdlc.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteHdlc.IsNull() && !data.Taskgroups[i].TaskExecuteHdlc.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteHdlc = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteHdlc.IsNull() {
 				data.Taskgroups[i].TaskExecuteHdlc = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteHdlc.IsNull() {
 				data.Taskgroups[i].TaskExecuteHdlc = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteHdlc = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.pos-dpt"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecutePosDpt.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecutePosDpt.IsNull() && !data.Taskgroups[i].TaskExecutePosDpt.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecutePosDpt = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecutePosDpt.IsNull() {
 				data.Taskgroups[i].TaskExecutePosDpt = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecutePosDpt.IsNull() {
 				data.Taskgroups[i].TaskExecutePosDpt = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecutePosDpt = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.sonet-sdh"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteSonetSdh.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteSonetSdh.IsNull() && !data.Taskgroups[i].TaskExecuteSonetSdh.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteSonetSdh = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteSonetSdh.IsNull() {
 				data.Taskgroups[i].TaskExecuteSonetSdh = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteSonetSdh.IsNull() {
 				data.Taskgroups[i].TaskExecuteSonetSdh = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteSonetSdh = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.dwdm"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteDwdm.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteDwdm.IsNull() && !data.Taskgroups[i].TaskExecuteDwdm.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteDwdm = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteDwdm.IsNull() {
 				data.Taskgroups[i].TaskExecuteDwdm = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteDwdm.IsNull() {
 				data.Taskgroups[i].TaskExecuteDwdm = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteDwdm = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.tunnel"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteTunnel.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteTunnel.IsNull() && !data.Taskgroups[i].TaskExecuteTunnel.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteTunnel = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteTunnel.IsNull() {
 				data.Taskgroups[i].TaskExecuteTunnel = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteTunnel.IsNull() {
 				data.Taskgroups[i].TaskExecuteTunnel = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteTunnel = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.vlan"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteVlan.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteVlan.IsNull() && !data.Taskgroups[i].TaskExecuteVlan.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteVlan = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteVlan.IsNull() {
 				data.Taskgroups[i].TaskExecuteVlan = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteVlan.IsNull() {
 				data.Taskgroups[i].TaskExecuteVlan = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteVlan = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.qos"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteQos.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteQos.IsNull() && !data.Taskgroups[i].TaskExecuteQos.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteQos = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteQos.IsNull() {
 				data.Taskgroups[i].TaskExecuteQos = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteQos.IsNull() {
 				data.Taskgroups[i].TaskExecuteQos = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteQos = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.acl"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteAcl.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteAcl.IsNull() && !data.Taskgroups[i].TaskExecuteAcl.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteAcl = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteAcl.IsNull() {
 				data.Taskgroups[i].TaskExecuteAcl = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteAcl.IsNull() {
 				data.Taskgroups[i].TaskExecuteAcl = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteAcl = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.aaa"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteAaa.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteAaa.IsNull() && !data.Taskgroups[i].TaskExecuteAaa.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteAaa = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteAaa.IsNull() {
 				data.Taskgroups[i].TaskExecuteAaa = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteAaa.IsNull() {
 				data.Taskgroups[i].TaskExecuteAaa = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteAaa = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.crypto"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteCrypto.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteCrypto.IsNull() && !data.Taskgroups[i].TaskExecuteCrypto.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteCrypto = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteCrypto.IsNull() {
 				data.Taskgroups[i].TaskExecuteCrypto = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteCrypto.IsNull() {
 				data.Taskgroups[i].TaskExecuteCrypto = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteCrypto = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.snmp"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteSnmp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteSnmp.IsNull() && !data.Taskgroups[i].TaskExecuteSnmp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteSnmp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteSnmp.IsNull() {
 				data.Taskgroups[i].TaskExecuteSnmp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteSnmp.IsNull() {
 				data.Taskgroups[i].TaskExecuteSnmp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteSnmp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.config-mgmt"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteConfigMgmt.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteConfigMgmt.IsNull() && !data.Taskgroups[i].TaskExecuteConfigMgmt.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteConfigMgmt = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteConfigMgmt.IsNull() {
 				data.Taskgroups[i].TaskExecuteConfigMgmt = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteConfigMgmt.IsNull() {
 				data.Taskgroups[i].TaskExecuteConfigMgmt = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteConfigMgmt = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.config-services"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteConfigServices.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteConfigServices.IsNull() && !data.Taskgroups[i].TaskExecuteConfigServices.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteConfigServices = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteConfigServices.IsNull() {
 				data.Taskgroups[i].TaskExecuteConfigServices = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteConfigServices.IsNull() {
 				data.Taskgroups[i].TaskExecuteConfigServices = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteConfigServices = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.host-services"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteHostServices.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteHostServices.IsNull() && !data.Taskgroups[i].TaskExecuteHostServices.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteHostServices = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteHostServices.IsNull() {
 				data.Taskgroups[i].TaskExecuteHostServices = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteHostServices.IsNull() {
 				data.Taskgroups[i].TaskExecuteHostServices = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteHostServices = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.boot"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteBoot.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteBoot.IsNull() && !data.Taskgroups[i].TaskExecuteBoot.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteBoot = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteBoot.IsNull() {
 				data.Taskgroups[i].TaskExecuteBoot = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteBoot.IsNull() {
 				data.Taskgroups[i].TaskExecuteBoot = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteBoot = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.fault-mgr"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteFaultMgr.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteFaultMgr.IsNull() && !data.Taskgroups[i].TaskExecuteFaultMgr.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteFaultMgr = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteFaultMgr.IsNull() {
 				data.Taskgroups[i].TaskExecuteFaultMgr = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteFaultMgr.IsNull() {
 				data.Taskgroups[i].TaskExecuteFaultMgr = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteFaultMgr = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.filesystem"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteFilesystem.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteFilesystem.IsNull() && !data.Taskgroups[i].TaskExecuteFilesystem.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteFilesystem = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteFilesystem.IsNull() {
 				data.Taskgroups[i].TaskExecuteFilesystem = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteFilesystem.IsNull() {
 				data.Taskgroups[i].TaskExecuteFilesystem = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteFilesystem = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.interface"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteInterface.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteInterface.IsNull() && !data.Taskgroups[i].TaskExecuteInterface.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteInterface = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteInterface.IsNull() {
 				data.Taskgroups[i].TaskExecuteInterface = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteInterface.IsNull() {
 				data.Taskgroups[i].TaskExecuteInterface = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteInterface = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.ip-services"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteIpServices.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteIpServices.IsNull() && !data.Taskgroups[i].TaskExecuteIpServices.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteIpServices = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteIpServices.IsNull() {
 				data.Taskgroups[i].TaskExecuteIpServices = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteIpServices.IsNull() {
 				data.Taskgroups[i].TaskExecuteIpServices = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteIpServices = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.pkg-mgmt"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecutePkgMgmt.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecutePkgMgmt.IsNull() && !data.Taskgroups[i].TaskExecutePkgMgmt.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecutePkgMgmt = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecutePkgMgmt.IsNull() {
 				data.Taskgroups[i].TaskExecutePkgMgmt = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecutePkgMgmt.IsNull() {
 				data.Taskgroups[i].TaskExecutePkgMgmt = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecutePkgMgmt = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.system"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteSystem.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteSystem.IsNull() && !data.Taskgroups[i].TaskExecuteSystem.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteSystem = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteSystem.IsNull() {
 				data.Taskgroups[i].TaskExecuteSystem = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteSystem.IsNull() {
 				data.Taskgroups[i].TaskExecuteSystem = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteSystem = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.tty-access"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteTtyAccess.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteTtyAccess.IsNull() && !data.Taskgroups[i].TaskExecuteTtyAccess.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteTtyAccess = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteTtyAccess.IsNull() {
 				data.Taskgroups[i].TaskExecuteTtyAccess = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteTtyAccess.IsNull() {
 				data.Taskgroups[i].TaskExecuteTtyAccess = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteTtyAccess = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.basic-services"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteBasicServices.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteBasicServices.IsNull() && !data.Taskgroups[i].TaskExecuteBasicServices.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteBasicServices = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteBasicServices.IsNull() {
 				data.Taskgroups[i].TaskExecuteBasicServices = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteBasicServices.IsNull() {
 				data.Taskgroups[i].TaskExecuteBasicServices = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteBasicServices = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.cdp"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteCdp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteCdp.IsNull() && !data.Taskgroups[i].TaskExecuteCdp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteCdp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteCdp.IsNull() {
 				data.Taskgroups[i].TaskExecuteCdp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteCdp.IsNull() {
 				data.Taskgroups[i].TaskExecuteCdp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteCdp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.diag"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteDiag.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteDiag.IsNull() && !data.Taskgroups[i].TaskExecuteDiag.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteDiag = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteDiag.IsNull() {
 				data.Taskgroups[i].TaskExecuteDiag = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteDiag.IsNull() {
 				data.Taskgroups[i].TaskExecuteDiag = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteDiag = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.ext-access"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteExtAccess.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteExtAccess.IsNull() && !data.Taskgroups[i].TaskExecuteExtAccess.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteExtAccess = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteExtAccess.IsNull() {
 				data.Taskgroups[i].TaskExecuteExtAccess = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteExtAccess.IsNull() {
 				data.Taskgroups[i].TaskExecuteExtAccess = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteExtAccess = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.bcdl"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteBcdl.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteBcdl.IsNull() && !data.Taskgroups[i].TaskExecuteBcdl.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteBcdl = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteBcdl.IsNull() {
 				data.Taskgroups[i].TaskExecuteBcdl = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteBcdl.IsNull() {
 				data.Taskgroups[i].TaskExecuteBcdl = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteBcdl = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.sysmgr"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteSysmgr.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteSysmgr.IsNull() && !data.Taskgroups[i].TaskExecuteSysmgr.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteSysmgr = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteSysmgr.IsNull() {
 				data.Taskgroups[i].TaskExecuteSysmgr = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteSysmgr.IsNull() {
 				data.Taskgroups[i].TaskExecuteSysmgr = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteSysmgr = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.logging"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteLogging.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteLogging.IsNull() && !data.Taskgroups[i].TaskExecuteLogging.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteLogging = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteLogging.IsNull() {
 				data.Taskgroups[i].TaskExecuteLogging = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteLogging.IsNull() {
 				data.Taskgroups[i].TaskExecuteLogging = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteLogging = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.netflow"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteNetflow.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteNetflow.IsNull() && !data.Taskgroups[i].TaskExecuteNetflow.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteNetflow = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteNetflow.IsNull() {
 				data.Taskgroups[i].TaskExecuteNetflow = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteNetflow.IsNull() {
 				data.Taskgroups[i].TaskExecuteNetflow = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteNetflow = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.drivers"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteDrivers.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteDrivers.IsNull() && !data.Taskgroups[i].TaskExecuteDrivers.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteDrivers = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteDrivers.IsNull() {
 				data.Taskgroups[i].TaskExecuteDrivers = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteDrivers.IsNull() {
 				data.Taskgroups[i].TaskExecuteDrivers = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteDrivers = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.fr"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteFr.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteFr.IsNull() && !data.Taskgroups[i].TaskExecuteFr.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteFr = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteFr.IsNull() {
 				data.Taskgroups[i].TaskExecuteFr = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteFr.IsNull() {
 				data.Taskgroups[i].TaskExecuteFr = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteFr = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.monitor"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteMonitor.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteMonitor.IsNull() && !data.Taskgroups[i].TaskExecuteMonitor.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteMonitor = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteMonitor.IsNull() {
 				data.Taskgroups[i].TaskExecuteMonitor = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteMonitor.IsNull() {
 				data.Taskgroups[i].TaskExecuteMonitor = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteMonitor = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.inventory"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteInventory.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteInventory.IsNull() && !data.Taskgroups[i].TaskExecuteInventory.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteInventory = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteInventory.IsNull() {
 				data.Taskgroups[i].TaskExecuteInventory = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteInventory.IsNull() {
 				data.Taskgroups[i].TaskExecuteInventory = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteInventory = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.ipv6"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteIpv6.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteIpv6.IsNull() && !data.Taskgroups[i].TaskExecuteIpv6.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteIpv6 = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteIpv6.IsNull() {
 				data.Taskgroups[i].TaskExecuteIpv6 = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteIpv6.IsNull() {
 				data.Taskgroups[i].TaskExecuteIpv6 = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteIpv6 = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.admin"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteAdmin.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteAdmin.IsNull() && !data.Taskgroups[i].TaskExecuteAdmin.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteAdmin = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteAdmin.IsNull() {
 				data.Taskgroups[i].TaskExecuteAdmin = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteAdmin.IsNull() {
 				data.Taskgroups[i].TaskExecuteAdmin = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteAdmin = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.atm"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteAtm.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteAtm.IsNull() && !data.Taskgroups[i].TaskExecuteAtm.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteAtm = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteAtm.IsNull() {
 				data.Taskgroups[i].TaskExecuteAtm = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteAtm.IsNull() {
 				data.Taskgroups[i].TaskExecuteAtm = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteAtm = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.bfd"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteBfd.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteBfd.IsNull() && !data.Taskgroups[i].TaskExecuteBfd.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteBfd = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteBfd.IsNull() {
 				data.Taskgroups[i].TaskExecuteBfd = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteBfd.IsNull() {
 				data.Taskgroups[i].TaskExecuteBfd = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteBfd = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.rip"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteRip.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteRip.IsNull() && !data.Taskgroups[i].TaskExecuteRip.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteRip = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteRip.IsNull() {
 				data.Taskgroups[i].TaskExecuteRip = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteRip.IsNull() {
 				data.Taskgroups[i].TaskExecuteRip = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteRip = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.eigrp"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteEigrp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteEigrp.IsNull() && !data.Taskgroups[i].TaskExecuteEigrp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteEigrp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteEigrp.IsNull() {
 				data.Taskgroups[i].TaskExecuteEigrp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteEigrp.IsNull() {
 				data.Taskgroups[i].TaskExecuteEigrp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteEigrp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.sbc"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteSbc.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteSbc.IsNull() && !data.Taskgroups[i].TaskExecuteSbc.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteSbc = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteSbc.IsNull() {
 				data.Taskgroups[i].TaskExecuteSbc = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteSbc.IsNull() {
 				data.Taskgroups[i].TaskExecuteSbc = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteSbc = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.firewall"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteFirewall.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteFirewall.IsNull() && !data.Taskgroups[i].TaskExecuteFirewall.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteFirewall = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteFirewall.IsNull() {
 				data.Taskgroups[i].TaskExecuteFirewall = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteFirewall.IsNull() {
 				data.Taskgroups[i].TaskExecuteFirewall = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteFirewall = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.l2vpn"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteL2vpn.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteL2vpn.IsNull() && !data.Taskgroups[i].TaskExecuteL2vpn.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteL2vpn = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteL2vpn.IsNull() {
 				data.Taskgroups[i].TaskExecuteL2vpn = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteL2vpn.IsNull() {
 				data.Taskgroups[i].TaskExecuteL2vpn = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteL2vpn = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.ethernet-services"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteEthernetServices.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteEthernetServices.IsNull() && !data.Taskgroups[i].TaskExecuteEthernetServices.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteEthernetServices = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteEthernetServices.IsNull() {
 				data.Taskgroups[i].TaskExecuteEthernetServices = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteEthernetServices.IsNull() {
 				data.Taskgroups[i].TaskExecuteEthernetServices = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteEthernetServices = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.eem"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteEem.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteEem.IsNull() && !data.Taskgroups[i].TaskExecuteEem.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteEem = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteEem.IsNull() {
 				data.Taskgroups[i].TaskExecuteEem = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteEem.IsNull() {
 				data.Taskgroups[i].TaskExecuteEem = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteEem = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.li"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteLi.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteLi.IsNull() && !data.Taskgroups[i].TaskExecuteLi.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteLi = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteLi.IsNull() {
 				data.Taskgroups[i].TaskExecuteLi = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteLi.IsNull() {
 				data.Taskgroups[i].TaskExecuteLi = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteLi = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.ancp"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteAncp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteAncp.IsNull() && !data.Taskgroups[i].TaskExecuteAncp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteAncp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteAncp.IsNull() {
 				data.Taskgroups[i].TaskExecuteAncp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteAncp.IsNull() {
 				data.Taskgroups[i].TaskExecuteAncp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteAncp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.cgn"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteCgn.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteCgn.IsNull() && !data.Taskgroups[i].TaskExecuteCgn.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteCgn = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteCgn.IsNull() {
 				data.Taskgroups[i].TaskExecuteCgn = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteCgn.IsNull() {
 				data.Taskgroups[i].TaskExecuteCgn = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteCgn = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.call-home"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteCallHome.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteCallHome.IsNull() && !data.Taskgroups[i].TaskExecuteCallHome.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteCallHome = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteCallHome.IsNull() {
 				data.Taskgroups[i].TaskExecuteCallHome = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteCallHome.IsNull() {
 				data.Taskgroups[i].TaskExecuteCallHome = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteCallHome = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.rcmd"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteRcmd.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteRcmd.IsNull() && !data.Taskgroups[i].TaskExecuteRcmd.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteRcmd = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteRcmd.IsNull() {
 				data.Taskgroups[i].TaskExecuteRcmd = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteRcmd.IsNull() {
 				data.Taskgroups[i].TaskExecuteRcmd = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteRcmd = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.vpdn"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteVpdn.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteVpdn.IsNull() && !data.Taskgroups[i].TaskExecuteVpdn.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteVpdn = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteVpdn.IsNull() {
 				data.Taskgroups[i].TaskExecuteVpdn = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteVpdn.IsNull() {
 				data.Taskgroups[i].TaskExecuteVpdn = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteVpdn = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.nps"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteNps.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteNps.IsNull() && !data.Taskgroups[i].TaskExecuteNps.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteNps = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteNps.IsNull() {
 				data.Taskgroups[i].TaskExecuteNps = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteNps.IsNull() {
 				data.Taskgroups[i].TaskExecuteNps = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteNps = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.lisp"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteLisp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteLisp.IsNull() && !data.Taskgroups[i].TaskExecuteLisp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteLisp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteLisp.IsNull() {
 				data.Taskgroups[i].TaskExecuteLisp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteLisp.IsNull() {
 				data.Taskgroups[i].TaskExecuteLisp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteLisp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.pbr"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecutePbr.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecutePbr.IsNull() && !data.Taskgroups[i].TaskExecutePbr.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecutePbr = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecutePbr.IsNull() {
 				data.Taskgroups[i].TaskExecutePbr = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecutePbr.IsNull() {
 				data.Taskgroups[i].TaskExecutePbr = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecutePbr = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.otn"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteOtn.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteOtn.IsNull() && !data.Taskgroups[i].TaskExecuteOtn.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteOtn = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteOtn.IsNull() {
 				data.Taskgroups[i].TaskExecuteOtn = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteOtn.IsNull() {
 				data.Taskgroups[i].TaskExecuteOtn = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteOtn = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.nacm"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteNacm.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteNacm.IsNull() && !data.Taskgroups[i].TaskExecuteNacm.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteNacm = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteNacm.IsNull() {
 				data.Taskgroups[i].TaskExecuteNacm = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteNacm.IsNull() {
 				data.Taskgroups[i].TaskExecuteNacm = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteNacm = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.plat-mgr"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecutePlatMgr.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecutePlatMgr.IsNull() && !data.Taskgroups[i].TaskExecutePlatMgr.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecutePlatMgr = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecutePlatMgr.IsNull() {
 				data.Taskgroups[i].TaskExecutePlatMgr = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecutePlatMgr.IsNull() {
 				data.Taskgroups[i].TaskExecutePlatMgr = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecutePlatMgr = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.cpri"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteCpri.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteCpri.IsNull() && !data.Taskgroups[i].TaskExecuteCpri.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteCpri = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteCpri.IsNull() {
 				data.Taskgroups[i].TaskExecuteCpri = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteCpri.IsNull() {
 				data.Taskgroups[i].TaskExecuteCpri = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteCpri = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.lldp"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteLldp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteLldp.IsNull() && !data.Taskgroups[i].TaskExecuteLldp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteLldp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteLldp.IsNull() {
 				data.Taskgroups[i].TaskExecuteLldp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteLldp.IsNull() {
 				data.Taskgroups[i].TaskExecuteLldp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteLldp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.l2rib"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteL2rib.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteL2rib.IsNull() && !data.Taskgroups[i].TaskExecuteL2rib.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteL2rib = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteL2rib.IsNull() {
 				data.Taskgroups[i].TaskExecuteL2rib = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteL2rib.IsNull() {
 				data.Taskgroups[i].TaskExecuteL2rib = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteL2rib = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.dossier"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteDossier.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteDossier.IsNull() && !data.Taskgroups[i].TaskExecuteDossier.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteDossier = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteDossier.IsNull() {
 				data.Taskgroups[i].TaskExecuteDossier = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteDossier.IsNull() {
 				data.Taskgroups[i].TaskExecuteDossier = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteDossier = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.fti"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteFti.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteFti.IsNull() && !data.Taskgroups[i].TaskExecuteFti.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteFti = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteFti.IsNull() {
 				data.Taskgroups[i].TaskExecuteFti = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteFti.IsNull() {
 				data.Taskgroups[i].TaskExecuteFti = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteFti = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.execute.fc"); value.Exists() {
-			if !data.Taskgroups[i].TaskExecuteFc.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskExecuteFc.IsNull() && !data.Taskgroups[i].TaskExecuteFc.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskExecuteFc = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskExecuteFc.IsNull() {
 				data.Taskgroups[i].TaskExecuteFc = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskExecuteFc.IsNull() {
 				data.Taskgroups[i].TaskExecuteFc = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskExecuteFc = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.bgp"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugBgp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugBgp.IsNull() && !data.Taskgroups[i].TaskDebugBgp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugBgp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugBgp.IsNull() {
 				data.Taskgroups[i].TaskDebugBgp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugBgp.IsNull() {
 				data.Taskgroups[i].TaskDebugBgp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugBgp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.ospf"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugOspf.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugOspf.IsNull() && !data.Taskgroups[i].TaskDebugOspf.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugOspf = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugOspf.IsNull() {
 				data.Taskgroups[i].TaskDebugOspf = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugOspf.IsNull() {
 				data.Taskgroups[i].TaskDebugOspf = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugOspf = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.hsrp"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugHsrp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugHsrp.IsNull() && !data.Taskgroups[i].TaskDebugHsrp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugHsrp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugHsrp.IsNull() {
 				data.Taskgroups[i].TaskDebugHsrp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugHsrp.IsNull() {
 				data.Taskgroups[i].TaskDebugHsrp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugHsrp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.isis"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugIsis.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugIsis.IsNull() && !data.Taskgroups[i].TaskDebugIsis.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugIsis = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugIsis.IsNull() {
 				data.Taskgroups[i].TaskDebugIsis = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugIsis.IsNull() {
 				data.Taskgroups[i].TaskDebugIsis = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugIsis = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.route-map"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugRouteMap.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugRouteMap.IsNull() && !data.Taskgroups[i].TaskDebugRouteMap.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugRouteMap = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugRouteMap.IsNull() {
 				data.Taskgroups[i].TaskDebugRouteMap = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugRouteMap.IsNull() {
 				data.Taskgroups[i].TaskDebugRouteMap = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugRouteMap = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.route-policy"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugRoutePolicy.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugRoutePolicy.IsNull() && !data.Taskgroups[i].TaskDebugRoutePolicy.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugRoutePolicy = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugRoutePolicy.IsNull() {
 				data.Taskgroups[i].TaskDebugRoutePolicy = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugRoutePolicy.IsNull() {
 				data.Taskgroups[i].TaskDebugRoutePolicy = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugRoutePolicy = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.static"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugStatic.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugStatic.IsNull() && !data.Taskgroups[i].TaskDebugStatic.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugStatic = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugStatic.IsNull() {
 				data.Taskgroups[i].TaskDebugStatic = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugStatic.IsNull() {
 				data.Taskgroups[i].TaskDebugStatic = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugStatic = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.vrrp"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugVrrp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugVrrp.IsNull() && !data.Taskgroups[i].TaskDebugVrrp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugVrrp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugVrrp.IsNull() {
 				data.Taskgroups[i].TaskDebugVrrp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugVrrp.IsNull() {
 				data.Taskgroups[i].TaskDebugVrrp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugVrrp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.cef"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugCef.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugCef.IsNull() && !data.Taskgroups[i].TaskDebugCef.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugCef = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugCef.IsNull() {
 				data.Taskgroups[i].TaskDebugCef = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugCef.IsNull() {
 				data.Taskgroups[i].TaskDebugCef = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugCef = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.lpts"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugLpts.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugLpts.IsNull() && !data.Taskgroups[i].TaskDebugLpts.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugLpts = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugLpts.IsNull() {
 				data.Taskgroups[i].TaskDebugLpts = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugLpts.IsNull() {
 				data.Taskgroups[i].TaskDebugLpts = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugLpts = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.ipv4"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugIpv4.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugIpv4.IsNull() && !data.Taskgroups[i].TaskDebugIpv4.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugIpv4 = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugIpv4.IsNull() {
 				data.Taskgroups[i].TaskDebugIpv4 = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugIpv4.IsNull() {
 				data.Taskgroups[i].TaskDebugIpv4 = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugIpv4 = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.rib"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugRib.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugRib.IsNull() && !data.Taskgroups[i].TaskDebugRib.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugRib = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugRib.IsNull() {
 				data.Taskgroups[i].TaskDebugRib = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugRib.IsNull() {
 				data.Taskgroups[i].TaskDebugRib = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugRib = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.multicast"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugMulticast.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugMulticast.IsNull() && !data.Taskgroups[i].TaskDebugMulticast.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugMulticast = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugMulticast.IsNull() {
 				data.Taskgroups[i].TaskDebugMulticast = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugMulticast.IsNull() {
 				data.Taskgroups[i].TaskDebugMulticast = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugMulticast = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.mpls-te"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugMplsTe.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugMplsTe.IsNull() && !data.Taskgroups[i].TaskDebugMplsTe.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugMplsTe = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugMplsTe.IsNull() {
 				data.Taskgroups[i].TaskDebugMplsTe = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugMplsTe.IsNull() {
 				data.Taskgroups[i].TaskDebugMplsTe = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugMplsTe = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.mpls-ldp"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugMplsLdp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugMplsLdp.IsNull() && !data.Taskgroups[i].TaskDebugMplsLdp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugMplsLdp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugMplsLdp.IsNull() {
 				data.Taskgroups[i].TaskDebugMplsLdp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugMplsLdp.IsNull() {
 				data.Taskgroups[i].TaskDebugMplsLdp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugMplsLdp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.mpls-static"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugMplsStatic.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugMplsStatic.IsNull() && !data.Taskgroups[i].TaskDebugMplsStatic.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugMplsStatic = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugMplsStatic.IsNull() {
 				data.Taskgroups[i].TaskDebugMplsStatic = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugMplsStatic.IsNull() {
 				data.Taskgroups[i].TaskDebugMplsStatic = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugMplsStatic = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.ouni"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugOuni.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugOuni.IsNull() && !data.Taskgroups[i].TaskDebugOuni.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugOuni = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugOuni.IsNull() {
 				data.Taskgroups[i].TaskDebugOuni = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugOuni.IsNull() {
 				data.Taskgroups[i].TaskDebugOuni = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugOuni = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.fabric"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugFabric.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugFabric.IsNull() && !data.Taskgroups[i].TaskDebugFabric.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugFabric = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugFabric.IsNull() {
 				data.Taskgroups[i].TaskDebugFabric = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugFabric.IsNull() {
 				data.Taskgroups[i].TaskDebugFabric = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugFabric = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.bundle"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugBundle.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugBundle.IsNull() && !data.Taskgroups[i].TaskDebugBundle.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugBundle = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugBundle.IsNull() {
 				data.Taskgroups[i].TaskDebugBundle = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugBundle.IsNull() {
 				data.Taskgroups[i].TaskDebugBundle = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugBundle = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.network"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugNetwork.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugNetwork.IsNull() && !data.Taskgroups[i].TaskDebugNetwork.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugNetwork = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugNetwork.IsNull() {
 				data.Taskgroups[i].TaskDebugNetwork = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugNetwork.IsNull() {
 				data.Taskgroups[i].TaskDebugNetwork = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugNetwork = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.transport"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugTransport.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugTransport.IsNull() && !data.Taskgroups[i].TaskDebugTransport.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugTransport = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugTransport.IsNull() {
 				data.Taskgroups[i].TaskDebugTransport = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugTransport.IsNull() {
 				data.Taskgroups[i].TaskDebugTransport = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugTransport = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.ppp"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugPpp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugPpp.IsNull() && !data.Taskgroups[i].TaskDebugPpp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugPpp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugPpp.IsNull() {
 				data.Taskgroups[i].TaskDebugPpp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugPpp.IsNull() {
 				data.Taskgroups[i].TaskDebugPpp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugPpp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.hdlc"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugHdlc.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugHdlc.IsNull() && !data.Taskgroups[i].TaskDebugHdlc.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugHdlc = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugHdlc.IsNull() {
 				data.Taskgroups[i].TaskDebugHdlc = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugHdlc.IsNull() {
 				data.Taskgroups[i].TaskDebugHdlc = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugHdlc = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.pos-dpt"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugPosDpt.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugPosDpt.IsNull() && !data.Taskgroups[i].TaskDebugPosDpt.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugPosDpt = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugPosDpt.IsNull() {
 				data.Taskgroups[i].TaskDebugPosDpt = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugPosDpt.IsNull() {
 				data.Taskgroups[i].TaskDebugPosDpt = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugPosDpt = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.sonet-sdh"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugSonetSdh.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugSonetSdh.IsNull() && !data.Taskgroups[i].TaskDebugSonetSdh.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugSonetSdh = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugSonetSdh.IsNull() {
 				data.Taskgroups[i].TaskDebugSonetSdh = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugSonetSdh.IsNull() {
 				data.Taskgroups[i].TaskDebugSonetSdh = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugSonetSdh = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.dwdm"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugDwdm.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugDwdm.IsNull() && !data.Taskgroups[i].TaskDebugDwdm.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugDwdm = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugDwdm.IsNull() {
 				data.Taskgroups[i].TaskDebugDwdm = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugDwdm.IsNull() {
 				data.Taskgroups[i].TaskDebugDwdm = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugDwdm = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.tunnel"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugTunnel.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugTunnel.IsNull() && !data.Taskgroups[i].TaskDebugTunnel.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugTunnel = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugTunnel.IsNull() {
 				data.Taskgroups[i].TaskDebugTunnel = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugTunnel.IsNull() {
 				data.Taskgroups[i].TaskDebugTunnel = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugTunnel = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.vlan"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugVlan.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugVlan.IsNull() && !data.Taskgroups[i].TaskDebugVlan.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugVlan = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugVlan.IsNull() {
 				data.Taskgroups[i].TaskDebugVlan = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugVlan.IsNull() {
 				data.Taskgroups[i].TaskDebugVlan = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugVlan = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.qos"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugQos.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugQos.IsNull() && !data.Taskgroups[i].TaskDebugQos.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugQos = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugQos.IsNull() {
 				data.Taskgroups[i].TaskDebugQos = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugQos.IsNull() {
 				data.Taskgroups[i].TaskDebugQos = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugQos = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.acl"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugAcl.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugAcl.IsNull() && !data.Taskgroups[i].TaskDebugAcl.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugAcl = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugAcl.IsNull() {
 				data.Taskgroups[i].TaskDebugAcl = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugAcl.IsNull() {
 				data.Taskgroups[i].TaskDebugAcl = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugAcl = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.aaa"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugAaa.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugAaa.IsNull() && !data.Taskgroups[i].TaskDebugAaa.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugAaa = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugAaa.IsNull() {
 				data.Taskgroups[i].TaskDebugAaa = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugAaa.IsNull() {
 				data.Taskgroups[i].TaskDebugAaa = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugAaa = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.crypto"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugCrypto.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugCrypto.IsNull() && !data.Taskgroups[i].TaskDebugCrypto.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugCrypto = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugCrypto.IsNull() {
 				data.Taskgroups[i].TaskDebugCrypto = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugCrypto.IsNull() {
 				data.Taskgroups[i].TaskDebugCrypto = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugCrypto = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.snmp"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugSnmp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugSnmp.IsNull() && !data.Taskgroups[i].TaskDebugSnmp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugSnmp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugSnmp.IsNull() {
 				data.Taskgroups[i].TaskDebugSnmp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugSnmp.IsNull() {
 				data.Taskgroups[i].TaskDebugSnmp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugSnmp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.config-mgmt"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugConfigMgmt.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugConfigMgmt.IsNull() && !data.Taskgroups[i].TaskDebugConfigMgmt.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugConfigMgmt = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugConfigMgmt.IsNull() {
 				data.Taskgroups[i].TaskDebugConfigMgmt = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugConfigMgmt.IsNull() {
 				data.Taskgroups[i].TaskDebugConfigMgmt = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugConfigMgmt = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.config-services"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugConfigServices.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugConfigServices.IsNull() && !data.Taskgroups[i].TaskDebugConfigServices.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugConfigServices = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugConfigServices.IsNull() {
 				data.Taskgroups[i].TaskDebugConfigServices = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugConfigServices.IsNull() {
 				data.Taskgroups[i].TaskDebugConfigServices = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugConfigServices = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.host-services"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugHostServices.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugHostServices.IsNull() && !data.Taskgroups[i].TaskDebugHostServices.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugHostServices = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugHostServices.IsNull() {
 				data.Taskgroups[i].TaskDebugHostServices = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugHostServices.IsNull() {
 				data.Taskgroups[i].TaskDebugHostServices = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugHostServices = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.boot"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugBoot.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugBoot.IsNull() && !data.Taskgroups[i].TaskDebugBoot.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugBoot = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugBoot.IsNull() {
 				data.Taskgroups[i].TaskDebugBoot = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugBoot.IsNull() {
 				data.Taskgroups[i].TaskDebugBoot = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugBoot = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.fault-mgr"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugFaultMgr.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugFaultMgr.IsNull() && !data.Taskgroups[i].TaskDebugFaultMgr.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugFaultMgr = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugFaultMgr.IsNull() {
 				data.Taskgroups[i].TaskDebugFaultMgr = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugFaultMgr.IsNull() {
 				data.Taskgroups[i].TaskDebugFaultMgr = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugFaultMgr = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.filesystem"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugFilesystem.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugFilesystem.IsNull() && !data.Taskgroups[i].TaskDebugFilesystem.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugFilesystem = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugFilesystem.IsNull() {
 				data.Taskgroups[i].TaskDebugFilesystem = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugFilesystem.IsNull() {
 				data.Taskgroups[i].TaskDebugFilesystem = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugFilesystem = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.interface"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugInterface.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugInterface.IsNull() && !data.Taskgroups[i].TaskDebugInterface.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugInterface = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugInterface.IsNull() {
 				data.Taskgroups[i].TaskDebugInterface = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugInterface.IsNull() {
 				data.Taskgroups[i].TaskDebugInterface = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugInterface = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.ip-services"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugIpServices.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugIpServices.IsNull() && !data.Taskgroups[i].TaskDebugIpServices.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugIpServices = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugIpServices.IsNull() {
 				data.Taskgroups[i].TaskDebugIpServices = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugIpServices.IsNull() {
 				data.Taskgroups[i].TaskDebugIpServices = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugIpServices = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.pkg-mgmt"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugPkgMgmt.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugPkgMgmt.IsNull() && !data.Taskgroups[i].TaskDebugPkgMgmt.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugPkgMgmt = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugPkgMgmt.IsNull() {
 				data.Taskgroups[i].TaskDebugPkgMgmt = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugPkgMgmt.IsNull() {
 				data.Taskgroups[i].TaskDebugPkgMgmt = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugPkgMgmt = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.system"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugSystem.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugSystem.IsNull() && !data.Taskgroups[i].TaskDebugSystem.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugSystem = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugSystem.IsNull() {
 				data.Taskgroups[i].TaskDebugSystem = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugSystem.IsNull() {
 				data.Taskgroups[i].TaskDebugSystem = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugSystem = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.tty-access"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugTtyAccess.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugTtyAccess.IsNull() && !data.Taskgroups[i].TaskDebugTtyAccess.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugTtyAccess = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugTtyAccess.IsNull() {
 				data.Taskgroups[i].TaskDebugTtyAccess = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugTtyAccess.IsNull() {
 				data.Taskgroups[i].TaskDebugTtyAccess = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugTtyAccess = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.basic-services"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugBasicServices.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugBasicServices.IsNull() && !data.Taskgroups[i].TaskDebugBasicServices.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugBasicServices = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugBasicServices.IsNull() {
 				data.Taskgroups[i].TaskDebugBasicServices = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugBasicServices.IsNull() {
 				data.Taskgroups[i].TaskDebugBasicServices = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugBasicServices = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.cdp"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugCdp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugCdp.IsNull() && !data.Taskgroups[i].TaskDebugCdp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugCdp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugCdp.IsNull() {
 				data.Taskgroups[i].TaskDebugCdp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugCdp.IsNull() {
 				data.Taskgroups[i].TaskDebugCdp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugCdp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.diag"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugDiag.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugDiag.IsNull() && !data.Taskgroups[i].TaskDebugDiag.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugDiag = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugDiag.IsNull() {
 				data.Taskgroups[i].TaskDebugDiag = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugDiag.IsNull() {
 				data.Taskgroups[i].TaskDebugDiag = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugDiag = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.ext-access"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugExtAccess.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugExtAccess.IsNull() && !data.Taskgroups[i].TaskDebugExtAccess.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugExtAccess = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugExtAccess.IsNull() {
 				data.Taskgroups[i].TaskDebugExtAccess = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugExtAccess.IsNull() {
 				data.Taskgroups[i].TaskDebugExtAccess = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugExtAccess = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.bcdl"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugBcdl.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugBcdl.IsNull() && !data.Taskgroups[i].TaskDebugBcdl.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugBcdl = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugBcdl.IsNull() {
 				data.Taskgroups[i].TaskDebugBcdl = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugBcdl.IsNull() {
 				data.Taskgroups[i].TaskDebugBcdl = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugBcdl = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.sysmgr"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugSysmgr.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugSysmgr.IsNull() && !data.Taskgroups[i].TaskDebugSysmgr.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugSysmgr = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugSysmgr.IsNull() {
 				data.Taskgroups[i].TaskDebugSysmgr = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugSysmgr.IsNull() {
 				data.Taskgroups[i].TaskDebugSysmgr = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugSysmgr = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.logging"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugLogging.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugLogging.IsNull() && !data.Taskgroups[i].TaskDebugLogging.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugLogging = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugLogging.IsNull() {
 				data.Taskgroups[i].TaskDebugLogging = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugLogging.IsNull() {
 				data.Taskgroups[i].TaskDebugLogging = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugLogging = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.netflow"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugNetflow.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugNetflow.IsNull() && !data.Taskgroups[i].TaskDebugNetflow.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugNetflow = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugNetflow.IsNull() {
 				data.Taskgroups[i].TaskDebugNetflow = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugNetflow.IsNull() {
 				data.Taskgroups[i].TaskDebugNetflow = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugNetflow = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.drivers"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugDrivers.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugDrivers.IsNull() && !data.Taskgroups[i].TaskDebugDrivers.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugDrivers = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugDrivers.IsNull() {
 				data.Taskgroups[i].TaskDebugDrivers = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugDrivers.IsNull() {
 				data.Taskgroups[i].TaskDebugDrivers = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugDrivers = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.fr"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugFr.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugFr.IsNull() && !data.Taskgroups[i].TaskDebugFr.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugFr = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugFr.IsNull() {
 				data.Taskgroups[i].TaskDebugFr = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugFr.IsNull() {
 				data.Taskgroups[i].TaskDebugFr = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugFr = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.monitor"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugMonitor.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugMonitor.IsNull() && !data.Taskgroups[i].TaskDebugMonitor.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugMonitor = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugMonitor.IsNull() {
 				data.Taskgroups[i].TaskDebugMonitor = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugMonitor.IsNull() {
 				data.Taskgroups[i].TaskDebugMonitor = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugMonitor = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.inventory"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugInventory.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugInventory.IsNull() && !data.Taskgroups[i].TaskDebugInventory.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugInventory = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugInventory.IsNull() {
 				data.Taskgroups[i].TaskDebugInventory = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugInventory.IsNull() {
 				data.Taskgroups[i].TaskDebugInventory = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugInventory = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.ipv6"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugIpv6.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugIpv6.IsNull() && !data.Taskgroups[i].TaskDebugIpv6.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugIpv6 = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugIpv6.IsNull() {
 				data.Taskgroups[i].TaskDebugIpv6 = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugIpv6.IsNull() {
 				data.Taskgroups[i].TaskDebugIpv6 = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugIpv6 = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.admin"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugAdmin.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugAdmin.IsNull() && !data.Taskgroups[i].TaskDebugAdmin.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugAdmin = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugAdmin.IsNull() {
 				data.Taskgroups[i].TaskDebugAdmin = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugAdmin.IsNull() {
 				data.Taskgroups[i].TaskDebugAdmin = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugAdmin = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.atm"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugAtm.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugAtm.IsNull() && !data.Taskgroups[i].TaskDebugAtm.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugAtm = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugAtm.IsNull() {
 				data.Taskgroups[i].TaskDebugAtm = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugAtm.IsNull() {
 				data.Taskgroups[i].TaskDebugAtm = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugAtm = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.bfd"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugBfd.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugBfd.IsNull() && !data.Taskgroups[i].TaskDebugBfd.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugBfd = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugBfd.IsNull() {
 				data.Taskgroups[i].TaskDebugBfd = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugBfd.IsNull() {
 				data.Taskgroups[i].TaskDebugBfd = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugBfd = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.rip"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugRip.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugRip.IsNull() && !data.Taskgroups[i].TaskDebugRip.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugRip = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugRip.IsNull() {
 				data.Taskgroups[i].TaskDebugRip = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugRip.IsNull() {
 				data.Taskgroups[i].TaskDebugRip = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugRip = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.eigrp"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugEigrp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugEigrp.IsNull() && !data.Taskgroups[i].TaskDebugEigrp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugEigrp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugEigrp.IsNull() {
 				data.Taskgroups[i].TaskDebugEigrp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugEigrp.IsNull() {
 				data.Taskgroups[i].TaskDebugEigrp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugEigrp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.sbc"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugSbc.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugSbc.IsNull() && !data.Taskgroups[i].TaskDebugSbc.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugSbc = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugSbc.IsNull() {
 				data.Taskgroups[i].TaskDebugSbc = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugSbc.IsNull() {
 				data.Taskgroups[i].TaskDebugSbc = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugSbc = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.firewall"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugFirewall.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugFirewall.IsNull() && !data.Taskgroups[i].TaskDebugFirewall.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugFirewall = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugFirewall.IsNull() {
 				data.Taskgroups[i].TaskDebugFirewall = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugFirewall.IsNull() {
 				data.Taskgroups[i].TaskDebugFirewall = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugFirewall = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.l2vpn"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugL2vpn.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugL2vpn.IsNull() && !data.Taskgroups[i].TaskDebugL2vpn.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugL2vpn = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugL2vpn.IsNull() {
 				data.Taskgroups[i].TaskDebugL2vpn = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugL2vpn.IsNull() {
 				data.Taskgroups[i].TaskDebugL2vpn = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugL2vpn = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.ethernet-services"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugEthernetServices.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugEthernetServices.IsNull() && !data.Taskgroups[i].TaskDebugEthernetServices.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugEthernetServices = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugEthernetServices.IsNull() {
 				data.Taskgroups[i].TaskDebugEthernetServices = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugEthernetServices.IsNull() {
 				data.Taskgroups[i].TaskDebugEthernetServices = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugEthernetServices = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.eem"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugEem.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugEem.IsNull() && !data.Taskgroups[i].TaskDebugEem.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugEem = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugEem.IsNull() {
 				data.Taskgroups[i].TaskDebugEem = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugEem.IsNull() {
 				data.Taskgroups[i].TaskDebugEem = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugEem = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.li"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugLi.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugLi.IsNull() && !data.Taskgroups[i].TaskDebugLi.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugLi = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugLi.IsNull() {
 				data.Taskgroups[i].TaskDebugLi = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugLi.IsNull() {
 				data.Taskgroups[i].TaskDebugLi = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugLi = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.ancp"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugAncp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugAncp.IsNull() && !data.Taskgroups[i].TaskDebugAncp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugAncp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugAncp.IsNull() {
 				data.Taskgroups[i].TaskDebugAncp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugAncp.IsNull() {
 				data.Taskgroups[i].TaskDebugAncp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugAncp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.cgn"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugCgn.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugCgn.IsNull() && !data.Taskgroups[i].TaskDebugCgn.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugCgn = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugCgn.IsNull() {
 				data.Taskgroups[i].TaskDebugCgn = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugCgn.IsNull() {
 				data.Taskgroups[i].TaskDebugCgn = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugCgn = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.call-home"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugCallHome.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugCallHome.IsNull() && !data.Taskgroups[i].TaskDebugCallHome.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugCallHome = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugCallHome.IsNull() {
 				data.Taskgroups[i].TaskDebugCallHome = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugCallHome.IsNull() {
 				data.Taskgroups[i].TaskDebugCallHome = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugCallHome = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.rcmd"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugRcmd.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugRcmd.IsNull() && !data.Taskgroups[i].TaskDebugRcmd.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugRcmd = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugRcmd.IsNull() {
 				data.Taskgroups[i].TaskDebugRcmd = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugRcmd.IsNull() {
 				data.Taskgroups[i].TaskDebugRcmd = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugRcmd = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.vpdn"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugVpdn.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugVpdn.IsNull() && !data.Taskgroups[i].TaskDebugVpdn.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugVpdn = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugVpdn.IsNull() {
 				data.Taskgroups[i].TaskDebugVpdn = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugVpdn.IsNull() {
 				data.Taskgroups[i].TaskDebugVpdn = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugVpdn = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.nps"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugNps.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugNps.IsNull() && !data.Taskgroups[i].TaskDebugNps.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugNps = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugNps.IsNull() {
 				data.Taskgroups[i].TaskDebugNps = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugNps.IsNull() {
 				data.Taskgroups[i].TaskDebugNps = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugNps = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.lisp"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugLisp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugLisp.IsNull() && !data.Taskgroups[i].TaskDebugLisp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugLisp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugLisp.IsNull() {
 				data.Taskgroups[i].TaskDebugLisp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugLisp.IsNull() {
 				data.Taskgroups[i].TaskDebugLisp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugLisp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.pbr"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugPbr.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugPbr.IsNull() && !data.Taskgroups[i].TaskDebugPbr.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugPbr = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugPbr.IsNull() {
 				data.Taskgroups[i].TaskDebugPbr = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugPbr.IsNull() {
 				data.Taskgroups[i].TaskDebugPbr = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugPbr = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.otn"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugOtn.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugOtn.IsNull() && !data.Taskgroups[i].TaskDebugOtn.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugOtn = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugOtn.IsNull() {
 				data.Taskgroups[i].TaskDebugOtn = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugOtn.IsNull() {
 				data.Taskgroups[i].TaskDebugOtn = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugOtn = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.nacm"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugNacm.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugNacm.IsNull() && !data.Taskgroups[i].TaskDebugNacm.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugNacm = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugNacm.IsNull() {
 				data.Taskgroups[i].TaskDebugNacm = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugNacm.IsNull() {
 				data.Taskgroups[i].TaskDebugNacm = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugNacm = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.plat-mgr"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugPlatMgr.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugPlatMgr.IsNull() && !data.Taskgroups[i].TaskDebugPlatMgr.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugPlatMgr = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugPlatMgr.IsNull() {
 				data.Taskgroups[i].TaskDebugPlatMgr = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugPlatMgr.IsNull() {
 				data.Taskgroups[i].TaskDebugPlatMgr = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugPlatMgr = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.cpri"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugCpri.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugCpri.IsNull() && !data.Taskgroups[i].TaskDebugCpri.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugCpri = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugCpri.IsNull() {
 				data.Taskgroups[i].TaskDebugCpri = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugCpri.IsNull() {
 				data.Taskgroups[i].TaskDebugCpri = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugCpri = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.lldp"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugLldp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugLldp.IsNull() && !data.Taskgroups[i].TaskDebugLldp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugLldp = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugLldp.IsNull() {
 				data.Taskgroups[i].TaskDebugLldp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugLldp.IsNull() {
 				data.Taskgroups[i].TaskDebugLldp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugLldp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.l2rib"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugL2rib.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugL2rib.IsNull() && !data.Taskgroups[i].TaskDebugL2rib.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugL2rib = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugL2rib.IsNull() {
 				data.Taskgroups[i].TaskDebugL2rib = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugL2rib.IsNull() {
 				data.Taskgroups[i].TaskDebugL2rib = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugL2rib = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.dossier"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugDossier.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugDossier.IsNull() && !data.Taskgroups[i].TaskDebugDossier.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugDossier = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugDossier.IsNull() {
 				data.Taskgroups[i].TaskDebugDossier = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugDossier.IsNull() {
 				data.Taskgroups[i].TaskDebugDossier = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugDossier = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.fti"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugFti.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugFti.IsNull() && !data.Taskgroups[i].TaskDebugFti.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugFti = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugFti.IsNull() {
 				data.Taskgroups[i].TaskDebugFti = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugFti.IsNull() {
 				data.Taskgroups[i].TaskDebugFti = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugFti = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("task.debug.fc"); value.Exists() {
-			if !data.Taskgroups[i].TaskDebugFc.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].TaskDebugFc.IsNull() && !data.Taskgroups[i].TaskDebugFc.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].TaskDebugFc = types.BoolValue(false)
+			} else if !data.Taskgroups[i].TaskDebugFc.IsNull() {
 				data.Taskgroups[i].TaskDebugFc = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].TaskDebugFc.IsNull() {
 				data.Taskgroups[i].TaskDebugFc = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].TaskDebugFc = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("inherit.taskgroup.root-lr"); value.Exists() {
-			if !data.Taskgroups[i].InheritTaskgroupRootLr.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].InheritTaskgroupRootLr.IsNull() && !data.Taskgroups[i].InheritTaskgroupRootLr.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].InheritTaskgroupRootLr = types.BoolValue(false)
+			} else if !data.Taskgroups[i].InheritTaskgroupRootLr.IsNull() {
 				data.Taskgroups[i].InheritTaskgroupRootLr = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].InheritTaskgroupRootLr.IsNull() {
 				data.Taskgroups[i].InheritTaskgroupRootLr = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].InheritTaskgroupRootLr = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("inherit.taskgroup.netadmin"); value.Exists() {
-			if !data.Taskgroups[i].InheritTaskgroupNetadmin.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].InheritTaskgroupNetadmin.IsNull() && !data.Taskgroups[i].InheritTaskgroupNetadmin.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].InheritTaskgroupNetadmin = types.BoolValue(false)
+			} else if !data.Taskgroups[i].InheritTaskgroupNetadmin.IsNull() {
 				data.Taskgroups[i].InheritTaskgroupNetadmin = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].InheritTaskgroupNetadmin.IsNull() {
 				data.Taskgroups[i].InheritTaskgroupNetadmin = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].InheritTaskgroupNetadmin = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("inherit.taskgroup.sysadmin"); value.Exists() {
-			if !data.Taskgroups[i].InheritTaskgroupSysadmin.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].InheritTaskgroupSysadmin.IsNull() && !data.Taskgroups[i].InheritTaskgroupSysadmin.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].InheritTaskgroupSysadmin = types.BoolValue(false)
+			} else if !data.Taskgroups[i].InheritTaskgroupSysadmin.IsNull() {
 				data.Taskgroups[i].InheritTaskgroupSysadmin = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].InheritTaskgroupSysadmin.IsNull() {
 				data.Taskgroups[i].InheritTaskgroupSysadmin = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].InheritTaskgroupSysadmin = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("inherit.taskgroup.serviceadmin"); value.Exists() {
-			if !data.Taskgroups[i].InheritTaskgroupServiceadmin.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].InheritTaskgroupServiceadmin.IsNull() && !data.Taskgroups[i].InheritTaskgroupServiceadmin.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].InheritTaskgroupServiceadmin = types.BoolValue(false)
+			} else if !data.Taskgroups[i].InheritTaskgroupServiceadmin.IsNull() {
 				data.Taskgroups[i].InheritTaskgroupServiceadmin = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].InheritTaskgroupServiceadmin.IsNull() {
 				data.Taskgroups[i].InheritTaskgroupServiceadmin = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].InheritTaskgroupServiceadmin = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("inherit.taskgroup.operator"); value.Exists() {
-			if !data.Taskgroups[i].InheritTaskgroupOperator.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].InheritTaskgroupOperator.IsNull() && !data.Taskgroups[i].InheritTaskgroupOperator.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].InheritTaskgroupOperator = types.BoolValue(false)
+			} else if !data.Taskgroups[i].InheritTaskgroupOperator.IsNull() {
 				data.Taskgroups[i].InheritTaskgroupOperator = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].InheritTaskgroupOperator.IsNull() {
 				data.Taskgroups[i].InheritTaskgroupOperator = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].InheritTaskgroupOperator = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("inherit.taskgroup.cisco-support"); value.Exists() {
-			if !data.Taskgroups[i].InheritTaskgroupCiscoSupport.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Taskgroups[i].InheritTaskgroupCiscoSupport.IsNull() && !data.Taskgroups[i].InheritTaskgroupCiscoSupport.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Taskgroups[i].InheritTaskgroupCiscoSupport = types.BoolValue(false)
+			} else if !data.Taskgroups[i].InheritTaskgroupCiscoSupport.IsNull() {
 				data.Taskgroups[i].InheritTaskgroupCiscoSupport = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Taskgroups[i].InheritTaskgroupCiscoSupport.IsNull() {
 				data.Taskgroups[i].InheritTaskgroupCiscoSupport = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Taskgroups[i].InheritTaskgroupCiscoSupport = types.BoolValue(false)
 			}
 		}
 		for ci := range data.Taskgroups[i].InheritTaskgroups {
@@ -9190,103 +12149,183 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 			data.Usergroups[i].Description = types.StringNull()
 		}
 		if value := r.Get("taskgroup.root-lr"); value.Exists() {
-			if !data.Usergroups[i].TaskgroupRootLr.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Usergroups[i].TaskgroupRootLr.IsNull() && !data.Usergroups[i].TaskgroupRootLr.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Usergroups[i].TaskgroupRootLr = types.BoolValue(false)
+			} else if !data.Usergroups[i].TaskgroupRootLr.IsNull() {
 				data.Usergroups[i].TaskgroupRootLr = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Usergroups[i].TaskgroupRootLr.IsNull() {
 				data.Usergroups[i].TaskgroupRootLr = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Usergroups[i].TaskgroupRootLr = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("taskgroup.netadmin"); value.Exists() {
-			if !data.Usergroups[i].TaskgroupNetadmin.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Usergroups[i].TaskgroupNetadmin.IsNull() && !data.Usergroups[i].TaskgroupNetadmin.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Usergroups[i].TaskgroupNetadmin = types.BoolValue(false)
+			} else if !data.Usergroups[i].TaskgroupNetadmin.IsNull() {
 				data.Usergroups[i].TaskgroupNetadmin = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Usergroups[i].TaskgroupNetadmin.IsNull() {
 				data.Usergroups[i].TaskgroupNetadmin = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Usergroups[i].TaskgroupNetadmin = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("taskgroup.sysadmin"); value.Exists() {
-			if !data.Usergroups[i].TaskgroupSysadmin.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Usergroups[i].TaskgroupSysadmin.IsNull() && !data.Usergroups[i].TaskgroupSysadmin.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Usergroups[i].TaskgroupSysadmin = types.BoolValue(false)
+			} else if !data.Usergroups[i].TaskgroupSysadmin.IsNull() {
 				data.Usergroups[i].TaskgroupSysadmin = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Usergroups[i].TaskgroupSysadmin.IsNull() {
 				data.Usergroups[i].TaskgroupSysadmin = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Usergroups[i].TaskgroupSysadmin = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("taskgroup.serviceadmin"); value.Exists() {
-			if !data.Usergroups[i].TaskgroupServiceadmin.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Usergroups[i].TaskgroupServiceadmin.IsNull() && !data.Usergroups[i].TaskgroupServiceadmin.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Usergroups[i].TaskgroupServiceadmin = types.BoolValue(false)
+			} else if !data.Usergroups[i].TaskgroupServiceadmin.IsNull() {
 				data.Usergroups[i].TaskgroupServiceadmin = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Usergroups[i].TaskgroupServiceadmin.IsNull() {
 				data.Usergroups[i].TaskgroupServiceadmin = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Usergroups[i].TaskgroupServiceadmin = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("taskgroup.operator"); value.Exists() {
-			if !data.Usergroups[i].TaskgroupOperator.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Usergroups[i].TaskgroupOperator.IsNull() && !data.Usergroups[i].TaskgroupOperator.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Usergroups[i].TaskgroupOperator = types.BoolValue(false)
+			} else if !data.Usergroups[i].TaskgroupOperator.IsNull() {
 				data.Usergroups[i].TaskgroupOperator = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Usergroups[i].TaskgroupOperator.IsNull() {
 				data.Usergroups[i].TaskgroupOperator = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Usergroups[i].TaskgroupOperator = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("taskgroup.cisco-support"); value.Exists() {
-			if !data.Usergroups[i].TaskgroupCiscoSupport.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Usergroups[i].TaskgroupCiscoSupport.IsNull() && !data.Usergroups[i].TaskgroupCiscoSupport.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Usergroups[i].TaskgroupCiscoSupport = types.BoolValue(false)
+			} else if !data.Usergroups[i].TaskgroupCiscoSupport.IsNull() {
 				data.Usergroups[i].TaskgroupCiscoSupport = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Usergroups[i].TaskgroupCiscoSupport.IsNull() {
 				data.Usergroups[i].TaskgroupCiscoSupport = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Usergroups[i].TaskgroupCiscoSupport = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("taskgroup.maintenance"); value.Exists() {
-			if !data.Usergroups[i].TaskgroupMaintenance.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Usergroups[i].TaskgroupMaintenance.IsNull() && !data.Usergroups[i].TaskgroupMaintenance.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Usergroups[i].TaskgroupMaintenance = types.BoolValue(false)
+			} else if !data.Usergroups[i].TaskgroupMaintenance.IsNull() {
 				data.Usergroups[i].TaskgroupMaintenance = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Usergroups[i].TaskgroupMaintenance.IsNull() {
 				data.Usergroups[i].TaskgroupMaintenance = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Usergroups[i].TaskgroupMaintenance = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("taskgroup.provisioning"); value.Exists() {
-			if !data.Usergroups[i].TaskgroupProvisioning.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Usergroups[i].TaskgroupProvisioning.IsNull() && !data.Usergroups[i].TaskgroupProvisioning.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Usergroups[i].TaskgroupProvisioning = types.BoolValue(false)
+			} else if !data.Usergroups[i].TaskgroupProvisioning.IsNull() {
 				data.Usergroups[i].TaskgroupProvisioning = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Usergroups[i].TaskgroupProvisioning.IsNull() {
 				data.Usergroups[i].TaskgroupProvisioning = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Usergroups[i].TaskgroupProvisioning = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("taskgroup.retrieve"); value.Exists() {
-			if !data.Usergroups[i].TaskgroupRetrieve.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Usergroups[i].TaskgroupRetrieve.IsNull() && !data.Usergroups[i].TaskgroupRetrieve.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Usergroups[i].TaskgroupRetrieve = types.BoolValue(false)
+			} else if !data.Usergroups[i].TaskgroupRetrieve.IsNull() {
 				data.Usergroups[i].TaskgroupRetrieve = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Usergroups[i].TaskgroupRetrieve.IsNull() {
 				data.Usergroups[i].TaskgroupRetrieve = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Usergroups[i].TaskgroupRetrieve = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("taskgroup.read-only-tg"); value.Exists() {
-			if !data.Usergroups[i].TaskgroupReadOnly.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Usergroups[i].TaskgroupReadOnly.IsNull() && !data.Usergroups[i].TaskgroupReadOnly.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Usergroups[i].TaskgroupReadOnly = types.BoolValue(false)
+			} else if !data.Usergroups[i].TaskgroupReadOnly.IsNull() {
 				data.Usergroups[i].TaskgroupReadOnly = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Usergroups[i].TaskgroupReadOnly.IsNull() {
 				data.Usergroups[i].TaskgroupReadOnly = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Usergroups[i].TaskgroupReadOnly = types.BoolValue(false)
 			}
 		}
 		for ci := range data.Usergroups[i].Taskgroups {
@@ -13446,12 +16485,12 @@ func (data *AAA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get(""); cValue.Exists() {
 				item.LoadBalanceMethodLeastOutstanding = types.BoolValue(true)
 			} else {
-				item.LoadBalanceMethodLeastOutstanding = types.BoolNull()
+				item.LoadBalanceMethodLeastOutstanding = types.BoolValue(false)
 			}
 			if cValue := v.Get(""); cValue.Exists() {
 				item.LoadBalanceMethodLeastOutstandingIgnorePreferredServer = types.BoolValue(true)
 			} else {
-				item.LoadBalanceMethodLeastOutstandingIgnorePreferredServer = types.BoolNull()
+				item.LoadBalanceMethodLeastOutstandingIgnorePreferredServer = types.BoolValue(false)
 			}
 			if cValue := v.Get(""); cValue.Exists() {
 				item.Deadtime = types.Int64Value(cValue.Int())
@@ -13496,12 +16535,12 @@ func (data *AAA) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get(""); ccValue.Exists() {
 						cItem.IgnoreAuthPort = types.BoolValue(true)
 					} else {
-						cItem.IgnoreAuthPort = types.BoolNull()
+						cItem.IgnoreAuthPort = types.BoolValue(false)
 					}
 					if ccValue := cv.Get(""); ccValue.Exists() {
 						cItem.IgnoreAcctPort = types.BoolValue(true)
 					} else {
-						cItem.IgnoreAcctPort = types.BoolNull()
+						cItem.IgnoreAcctPort = types.BoolValue(false)
 					}
 					item.ServerPrivates = append(item.ServerPrivates, cItem)
 					return true
@@ -13516,12 +16555,12 @@ func (data *AAA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get(""); cValue.Exists() {
 				item.AuthorizationRequestAccept = types.BoolValue(true)
 			} else {
-				item.AuthorizationRequestAccept = types.BoolNull()
+				item.AuthorizationRequestAccept = types.BoolValue(false)
 			}
 			if cValue := v.Get(""); cValue.Exists() {
 				item.AuthorizationRequestReject = types.BoolValue(true)
 			} else {
-				item.AuthorizationRequestReject = types.BoolNull()
+				item.AuthorizationRequestReject = types.BoolValue(false)
 			}
 			if cValue := v.Get(""); cValue.Exists() {
 				item.AuthorizationRequestRadiusAttributeList = types.StringValue(cValue.String())
@@ -13529,12 +16568,12 @@ func (data *AAA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get(""); cValue.Exists() {
 				item.AuthorizationReplyAccept = types.BoolValue(true)
 			} else {
-				item.AuthorizationReplyAccept = types.BoolNull()
+				item.AuthorizationReplyAccept = types.BoolValue(false)
 			}
 			if cValue := v.Get(""); cValue.Exists() {
 				item.AuthorizationReplyReject = types.BoolValue(true)
 			} else {
-				item.AuthorizationReplyReject = types.BoolNull()
+				item.AuthorizationReplyReject = types.BoolValue(false)
 			}
 			if cValue := v.Get(""); cValue.Exists() {
 				item.AuthorizationReplyRadiusAttributeList = types.StringValue(cValue.String())
@@ -13542,12 +16581,12 @@ func (data *AAA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get(""); cValue.Exists() {
 				item.AccountingRequestAccept = types.BoolValue(true)
 			} else {
-				item.AccountingRequestAccept = types.BoolNull()
+				item.AccountingRequestAccept = types.BoolValue(false)
 			}
 			if cValue := v.Get(""); cValue.Exists() {
 				item.AccountingRequestReject = types.BoolValue(true)
 			} else {
-				item.AccountingRequestReject = types.BoolNull()
+				item.AccountingRequestReject = types.BoolValue(false)
 			}
 			if cValue := v.Get(""); cValue.Exists() {
 				item.AccountingRequestRadiusAttributeList = types.StringValue(cValue.String())
@@ -13555,12 +16594,12 @@ func (data *AAA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get(""); cValue.Exists() {
 				item.AccountingReplyAccept = types.BoolValue(true)
 			} else {
-				item.AccountingReplyAccept = types.BoolNull()
+				item.AccountingReplyAccept = types.BoolValue(false)
 			}
 			if cValue := v.Get(""); cValue.Exists() {
 				item.AccountingReplyReject = types.BoolValue(true)
 			} else {
-				item.AccountingReplyReject = types.BoolNull()
+				item.AccountingReplyReject = types.BoolValue(false)
 			}
 			if cValue := v.Get(""); cValue.Exists() {
 				item.AccountingReplyRadiusAttributeList = types.StringValue(cValue.String())
@@ -13634,7 +16673,7 @@ func (data *AAA) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get(""); ccValue.Exists() {
 						cItem.SingleConnection = types.BoolValue(true)
 					} else {
-						cItem.SingleConnection = types.BoolNull()
+						cItem.SingleConnection = types.BoolValue(false)
 					}
 					if ccValue := cv.Get(""); ccValue.Exists() {
 						cItem.SingleConnectionIdleTimeout = types.Int64Value(ccValue.Int())
@@ -13666,12 +16705,12 @@ func (data *AAA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("login-history.enable"); cValue.Exists() {
 				item.LoginHistoryEnable = types.BoolValue(true)
 			} else {
-				item.LoginHistoryEnable = types.BoolNull()
+				item.LoginHistoryEnable = types.BoolValue(false)
 			}
 			if cValue := v.Get("login-history.disable"); cValue.Exists() {
 				item.LoginHistoryDisable = types.BoolValue(true)
 			} else {
-				item.LoginHistoryDisable = types.BoolNull()
+				item.LoginHistoryDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("policy"); cValue.Exists() {
 				item.Policy = types.StringValue(cValue.String())
@@ -13679,52 +16718,52 @@ func (data *AAA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("group.root-lr"); cValue.Exists() {
 				item.GroupRootLr = types.BoolValue(true)
 			} else {
-				item.GroupRootLr = types.BoolNull()
+				item.GroupRootLr = types.BoolValue(false)
 			}
 			if cValue := v.Get("group.netadmin"); cValue.Exists() {
 				item.GroupNetadmin = types.BoolValue(true)
 			} else {
-				item.GroupNetadmin = types.BoolNull()
+				item.GroupNetadmin = types.BoolValue(false)
 			}
 			if cValue := v.Get("group.sysadmin"); cValue.Exists() {
 				item.GroupSysadmin = types.BoolValue(true)
 			} else {
-				item.GroupSysadmin = types.BoolNull()
+				item.GroupSysadmin = types.BoolValue(false)
 			}
 			if cValue := v.Get("group.serviceadmin"); cValue.Exists() {
 				item.GroupServiceadmin = types.BoolValue(true)
 			} else {
-				item.GroupServiceadmin = types.BoolNull()
+				item.GroupServiceadmin = types.BoolValue(false)
 			}
 			if cValue := v.Get("group.operator"); cValue.Exists() {
 				item.GroupOperator = types.BoolValue(true)
 			} else {
-				item.GroupOperator = types.BoolNull()
+				item.GroupOperator = types.BoolValue(false)
 			}
 			if cValue := v.Get("group.cisco-support"); cValue.Exists() {
 				item.GroupCiscoSupport = types.BoolValue(true)
 			} else {
-				item.GroupCiscoSupport = types.BoolNull()
+				item.GroupCiscoSupport = types.BoolValue(false)
 			}
 			if cValue := v.Get("group.maintenance"); cValue.Exists() {
 				item.GroupMaintenance = types.BoolValue(true)
 			} else {
-				item.GroupMaintenance = types.BoolNull()
+				item.GroupMaintenance = types.BoolValue(false)
 			}
 			if cValue := v.Get("group.provisioning"); cValue.Exists() {
 				item.GroupProvisioning = types.BoolValue(true)
 			} else {
-				item.GroupProvisioning = types.BoolNull()
+				item.GroupProvisioning = types.BoolValue(false)
 			}
 			if cValue := v.Get("group.retrieve"); cValue.Exists() {
 				item.GroupRetrieve = types.BoolValue(true)
 			} else {
-				item.GroupRetrieve = types.BoolNull()
+				item.GroupRetrieve = types.BoolValue(false)
 			}
 			if cValue := v.Get("group.read-only-tg"); cValue.Exists() {
 				item.GroupReadOnlyTg = types.BoolValue(true)
 			} else {
-				item.GroupReadOnlyTg = types.BoolNull()
+				item.GroupReadOnlyTg = types.BoolValue(false)
 			}
 			if cValue := v.Get("group.user-groups.user-group"); cValue.Exists() {
 				item.UserGroups = make([]AAAUsernamesUserGroups, 0)
@@ -13760,1732 +16799,1732 @@ func (data *AAA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("task.read.bgp"); cValue.Exists() {
 				item.TaskReadBgp = types.BoolValue(true)
 			} else {
-				item.TaskReadBgp = types.BoolNull()
+				item.TaskReadBgp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.ospf"); cValue.Exists() {
 				item.TaskReadOspf = types.BoolValue(true)
 			} else {
-				item.TaskReadOspf = types.BoolNull()
+				item.TaskReadOspf = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.hsrp"); cValue.Exists() {
 				item.TaskReadHsrp = types.BoolValue(true)
 			} else {
-				item.TaskReadHsrp = types.BoolNull()
+				item.TaskReadHsrp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.isis"); cValue.Exists() {
 				item.TaskReadIsis = types.BoolValue(true)
 			} else {
-				item.TaskReadIsis = types.BoolNull()
+				item.TaskReadIsis = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.route-map"); cValue.Exists() {
 				item.TaskReadRouteMap = types.BoolValue(true)
 			} else {
-				item.TaskReadRouteMap = types.BoolNull()
+				item.TaskReadRouteMap = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.route-policy"); cValue.Exists() {
 				item.TaskReadRoutePolicy = types.BoolValue(true)
 			} else {
-				item.TaskReadRoutePolicy = types.BoolNull()
+				item.TaskReadRoutePolicy = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.static"); cValue.Exists() {
 				item.TaskReadStatic = types.BoolValue(true)
 			} else {
-				item.TaskReadStatic = types.BoolNull()
+				item.TaskReadStatic = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.vrrp"); cValue.Exists() {
 				item.TaskReadVrrp = types.BoolValue(true)
 			} else {
-				item.TaskReadVrrp = types.BoolNull()
+				item.TaskReadVrrp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.cef"); cValue.Exists() {
 				item.TaskReadCef = types.BoolValue(true)
 			} else {
-				item.TaskReadCef = types.BoolNull()
+				item.TaskReadCef = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.lpts"); cValue.Exists() {
 				item.TaskReadLpts = types.BoolValue(true)
 			} else {
-				item.TaskReadLpts = types.BoolNull()
+				item.TaskReadLpts = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.ipv4"); cValue.Exists() {
 				item.TaskReadIpv4 = types.BoolValue(true)
 			} else {
-				item.TaskReadIpv4 = types.BoolNull()
+				item.TaskReadIpv4 = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.rib"); cValue.Exists() {
 				item.TaskReadRib = types.BoolValue(true)
 			} else {
-				item.TaskReadRib = types.BoolNull()
+				item.TaskReadRib = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.multicast"); cValue.Exists() {
 				item.TaskReadMulticast = types.BoolValue(true)
 			} else {
-				item.TaskReadMulticast = types.BoolNull()
+				item.TaskReadMulticast = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.mpls-te"); cValue.Exists() {
 				item.TaskReadMplsTe = types.BoolValue(true)
 			} else {
-				item.TaskReadMplsTe = types.BoolNull()
+				item.TaskReadMplsTe = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.mpls-ldp"); cValue.Exists() {
 				item.TaskReadMplsLdp = types.BoolValue(true)
 			} else {
-				item.TaskReadMplsLdp = types.BoolNull()
+				item.TaskReadMplsLdp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.mpls-static"); cValue.Exists() {
 				item.TaskReadMplsStatic = types.BoolValue(true)
 			} else {
-				item.TaskReadMplsStatic = types.BoolNull()
+				item.TaskReadMplsStatic = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.ouni"); cValue.Exists() {
 				item.TaskReadOuni = types.BoolValue(true)
 			} else {
-				item.TaskReadOuni = types.BoolNull()
+				item.TaskReadOuni = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.fabric"); cValue.Exists() {
 				item.TaskReadFabric = types.BoolValue(true)
 			} else {
-				item.TaskReadFabric = types.BoolNull()
+				item.TaskReadFabric = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.bundle"); cValue.Exists() {
 				item.TaskReadBundle = types.BoolValue(true)
 			} else {
-				item.TaskReadBundle = types.BoolNull()
+				item.TaskReadBundle = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.network"); cValue.Exists() {
 				item.TaskReadNetwork = types.BoolValue(true)
 			} else {
-				item.TaskReadNetwork = types.BoolNull()
+				item.TaskReadNetwork = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.transport"); cValue.Exists() {
 				item.TaskReadTransport = types.BoolValue(true)
 			} else {
-				item.TaskReadTransport = types.BoolNull()
+				item.TaskReadTransport = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.ppp"); cValue.Exists() {
 				item.TaskReadPpp = types.BoolValue(true)
 			} else {
-				item.TaskReadPpp = types.BoolNull()
+				item.TaskReadPpp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.hdlc"); cValue.Exists() {
 				item.TaskReadHdlc = types.BoolValue(true)
 			} else {
-				item.TaskReadHdlc = types.BoolNull()
+				item.TaskReadHdlc = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.pos-dpt"); cValue.Exists() {
 				item.TaskReadPosDpt = types.BoolValue(true)
 			} else {
-				item.TaskReadPosDpt = types.BoolNull()
+				item.TaskReadPosDpt = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.sonet-sdh"); cValue.Exists() {
 				item.TaskReadSonetSdh = types.BoolValue(true)
 			} else {
-				item.TaskReadSonetSdh = types.BoolNull()
+				item.TaskReadSonetSdh = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.dwdm"); cValue.Exists() {
 				item.TaskReadDwdm = types.BoolValue(true)
 			} else {
-				item.TaskReadDwdm = types.BoolNull()
+				item.TaskReadDwdm = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.tunnel"); cValue.Exists() {
 				item.TaskReadTunnel = types.BoolValue(true)
 			} else {
-				item.TaskReadTunnel = types.BoolNull()
+				item.TaskReadTunnel = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.vlan"); cValue.Exists() {
 				item.TaskReadVlan = types.BoolValue(true)
 			} else {
-				item.TaskReadVlan = types.BoolNull()
+				item.TaskReadVlan = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.qos"); cValue.Exists() {
 				item.TaskReadQos = types.BoolValue(true)
 			} else {
-				item.TaskReadQos = types.BoolNull()
+				item.TaskReadQos = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.acl"); cValue.Exists() {
 				item.TaskReadAcl = types.BoolValue(true)
 			} else {
-				item.TaskReadAcl = types.BoolNull()
+				item.TaskReadAcl = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.aaa"); cValue.Exists() {
 				item.TaskReadAaa = types.BoolValue(true)
 			} else {
-				item.TaskReadAaa = types.BoolNull()
+				item.TaskReadAaa = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.crypto"); cValue.Exists() {
 				item.TaskReadCrypto = types.BoolValue(true)
 			} else {
-				item.TaskReadCrypto = types.BoolNull()
+				item.TaskReadCrypto = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.snmp"); cValue.Exists() {
 				item.TaskReadSnmp = types.BoolValue(true)
 			} else {
-				item.TaskReadSnmp = types.BoolNull()
+				item.TaskReadSnmp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.config-mgmt"); cValue.Exists() {
 				item.TaskReadConfigMgmt = types.BoolValue(true)
 			} else {
-				item.TaskReadConfigMgmt = types.BoolNull()
+				item.TaskReadConfigMgmt = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.config-services"); cValue.Exists() {
 				item.TaskReadConfigServices = types.BoolValue(true)
 			} else {
-				item.TaskReadConfigServices = types.BoolNull()
+				item.TaskReadConfigServices = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.host-services"); cValue.Exists() {
 				item.TaskReadHostServices = types.BoolValue(true)
 			} else {
-				item.TaskReadHostServices = types.BoolNull()
+				item.TaskReadHostServices = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.boot"); cValue.Exists() {
 				item.TaskReadBoot = types.BoolValue(true)
 			} else {
-				item.TaskReadBoot = types.BoolNull()
+				item.TaskReadBoot = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.fault-mgr"); cValue.Exists() {
 				item.TaskReadFaultMgr = types.BoolValue(true)
 			} else {
-				item.TaskReadFaultMgr = types.BoolNull()
+				item.TaskReadFaultMgr = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.filesystem"); cValue.Exists() {
 				item.TaskReadFilesystem = types.BoolValue(true)
 			} else {
-				item.TaskReadFilesystem = types.BoolNull()
+				item.TaskReadFilesystem = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.interface"); cValue.Exists() {
 				item.TaskReadInterface = types.BoolValue(true)
 			} else {
-				item.TaskReadInterface = types.BoolNull()
+				item.TaskReadInterface = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.ip-services"); cValue.Exists() {
 				item.TaskReadIpServices = types.BoolValue(true)
 			} else {
-				item.TaskReadIpServices = types.BoolNull()
+				item.TaskReadIpServices = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.pkg-mgmt"); cValue.Exists() {
 				item.TaskReadPkgMgmt = types.BoolValue(true)
 			} else {
-				item.TaskReadPkgMgmt = types.BoolNull()
+				item.TaskReadPkgMgmt = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.system"); cValue.Exists() {
 				item.TaskReadSystem = types.BoolValue(true)
 			} else {
-				item.TaskReadSystem = types.BoolNull()
+				item.TaskReadSystem = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.tty-access"); cValue.Exists() {
 				item.TaskReadTtyAccess = types.BoolValue(true)
 			} else {
-				item.TaskReadTtyAccess = types.BoolNull()
+				item.TaskReadTtyAccess = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.basic-services"); cValue.Exists() {
 				item.TaskReadBasicServices = types.BoolValue(true)
 			} else {
-				item.TaskReadBasicServices = types.BoolNull()
+				item.TaskReadBasicServices = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.cdp"); cValue.Exists() {
 				item.TaskReadCdp = types.BoolValue(true)
 			} else {
-				item.TaskReadCdp = types.BoolNull()
+				item.TaskReadCdp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.diag"); cValue.Exists() {
 				item.TaskReadDiag = types.BoolValue(true)
 			} else {
-				item.TaskReadDiag = types.BoolNull()
+				item.TaskReadDiag = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.ext-access"); cValue.Exists() {
 				item.TaskReadExtAccess = types.BoolValue(true)
 			} else {
-				item.TaskReadExtAccess = types.BoolNull()
+				item.TaskReadExtAccess = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.bcdl"); cValue.Exists() {
 				item.TaskReadBcdl = types.BoolValue(true)
 			} else {
-				item.TaskReadBcdl = types.BoolNull()
+				item.TaskReadBcdl = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.sysmgr"); cValue.Exists() {
 				item.TaskReadSysmgr = types.BoolValue(true)
 			} else {
-				item.TaskReadSysmgr = types.BoolNull()
+				item.TaskReadSysmgr = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.logging"); cValue.Exists() {
 				item.TaskReadLogging = types.BoolValue(true)
 			} else {
-				item.TaskReadLogging = types.BoolNull()
+				item.TaskReadLogging = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.netflow"); cValue.Exists() {
 				item.TaskReadNetflow = types.BoolValue(true)
 			} else {
-				item.TaskReadNetflow = types.BoolNull()
+				item.TaskReadNetflow = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.drivers"); cValue.Exists() {
 				item.TaskReadDrivers = types.BoolValue(true)
 			} else {
-				item.TaskReadDrivers = types.BoolNull()
+				item.TaskReadDrivers = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.fr"); cValue.Exists() {
 				item.TaskReadFr = types.BoolValue(true)
 			} else {
-				item.TaskReadFr = types.BoolNull()
+				item.TaskReadFr = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.monitor"); cValue.Exists() {
 				item.TaskReadMonitor = types.BoolValue(true)
 			} else {
-				item.TaskReadMonitor = types.BoolNull()
+				item.TaskReadMonitor = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.inventory"); cValue.Exists() {
 				item.TaskReadInventory = types.BoolValue(true)
 			} else {
-				item.TaskReadInventory = types.BoolNull()
+				item.TaskReadInventory = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.ipv6"); cValue.Exists() {
 				item.TaskReadIpv6 = types.BoolValue(true)
 			} else {
-				item.TaskReadIpv6 = types.BoolNull()
+				item.TaskReadIpv6 = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.admin"); cValue.Exists() {
 				item.TaskReadAdmin = types.BoolValue(true)
 			} else {
-				item.TaskReadAdmin = types.BoolNull()
+				item.TaskReadAdmin = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.atm"); cValue.Exists() {
 				item.TaskReadAtm = types.BoolValue(true)
 			} else {
-				item.TaskReadAtm = types.BoolNull()
+				item.TaskReadAtm = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.bfd"); cValue.Exists() {
 				item.TaskReadBfd = types.BoolValue(true)
 			} else {
-				item.TaskReadBfd = types.BoolNull()
+				item.TaskReadBfd = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.rip"); cValue.Exists() {
 				item.TaskReadRip = types.BoolValue(true)
 			} else {
-				item.TaskReadRip = types.BoolNull()
+				item.TaskReadRip = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.eigrp"); cValue.Exists() {
 				item.TaskReadEigrp = types.BoolValue(true)
 			} else {
-				item.TaskReadEigrp = types.BoolNull()
+				item.TaskReadEigrp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.sbc"); cValue.Exists() {
 				item.TaskReadSbc = types.BoolValue(true)
 			} else {
-				item.TaskReadSbc = types.BoolNull()
+				item.TaskReadSbc = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.firewall"); cValue.Exists() {
 				item.TaskReadFirewall = types.BoolValue(true)
 			} else {
-				item.TaskReadFirewall = types.BoolNull()
+				item.TaskReadFirewall = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.l2vpn"); cValue.Exists() {
 				item.TaskReadL2vpn = types.BoolValue(true)
 			} else {
-				item.TaskReadL2vpn = types.BoolNull()
+				item.TaskReadL2vpn = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.ethernet-services"); cValue.Exists() {
 				item.TaskReadEthernetServices = types.BoolValue(true)
 			} else {
-				item.TaskReadEthernetServices = types.BoolNull()
+				item.TaskReadEthernetServices = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.eem"); cValue.Exists() {
 				item.TaskReadEem = types.BoolValue(true)
 			} else {
-				item.TaskReadEem = types.BoolNull()
+				item.TaskReadEem = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.li"); cValue.Exists() {
 				item.TaskReadLi = types.BoolValue(true)
 			} else {
-				item.TaskReadLi = types.BoolNull()
+				item.TaskReadLi = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.ancp"); cValue.Exists() {
 				item.TaskReadAncp = types.BoolValue(true)
 			} else {
-				item.TaskReadAncp = types.BoolNull()
+				item.TaskReadAncp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.cgn"); cValue.Exists() {
 				item.TaskReadCgn = types.BoolValue(true)
 			} else {
-				item.TaskReadCgn = types.BoolNull()
+				item.TaskReadCgn = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.call-home"); cValue.Exists() {
 				item.TaskReadCallHome = types.BoolValue(true)
 			} else {
-				item.TaskReadCallHome = types.BoolNull()
+				item.TaskReadCallHome = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.rcmd"); cValue.Exists() {
 				item.TaskReadRcmd = types.BoolValue(true)
 			} else {
-				item.TaskReadRcmd = types.BoolNull()
+				item.TaskReadRcmd = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.vpdn"); cValue.Exists() {
 				item.TaskReadVpdn = types.BoolValue(true)
 			} else {
-				item.TaskReadVpdn = types.BoolNull()
+				item.TaskReadVpdn = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.nps"); cValue.Exists() {
 				item.TaskReadNps = types.BoolValue(true)
 			} else {
-				item.TaskReadNps = types.BoolNull()
+				item.TaskReadNps = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.lisp"); cValue.Exists() {
 				item.TaskReadLisp = types.BoolValue(true)
 			} else {
-				item.TaskReadLisp = types.BoolNull()
+				item.TaskReadLisp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.pbr"); cValue.Exists() {
 				item.TaskReadPbr = types.BoolValue(true)
 			} else {
-				item.TaskReadPbr = types.BoolNull()
+				item.TaskReadPbr = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.otn"); cValue.Exists() {
 				item.TaskReadOtn = types.BoolValue(true)
 			} else {
-				item.TaskReadOtn = types.BoolNull()
+				item.TaskReadOtn = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.nacm"); cValue.Exists() {
 				item.TaskReadNacm = types.BoolValue(true)
 			} else {
-				item.TaskReadNacm = types.BoolNull()
+				item.TaskReadNacm = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.plat-mgr"); cValue.Exists() {
 				item.TaskReadPlatMgr = types.BoolValue(true)
 			} else {
-				item.TaskReadPlatMgr = types.BoolNull()
+				item.TaskReadPlatMgr = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.cpri"); cValue.Exists() {
 				item.TaskReadCpri = types.BoolValue(true)
 			} else {
-				item.TaskReadCpri = types.BoolNull()
+				item.TaskReadCpri = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.lldp"); cValue.Exists() {
 				item.TaskReadLldp = types.BoolValue(true)
 			} else {
-				item.TaskReadLldp = types.BoolNull()
+				item.TaskReadLldp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.l2rib"); cValue.Exists() {
 				item.TaskReadL2rib = types.BoolValue(true)
 			} else {
-				item.TaskReadL2rib = types.BoolNull()
+				item.TaskReadL2rib = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.dossier"); cValue.Exists() {
 				item.TaskReadDossier = types.BoolValue(true)
 			} else {
-				item.TaskReadDossier = types.BoolNull()
+				item.TaskReadDossier = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.fti"); cValue.Exists() {
 				item.TaskReadFti = types.BoolValue(true)
 			} else {
-				item.TaskReadFti = types.BoolNull()
+				item.TaskReadFti = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.read.fc"); cValue.Exists() {
 				item.TaskReadFc = types.BoolValue(true)
 			} else {
-				item.TaskReadFc = types.BoolNull()
+				item.TaskReadFc = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.bgp"); cValue.Exists() {
 				item.TaskWriteBgp = types.BoolValue(true)
 			} else {
-				item.TaskWriteBgp = types.BoolNull()
+				item.TaskWriteBgp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.ospf"); cValue.Exists() {
 				item.TaskWriteOspf = types.BoolValue(true)
 			} else {
-				item.TaskWriteOspf = types.BoolNull()
+				item.TaskWriteOspf = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.hsrp"); cValue.Exists() {
 				item.TaskWriteHsrp = types.BoolValue(true)
 			} else {
-				item.TaskWriteHsrp = types.BoolNull()
+				item.TaskWriteHsrp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.isis"); cValue.Exists() {
 				item.TaskWriteIsis = types.BoolValue(true)
 			} else {
-				item.TaskWriteIsis = types.BoolNull()
+				item.TaskWriteIsis = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.route-map"); cValue.Exists() {
 				item.TaskWriteRouteMap = types.BoolValue(true)
 			} else {
-				item.TaskWriteRouteMap = types.BoolNull()
+				item.TaskWriteRouteMap = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.route-policy"); cValue.Exists() {
 				item.TaskWriteRoutePolicy = types.BoolValue(true)
 			} else {
-				item.TaskWriteRoutePolicy = types.BoolNull()
+				item.TaskWriteRoutePolicy = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.static"); cValue.Exists() {
 				item.TaskWriteStatic = types.BoolValue(true)
 			} else {
-				item.TaskWriteStatic = types.BoolNull()
+				item.TaskWriteStatic = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.vrrp"); cValue.Exists() {
 				item.TaskWriteVrrp = types.BoolValue(true)
 			} else {
-				item.TaskWriteVrrp = types.BoolNull()
+				item.TaskWriteVrrp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.cef"); cValue.Exists() {
 				item.TaskWriteCef = types.BoolValue(true)
 			} else {
-				item.TaskWriteCef = types.BoolNull()
+				item.TaskWriteCef = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.lpts"); cValue.Exists() {
 				item.TaskWriteLpts = types.BoolValue(true)
 			} else {
-				item.TaskWriteLpts = types.BoolNull()
+				item.TaskWriteLpts = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.ipv4"); cValue.Exists() {
 				item.TaskWriteIpv4 = types.BoolValue(true)
 			} else {
-				item.TaskWriteIpv4 = types.BoolNull()
+				item.TaskWriteIpv4 = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.rib"); cValue.Exists() {
 				item.TaskWriteRib = types.BoolValue(true)
 			} else {
-				item.TaskWriteRib = types.BoolNull()
+				item.TaskWriteRib = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.multicast"); cValue.Exists() {
 				item.TaskWriteMulticast = types.BoolValue(true)
 			} else {
-				item.TaskWriteMulticast = types.BoolNull()
+				item.TaskWriteMulticast = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.mpls-te"); cValue.Exists() {
 				item.TaskWriteMplsTe = types.BoolValue(true)
 			} else {
-				item.TaskWriteMplsTe = types.BoolNull()
+				item.TaskWriteMplsTe = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.mpls-ldp"); cValue.Exists() {
 				item.TaskWriteMplsLdp = types.BoolValue(true)
 			} else {
-				item.TaskWriteMplsLdp = types.BoolNull()
+				item.TaskWriteMplsLdp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.mpls-static"); cValue.Exists() {
 				item.TaskWriteMplsStatic = types.BoolValue(true)
 			} else {
-				item.TaskWriteMplsStatic = types.BoolNull()
+				item.TaskWriteMplsStatic = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.ouni"); cValue.Exists() {
 				item.TaskWriteOuni = types.BoolValue(true)
 			} else {
-				item.TaskWriteOuni = types.BoolNull()
+				item.TaskWriteOuni = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.fabric"); cValue.Exists() {
 				item.TaskWriteFabric = types.BoolValue(true)
 			} else {
-				item.TaskWriteFabric = types.BoolNull()
+				item.TaskWriteFabric = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.bundle"); cValue.Exists() {
 				item.TaskWriteBundle = types.BoolValue(true)
 			} else {
-				item.TaskWriteBundle = types.BoolNull()
+				item.TaskWriteBundle = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.network"); cValue.Exists() {
 				item.TaskWriteNetwork = types.BoolValue(true)
 			} else {
-				item.TaskWriteNetwork = types.BoolNull()
+				item.TaskWriteNetwork = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.transport"); cValue.Exists() {
 				item.TaskWriteTransport = types.BoolValue(true)
 			} else {
-				item.TaskWriteTransport = types.BoolNull()
+				item.TaskWriteTransport = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.ppp"); cValue.Exists() {
 				item.TaskWritePpp = types.BoolValue(true)
 			} else {
-				item.TaskWritePpp = types.BoolNull()
+				item.TaskWritePpp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.hdlc"); cValue.Exists() {
 				item.TaskWriteHdlc = types.BoolValue(true)
 			} else {
-				item.TaskWriteHdlc = types.BoolNull()
+				item.TaskWriteHdlc = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.pos-dpt"); cValue.Exists() {
 				item.TaskWritePosDpt = types.BoolValue(true)
 			} else {
-				item.TaskWritePosDpt = types.BoolNull()
+				item.TaskWritePosDpt = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.sonet-sdh"); cValue.Exists() {
 				item.TaskWriteSonetSdh = types.BoolValue(true)
 			} else {
-				item.TaskWriteSonetSdh = types.BoolNull()
+				item.TaskWriteSonetSdh = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.dwdm"); cValue.Exists() {
 				item.TaskWriteDwdm = types.BoolValue(true)
 			} else {
-				item.TaskWriteDwdm = types.BoolNull()
+				item.TaskWriteDwdm = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.tunnel"); cValue.Exists() {
 				item.TaskWriteTunnel = types.BoolValue(true)
 			} else {
-				item.TaskWriteTunnel = types.BoolNull()
+				item.TaskWriteTunnel = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.vlan"); cValue.Exists() {
 				item.TaskWriteVlan = types.BoolValue(true)
 			} else {
-				item.TaskWriteVlan = types.BoolNull()
+				item.TaskWriteVlan = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.qos"); cValue.Exists() {
 				item.TaskWriteQos = types.BoolValue(true)
 			} else {
-				item.TaskWriteQos = types.BoolNull()
+				item.TaskWriteQos = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.acl"); cValue.Exists() {
 				item.TaskWriteAcl = types.BoolValue(true)
 			} else {
-				item.TaskWriteAcl = types.BoolNull()
+				item.TaskWriteAcl = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.aaa"); cValue.Exists() {
 				item.TaskWriteAaa = types.BoolValue(true)
 			} else {
-				item.TaskWriteAaa = types.BoolNull()
+				item.TaskWriteAaa = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.crypto"); cValue.Exists() {
 				item.TaskWriteCrypto = types.BoolValue(true)
 			} else {
-				item.TaskWriteCrypto = types.BoolNull()
+				item.TaskWriteCrypto = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.snmp"); cValue.Exists() {
 				item.TaskWriteSnmp = types.BoolValue(true)
 			} else {
-				item.TaskWriteSnmp = types.BoolNull()
+				item.TaskWriteSnmp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.config-mgmt"); cValue.Exists() {
 				item.TaskWriteConfigMgmt = types.BoolValue(true)
 			} else {
-				item.TaskWriteConfigMgmt = types.BoolNull()
+				item.TaskWriteConfigMgmt = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.config-services"); cValue.Exists() {
 				item.TaskWriteConfigServices = types.BoolValue(true)
 			} else {
-				item.TaskWriteConfigServices = types.BoolNull()
+				item.TaskWriteConfigServices = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.host-services"); cValue.Exists() {
 				item.TaskWriteHostServices = types.BoolValue(true)
 			} else {
-				item.TaskWriteHostServices = types.BoolNull()
+				item.TaskWriteHostServices = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.boot"); cValue.Exists() {
 				item.TaskWriteBoot = types.BoolValue(true)
 			} else {
-				item.TaskWriteBoot = types.BoolNull()
+				item.TaskWriteBoot = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.fault-mgr"); cValue.Exists() {
 				item.TaskWriteFaultMgr = types.BoolValue(true)
 			} else {
-				item.TaskWriteFaultMgr = types.BoolNull()
+				item.TaskWriteFaultMgr = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.filesystem"); cValue.Exists() {
 				item.TaskWriteFilesystem = types.BoolValue(true)
 			} else {
-				item.TaskWriteFilesystem = types.BoolNull()
+				item.TaskWriteFilesystem = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.interface"); cValue.Exists() {
 				item.TaskWriteInterface = types.BoolValue(true)
 			} else {
-				item.TaskWriteInterface = types.BoolNull()
+				item.TaskWriteInterface = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.ip-services"); cValue.Exists() {
 				item.TaskWriteIpServices = types.BoolValue(true)
 			} else {
-				item.TaskWriteIpServices = types.BoolNull()
+				item.TaskWriteIpServices = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.pkg-mgmt"); cValue.Exists() {
 				item.TaskWritePkgMgmt = types.BoolValue(true)
 			} else {
-				item.TaskWritePkgMgmt = types.BoolNull()
+				item.TaskWritePkgMgmt = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.system"); cValue.Exists() {
 				item.TaskWriteSystem = types.BoolValue(true)
 			} else {
-				item.TaskWriteSystem = types.BoolNull()
+				item.TaskWriteSystem = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.tty-access"); cValue.Exists() {
 				item.TaskWriteTtyAccess = types.BoolValue(true)
 			} else {
-				item.TaskWriteTtyAccess = types.BoolNull()
+				item.TaskWriteTtyAccess = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.basic-services"); cValue.Exists() {
 				item.TaskWriteBasicServices = types.BoolValue(true)
 			} else {
-				item.TaskWriteBasicServices = types.BoolNull()
+				item.TaskWriteBasicServices = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.cdp"); cValue.Exists() {
 				item.TaskWriteCdp = types.BoolValue(true)
 			} else {
-				item.TaskWriteCdp = types.BoolNull()
+				item.TaskWriteCdp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.diag"); cValue.Exists() {
 				item.TaskWriteDiag = types.BoolValue(true)
 			} else {
-				item.TaskWriteDiag = types.BoolNull()
+				item.TaskWriteDiag = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.ext-access"); cValue.Exists() {
 				item.TaskWriteExtAccess = types.BoolValue(true)
 			} else {
-				item.TaskWriteExtAccess = types.BoolNull()
+				item.TaskWriteExtAccess = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.bcdl"); cValue.Exists() {
 				item.TaskWriteBcdl = types.BoolValue(true)
 			} else {
-				item.TaskWriteBcdl = types.BoolNull()
+				item.TaskWriteBcdl = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.sysmgr"); cValue.Exists() {
 				item.TaskWriteSysmgr = types.BoolValue(true)
 			} else {
-				item.TaskWriteSysmgr = types.BoolNull()
+				item.TaskWriteSysmgr = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.logging"); cValue.Exists() {
 				item.TaskWriteLogging = types.BoolValue(true)
 			} else {
-				item.TaskWriteLogging = types.BoolNull()
+				item.TaskWriteLogging = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.netflow"); cValue.Exists() {
 				item.TaskWriteNetflow = types.BoolValue(true)
 			} else {
-				item.TaskWriteNetflow = types.BoolNull()
+				item.TaskWriteNetflow = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.drivers"); cValue.Exists() {
 				item.TaskWriteDrivers = types.BoolValue(true)
 			} else {
-				item.TaskWriteDrivers = types.BoolNull()
+				item.TaskWriteDrivers = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.fr"); cValue.Exists() {
 				item.TaskWriteFr = types.BoolValue(true)
 			} else {
-				item.TaskWriteFr = types.BoolNull()
+				item.TaskWriteFr = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.monitor"); cValue.Exists() {
 				item.TaskWriteMonitor = types.BoolValue(true)
 			} else {
-				item.TaskWriteMonitor = types.BoolNull()
+				item.TaskWriteMonitor = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.inventory"); cValue.Exists() {
 				item.TaskWriteInventory = types.BoolValue(true)
 			} else {
-				item.TaskWriteInventory = types.BoolNull()
+				item.TaskWriteInventory = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.ipv6"); cValue.Exists() {
 				item.TaskWriteIpv6 = types.BoolValue(true)
 			} else {
-				item.TaskWriteIpv6 = types.BoolNull()
+				item.TaskWriteIpv6 = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.admin"); cValue.Exists() {
 				item.TaskWriteAdmin = types.BoolValue(true)
 			} else {
-				item.TaskWriteAdmin = types.BoolNull()
+				item.TaskWriteAdmin = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.atm"); cValue.Exists() {
 				item.TaskWriteAtm = types.BoolValue(true)
 			} else {
-				item.TaskWriteAtm = types.BoolNull()
+				item.TaskWriteAtm = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.bfd"); cValue.Exists() {
 				item.TaskWriteBfd = types.BoolValue(true)
 			} else {
-				item.TaskWriteBfd = types.BoolNull()
+				item.TaskWriteBfd = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.rip"); cValue.Exists() {
 				item.TaskWriteRip = types.BoolValue(true)
 			} else {
-				item.TaskWriteRip = types.BoolNull()
+				item.TaskWriteRip = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.eigrp"); cValue.Exists() {
 				item.TaskWriteEigrp = types.BoolValue(true)
 			} else {
-				item.TaskWriteEigrp = types.BoolNull()
+				item.TaskWriteEigrp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.sbc"); cValue.Exists() {
 				item.TaskWriteSbc = types.BoolValue(true)
 			} else {
-				item.TaskWriteSbc = types.BoolNull()
+				item.TaskWriteSbc = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.firewall"); cValue.Exists() {
 				item.TaskWriteFirewall = types.BoolValue(true)
 			} else {
-				item.TaskWriteFirewall = types.BoolNull()
+				item.TaskWriteFirewall = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.l2vpn"); cValue.Exists() {
 				item.TaskWriteL2vpn = types.BoolValue(true)
 			} else {
-				item.TaskWriteL2vpn = types.BoolNull()
+				item.TaskWriteL2vpn = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.ethernet-services"); cValue.Exists() {
 				item.TaskWriteEthernetServices = types.BoolValue(true)
 			} else {
-				item.TaskWriteEthernetServices = types.BoolNull()
+				item.TaskWriteEthernetServices = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.eem"); cValue.Exists() {
 				item.TaskWriteEem = types.BoolValue(true)
 			} else {
-				item.TaskWriteEem = types.BoolNull()
+				item.TaskWriteEem = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.li"); cValue.Exists() {
 				item.TaskWriteLi = types.BoolValue(true)
 			} else {
-				item.TaskWriteLi = types.BoolNull()
+				item.TaskWriteLi = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.ancp"); cValue.Exists() {
 				item.TaskWriteAncp = types.BoolValue(true)
 			} else {
-				item.TaskWriteAncp = types.BoolNull()
+				item.TaskWriteAncp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.cgn"); cValue.Exists() {
 				item.TaskWriteCgn = types.BoolValue(true)
 			} else {
-				item.TaskWriteCgn = types.BoolNull()
+				item.TaskWriteCgn = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.call-home"); cValue.Exists() {
 				item.TaskWriteCallHome = types.BoolValue(true)
 			} else {
-				item.TaskWriteCallHome = types.BoolNull()
+				item.TaskWriteCallHome = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.rcmd"); cValue.Exists() {
 				item.TaskWriteRcmd = types.BoolValue(true)
 			} else {
-				item.TaskWriteRcmd = types.BoolNull()
+				item.TaskWriteRcmd = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.vpdn"); cValue.Exists() {
 				item.TaskWriteVpdn = types.BoolValue(true)
 			} else {
-				item.TaskWriteVpdn = types.BoolNull()
+				item.TaskWriteVpdn = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.nps"); cValue.Exists() {
 				item.TaskWriteNps = types.BoolValue(true)
 			} else {
-				item.TaskWriteNps = types.BoolNull()
+				item.TaskWriteNps = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.lisp"); cValue.Exists() {
 				item.TaskWriteLisp = types.BoolValue(true)
 			} else {
-				item.TaskWriteLisp = types.BoolNull()
+				item.TaskWriteLisp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.pbr"); cValue.Exists() {
 				item.TaskWritePbr = types.BoolValue(true)
 			} else {
-				item.TaskWritePbr = types.BoolNull()
+				item.TaskWritePbr = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.otn"); cValue.Exists() {
 				item.TaskWriteOtn = types.BoolValue(true)
 			} else {
-				item.TaskWriteOtn = types.BoolNull()
+				item.TaskWriteOtn = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.nacm"); cValue.Exists() {
 				item.TaskWriteNacm = types.BoolValue(true)
 			} else {
-				item.TaskWriteNacm = types.BoolNull()
+				item.TaskWriteNacm = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.plat-mgr"); cValue.Exists() {
 				item.TaskWritePlatMgr = types.BoolValue(true)
 			} else {
-				item.TaskWritePlatMgr = types.BoolNull()
+				item.TaskWritePlatMgr = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.cpri"); cValue.Exists() {
 				item.TaskWriteCpri = types.BoolValue(true)
 			} else {
-				item.TaskWriteCpri = types.BoolNull()
+				item.TaskWriteCpri = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.lldp"); cValue.Exists() {
 				item.TaskWriteLldp = types.BoolValue(true)
 			} else {
-				item.TaskWriteLldp = types.BoolNull()
+				item.TaskWriteLldp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.l2rib"); cValue.Exists() {
 				item.TaskWriteL2rib = types.BoolValue(true)
 			} else {
-				item.TaskWriteL2rib = types.BoolNull()
+				item.TaskWriteL2rib = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.dossier"); cValue.Exists() {
 				item.TaskWriteDossier = types.BoolValue(true)
 			} else {
-				item.TaskWriteDossier = types.BoolNull()
+				item.TaskWriteDossier = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.fti"); cValue.Exists() {
 				item.TaskWriteFti = types.BoolValue(true)
 			} else {
-				item.TaskWriteFti = types.BoolNull()
+				item.TaskWriteFti = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.write.fc"); cValue.Exists() {
 				item.TaskWriteFc = types.BoolValue(true)
 			} else {
-				item.TaskWriteFc = types.BoolNull()
+				item.TaskWriteFc = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.bgp"); cValue.Exists() {
 				item.TaskExecuteBgp = types.BoolValue(true)
 			} else {
-				item.TaskExecuteBgp = types.BoolNull()
+				item.TaskExecuteBgp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.ospf"); cValue.Exists() {
 				item.TaskExecuteOspf = types.BoolValue(true)
 			} else {
-				item.TaskExecuteOspf = types.BoolNull()
+				item.TaskExecuteOspf = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.hsrp"); cValue.Exists() {
 				item.TaskExecuteHsrp = types.BoolValue(true)
 			} else {
-				item.TaskExecuteHsrp = types.BoolNull()
+				item.TaskExecuteHsrp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.isis"); cValue.Exists() {
 				item.TaskExecuteIsis = types.BoolValue(true)
 			} else {
-				item.TaskExecuteIsis = types.BoolNull()
+				item.TaskExecuteIsis = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.route-map"); cValue.Exists() {
 				item.TaskExecuteRouteMap = types.BoolValue(true)
 			} else {
-				item.TaskExecuteRouteMap = types.BoolNull()
+				item.TaskExecuteRouteMap = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.route-policy"); cValue.Exists() {
 				item.TaskExecuteRoutePolicy = types.BoolValue(true)
 			} else {
-				item.TaskExecuteRoutePolicy = types.BoolNull()
+				item.TaskExecuteRoutePolicy = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.static"); cValue.Exists() {
 				item.TaskExecuteStatic = types.BoolValue(true)
 			} else {
-				item.TaskExecuteStatic = types.BoolNull()
+				item.TaskExecuteStatic = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.vrrp"); cValue.Exists() {
 				item.TaskExecuteVrrp = types.BoolValue(true)
 			} else {
-				item.TaskExecuteVrrp = types.BoolNull()
+				item.TaskExecuteVrrp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.cef"); cValue.Exists() {
 				item.TaskExecuteCef = types.BoolValue(true)
 			} else {
-				item.TaskExecuteCef = types.BoolNull()
+				item.TaskExecuteCef = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.lpts"); cValue.Exists() {
 				item.TaskExecuteLpts = types.BoolValue(true)
 			} else {
-				item.TaskExecuteLpts = types.BoolNull()
+				item.TaskExecuteLpts = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.ipv4"); cValue.Exists() {
 				item.TaskExecuteIpv4 = types.BoolValue(true)
 			} else {
-				item.TaskExecuteIpv4 = types.BoolNull()
+				item.TaskExecuteIpv4 = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.rib"); cValue.Exists() {
 				item.TaskExecuteRib = types.BoolValue(true)
 			} else {
-				item.TaskExecuteRib = types.BoolNull()
+				item.TaskExecuteRib = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.multicast"); cValue.Exists() {
 				item.TaskExecuteMulticast = types.BoolValue(true)
 			} else {
-				item.TaskExecuteMulticast = types.BoolNull()
+				item.TaskExecuteMulticast = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.mpls-te"); cValue.Exists() {
 				item.TaskExecuteMplsTe = types.BoolValue(true)
 			} else {
-				item.TaskExecuteMplsTe = types.BoolNull()
+				item.TaskExecuteMplsTe = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.mpls-ldp"); cValue.Exists() {
 				item.TaskExecuteMplsLdp = types.BoolValue(true)
 			} else {
-				item.TaskExecuteMplsLdp = types.BoolNull()
+				item.TaskExecuteMplsLdp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.mpls-static"); cValue.Exists() {
 				item.TaskExecuteMplsStatic = types.BoolValue(true)
 			} else {
-				item.TaskExecuteMplsStatic = types.BoolNull()
+				item.TaskExecuteMplsStatic = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.ouni"); cValue.Exists() {
 				item.TaskExecuteOuni = types.BoolValue(true)
 			} else {
-				item.TaskExecuteOuni = types.BoolNull()
+				item.TaskExecuteOuni = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.fabric"); cValue.Exists() {
 				item.TaskExecuteFabric = types.BoolValue(true)
 			} else {
-				item.TaskExecuteFabric = types.BoolNull()
+				item.TaskExecuteFabric = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.bundle"); cValue.Exists() {
 				item.TaskExecuteBundle = types.BoolValue(true)
 			} else {
-				item.TaskExecuteBundle = types.BoolNull()
+				item.TaskExecuteBundle = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.network"); cValue.Exists() {
 				item.TaskExecuteNetwork = types.BoolValue(true)
 			} else {
-				item.TaskExecuteNetwork = types.BoolNull()
+				item.TaskExecuteNetwork = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.transport"); cValue.Exists() {
 				item.TaskExecuteTransport = types.BoolValue(true)
 			} else {
-				item.TaskExecuteTransport = types.BoolNull()
+				item.TaskExecuteTransport = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.ppp"); cValue.Exists() {
 				item.TaskExecutePpp = types.BoolValue(true)
 			} else {
-				item.TaskExecutePpp = types.BoolNull()
+				item.TaskExecutePpp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.hdlc"); cValue.Exists() {
 				item.TaskExecuteHdlc = types.BoolValue(true)
 			} else {
-				item.TaskExecuteHdlc = types.BoolNull()
+				item.TaskExecuteHdlc = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.pos-dpt"); cValue.Exists() {
 				item.TaskExecutePosDpt = types.BoolValue(true)
 			} else {
-				item.TaskExecutePosDpt = types.BoolNull()
+				item.TaskExecutePosDpt = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.sonet-sdh"); cValue.Exists() {
 				item.TaskExecuteSonetSdh = types.BoolValue(true)
 			} else {
-				item.TaskExecuteSonetSdh = types.BoolNull()
+				item.TaskExecuteSonetSdh = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.dwdm"); cValue.Exists() {
 				item.TaskExecuteDwdm = types.BoolValue(true)
 			} else {
-				item.TaskExecuteDwdm = types.BoolNull()
+				item.TaskExecuteDwdm = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.tunnel"); cValue.Exists() {
 				item.TaskExecuteTunnel = types.BoolValue(true)
 			} else {
-				item.TaskExecuteTunnel = types.BoolNull()
+				item.TaskExecuteTunnel = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.vlan"); cValue.Exists() {
 				item.TaskExecuteVlan = types.BoolValue(true)
 			} else {
-				item.TaskExecuteVlan = types.BoolNull()
+				item.TaskExecuteVlan = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.qos"); cValue.Exists() {
 				item.TaskExecuteQos = types.BoolValue(true)
 			} else {
-				item.TaskExecuteQos = types.BoolNull()
+				item.TaskExecuteQos = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.acl"); cValue.Exists() {
 				item.TaskExecuteAcl = types.BoolValue(true)
 			} else {
-				item.TaskExecuteAcl = types.BoolNull()
+				item.TaskExecuteAcl = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.aaa"); cValue.Exists() {
 				item.TaskExecuteAaa = types.BoolValue(true)
 			} else {
-				item.TaskExecuteAaa = types.BoolNull()
+				item.TaskExecuteAaa = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.crypto"); cValue.Exists() {
 				item.TaskExecuteCrypto = types.BoolValue(true)
 			} else {
-				item.TaskExecuteCrypto = types.BoolNull()
+				item.TaskExecuteCrypto = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.snmp"); cValue.Exists() {
 				item.TaskExecuteSnmp = types.BoolValue(true)
 			} else {
-				item.TaskExecuteSnmp = types.BoolNull()
+				item.TaskExecuteSnmp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.config-mgmt"); cValue.Exists() {
 				item.TaskExecuteConfigMgmt = types.BoolValue(true)
 			} else {
-				item.TaskExecuteConfigMgmt = types.BoolNull()
+				item.TaskExecuteConfigMgmt = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.config-services"); cValue.Exists() {
 				item.TaskExecuteConfigServices = types.BoolValue(true)
 			} else {
-				item.TaskExecuteConfigServices = types.BoolNull()
+				item.TaskExecuteConfigServices = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.host-services"); cValue.Exists() {
 				item.TaskExecuteHostServices = types.BoolValue(true)
 			} else {
-				item.TaskExecuteHostServices = types.BoolNull()
+				item.TaskExecuteHostServices = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.boot"); cValue.Exists() {
 				item.TaskExecuteBoot = types.BoolValue(true)
 			} else {
-				item.TaskExecuteBoot = types.BoolNull()
+				item.TaskExecuteBoot = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.fault-mgr"); cValue.Exists() {
 				item.TaskExecuteFaultMgr = types.BoolValue(true)
 			} else {
-				item.TaskExecuteFaultMgr = types.BoolNull()
+				item.TaskExecuteFaultMgr = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.filesystem"); cValue.Exists() {
 				item.TaskExecuteFilesystem = types.BoolValue(true)
 			} else {
-				item.TaskExecuteFilesystem = types.BoolNull()
+				item.TaskExecuteFilesystem = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.interface"); cValue.Exists() {
 				item.TaskExecuteInterface = types.BoolValue(true)
 			} else {
-				item.TaskExecuteInterface = types.BoolNull()
+				item.TaskExecuteInterface = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.ip-services"); cValue.Exists() {
 				item.TaskExecuteIpServices = types.BoolValue(true)
 			} else {
-				item.TaskExecuteIpServices = types.BoolNull()
+				item.TaskExecuteIpServices = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.pkg-mgmt"); cValue.Exists() {
 				item.TaskExecutePkgMgmt = types.BoolValue(true)
 			} else {
-				item.TaskExecutePkgMgmt = types.BoolNull()
+				item.TaskExecutePkgMgmt = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.system"); cValue.Exists() {
 				item.TaskExecuteSystem = types.BoolValue(true)
 			} else {
-				item.TaskExecuteSystem = types.BoolNull()
+				item.TaskExecuteSystem = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.tty-access"); cValue.Exists() {
 				item.TaskExecuteTtyAccess = types.BoolValue(true)
 			} else {
-				item.TaskExecuteTtyAccess = types.BoolNull()
+				item.TaskExecuteTtyAccess = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.basic-services"); cValue.Exists() {
 				item.TaskExecuteBasicServices = types.BoolValue(true)
 			} else {
-				item.TaskExecuteBasicServices = types.BoolNull()
+				item.TaskExecuteBasicServices = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.cdp"); cValue.Exists() {
 				item.TaskExecuteCdp = types.BoolValue(true)
 			} else {
-				item.TaskExecuteCdp = types.BoolNull()
+				item.TaskExecuteCdp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.diag"); cValue.Exists() {
 				item.TaskExecuteDiag = types.BoolValue(true)
 			} else {
-				item.TaskExecuteDiag = types.BoolNull()
+				item.TaskExecuteDiag = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.ext-access"); cValue.Exists() {
 				item.TaskExecuteExtAccess = types.BoolValue(true)
 			} else {
-				item.TaskExecuteExtAccess = types.BoolNull()
+				item.TaskExecuteExtAccess = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.bcdl"); cValue.Exists() {
 				item.TaskExecuteBcdl = types.BoolValue(true)
 			} else {
-				item.TaskExecuteBcdl = types.BoolNull()
+				item.TaskExecuteBcdl = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.sysmgr"); cValue.Exists() {
 				item.TaskExecuteSysmgr = types.BoolValue(true)
 			} else {
-				item.TaskExecuteSysmgr = types.BoolNull()
+				item.TaskExecuteSysmgr = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.logging"); cValue.Exists() {
 				item.TaskExecuteLogging = types.BoolValue(true)
 			} else {
-				item.TaskExecuteLogging = types.BoolNull()
+				item.TaskExecuteLogging = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.netflow"); cValue.Exists() {
 				item.TaskExecuteNetflow = types.BoolValue(true)
 			} else {
-				item.TaskExecuteNetflow = types.BoolNull()
+				item.TaskExecuteNetflow = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.drivers"); cValue.Exists() {
 				item.TaskExecuteDrivers = types.BoolValue(true)
 			} else {
-				item.TaskExecuteDrivers = types.BoolNull()
+				item.TaskExecuteDrivers = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.fr"); cValue.Exists() {
 				item.TaskExecuteFr = types.BoolValue(true)
 			} else {
-				item.TaskExecuteFr = types.BoolNull()
+				item.TaskExecuteFr = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.monitor"); cValue.Exists() {
 				item.TaskExecuteMonitor = types.BoolValue(true)
 			} else {
-				item.TaskExecuteMonitor = types.BoolNull()
+				item.TaskExecuteMonitor = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.inventory"); cValue.Exists() {
 				item.TaskExecuteInventory = types.BoolValue(true)
 			} else {
-				item.TaskExecuteInventory = types.BoolNull()
+				item.TaskExecuteInventory = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.ipv6"); cValue.Exists() {
 				item.TaskExecuteIpv6 = types.BoolValue(true)
 			} else {
-				item.TaskExecuteIpv6 = types.BoolNull()
+				item.TaskExecuteIpv6 = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.admin"); cValue.Exists() {
 				item.TaskExecuteAdmin = types.BoolValue(true)
 			} else {
-				item.TaskExecuteAdmin = types.BoolNull()
+				item.TaskExecuteAdmin = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.atm"); cValue.Exists() {
 				item.TaskExecuteAtm = types.BoolValue(true)
 			} else {
-				item.TaskExecuteAtm = types.BoolNull()
+				item.TaskExecuteAtm = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.bfd"); cValue.Exists() {
 				item.TaskExecuteBfd = types.BoolValue(true)
 			} else {
-				item.TaskExecuteBfd = types.BoolNull()
+				item.TaskExecuteBfd = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.rip"); cValue.Exists() {
 				item.TaskExecuteRip = types.BoolValue(true)
 			} else {
-				item.TaskExecuteRip = types.BoolNull()
+				item.TaskExecuteRip = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.eigrp"); cValue.Exists() {
 				item.TaskExecuteEigrp = types.BoolValue(true)
 			} else {
-				item.TaskExecuteEigrp = types.BoolNull()
+				item.TaskExecuteEigrp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.sbc"); cValue.Exists() {
 				item.TaskExecuteSbc = types.BoolValue(true)
 			} else {
-				item.TaskExecuteSbc = types.BoolNull()
+				item.TaskExecuteSbc = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.firewall"); cValue.Exists() {
 				item.TaskExecuteFirewall = types.BoolValue(true)
 			} else {
-				item.TaskExecuteFirewall = types.BoolNull()
+				item.TaskExecuteFirewall = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.l2vpn"); cValue.Exists() {
 				item.TaskExecuteL2vpn = types.BoolValue(true)
 			} else {
-				item.TaskExecuteL2vpn = types.BoolNull()
+				item.TaskExecuteL2vpn = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.ethernet-services"); cValue.Exists() {
 				item.TaskExecuteEthernetServices = types.BoolValue(true)
 			} else {
-				item.TaskExecuteEthernetServices = types.BoolNull()
+				item.TaskExecuteEthernetServices = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.eem"); cValue.Exists() {
 				item.TaskExecuteEem = types.BoolValue(true)
 			} else {
-				item.TaskExecuteEem = types.BoolNull()
+				item.TaskExecuteEem = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.li"); cValue.Exists() {
 				item.TaskExecuteLi = types.BoolValue(true)
 			} else {
-				item.TaskExecuteLi = types.BoolNull()
+				item.TaskExecuteLi = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.ancp"); cValue.Exists() {
 				item.TaskExecuteAncp = types.BoolValue(true)
 			} else {
-				item.TaskExecuteAncp = types.BoolNull()
+				item.TaskExecuteAncp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.cgn"); cValue.Exists() {
 				item.TaskExecuteCgn = types.BoolValue(true)
 			} else {
-				item.TaskExecuteCgn = types.BoolNull()
+				item.TaskExecuteCgn = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.call-home"); cValue.Exists() {
 				item.TaskExecuteCallHome = types.BoolValue(true)
 			} else {
-				item.TaskExecuteCallHome = types.BoolNull()
+				item.TaskExecuteCallHome = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.rcmd"); cValue.Exists() {
 				item.TaskExecuteRcmd = types.BoolValue(true)
 			} else {
-				item.TaskExecuteRcmd = types.BoolNull()
+				item.TaskExecuteRcmd = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.vpdn"); cValue.Exists() {
 				item.TaskExecuteVpdn = types.BoolValue(true)
 			} else {
-				item.TaskExecuteVpdn = types.BoolNull()
+				item.TaskExecuteVpdn = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.nps"); cValue.Exists() {
 				item.TaskExecuteNps = types.BoolValue(true)
 			} else {
-				item.TaskExecuteNps = types.BoolNull()
+				item.TaskExecuteNps = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.lisp"); cValue.Exists() {
 				item.TaskExecuteLisp = types.BoolValue(true)
 			} else {
-				item.TaskExecuteLisp = types.BoolNull()
+				item.TaskExecuteLisp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.pbr"); cValue.Exists() {
 				item.TaskExecutePbr = types.BoolValue(true)
 			} else {
-				item.TaskExecutePbr = types.BoolNull()
+				item.TaskExecutePbr = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.otn"); cValue.Exists() {
 				item.TaskExecuteOtn = types.BoolValue(true)
 			} else {
-				item.TaskExecuteOtn = types.BoolNull()
+				item.TaskExecuteOtn = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.nacm"); cValue.Exists() {
 				item.TaskExecuteNacm = types.BoolValue(true)
 			} else {
-				item.TaskExecuteNacm = types.BoolNull()
+				item.TaskExecuteNacm = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.plat-mgr"); cValue.Exists() {
 				item.TaskExecutePlatMgr = types.BoolValue(true)
 			} else {
-				item.TaskExecutePlatMgr = types.BoolNull()
+				item.TaskExecutePlatMgr = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.cpri"); cValue.Exists() {
 				item.TaskExecuteCpri = types.BoolValue(true)
 			} else {
-				item.TaskExecuteCpri = types.BoolNull()
+				item.TaskExecuteCpri = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.lldp"); cValue.Exists() {
 				item.TaskExecuteLldp = types.BoolValue(true)
 			} else {
-				item.TaskExecuteLldp = types.BoolNull()
+				item.TaskExecuteLldp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.l2rib"); cValue.Exists() {
 				item.TaskExecuteL2rib = types.BoolValue(true)
 			} else {
-				item.TaskExecuteL2rib = types.BoolNull()
+				item.TaskExecuteL2rib = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.dossier"); cValue.Exists() {
 				item.TaskExecuteDossier = types.BoolValue(true)
 			} else {
-				item.TaskExecuteDossier = types.BoolNull()
+				item.TaskExecuteDossier = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.fti"); cValue.Exists() {
 				item.TaskExecuteFti = types.BoolValue(true)
 			} else {
-				item.TaskExecuteFti = types.BoolNull()
+				item.TaskExecuteFti = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.execute.fc"); cValue.Exists() {
 				item.TaskExecuteFc = types.BoolValue(true)
 			} else {
-				item.TaskExecuteFc = types.BoolNull()
+				item.TaskExecuteFc = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.bgp"); cValue.Exists() {
 				item.TaskDebugBgp = types.BoolValue(true)
 			} else {
-				item.TaskDebugBgp = types.BoolNull()
+				item.TaskDebugBgp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.ospf"); cValue.Exists() {
 				item.TaskDebugOspf = types.BoolValue(true)
 			} else {
-				item.TaskDebugOspf = types.BoolNull()
+				item.TaskDebugOspf = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.hsrp"); cValue.Exists() {
 				item.TaskDebugHsrp = types.BoolValue(true)
 			} else {
-				item.TaskDebugHsrp = types.BoolNull()
+				item.TaskDebugHsrp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.isis"); cValue.Exists() {
 				item.TaskDebugIsis = types.BoolValue(true)
 			} else {
-				item.TaskDebugIsis = types.BoolNull()
+				item.TaskDebugIsis = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.route-map"); cValue.Exists() {
 				item.TaskDebugRouteMap = types.BoolValue(true)
 			} else {
-				item.TaskDebugRouteMap = types.BoolNull()
+				item.TaskDebugRouteMap = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.route-policy"); cValue.Exists() {
 				item.TaskDebugRoutePolicy = types.BoolValue(true)
 			} else {
-				item.TaskDebugRoutePolicy = types.BoolNull()
+				item.TaskDebugRoutePolicy = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.static"); cValue.Exists() {
 				item.TaskDebugStatic = types.BoolValue(true)
 			} else {
-				item.TaskDebugStatic = types.BoolNull()
+				item.TaskDebugStatic = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.vrrp"); cValue.Exists() {
 				item.TaskDebugVrrp = types.BoolValue(true)
 			} else {
-				item.TaskDebugVrrp = types.BoolNull()
+				item.TaskDebugVrrp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.cef"); cValue.Exists() {
 				item.TaskDebugCef = types.BoolValue(true)
 			} else {
-				item.TaskDebugCef = types.BoolNull()
+				item.TaskDebugCef = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.lpts"); cValue.Exists() {
 				item.TaskDebugLpts = types.BoolValue(true)
 			} else {
-				item.TaskDebugLpts = types.BoolNull()
+				item.TaskDebugLpts = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.ipv4"); cValue.Exists() {
 				item.TaskDebugIpv4 = types.BoolValue(true)
 			} else {
-				item.TaskDebugIpv4 = types.BoolNull()
+				item.TaskDebugIpv4 = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.rib"); cValue.Exists() {
 				item.TaskDebugRib = types.BoolValue(true)
 			} else {
-				item.TaskDebugRib = types.BoolNull()
+				item.TaskDebugRib = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.multicast"); cValue.Exists() {
 				item.TaskDebugMulticast = types.BoolValue(true)
 			} else {
-				item.TaskDebugMulticast = types.BoolNull()
+				item.TaskDebugMulticast = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.mpls-te"); cValue.Exists() {
 				item.TaskDebugMplsTe = types.BoolValue(true)
 			} else {
-				item.TaskDebugMplsTe = types.BoolNull()
+				item.TaskDebugMplsTe = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.mpls-ldp"); cValue.Exists() {
 				item.TaskDebugMplsLdp = types.BoolValue(true)
 			} else {
-				item.TaskDebugMplsLdp = types.BoolNull()
+				item.TaskDebugMplsLdp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.mpls-static"); cValue.Exists() {
 				item.TaskDebugMplsStatic = types.BoolValue(true)
 			} else {
-				item.TaskDebugMplsStatic = types.BoolNull()
+				item.TaskDebugMplsStatic = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.ouni"); cValue.Exists() {
 				item.TaskDebugOuni = types.BoolValue(true)
 			} else {
-				item.TaskDebugOuni = types.BoolNull()
+				item.TaskDebugOuni = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.fabric"); cValue.Exists() {
 				item.TaskDebugFabric = types.BoolValue(true)
 			} else {
-				item.TaskDebugFabric = types.BoolNull()
+				item.TaskDebugFabric = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.bundle"); cValue.Exists() {
 				item.TaskDebugBundle = types.BoolValue(true)
 			} else {
-				item.TaskDebugBundle = types.BoolNull()
+				item.TaskDebugBundle = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.network"); cValue.Exists() {
 				item.TaskDebugNetwork = types.BoolValue(true)
 			} else {
-				item.TaskDebugNetwork = types.BoolNull()
+				item.TaskDebugNetwork = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.transport"); cValue.Exists() {
 				item.TaskDebugTransport = types.BoolValue(true)
 			} else {
-				item.TaskDebugTransport = types.BoolNull()
+				item.TaskDebugTransport = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.ppp"); cValue.Exists() {
 				item.TaskDebugPpp = types.BoolValue(true)
 			} else {
-				item.TaskDebugPpp = types.BoolNull()
+				item.TaskDebugPpp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.hdlc"); cValue.Exists() {
 				item.TaskDebugHdlc = types.BoolValue(true)
 			} else {
-				item.TaskDebugHdlc = types.BoolNull()
+				item.TaskDebugHdlc = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.pos-dpt"); cValue.Exists() {
 				item.TaskDebugPosDpt = types.BoolValue(true)
 			} else {
-				item.TaskDebugPosDpt = types.BoolNull()
+				item.TaskDebugPosDpt = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.sonet-sdh"); cValue.Exists() {
 				item.TaskDebugSonetSdh = types.BoolValue(true)
 			} else {
-				item.TaskDebugSonetSdh = types.BoolNull()
+				item.TaskDebugSonetSdh = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.dwdm"); cValue.Exists() {
 				item.TaskDebugDwdm = types.BoolValue(true)
 			} else {
-				item.TaskDebugDwdm = types.BoolNull()
+				item.TaskDebugDwdm = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.tunnel"); cValue.Exists() {
 				item.TaskDebugTunnel = types.BoolValue(true)
 			} else {
-				item.TaskDebugTunnel = types.BoolNull()
+				item.TaskDebugTunnel = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.vlan"); cValue.Exists() {
 				item.TaskDebugVlan = types.BoolValue(true)
 			} else {
-				item.TaskDebugVlan = types.BoolNull()
+				item.TaskDebugVlan = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.qos"); cValue.Exists() {
 				item.TaskDebugQos = types.BoolValue(true)
 			} else {
-				item.TaskDebugQos = types.BoolNull()
+				item.TaskDebugQos = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.acl"); cValue.Exists() {
 				item.TaskDebugAcl = types.BoolValue(true)
 			} else {
-				item.TaskDebugAcl = types.BoolNull()
+				item.TaskDebugAcl = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.aaa"); cValue.Exists() {
 				item.TaskDebugAaa = types.BoolValue(true)
 			} else {
-				item.TaskDebugAaa = types.BoolNull()
+				item.TaskDebugAaa = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.crypto"); cValue.Exists() {
 				item.TaskDebugCrypto = types.BoolValue(true)
 			} else {
-				item.TaskDebugCrypto = types.BoolNull()
+				item.TaskDebugCrypto = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.snmp"); cValue.Exists() {
 				item.TaskDebugSnmp = types.BoolValue(true)
 			} else {
-				item.TaskDebugSnmp = types.BoolNull()
+				item.TaskDebugSnmp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.config-mgmt"); cValue.Exists() {
 				item.TaskDebugConfigMgmt = types.BoolValue(true)
 			} else {
-				item.TaskDebugConfigMgmt = types.BoolNull()
+				item.TaskDebugConfigMgmt = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.config-services"); cValue.Exists() {
 				item.TaskDebugConfigServices = types.BoolValue(true)
 			} else {
-				item.TaskDebugConfigServices = types.BoolNull()
+				item.TaskDebugConfigServices = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.host-services"); cValue.Exists() {
 				item.TaskDebugHostServices = types.BoolValue(true)
 			} else {
-				item.TaskDebugHostServices = types.BoolNull()
+				item.TaskDebugHostServices = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.boot"); cValue.Exists() {
 				item.TaskDebugBoot = types.BoolValue(true)
 			} else {
-				item.TaskDebugBoot = types.BoolNull()
+				item.TaskDebugBoot = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.fault-mgr"); cValue.Exists() {
 				item.TaskDebugFaultMgr = types.BoolValue(true)
 			} else {
-				item.TaskDebugFaultMgr = types.BoolNull()
+				item.TaskDebugFaultMgr = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.filesystem"); cValue.Exists() {
 				item.TaskDebugFilesystem = types.BoolValue(true)
 			} else {
-				item.TaskDebugFilesystem = types.BoolNull()
+				item.TaskDebugFilesystem = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.interface"); cValue.Exists() {
 				item.TaskDebugInterface = types.BoolValue(true)
 			} else {
-				item.TaskDebugInterface = types.BoolNull()
+				item.TaskDebugInterface = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.ip-services"); cValue.Exists() {
 				item.TaskDebugIpServices = types.BoolValue(true)
 			} else {
-				item.TaskDebugIpServices = types.BoolNull()
+				item.TaskDebugIpServices = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.pkg-mgmt"); cValue.Exists() {
 				item.TaskDebugPkgMgmt = types.BoolValue(true)
 			} else {
-				item.TaskDebugPkgMgmt = types.BoolNull()
+				item.TaskDebugPkgMgmt = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.system"); cValue.Exists() {
 				item.TaskDebugSystem = types.BoolValue(true)
 			} else {
-				item.TaskDebugSystem = types.BoolNull()
+				item.TaskDebugSystem = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.tty-access"); cValue.Exists() {
 				item.TaskDebugTtyAccess = types.BoolValue(true)
 			} else {
-				item.TaskDebugTtyAccess = types.BoolNull()
+				item.TaskDebugTtyAccess = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.basic-services"); cValue.Exists() {
 				item.TaskDebugBasicServices = types.BoolValue(true)
 			} else {
-				item.TaskDebugBasicServices = types.BoolNull()
+				item.TaskDebugBasicServices = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.cdp"); cValue.Exists() {
 				item.TaskDebugCdp = types.BoolValue(true)
 			} else {
-				item.TaskDebugCdp = types.BoolNull()
+				item.TaskDebugCdp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.diag"); cValue.Exists() {
 				item.TaskDebugDiag = types.BoolValue(true)
 			} else {
-				item.TaskDebugDiag = types.BoolNull()
+				item.TaskDebugDiag = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.ext-access"); cValue.Exists() {
 				item.TaskDebugExtAccess = types.BoolValue(true)
 			} else {
-				item.TaskDebugExtAccess = types.BoolNull()
+				item.TaskDebugExtAccess = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.bcdl"); cValue.Exists() {
 				item.TaskDebugBcdl = types.BoolValue(true)
 			} else {
-				item.TaskDebugBcdl = types.BoolNull()
+				item.TaskDebugBcdl = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.sysmgr"); cValue.Exists() {
 				item.TaskDebugSysmgr = types.BoolValue(true)
 			} else {
-				item.TaskDebugSysmgr = types.BoolNull()
+				item.TaskDebugSysmgr = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.logging"); cValue.Exists() {
 				item.TaskDebugLogging = types.BoolValue(true)
 			} else {
-				item.TaskDebugLogging = types.BoolNull()
+				item.TaskDebugLogging = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.netflow"); cValue.Exists() {
 				item.TaskDebugNetflow = types.BoolValue(true)
 			} else {
-				item.TaskDebugNetflow = types.BoolNull()
+				item.TaskDebugNetflow = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.drivers"); cValue.Exists() {
 				item.TaskDebugDrivers = types.BoolValue(true)
 			} else {
-				item.TaskDebugDrivers = types.BoolNull()
+				item.TaskDebugDrivers = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.fr"); cValue.Exists() {
 				item.TaskDebugFr = types.BoolValue(true)
 			} else {
-				item.TaskDebugFr = types.BoolNull()
+				item.TaskDebugFr = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.monitor"); cValue.Exists() {
 				item.TaskDebugMonitor = types.BoolValue(true)
 			} else {
-				item.TaskDebugMonitor = types.BoolNull()
+				item.TaskDebugMonitor = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.inventory"); cValue.Exists() {
 				item.TaskDebugInventory = types.BoolValue(true)
 			} else {
-				item.TaskDebugInventory = types.BoolNull()
+				item.TaskDebugInventory = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.ipv6"); cValue.Exists() {
 				item.TaskDebugIpv6 = types.BoolValue(true)
 			} else {
-				item.TaskDebugIpv6 = types.BoolNull()
+				item.TaskDebugIpv6 = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.admin"); cValue.Exists() {
 				item.TaskDebugAdmin = types.BoolValue(true)
 			} else {
-				item.TaskDebugAdmin = types.BoolNull()
+				item.TaskDebugAdmin = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.atm"); cValue.Exists() {
 				item.TaskDebugAtm = types.BoolValue(true)
 			} else {
-				item.TaskDebugAtm = types.BoolNull()
+				item.TaskDebugAtm = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.bfd"); cValue.Exists() {
 				item.TaskDebugBfd = types.BoolValue(true)
 			} else {
-				item.TaskDebugBfd = types.BoolNull()
+				item.TaskDebugBfd = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.rip"); cValue.Exists() {
 				item.TaskDebugRip = types.BoolValue(true)
 			} else {
-				item.TaskDebugRip = types.BoolNull()
+				item.TaskDebugRip = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.eigrp"); cValue.Exists() {
 				item.TaskDebugEigrp = types.BoolValue(true)
 			} else {
-				item.TaskDebugEigrp = types.BoolNull()
+				item.TaskDebugEigrp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.sbc"); cValue.Exists() {
 				item.TaskDebugSbc = types.BoolValue(true)
 			} else {
-				item.TaskDebugSbc = types.BoolNull()
+				item.TaskDebugSbc = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.firewall"); cValue.Exists() {
 				item.TaskDebugFirewall = types.BoolValue(true)
 			} else {
-				item.TaskDebugFirewall = types.BoolNull()
+				item.TaskDebugFirewall = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.l2vpn"); cValue.Exists() {
 				item.TaskDebugL2vpn = types.BoolValue(true)
 			} else {
-				item.TaskDebugL2vpn = types.BoolNull()
+				item.TaskDebugL2vpn = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.ethernet-services"); cValue.Exists() {
 				item.TaskDebugEthernetServices = types.BoolValue(true)
 			} else {
-				item.TaskDebugEthernetServices = types.BoolNull()
+				item.TaskDebugEthernetServices = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.eem"); cValue.Exists() {
 				item.TaskDebugEem = types.BoolValue(true)
 			} else {
-				item.TaskDebugEem = types.BoolNull()
+				item.TaskDebugEem = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.li"); cValue.Exists() {
 				item.TaskDebugLi = types.BoolValue(true)
 			} else {
-				item.TaskDebugLi = types.BoolNull()
+				item.TaskDebugLi = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.ancp"); cValue.Exists() {
 				item.TaskDebugAncp = types.BoolValue(true)
 			} else {
-				item.TaskDebugAncp = types.BoolNull()
+				item.TaskDebugAncp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.cgn"); cValue.Exists() {
 				item.TaskDebugCgn = types.BoolValue(true)
 			} else {
-				item.TaskDebugCgn = types.BoolNull()
+				item.TaskDebugCgn = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.call-home"); cValue.Exists() {
 				item.TaskDebugCallHome = types.BoolValue(true)
 			} else {
-				item.TaskDebugCallHome = types.BoolNull()
+				item.TaskDebugCallHome = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.rcmd"); cValue.Exists() {
 				item.TaskDebugRcmd = types.BoolValue(true)
 			} else {
-				item.TaskDebugRcmd = types.BoolNull()
+				item.TaskDebugRcmd = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.vpdn"); cValue.Exists() {
 				item.TaskDebugVpdn = types.BoolValue(true)
 			} else {
-				item.TaskDebugVpdn = types.BoolNull()
+				item.TaskDebugVpdn = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.nps"); cValue.Exists() {
 				item.TaskDebugNps = types.BoolValue(true)
 			} else {
-				item.TaskDebugNps = types.BoolNull()
+				item.TaskDebugNps = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.lisp"); cValue.Exists() {
 				item.TaskDebugLisp = types.BoolValue(true)
 			} else {
-				item.TaskDebugLisp = types.BoolNull()
+				item.TaskDebugLisp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.pbr"); cValue.Exists() {
 				item.TaskDebugPbr = types.BoolValue(true)
 			} else {
-				item.TaskDebugPbr = types.BoolNull()
+				item.TaskDebugPbr = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.otn"); cValue.Exists() {
 				item.TaskDebugOtn = types.BoolValue(true)
 			} else {
-				item.TaskDebugOtn = types.BoolNull()
+				item.TaskDebugOtn = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.nacm"); cValue.Exists() {
 				item.TaskDebugNacm = types.BoolValue(true)
 			} else {
-				item.TaskDebugNacm = types.BoolNull()
+				item.TaskDebugNacm = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.plat-mgr"); cValue.Exists() {
 				item.TaskDebugPlatMgr = types.BoolValue(true)
 			} else {
-				item.TaskDebugPlatMgr = types.BoolNull()
+				item.TaskDebugPlatMgr = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.cpri"); cValue.Exists() {
 				item.TaskDebugCpri = types.BoolValue(true)
 			} else {
-				item.TaskDebugCpri = types.BoolNull()
+				item.TaskDebugCpri = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.lldp"); cValue.Exists() {
 				item.TaskDebugLldp = types.BoolValue(true)
 			} else {
-				item.TaskDebugLldp = types.BoolNull()
+				item.TaskDebugLldp = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.l2rib"); cValue.Exists() {
 				item.TaskDebugL2rib = types.BoolValue(true)
 			} else {
-				item.TaskDebugL2rib = types.BoolNull()
+				item.TaskDebugL2rib = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.dossier"); cValue.Exists() {
 				item.TaskDebugDossier = types.BoolValue(true)
 			} else {
-				item.TaskDebugDossier = types.BoolNull()
+				item.TaskDebugDossier = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.fti"); cValue.Exists() {
 				item.TaskDebugFti = types.BoolValue(true)
 			} else {
-				item.TaskDebugFti = types.BoolNull()
+				item.TaskDebugFti = types.BoolValue(false)
 			}
 			if cValue := v.Get("task.debug.fc"); cValue.Exists() {
 				item.TaskDebugFc = types.BoolValue(true)
 			} else {
-				item.TaskDebugFc = types.BoolNull()
+				item.TaskDebugFc = types.BoolValue(false)
 			}
 			if cValue := v.Get("inherit.taskgroup.root-lr"); cValue.Exists() {
 				item.InheritTaskgroupRootLr = types.BoolValue(true)
 			} else {
-				item.InheritTaskgroupRootLr = types.BoolNull()
+				item.InheritTaskgroupRootLr = types.BoolValue(false)
 			}
 			if cValue := v.Get("inherit.taskgroup.netadmin"); cValue.Exists() {
 				item.InheritTaskgroupNetadmin = types.BoolValue(true)
 			} else {
-				item.InheritTaskgroupNetadmin = types.BoolNull()
+				item.InheritTaskgroupNetadmin = types.BoolValue(false)
 			}
 			if cValue := v.Get("inherit.taskgroup.sysadmin"); cValue.Exists() {
 				item.InheritTaskgroupSysadmin = types.BoolValue(true)
 			} else {
-				item.InheritTaskgroupSysadmin = types.BoolNull()
+				item.InheritTaskgroupSysadmin = types.BoolValue(false)
 			}
 			if cValue := v.Get("inherit.taskgroup.serviceadmin"); cValue.Exists() {
 				item.InheritTaskgroupServiceadmin = types.BoolValue(true)
 			} else {
-				item.InheritTaskgroupServiceadmin = types.BoolNull()
+				item.InheritTaskgroupServiceadmin = types.BoolValue(false)
 			}
 			if cValue := v.Get("inherit.taskgroup.operator"); cValue.Exists() {
 				item.InheritTaskgroupOperator = types.BoolValue(true)
 			} else {
-				item.InheritTaskgroupOperator = types.BoolNull()
+				item.InheritTaskgroupOperator = types.BoolValue(false)
 			}
 			if cValue := v.Get("inherit.taskgroup.cisco-support"); cValue.Exists() {
 				item.InheritTaskgroupCiscoSupport = types.BoolValue(true)
 			} else {
-				item.InheritTaskgroupCiscoSupport = types.BoolNull()
+				item.InheritTaskgroupCiscoSupport = types.BoolValue(false)
 			}
 			if cValue := v.Get("inherit.taskgroup.task-groups.task-group"); cValue.Exists() {
 				item.InheritTaskgroups = make([]AAATaskgroupsInheritTaskgroups, 0)
@@ -15515,52 +18554,52 @@ func (data *AAA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("taskgroup.root-lr"); cValue.Exists() {
 				item.TaskgroupRootLr = types.BoolValue(true)
 			} else {
-				item.TaskgroupRootLr = types.BoolNull()
+				item.TaskgroupRootLr = types.BoolValue(false)
 			}
 			if cValue := v.Get("taskgroup.netadmin"); cValue.Exists() {
 				item.TaskgroupNetadmin = types.BoolValue(true)
 			} else {
-				item.TaskgroupNetadmin = types.BoolNull()
+				item.TaskgroupNetadmin = types.BoolValue(false)
 			}
 			if cValue := v.Get("taskgroup.sysadmin"); cValue.Exists() {
 				item.TaskgroupSysadmin = types.BoolValue(true)
 			} else {
-				item.TaskgroupSysadmin = types.BoolNull()
+				item.TaskgroupSysadmin = types.BoolValue(false)
 			}
 			if cValue := v.Get("taskgroup.serviceadmin"); cValue.Exists() {
 				item.TaskgroupServiceadmin = types.BoolValue(true)
 			} else {
-				item.TaskgroupServiceadmin = types.BoolNull()
+				item.TaskgroupServiceadmin = types.BoolValue(false)
 			}
 			if cValue := v.Get("taskgroup.operator"); cValue.Exists() {
 				item.TaskgroupOperator = types.BoolValue(true)
 			} else {
-				item.TaskgroupOperator = types.BoolNull()
+				item.TaskgroupOperator = types.BoolValue(false)
 			}
 			if cValue := v.Get("taskgroup.cisco-support"); cValue.Exists() {
 				item.TaskgroupCiscoSupport = types.BoolValue(true)
 			} else {
-				item.TaskgroupCiscoSupport = types.BoolNull()
+				item.TaskgroupCiscoSupport = types.BoolValue(false)
 			}
 			if cValue := v.Get("taskgroup.maintenance"); cValue.Exists() {
 				item.TaskgroupMaintenance = types.BoolValue(true)
 			} else {
-				item.TaskgroupMaintenance = types.BoolNull()
+				item.TaskgroupMaintenance = types.BoolValue(false)
 			}
 			if cValue := v.Get("taskgroup.provisioning"); cValue.Exists() {
 				item.TaskgroupProvisioning = types.BoolValue(true)
 			} else {
-				item.TaskgroupProvisioning = types.BoolNull()
+				item.TaskgroupProvisioning = types.BoolValue(false)
 			}
 			if cValue := v.Get("taskgroup.retrieve"); cValue.Exists() {
 				item.TaskgroupRetrieve = types.BoolValue(true)
 			} else {
-				item.TaskgroupRetrieve = types.BoolNull()
+				item.TaskgroupRetrieve = types.BoolValue(false)
 			}
 			if cValue := v.Get("taskgroup.read-only-tg"); cValue.Exists() {
 				item.TaskgroupReadOnly = types.BoolValue(true)
 			} else {
-				item.TaskgroupReadOnly = types.BoolNull()
+				item.TaskgroupReadOnly = types.BoolValue(false)
 			}
 			if cValue := v.Get("taskgroup.task-groups.task-group"); cValue.Exists() {
 				item.Taskgroups = make([]AAAUsergroupsTaskgroups, 0)

@@ -423,23 +423,39 @@ func (data *RouterMLDInterface) updateFromBody(ctx context.Context, res []byte) 
 			data.StaticGroups[i].GroupAddress = types.StringNull()
 		}
 		if value := r.Get("group-address-only"); value.Exists() {
-			if !data.StaticGroups[i].GroupAddressOnly.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.StaticGroups[i].GroupAddressOnly.IsNull() && !data.StaticGroups[i].GroupAddressOnly.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.StaticGroups[i].GroupAddressOnly = types.BoolValue(false)
+			} else if !data.StaticGroups[i].GroupAddressOnly.IsNull() {
 				data.StaticGroups[i].GroupAddressOnly = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.StaticGroups[i].GroupAddressOnly.IsNull() {
 				data.StaticGroups[i].GroupAddressOnly = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.StaticGroups[i].GroupAddressOnly = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("group-address-only.suppress-reports"); value.Exists() {
-			if !data.StaticGroups[i].SuppressReports.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.StaticGroups[i].SuppressReports.IsNull() && !data.StaticGroups[i].SuppressReports.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.StaticGroups[i].SuppressReports = types.BoolValue(false)
+			} else if !data.StaticGroups[i].SuppressReports.IsNull() {
 				data.StaticGroups[i].SuppressReports = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.StaticGroups[i].SuppressReports.IsNull() {
 				data.StaticGroups[i].SuppressReports = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.StaticGroups[i].SuppressReports = types.BoolValue(false)
 			}
 		}
 		for ci := range data.StaticGroups[i].GroupMasks {
@@ -476,13 +492,18 @@ func (data *RouterMLDInterface) updateFromBody(ctx context.Context, res []byte) 
 				data.StaticGroups[i].GroupMasks[ci].GroupCount = types.Int64Null()
 			}
 			if value := cr.Get("suppress-reports"); value.Exists() {
-				if !data.StaticGroups[i].GroupMasks[ci].SuppressReports.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.StaticGroups[i].GroupMasks[ci].SuppressReports.IsNull() && !data.StaticGroups[i].GroupMasks[ci].SuppressReports.ValueBool() {
+					data.StaticGroups[i].GroupMasks[ci].SuppressReports = types.BoolValue(false)
+				} else if !data.StaticGroups[i].GroupMasks[ci].SuppressReports.IsNull() {
 					data.StaticGroups[i].GroupMasks[ci].SuppressReports = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.StaticGroups[i].GroupMasks[ci].SuppressReports.IsNull() {
 					data.StaticGroups[i].GroupMasks[ci].SuppressReports = types.BoolNull()
+				} else {
+					data.StaticGroups[i].GroupMasks[ci].SuppressReports = types.BoolValue(false)
 				}
 			}
 		}
@@ -515,13 +536,18 @@ func (data *RouterMLDInterface) updateFromBody(ctx context.Context, res []byte) 
 				data.StaticGroups[i].SourceAddresses[ci].SourceIp = types.StringNull()
 			}
 			if value := cr.Get("suppress-reports"); value.Exists() {
-				if !data.StaticGroups[i].SourceAddresses[ci].SuppressReports.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.StaticGroups[i].SourceAddresses[ci].SuppressReports.IsNull() && !data.StaticGroups[i].SourceAddresses[ci].SuppressReports.ValueBool() {
+					data.StaticGroups[i].SourceAddresses[ci].SuppressReports = types.BoolValue(false)
+				} else if !data.StaticGroups[i].SourceAddresses[ci].SuppressReports.IsNull() {
 					data.StaticGroups[i].SourceAddresses[ci].SuppressReports = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.StaticGroups[i].SourceAddresses[ci].SuppressReports.IsNull() {
 					data.StaticGroups[i].SourceAddresses[ci].SuppressReports = types.BoolNull()
+				} else {
+					data.StaticGroups[i].SourceAddresses[ci].SuppressReports = types.BoolValue(false)
 				}
 			}
 		}
@@ -564,13 +590,18 @@ func (data *RouterMLDInterface) updateFromBody(ctx context.Context, res []byte) 
 				data.StaticGroups[i].GroupMasksSourceAddresses[ci].GroupCount = types.Int64Null()
 			}
 			if value := cr.Get("suppress-reports"); value.Exists() {
-				if !data.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports.IsNull() && !data.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports.ValueBool() {
+					data.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports = types.BoolValue(false)
+				} else if !data.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports.IsNull() {
 					data.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports.IsNull() {
 					data.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports = types.BoolNull()
+				} else {
+					data.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports = types.BoolValue(false)
 				}
 			}
 		}
@@ -604,13 +635,21 @@ func (data *RouterMLDInterface) updateFromBody(ctx context.Context, res []byte) 
 			data.JoinGroups[i].GroupAddress = types.StringNull()
 		}
 		if value := r.Get("group-address-only"); value.Exists() {
-			if !data.JoinGroups[i].GroupAddressOnly.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.JoinGroups[i].GroupAddressOnly.IsNull() && !data.JoinGroups[i].GroupAddressOnly.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.JoinGroups[i].GroupAddressOnly = types.BoolValue(false)
+			} else if !data.JoinGroups[i].GroupAddressOnly.IsNull() {
 				data.JoinGroups[i].GroupAddressOnly = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.JoinGroups[i].GroupAddressOnly.IsNull() {
 				data.JoinGroups[i].GroupAddressOnly = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.JoinGroups[i].GroupAddressOnly = types.BoolValue(false)
 			}
 		}
 		for ci := range data.JoinGroups[i].SourceAddresses {
@@ -642,23 +681,33 @@ func (data *RouterMLDInterface) updateFromBody(ctx context.Context, res []byte) 
 				data.JoinGroups[i].SourceAddresses[ci].SourceIp = types.StringNull()
 			}
 			if value := cr.Get("include"); value.Exists() {
-				if !data.JoinGroups[i].SourceAddresses[ci].Include.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.JoinGroups[i].SourceAddresses[ci].Include.IsNull() && !data.JoinGroups[i].SourceAddresses[ci].Include.ValueBool() {
+					data.JoinGroups[i].SourceAddresses[ci].Include = types.BoolValue(false)
+				} else if !data.JoinGroups[i].SourceAddresses[ci].Include.IsNull() {
 					data.JoinGroups[i].SourceAddresses[ci].Include = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.JoinGroups[i].SourceAddresses[ci].Include.IsNull() {
 					data.JoinGroups[i].SourceAddresses[ci].Include = types.BoolNull()
+				} else {
+					data.JoinGroups[i].SourceAddresses[ci].Include = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("exclude"); value.Exists() {
-				if !data.JoinGroups[i].SourceAddresses[ci].Exclude.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.JoinGroups[i].SourceAddresses[ci].Exclude.IsNull() && !data.JoinGroups[i].SourceAddresses[ci].Exclude.ValueBool() {
+					data.JoinGroups[i].SourceAddresses[ci].Exclude = types.BoolValue(false)
+				} else if !data.JoinGroups[i].SourceAddresses[ci].Exclude.IsNull() {
 					data.JoinGroups[i].SourceAddresses[ci].Exclude = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.JoinGroups[i].SourceAddresses[ci].Exclude.IsNull() {
 					data.JoinGroups[i].SourceAddresses[ci].Exclude = types.BoolNull()
+				} else {
+					data.JoinGroups[i].SourceAddresses[ci].Exclude = types.BoolValue(false)
 				}
 			}
 		}
@@ -1265,12 +1314,12 @@ func (data *RouterMLDInterface) fromBody(ctx context.Context, res gjson.Result) 
 			if cValue := v.Get("group-address-only"); cValue.Exists() {
 				item.GroupAddressOnly = types.BoolValue(true)
 			} else {
-				item.GroupAddressOnly = types.BoolNull()
+				item.GroupAddressOnly = types.BoolValue(false)
 			}
 			if cValue := v.Get("group-address-only.suppress-reports"); cValue.Exists() {
 				item.SuppressReports = types.BoolValue(true)
 			} else {
-				item.SuppressReports = types.BoolNull()
+				item.SuppressReports = types.BoolValue(false)
 			}
 			if cValue := v.Get("group-address-inc-mask.inc-mask"); cValue.Exists() {
 				item.GroupMasks = make([]RouterMLDInterfaceStaticGroupsGroupMasks, 0)
@@ -1285,7 +1334,7 @@ func (data *RouterMLDInterface) fromBody(ctx context.Context, res gjson.Result) 
 					if ccValue := cv.Get("suppress-reports"); ccValue.Exists() {
 						cItem.SuppressReports = types.BoolValue(true)
 					} else {
-						cItem.SuppressReports = types.BoolNull()
+						cItem.SuppressReports = types.BoolValue(false)
 					}
 					item.GroupMasks = append(item.GroupMasks, cItem)
 					return true
@@ -1301,7 +1350,7 @@ func (data *RouterMLDInterface) fromBody(ctx context.Context, res gjson.Result) 
 					if ccValue := cv.Get("suppress-reports"); ccValue.Exists() {
 						cItem.SuppressReports = types.BoolValue(true)
 					} else {
-						cItem.SuppressReports = types.BoolNull()
+						cItem.SuppressReports = types.BoolValue(false)
 					}
 					item.SourceAddresses = append(item.SourceAddresses, cItem)
 					return true
@@ -1323,7 +1372,7 @@ func (data *RouterMLDInterface) fromBody(ctx context.Context, res gjson.Result) 
 					if ccValue := cv.Get("suppress-reports"); ccValue.Exists() {
 						cItem.SuppressReports = types.BoolValue(true)
 					} else {
-						cItem.SuppressReports = types.BoolNull()
+						cItem.SuppressReports = types.BoolValue(false)
 					}
 					item.GroupMasksSourceAddresses = append(item.GroupMasksSourceAddresses, cItem)
 					return true
@@ -1343,7 +1392,7 @@ func (data *RouterMLDInterface) fromBody(ctx context.Context, res gjson.Result) 
 			if cValue := v.Get("group-address-only"); cValue.Exists() {
 				item.GroupAddressOnly = types.BoolValue(true)
 			} else {
-				item.GroupAddressOnly = types.BoolNull()
+				item.GroupAddressOnly = types.BoolValue(false)
 			}
 			if cValue := v.Get("source-addresses"); cValue.Exists() {
 				item.SourceAddresses = make([]RouterMLDInterfaceJoinGroupsSourceAddresses, 0)
@@ -1355,12 +1404,12 @@ func (data *RouterMLDInterface) fromBody(ctx context.Context, res gjson.Result) 
 					if ccValue := cv.Get("include"); ccValue.Exists() {
 						cItem.Include = types.BoolValue(true)
 					} else {
-						cItem.Include = types.BoolNull()
+						cItem.Include = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("exclude"); ccValue.Exists() {
 						cItem.Exclude = types.BoolValue(true)
 					} else {
-						cItem.Exclude = types.BoolNull()
+						cItem.Exclude = types.BoolValue(false)
 					}
 					item.SourceAddresses = append(item.SourceAddresses, cItem)
 					return true

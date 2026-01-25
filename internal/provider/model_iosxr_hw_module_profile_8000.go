@@ -1494,13 +1494,18 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].PauseThresholdBytes = types.Int64Null()
 			}
 			if value := cr.Get("ms"); value.Exists() {
-				if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms.IsNull() && !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms.ValueBool() {
+					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms = types.BoolValue(false)
+				} else if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms.IsNull() {
 					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms.IsNull() {
 					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms = types.BoolNull()
+				} else {
+					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("ms.headroom"); value.Exists() {
@@ -1509,13 +1514,18 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].MsHeadroom = types.Int64Null()
 			}
 			if value := cr.Get("us"); value.Exists() {
-				if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us.IsNull() && !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us.ValueBool() {
+					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us = types.BoolValue(false)
+				} else if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us.IsNull() {
 					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us.IsNull() {
 					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us = types.BoolNull()
+				} else {
+					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("us.headroom"); value.Exists() {
@@ -1524,13 +1534,18 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].UsHeadroom = types.Int64Null()
 			}
 			if value := cr.Get("kbytes"); value.Exists() {
-				if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes.IsNull() && !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes.ValueBool() {
+					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes = types.BoolValue(false)
+				} else if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes.IsNull() {
 					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes.IsNull() {
 					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes = types.BoolNull()
+				} else {
+					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("kbytes.headroom"); value.Exists() {
@@ -1539,13 +1554,18 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 				data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].KbytesHeadroom = types.Int64Null()
 			}
 			if value := cr.Get("mbytes"); value.Exists() {
-				if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes.IsNull() && !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes.ValueBool() {
+					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes = types.BoolValue(false)
+				} else if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes.IsNull() {
 					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes.IsNull() {
 					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes = types.BoolNull()
+				} else {
+					data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("mbytes.headroom"); value.Exists() {
@@ -1653,23 +1673,39 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileNpuBufferExtendedLocations[i].LocationName = types.StringNull()
 		}
 		if value := r.Get("bandwidth-congestion-detection.enable"); value.Exists() {
-			if !data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionDetectionEnable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionDetectionEnable.IsNull() && !data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionDetectionEnable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionDetectionEnable = types.BoolValue(false)
+			} else if !data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionDetectionEnable.IsNull() {
 				data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionDetectionEnable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionDetectionEnable.IsNull() {
 				data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionDetectionEnable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionDetectionEnable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("bandwidth-congestion-protect.enable"); value.Exists() {
-			if !data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionProtectEnable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionProtectEnable.IsNull() && !data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionProtectEnable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionProtectEnable = types.BoolValue(false)
+			} else if !data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionProtectEnable.IsNull() {
 				data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionProtectEnable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionProtectEnable.IsNull() {
 				data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionProtectEnable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionProtectEnable = types.BoolValue(false)
 			}
 		}
 	}
@@ -3488,7 +3524,7 @@ func (data *HWModuleProfile8000) fromBody(ctx context.Context, res gjson.Result)
 					if ccValue := cv.Get("ms"); ccValue.Exists() {
 						cItem.Ms = types.BoolValue(true)
 					} else {
-						cItem.Ms = types.BoolNull()
+						cItem.Ms = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("ms.headroom"); ccValue.Exists() {
 						cItem.MsHeadroom = types.Int64Value(ccValue.Int())
@@ -3496,7 +3532,7 @@ func (data *HWModuleProfile8000) fromBody(ctx context.Context, res gjson.Result)
 					if ccValue := cv.Get("us"); ccValue.Exists() {
 						cItem.Us = types.BoolValue(true)
 					} else {
-						cItem.Us = types.BoolNull()
+						cItem.Us = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("us.headroom"); ccValue.Exists() {
 						cItem.UsHeadroom = types.Int64Value(ccValue.Int())
@@ -3504,7 +3540,7 @@ func (data *HWModuleProfile8000) fromBody(ctx context.Context, res gjson.Result)
 					if ccValue := cv.Get("kbytes"); ccValue.Exists() {
 						cItem.Kbytes = types.BoolValue(true)
 					} else {
-						cItem.Kbytes = types.BoolNull()
+						cItem.Kbytes = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("kbytes.headroom"); ccValue.Exists() {
 						cItem.KbytesHeadroom = types.Int64Value(ccValue.Int())
@@ -3512,7 +3548,7 @@ func (data *HWModuleProfile8000) fromBody(ctx context.Context, res gjson.Result)
 					if ccValue := cv.Get("mbytes"); ccValue.Exists() {
 						cItem.Mbytes = types.BoolValue(true)
 					} else {
-						cItem.Mbytes = types.BoolNull()
+						cItem.Mbytes = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("mbytes.headroom"); ccValue.Exists() {
 						cItem.MbytesHeadroom = types.Int64Value(ccValue.Int())
@@ -3570,12 +3606,12 @@ func (data *HWModuleProfile8000) fromBody(ctx context.Context, res gjson.Result)
 			if cValue := v.Get("bandwidth-congestion-detection.enable"); cValue.Exists() {
 				item.BandwidthCongestionDetectionEnable = types.BoolValue(true)
 			} else {
-				item.BandwidthCongestionDetectionEnable = types.BoolNull()
+				item.BandwidthCongestionDetectionEnable = types.BoolValue(false)
 			}
 			if cValue := v.Get("bandwidth-congestion-protect.enable"); cValue.Exists() {
 				item.BandwidthCongestionProtectEnable = types.BoolValue(true)
 			} else {
-				item.BandwidthCongestionProtectEnable = types.BoolNull()
+				item.BandwidthCongestionProtectEnable = types.BoolValue(false)
 			}
 			data.ProfileNpuBufferExtendedLocations = append(data.ProfileNpuBufferExtendedLocations, item)
 			return true

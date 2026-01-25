@@ -457,13 +457,21 @@ func (data *KeyChain) updateFromBody(ctx context.Context, res []byte) {
 			data.MacsecKeys[i].LifetimeDuration = types.Int64Null()
 		}
 		if value := r.Get("lifetime.infinite"); value.Exists() {
-			if !data.MacsecKeys[i].LifetimeInfinite.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MacsecKeys[i].LifetimeInfinite.IsNull() && !data.MacsecKeys[i].LifetimeInfinite.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MacsecKeys[i].LifetimeInfinite = types.BoolValue(false)
+			} else if !data.MacsecKeys[i].LifetimeInfinite.IsNull() {
 				data.MacsecKeys[i].LifetimeInfinite = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MacsecKeys[i].LifetimeInfinite.IsNull() {
 				data.MacsecKeys[i].LifetimeInfinite = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MacsecKeys[i].LifetimeInfinite = types.BoolValue(false)
 			}
 		}
 	}
@@ -566,13 +574,21 @@ func (data *KeyChain) updateFromBody(ctx context.Context, res []byte) {
 			data.Keys[i].AcceptLifetimeDuration = types.Int64Null()
 		}
 		if value := r.Get("accept-lifetime.infinite"); value.Exists() {
-			if !data.Keys[i].AcceptLifetimeInfinite.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Keys[i].AcceptLifetimeInfinite.IsNull() && !data.Keys[i].AcceptLifetimeInfinite.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Keys[i].AcceptLifetimeInfinite = types.BoolValue(false)
+			} else if !data.Keys[i].AcceptLifetimeInfinite.IsNull() {
 				data.Keys[i].AcceptLifetimeInfinite = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Keys[i].AcceptLifetimeInfinite.IsNull() {
 				data.Keys[i].AcceptLifetimeInfinite = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Keys[i].AcceptLifetimeInfinite = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("send-lifetime.start-time.hour"); value.Exists() && !data.Keys[i].SendLifetimeStartTimeHour.IsNull() {
@@ -641,13 +657,21 @@ func (data *KeyChain) updateFromBody(ctx context.Context, res []byte) {
 			data.Keys[i].SendLifetimeDuration = types.Int64Null()
 		}
 		if value := r.Get("send-lifetime.infinite"); value.Exists() {
-			if !data.Keys[i].SendLifetimeInfinite.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Keys[i].SendLifetimeInfinite.IsNull() && !data.Keys[i].SendLifetimeInfinite.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Keys[i].SendLifetimeInfinite = types.BoolValue(false)
+			} else if !data.Keys[i].SendLifetimeInfinite.IsNull() {
 				data.Keys[i].SendLifetimeInfinite = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Keys[i].SendLifetimeInfinite.IsNull() {
 				data.Keys[i].SendLifetimeInfinite = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Keys[i].SendLifetimeInfinite = types.BoolValue(false)
 			}
 		}
 	}
@@ -1276,7 +1300,7 @@ func (data *KeyChain) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("lifetime.infinite"); cValue.Exists() {
 				item.LifetimeInfinite = types.BoolValue(true)
 			} else {
-				item.LifetimeInfinite = types.BoolNull()
+				item.LifetimeInfinite = types.BoolValue(false)
 			}
 			data.MacsecKeys = append(data.MacsecKeys, item)
 			return true
@@ -1334,7 +1358,7 @@ func (data *KeyChain) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("accept-lifetime.infinite"); cValue.Exists() {
 				item.AcceptLifetimeInfinite = types.BoolValue(true)
 			} else {
-				item.AcceptLifetimeInfinite = types.BoolNull()
+				item.AcceptLifetimeInfinite = types.BoolValue(false)
 			}
 			if cValue := v.Get("send-lifetime.start-time.hour"); cValue.Exists() {
 				item.SendLifetimeStartTimeHour = types.Int64Value(cValue.Int())
@@ -1378,7 +1402,7 @@ func (data *KeyChain) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("send-lifetime.infinite"); cValue.Exists() {
 				item.SendLifetimeInfinite = types.BoolValue(true)
 			} else {
-				item.SendLifetimeInfinite = types.BoolNull()
+				item.SendLifetimeInfinite = types.BoolValue(false)
 			}
 			data.Keys = append(data.Keys, item)
 			return true

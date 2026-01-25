@@ -744,13 +744,21 @@ func (data *RouterPIMVRFIPv4) updateFromBody(ctx context.Context, res []byte) {
 			data.RpAddresses[i].AccessList = types.StringNull()
 		}
 		if value := r.Get("override"); value.Exists() {
-			if !data.RpAddresses[i].Override.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RpAddresses[i].Override.IsNull() && !data.RpAddresses[i].Override.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RpAddresses[i].Override = types.BoolValue(false)
+			} else if !data.RpAddresses[i].Override.IsNull() {
 				data.RpAddresses[i].Override = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RpAddresses[i].Override.IsNull() {
 				data.RpAddresses[i].Override = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RpAddresses[i].Override = types.BoolValue(false)
 			}
 		}
 	}
@@ -788,13 +796,21 @@ func (data *RouterPIMVRFIPv4) updateFromBody(ctx context.Context, res []byte) {
 			data.RpAddressesBidir[i].AccessList = types.StringNull()
 		}
 		if value := r.Get("override"); value.Exists() {
-			if !data.RpAddressesBidir[i].Override.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RpAddressesBidir[i].Override.IsNull() && !data.RpAddressesBidir[i].Override.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RpAddressesBidir[i].Override = types.BoolValue(false)
+			} else if !data.RpAddressesBidir[i].Override.IsNull() {
 				data.RpAddressesBidir[i].Override = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RpAddressesBidir[i].Override.IsNull() {
 				data.RpAddressesBidir[i].Override = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RpAddressesBidir[i].Override = types.BoolValue(false)
 			}
 		}
 	}
@@ -1325,13 +1341,21 @@ func (data *RouterPIMVRFIPv4) updateFromBody(ctx context.Context, res []byte) {
 			data.AutoRpRelayVrfs[i].VrfName = types.StringNull()
 		}
 		if value := r.Get("listen"); value.Exists() {
-			if !data.AutoRpRelayVrfs[i].Listen.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AutoRpRelayVrfs[i].Listen.IsNull() && !data.AutoRpRelayVrfs[i].Listen.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AutoRpRelayVrfs[i].Listen = types.BoolValue(false)
+			} else if !data.AutoRpRelayVrfs[i].Listen.IsNull() {
 				data.AutoRpRelayVrfs[i].Listen = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AutoRpRelayVrfs[i].Listen.IsNull() {
 				data.AutoRpRelayVrfs[i].Listen = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AutoRpRelayVrfs[i].Listen = types.BoolValue(false)
 			}
 		}
 	}
@@ -1438,13 +1462,21 @@ func (data *RouterPIMVRFIPv4) updateFromBody(ctx context.Context, res []byte) {
 			data.BsrRelayVrfs[i].VrfName = types.StringNull()
 		}
 		if value := r.Get("listen"); value.Exists() {
-			if !data.BsrRelayVrfs[i].Listen.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.BsrRelayVrfs[i].Listen.IsNull() && !data.BsrRelayVrfs[i].Listen.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.BsrRelayVrfs[i].Listen = types.BoolValue(false)
+			} else if !data.BsrRelayVrfs[i].Listen.IsNull() {
 				data.BsrRelayVrfs[i].Listen = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.BsrRelayVrfs[i].Listen.IsNull() {
 				data.BsrRelayVrfs[i].Listen = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.BsrRelayVrfs[i].Listen = types.BoolValue(false)
 			}
 		}
 	}
@@ -1477,23 +1509,39 @@ func (data *RouterPIMVRFIPv4) updateFromBody(ctx context.Context, res []byte) {
 			data.Interfaces[i].InterfaceName = types.StringNull()
 		}
 		if value := r.Get("enable"); value.Exists() {
-			if !data.Interfaces[i].Enable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].Enable.IsNull() && !data.Interfaces[i].Enable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].Enable = types.BoolValue(false)
+			} else if !data.Interfaces[i].Enable.IsNull() {
 				data.Interfaces[i].Enable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].Enable.IsNull() {
 				data.Interfaces[i].Enable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].Enable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("disable"); value.Exists() {
-			if !data.Interfaces[i].Disable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].Disable.IsNull() && !data.Interfaces[i].Disable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].Disable = types.BoolValue(false)
+			} else if !data.Interfaces[i].Disable.IsNull() {
 				data.Interfaces[i].Disable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].Disable.IsNull() {
 				data.Interfaces[i].Disable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].Disable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("dr-priority"); value.Exists() && !data.Interfaces[i].DrPriority.IsNull() {
@@ -1557,23 +1605,39 @@ func (data *RouterPIMVRFIPv4) updateFromBody(ctx context.Context, res []byte) {
 			data.Interfaces[i].BfdMinimumInterval = types.Int64Null()
 		}
 		if value := r.Get("bfd.fast-detect"); value.Exists() {
-			if !data.Interfaces[i].BfdFastDetect.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].BfdFastDetect.IsNull() && !data.Interfaces[i].BfdFastDetect.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].BfdFastDetect = types.BoolValue(false)
+			} else if !data.Interfaces[i].BfdFastDetect.IsNull() {
 				data.Interfaces[i].BfdFastDetect = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].BfdFastDetect.IsNull() {
 				data.Interfaces[i].BfdFastDetect = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].BfdFastDetect = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("bsr-border"); value.Exists() {
-			if !data.Interfaces[i].BsrBorder.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].BsrBorder.IsNull() && !data.Interfaces[i].BsrBorder.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].BsrBorder = types.BoolValue(false)
+			} else if !data.Interfaces[i].BsrBorder.IsNull() {
 				data.Interfaces[i].BsrBorder = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].BsrBorder.IsNull() {
 				data.Interfaces[i].BsrBorder = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].BsrBorder = types.BoolValue(false)
 			}
 		}
 	}
@@ -2873,7 +2937,7 @@ func (data *RouterPIMVRFIPv4) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("override"); cValue.Exists() {
 				item.Override = types.BoolValue(true)
 			} else {
-				item.Override = types.BoolNull()
+				item.Override = types.BoolValue(false)
 			}
 			data.RpAddresses = append(data.RpAddresses, item)
 			return true
@@ -2892,7 +2956,7 @@ func (data *RouterPIMVRFIPv4) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("override"); cValue.Exists() {
 				item.Override = types.BoolValue(true)
 			} else {
-				item.Override = types.BoolNull()
+				item.Override = types.BoolValue(false)
 			}
 			data.RpAddressesBidir = append(data.RpAddressesBidir, item)
 			return true
@@ -3175,7 +3239,7 @@ func (data *RouterPIMVRFIPv4) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("listen"); cValue.Exists() {
 				item.Listen = types.BoolValue(true)
 			} else {
-				item.Listen = types.BoolNull()
+				item.Listen = types.BoolValue(false)
 			}
 			data.AutoRpRelayVrfs = append(data.AutoRpRelayVrfs, item)
 			return true
@@ -3229,7 +3293,7 @@ func (data *RouterPIMVRFIPv4) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("listen"); cValue.Exists() {
 				item.Listen = types.BoolValue(true)
 			} else {
-				item.Listen = types.BoolNull()
+				item.Listen = types.BoolValue(false)
 			}
 			data.BsrRelayVrfs = append(data.BsrRelayVrfs, item)
 			return true
@@ -3245,12 +3309,12 @@ func (data *RouterPIMVRFIPv4) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("enable"); cValue.Exists() {
 				item.Enable = types.BoolValue(true)
 			} else {
-				item.Enable = types.BoolNull()
+				item.Enable = types.BoolValue(false)
 			}
 			if cValue := v.Get("disable"); cValue.Exists() {
 				item.Disable = types.BoolValue(true)
 			} else {
-				item.Disable = types.BoolNull()
+				item.Disable = types.BoolValue(false)
 			}
 			if cValue := v.Get("dr-priority"); cValue.Exists() {
 				item.DrPriority = types.Int64Value(cValue.Int())
@@ -3291,12 +3355,12 @@ func (data *RouterPIMVRFIPv4) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("bfd.fast-detect"); cValue.Exists() {
 				item.BfdFastDetect = types.BoolValue(true)
 			} else {
-				item.BfdFastDetect = types.BoolNull()
+				item.BfdFastDetect = types.BoolValue(false)
 			}
 			if cValue := v.Get("bsr-border"); cValue.Exists() {
 				item.BsrBorder = types.BoolValue(true)
 			} else {
-				item.BsrBorder = types.BoolNull()
+				item.BsrBorder = types.BoolValue(false)
 			}
 			data.Interfaces = append(data.Interfaces, item)
 			return true

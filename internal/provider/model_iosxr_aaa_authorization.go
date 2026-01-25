@@ -851,43 +851,75 @@ func (data *AAAAuthorization) updateFromBody(ctx context.Context, res []byte) {
 			data.Exec[i].List = types.StringNull()
 		}
 		if value := r.Get("local"); value.Exists() {
-			if !data.Exec[i].A1Local.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Exec[i].A1Local.IsNull() && !data.Exec[i].A1Local.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Exec[i].A1Local = types.BoolValue(false)
+			} else if !data.Exec[i].A1Local.IsNull() {
 				data.Exec[i].A1Local = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Exec[i].A1Local.IsNull() {
 				data.Exec[i].A1Local = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Exec[i].A1Local = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("none"); value.Exists() {
-			if !data.Exec[i].A1None.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Exec[i].A1None.IsNull() && !data.Exec[i].A1None.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Exec[i].A1None = types.BoolValue(false)
+			} else if !data.Exec[i].A1None.IsNull() {
 				data.Exec[i].A1None = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Exec[i].A1None.IsNull() {
 				data.Exec[i].A1None = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Exec[i].A1None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-1.tacacs"); value.Exists() {
-			if !data.Exec[i].A1Tacacs.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Exec[i].A1Tacacs.IsNull() && !data.Exec[i].A1Tacacs.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Exec[i].A1Tacacs = types.BoolValue(false)
+			} else if !data.Exec[i].A1Tacacs.IsNull() {
 				data.Exec[i].A1Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Exec[i].A1Tacacs.IsNull() {
 				data.Exec[i].A1Tacacs = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Exec[i].A1Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-1.radius"); value.Exists() {
-			if !data.Exec[i].A1Radius.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Exec[i].A1Radius.IsNull() && !data.Exec[i].A1Radius.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Exec[i].A1Radius = types.BoolValue(false)
+			} else if !data.Exec[i].A1Radius.IsNull() {
 				data.Exec[i].A1Radius = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Exec[i].A1Radius.IsNull() {
 				data.Exec[i].A1Radius = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Exec[i].A1Radius = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-1.server-group-name"); value.Exists() && !data.Exec[i].A1Group.IsNull() {
@@ -896,43 +928,75 @@ func (data *AAAAuthorization) updateFromBody(ctx context.Context, res []byte) {
 			data.Exec[i].A1Group = types.StringNull()
 		}
 		if value := r.Get("groups.group-2.local"); value.Exists() {
-			if !data.Exec[i].A2Local.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Exec[i].A2Local.IsNull() && !data.Exec[i].A2Local.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Exec[i].A2Local = types.BoolValue(false)
+			} else if !data.Exec[i].A2Local.IsNull() {
 				data.Exec[i].A2Local = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Exec[i].A2Local.IsNull() {
 				data.Exec[i].A2Local = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Exec[i].A2Local = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-2.none"); value.Exists() {
-			if !data.Exec[i].A2None.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Exec[i].A2None.IsNull() && !data.Exec[i].A2None.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Exec[i].A2None = types.BoolValue(false)
+			} else if !data.Exec[i].A2None.IsNull() {
 				data.Exec[i].A2None = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Exec[i].A2None.IsNull() {
 				data.Exec[i].A2None = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Exec[i].A2None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-2.tacacs"); value.Exists() {
-			if !data.Exec[i].A2Tacacs.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Exec[i].A2Tacacs.IsNull() && !data.Exec[i].A2Tacacs.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Exec[i].A2Tacacs = types.BoolValue(false)
+			} else if !data.Exec[i].A2Tacacs.IsNull() {
 				data.Exec[i].A2Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Exec[i].A2Tacacs.IsNull() {
 				data.Exec[i].A2Tacacs = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Exec[i].A2Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-2.radius"); value.Exists() {
-			if !data.Exec[i].A2Radius.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Exec[i].A2Radius.IsNull() && !data.Exec[i].A2Radius.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Exec[i].A2Radius = types.BoolValue(false)
+			} else if !data.Exec[i].A2Radius.IsNull() {
 				data.Exec[i].A2Radius = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Exec[i].A2Radius.IsNull() {
 				data.Exec[i].A2Radius = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Exec[i].A2Radius = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-2.server-group-name"); value.Exists() && !data.Exec[i].A2Group.IsNull() {
@@ -941,43 +1005,75 @@ func (data *AAAAuthorization) updateFromBody(ctx context.Context, res []byte) {
 			data.Exec[i].A2Group = types.StringNull()
 		}
 		if value := r.Get("groups.group-3.local"); value.Exists() {
-			if !data.Exec[i].A3Local.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Exec[i].A3Local.IsNull() && !data.Exec[i].A3Local.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Exec[i].A3Local = types.BoolValue(false)
+			} else if !data.Exec[i].A3Local.IsNull() {
 				data.Exec[i].A3Local = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Exec[i].A3Local.IsNull() {
 				data.Exec[i].A3Local = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Exec[i].A3Local = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-3.none"); value.Exists() {
-			if !data.Exec[i].A3None.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Exec[i].A3None.IsNull() && !data.Exec[i].A3None.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Exec[i].A3None = types.BoolValue(false)
+			} else if !data.Exec[i].A3None.IsNull() {
 				data.Exec[i].A3None = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Exec[i].A3None.IsNull() {
 				data.Exec[i].A3None = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Exec[i].A3None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-3.tacacs"); value.Exists() {
-			if !data.Exec[i].A3Tacacs.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Exec[i].A3Tacacs.IsNull() && !data.Exec[i].A3Tacacs.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Exec[i].A3Tacacs = types.BoolValue(false)
+			} else if !data.Exec[i].A3Tacacs.IsNull() {
 				data.Exec[i].A3Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Exec[i].A3Tacacs.IsNull() {
 				data.Exec[i].A3Tacacs = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Exec[i].A3Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-3.radius"); value.Exists() {
-			if !data.Exec[i].A3Radius.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Exec[i].A3Radius.IsNull() && !data.Exec[i].A3Radius.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Exec[i].A3Radius = types.BoolValue(false)
+			} else if !data.Exec[i].A3Radius.IsNull() {
 				data.Exec[i].A3Radius = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Exec[i].A3Radius.IsNull() {
 				data.Exec[i].A3Radius = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Exec[i].A3Radius = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-3.server-group-name"); value.Exists() && !data.Exec[i].A3Group.IsNull() {
@@ -986,43 +1082,75 @@ func (data *AAAAuthorization) updateFromBody(ctx context.Context, res []byte) {
 			data.Exec[i].A3Group = types.StringNull()
 		}
 		if value := r.Get("groups.group-4.local"); value.Exists() {
-			if !data.Exec[i].A4Local.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Exec[i].A4Local.IsNull() && !data.Exec[i].A4Local.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Exec[i].A4Local = types.BoolValue(false)
+			} else if !data.Exec[i].A4Local.IsNull() {
 				data.Exec[i].A4Local = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Exec[i].A4Local.IsNull() {
 				data.Exec[i].A4Local = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Exec[i].A4Local = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-4.none"); value.Exists() {
-			if !data.Exec[i].A4None.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Exec[i].A4None.IsNull() && !data.Exec[i].A4None.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Exec[i].A4None = types.BoolValue(false)
+			} else if !data.Exec[i].A4None.IsNull() {
 				data.Exec[i].A4None = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Exec[i].A4None.IsNull() {
 				data.Exec[i].A4None = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Exec[i].A4None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-4.tacacs"); value.Exists() {
-			if !data.Exec[i].A4Tacacs.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Exec[i].A4Tacacs.IsNull() && !data.Exec[i].A4Tacacs.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Exec[i].A4Tacacs = types.BoolValue(false)
+			} else if !data.Exec[i].A4Tacacs.IsNull() {
 				data.Exec[i].A4Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Exec[i].A4Tacacs.IsNull() {
 				data.Exec[i].A4Tacacs = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Exec[i].A4Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-4.radius"); value.Exists() {
-			if !data.Exec[i].A4Radius.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Exec[i].A4Radius.IsNull() && !data.Exec[i].A4Radius.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Exec[i].A4Radius = types.BoolValue(false)
+			} else if !data.Exec[i].A4Radius.IsNull() {
 				data.Exec[i].A4Radius = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Exec[i].A4Radius.IsNull() {
 				data.Exec[i].A4Radius = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Exec[i].A4Radius = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-4.server-group-name"); value.Exists() && !data.Exec[i].A4Group.IsNull() {
@@ -1060,23 +1188,39 @@ func (data *AAAAuthorization) updateFromBody(ctx context.Context, res []byte) {
 			data.Eventmanager[i].List = types.StringNull()
 		}
 		if value := r.Get("local"); value.Exists() {
-			if !data.Eventmanager[i].A1Local.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Eventmanager[i].A1Local.IsNull() && !data.Eventmanager[i].A1Local.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Eventmanager[i].A1Local = types.BoolValue(false)
+			} else if !data.Eventmanager[i].A1Local.IsNull() {
 				data.Eventmanager[i].A1Local = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Eventmanager[i].A1Local.IsNull() {
 				data.Eventmanager[i].A1Local = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Eventmanager[i].A1Local = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-1.tacacs"); value.Exists() {
-			if !data.Eventmanager[i].A1Tacacs.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Eventmanager[i].A1Tacacs.IsNull() && !data.Eventmanager[i].A1Tacacs.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Eventmanager[i].A1Tacacs = types.BoolValue(false)
+			} else if !data.Eventmanager[i].A1Tacacs.IsNull() {
 				data.Eventmanager[i].A1Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Eventmanager[i].A1Tacacs.IsNull() {
 				data.Eventmanager[i].A1Tacacs = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Eventmanager[i].A1Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-1.server-group-name"); value.Exists() && !data.Eventmanager[i].A1Group.IsNull() {
@@ -1085,23 +1229,39 @@ func (data *AAAAuthorization) updateFromBody(ctx context.Context, res []byte) {
 			data.Eventmanager[i].A1Group = types.StringNull()
 		}
 		if value := r.Get("groups.group-2.local"); value.Exists() {
-			if !data.Eventmanager[i].A2Local.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Eventmanager[i].A2Local.IsNull() && !data.Eventmanager[i].A2Local.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Eventmanager[i].A2Local = types.BoolValue(false)
+			} else if !data.Eventmanager[i].A2Local.IsNull() {
 				data.Eventmanager[i].A2Local = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Eventmanager[i].A2Local.IsNull() {
 				data.Eventmanager[i].A2Local = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Eventmanager[i].A2Local = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-2.tacacs"); value.Exists() {
-			if !data.Eventmanager[i].A2Tacacs.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Eventmanager[i].A2Tacacs.IsNull() && !data.Eventmanager[i].A2Tacacs.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Eventmanager[i].A2Tacacs = types.BoolValue(false)
+			} else if !data.Eventmanager[i].A2Tacacs.IsNull() {
 				data.Eventmanager[i].A2Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Eventmanager[i].A2Tacacs.IsNull() {
 				data.Eventmanager[i].A2Tacacs = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Eventmanager[i].A2Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-2.server-group-name"); value.Exists() && !data.Eventmanager[i].A2Group.IsNull() {
@@ -1139,33 +1299,57 @@ func (data *AAAAuthorization) updateFromBody(ctx context.Context, res []byte) {
 			data.Commands[i].List = types.StringNull()
 		}
 		if value := r.Get("local"); value.Exists() {
-			if !data.Commands[i].A1Local.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Commands[i].A1Local.IsNull() && !data.Commands[i].A1Local.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Commands[i].A1Local = types.BoolValue(false)
+			} else if !data.Commands[i].A1Local.IsNull() {
 				data.Commands[i].A1Local = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Commands[i].A1Local.IsNull() {
 				data.Commands[i].A1Local = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Commands[i].A1Local = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("none"); value.Exists() {
-			if !data.Commands[i].A1None.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Commands[i].A1None.IsNull() && !data.Commands[i].A1None.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Commands[i].A1None = types.BoolValue(false)
+			} else if !data.Commands[i].A1None.IsNull() {
 				data.Commands[i].A1None = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Commands[i].A1None.IsNull() {
 				data.Commands[i].A1None = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Commands[i].A1None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-1.tacacs"); value.Exists() {
-			if !data.Commands[i].A1Tacacs.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Commands[i].A1Tacacs.IsNull() && !data.Commands[i].A1Tacacs.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Commands[i].A1Tacacs = types.BoolValue(false)
+			} else if !data.Commands[i].A1Tacacs.IsNull() {
 				data.Commands[i].A1Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Commands[i].A1Tacacs.IsNull() {
 				data.Commands[i].A1Tacacs = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Commands[i].A1Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-1.server-group-name"); value.Exists() && !data.Commands[i].A1Group.IsNull() {
@@ -1174,33 +1358,57 @@ func (data *AAAAuthorization) updateFromBody(ctx context.Context, res []byte) {
 			data.Commands[i].A1Group = types.StringNull()
 		}
 		if value := r.Get("groups.group-2.local"); value.Exists() {
-			if !data.Commands[i].A2Local.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Commands[i].A2Local.IsNull() && !data.Commands[i].A2Local.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Commands[i].A2Local = types.BoolValue(false)
+			} else if !data.Commands[i].A2Local.IsNull() {
 				data.Commands[i].A2Local = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Commands[i].A2Local.IsNull() {
 				data.Commands[i].A2Local = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Commands[i].A2Local = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-2.none"); value.Exists() {
-			if !data.Commands[i].A2None.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Commands[i].A2None.IsNull() && !data.Commands[i].A2None.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Commands[i].A2None = types.BoolValue(false)
+			} else if !data.Commands[i].A2None.IsNull() {
 				data.Commands[i].A2None = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Commands[i].A2None.IsNull() {
 				data.Commands[i].A2None = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Commands[i].A2None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-2.tacacs"); value.Exists() {
-			if !data.Commands[i].A2Tacacs.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Commands[i].A2Tacacs.IsNull() && !data.Commands[i].A2Tacacs.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Commands[i].A2Tacacs = types.BoolValue(false)
+			} else if !data.Commands[i].A2Tacacs.IsNull() {
 				data.Commands[i].A2Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Commands[i].A2Tacacs.IsNull() {
 				data.Commands[i].A2Tacacs = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Commands[i].A2Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-2.server-group-name"); value.Exists() && !data.Commands[i].A2Group.IsNull() {
@@ -1209,33 +1417,57 @@ func (data *AAAAuthorization) updateFromBody(ctx context.Context, res []byte) {
 			data.Commands[i].A2Group = types.StringNull()
 		}
 		if value := r.Get("groups.group-3.local"); value.Exists() {
-			if !data.Commands[i].A3Local.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Commands[i].A3Local.IsNull() && !data.Commands[i].A3Local.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Commands[i].A3Local = types.BoolValue(false)
+			} else if !data.Commands[i].A3Local.IsNull() {
 				data.Commands[i].A3Local = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Commands[i].A3Local.IsNull() {
 				data.Commands[i].A3Local = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Commands[i].A3Local = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-3.none"); value.Exists() {
-			if !data.Commands[i].A3None.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Commands[i].A3None.IsNull() && !data.Commands[i].A3None.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Commands[i].A3None = types.BoolValue(false)
+			} else if !data.Commands[i].A3None.IsNull() {
 				data.Commands[i].A3None = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Commands[i].A3None.IsNull() {
 				data.Commands[i].A3None = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Commands[i].A3None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-3.tacacs"); value.Exists() {
-			if !data.Commands[i].A3Tacacs.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Commands[i].A3Tacacs.IsNull() && !data.Commands[i].A3Tacacs.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Commands[i].A3Tacacs = types.BoolValue(false)
+			} else if !data.Commands[i].A3Tacacs.IsNull() {
 				data.Commands[i].A3Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Commands[i].A3Tacacs.IsNull() {
 				data.Commands[i].A3Tacacs = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Commands[i].A3Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-3.server-group-name"); value.Exists() && !data.Commands[i].A3Group.IsNull() {
@@ -1244,33 +1476,57 @@ func (data *AAAAuthorization) updateFromBody(ctx context.Context, res []byte) {
 			data.Commands[i].A3Group = types.StringNull()
 		}
 		if value := r.Get("groups.group-4.local"); value.Exists() {
-			if !data.Commands[i].A4Local.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Commands[i].A4Local.IsNull() && !data.Commands[i].A4Local.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Commands[i].A4Local = types.BoolValue(false)
+			} else if !data.Commands[i].A4Local.IsNull() {
 				data.Commands[i].A4Local = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Commands[i].A4Local.IsNull() {
 				data.Commands[i].A4Local = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Commands[i].A4Local = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-4.none"); value.Exists() {
-			if !data.Commands[i].A4None.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Commands[i].A4None.IsNull() && !data.Commands[i].A4None.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Commands[i].A4None = types.BoolValue(false)
+			} else if !data.Commands[i].A4None.IsNull() {
 				data.Commands[i].A4None = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Commands[i].A4None.IsNull() {
 				data.Commands[i].A4None = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Commands[i].A4None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-4.tacacs"); value.Exists() {
-			if !data.Commands[i].A4Tacacs.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Commands[i].A4Tacacs.IsNull() && !data.Commands[i].A4Tacacs.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Commands[i].A4Tacacs = types.BoolValue(false)
+			} else if !data.Commands[i].A4Tacacs.IsNull() {
 				data.Commands[i].A4Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Commands[i].A4Tacacs.IsNull() {
 				data.Commands[i].A4Tacacs = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Commands[i].A4Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-4.server-group-name"); value.Exists() && !data.Commands[i].A4Group.IsNull() {
@@ -1308,43 +1564,75 @@ func (data *AAAAuthorization) updateFromBody(ctx context.Context, res []byte) {
 			data.Network[i].List = types.StringNull()
 		}
 		if value := r.Get("local"); value.Exists() {
-			if !data.Network[i].A1Local.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Network[i].A1Local.IsNull() && !data.Network[i].A1Local.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Network[i].A1Local = types.BoolValue(false)
+			} else if !data.Network[i].A1Local.IsNull() {
 				data.Network[i].A1Local = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Network[i].A1Local.IsNull() {
 				data.Network[i].A1Local = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Network[i].A1Local = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("none"); value.Exists() {
-			if !data.Network[i].A1None.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Network[i].A1None.IsNull() && !data.Network[i].A1None.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Network[i].A1None = types.BoolValue(false)
+			} else if !data.Network[i].A1None.IsNull() {
 				data.Network[i].A1None = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Network[i].A1None.IsNull() {
 				data.Network[i].A1None = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Network[i].A1None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-1.tacacs"); value.Exists() {
-			if !data.Network[i].A1Tacacs.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Network[i].A1Tacacs.IsNull() && !data.Network[i].A1Tacacs.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Network[i].A1Tacacs = types.BoolValue(false)
+			} else if !data.Network[i].A1Tacacs.IsNull() {
 				data.Network[i].A1Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Network[i].A1Tacacs.IsNull() {
 				data.Network[i].A1Tacacs = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Network[i].A1Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-1.radius"); value.Exists() {
-			if !data.Network[i].A1Radius.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Network[i].A1Radius.IsNull() && !data.Network[i].A1Radius.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Network[i].A1Radius = types.BoolValue(false)
+			} else if !data.Network[i].A1Radius.IsNull() {
 				data.Network[i].A1Radius = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Network[i].A1Radius.IsNull() {
 				data.Network[i].A1Radius = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Network[i].A1Radius = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-1.server-group-name"); value.Exists() && !data.Network[i].A1Group.IsNull() {
@@ -1353,43 +1641,75 @@ func (data *AAAAuthorization) updateFromBody(ctx context.Context, res []byte) {
 			data.Network[i].A1Group = types.StringNull()
 		}
 		if value := r.Get("groups.group-2.local"); value.Exists() {
-			if !data.Network[i].A2Local.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Network[i].A2Local.IsNull() && !data.Network[i].A2Local.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Network[i].A2Local = types.BoolValue(false)
+			} else if !data.Network[i].A2Local.IsNull() {
 				data.Network[i].A2Local = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Network[i].A2Local.IsNull() {
 				data.Network[i].A2Local = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Network[i].A2Local = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-2.none"); value.Exists() {
-			if !data.Network[i].A2None.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Network[i].A2None.IsNull() && !data.Network[i].A2None.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Network[i].A2None = types.BoolValue(false)
+			} else if !data.Network[i].A2None.IsNull() {
 				data.Network[i].A2None = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Network[i].A2None.IsNull() {
 				data.Network[i].A2None = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Network[i].A2None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-2.tacacs"); value.Exists() {
-			if !data.Network[i].A2Tacacs.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Network[i].A2Tacacs.IsNull() && !data.Network[i].A2Tacacs.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Network[i].A2Tacacs = types.BoolValue(false)
+			} else if !data.Network[i].A2Tacacs.IsNull() {
 				data.Network[i].A2Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Network[i].A2Tacacs.IsNull() {
 				data.Network[i].A2Tacacs = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Network[i].A2Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-2.radius"); value.Exists() {
-			if !data.Network[i].A2Radius.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Network[i].A2Radius.IsNull() && !data.Network[i].A2Radius.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Network[i].A2Radius = types.BoolValue(false)
+			} else if !data.Network[i].A2Radius.IsNull() {
 				data.Network[i].A2Radius = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Network[i].A2Radius.IsNull() {
 				data.Network[i].A2Radius = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Network[i].A2Radius = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-2.server-group-name"); value.Exists() && !data.Network[i].A2Group.IsNull() {
@@ -1398,43 +1718,75 @@ func (data *AAAAuthorization) updateFromBody(ctx context.Context, res []byte) {
 			data.Network[i].A2Group = types.StringNull()
 		}
 		if value := r.Get("groups.group-3.local"); value.Exists() {
-			if !data.Network[i].A3Local.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Network[i].A3Local.IsNull() && !data.Network[i].A3Local.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Network[i].A3Local = types.BoolValue(false)
+			} else if !data.Network[i].A3Local.IsNull() {
 				data.Network[i].A3Local = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Network[i].A3Local.IsNull() {
 				data.Network[i].A3Local = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Network[i].A3Local = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-3.none"); value.Exists() {
-			if !data.Network[i].A3None.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Network[i].A3None.IsNull() && !data.Network[i].A3None.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Network[i].A3None = types.BoolValue(false)
+			} else if !data.Network[i].A3None.IsNull() {
 				data.Network[i].A3None = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Network[i].A3None.IsNull() {
 				data.Network[i].A3None = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Network[i].A3None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-3.tacacs"); value.Exists() {
-			if !data.Network[i].A3Tacacs.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Network[i].A3Tacacs.IsNull() && !data.Network[i].A3Tacacs.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Network[i].A3Tacacs = types.BoolValue(false)
+			} else if !data.Network[i].A3Tacacs.IsNull() {
 				data.Network[i].A3Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Network[i].A3Tacacs.IsNull() {
 				data.Network[i].A3Tacacs = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Network[i].A3Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-3.radius"); value.Exists() {
-			if !data.Network[i].A3Radius.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Network[i].A3Radius.IsNull() && !data.Network[i].A3Radius.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Network[i].A3Radius = types.BoolValue(false)
+			} else if !data.Network[i].A3Radius.IsNull() {
 				data.Network[i].A3Radius = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Network[i].A3Radius.IsNull() {
 				data.Network[i].A3Radius = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Network[i].A3Radius = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-3.server-group-name"); value.Exists() && !data.Network[i].A3Group.IsNull() {
@@ -1443,43 +1795,75 @@ func (data *AAAAuthorization) updateFromBody(ctx context.Context, res []byte) {
 			data.Network[i].A3Group = types.StringNull()
 		}
 		if value := r.Get("groups.group-4.local"); value.Exists() {
-			if !data.Network[i].A4Local.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Network[i].A4Local.IsNull() && !data.Network[i].A4Local.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Network[i].A4Local = types.BoolValue(false)
+			} else if !data.Network[i].A4Local.IsNull() {
 				data.Network[i].A4Local = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Network[i].A4Local.IsNull() {
 				data.Network[i].A4Local = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Network[i].A4Local = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-4.none"); value.Exists() {
-			if !data.Network[i].A4None.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Network[i].A4None.IsNull() && !data.Network[i].A4None.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Network[i].A4None = types.BoolValue(false)
+			} else if !data.Network[i].A4None.IsNull() {
 				data.Network[i].A4None = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Network[i].A4None.IsNull() {
 				data.Network[i].A4None = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Network[i].A4None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-4.tacacs"); value.Exists() {
-			if !data.Network[i].A4Tacacs.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Network[i].A4Tacacs.IsNull() && !data.Network[i].A4Tacacs.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Network[i].A4Tacacs = types.BoolValue(false)
+			} else if !data.Network[i].A4Tacacs.IsNull() {
 				data.Network[i].A4Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Network[i].A4Tacacs.IsNull() {
 				data.Network[i].A4Tacacs = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Network[i].A4Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-4.radius"); value.Exists() {
-			if !data.Network[i].A4Radius.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Network[i].A4Radius.IsNull() && !data.Network[i].A4Radius.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Network[i].A4Radius = types.BoolValue(false)
+			} else if !data.Network[i].A4Radius.IsNull() {
 				data.Network[i].A4Radius = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Network[i].A4Radius.IsNull() {
 				data.Network[i].A4Radius = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Network[i].A4Radius = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-4.server-group-name"); value.Exists() && !data.Network[i].A4Group.IsNull() {
@@ -2134,22 +2518,22 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("local"); cValue.Exists() {
 				item.A1Local = types.BoolValue(true)
 			} else {
-				item.A1Local = types.BoolNull()
+				item.A1Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("none"); cValue.Exists() {
 				item.A1None = types.BoolValue(true)
 			} else {
-				item.A1None = types.BoolNull()
+				item.A1None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.tacacs"); cValue.Exists() {
 				item.A1Tacacs = types.BoolValue(true)
 			} else {
-				item.A1Tacacs = types.BoolNull()
+				item.A1Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.radius"); cValue.Exists() {
 				item.A1Radius = types.BoolValue(true)
 			} else {
-				item.A1Radius = types.BoolNull()
+				item.A1Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
@@ -2157,22 +2541,22 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-2.local"); cValue.Exists() {
 				item.A2Local = types.BoolValue(true)
 			} else {
-				item.A2Local = types.BoolNull()
+				item.A2Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.none"); cValue.Exists() {
 				item.A2None = types.BoolValue(true)
 			} else {
-				item.A2None = types.BoolNull()
+				item.A2None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.tacacs"); cValue.Exists() {
 				item.A2Tacacs = types.BoolValue(true)
 			} else {
-				item.A2Tacacs = types.BoolNull()
+				item.A2Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.radius"); cValue.Exists() {
 				item.A2Radius = types.BoolValue(true)
 			} else {
-				item.A2Radius = types.BoolNull()
+				item.A2Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
@@ -2180,22 +2564,22 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-3.local"); cValue.Exists() {
 				item.A3Local = types.BoolValue(true)
 			} else {
-				item.A3Local = types.BoolNull()
+				item.A3Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.none"); cValue.Exists() {
 				item.A3None = types.BoolValue(true)
 			} else {
-				item.A3None = types.BoolNull()
+				item.A3None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.tacacs"); cValue.Exists() {
 				item.A3Tacacs = types.BoolValue(true)
 			} else {
-				item.A3Tacacs = types.BoolNull()
+				item.A3Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.radius"); cValue.Exists() {
 				item.A3Radius = types.BoolValue(true)
 			} else {
-				item.A3Radius = types.BoolNull()
+				item.A3Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
@@ -2203,22 +2587,22 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-4.local"); cValue.Exists() {
 				item.A4Local = types.BoolValue(true)
 			} else {
-				item.A4Local = types.BoolNull()
+				item.A4Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.none"); cValue.Exists() {
 				item.A4None = types.BoolValue(true)
 			} else {
-				item.A4None = types.BoolNull()
+				item.A4None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.tacacs"); cValue.Exists() {
 				item.A4Tacacs = types.BoolValue(true)
 			} else {
-				item.A4Tacacs = types.BoolNull()
+				item.A4Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.radius"); cValue.Exists() {
 				item.A4Radius = types.BoolValue(true)
 			} else {
-				item.A4Radius = types.BoolNull()
+				item.A4Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())
@@ -2237,12 +2621,12 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("local"); cValue.Exists() {
 				item.A1Local = types.BoolValue(true)
 			} else {
-				item.A1Local = types.BoolNull()
+				item.A1Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.tacacs"); cValue.Exists() {
 				item.A1Tacacs = types.BoolValue(true)
 			} else {
-				item.A1Tacacs = types.BoolNull()
+				item.A1Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
@@ -2250,12 +2634,12 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-2.local"); cValue.Exists() {
 				item.A2Local = types.BoolValue(true)
 			} else {
-				item.A2Local = types.BoolNull()
+				item.A2Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.tacacs"); cValue.Exists() {
 				item.A2Tacacs = types.BoolValue(true)
 			} else {
-				item.A2Tacacs = types.BoolNull()
+				item.A2Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
@@ -2274,17 +2658,17 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("local"); cValue.Exists() {
 				item.A1Local = types.BoolValue(true)
 			} else {
-				item.A1Local = types.BoolNull()
+				item.A1Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("none"); cValue.Exists() {
 				item.A1None = types.BoolValue(true)
 			} else {
-				item.A1None = types.BoolNull()
+				item.A1None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.tacacs"); cValue.Exists() {
 				item.A1Tacacs = types.BoolValue(true)
 			} else {
-				item.A1Tacacs = types.BoolNull()
+				item.A1Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
@@ -2292,17 +2676,17 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-2.local"); cValue.Exists() {
 				item.A2Local = types.BoolValue(true)
 			} else {
-				item.A2Local = types.BoolNull()
+				item.A2Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.none"); cValue.Exists() {
 				item.A2None = types.BoolValue(true)
 			} else {
-				item.A2None = types.BoolNull()
+				item.A2None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.tacacs"); cValue.Exists() {
 				item.A2Tacacs = types.BoolValue(true)
 			} else {
-				item.A2Tacacs = types.BoolNull()
+				item.A2Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
@@ -2310,17 +2694,17 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-3.local"); cValue.Exists() {
 				item.A3Local = types.BoolValue(true)
 			} else {
-				item.A3Local = types.BoolNull()
+				item.A3Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.none"); cValue.Exists() {
 				item.A3None = types.BoolValue(true)
 			} else {
-				item.A3None = types.BoolNull()
+				item.A3None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.tacacs"); cValue.Exists() {
 				item.A3Tacacs = types.BoolValue(true)
 			} else {
-				item.A3Tacacs = types.BoolNull()
+				item.A3Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
@@ -2328,17 +2712,17 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-4.local"); cValue.Exists() {
 				item.A4Local = types.BoolValue(true)
 			} else {
-				item.A4Local = types.BoolNull()
+				item.A4Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.none"); cValue.Exists() {
 				item.A4None = types.BoolValue(true)
 			} else {
-				item.A4None = types.BoolNull()
+				item.A4None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.tacacs"); cValue.Exists() {
 				item.A4Tacacs = types.BoolValue(true)
 			} else {
-				item.A4Tacacs = types.BoolNull()
+				item.A4Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())
@@ -2357,22 +2741,22 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("local"); cValue.Exists() {
 				item.A1Local = types.BoolValue(true)
 			} else {
-				item.A1Local = types.BoolNull()
+				item.A1Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("none"); cValue.Exists() {
 				item.A1None = types.BoolValue(true)
 			} else {
-				item.A1None = types.BoolNull()
+				item.A1None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.tacacs"); cValue.Exists() {
 				item.A1Tacacs = types.BoolValue(true)
 			} else {
-				item.A1Tacacs = types.BoolNull()
+				item.A1Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.radius"); cValue.Exists() {
 				item.A1Radius = types.BoolValue(true)
 			} else {
-				item.A1Radius = types.BoolNull()
+				item.A1Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
@@ -2380,22 +2764,22 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-2.local"); cValue.Exists() {
 				item.A2Local = types.BoolValue(true)
 			} else {
-				item.A2Local = types.BoolNull()
+				item.A2Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.none"); cValue.Exists() {
 				item.A2None = types.BoolValue(true)
 			} else {
-				item.A2None = types.BoolNull()
+				item.A2None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.tacacs"); cValue.Exists() {
 				item.A2Tacacs = types.BoolValue(true)
 			} else {
-				item.A2Tacacs = types.BoolNull()
+				item.A2Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.radius"); cValue.Exists() {
 				item.A2Radius = types.BoolValue(true)
 			} else {
-				item.A2Radius = types.BoolNull()
+				item.A2Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
@@ -2403,22 +2787,22 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-3.local"); cValue.Exists() {
 				item.A3Local = types.BoolValue(true)
 			} else {
-				item.A3Local = types.BoolNull()
+				item.A3Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.none"); cValue.Exists() {
 				item.A3None = types.BoolValue(true)
 			} else {
-				item.A3None = types.BoolNull()
+				item.A3None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.tacacs"); cValue.Exists() {
 				item.A3Tacacs = types.BoolValue(true)
 			} else {
-				item.A3Tacacs = types.BoolNull()
+				item.A3Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.radius"); cValue.Exists() {
 				item.A3Radius = types.BoolValue(true)
 			} else {
-				item.A3Radius = types.BoolNull()
+				item.A3Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
@@ -2426,22 +2810,22 @@ func (data *AAAAuthorization) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-4.local"); cValue.Exists() {
 				item.A4Local = types.BoolValue(true)
 			} else {
-				item.A4Local = types.BoolNull()
+				item.A4Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.none"); cValue.Exists() {
 				item.A4None = types.BoolValue(true)
 			} else {
-				item.A4None = types.BoolNull()
+				item.A4None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.tacacs"); cValue.Exists() {
 				item.A4Tacacs = types.BoolValue(true)
 			} else {
-				item.A4Tacacs = types.BoolNull()
+				item.A4Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.radius"); cValue.Exists() {
 				item.A4Radius = types.BoolValue(true)
 			} else {
-				item.A4Radius = types.BoolNull()
+				item.A4Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())

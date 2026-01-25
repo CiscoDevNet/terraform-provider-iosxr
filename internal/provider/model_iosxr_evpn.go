@@ -998,13 +998,21 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 			data.Srv6Locators[i].LocatorName = types.StringNull()
 		}
 		if value := r.Get("usid.allocation.wide-local-id-block"); value.Exists() {
-			if !data.Srv6Locators[i].UsidAllocationWideLocalIdBlock.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Srv6Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && !data.Srv6Locators[i].UsidAllocationWideLocalIdBlock.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Srv6Locators[i].UsidAllocationWideLocalIdBlock = types.BoolValue(false)
+			} else if !data.Srv6Locators[i].UsidAllocationWideLocalIdBlock.IsNull() {
 				data.Srv6Locators[i].UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Srv6Locators[i].UsidAllocationWideLocalIdBlock.IsNull() {
 				data.Srv6Locators[i].UsidAllocationWideLocalIdBlock = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Srv6Locators[i].UsidAllocationWideLocalIdBlock = types.BoolValue(false)
 			}
 		}
 	}
@@ -1197,13 +1205,21 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 			data.VirtualNeighbors[i].EthernetSegmentServiceCarvingManualSecondary = types.StringNull()
 		}
 		if value := r.Get("ethernet-segment.service-carving.hrw"); value.Exists() {
-			if !data.VirtualNeighbors[i].EthernetSegmentServiceCarvingHrw.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.VirtualNeighbors[i].EthernetSegmentServiceCarvingHrw.IsNull() && !data.VirtualNeighbors[i].EthernetSegmentServiceCarvingHrw.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.VirtualNeighbors[i].EthernetSegmentServiceCarvingHrw = types.BoolValue(false)
+			} else if !data.VirtualNeighbors[i].EthernetSegmentServiceCarvingHrw.IsNull() {
 				data.VirtualNeighbors[i].EthernetSegmentServiceCarvingHrw = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.VirtualNeighbors[i].EthernetSegmentServiceCarvingHrw.IsNull() {
 				data.VirtualNeighbors[i].EthernetSegmentServiceCarvingHrw = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.VirtualNeighbors[i].EthernetSegmentServiceCarvingHrw = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("ethernet-segment.service-carving.preference-based.weight"); value.Exists() && !data.VirtualNeighbors[i].EthernetSegmentServiceCarvingPreferenceBasedWeight.IsNull() {
@@ -1212,33 +1228,57 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 			data.VirtualNeighbors[i].EthernetSegmentServiceCarvingPreferenceBasedWeight = types.Int64Null()
 		}
 		if value := r.Get("ethernet-segment.service-carving.preference-based.access-driven"); value.Exists() {
-			if !data.VirtualNeighbors[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.VirtualNeighbors[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() && !data.VirtualNeighbors[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.VirtualNeighbors[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolValue(false)
+			} else if !data.VirtualNeighbors[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() {
 				data.VirtualNeighbors[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.VirtualNeighbors[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() {
 				data.VirtualNeighbors[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.VirtualNeighbors[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("ethernet-segment.service-carving.multicast.hrw-s-g"); value.Exists() {
-			if !data.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwSG.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwSG.IsNull() && !data.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwSG.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwSG = types.BoolValue(false)
+			} else if !data.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwSG.IsNull() {
 				data.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwSG = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwSG.IsNull() {
 				data.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwSG = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwSG = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("ethernet-segment.service-carving.multicast.hrw-g"); value.Exists() {
-			if !data.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwG.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwG.IsNull() && !data.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwG.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwG = types.BoolValue(false)
+			} else if !data.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwG.IsNull() {
 				data.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwG = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwG.IsNull() {
 				data.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwG = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwG = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("ethernet-segment.bgp.route-target"); value.Exists() && !data.VirtualNeighbors[i].EthernetSegmentBgpRt.IsNull() {
@@ -1311,13 +1351,21 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 			data.VirtualVfis[i].EthernetSegmentServiceCarvingManualSecondary = types.StringNull()
 		}
 		if value := r.Get("ethernet-segment.service-carving.hrw"); value.Exists() {
-			if !data.VirtualVfis[i].EthernetSegmentServiceCarvingHrw.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.VirtualVfis[i].EthernetSegmentServiceCarvingHrw.IsNull() && !data.VirtualVfis[i].EthernetSegmentServiceCarvingHrw.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.VirtualVfis[i].EthernetSegmentServiceCarvingHrw = types.BoolValue(false)
+			} else if !data.VirtualVfis[i].EthernetSegmentServiceCarvingHrw.IsNull() {
 				data.VirtualVfis[i].EthernetSegmentServiceCarvingHrw = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.VirtualVfis[i].EthernetSegmentServiceCarvingHrw.IsNull() {
 				data.VirtualVfis[i].EthernetSegmentServiceCarvingHrw = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.VirtualVfis[i].EthernetSegmentServiceCarvingHrw = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("ethernet-segment.service-carving.preference-based.weight"); value.Exists() && !data.VirtualVfis[i].EthernetSegmentServiceCarvingPreferenceBasedWeight.IsNull() {
@@ -1326,13 +1374,21 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 			data.VirtualVfis[i].EthernetSegmentServiceCarvingPreferenceBasedWeight = types.Int64Null()
 		}
 		if value := r.Get("ethernet-segment.service-carving.preference-based.access-driven"); value.Exists() {
-			if !data.VirtualVfis[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.VirtualVfis[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() && !data.VirtualVfis[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.VirtualVfis[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolValue(false)
+			} else if !data.VirtualVfis[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() {
 				data.VirtualVfis[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.VirtualVfis[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() {
 				data.VirtualVfis[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.VirtualVfis[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("ethernet-segment.bgp.route-target"); value.Exists() && !data.VirtualVfis[i].EthernetSegmentBgpRt.IsNull() {
@@ -2005,7 +2061,7 @@ func (data *EVPN) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("usid.allocation.wide-local-id-block"); cValue.Exists() {
 				item.UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 			} else {
-				item.UsidAllocationWideLocalIdBlock = types.BoolNull()
+				item.UsidAllocationWideLocalIdBlock = types.BoolValue(false)
 			}
 			data.Srv6Locators = append(data.Srv6Locators, item)
 			return true
@@ -2110,7 +2166,7 @@ func (data *EVPN) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("ethernet-segment.service-carving.hrw"); cValue.Exists() {
 				item.EthernetSegmentServiceCarvingHrw = types.BoolValue(true)
 			} else {
-				item.EthernetSegmentServiceCarvingHrw = types.BoolNull()
+				item.EthernetSegmentServiceCarvingHrw = types.BoolValue(false)
 			}
 			if cValue := v.Get("ethernet-segment.service-carving.preference-based.weight"); cValue.Exists() {
 				item.EthernetSegmentServiceCarvingPreferenceBasedWeight = types.Int64Value(cValue.Int())
@@ -2118,17 +2174,17 @@ func (data *EVPN) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("ethernet-segment.service-carving.preference-based.access-driven"); cValue.Exists() {
 				item.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolValue(true)
 			} else {
-				item.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolNull()
+				item.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolValue(false)
 			}
 			if cValue := v.Get("ethernet-segment.service-carving.multicast.hrw-s-g"); cValue.Exists() {
 				item.EthernetSegmentServiceCarvingMulticastHrwSG = types.BoolValue(true)
 			} else {
-				item.EthernetSegmentServiceCarvingMulticastHrwSG = types.BoolNull()
+				item.EthernetSegmentServiceCarvingMulticastHrwSG = types.BoolValue(false)
 			}
 			if cValue := v.Get("ethernet-segment.service-carving.multicast.hrw-g"); cValue.Exists() {
 				item.EthernetSegmentServiceCarvingMulticastHrwG = types.BoolValue(true)
 			} else {
-				item.EthernetSegmentServiceCarvingMulticastHrwG = types.BoolNull()
+				item.EthernetSegmentServiceCarvingMulticastHrwG = types.BoolValue(false)
 			}
 			if cValue := v.Get("ethernet-segment.bgp.route-target"); cValue.Exists() {
 				item.EthernetSegmentBgpRt = types.StringValue(cValue.String())
@@ -2168,7 +2224,7 @@ func (data *EVPN) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("ethernet-segment.service-carving.hrw"); cValue.Exists() {
 				item.EthernetSegmentServiceCarvingHrw = types.BoolValue(true)
 			} else {
-				item.EthernetSegmentServiceCarvingHrw = types.BoolNull()
+				item.EthernetSegmentServiceCarvingHrw = types.BoolValue(false)
 			}
 			if cValue := v.Get("ethernet-segment.service-carving.preference-based.weight"); cValue.Exists() {
 				item.EthernetSegmentServiceCarvingPreferenceBasedWeight = types.Int64Value(cValue.Int())
@@ -2176,7 +2232,7 @@ func (data *EVPN) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("ethernet-segment.service-carving.preference-based.access-driven"); cValue.Exists() {
 				item.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolValue(true)
 			} else {
-				item.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolNull()
+				item.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven = types.BoolValue(false)
 			}
 			if cValue := v.Get("ethernet-segment.bgp.route-target"); cValue.Exists() {
 				item.EthernetSegmentBgpRt = types.StringValue(cValue.String())

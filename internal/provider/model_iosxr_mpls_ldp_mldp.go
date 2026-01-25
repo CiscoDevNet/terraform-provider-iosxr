@@ -319,23 +319,39 @@ func (data *MPLSLDPMLDP) updateFromBody(ctx context.Context, res []byte) {
 			data.AddressFamily[i].MakeBeforeBreakRoutePolicy = types.StringNull()
 		}
 		if value := r.Get("carrier-supporting-carrier"); value.Exists() {
-			if !data.AddressFamily[i].CarrierSupportingCarrier.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].CarrierSupportingCarrier.IsNull() && !data.AddressFamily[i].CarrierSupportingCarrier.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].CarrierSupportingCarrier = types.BoolValue(false)
+			} else if !data.AddressFamily[i].CarrierSupportingCarrier.IsNull() {
 				data.AddressFamily[i].CarrierSupportingCarrier = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].CarrierSupportingCarrier.IsNull() {
 				data.AddressFamily[i].CarrierSupportingCarrier = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].CarrierSupportingCarrier = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("mofrr"); value.Exists() {
-			if !data.AddressFamily[i].MofrrEnable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].MofrrEnable.IsNull() && !data.AddressFamily[i].MofrrEnable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].MofrrEnable = types.BoolValue(false)
+			} else if !data.AddressFamily[i].MofrrEnable.IsNull() {
 				data.AddressFamily[i].MofrrEnable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].MofrrEnable.IsNull() {
 				data.AddressFamily[i].MofrrEnable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].MofrrEnable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("mofrr.route-policy"); value.Exists() && !data.AddressFamily[i].MofrrRoutePolicy.IsNull() {
@@ -344,13 +360,21 @@ func (data *MPLSLDPMLDP) updateFromBody(ctx context.Context, res []byte) {
 			data.AddressFamily[i].MofrrRoutePolicy = types.StringNull()
 		}
 		if value := r.Get("recursive-fec.enable"); value.Exists() {
-			if !data.AddressFamily[i].RecursiveFecEnable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].RecursiveFecEnable.IsNull() && !data.AddressFamily[i].RecursiveFecEnable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].RecursiveFecEnable = types.BoolValue(false)
+			} else if !data.AddressFamily[i].RecursiveFecEnable.IsNull() {
 				data.AddressFamily[i].RecursiveFecEnable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].RecursiveFecEnable.IsNull() {
 				data.AddressFamily[i].RecursiveFecEnable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].RecursiveFecEnable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("recursive-fec.route-policy"); value.Exists() && !data.AddressFamily[i].RecursiveFecRoutePolicy.IsNull() {
@@ -408,13 +432,21 @@ func (data *MPLSLDPMLDP) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		if value := r.Get("forwarding.recursive"); value.Exists() {
-			if !data.AddressFamily[i].ForwardingRecursive.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].ForwardingRecursive.IsNull() && !data.AddressFamily[i].ForwardingRecursive.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].ForwardingRecursive = types.BoolValue(false)
+			} else if !data.AddressFamily[i].ForwardingRecursive.IsNull() {
 				data.AddressFamily[i].ForwardingRecursive = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].ForwardingRecursive.IsNull() {
 				data.AddressFamily[i].ForwardingRecursive = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].ForwardingRecursive = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("forwarding.recursive.route-policy"); value.Exists() && !data.AddressFamily[i].ForwardingRecursiveRoutePolicy.IsNull() {
@@ -423,13 +455,21 @@ func (data *MPLSLDPMLDP) updateFromBody(ctx context.Context, res []byte) {
 			data.AddressFamily[i].ForwardingRecursiveRoutePolicy = types.StringNull()
 		}
 		if value := r.Get("rib.unicast-always"); value.Exists() {
-			if !data.AddressFamily[i].RibUnicastAlways.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].RibUnicastAlways.IsNull() && !data.AddressFamily[i].RibUnicastAlways.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].RibUnicastAlways = types.BoolValue(false)
+			} else if !data.AddressFamily[i].RibUnicastAlways.IsNull() {
 				data.AddressFamily[i].RibUnicastAlways = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].RibUnicastAlways.IsNull() {
 				data.AddressFamily[i].RibUnicastAlways = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].RibUnicastAlways = types.BoolValue(false)
 			}
 		}
 	}
@@ -811,12 +851,12 @@ func (data *MPLSLDPMLDP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("carrier-supporting-carrier"); cValue.Exists() {
 				item.CarrierSupportingCarrier = types.BoolValue(true)
 			} else {
-				item.CarrierSupportingCarrier = types.BoolNull()
+				item.CarrierSupportingCarrier = types.BoolValue(false)
 			}
 			if cValue := v.Get("mofrr"); cValue.Exists() {
 				item.MofrrEnable = types.BoolValue(true)
 			} else {
-				item.MofrrEnable = types.BoolNull()
+				item.MofrrEnable = types.BoolValue(false)
 			}
 			if cValue := v.Get("mofrr.route-policy"); cValue.Exists() {
 				item.MofrrRoutePolicy = types.StringValue(cValue.String())
@@ -824,7 +864,7 @@ func (data *MPLSLDPMLDP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("recursive-fec.enable"); cValue.Exists() {
 				item.RecursiveFecEnable = types.BoolValue(true)
 			} else {
-				item.RecursiveFecEnable = types.BoolNull()
+				item.RecursiveFecEnable = types.BoolValue(false)
 			}
 			if cValue := v.Get("recursive-fec.route-policy"); cValue.Exists() {
 				item.RecursiveFecRoutePolicy = types.StringValue(cValue.String())
@@ -855,7 +895,7 @@ func (data *MPLSLDPMLDP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("forwarding.recursive"); cValue.Exists() {
 				item.ForwardingRecursive = types.BoolValue(true)
 			} else {
-				item.ForwardingRecursive = types.BoolNull()
+				item.ForwardingRecursive = types.BoolValue(false)
 			}
 			if cValue := v.Get("forwarding.recursive.route-policy"); cValue.Exists() {
 				item.ForwardingRecursiveRoutePolicy = types.StringValue(cValue.String())
@@ -863,7 +903,7 @@ func (data *MPLSLDPMLDP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("rib.unicast-always"); cValue.Exists() {
 				item.RibUnicastAlways = types.BoolValue(true)
 			} else {
-				item.RibUnicastAlways = types.BoolNull()
+				item.RibUnicastAlways = types.BoolValue(false)
 			}
 			data.AddressFamily = append(data.AddressFamily, item)
 			return true

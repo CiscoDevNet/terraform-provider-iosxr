@@ -232,13 +232,21 @@ func (data *MPLSLDPInterface) updateFromBody(ctx context.Context, res []byte) {
 			data.AddressFamily[i].AfName = types.StringNull()
 		}
 		if value := r.Get("discovery.transport-address.interface"); value.Exists() {
-			if !data.AddressFamily[i].DiscoveryTransportAddressInterface.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].DiscoveryTransportAddressInterface.IsNull() && !data.AddressFamily[i].DiscoveryTransportAddressInterface.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].DiscoveryTransportAddressInterface = types.BoolValue(false)
+			} else if !data.AddressFamily[i].DiscoveryTransportAddressInterface.IsNull() {
 				data.AddressFamily[i].DiscoveryTransportAddressInterface = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].DiscoveryTransportAddressInterface.IsNull() {
 				data.AddressFamily[i].DiscoveryTransportAddressInterface = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].DiscoveryTransportAddressInterface = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("discovery.transport-address.ip-address"); value.Exists() && !data.AddressFamily[i].DiscoveryTransportAddressIp.IsNull() {
@@ -247,23 +255,39 @@ func (data *MPLSLDPInterface) updateFromBody(ctx context.Context, res []byte) {
 			data.AddressFamily[i].DiscoveryTransportAddressIp = types.StringNull()
 		}
 		if value := r.Get("igp.auto-config.disable"); value.Exists() {
-			if !data.AddressFamily[i].IgpAutoConfigDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].IgpAutoConfigDisable.IsNull() && !data.AddressFamily[i].IgpAutoConfigDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].IgpAutoConfigDisable = types.BoolValue(false)
+			} else if !data.AddressFamily[i].IgpAutoConfigDisable.IsNull() {
 				data.AddressFamily[i].IgpAutoConfigDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].IgpAutoConfigDisable.IsNull() {
 				data.AddressFamily[i].IgpAutoConfigDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].IgpAutoConfigDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("mldp.disable"); value.Exists() {
-			if !data.AddressFamily[i].MldpDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].MldpDisable.IsNull() && !data.AddressFamily[i].MldpDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].MldpDisable = types.BoolValue(false)
+			} else if !data.AddressFamily[i].MldpDisable.IsNull() {
 				data.AddressFamily[i].MldpDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].MldpDisable.IsNull() {
 				data.AddressFamily[i].MldpDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].MldpDisable = types.BoolValue(false)
 			}
 		}
 	}
@@ -483,7 +507,7 @@ func (data *MPLSLDPInterface) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("discovery.transport-address.interface"); cValue.Exists() {
 				item.DiscoveryTransportAddressInterface = types.BoolValue(true)
 			} else {
-				item.DiscoveryTransportAddressInterface = types.BoolNull()
+				item.DiscoveryTransportAddressInterface = types.BoolValue(false)
 			}
 			if cValue := v.Get("discovery.transport-address.ip-address"); cValue.Exists() {
 				item.DiscoveryTransportAddressIp = types.StringValue(cValue.String())
@@ -491,12 +515,12 @@ func (data *MPLSLDPInterface) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("igp.auto-config.disable"); cValue.Exists() {
 				item.IgpAutoConfigDisable = types.BoolValue(true)
 			} else {
-				item.IgpAutoConfigDisable = types.BoolNull()
+				item.IgpAutoConfigDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("mldp.disable"); cValue.Exists() {
 				item.MldpDisable = types.BoolValue(true)
 			} else {
-				item.MldpDisable = types.BoolNull()
+				item.MldpDisable = types.BoolValue(false)
 			}
 			data.AddressFamily = append(data.AddressFamily, item)
 			return true

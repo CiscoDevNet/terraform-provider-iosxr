@@ -1277,13 +1277,21 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBody(ctx context.Conte
 			data.Profiles[i].ProbeSweepDestinationRange = types.Int64Null()
 		}
 		if value := r.Get("probe.flow-label.explicits"); value.Exists() {
-			if !data.Profiles[i].ProbeFlowLabelExplicit.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Profiles[i].ProbeFlowLabelExplicit.IsNull() && !data.Profiles[i].ProbeFlowLabelExplicit.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Profiles[i].ProbeFlowLabelExplicit = types.BoolValue(false)
+			} else if !data.Profiles[i].ProbeFlowLabelExplicit.IsNull() {
 				data.Profiles[i].ProbeFlowLabelExplicit = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Profiles[i].ProbeFlowLabelExplicit.IsNull() {
 				data.Profiles[i].ProbeFlowLabelExplicit = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Profiles[i].ProbeFlowLabelExplicit = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("probe.flow-label.explicits.explicit"); value.Exists() && !data.Profiles[i].ProbeFlowLabelExplicitList.IsNull() {
@@ -1307,23 +1315,39 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBody(ctx context.Conte
 			data.Profiles[i].ProbeFlowLabelIncrement = types.Int64Null()
 		}
 		if value := r.Get("probe.protocol.pm-mpls"); value.Exists() {
-			if !data.Profiles[i].ProbeProtocolPmMpls.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Profiles[i].ProbeProtocolPmMpls.IsNull() && !data.Profiles[i].ProbeProtocolPmMpls.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Profiles[i].ProbeProtocolPmMpls = types.BoolValue(false)
+			} else if !data.Profiles[i].ProbeProtocolPmMpls.IsNull() {
 				data.Profiles[i].ProbeProtocolPmMpls = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Profiles[i].ProbeProtocolPmMpls.IsNull() {
 				data.Profiles[i].ProbeProtocolPmMpls = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Profiles[i].ProbeProtocolPmMpls = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("probe.protocol.twamp-light"); value.Exists() {
-			if !data.Profiles[i].ProbeProtocolTwampLight.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Profiles[i].ProbeProtocolTwampLight.IsNull() && !data.Profiles[i].ProbeProtocolTwampLight.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Profiles[i].ProbeProtocolTwampLight = types.BoolValue(false)
+			} else if !data.Profiles[i].ProbeProtocolTwampLight.IsNull() {
 				data.Profiles[i].ProbeProtocolTwampLight = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Profiles[i].ProbeProtocolTwampLight.IsNull() {
 				data.Profiles[i].ProbeProtocolTwampLight = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Profiles[i].ProbeProtocolTwampLight = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("probe.tos.traffic-class"); value.Exists() && !data.Profiles[i].ProbeTosTrafficClass.IsNull() {
@@ -1337,83 +1361,147 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBody(ctx context.Conte
 			data.Profiles[i].ProbeTosDscp = types.Int64Null()
 		}
 		if value := r.Get("probe.measurement-mode.one-way"); value.Exists() {
-			if !data.Profiles[i].ProbeMeasurementModeOneWay.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Profiles[i].ProbeMeasurementModeOneWay.IsNull() && !data.Profiles[i].ProbeMeasurementModeOneWay.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Profiles[i].ProbeMeasurementModeOneWay = types.BoolValue(false)
+			} else if !data.Profiles[i].ProbeMeasurementModeOneWay.IsNull() {
 				data.Profiles[i].ProbeMeasurementModeOneWay = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Profiles[i].ProbeMeasurementModeOneWay.IsNull() {
 				data.Profiles[i].ProbeMeasurementModeOneWay = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Profiles[i].ProbeMeasurementModeOneWay = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("probe.measurement-mode.two-way"); value.Exists() {
-			if !data.Profiles[i].ProbeMeasurementModeTwoWay.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Profiles[i].ProbeMeasurementModeTwoWay.IsNull() && !data.Profiles[i].ProbeMeasurementModeTwoWay.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Profiles[i].ProbeMeasurementModeTwoWay = types.BoolValue(false)
+			} else if !data.Profiles[i].ProbeMeasurementModeTwoWay.IsNull() {
 				data.Profiles[i].ProbeMeasurementModeTwoWay = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Profiles[i].ProbeMeasurementModeTwoWay.IsNull() {
 				data.Profiles[i].ProbeMeasurementModeTwoWay = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Profiles[i].ProbeMeasurementModeTwoWay = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("probe.measurement-mode.loopback"); value.Exists() {
-			if !data.Profiles[i].ProbeMeasurementModeLoopback.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Profiles[i].ProbeMeasurementModeLoopback.IsNull() && !data.Profiles[i].ProbeMeasurementModeLoopback.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Profiles[i].ProbeMeasurementModeLoopback = types.BoolValue(false)
+			} else if !data.Profiles[i].ProbeMeasurementModeLoopback.IsNull() {
 				data.Profiles[i].ProbeMeasurementModeLoopback = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Profiles[i].ProbeMeasurementModeLoopback.IsNull() {
 				data.Profiles[i].ProbeMeasurementModeLoopback = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Profiles[i].ProbeMeasurementModeLoopback = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("advertisement.logging.delay-exceeded"); value.Exists() {
-			if !data.Profiles[i].AdvertiseLoggingDelayExceeded.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Profiles[i].AdvertiseLoggingDelayExceeded.IsNull() && !data.Profiles[i].AdvertiseLoggingDelayExceeded.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Profiles[i].AdvertiseLoggingDelayExceeded = types.BoolValue(false)
+			} else if !data.Profiles[i].AdvertiseLoggingDelayExceeded.IsNull() {
 				data.Profiles[i].AdvertiseLoggingDelayExceeded = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Profiles[i].AdvertiseLoggingDelayExceeded.IsNull() {
 				data.Profiles[i].AdvertiseLoggingDelayExceeded = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Profiles[i].AdvertiseLoggingDelayExceeded = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("advertisement.threshold-check.average-delay"); value.Exists() {
-			if !data.Profiles[i].AdvertiseThresholdCheckAverageDelay.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Profiles[i].AdvertiseThresholdCheckAverageDelay.IsNull() && !data.Profiles[i].AdvertiseThresholdCheckAverageDelay.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Profiles[i].AdvertiseThresholdCheckAverageDelay = types.BoolValue(false)
+			} else if !data.Profiles[i].AdvertiseThresholdCheckAverageDelay.IsNull() {
 				data.Profiles[i].AdvertiseThresholdCheckAverageDelay = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Profiles[i].AdvertiseThresholdCheckAverageDelay.IsNull() {
 				data.Profiles[i].AdvertiseThresholdCheckAverageDelay = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Profiles[i].AdvertiseThresholdCheckAverageDelay = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("advertisement.threshold-check.minimum-delay"); value.Exists() {
-			if !data.Profiles[i].AdvertiseThresholdCheckMinimumDelay.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Profiles[i].AdvertiseThresholdCheckMinimumDelay.IsNull() && !data.Profiles[i].AdvertiseThresholdCheckMinimumDelay.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Profiles[i].AdvertiseThresholdCheckMinimumDelay = types.BoolValue(false)
+			} else if !data.Profiles[i].AdvertiseThresholdCheckMinimumDelay.IsNull() {
 				data.Profiles[i].AdvertiseThresholdCheckMinimumDelay = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Profiles[i].AdvertiseThresholdCheckMinimumDelay.IsNull() {
 				data.Profiles[i].AdvertiseThresholdCheckMinimumDelay = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Profiles[i].AdvertiseThresholdCheckMinimumDelay = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("advertisement.threshold-check.maximum-delay"); value.Exists() {
-			if !data.Profiles[i].AdvertiseThresholdCheckMaximumDelay.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Profiles[i].AdvertiseThresholdCheckMaximumDelay.IsNull() && !data.Profiles[i].AdvertiseThresholdCheckMaximumDelay.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Profiles[i].AdvertiseThresholdCheckMaximumDelay = types.BoolValue(false)
+			} else if !data.Profiles[i].AdvertiseThresholdCheckMaximumDelay.IsNull() {
 				data.Profiles[i].AdvertiseThresholdCheckMaximumDelay = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Profiles[i].AdvertiseThresholdCheckMaximumDelay.IsNull() {
 				data.Profiles[i].AdvertiseThresholdCheckMaximumDelay = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Profiles[i].AdvertiseThresholdCheckMaximumDelay = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("advertisement.periodic.disabled"); value.Exists() {
-			if !data.Profiles[i].AdvertisePeriodicDisabled.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Profiles[i].AdvertisePeriodicDisabled.IsNull() && !data.Profiles[i].AdvertisePeriodicDisabled.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Profiles[i].AdvertisePeriodicDisabled = types.BoolValue(false)
+			} else if !data.Profiles[i].AdvertisePeriodicDisabled.IsNull() {
 				data.Profiles[i].AdvertisePeriodicDisabled = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Profiles[i].AdvertisePeriodicDisabled.IsNull() {
 				data.Profiles[i].AdvertisePeriodicDisabled = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Profiles[i].AdvertisePeriodicDisabled = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("advertisement.periodic.interval"); value.Exists() && !data.Profiles[i].AdvertisePeriodicInterval.IsNull() {
@@ -1432,13 +1520,21 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBody(ctx context.Conte
 			data.Profiles[i].AdvertisePeriodicMinimumChange = types.Int64Null()
 		}
 		if value := r.Get("advertisement.accelerated"); value.Exists() {
-			if !data.Profiles[i].AdvertiseAccelerated.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Profiles[i].AdvertiseAccelerated.IsNull() && !data.Profiles[i].AdvertiseAccelerated.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Profiles[i].AdvertiseAccelerated = types.BoolValue(false)
+			} else if !data.Profiles[i].AdvertiseAccelerated.IsNull() {
 				data.Profiles[i].AdvertiseAccelerated = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Profiles[i].AdvertiseAccelerated.IsNull() {
 				data.Profiles[i].AdvertiseAccelerated = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Profiles[i].AdvertiseAccelerated = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("advertisement.accelerated.threshold"); value.Exists() && !data.Profiles[i].AdvertiseAcceleratedThreshold.IsNull() {
@@ -2943,7 +3039,7 @@ func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, re
 			if cValue := v.Get("probe.flow-label.explicits"); cValue.Exists() {
 				item.ProbeFlowLabelExplicit = types.BoolValue(true)
 			} else {
-				item.ProbeFlowLabelExplicit = types.BoolNull()
+				item.ProbeFlowLabelExplicit = types.BoolValue(false)
 			}
 			if cValue := v.Get("probe.flow-label.explicits.explicit"); cValue.Exists() {
 				item.ProbeFlowLabelExplicitList = helpers.GetInt64List(cValue.Array())
@@ -2962,12 +3058,12 @@ func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, re
 			if cValue := v.Get("probe.protocol.pm-mpls"); cValue.Exists() {
 				item.ProbeProtocolPmMpls = types.BoolValue(true)
 			} else {
-				item.ProbeProtocolPmMpls = types.BoolNull()
+				item.ProbeProtocolPmMpls = types.BoolValue(false)
 			}
 			if cValue := v.Get("probe.protocol.twamp-light"); cValue.Exists() {
 				item.ProbeProtocolTwampLight = types.BoolValue(true)
 			} else {
-				item.ProbeProtocolTwampLight = types.BoolNull()
+				item.ProbeProtocolTwampLight = types.BoolValue(false)
 			}
 			if cValue := v.Get("probe.tos.traffic-class"); cValue.Exists() {
 				item.ProbeTosTrafficClass = types.Int64Value(cValue.Int())
@@ -2978,42 +3074,42 @@ func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, re
 			if cValue := v.Get("probe.measurement-mode.one-way"); cValue.Exists() {
 				item.ProbeMeasurementModeOneWay = types.BoolValue(true)
 			} else {
-				item.ProbeMeasurementModeOneWay = types.BoolNull()
+				item.ProbeMeasurementModeOneWay = types.BoolValue(false)
 			}
 			if cValue := v.Get("probe.measurement-mode.two-way"); cValue.Exists() {
 				item.ProbeMeasurementModeTwoWay = types.BoolValue(true)
 			} else {
-				item.ProbeMeasurementModeTwoWay = types.BoolNull()
+				item.ProbeMeasurementModeTwoWay = types.BoolValue(false)
 			}
 			if cValue := v.Get("probe.measurement-mode.loopback"); cValue.Exists() {
 				item.ProbeMeasurementModeLoopback = types.BoolValue(true)
 			} else {
-				item.ProbeMeasurementModeLoopback = types.BoolNull()
+				item.ProbeMeasurementModeLoopback = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertisement.logging.delay-exceeded"); cValue.Exists() {
 				item.AdvertiseLoggingDelayExceeded = types.BoolValue(true)
 			} else {
-				item.AdvertiseLoggingDelayExceeded = types.BoolNull()
+				item.AdvertiseLoggingDelayExceeded = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertisement.threshold-check.average-delay"); cValue.Exists() {
 				item.AdvertiseThresholdCheckAverageDelay = types.BoolValue(true)
 			} else {
-				item.AdvertiseThresholdCheckAverageDelay = types.BoolNull()
+				item.AdvertiseThresholdCheckAverageDelay = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertisement.threshold-check.minimum-delay"); cValue.Exists() {
 				item.AdvertiseThresholdCheckMinimumDelay = types.BoolValue(true)
 			} else {
-				item.AdvertiseThresholdCheckMinimumDelay = types.BoolNull()
+				item.AdvertiseThresholdCheckMinimumDelay = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertisement.threshold-check.maximum-delay"); cValue.Exists() {
 				item.AdvertiseThresholdCheckMaximumDelay = types.BoolValue(true)
 			} else {
-				item.AdvertiseThresholdCheckMaximumDelay = types.BoolNull()
+				item.AdvertiseThresholdCheckMaximumDelay = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertisement.periodic.disabled"); cValue.Exists() {
 				item.AdvertisePeriodicDisabled = types.BoolValue(true)
 			} else {
-				item.AdvertisePeriodicDisabled = types.BoolNull()
+				item.AdvertisePeriodicDisabled = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertisement.periodic.interval"); cValue.Exists() {
 				item.AdvertisePeriodicInterval = types.Int64Value(cValue.Int())
@@ -3027,7 +3123,7 @@ func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, re
 			if cValue := v.Get("advertisement.accelerated"); cValue.Exists() {
 				item.AdvertiseAccelerated = types.BoolValue(true)
 			} else {
-				item.AdvertiseAccelerated = types.BoolNull()
+				item.AdvertiseAccelerated = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertisement.accelerated.threshold"); cValue.Exists() {
 				item.AdvertiseAcceleratedThreshold = types.Int64Value(cValue.Int())

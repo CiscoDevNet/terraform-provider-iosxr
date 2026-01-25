@@ -482,13 +482,21 @@ func (data *RouterStaticVRFIPv6Multicast) updateFromBody(ctx context.Context, re
 			data.NexthopInterfaces[i].DistanceMetric = types.Int64Null()
 		}
 		if value := r.Get("permanent"); value.Exists() {
-			if !data.NexthopInterfaces[i].Permanent.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.NexthopInterfaces[i].Permanent.IsNull() && !data.NexthopInterfaces[i].Permanent.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.NexthopInterfaces[i].Permanent = types.BoolValue(false)
+			} else if !data.NexthopInterfaces[i].Permanent.IsNull() {
 				data.NexthopInterfaces[i].Permanent = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.NexthopInterfaces[i].Permanent.IsNull() {
 				data.NexthopInterfaces[i].Permanent = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.NexthopInterfaces[i].Permanent = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("track"); value.Exists() && !data.NexthopInterfaces[i].Track.IsNull() {
@@ -551,13 +559,21 @@ func (data *RouterStaticVRFIPv6Multicast) updateFromBody(ctx context.Context, re
 			data.NexthopInterfaceAddresses[i].DistanceMetric = types.Int64Null()
 		}
 		if value := r.Get("permanent"); value.Exists() {
-			if !data.NexthopInterfaceAddresses[i].Permanent.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.NexthopInterfaceAddresses[i].Permanent.IsNull() && !data.NexthopInterfaceAddresses[i].Permanent.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.NexthopInterfaceAddresses[i].Permanent = types.BoolValue(false)
+			} else if !data.NexthopInterfaceAddresses[i].Permanent.IsNull() {
 				data.NexthopInterfaceAddresses[i].Permanent = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.NexthopInterfaceAddresses[i].Permanent.IsNull() {
 				data.NexthopInterfaceAddresses[i].Permanent = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.NexthopInterfaceAddresses[i].Permanent = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("track"); value.Exists() && !data.NexthopInterfaceAddresses[i].Track.IsNull() {
@@ -615,13 +631,21 @@ func (data *RouterStaticVRFIPv6Multicast) updateFromBody(ctx context.Context, re
 			data.NexthopAddresses[i].DistanceMetric = types.Int64Null()
 		}
 		if value := r.Get("permanent"); value.Exists() {
-			if !data.NexthopAddresses[i].Permanent.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.NexthopAddresses[i].Permanent.IsNull() && !data.NexthopAddresses[i].Permanent.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.NexthopAddresses[i].Permanent = types.BoolValue(false)
+			} else if !data.NexthopAddresses[i].Permanent.IsNull() {
 				data.NexthopAddresses[i].Permanent = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.NexthopAddresses[i].Permanent.IsNull() {
 				data.NexthopAddresses[i].Permanent = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.NexthopAddresses[i].Permanent = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("track"); value.Exists() && !data.NexthopAddresses[i].Track.IsNull() {
@@ -679,13 +703,21 @@ func (data *RouterStaticVRFIPv6Multicast) updateFromBody(ctx context.Context, re
 			data.SrPolicies[i].DistanceMetric = types.Int64Null()
 		}
 		if value := r.Get("permanent"); value.Exists() {
-			if !data.SrPolicies[i].Permanent.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SrPolicies[i].Permanent.IsNull() && !data.SrPolicies[i].Permanent.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SrPolicies[i].Permanent = types.BoolValue(false)
+			} else if !data.SrPolicies[i].Permanent.IsNull() {
 				data.SrPolicies[i].Permanent = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SrPolicies[i].Permanent.IsNull() {
 				data.SrPolicies[i].Permanent = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SrPolicies[i].Permanent = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("track"); value.Exists() && !data.SrPolicies[i].Track.IsNull() {
@@ -771,13 +803,18 @@ func (data *RouterStaticVRFIPv6Multicast) updateFromBody(ctx context.Context, re
 				data.Vrfs[i].NexthopInterfaces[ci].DistanceMetric = types.Int64Null()
 			}
 			if value := cr.Get("permanent"); value.Exists() {
-				if !data.Vrfs[i].NexthopInterfaces[ci].Permanent.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.Vrfs[i].NexthopInterfaces[ci].Permanent.IsNull() && !data.Vrfs[i].NexthopInterfaces[ci].Permanent.ValueBool() {
+					data.Vrfs[i].NexthopInterfaces[ci].Permanent = types.BoolValue(false)
+				} else if !data.Vrfs[i].NexthopInterfaces[ci].Permanent.IsNull() {
 					data.Vrfs[i].NexthopInterfaces[ci].Permanent = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.Vrfs[i].NexthopInterfaces[ci].Permanent.IsNull() {
 					data.Vrfs[i].NexthopInterfaces[ci].Permanent = types.BoolNull()
+				} else {
+					data.Vrfs[i].NexthopInterfaces[ci].Permanent = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("track"); value.Exists() && !data.Vrfs[i].NexthopInterfaces[ci].Track.IsNull() {
@@ -850,13 +887,18 @@ func (data *RouterStaticVRFIPv6Multicast) updateFromBody(ctx context.Context, re
 				data.Vrfs[i].NexthopInterfaceAddresses[ci].DistanceMetric = types.Int64Null()
 			}
 			if value := cr.Get("permanent"); value.Exists() {
-				if !data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.IsNull() && !data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.ValueBool() {
+					data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent = types.BoolValue(false)
+				} else if !data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.IsNull() {
 					data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.IsNull() {
 					data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent = types.BoolNull()
+				} else {
+					data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("track"); value.Exists() && !data.Vrfs[i].NexthopInterfaceAddresses[ci].Track.IsNull() {
@@ -914,13 +956,18 @@ func (data *RouterStaticVRFIPv6Multicast) updateFromBody(ctx context.Context, re
 				data.Vrfs[i].NexthopAddresses[ci].DistanceMetric = types.Int64Null()
 			}
 			if value := cr.Get("permanent"); value.Exists() {
-				if !data.Vrfs[i].NexthopAddresses[ci].Permanent.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.Vrfs[i].NexthopAddresses[ci].Permanent.IsNull() && !data.Vrfs[i].NexthopAddresses[ci].Permanent.ValueBool() {
+					data.Vrfs[i].NexthopAddresses[ci].Permanent = types.BoolValue(false)
+				} else if !data.Vrfs[i].NexthopAddresses[ci].Permanent.IsNull() {
 					data.Vrfs[i].NexthopAddresses[ci].Permanent = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.Vrfs[i].NexthopAddresses[ci].Permanent.IsNull() {
 					data.Vrfs[i].NexthopAddresses[ci].Permanent = types.BoolNull()
+				} else {
+					data.Vrfs[i].NexthopAddresses[ci].Permanent = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("track"); value.Exists() && !data.Vrfs[i].NexthopAddresses[ci].Track.IsNull() {
@@ -978,13 +1025,18 @@ func (data *RouterStaticVRFIPv6Multicast) updateFromBody(ctx context.Context, re
 				data.Vrfs[i].SrPolicies[ci].DistanceMetric = types.Int64Null()
 			}
 			if value := cr.Get("permanent"); value.Exists() {
-				if !data.Vrfs[i].SrPolicies[ci].Permanent.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.Vrfs[i].SrPolicies[ci].Permanent.IsNull() && !data.Vrfs[i].SrPolicies[ci].Permanent.ValueBool() {
+					data.Vrfs[i].SrPolicies[ci].Permanent = types.BoolValue(false)
+				} else if !data.Vrfs[i].SrPolicies[ci].Permanent.IsNull() {
 					data.Vrfs[i].SrPolicies[ci].Permanent = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.Vrfs[i].SrPolicies[ci].Permanent.IsNull() {
 					data.Vrfs[i].SrPolicies[ci].Permanent = types.BoolNull()
+				} else {
+					data.Vrfs[i].SrPolicies[ci].Permanent = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("track"); value.Exists() && !data.Vrfs[i].SrPolicies[ci].Track.IsNull() {
@@ -1871,7 +1923,7 @@ func (data *RouterStaticVRFIPv6Multicast) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("permanent"); cValue.Exists() {
 				item.Permanent = types.BoolValue(true)
 			} else {
-				item.Permanent = types.BoolNull()
+				item.Permanent = types.BoolValue(false)
 			}
 			if cValue := v.Get("track"); cValue.Exists() {
 				item.Track = types.StringValue(cValue.String())
@@ -1905,7 +1957,7 @@ func (data *RouterStaticVRFIPv6Multicast) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("permanent"); cValue.Exists() {
 				item.Permanent = types.BoolValue(true)
 			} else {
-				item.Permanent = types.BoolNull()
+				item.Permanent = types.BoolValue(false)
 			}
 			if cValue := v.Get("track"); cValue.Exists() {
 				item.Track = types.StringValue(cValue.String())
@@ -1936,7 +1988,7 @@ func (data *RouterStaticVRFIPv6Multicast) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("permanent"); cValue.Exists() {
 				item.Permanent = types.BoolValue(true)
 			} else {
-				item.Permanent = types.BoolNull()
+				item.Permanent = types.BoolValue(false)
 			}
 			if cValue := v.Get("track"); cValue.Exists() {
 				item.Track = types.StringValue(cValue.String())
@@ -1967,7 +2019,7 @@ func (data *RouterStaticVRFIPv6Multicast) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("permanent"); cValue.Exists() {
 				item.Permanent = types.BoolValue(true)
 			} else {
-				item.Permanent = types.BoolNull()
+				item.Permanent = types.BoolValue(false)
 			}
 			if cValue := v.Get("track"); cValue.Exists() {
 				item.Track = types.StringValue(cValue.String())
@@ -2005,7 +2057,7 @@ func (data *RouterStaticVRFIPv6Multicast) fromBody(ctx context.Context, res gjso
 					if ccValue := cv.Get("permanent"); ccValue.Exists() {
 						cItem.Permanent = types.BoolValue(true)
 					} else {
-						cItem.Permanent = types.BoolNull()
+						cItem.Permanent = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("track"); ccValue.Exists() {
 						cItem.Track = types.StringValue(ccValue.String())
@@ -2045,7 +2097,7 @@ func (data *RouterStaticVRFIPv6Multicast) fromBody(ctx context.Context, res gjso
 					if ccValue := cv.Get("permanent"); ccValue.Exists() {
 						cItem.Permanent = types.BoolValue(true)
 					} else {
-						cItem.Permanent = types.BoolNull()
+						cItem.Permanent = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("track"); ccValue.Exists() {
 						cItem.Track = types.StringValue(ccValue.String())
@@ -2076,7 +2128,7 @@ func (data *RouterStaticVRFIPv6Multicast) fromBody(ctx context.Context, res gjso
 					if ccValue := cv.Get("permanent"); ccValue.Exists() {
 						cItem.Permanent = types.BoolValue(true)
 					} else {
-						cItem.Permanent = types.BoolNull()
+						cItem.Permanent = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("track"); ccValue.Exists() {
 						cItem.Track = types.StringValue(ccValue.String())
@@ -2107,7 +2159,7 @@ func (data *RouterStaticVRFIPv6Multicast) fromBody(ctx context.Context, res gjso
 					if ccValue := cv.Get("permanent"); ccValue.Exists() {
 						cItem.Permanent = types.BoolValue(true)
 					} else {
-						cItem.Permanent = types.BoolNull()
+						cItem.Permanent = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("track"); ccValue.Exists() {
 						cItem.Track = types.StringValue(ccValue.String())

@@ -431,43 +431,75 @@ func (data *LinuxNetworking) updateFromBody(ctx context.Context, res []byte) {
 			data.ExposedInterfaces[i].LinuxManaged = types.StringNull()
 		}
 		if value := r.Get("statistics-synchronization.from-xr.every.five-seconds"); value.Exists() {
-			if !data.ExposedInterfaces[i].StatisticsSynchronizationFiveSeconds.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.ExposedInterfaces[i].StatisticsSynchronizationFiveSeconds.IsNull() && !data.ExposedInterfaces[i].StatisticsSynchronizationFiveSeconds.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.ExposedInterfaces[i].StatisticsSynchronizationFiveSeconds = types.BoolValue(false)
+			} else if !data.ExposedInterfaces[i].StatisticsSynchronizationFiveSeconds.IsNull() {
 				data.ExposedInterfaces[i].StatisticsSynchronizationFiveSeconds = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.ExposedInterfaces[i].StatisticsSynchronizationFiveSeconds.IsNull() {
 				data.ExposedInterfaces[i].StatisticsSynchronizationFiveSeconds = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.ExposedInterfaces[i].StatisticsSynchronizationFiveSeconds = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("statistics-synchronization.from-xr.every.ten-seconds"); value.Exists() {
-			if !data.ExposedInterfaces[i].StatisticsSynchronizationTenSeconds.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.ExposedInterfaces[i].StatisticsSynchronizationTenSeconds.IsNull() && !data.ExposedInterfaces[i].StatisticsSynchronizationTenSeconds.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.ExposedInterfaces[i].StatisticsSynchronizationTenSeconds = types.BoolValue(false)
+			} else if !data.ExposedInterfaces[i].StatisticsSynchronizationTenSeconds.IsNull() {
 				data.ExposedInterfaces[i].StatisticsSynchronizationTenSeconds = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.ExposedInterfaces[i].StatisticsSynchronizationTenSeconds.IsNull() {
 				data.ExposedInterfaces[i].StatisticsSynchronizationTenSeconds = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.ExposedInterfaces[i].StatisticsSynchronizationTenSeconds = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("statistics-synchronization.from-xr.every.thirty-seconds"); value.Exists() {
-			if !data.ExposedInterfaces[i].StatisticsSynchronizationThirtySeconds.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.ExposedInterfaces[i].StatisticsSynchronizationThirtySeconds.IsNull() && !data.ExposedInterfaces[i].StatisticsSynchronizationThirtySeconds.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.ExposedInterfaces[i].StatisticsSynchronizationThirtySeconds = types.BoolValue(false)
+			} else if !data.ExposedInterfaces[i].StatisticsSynchronizationThirtySeconds.IsNull() {
 				data.ExposedInterfaces[i].StatisticsSynchronizationThirtySeconds = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.ExposedInterfaces[i].StatisticsSynchronizationThirtySeconds.IsNull() {
 				data.ExposedInterfaces[i].StatisticsSynchronizationThirtySeconds = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.ExposedInterfaces[i].StatisticsSynchronizationThirtySeconds = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("statistics-synchronization.from-xr.every.sixty-seconds"); value.Exists() {
-			if !data.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds.IsNull() && !data.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds = types.BoolValue(false)
+			} else if !data.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds.IsNull() {
 				data.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds.IsNull() {
 				data.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds = types.BoolValue(false)
 			}
 		}
 	}
@@ -500,13 +532,21 @@ func (data *LinuxNetworking) updateFromBody(ctx context.Context, res []byte) {
 			data.Vrfs[i].VrfName = types.StringNull()
 		}
 		if value := r.Get("disable"); value.Exists() {
-			if !data.Vrfs[i].Disable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Vrfs[i].Disable.IsNull() && !data.Vrfs[i].Disable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Vrfs[i].Disable = types.BoolValue(false)
+			} else if !data.Vrfs[i].Disable.IsNull() {
 				data.Vrfs[i].Disable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Vrfs[i].Disable.IsNull() {
 				data.Vrfs[i].Disable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Vrfs[i].Disable = types.BoolValue(false)
 			}
 		}
 		for ci := range data.Vrfs[i].EastWestInterfaces {
@@ -544,13 +584,21 @@ func (data *LinuxNetworking) updateFromBody(ctx context.Context, res []byte) {
 			data.Vrfs[i].Ipv4SourceInterfaceDefaultRoute = types.StringNull()
 		}
 		if value := r.Get("address-family.ipv4.source-hint.default-route.active-management"); value.Exists() {
-			if !data.Vrfs[i].Ipv4SourceDefaultRouteActiveManagement.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Vrfs[i].Ipv4SourceDefaultRouteActiveManagement.IsNull() && !data.Vrfs[i].Ipv4SourceDefaultRouteActiveManagement.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Vrfs[i].Ipv4SourceDefaultRouteActiveManagement = types.BoolValue(false)
+			} else if !data.Vrfs[i].Ipv4SourceDefaultRouteActiveManagement.IsNull() {
 				data.Vrfs[i].Ipv4SourceDefaultRouteActiveManagement = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Vrfs[i].Ipv4SourceDefaultRouteActiveManagement.IsNull() {
 				data.Vrfs[i].Ipv4SourceDefaultRouteActiveManagement = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Vrfs[i].Ipv4SourceDefaultRouteActiveManagement = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("address-family.ipv4.source-hint.management-route.interface"); value.Exists() && !data.Vrfs[i].Ipv4SourceInterfaceManagementRoute.IsNull() {
@@ -559,13 +607,21 @@ func (data *LinuxNetworking) updateFromBody(ctx context.Context, res []byte) {
 			data.Vrfs[i].Ipv4SourceInterfaceManagementRoute = types.StringNull()
 		}
 		if value := r.Get("address-family.ipv4.default-route.software-forwarding"); value.Exists() {
-			if !data.Vrfs[i].Ipv4DefaultRouteSoftwareForwarding.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Vrfs[i].Ipv4DefaultRouteSoftwareForwarding.IsNull() && !data.Vrfs[i].Ipv4DefaultRouteSoftwareForwarding.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Vrfs[i].Ipv4DefaultRouteSoftwareForwarding = types.BoolValue(false)
+			} else if !data.Vrfs[i].Ipv4DefaultRouteSoftwareForwarding.IsNull() {
 				data.Vrfs[i].Ipv4DefaultRouteSoftwareForwarding = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Vrfs[i].Ipv4DefaultRouteSoftwareForwarding.IsNull() {
 				data.Vrfs[i].Ipv4DefaultRouteSoftwareForwarding = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Vrfs[i].Ipv4DefaultRouteSoftwareForwarding = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("address-family.ipv6.source-hint.default-route.interface"); value.Exists() && !data.Vrfs[i].Ipv6SourceInterfaceDefaultRoute.IsNull() {
@@ -574,13 +630,21 @@ func (data *LinuxNetworking) updateFromBody(ctx context.Context, res []byte) {
 			data.Vrfs[i].Ipv6SourceInterfaceDefaultRoute = types.StringNull()
 		}
 		if value := r.Get("address-family.ipv6.source-hint.default-route.active-management"); value.Exists() {
-			if !data.Vrfs[i].Ipv6SourceDefaultRouteActiveManagement.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Vrfs[i].Ipv6SourceDefaultRouteActiveManagement.IsNull() && !data.Vrfs[i].Ipv6SourceDefaultRouteActiveManagement.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Vrfs[i].Ipv6SourceDefaultRouteActiveManagement = types.BoolValue(false)
+			} else if !data.Vrfs[i].Ipv6SourceDefaultRouteActiveManagement.IsNull() {
 				data.Vrfs[i].Ipv6SourceDefaultRouteActiveManagement = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Vrfs[i].Ipv6SourceDefaultRouteActiveManagement.IsNull() {
 				data.Vrfs[i].Ipv6SourceDefaultRouteActiveManagement = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Vrfs[i].Ipv6SourceDefaultRouteActiveManagement = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("address-family.ipv6.source-hint.management-route.interface"); value.Exists() && !data.Vrfs[i].Ipv6SourceInterfaceManagementRoute.IsNull() {
@@ -589,13 +653,21 @@ func (data *LinuxNetworking) updateFromBody(ctx context.Context, res []byte) {
 			data.Vrfs[i].Ipv6SourceInterfaceManagementRoute = types.StringNull()
 		}
 		if value := r.Get("address-family.ipv6.default-route.software-forwarding"); value.Exists() {
-			if !data.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding.IsNull() && !data.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding = types.BoolValue(false)
+			} else if !data.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding.IsNull() {
 				data.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding.IsNull() {
 				data.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding = types.BoolValue(false)
 			}
 		}
 	}
@@ -1131,22 +1203,22 @@ func (data *LinuxNetworking) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("statistics-synchronization.from-xr.every.five-seconds"); cValue.Exists() {
 				item.StatisticsSynchronizationFiveSeconds = types.BoolValue(true)
 			} else {
-				item.StatisticsSynchronizationFiveSeconds = types.BoolNull()
+				item.StatisticsSynchronizationFiveSeconds = types.BoolValue(false)
 			}
 			if cValue := v.Get("statistics-synchronization.from-xr.every.ten-seconds"); cValue.Exists() {
 				item.StatisticsSynchronizationTenSeconds = types.BoolValue(true)
 			} else {
-				item.StatisticsSynchronizationTenSeconds = types.BoolNull()
+				item.StatisticsSynchronizationTenSeconds = types.BoolValue(false)
 			}
 			if cValue := v.Get("statistics-synchronization.from-xr.every.thirty-seconds"); cValue.Exists() {
 				item.StatisticsSynchronizationThirtySeconds = types.BoolValue(true)
 			} else {
-				item.StatisticsSynchronizationThirtySeconds = types.BoolNull()
+				item.StatisticsSynchronizationThirtySeconds = types.BoolValue(false)
 			}
 			if cValue := v.Get("statistics-synchronization.from-xr.every.sixty-seconds"); cValue.Exists() {
 				item.StatisticsSynchronizationSixtySeconds = types.BoolValue(true)
 			} else {
-				item.StatisticsSynchronizationSixtySeconds = types.BoolNull()
+				item.StatisticsSynchronizationSixtySeconds = types.BoolValue(false)
 			}
 			data.ExposedInterfaces = append(data.ExposedInterfaces, item)
 			return true
@@ -1162,7 +1234,7 @@ func (data *LinuxNetworking) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("disable"); cValue.Exists() {
 				item.Disable = types.BoolValue(true)
 			} else {
-				item.Disable = types.BoolNull()
+				item.Disable = types.BoolValue(false)
 			}
 			if cValue := v.Get("east-wests.east-west"); cValue.Exists() {
 				item.EastWestInterfaces = make([]LinuxNetworkingVrfsEastWestInterfaces, 0)
@@ -1181,7 +1253,7 @@ func (data *LinuxNetworking) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("address-family.ipv4.source-hint.default-route.active-management"); cValue.Exists() {
 				item.Ipv4SourceDefaultRouteActiveManagement = types.BoolValue(true)
 			} else {
-				item.Ipv4SourceDefaultRouteActiveManagement = types.BoolNull()
+				item.Ipv4SourceDefaultRouteActiveManagement = types.BoolValue(false)
 			}
 			if cValue := v.Get("address-family.ipv4.source-hint.management-route.interface"); cValue.Exists() {
 				item.Ipv4SourceInterfaceManagementRoute = types.StringValue(cValue.String())
@@ -1189,7 +1261,7 @@ func (data *LinuxNetworking) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("address-family.ipv4.default-route.software-forwarding"); cValue.Exists() {
 				item.Ipv4DefaultRouteSoftwareForwarding = types.BoolValue(true)
 			} else {
-				item.Ipv4DefaultRouteSoftwareForwarding = types.BoolNull()
+				item.Ipv4DefaultRouteSoftwareForwarding = types.BoolValue(false)
 			}
 			if cValue := v.Get("address-family.ipv6.source-hint.default-route.interface"); cValue.Exists() {
 				item.Ipv6SourceInterfaceDefaultRoute = types.StringValue(cValue.String())
@@ -1197,7 +1269,7 @@ func (data *LinuxNetworking) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("address-family.ipv6.source-hint.default-route.active-management"); cValue.Exists() {
 				item.Ipv6SourceDefaultRouteActiveManagement = types.BoolValue(true)
 			} else {
-				item.Ipv6SourceDefaultRouteActiveManagement = types.BoolNull()
+				item.Ipv6SourceDefaultRouteActiveManagement = types.BoolValue(false)
 			}
 			if cValue := v.Get("address-family.ipv6.source-hint.management-route.interface"); cValue.Exists() {
 				item.Ipv6SourceInterfaceManagementRoute = types.StringValue(cValue.String())
@@ -1205,7 +1277,7 @@ func (data *LinuxNetworking) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("address-family.ipv6.default-route.software-forwarding"); cValue.Exists() {
 				item.Ipv6DefaultRouteSoftwareForwarding = types.BoolValue(true)
 			} else {
-				item.Ipv6DefaultRouteSoftwareForwarding = types.BoolNull()
+				item.Ipv6DefaultRouteSoftwareForwarding = types.BoolValue(false)
 			}
 			data.Vrfs = append(data.Vrfs, item)
 			return true

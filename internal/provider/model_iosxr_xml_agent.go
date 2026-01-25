@@ -356,13 +356,21 @@ func (data *XMLAgent) updateFromBody(ctx context.Context, res []byte) {
 			data.SslVrfs[i].VrfName = types.StringNull()
 		}
 		if value := r.Get("shutdown"); value.Exists() {
-			if !data.SslVrfs[i].Shutdown.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SslVrfs[i].Shutdown.IsNull() && !data.SslVrfs[i].Shutdown.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SslVrfs[i].Shutdown = types.BoolValue(false)
+			} else if !data.SslVrfs[i].Shutdown.IsNull() {
 				data.SslVrfs[i].Shutdown = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SslVrfs[i].Shutdown.IsNull() {
 				data.SslVrfs[i].Shutdown = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SslVrfs[i].Shutdown = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("ipv4.access-list"); value.Exists() && !data.SslVrfs[i].Ipv4AccessList.IsNull() {
@@ -445,13 +453,21 @@ func (data *XMLAgent) updateFromBody(ctx context.Context, res []byte) {
 			data.Vrfs[i].VrfName = types.StringNull()
 		}
 		if value := r.Get("shutdown"); value.Exists() {
-			if !data.Vrfs[i].Shutdown.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Vrfs[i].Shutdown.IsNull() && !data.Vrfs[i].Shutdown.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Vrfs[i].Shutdown = types.BoolValue(false)
+			} else if !data.Vrfs[i].Shutdown.IsNull() {
 				data.Vrfs[i].Shutdown = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Vrfs[i].Shutdown.IsNull() {
 				data.Vrfs[i].Shutdown = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Vrfs[i].Shutdown = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("ipv6.access-list"); value.Exists() && !data.Vrfs[i].Ipv6AccessList.IsNull() {
@@ -865,7 +881,7 @@ func (data *XMLAgent) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("shutdown"); cValue.Exists() {
 				item.Shutdown = types.BoolValue(true)
 			} else {
-				item.Shutdown = types.BoolNull()
+				item.Shutdown = types.BoolValue(false)
 			}
 			if cValue := v.Get("ipv4.access-list"); cValue.Exists() {
 				item.Ipv4AccessList = types.StringValue(cValue.String())
@@ -909,7 +925,7 @@ func (data *XMLAgent) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("shutdown"); cValue.Exists() {
 				item.Shutdown = types.BoolValue(true)
 			} else {
-				item.Shutdown = types.BoolNull()
+				item.Shutdown = types.BoolValue(false)
 			}
 			if cValue := v.Get("ipv6.access-list"); cValue.Exists() {
 				item.Ipv6AccessList = types.StringValue(cValue.String())

@@ -473,23 +473,39 @@ func (data *IPSLAResponder) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		if value := r.Get("authentication"); value.Exists() {
-			if !data.TwampLightSessions[i].Authentication.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.TwampLightSessions[i].Authentication.IsNull() && !data.TwampLightSessions[i].Authentication.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.TwampLightSessions[i].Authentication = types.BoolValue(false)
+			} else if !data.TwampLightSessions[i].Authentication.IsNull() {
 				data.TwampLightSessions[i].Authentication = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.TwampLightSessions[i].Authentication.IsNull() {
 				data.TwampLightSessions[i].Authentication = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.TwampLightSessions[i].Authentication = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("encryption"); value.Exists() {
-			if !data.TwampLightSessions[i].Encryption.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.TwampLightSessions[i].Encryption.IsNull() && !data.TwampLightSessions[i].Encryption.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.TwampLightSessions[i].Encryption = types.BoolValue(false)
+			} else if !data.TwampLightSessions[i].Encryption.IsNull() {
 				data.TwampLightSessions[i].Encryption = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.TwampLightSessions[i].Encryption.IsNull() {
 				data.TwampLightSessions[i].Encryption = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.TwampLightSessions[i].Encryption = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("timeout"); value.Exists() && !data.TwampLightSessions[i].Timeout.IsNull() {
@@ -897,12 +913,12 @@ func (data *IPSLAResponder) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("authentication"); cValue.Exists() {
 				item.Authentication = types.BoolValue(true)
 			} else {
-				item.Authentication = types.BoolNull()
+				item.Authentication = types.BoolValue(false)
 			}
 			if cValue := v.Get("encryption"); cValue.Exists() {
 				item.Encryption = types.BoolValue(true)
 			} else {
-				item.Encryption = types.BoolNull()
+				item.Encryption = types.BoolValue(false)
 			}
 			if cValue := v.Get("timeout"); cValue.Exists() {
 				item.Timeout = types.Int64Value(cValue.Int())

@@ -309,13 +309,21 @@ func (data *PerformanceMeasurementEndpointIPv6) updateFromBody(ctx context.Conte
 			data.SegmentRoutingTeExplicitSegmentLists[i].ReversePathSegmentList = types.StringNull()
 		}
 		if value := r.Get("insert-srh.sl-zero"); value.Exists() {
-			if !data.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero.IsNull() && !data.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero = types.BoolValue(false)
+			} else if !data.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero.IsNull() {
 				data.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero.IsNull() {
 				data.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero = types.BoolValue(false)
 			}
 		}
 	}
@@ -610,7 +618,7 @@ func (data *PerformanceMeasurementEndpointIPv6) fromBody(ctx context.Context, re
 			if cValue := v.Get("insert-srh.sl-zero"); cValue.Exists() {
 				item.InsertSrhSlZero = types.BoolValue(true)
 			} else {
-				item.InsertSrhSlZero = types.BoolNull()
+				item.InsertSrhSlZero = types.BoolValue(false)
 			}
 			data.SegmentRoutingTeExplicitSegmentLists = append(data.SegmentRoutingTeExplicitSegmentLists, item)
 			return true

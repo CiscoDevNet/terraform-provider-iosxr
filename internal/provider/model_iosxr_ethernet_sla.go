@@ -710,13 +710,21 @@ func (data *EthernetSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.StatisticsMeasure[i].Type = types.StringNull()
 		}
 		if value := r.Get("aggregate.none"); value.Exists() {
-			if !data.StatisticsMeasure[i].AggregateNone.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.StatisticsMeasure[i].AggregateNone.IsNull() && !data.StatisticsMeasure[i].AggregateNone.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.StatisticsMeasure[i].AggregateNone = types.BoolValue(false)
+			} else if !data.StatisticsMeasure[i].AggregateNone.IsNull() {
 				data.StatisticsMeasure[i].AggregateNone = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.StatisticsMeasure[i].AggregateNone.IsNull() {
 				data.StatisticsMeasure[i].AggregateNone = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.StatisticsMeasure[i].AggregateNone = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("aggregate.bins"); value.Exists() && !data.StatisticsMeasure[i].AggregateBins.IsNull() {
@@ -735,13 +743,21 @@ func (data *EthernetSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.StatisticsMeasure[i].AggregateWidthPercentage = types.Int64Null()
 		}
 		if value := r.Get("aggregate.usec"); value.Exists() {
-			if !data.StatisticsMeasure[i].AggregateUsec.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.StatisticsMeasure[i].AggregateUsec.IsNull() && !data.StatisticsMeasure[i].AggregateUsec.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.StatisticsMeasure[i].AggregateUsec = types.BoolValue(false)
+			} else if !data.StatisticsMeasure[i].AggregateUsec.IsNull() {
 				data.StatisticsMeasure[i].AggregateUsec = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.StatisticsMeasure[i].AggregateUsec.IsNull() {
 				data.StatisticsMeasure[i].AggregateUsec = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.StatisticsMeasure[i].AggregateUsec = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("buckets.size"); value.Exists() && !data.StatisticsMeasure[i].BucketsSize.IsNull() {
@@ -750,13 +766,21 @@ func (data *EthernetSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.StatisticsMeasure[i].BucketsSize = types.Int64Null()
 		}
 		if value := r.Get("buckets.probes"); value.Exists() {
-			if !data.StatisticsMeasure[i].BucketsProbes.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.StatisticsMeasure[i].BucketsProbes.IsNull() && !data.StatisticsMeasure[i].BucketsProbes.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.StatisticsMeasure[i].BucketsProbes = types.BoolValue(false)
+			} else if !data.StatisticsMeasure[i].BucketsProbes.IsNull() {
 				data.StatisticsMeasure[i].BucketsProbes = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.StatisticsMeasure[i].BucketsProbes.IsNull() {
 				data.StatisticsMeasure[i].BucketsProbes = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.StatisticsMeasure[i].BucketsProbes = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("buckets.archive"); value.Exists() && !data.StatisticsMeasure[i].BucketsArchive.IsNull() {
@@ -1284,7 +1308,7 @@ func (data *EthernetSLA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("aggregate.none"); cValue.Exists() {
 				item.AggregateNone = types.BoolValue(true)
 			} else {
-				item.AggregateNone = types.BoolNull()
+				item.AggregateNone = types.BoolValue(false)
 			}
 			if cValue := v.Get("aggregate.bins"); cValue.Exists() {
 				item.AggregateBins = types.Int64Value(cValue.Int())
@@ -1298,7 +1322,7 @@ func (data *EthernetSLA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("aggregate.usec"); cValue.Exists() {
 				item.AggregateUsec = types.BoolValue(true)
 			} else {
-				item.AggregateUsec = types.BoolNull()
+				item.AggregateUsec = types.BoolValue(false)
 			}
 			if cValue := v.Get("buckets.size"); cValue.Exists() {
 				item.BucketsSize = types.Int64Value(cValue.Int())
@@ -1306,7 +1330,7 @@ func (data *EthernetSLA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("buckets.probes"); cValue.Exists() {
 				item.BucketsProbes = types.BoolValue(true)
 			} else {
-				item.BucketsProbes = types.BoolNull()
+				item.BucketsProbes = types.BoolValue(false)
 			}
 			if cValue := v.Get("buckets.archive"); cValue.Exists() {
 				item.BucketsArchive = types.Int64Value(cValue.Int())

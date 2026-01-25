@@ -837,13 +837,21 @@ func (data *SegmentRoutingTEPolicy) updateFromBody(ctx context.Context, res []by
 			data.CandidatePathsPreferences[i].ConstraintsSegmentRulesSidAlgorithm = types.Int64Null()
 		}
 		if value := r.Get("constraints.segment-rules.adjacency-sid-only"); value.Exists() {
-			if !data.CandidatePathsPreferences[i].ConstraintsSegmentRulesAdjacencySidOnly.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.CandidatePathsPreferences[i].ConstraintsSegmentRulesAdjacencySidOnly.IsNull() && !data.CandidatePathsPreferences[i].ConstraintsSegmentRulesAdjacencySidOnly.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.CandidatePathsPreferences[i].ConstraintsSegmentRulesAdjacencySidOnly = types.BoolValue(false)
+			} else if !data.CandidatePathsPreferences[i].ConstraintsSegmentRulesAdjacencySidOnly.IsNull() {
 				data.CandidatePathsPreferences[i].ConstraintsSegmentRulesAdjacencySidOnly = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.CandidatePathsPreferences[i].ConstraintsSegmentRulesAdjacencySidOnly.IsNull() {
 				data.CandidatePathsPreferences[i].ConstraintsSegmentRulesAdjacencySidOnly = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.CandidatePathsPreferences[i].ConstraintsSegmentRulesAdjacencySidOnly = types.BoolValue(false)
 			}
 		}
 		for ci := range data.CandidatePathsPreferences[i].ConstraintsAffinityRules {
@@ -949,13 +957,21 @@ func (data *SegmentRoutingTEPolicy) updateFromBody(ctx context.Context, res []by
 			data.CandidatePathsPreferences[i].BidirectionalAssociationId = types.Int64Null()
 		}
 		if value := r.Get("bidirectional.corouted"); value.Exists() {
-			if !data.CandidatePathsPreferences[i].BidirectionalCorouted.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.CandidatePathsPreferences[i].BidirectionalCorouted.IsNull() && !data.CandidatePathsPreferences[i].BidirectionalCorouted.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.CandidatePathsPreferences[i].BidirectionalCorouted = types.BoolValue(false)
+			} else if !data.CandidatePathsPreferences[i].BidirectionalCorouted.IsNull() {
 				data.CandidatePathsPreferences[i].BidirectionalCorouted = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.CandidatePathsPreferences[i].BidirectionalCorouted.IsNull() {
 				data.CandidatePathsPreferences[i].BidirectionalCorouted = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.CandidatePathsPreferences[i].BidirectionalCorouted = types.BoolValue(false)
 			}
 		}
 		for ci := range data.CandidatePathsPreferences[i].Paths {
@@ -997,13 +1013,18 @@ func (data *SegmentRoutingTEPolicy) updateFromBody(ctx context.Context, res []by
 				data.CandidatePathsPreferences[i].Paths[ci].SegmentListName = types.StringNull()
 			}
 			if value := cr.Get("disable-auto-reroute"); value.Exists() {
-				if !data.CandidatePathsPreferences[i].Paths[ci].Sticky.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.CandidatePathsPreferences[i].Paths[ci].Sticky.IsNull() && !data.CandidatePathsPreferences[i].Paths[ci].Sticky.ValueBool() {
+					data.CandidatePathsPreferences[i].Paths[ci].Sticky = types.BoolValue(false)
+				} else if !data.CandidatePathsPreferences[i].Paths[ci].Sticky.IsNull() {
 					data.CandidatePathsPreferences[i].Paths[ci].Sticky = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.CandidatePathsPreferences[i].Paths[ci].Sticky.IsNull() {
 					data.CandidatePathsPreferences[i].Paths[ci].Sticky = types.BoolNull()
+				} else {
+					data.CandidatePathsPreferences[i].Paths[ci].Sticky = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("metric.sid-limit"); value.Exists() {
@@ -1032,23 +1053,33 @@ func (data *SegmentRoutingTEPolicy) updateFromBody(ctx context.Context, res []by
 				data.CandidatePathsPreferences[i].Paths[ci].MetricMarginAbsolute = types.Int64Null()
 			}
 			if value := cr.Get("anycast"); value.Exists() {
-				if !data.CandidatePathsPreferences[i].Paths[ci].Anycast.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.CandidatePathsPreferences[i].Paths[ci].Anycast.IsNull() && !data.CandidatePathsPreferences[i].Paths[ci].Anycast.ValueBool() {
+					data.CandidatePathsPreferences[i].Paths[ci].Anycast = types.BoolValue(false)
+				} else if !data.CandidatePathsPreferences[i].Paths[ci].Anycast.IsNull() {
 					data.CandidatePathsPreferences[i].Paths[ci].Anycast = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.CandidatePathsPreferences[i].Paths[ci].Anycast.IsNull() {
 					data.CandidatePathsPreferences[i].Paths[ci].Anycast = types.BoolNull()
+				} else {
+					data.CandidatePathsPreferences[i].Paths[ci].Anycast = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("pcep"); value.Exists() {
-				if !data.CandidatePathsPreferences[i].Paths[ci].Pcep.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.CandidatePathsPreferences[i].Paths[ci].Pcep.IsNull() && !data.CandidatePathsPreferences[i].Paths[ci].Pcep.ValueBool() {
+					data.CandidatePathsPreferences[i].Paths[ci].Pcep = types.BoolValue(false)
+				} else if !data.CandidatePathsPreferences[i].Paths[ci].Pcep.IsNull() {
 					data.CandidatePathsPreferences[i].Paths[ci].Pcep = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.CandidatePathsPreferences[i].Paths[ci].Pcep.IsNull() {
 					data.CandidatePathsPreferences[i].Paths[ci].Pcep = types.BoolNull()
+				} else {
+					data.CandidatePathsPreferences[i].Paths[ci].Pcep = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("reverse-path-segment-list-name"); value.Exists() && !data.CandidatePathsPreferences[i].Paths[ci].ReversePathSegmentList.IsNull() {
@@ -1063,23 +1094,39 @@ func (data *SegmentRoutingTEPolicy) updateFromBody(ctx context.Context, res []by
 			}
 		}
 		if value := r.Get("backup-ineligible"); value.Exists() {
-			if !data.CandidatePathsPreferences[i].BackupIneligible.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.CandidatePathsPreferences[i].BackupIneligible.IsNull() && !data.CandidatePathsPreferences[i].BackupIneligible.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.CandidatePathsPreferences[i].BackupIneligible = types.BoolValue(false)
+			} else if !data.CandidatePathsPreferences[i].BackupIneligible.IsNull() {
 				data.CandidatePathsPreferences[i].BackupIneligible = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.CandidatePathsPreferences[i].BackupIneligible.IsNull() {
 				data.CandidatePathsPreferences[i].BackupIneligible = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.CandidatePathsPreferences[i].BackupIneligible = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("per-flow.enable"); value.Exists() {
-			if !data.CandidatePathsPreferences[i].PerFlow.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.CandidatePathsPreferences[i].PerFlow.IsNull() && !data.CandidatePathsPreferences[i].PerFlow.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.CandidatePathsPreferences[i].PerFlow = types.BoolValue(false)
+			} else if !data.CandidatePathsPreferences[i].PerFlow.IsNull() {
 				data.CandidatePathsPreferences[i].PerFlow = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.CandidatePathsPreferences[i].PerFlow.IsNull() {
 				data.CandidatePathsPreferences[i].PerFlow = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.CandidatePathsPreferences[i].PerFlow = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("per-flow.default-forward-class"); value.Exists() && !data.CandidatePathsPreferences[i].PerFlowForwardClassDefault.IsNull() {
@@ -2393,12 +2440,12 @@ func (data *SegmentRoutingTEPolicy) fromBody(ctx context.Context, res gjson.Resu
 			if cValue := v.Get("constraints.disjoint-path.shortest-path"); cValue.Exists() {
 				item.ConstraintsDisjointPathShortestPath = types.BoolValue(cValue.Bool())
 			} else {
-				item.ConstraintsDisjointPathShortestPath = types.BoolNull()
+				item.ConstraintsDisjointPathShortestPath = types.BoolValue(false)
 			}
 			if cValue := v.Get("constraints.disjoint-path.fallback-disable"); cValue.Exists() {
 				item.ConstraintsDisjointPathFallbackDisable = types.BoolValue(cValue.Bool())
 			} else {
-				item.ConstraintsDisjointPathFallbackDisable = types.BoolNull()
+				item.ConstraintsDisjointPathFallbackDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("constraints.segment-rules.protection-type"); cValue.Exists() {
 				item.ConstraintsSegmentRulesProtectionType = types.StringValue(cValue.String())
@@ -2409,7 +2456,7 @@ func (data *SegmentRoutingTEPolicy) fromBody(ctx context.Context, res gjson.Resu
 			if cValue := v.Get("constraints.segment-rules.adjacency-sid-only"); cValue.Exists() {
 				item.ConstraintsSegmentRulesAdjacencySidOnly = types.BoolValue(true)
 			} else {
-				item.ConstraintsSegmentRulesAdjacencySidOnly = types.BoolNull()
+				item.ConstraintsSegmentRulesAdjacencySidOnly = types.BoolValue(false)
 			}
 			if cValue := v.Get("constraints.affinity-rules.affinity-rule"); cValue.Exists() {
 				item.ConstraintsAffinityRules = make([]SegmentRoutingTEPolicyCandidatePathsPreferencesConstraintsAffinityRules, 0)
@@ -2456,7 +2503,7 @@ func (data *SegmentRoutingTEPolicy) fromBody(ctx context.Context, res gjson.Resu
 			if cValue := v.Get("bidirectional.corouted"); cValue.Exists() {
 				item.BidirectionalCorouted = types.BoolValue(true)
 			} else {
-				item.BidirectionalCorouted = types.BoolNull()
+				item.BidirectionalCorouted = types.BoolValue(false)
 			}
 			if cValue := v.Get("path-infos.path-info"); cValue.Exists() {
 				item.Paths = make([]SegmentRoutingTEPolicyCandidatePathsPreferencesPaths, 0)
@@ -2474,7 +2521,7 @@ func (data *SegmentRoutingTEPolicy) fromBody(ctx context.Context, res gjson.Resu
 					if ccValue := cv.Get("disable-auto-reroute"); ccValue.Exists() {
 						cItem.Sticky = types.BoolValue(true)
 					} else {
-						cItem.Sticky = types.BoolNull()
+						cItem.Sticky = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("metric.sid-limit"); ccValue.Exists() {
 						cItem.MetricSidLimit = types.Int64Value(ccValue.Int())
@@ -2494,12 +2541,12 @@ func (data *SegmentRoutingTEPolicy) fromBody(ctx context.Context, res gjson.Resu
 					if ccValue := cv.Get("anycast"); ccValue.Exists() {
 						cItem.Anycast = types.BoolValue(true)
 					} else {
-						cItem.Anycast = types.BoolNull()
+						cItem.Anycast = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("pcep"); ccValue.Exists() {
 						cItem.Pcep = types.BoolValue(true)
 					} else {
-						cItem.Pcep = types.BoolNull()
+						cItem.Pcep = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("reverse-path-segment-list-name"); ccValue.Exists() {
 						cItem.ReversePathSegmentList = types.StringValue(ccValue.String())
@@ -2514,12 +2561,12 @@ func (data *SegmentRoutingTEPolicy) fromBody(ctx context.Context, res gjson.Resu
 			if cValue := v.Get("backup-ineligible"); cValue.Exists() {
 				item.BackupIneligible = types.BoolValue(true)
 			} else {
-				item.BackupIneligible = types.BoolNull()
+				item.BackupIneligible = types.BoolValue(false)
 			}
 			if cValue := v.Get("per-flow.enable"); cValue.Exists() {
 				item.PerFlow = types.BoolValue(true)
 			} else {
-				item.PerFlow = types.BoolNull()
+				item.PerFlow = types.BoolValue(false)
 			}
 			if cValue := v.Get("per-flow.default-forward-class"); cValue.Exists() {
 				item.PerFlowForwardClassDefault = types.Int64Value(cValue.Int())

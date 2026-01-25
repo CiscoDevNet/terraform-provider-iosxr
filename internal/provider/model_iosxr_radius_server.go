@@ -381,23 +381,39 @@ func (data *RadiusServer) updateFromBody(ctx context.Context, res []byte) {
 			data.Hosts[i].IdleTime = types.Int64Null()
 		}
 		if value := r.Get("ignore-auth-port"); value.Exists() {
-			if !data.Hosts[i].IgnoreAuthPort.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Hosts[i].IgnoreAuthPort.IsNull() && !data.Hosts[i].IgnoreAuthPort.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Hosts[i].IgnoreAuthPort = types.BoolValue(false)
+			} else if !data.Hosts[i].IgnoreAuthPort.IsNull() {
 				data.Hosts[i].IgnoreAuthPort = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Hosts[i].IgnoreAuthPort.IsNull() {
 				data.Hosts[i].IgnoreAuthPort = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Hosts[i].IgnoreAuthPort = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("ignore-acct-port"); value.Exists() {
-			if !data.Hosts[i].IgnoreAcctPort.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Hosts[i].IgnoreAcctPort.IsNull() && !data.Hosts[i].IgnoreAcctPort.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Hosts[i].IgnoreAcctPort = types.BoolValue(false)
+			} else if !data.Hosts[i].IgnoreAcctPort.IsNull() {
 				data.Hosts[i].IgnoreAcctPort = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Hosts[i].IgnoreAcctPort.IsNull() {
 				data.Hosts[i].IgnoreAcctPort = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Hosts[i].IgnoreAcctPort = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("dtls-server.trustpoint"); value.Exists() && !data.Hosts[i].DtlsServerTrustpoint.IsNull() {
@@ -1122,12 +1138,12 @@ func (data *RadiusServer) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("ignore-auth-port"); cValue.Exists() {
 				item.IgnoreAuthPort = types.BoolValue(true)
 			} else {
-				item.IgnoreAuthPort = types.BoolNull()
+				item.IgnoreAuthPort = types.BoolValue(false)
 			}
 			if cValue := v.Get("ignore-acct-port"); cValue.Exists() {
 				item.IgnoreAcctPort = types.BoolValue(true)
 			} else {
-				item.IgnoreAcctPort = types.BoolNull()
+				item.IgnoreAcctPort = types.BoolValue(false)
 			}
 			if cValue := v.Get("dtls-server.trustpoint"); cValue.Exists() {
 				item.DtlsServerTrustpoint = types.StringValue(cValue.String())

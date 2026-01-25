@@ -484,23 +484,39 @@ func (data *PolicyMapQoS) updateFromBody(ctx context.Context, res []byte) {
 			data.Classes[i].PolicePeakBurstUnit = types.StringNull()
 		}
 		if value := r.Get("police.conform-action.transmit"); value.Exists() {
-			if !data.Classes[i].PoliceConformActionTransmit.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Classes[i].PoliceConformActionTransmit.IsNull() && !data.Classes[i].PoliceConformActionTransmit.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Classes[i].PoliceConformActionTransmit = types.BoolValue(false)
+			} else if !data.Classes[i].PoliceConformActionTransmit.IsNull() {
 				data.Classes[i].PoliceConformActionTransmit = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Classes[i].PoliceConformActionTransmit.IsNull() {
 				data.Classes[i].PoliceConformActionTransmit = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Classes[i].PoliceConformActionTransmit = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("police.conform-action.drop"); value.Exists() {
-			if !data.Classes[i].PoliceConformActionDrop.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Classes[i].PoliceConformActionDrop.IsNull() && !data.Classes[i].PoliceConformActionDrop.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Classes[i].PoliceConformActionDrop = types.BoolValue(false)
+			} else if !data.Classes[i].PoliceConformActionDrop.IsNull() {
 				data.Classes[i].PoliceConformActionDrop = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Classes[i].PoliceConformActionDrop.IsNull() {
 				data.Classes[i].PoliceConformActionDrop = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Classes[i].PoliceConformActionDrop = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("police.conform-action.set.cos"); value.Exists() && !data.Classes[i].PoliceConformActionSetCos.IsNull() {
@@ -539,23 +555,39 @@ func (data *PolicyMapQoS) updateFromBody(ctx context.Context, res []byte) {
 			data.Classes[i].PoliceConformActionSetQosGroup = types.Int64Null()
 		}
 		if value := r.Get("police.exceed-action.transmit"); value.Exists() {
-			if !data.Classes[i].PoliceExceedActionTransmit.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Classes[i].PoliceExceedActionTransmit.IsNull() && !data.Classes[i].PoliceExceedActionTransmit.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Classes[i].PoliceExceedActionTransmit = types.BoolValue(false)
+			} else if !data.Classes[i].PoliceExceedActionTransmit.IsNull() {
 				data.Classes[i].PoliceExceedActionTransmit = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Classes[i].PoliceExceedActionTransmit.IsNull() {
 				data.Classes[i].PoliceExceedActionTransmit = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Classes[i].PoliceExceedActionTransmit = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("police.exceed-action.drop"); value.Exists() {
-			if !data.Classes[i].PoliceExceedActionDrop.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Classes[i].PoliceExceedActionDrop.IsNull() && !data.Classes[i].PoliceExceedActionDrop.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Classes[i].PoliceExceedActionDrop = types.BoolValue(false)
+			} else if !data.Classes[i].PoliceExceedActionDrop.IsNull() {
 				data.Classes[i].PoliceExceedActionDrop = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Classes[i].PoliceExceedActionDrop.IsNull() {
 				data.Classes[i].PoliceExceedActionDrop = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Classes[i].PoliceExceedActionDrop = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("police.exceed-action.set.cos"); value.Exists() && !data.Classes[i].PoliceExceedActionSetCos.IsNull() {
@@ -594,23 +626,39 @@ func (data *PolicyMapQoS) updateFromBody(ctx context.Context, res []byte) {
 			data.Classes[i].PoliceExceedActionSetQosGroup = types.Int64Null()
 		}
 		if value := r.Get("police.violate-action.transmit"); value.Exists() {
-			if !data.Classes[i].PoliceViolateActionTransmit.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Classes[i].PoliceViolateActionTransmit.IsNull() && !data.Classes[i].PoliceViolateActionTransmit.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Classes[i].PoliceViolateActionTransmit = types.BoolValue(false)
+			} else if !data.Classes[i].PoliceViolateActionTransmit.IsNull() {
 				data.Classes[i].PoliceViolateActionTransmit = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Classes[i].PoliceViolateActionTransmit.IsNull() {
 				data.Classes[i].PoliceViolateActionTransmit = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Classes[i].PoliceViolateActionTransmit = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("police.violate-action.drop"); value.Exists() {
-			if !data.Classes[i].PoliceViolateActionDrop.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Classes[i].PoliceViolateActionDrop.IsNull() && !data.Classes[i].PoliceViolateActionDrop.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Classes[i].PoliceViolateActionDrop = types.BoolValue(false)
+			} else if !data.Classes[i].PoliceViolateActionDrop.IsNull() {
 				data.Classes[i].PoliceViolateActionDrop = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Classes[i].PoliceViolateActionDrop.IsNull() {
 				data.Classes[i].PoliceViolateActionDrop = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Classes[i].PoliceViolateActionDrop = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("police.violate-action.set.cos"); value.Exists() && !data.Classes[i].PoliceViolateActionSetCos.IsNull() {
@@ -688,13 +736,21 @@ func (data *PolicyMapQoS) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		if value := r.Get("random-detect-default"); value.Exists() {
-			if !data.Classes[i].RandomDetectDefault.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Classes[i].RandomDetectDefault.IsNull() && !data.Classes[i].RandomDetectDefault.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Classes[i].RandomDetectDefault = types.BoolValue(false)
+			} else if !data.Classes[i].RandomDetectDefault.IsNull() {
 				data.Classes[i].RandomDetectDefault = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Classes[i].RandomDetectDefault.IsNull() {
 				data.Classes[i].RandomDetectDefault = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Classes[i].RandomDetectDefault = types.BoolValue(false)
 			}
 		}
 		for ci := range data.Classes[i].RandomDetect {
@@ -1517,12 +1573,12 @@ func (data *PolicyMapQoS) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("police.conform-action.transmit"); cValue.Exists() {
 				item.PoliceConformActionTransmit = types.BoolValue(true)
 			} else {
-				item.PoliceConformActionTransmit = types.BoolNull()
+				item.PoliceConformActionTransmit = types.BoolValue(false)
 			}
 			if cValue := v.Get("police.conform-action.drop"); cValue.Exists() {
 				item.PoliceConformActionDrop = types.BoolValue(true)
 			} else {
-				item.PoliceConformActionDrop = types.BoolNull()
+				item.PoliceConformActionDrop = types.BoolValue(false)
 			}
 			if cValue := v.Get("police.conform-action.set.cos"); cValue.Exists() {
 				item.PoliceConformActionSetCos = types.Int64Value(cValue.Int())
@@ -1548,12 +1604,12 @@ func (data *PolicyMapQoS) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("police.exceed-action.transmit"); cValue.Exists() {
 				item.PoliceExceedActionTransmit = types.BoolValue(true)
 			} else {
-				item.PoliceExceedActionTransmit = types.BoolNull()
+				item.PoliceExceedActionTransmit = types.BoolValue(false)
 			}
 			if cValue := v.Get("police.exceed-action.drop"); cValue.Exists() {
 				item.PoliceExceedActionDrop = types.BoolValue(true)
 			} else {
-				item.PoliceExceedActionDrop = types.BoolNull()
+				item.PoliceExceedActionDrop = types.BoolValue(false)
 			}
 			if cValue := v.Get("police.exceed-action.set.cos"); cValue.Exists() {
 				item.PoliceExceedActionSetCos = types.Int64Value(cValue.Int())
@@ -1579,12 +1635,12 @@ func (data *PolicyMapQoS) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("police.violate-action.transmit"); cValue.Exists() {
 				item.PoliceViolateActionTransmit = types.BoolValue(true)
 			} else {
-				item.PoliceViolateActionTransmit = types.BoolNull()
+				item.PoliceViolateActionTransmit = types.BoolValue(false)
 			}
 			if cValue := v.Get("police.violate-action.drop"); cValue.Exists() {
 				item.PoliceViolateActionDrop = types.BoolValue(true)
 			} else {
-				item.PoliceViolateActionDrop = types.BoolNull()
+				item.PoliceViolateActionDrop = types.BoolValue(false)
 			}
 			if cValue := v.Get("police.violate-action.set.cos"); cValue.Exists() {
 				item.PoliceViolateActionSetCos = types.Int64Value(cValue.Int())
@@ -1627,7 +1683,7 @@ func (data *PolicyMapQoS) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("random-detect-default"); cValue.Exists() {
 				item.RandomDetectDefault = types.BoolValue(true)
 			} else {
-				item.RandomDetectDefault = types.BoolNull()
+				item.RandomDetectDefault = types.BoolValue(false)
 			}
 			if cValue := v.Get("random-detect"); cValue.Exists() {
 				item.RandomDetect = make([]PolicyMapQoSClassesRandomDetect, 0)

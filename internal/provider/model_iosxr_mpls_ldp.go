@@ -757,13 +757,21 @@ func (data *MPLSLDP) updateFromBody(ctx context.Context, res []byte) {
 			data.Neighbors[i].LabelSpaceId = types.Int64Null()
 		}
 		if value := r.Get("password.disable"); value.Exists() {
-			if !data.Neighbors[i].PasswordDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Neighbors[i].PasswordDisable.IsNull() && !data.Neighbors[i].PasswordDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Neighbors[i].PasswordDisable = types.BoolValue(false)
+			} else if !data.Neighbors[i].PasswordDisable.IsNull() {
 				data.Neighbors[i].PasswordDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Neighbors[i].PasswordDisable.IsNull() {
 				data.Neighbors[i].PasswordDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Neighbors[i].PasswordDisable = types.BoolValue(false)
 			}
 		}
 	}
@@ -1525,7 +1533,7 @@ func (data *MPLSLDP) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("password.disable"); cValue.Exists() {
 				item.PasswordDisable = types.BoolValue(true)
 			} else {
-				item.PasswordDisable = types.BoolNull()
+				item.PasswordDisable = types.BoolValue(false)
 			}
 			data.Neighbors = append(data.Neighbors, item)
 			return true

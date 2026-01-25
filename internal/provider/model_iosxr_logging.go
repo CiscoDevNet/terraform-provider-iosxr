@@ -982,23 +982,39 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		if value := r.Get(""); value.Exists() {
-			if !data.SuppressRules[i].AllAlarms.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SuppressRules[i].AllAlarms.IsNull() && !data.SuppressRules[i].AllAlarms.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SuppressRules[i].AllAlarms = types.BoolValue(false)
+			} else if !data.SuppressRules[i].AllAlarms.IsNull() {
 				data.SuppressRules[i].AllAlarms = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SuppressRules[i].AllAlarms.IsNull() {
 				data.SuppressRules[i].AllAlarms = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SuppressRules[i].AllAlarms = types.BoolValue(false)
 			}
 		}
 		if value := r.Get(""); value.Exists() {
-			if !data.SuppressRules[i].ApplyAllOfRouter.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SuppressRules[i].ApplyAllOfRouter.IsNull() && !data.SuppressRules[i].ApplyAllOfRouter.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SuppressRules[i].ApplyAllOfRouter = types.BoolValue(false)
+			} else if !data.SuppressRules[i].ApplyAllOfRouter.IsNull() {
 				data.SuppressRules[i].ApplyAllOfRouter = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SuppressRules[i].ApplyAllOfRouter.IsNull() {
 				data.SuppressRules[i].ApplyAllOfRouter = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SuppressRules[i].ApplyAllOfRouter = types.BoolValue(false)
 			}
 		}
 		for ci := range data.SuppressRules[i].ApplySourceLocations {
@@ -2206,12 +2222,12 @@ func (data *Logging) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get(""); cValue.Exists() {
 				item.AllAlarms = types.BoolValue(true)
 			} else {
-				item.AllAlarms = types.BoolNull()
+				item.AllAlarms = types.BoolValue(false)
 			}
 			if cValue := v.Get(""); cValue.Exists() {
 				item.ApplyAllOfRouter = types.BoolValue(true)
 			} else {
-				item.ApplyAllOfRouter = types.BoolNull()
+				item.ApplyAllOfRouter = types.BoolValue(false)
 			}
 			if cValue := v.Get(""); cValue.Exists() {
 				item.ApplySourceLocations = make([]LoggingSuppressRulesApplySourceLocations, 0)

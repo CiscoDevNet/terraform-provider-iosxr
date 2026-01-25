@@ -2452,13 +2452,21 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 			data.AddressFamily[i].Weight = types.Int64Null()
 		}
 		if value := r.Get("multipath"); value.Exists() {
-			if !data.AddressFamily[i].Multipath.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].Multipath.IsNull() && !data.AddressFamily[i].Multipath.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].Multipath = types.BoolValue(false)
+			} else if !data.AddressFamily[i].Multipath.IsNull() {
 				data.AddressFamily[i].Multipath = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].Multipath.IsNull() {
 				data.AddressFamily[i].Multipath = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].Multipath = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("use.af-group"); value.Exists() && !data.AddressFamily[i].UseAfGroup.IsNull() {
@@ -2472,53 +2480,93 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 			data.AddressFamily[i].CapabilityOrfPrefix = types.StringNull()
 		}
 		if value := r.Get("additional-paths.send"); value.Exists() {
-			if !data.AddressFamily[i].AdditionalPathsSend.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].AdditionalPathsSend.IsNull() && !data.AddressFamily[i].AdditionalPathsSend.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].AdditionalPathsSend = types.BoolValue(false)
+			} else if !data.AddressFamily[i].AdditionalPathsSend.IsNull() {
 				data.AddressFamily[i].AdditionalPathsSend = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].AdditionalPathsSend.IsNull() {
 				data.AddressFamily[i].AdditionalPathsSend = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].AdditionalPathsSend = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("additional-paths.send.disable"); value.Exists() {
-			if !data.AddressFamily[i].AdditionalPathsSendDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].AdditionalPathsSendDisable.IsNull() && !data.AddressFamily[i].AdditionalPathsSendDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].AdditionalPathsSendDisable = types.BoolValue(false)
+			} else if !data.AddressFamily[i].AdditionalPathsSendDisable.IsNull() {
 				data.AddressFamily[i].AdditionalPathsSendDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].AdditionalPathsSendDisable.IsNull() {
 				data.AddressFamily[i].AdditionalPathsSendDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].AdditionalPathsSendDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("additional-paths.receive"); value.Exists() {
-			if !data.AddressFamily[i].AdditionalPathsReceive.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].AdditionalPathsReceive.IsNull() && !data.AddressFamily[i].AdditionalPathsReceive.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].AdditionalPathsReceive = types.BoolValue(false)
+			} else if !data.AddressFamily[i].AdditionalPathsReceive.IsNull() {
 				data.AddressFamily[i].AdditionalPathsReceive = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].AdditionalPathsReceive.IsNull() {
 				data.AddressFamily[i].AdditionalPathsReceive = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].AdditionalPathsReceive = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("additional-paths.receive.disable"); value.Exists() {
-			if !data.AddressFamily[i].AdditionalPathsReceiveDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].AdditionalPathsReceiveDisable.IsNull() && !data.AddressFamily[i].AdditionalPathsReceiveDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].AdditionalPathsReceiveDisable = types.BoolValue(false)
+			} else if !data.AddressFamily[i].AdditionalPathsReceiveDisable.IsNull() {
 				data.AddressFamily[i].AdditionalPathsReceiveDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].AdditionalPathsReceiveDisable.IsNull() {
 				data.AddressFamily[i].AdditionalPathsReceiveDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].AdditionalPathsReceiveDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("default-originate"); value.Exists() {
-			if !data.AddressFamily[i].DefaultOriginate.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].DefaultOriginate.IsNull() && !data.AddressFamily[i].DefaultOriginate.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].DefaultOriginate = types.BoolValue(false)
+			} else if !data.AddressFamily[i].DefaultOriginate.IsNull() {
 				data.AddressFamily[i].DefaultOriginate = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].DefaultOriginate.IsNull() {
 				data.AddressFamily[i].DefaultOriginate = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].DefaultOriginate = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("default-originate.route-policy"); value.Exists() && !data.AddressFamily[i].DefaultOriginateRoutePolicy.IsNull() {
@@ -2527,13 +2575,21 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 			data.AddressFamily[i].DefaultOriginateRoutePolicy = types.StringNull()
 		}
 		if value := r.Get("default-originate.inheritance-disable"); value.Exists() {
-			if !data.AddressFamily[i].DefaultOriginateInheritanceDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].DefaultOriginateInheritanceDisable.IsNull() && !data.AddressFamily[i].DefaultOriginateInheritanceDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].DefaultOriginateInheritanceDisable = types.BoolValue(false)
+			} else if !data.AddressFamily[i].DefaultOriginateInheritanceDisable.IsNull() {
 				data.AddressFamily[i].DefaultOriginateInheritanceDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].DefaultOriginateInheritanceDisable.IsNull() {
 				data.AddressFamily[i].DefaultOriginateInheritanceDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].DefaultOriginateInheritanceDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("maximum-prefix.maximum-prefix-number"); value.Exists() && !data.AddressFamily[i].MaximumPrefixLimit.IsNull() {
@@ -2552,73 +2608,129 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 			data.AddressFamily[i].MaximumPrefixRestart = types.Int64Null()
 		}
 		if value := r.Get("maximum-prefix.discard-extra-paths"); value.Exists() {
-			if !data.AddressFamily[i].MaximumPrefixDiscardExtraPaths.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].MaximumPrefixDiscardExtraPaths.IsNull() && !data.AddressFamily[i].MaximumPrefixDiscardExtraPaths.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].MaximumPrefixDiscardExtraPaths = types.BoolValue(false)
+			} else if !data.AddressFamily[i].MaximumPrefixDiscardExtraPaths.IsNull() {
 				data.AddressFamily[i].MaximumPrefixDiscardExtraPaths = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].MaximumPrefixDiscardExtraPaths.IsNull() {
 				data.AddressFamily[i].MaximumPrefixDiscardExtraPaths = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].MaximumPrefixDiscardExtraPaths = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("maximum-prefix.warning-only"); value.Exists() {
-			if !data.AddressFamily[i].MaximumPrefixWarningOnly.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].MaximumPrefixWarningOnly.IsNull() && !data.AddressFamily[i].MaximumPrefixWarningOnly.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].MaximumPrefixWarningOnly = types.BoolValue(false)
+			} else if !data.AddressFamily[i].MaximumPrefixWarningOnly.IsNull() {
 				data.AddressFamily[i].MaximumPrefixWarningOnly = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].MaximumPrefixWarningOnly.IsNull() {
 				data.AddressFamily[i].MaximumPrefixWarningOnly = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].MaximumPrefixWarningOnly = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("next-hop-self"); value.Exists() {
-			if !data.AddressFamily[i].NextHopSelf.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].NextHopSelf.IsNull() && !data.AddressFamily[i].NextHopSelf.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].NextHopSelf = types.BoolValue(false)
+			} else if !data.AddressFamily[i].NextHopSelf.IsNull() {
 				data.AddressFamily[i].NextHopSelf = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].NextHopSelf.IsNull() {
 				data.AddressFamily[i].NextHopSelf = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].NextHopSelf = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("next-hop-self.inheritance-disable"); value.Exists() {
-			if !data.AddressFamily[i].NextHopSelfInheritanceDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].NextHopSelfInheritanceDisable.IsNull() && !data.AddressFamily[i].NextHopSelfInheritanceDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].NextHopSelfInheritanceDisable = types.BoolValue(false)
+			} else if !data.AddressFamily[i].NextHopSelfInheritanceDisable.IsNull() {
 				data.AddressFamily[i].NextHopSelfInheritanceDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].NextHopSelfInheritanceDisable.IsNull() {
 				data.AddressFamily[i].NextHopSelfInheritanceDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].NextHopSelfInheritanceDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("next-hop-unchanged.next-hop-unchanged-enable"); value.Exists() {
-			if !data.AddressFamily[i].NextHopUnchanged.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].NextHopUnchanged.IsNull() && !data.AddressFamily[i].NextHopUnchanged.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].NextHopUnchanged = types.BoolValue(false)
+			} else if !data.AddressFamily[i].NextHopUnchanged.IsNull() {
 				data.AddressFamily[i].NextHopUnchanged = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].NextHopUnchanged.IsNull() {
 				data.AddressFamily[i].NextHopUnchanged = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].NextHopUnchanged = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("next-hop-unchanged.multipath"); value.Exists() {
-			if !data.AddressFamily[i].NextHopUnchangedMultipath.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].NextHopUnchangedMultipath.IsNull() && !data.AddressFamily[i].NextHopUnchangedMultipath.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].NextHopUnchangedMultipath = types.BoolValue(false)
+			} else if !data.AddressFamily[i].NextHopUnchangedMultipath.IsNull() {
 				data.AddressFamily[i].NextHopUnchangedMultipath = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].NextHopUnchangedMultipath.IsNull() {
 				data.AddressFamily[i].NextHopUnchangedMultipath = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].NextHopUnchangedMultipath = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("next-hop-unchanged.next-hop-unchanged-enable.inheritance-disable"); value.Exists() {
-			if !data.AddressFamily[i].NextHopUnchangedInheritanceDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].NextHopUnchangedInheritanceDisable.IsNull() && !data.AddressFamily[i].NextHopUnchangedInheritanceDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].NextHopUnchangedInheritanceDisable = types.BoolValue(false)
+			} else if !data.AddressFamily[i].NextHopUnchangedInheritanceDisable.IsNull() {
 				data.AddressFamily[i].NextHopUnchangedInheritanceDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].NextHopUnchangedInheritanceDisable.IsNull() {
 				data.AddressFamily[i].NextHopUnchangedInheritanceDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].NextHopUnchangedInheritanceDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("route-policy.in"); value.Exists() && !data.AddressFamily[i].RoutePolicyIn.IsNull() {
@@ -2637,353 +2749,633 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 			data.AddressFamily[i].OrfRoutePolicy = types.StringNull()
 		}
 		if value := r.Get("cluster-id.allow-equal"); value.Exists() {
-			if !data.AddressFamily[i].ClusterIdAllowEqual.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].ClusterIdAllowEqual.IsNull() && !data.AddressFamily[i].ClusterIdAllowEqual.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].ClusterIdAllowEqual = types.BoolValue(false)
+			} else if !data.AddressFamily[i].ClusterIdAllowEqual.IsNull() {
 				data.AddressFamily[i].ClusterIdAllowEqual = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].ClusterIdAllowEqual.IsNull() {
 				data.AddressFamily[i].ClusterIdAllowEqual = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].ClusterIdAllowEqual = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("cluster-id.allow-equal.disable"); value.Exists() {
-			if !data.AddressFamily[i].ClusterIdAllowEqualDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].ClusterIdAllowEqualDisable.IsNull() && !data.AddressFamily[i].ClusterIdAllowEqualDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].ClusterIdAllowEqualDisable = types.BoolValue(false)
+			} else if !data.AddressFamily[i].ClusterIdAllowEqualDisable.IsNull() {
 				data.AddressFamily[i].ClusterIdAllowEqualDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].ClusterIdAllowEqualDisable.IsNull() {
 				data.AddressFamily[i].ClusterIdAllowEqualDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].ClusterIdAllowEqualDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("replace-private-as"); value.Exists() {
-			if !data.AddressFamily[i].ReplacePrivateAs.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].ReplacePrivateAs.IsNull() && !data.AddressFamily[i].ReplacePrivateAs.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].ReplacePrivateAs = types.BoolValue(false)
+			} else if !data.AddressFamily[i].ReplacePrivateAs.IsNull() {
 				data.AddressFamily[i].ReplacePrivateAs = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].ReplacePrivateAs.IsNull() {
 				data.AddressFamily[i].ReplacePrivateAs = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].ReplacePrivateAs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("replace-private-as.internal"); value.Exists() {
-			if !data.AddressFamily[i].ReplacePrivateAsInternal.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].ReplacePrivateAsInternal.IsNull() && !data.AddressFamily[i].ReplacePrivateAsInternal.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].ReplacePrivateAsInternal = types.BoolValue(false)
+			} else if !data.AddressFamily[i].ReplacePrivateAsInternal.IsNull() {
 				data.AddressFamily[i].ReplacePrivateAsInternal = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].ReplacePrivateAsInternal.IsNull() {
 				data.AddressFamily[i].ReplacePrivateAsInternal = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].ReplacePrivateAsInternal = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("remove-private-as.inbound"); value.Exists() {
-			if !data.AddressFamily[i].RemovePrivateAsInbound.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].RemovePrivateAsInbound.IsNull() && !data.AddressFamily[i].RemovePrivateAsInbound.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].RemovePrivateAsInbound = types.BoolValue(false)
+			} else if !data.AddressFamily[i].RemovePrivateAsInbound.IsNull() {
 				data.AddressFamily[i].RemovePrivateAsInbound = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].RemovePrivateAsInbound.IsNull() {
 				data.AddressFamily[i].RemovePrivateAsInbound = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].RemovePrivateAsInbound = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("remove-private-as.inbound.entire-aspath"); value.Exists() {
-			if !data.AddressFamily[i].RemovePrivateAsInboundEntireAspath.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].RemovePrivateAsInboundEntireAspath.IsNull() && !data.AddressFamily[i].RemovePrivateAsInboundEntireAspath.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].RemovePrivateAsInboundEntireAspath = types.BoolValue(false)
+			} else if !data.AddressFamily[i].RemovePrivateAsInboundEntireAspath.IsNull() {
 				data.AddressFamily[i].RemovePrivateAsInboundEntireAspath = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].RemovePrivateAsInboundEntireAspath.IsNull() {
 				data.AddressFamily[i].RemovePrivateAsInboundEntireAspath = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].RemovePrivateAsInboundEntireAspath = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("remove-private-as.inbound.inheritance-disable"); value.Exists() {
-			if !data.AddressFamily[i].RemovePrivateAsInboundInheritanceDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].RemovePrivateAsInboundInheritanceDisable.IsNull() && !data.AddressFamily[i].RemovePrivateAsInboundInheritanceDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].RemovePrivateAsInboundInheritanceDisable = types.BoolValue(false)
+			} else if !data.AddressFamily[i].RemovePrivateAsInboundInheritanceDisable.IsNull() {
 				data.AddressFamily[i].RemovePrivateAsInboundInheritanceDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].RemovePrivateAsInboundInheritanceDisable.IsNull() {
 				data.AddressFamily[i].RemovePrivateAsInboundInheritanceDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].RemovePrivateAsInboundInheritanceDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("remove-private-as.remove-private-as-outbound"); value.Exists() {
-			if !data.AddressFamily[i].RemovePrivateAs.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].RemovePrivateAs.IsNull() && !data.AddressFamily[i].RemovePrivateAs.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].RemovePrivateAs = types.BoolValue(false)
+			} else if !data.AddressFamily[i].RemovePrivateAs.IsNull() {
 				data.AddressFamily[i].RemovePrivateAs = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].RemovePrivateAs.IsNull() {
 				data.AddressFamily[i].RemovePrivateAs = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].RemovePrivateAs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("remove-private-as.remove-private-as-outbound.entire-aspath"); value.Exists() {
-			if !data.AddressFamily[i].RemovePrivateAsEntireAspath.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].RemovePrivateAsEntireAspath.IsNull() && !data.AddressFamily[i].RemovePrivateAsEntireAspath.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].RemovePrivateAsEntireAspath = types.BoolValue(false)
+			} else if !data.AddressFamily[i].RemovePrivateAsEntireAspath.IsNull() {
 				data.AddressFamily[i].RemovePrivateAsEntireAspath = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].RemovePrivateAsEntireAspath.IsNull() {
 				data.AddressFamily[i].RemovePrivateAsEntireAspath = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].RemovePrivateAsEntireAspath = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("remove-private-as.remove-private-as-outbound.internal"); value.Exists() {
-			if !data.AddressFamily[i].RemovePrivateAsInternal.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].RemovePrivateAsInternal.IsNull() && !data.AddressFamily[i].RemovePrivateAsInternal.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].RemovePrivateAsInternal = types.BoolValue(false)
+			} else if !data.AddressFamily[i].RemovePrivateAsInternal.IsNull() {
 				data.AddressFamily[i].RemovePrivateAsInternal = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].RemovePrivateAsInternal.IsNull() {
 				data.AddressFamily[i].RemovePrivateAsInternal = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].RemovePrivateAsInternal = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("route-reflector-client"); value.Exists() {
-			if !data.AddressFamily[i].RouteReflectorClient.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].RouteReflectorClient.IsNull() && !data.AddressFamily[i].RouteReflectorClient.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].RouteReflectorClient = types.BoolValue(false)
+			} else if !data.AddressFamily[i].RouteReflectorClient.IsNull() {
 				data.AddressFamily[i].RouteReflectorClient = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].RouteReflectorClient.IsNull() {
 				data.AddressFamily[i].RouteReflectorClient = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].RouteReflectorClient = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("route-reflector-client.inheritance-disable"); value.Exists() {
-			if !data.AddressFamily[i].RouteReflectorClientInheritanceDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].RouteReflectorClientInheritanceDisable.IsNull() && !data.AddressFamily[i].RouteReflectorClientInheritanceDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].RouteReflectorClientInheritanceDisable = types.BoolValue(false)
+			} else if !data.AddressFamily[i].RouteReflectorClientInheritanceDisable.IsNull() {
 				data.AddressFamily[i].RouteReflectorClientInheritanceDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].RouteReflectorClientInheritanceDisable.IsNull() {
 				data.AddressFamily[i].RouteReflectorClientInheritanceDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].RouteReflectorClientInheritanceDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("send-community-ebgp"); value.Exists() {
-			if !data.AddressFamily[i].SendCommunityEbgp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].SendCommunityEbgp.IsNull() && !data.AddressFamily[i].SendCommunityEbgp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].SendCommunityEbgp = types.BoolValue(false)
+			} else if !data.AddressFamily[i].SendCommunityEbgp.IsNull() {
 				data.AddressFamily[i].SendCommunityEbgp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].SendCommunityEbgp.IsNull() {
 				data.AddressFamily[i].SendCommunityEbgp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].SendCommunityEbgp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("send-community-ebgp.inheritance-disable"); value.Exists() {
-			if !data.AddressFamily[i].SendCommunityEbgpInheritanceDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].SendCommunityEbgpInheritanceDisable.IsNull() && !data.AddressFamily[i].SendCommunityEbgpInheritanceDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].SendCommunityEbgpInheritanceDisable = types.BoolValue(false)
+			} else if !data.AddressFamily[i].SendCommunityEbgpInheritanceDisable.IsNull() {
 				data.AddressFamily[i].SendCommunityEbgpInheritanceDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].SendCommunityEbgpInheritanceDisable.IsNull() {
 				data.AddressFamily[i].SendCommunityEbgpInheritanceDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].SendCommunityEbgpInheritanceDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("send-community-gshut-ebgp"); value.Exists() {
-			if !data.AddressFamily[i].SendCommunityGshutEbgp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].SendCommunityGshutEbgp.IsNull() && !data.AddressFamily[i].SendCommunityGshutEbgp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].SendCommunityGshutEbgp = types.BoolValue(false)
+			} else if !data.AddressFamily[i].SendCommunityGshutEbgp.IsNull() {
 				data.AddressFamily[i].SendCommunityGshutEbgp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].SendCommunityGshutEbgp.IsNull() {
 				data.AddressFamily[i].SendCommunityGshutEbgp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].SendCommunityGshutEbgp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("send-community-gshut-ebgp.inheritance-disable"); value.Exists() {
-			if !data.AddressFamily[i].SendCommunityGshutEbgpInheritanceDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].SendCommunityGshutEbgpInheritanceDisable.IsNull() && !data.AddressFamily[i].SendCommunityGshutEbgpInheritanceDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].SendCommunityGshutEbgpInheritanceDisable = types.BoolValue(false)
+			} else if !data.AddressFamily[i].SendCommunityGshutEbgpInheritanceDisable.IsNull() {
 				data.AddressFamily[i].SendCommunityGshutEbgpInheritanceDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].SendCommunityGshutEbgpInheritanceDisable.IsNull() {
 				data.AddressFamily[i].SendCommunityGshutEbgpInheritanceDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].SendCommunityGshutEbgpInheritanceDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("send-extended-community-ebgp"); value.Exists() {
-			if !data.AddressFamily[i].SendExtendedCommunityEbgp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].SendExtendedCommunityEbgp.IsNull() && !data.AddressFamily[i].SendExtendedCommunityEbgp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].SendExtendedCommunityEbgp = types.BoolValue(false)
+			} else if !data.AddressFamily[i].SendExtendedCommunityEbgp.IsNull() {
 				data.AddressFamily[i].SendExtendedCommunityEbgp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].SendExtendedCommunityEbgp.IsNull() {
 				data.AddressFamily[i].SendExtendedCommunityEbgp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].SendExtendedCommunityEbgp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("send-extended-community-ebgp.inheritance-disable"); value.Exists() {
-			if !data.AddressFamily[i].SendExtendedCommunityEbgpInheritanceDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].SendExtendedCommunityEbgpInheritanceDisable.IsNull() && !data.AddressFamily[i].SendExtendedCommunityEbgpInheritanceDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].SendExtendedCommunityEbgpInheritanceDisable = types.BoolValue(false)
+			} else if !data.AddressFamily[i].SendExtendedCommunityEbgpInheritanceDisable.IsNull() {
 				data.AddressFamily[i].SendExtendedCommunityEbgpInheritanceDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].SendExtendedCommunityEbgpInheritanceDisable.IsNull() {
 				data.AddressFamily[i].SendExtendedCommunityEbgpInheritanceDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].SendExtendedCommunityEbgpInheritanceDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("soft-reconfiguration.inbound"); value.Exists() {
-			if !data.AddressFamily[i].SoftReconfigurationInbound.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].SoftReconfigurationInbound.IsNull() && !data.AddressFamily[i].SoftReconfigurationInbound.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].SoftReconfigurationInbound = types.BoolValue(false)
+			} else if !data.AddressFamily[i].SoftReconfigurationInbound.IsNull() {
 				data.AddressFamily[i].SoftReconfigurationInbound = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].SoftReconfigurationInbound.IsNull() {
 				data.AddressFamily[i].SoftReconfigurationInbound = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].SoftReconfigurationInbound = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("soft-reconfiguration.inbound.always"); value.Exists() {
-			if !data.AddressFamily[i].SoftReconfigurationInboundAlways.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].SoftReconfigurationInboundAlways.IsNull() && !data.AddressFamily[i].SoftReconfigurationInboundAlways.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].SoftReconfigurationInboundAlways = types.BoolValue(false)
+			} else if !data.AddressFamily[i].SoftReconfigurationInboundAlways.IsNull() {
 				data.AddressFamily[i].SoftReconfigurationInboundAlways = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].SoftReconfigurationInboundAlways.IsNull() {
 				data.AddressFamily[i].SoftReconfigurationInboundAlways = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].SoftReconfigurationInboundAlways = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("update.out.originator-loopcheck"); value.Exists() {
-			if !data.AddressFamily[i].UpdateOutOriginatorLoopcheck.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].UpdateOutOriginatorLoopcheck.IsNull() && !data.AddressFamily[i].UpdateOutOriginatorLoopcheck.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].UpdateOutOriginatorLoopcheck = types.BoolValue(false)
+			} else if !data.AddressFamily[i].UpdateOutOriginatorLoopcheck.IsNull() {
 				data.AddressFamily[i].UpdateOutOriginatorLoopcheck = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].UpdateOutOriginatorLoopcheck.IsNull() {
 				data.AddressFamily[i].UpdateOutOriginatorLoopcheck = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].UpdateOutOriginatorLoopcheck = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("update.out.originator-loopcheck.disable"); value.Exists() {
-			if !data.AddressFamily[i].UpdateOutOriginatorLoopcheckDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].UpdateOutOriginatorLoopcheckDisable.IsNull() && !data.AddressFamily[i].UpdateOutOriginatorLoopcheckDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].UpdateOutOriginatorLoopcheckDisable = types.BoolValue(false)
+			} else if !data.AddressFamily[i].UpdateOutOriginatorLoopcheckDisable.IsNull() {
 				data.AddressFamily[i].UpdateOutOriginatorLoopcheckDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].UpdateOutOriginatorLoopcheckDisable.IsNull() {
 				data.AddressFamily[i].UpdateOutOriginatorLoopcheckDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].UpdateOutOriginatorLoopcheckDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("advertise.vpnv4.unicast.enable"); value.Exists() {
-			if !data.AddressFamily[i].AdvertiseVpnv4Unicast.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].AdvertiseVpnv4Unicast.IsNull() && !data.AddressFamily[i].AdvertiseVpnv4Unicast.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].AdvertiseVpnv4Unicast = types.BoolValue(false)
+			} else if !data.AddressFamily[i].AdvertiseVpnv4Unicast.IsNull() {
 				data.AddressFamily[i].AdvertiseVpnv4Unicast = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].AdvertiseVpnv4Unicast.IsNull() {
 				data.AddressFamily[i].AdvertiseVpnv4Unicast = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].AdvertiseVpnv4Unicast = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("advertise.vpnv4.unicast.enable.re-originated"); value.Exists() {
-			if !data.AddressFamily[i].AdvertiseVpnv4UnicastReOriginated.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].AdvertiseVpnv4UnicastReOriginated.IsNull() && !data.AddressFamily[i].AdvertiseVpnv4UnicastReOriginated.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].AdvertiseVpnv4UnicastReOriginated = types.BoolValue(false)
+			} else if !data.AddressFamily[i].AdvertiseVpnv4UnicastReOriginated.IsNull() {
 				data.AddressFamily[i].AdvertiseVpnv4UnicastReOriginated = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].AdvertiseVpnv4UnicastReOriginated.IsNull() {
 				data.AddressFamily[i].AdvertiseVpnv4UnicastReOriginated = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].AdvertiseVpnv4UnicastReOriginated = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("advertise.vpnv4.unicast.enable.re-originated.stitching-rt"); value.Exists() {
-			if !data.AddressFamily[i].AdvertiseVpnv4UnicastReOriginatedStitchingRt.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].AdvertiseVpnv4UnicastReOriginatedStitchingRt.IsNull() && !data.AddressFamily[i].AdvertiseVpnv4UnicastReOriginatedStitchingRt.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolValue(false)
+			} else if !data.AddressFamily[i].AdvertiseVpnv4UnicastReOriginatedStitchingRt.IsNull() {
 				data.AddressFamily[i].AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].AdvertiseVpnv4UnicastReOriginatedStitchingRt.IsNull() {
 				data.AddressFamily[i].AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("advertise.vpnv6.unicast.enable"); value.Exists() {
-			if !data.AddressFamily[i].AdvertiseVpnv6Unicast.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].AdvertiseVpnv6Unicast.IsNull() && !data.AddressFamily[i].AdvertiseVpnv6Unicast.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].AdvertiseVpnv6Unicast = types.BoolValue(false)
+			} else if !data.AddressFamily[i].AdvertiseVpnv6Unicast.IsNull() {
 				data.AddressFamily[i].AdvertiseVpnv6Unicast = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].AdvertiseVpnv6Unicast.IsNull() {
 				data.AddressFamily[i].AdvertiseVpnv6Unicast = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].AdvertiseVpnv6Unicast = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("advertise.vpnv6.unicast.enable.re-originated"); value.Exists() {
-			if !data.AddressFamily[i].AdvertiseVpnv6UnicastReOriginated.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].AdvertiseVpnv6UnicastReOriginated.IsNull() && !data.AddressFamily[i].AdvertiseVpnv6UnicastReOriginated.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].AdvertiseVpnv6UnicastReOriginated = types.BoolValue(false)
+			} else if !data.AddressFamily[i].AdvertiseVpnv6UnicastReOriginated.IsNull() {
 				data.AddressFamily[i].AdvertiseVpnv6UnicastReOriginated = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].AdvertiseVpnv6UnicastReOriginated.IsNull() {
 				data.AddressFamily[i].AdvertiseVpnv6UnicastReOriginated = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].AdvertiseVpnv6UnicastReOriginated = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("advertise.vpnv6.unicast.enable.re-originated.stitching-rt"); value.Exists() {
-			if !data.AddressFamily[i].AdvertiseVpnv6UnicastReOriginatedStitchingRt.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].AdvertiseVpnv6UnicastReOriginatedStitchingRt.IsNull() && !data.AddressFamily[i].AdvertiseVpnv6UnicastReOriginatedStitchingRt.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].AdvertiseVpnv6UnicastReOriginatedStitchingRt = types.BoolValue(false)
+			} else if !data.AddressFamily[i].AdvertiseVpnv6UnicastReOriginatedStitchingRt.IsNull() {
 				data.AddressFamily[i].AdvertiseVpnv6UnicastReOriginatedStitchingRt = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].AdvertiseVpnv6UnicastReOriginatedStitchingRt.IsNull() {
 				data.AddressFamily[i].AdvertiseVpnv6UnicastReOriginatedStitchingRt = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].AdvertiseVpnv6UnicastReOriginatedStitchingRt = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("advertise.l2vpn.evpn.re-originated"); value.Exists() {
-			if !data.AddressFamily[i].AdvertiseL2vpnEvpnReOriginated.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].AdvertiseL2vpnEvpnReOriginated.IsNull() && !data.AddressFamily[i].AdvertiseL2vpnEvpnReOriginated.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].AdvertiseL2vpnEvpnReOriginated = types.BoolValue(false)
+			} else if !data.AddressFamily[i].AdvertiseL2vpnEvpnReOriginated.IsNull() {
 				data.AddressFamily[i].AdvertiseL2vpnEvpnReOriginated = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].AdvertiseL2vpnEvpnReOriginated.IsNull() {
 				data.AddressFamily[i].AdvertiseL2vpnEvpnReOriginated = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].AdvertiseL2vpnEvpnReOriginated = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("advertise.l2vpn.evpn.re-originated.stitching-rt"); value.Exists() {
-			if !data.AddressFamily[i].AdvertiseL2vpnEvpnReOriginatedStitchingRt.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].AdvertiseL2vpnEvpnReOriginatedStitchingRt.IsNull() && !data.AddressFamily[i].AdvertiseL2vpnEvpnReOriginatedStitchingRt.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].AdvertiseL2vpnEvpnReOriginatedStitchingRt = types.BoolValue(false)
+			} else if !data.AddressFamily[i].AdvertiseL2vpnEvpnReOriginatedStitchingRt.IsNull() {
 				data.AddressFamily[i].AdvertiseL2vpnEvpnReOriginatedStitchingRt = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].AdvertiseL2vpnEvpnReOriginatedStitchingRt.IsNull() {
 				data.AddressFamily[i].AdvertiseL2vpnEvpnReOriginatedStitchingRt = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].AdvertiseL2vpnEvpnReOriginatedStitchingRt = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("segment-routing.srv6.prefix-sid-type4"); value.Exists() {
-			if !data.AddressFamily[i].SegmentRoutingSrv6PrefixSidType4.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].SegmentRoutingSrv6PrefixSidType4.IsNull() && !data.AddressFamily[i].SegmentRoutingSrv6PrefixSidType4.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].SegmentRoutingSrv6PrefixSidType4 = types.BoolValue(false)
+			} else if !data.AddressFamily[i].SegmentRoutingSrv6PrefixSidType4.IsNull() {
 				data.AddressFamily[i].SegmentRoutingSrv6PrefixSidType4 = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].SegmentRoutingSrv6PrefixSidType4.IsNull() {
 				data.AddressFamily[i].SegmentRoutingSrv6PrefixSidType4 = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].SegmentRoutingSrv6PrefixSidType4 = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("import.stitching-rt"); value.Exists() {
-			if !data.AddressFamily[i].ImportStitchingRt.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].ImportStitchingRt.IsNull() && !data.AddressFamily[i].ImportStitchingRt.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].ImportStitchingRt = types.BoolValue(false)
+			} else if !data.AddressFamily[i].ImportStitchingRt.IsNull() {
 				data.AddressFamily[i].ImportStitchingRt = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].ImportStitchingRt.IsNull() {
 				data.AddressFamily[i].ImportStitchingRt = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].ImportStitchingRt = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("import.stitching-rt.re-originate"); value.Exists() {
-			if !data.AddressFamily[i].ImportStitchingRtReOriginate.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].ImportStitchingRtReOriginate.IsNull() && !data.AddressFamily[i].ImportStitchingRtReOriginate.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].ImportStitchingRtReOriginate = types.BoolValue(false)
+			} else if !data.AddressFamily[i].ImportStitchingRtReOriginate.IsNull() {
 				data.AddressFamily[i].ImportStitchingRtReOriginate = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].ImportStitchingRtReOriginate.IsNull() {
 				data.AddressFamily[i].ImportStitchingRtReOriginate = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].ImportStitchingRtReOriginate = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("import.stitching-rt.re-originate.stitching-rt"); value.Exists() {
-			if !data.AddressFamily[i].ImportStitchingRtReOriginateStitchingRt.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].ImportStitchingRtReOriginateStitchingRt.IsNull() && !data.AddressFamily[i].ImportStitchingRtReOriginateStitchingRt.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].ImportStitchingRtReOriginateStitchingRt = types.BoolValue(false)
+			} else if !data.AddressFamily[i].ImportStitchingRtReOriginateStitchingRt.IsNull() {
 				data.AddressFamily[i].ImportStitchingRtReOriginateStitchingRt = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].ImportStitchingRtReOriginateStitchingRt.IsNull() {
 				data.AddressFamily[i].ImportStitchingRtReOriginateStitchingRt = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].ImportStitchingRtReOriginateStitchingRt = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("import.re-originate"); value.Exists() {
-			if !data.AddressFamily[i].ImportReOriginate.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].ImportReOriginate.IsNull() && !data.AddressFamily[i].ImportReOriginate.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].ImportReOriginate = types.BoolValue(false)
+			} else if !data.AddressFamily[i].ImportReOriginate.IsNull() {
 				data.AddressFamily[i].ImportReOriginate = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].ImportReOriginate.IsNull() {
 				data.AddressFamily[i].ImportReOriginate = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].ImportReOriginate = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("allowas-in.number-of-occurrences-of-as-number"); value.Exists() && !data.AddressFamily[i].AllowasIn.IsNull() {
@@ -3027,73 +3419,129 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 			data.AddressFamily[i].SiteOfOriginIpv4AddressIndex = types.Int64Null()
 		}
 		if value := r.Get("as-override"); value.Exists() {
-			if !data.AddressFamily[i].AsOverride.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].AsOverride.IsNull() && !data.AddressFamily[i].AsOverride.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].AsOverride = types.BoolValue(false)
+			} else if !data.AddressFamily[i].AsOverride.IsNull() {
 				data.AddressFamily[i].AsOverride = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].AsOverride.IsNull() {
 				data.AddressFamily[i].AsOverride = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].AsOverride = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("as-override.inheritance-disable"); value.Exists() {
-			if !data.AddressFamily[i].AsOverrideInheritanceDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].AsOverrideInheritanceDisable.IsNull() && !data.AddressFamily[i].AsOverrideInheritanceDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].AsOverrideInheritanceDisable = types.BoolValue(false)
+			} else if !data.AddressFamily[i].AsOverrideInheritanceDisable.IsNull() {
 				data.AddressFamily[i].AsOverrideInheritanceDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].AsOverrideInheritanceDisable.IsNull() {
 				data.AddressFamily[i].AsOverrideInheritanceDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].AsOverrideInheritanceDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("aigp.enable"); value.Exists() {
-			if !data.AddressFamily[i].Aigp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].Aigp.IsNull() && !data.AddressFamily[i].Aigp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].Aigp = types.BoolValue(false)
+			} else if !data.AddressFamily[i].Aigp.IsNull() {
 				data.AddressFamily[i].Aigp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].Aigp.IsNull() {
 				data.AddressFamily[i].Aigp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].Aigp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("aigp.enable.disable"); value.Exists() {
-			if !data.AddressFamily[i].AigpDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].AigpDisable.IsNull() && !data.AddressFamily[i].AigpDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].AigpDisable = types.BoolValue(false)
+			} else if !data.AddressFamily[i].AigpDisable.IsNull() {
 				data.AddressFamily[i].AigpDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].AigpDisable.IsNull() {
 				data.AddressFamily[i].AigpDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].AigpDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("aigp.send.med"); value.Exists() {
-			if !data.AddressFamily[i].AigpSendMed.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].AigpSendMed.IsNull() && !data.AddressFamily[i].AigpSendMed.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].AigpSendMed = types.BoolValue(false)
+			} else if !data.AddressFamily[i].AigpSendMed.IsNull() {
 				data.AddressFamily[i].AigpSendMed = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].AigpSendMed.IsNull() {
 				data.AddressFamily[i].AigpSendMed = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].AigpSendMed = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("aigp.send.med.disable"); value.Exists() {
-			if !data.AddressFamily[i].AigpSendMedDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].AigpSendMedDisable.IsNull() && !data.AddressFamily[i].AigpSendMedDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].AigpSendMedDisable = types.BoolValue(false)
+			} else if !data.AddressFamily[i].AigpSendMedDisable.IsNull() {
 				data.AddressFamily[i].AigpSendMedDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].AigpSendMedDisable.IsNull() {
 				data.AddressFamily[i].AigpSendMedDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].AigpSendMedDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("aigp.send.cost-community.disable"); value.Exists() {
-			if !data.AddressFamily[i].AigpSendCostCommunityDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].AigpSendCostCommunityDisable.IsNull() && !data.AddressFamily[i].AigpSendCostCommunityDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].AigpSendCostCommunityDisable = types.BoolValue(false)
+			} else if !data.AddressFamily[i].AigpSendCostCommunityDisable.IsNull() {
 				data.AddressFamily[i].AigpSendCostCommunityDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].AigpSendCostCommunityDisable.IsNull() {
 				data.AddressFamily[i].AigpSendCostCommunityDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].AigpSendCostCommunityDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("aigp.send.cost-community.cost-community-id.cost-community-id-number"); value.Exists() && !data.AddressFamily[i].AigpSendCostCommunityId.IsNull() {
@@ -3102,93 +3550,165 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 			data.AddressFamily[i].AigpSendCostCommunityId = types.Int64Null()
 		}
 		if value := r.Get("aigp.send.cost-community.cost-community-id.poi.igp-cost"); value.Exists() {
-			if !data.AddressFamily[i].AigpSendCostCommunityIdPoiIgpCost.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].AigpSendCostCommunityIdPoiIgpCost.IsNull() && !data.AddressFamily[i].AigpSendCostCommunityIdPoiIgpCost.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].AigpSendCostCommunityIdPoiIgpCost = types.BoolValue(false)
+			} else if !data.AddressFamily[i].AigpSendCostCommunityIdPoiIgpCost.IsNull() {
 				data.AddressFamily[i].AigpSendCostCommunityIdPoiIgpCost = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].AigpSendCostCommunityIdPoiIgpCost.IsNull() {
 				data.AddressFamily[i].AigpSendCostCommunityIdPoiIgpCost = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].AigpSendCostCommunityIdPoiIgpCost = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("aigp.send.cost-community.cost-community-id.poi.igp-cost.transitive"); value.Exists() {
-			if !data.AddressFamily[i].AigpSendCostCommunityIdPoiIgpCostTransitive.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].AigpSendCostCommunityIdPoiIgpCostTransitive.IsNull() && !data.AddressFamily[i].AigpSendCostCommunityIdPoiIgpCostTransitive.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].AigpSendCostCommunityIdPoiIgpCostTransitive = types.BoolValue(false)
+			} else if !data.AddressFamily[i].AigpSendCostCommunityIdPoiIgpCostTransitive.IsNull() {
 				data.AddressFamily[i].AigpSendCostCommunityIdPoiIgpCostTransitive = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].AigpSendCostCommunityIdPoiIgpCostTransitive.IsNull() {
 				data.AddressFamily[i].AigpSendCostCommunityIdPoiIgpCostTransitive = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].AigpSendCostCommunityIdPoiIgpCostTransitive = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("aigp.send.cost-community.cost-community-id.poi.pre-bestpath"); value.Exists() {
-			if !data.AddressFamily[i].AigpSendCostCommunityIdPoiPreBestpath.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].AigpSendCostCommunityIdPoiPreBestpath.IsNull() && !data.AddressFamily[i].AigpSendCostCommunityIdPoiPreBestpath.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].AigpSendCostCommunityIdPoiPreBestpath = types.BoolValue(false)
+			} else if !data.AddressFamily[i].AigpSendCostCommunityIdPoiPreBestpath.IsNull() {
 				data.AddressFamily[i].AigpSendCostCommunityIdPoiPreBestpath = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].AigpSendCostCommunityIdPoiPreBestpath.IsNull() {
 				data.AddressFamily[i].AigpSendCostCommunityIdPoiPreBestpath = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].AigpSendCostCommunityIdPoiPreBestpath = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("aigp.send.cost-community.cost-community-id.poi.pre-bestpath.transitive"); value.Exists() {
-			if !data.AddressFamily[i].AigpSendCostCommunityIdPoiPreBestpathTransitive.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].AigpSendCostCommunityIdPoiPreBestpathTransitive.IsNull() && !data.AddressFamily[i].AigpSendCostCommunityIdPoiPreBestpathTransitive.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].AigpSendCostCommunityIdPoiPreBestpathTransitive = types.BoolValue(false)
+			} else if !data.AddressFamily[i].AigpSendCostCommunityIdPoiPreBestpathTransitive.IsNull() {
 				data.AddressFamily[i].AigpSendCostCommunityIdPoiPreBestpathTransitive = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].AigpSendCostCommunityIdPoiPreBestpathTransitive.IsNull() {
 				data.AddressFamily[i].AigpSendCostCommunityIdPoiPreBestpathTransitive = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].AigpSendCostCommunityIdPoiPreBestpathTransitive = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("send-multicast-attributes"); value.Exists() {
-			if !data.AddressFamily[i].SendMulticastAttributes.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].SendMulticastAttributes.IsNull() && !data.AddressFamily[i].SendMulticastAttributes.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].SendMulticastAttributes = types.BoolValue(false)
+			} else if !data.AddressFamily[i].SendMulticastAttributes.IsNull() {
 				data.AddressFamily[i].SendMulticastAttributes = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].SendMulticastAttributes.IsNull() {
 				data.AddressFamily[i].SendMulticastAttributes = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].SendMulticastAttributes = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("send-multicast-attributes.disable"); value.Exists() {
-			if !data.AddressFamily[i].SendMulticastAttributesDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].SendMulticastAttributesDisable.IsNull() && !data.AddressFamily[i].SendMulticastAttributesDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].SendMulticastAttributesDisable = types.BoolValue(false)
+			} else if !data.AddressFamily[i].SendMulticastAttributesDisable.IsNull() {
 				data.AddressFamily[i].SendMulticastAttributesDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].SendMulticastAttributesDisable.IsNull() {
 				data.AddressFamily[i].SendMulticastAttributesDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].SendMulticastAttributesDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("accept-own"); value.Exists() {
-			if !data.AddressFamily[i].AcceptOwn.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].AcceptOwn.IsNull() && !data.AddressFamily[i].AcceptOwn.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].AcceptOwn = types.BoolValue(false)
+			} else if !data.AddressFamily[i].AcceptOwn.IsNull() {
 				data.AddressFamily[i].AcceptOwn = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].AcceptOwn.IsNull() {
 				data.AddressFamily[i].AcceptOwn = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].AcceptOwn = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("accept-own.inheritance-disable"); value.Exists() {
-			if !data.AddressFamily[i].AcceptOwnInheritanceDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].AcceptOwnInheritanceDisable.IsNull() && !data.AddressFamily[i].AcceptOwnInheritanceDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].AcceptOwnInheritanceDisable = types.BoolValue(false)
+			} else if !data.AddressFamily[i].AcceptOwnInheritanceDisable.IsNull() {
 				data.AddressFamily[i].AcceptOwnInheritanceDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].AcceptOwnInheritanceDisable.IsNull() {
 				data.AddressFamily[i].AcceptOwnInheritanceDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].AcceptOwnInheritanceDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("slow-peer.dynamic"); value.Exists() {
-			if !data.AddressFamily[i].SlowPeerDynamic.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].SlowPeerDynamic.IsNull() && !data.AddressFamily[i].SlowPeerDynamic.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].SlowPeerDynamic = types.BoolValue(false)
+			} else if !data.AddressFamily[i].SlowPeerDynamic.IsNull() {
 				data.AddressFamily[i].SlowPeerDynamic = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].SlowPeerDynamic.IsNull() {
 				data.AddressFamily[i].SlowPeerDynamic = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].SlowPeerDynamic = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("slow-peer.dynamic.threshold"); value.Exists() && !data.AddressFamily[i].SlowPeerDynamicThreshold.IsNull() {
@@ -3197,43 +3717,75 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 			data.AddressFamily[i].SlowPeerDynamicThreshold = types.Int64Null()
 		}
 		if value := r.Get("slow-peer.dynamic.disable"); value.Exists() {
-			if !data.AddressFamily[i].SlowPeerDynamicDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].SlowPeerDynamicDisable.IsNull() && !data.AddressFamily[i].SlowPeerDynamicDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].SlowPeerDynamicDisable = types.BoolValue(false)
+			} else if !data.AddressFamily[i].SlowPeerDynamicDisable.IsNull() {
 				data.AddressFamily[i].SlowPeerDynamicDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].SlowPeerDynamicDisable.IsNull() {
 				data.AddressFamily[i].SlowPeerDynamicDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].SlowPeerDynamicDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("slow-peer.static"); value.Exists() {
-			if !data.AddressFamily[i].SlowPeerStatic.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].SlowPeerStatic.IsNull() && !data.AddressFamily[i].SlowPeerStatic.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].SlowPeerStatic = types.BoolValue(false)
+			} else if !data.AddressFamily[i].SlowPeerStatic.IsNull() {
 				data.AddressFamily[i].SlowPeerStatic = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].SlowPeerStatic.IsNull() {
 				data.AddressFamily[i].SlowPeerStatic = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].SlowPeerStatic = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("origin-as.validation.disable"); value.Exists() {
-			if !data.AddressFamily[i].OriginAsValidationDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].OriginAsValidationDisable.IsNull() && !data.AddressFamily[i].OriginAsValidationDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].OriginAsValidationDisable = types.BoolValue(false)
+			} else if !data.AddressFamily[i].OriginAsValidationDisable.IsNull() {
 				data.AddressFamily[i].OriginAsValidationDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].OriginAsValidationDisable.IsNull() {
 				data.AddressFamily[i].OriginAsValidationDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].OriginAsValidationDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("bestpath.origin-as.allow.invalid"); value.Exists() {
-			if !data.AddressFamily[i].BestpathOriginAsAllowInvalid.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AddressFamily[i].BestpathOriginAsAllowInvalid.IsNull() && !data.AddressFamily[i].BestpathOriginAsAllowInvalid.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AddressFamily[i].BestpathOriginAsAllowInvalid = types.BoolValue(false)
+			} else if !data.AddressFamily[i].BestpathOriginAsAllowInvalid.IsNull() {
 				data.AddressFamily[i].BestpathOriginAsAllowInvalid = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AddressFamily[i].BestpathOriginAsAllowInvalid.IsNull() {
 				data.AddressFamily[i].BestpathOriginAsAllowInvalid = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AddressFamily[i].BestpathOriginAsAllowInvalid = types.BoolValue(false)
 			}
 		}
 	}
@@ -6408,7 +6960,7 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res gjson.Resu
 			if cValue := v.Get("multipath"); cValue.Exists() {
 				item.Multipath = types.BoolValue(true)
 			} else {
-				item.Multipath = types.BoolNull()
+				item.Multipath = types.BoolValue(false)
 			}
 			if cValue := v.Get("use.af-group"); cValue.Exists() {
 				item.UseAfGroup = types.StringValue(cValue.String())
@@ -6419,27 +6971,27 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res gjson.Resu
 			if cValue := v.Get("additional-paths.send"); cValue.Exists() {
 				item.AdditionalPathsSend = types.BoolValue(true)
 			} else {
-				item.AdditionalPathsSend = types.BoolNull()
+				item.AdditionalPathsSend = types.BoolValue(false)
 			}
 			if cValue := v.Get("additional-paths.send.disable"); cValue.Exists() {
 				item.AdditionalPathsSendDisable = types.BoolValue(true)
 			} else {
-				item.AdditionalPathsSendDisable = types.BoolNull()
+				item.AdditionalPathsSendDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("additional-paths.receive"); cValue.Exists() {
 				item.AdditionalPathsReceive = types.BoolValue(true)
 			} else {
-				item.AdditionalPathsReceive = types.BoolNull()
+				item.AdditionalPathsReceive = types.BoolValue(false)
 			}
 			if cValue := v.Get("additional-paths.receive.disable"); cValue.Exists() {
 				item.AdditionalPathsReceiveDisable = types.BoolValue(true)
 			} else {
-				item.AdditionalPathsReceiveDisable = types.BoolNull()
+				item.AdditionalPathsReceiveDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("default-originate"); cValue.Exists() {
 				item.DefaultOriginate = types.BoolValue(true)
 			} else {
-				item.DefaultOriginate = types.BoolNull()
+				item.DefaultOriginate = types.BoolValue(false)
 			}
 			if cValue := v.Get("default-originate.route-policy"); cValue.Exists() {
 				item.DefaultOriginateRoutePolicy = types.StringValue(cValue.String())
@@ -6447,7 +6999,7 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res gjson.Resu
 			if cValue := v.Get("default-originate.inheritance-disable"); cValue.Exists() {
 				item.DefaultOriginateInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.DefaultOriginateInheritanceDisable = types.BoolNull()
+				item.DefaultOriginateInheritanceDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("maximum-prefix.maximum-prefix-number"); cValue.Exists() {
 				item.MaximumPrefixLimit = types.Int64Value(cValue.Int())
@@ -6461,37 +7013,37 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res gjson.Resu
 			if cValue := v.Get("maximum-prefix.discard-extra-paths"); cValue.Exists() {
 				item.MaximumPrefixDiscardExtraPaths = types.BoolValue(true)
 			} else {
-				item.MaximumPrefixDiscardExtraPaths = types.BoolNull()
+				item.MaximumPrefixDiscardExtraPaths = types.BoolValue(false)
 			}
 			if cValue := v.Get("maximum-prefix.warning-only"); cValue.Exists() {
 				item.MaximumPrefixWarningOnly = types.BoolValue(true)
 			} else {
-				item.MaximumPrefixWarningOnly = types.BoolNull()
+				item.MaximumPrefixWarningOnly = types.BoolValue(false)
 			}
 			if cValue := v.Get("next-hop-self"); cValue.Exists() {
 				item.NextHopSelf = types.BoolValue(true)
 			} else {
-				item.NextHopSelf = types.BoolNull()
+				item.NextHopSelf = types.BoolValue(false)
 			}
 			if cValue := v.Get("next-hop-self.inheritance-disable"); cValue.Exists() {
 				item.NextHopSelfInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.NextHopSelfInheritanceDisable = types.BoolNull()
+				item.NextHopSelfInheritanceDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("next-hop-unchanged.next-hop-unchanged-enable"); cValue.Exists() {
 				item.NextHopUnchanged = types.BoolValue(true)
 			} else {
-				item.NextHopUnchanged = types.BoolNull()
+				item.NextHopUnchanged = types.BoolValue(false)
 			}
 			if cValue := v.Get("next-hop-unchanged.multipath"); cValue.Exists() {
 				item.NextHopUnchangedMultipath = types.BoolValue(true)
 			} else {
-				item.NextHopUnchangedMultipath = types.BoolNull()
+				item.NextHopUnchangedMultipath = types.BoolValue(false)
 			}
 			if cValue := v.Get("next-hop-unchanged.next-hop-unchanged-enable.inheritance-disable"); cValue.Exists() {
 				item.NextHopUnchangedInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.NextHopUnchangedInheritanceDisable = types.BoolNull()
+				item.NextHopUnchangedInheritanceDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("route-policy.in"); cValue.Exists() {
 				item.RoutePolicyIn = types.StringValue(cValue.String())
@@ -6505,177 +7057,177 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res gjson.Resu
 			if cValue := v.Get("cluster-id.allow-equal"); cValue.Exists() {
 				item.ClusterIdAllowEqual = types.BoolValue(true)
 			} else {
-				item.ClusterIdAllowEqual = types.BoolNull()
+				item.ClusterIdAllowEqual = types.BoolValue(false)
 			}
 			if cValue := v.Get("cluster-id.allow-equal.disable"); cValue.Exists() {
 				item.ClusterIdAllowEqualDisable = types.BoolValue(true)
 			} else {
-				item.ClusterIdAllowEqualDisable = types.BoolNull()
+				item.ClusterIdAllowEqualDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("replace-private-as"); cValue.Exists() {
 				item.ReplacePrivateAs = types.BoolValue(true)
 			} else {
-				item.ReplacePrivateAs = types.BoolNull()
+				item.ReplacePrivateAs = types.BoolValue(false)
 			}
 			if cValue := v.Get("replace-private-as.internal"); cValue.Exists() {
 				item.ReplacePrivateAsInternal = types.BoolValue(true)
 			} else {
-				item.ReplacePrivateAsInternal = types.BoolNull()
+				item.ReplacePrivateAsInternal = types.BoolValue(false)
 			}
 			if cValue := v.Get("remove-private-as.inbound"); cValue.Exists() {
 				item.RemovePrivateAsInbound = types.BoolValue(true)
 			} else {
-				item.RemovePrivateAsInbound = types.BoolNull()
+				item.RemovePrivateAsInbound = types.BoolValue(false)
 			}
 			if cValue := v.Get("remove-private-as.inbound.entire-aspath"); cValue.Exists() {
 				item.RemovePrivateAsInboundEntireAspath = types.BoolValue(true)
 			} else {
-				item.RemovePrivateAsInboundEntireAspath = types.BoolNull()
+				item.RemovePrivateAsInboundEntireAspath = types.BoolValue(false)
 			}
 			if cValue := v.Get("remove-private-as.inbound.inheritance-disable"); cValue.Exists() {
 				item.RemovePrivateAsInboundInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.RemovePrivateAsInboundInheritanceDisable = types.BoolNull()
+				item.RemovePrivateAsInboundInheritanceDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("remove-private-as.remove-private-as-outbound"); cValue.Exists() {
 				item.RemovePrivateAs = types.BoolValue(true)
 			} else {
-				item.RemovePrivateAs = types.BoolNull()
+				item.RemovePrivateAs = types.BoolValue(false)
 			}
 			if cValue := v.Get("remove-private-as.remove-private-as-outbound.entire-aspath"); cValue.Exists() {
 				item.RemovePrivateAsEntireAspath = types.BoolValue(true)
 			} else {
-				item.RemovePrivateAsEntireAspath = types.BoolNull()
+				item.RemovePrivateAsEntireAspath = types.BoolValue(false)
 			}
 			if cValue := v.Get("remove-private-as.remove-private-as-outbound.internal"); cValue.Exists() {
 				item.RemovePrivateAsInternal = types.BoolValue(true)
 			} else {
-				item.RemovePrivateAsInternal = types.BoolNull()
+				item.RemovePrivateAsInternal = types.BoolValue(false)
 			}
 			if cValue := v.Get("route-reflector-client"); cValue.Exists() {
 				item.RouteReflectorClient = types.BoolValue(true)
 			} else {
-				item.RouteReflectorClient = types.BoolNull()
+				item.RouteReflectorClient = types.BoolValue(false)
 			}
 			if cValue := v.Get("route-reflector-client.inheritance-disable"); cValue.Exists() {
 				item.RouteReflectorClientInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.RouteReflectorClientInheritanceDisable = types.BoolNull()
+				item.RouteReflectorClientInheritanceDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("send-community-ebgp"); cValue.Exists() {
 				item.SendCommunityEbgp = types.BoolValue(true)
 			} else {
-				item.SendCommunityEbgp = types.BoolNull()
+				item.SendCommunityEbgp = types.BoolValue(false)
 			}
 			if cValue := v.Get("send-community-ebgp.inheritance-disable"); cValue.Exists() {
 				item.SendCommunityEbgpInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.SendCommunityEbgpInheritanceDisable = types.BoolNull()
+				item.SendCommunityEbgpInheritanceDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("send-community-gshut-ebgp"); cValue.Exists() {
 				item.SendCommunityGshutEbgp = types.BoolValue(true)
 			} else {
-				item.SendCommunityGshutEbgp = types.BoolNull()
+				item.SendCommunityGshutEbgp = types.BoolValue(false)
 			}
 			if cValue := v.Get("send-community-gshut-ebgp.inheritance-disable"); cValue.Exists() {
 				item.SendCommunityGshutEbgpInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.SendCommunityGshutEbgpInheritanceDisable = types.BoolNull()
+				item.SendCommunityGshutEbgpInheritanceDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("send-extended-community-ebgp"); cValue.Exists() {
 				item.SendExtendedCommunityEbgp = types.BoolValue(true)
 			} else {
-				item.SendExtendedCommunityEbgp = types.BoolNull()
+				item.SendExtendedCommunityEbgp = types.BoolValue(false)
 			}
 			if cValue := v.Get("send-extended-community-ebgp.inheritance-disable"); cValue.Exists() {
 				item.SendExtendedCommunityEbgpInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.SendExtendedCommunityEbgpInheritanceDisable = types.BoolNull()
+				item.SendExtendedCommunityEbgpInheritanceDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("soft-reconfiguration.inbound"); cValue.Exists() {
 				item.SoftReconfigurationInbound = types.BoolValue(true)
 			} else {
-				item.SoftReconfigurationInbound = types.BoolNull()
+				item.SoftReconfigurationInbound = types.BoolValue(false)
 			}
 			if cValue := v.Get("soft-reconfiguration.inbound.always"); cValue.Exists() {
 				item.SoftReconfigurationInboundAlways = types.BoolValue(true)
 			} else {
-				item.SoftReconfigurationInboundAlways = types.BoolNull()
+				item.SoftReconfigurationInboundAlways = types.BoolValue(false)
 			}
 			if cValue := v.Get("update.out.originator-loopcheck"); cValue.Exists() {
 				item.UpdateOutOriginatorLoopcheck = types.BoolValue(true)
 			} else {
-				item.UpdateOutOriginatorLoopcheck = types.BoolNull()
+				item.UpdateOutOriginatorLoopcheck = types.BoolValue(false)
 			}
 			if cValue := v.Get("update.out.originator-loopcheck.disable"); cValue.Exists() {
 				item.UpdateOutOriginatorLoopcheckDisable = types.BoolValue(true)
 			} else {
-				item.UpdateOutOriginatorLoopcheckDisable = types.BoolNull()
+				item.UpdateOutOriginatorLoopcheckDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertise.vpnv4.unicast.enable"); cValue.Exists() {
 				item.AdvertiseVpnv4Unicast = types.BoolValue(true)
 			} else {
-				item.AdvertiseVpnv4Unicast = types.BoolNull()
+				item.AdvertiseVpnv4Unicast = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertise.vpnv4.unicast.enable.re-originated"); cValue.Exists() {
 				item.AdvertiseVpnv4UnicastReOriginated = types.BoolValue(true)
 			} else {
-				item.AdvertiseVpnv4UnicastReOriginated = types.BoolNull()
+				item.AdvertiseVpnv4UnicastReOriginated = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertise.vpnv4.unicast.enable.re-originated.stitching-rt"); cValue.Exists() {
 				item.AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolValue(true)
 			} else {
-				item.AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolNull()
+				item.AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertise.vpnv6.unicast.enable"); cValue.Exists() {
 				item.AdvertiseVpnv6Unicast = types.BoolValue(true)
 			} else {
-				item.AdvertiseVpnv6Unicast = types.BoolNull()
+				item.AdvertiseVpnv6Unicast = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertise.vpnv6.unicast.enable.re-originated"); cValue.Exists() {
 				item.AdvertiseVpnv6UnicastReOriginated = types.BoolValue(true)
 			} else {
-				item.AdvertiseVpnv6UnicastReOriginated = types.BoolNull()
+				item.AdvertiseVpnv6UnicastReOriginated = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertise.vpnv6.unicast.enable.re-originated.stitching-rt"); cValue.Exists() {
 				item.AdvertiseVpnv6UnicastReOriginatedStitchingRt = types.BoolValue(true)
 			} else {
-				item.AdvertiseVpnv6UnicastReOriginatedStitchingRt = types.BoolNull()
+				item.AdvertiseVpnv6UnicastReOriginatedStitchingRt = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertise.l2vpn.evpn.re-originated"); cValue.Exists() {
 				item.AdvertiseL2vpnEvpnReOriginated = types.BoolValue(true)
 			} else {
-				item.AdvertiseL2vpnEvpnReOriginated = types.BoolNull()
+				item.AdvertiseL2vpnEvpnReOriginated = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertise.l2vpn.evpn.re-originated.stitching-rt"); cValue.Exists() {
 				item.AdvertiseL2vpnEvpnReOriginatedStitchingRt = types.BoolValue(true)
 			} else {
-				item.AdvertiseL2vpnEvpnReOriginatedStitchingRt = types.BoolNull()
+				item.AdvertiseL2vpnEvpnReOriginatedStitchingRt = types.BoolValue(false)
 			}
 			if cValue := v.Get("segment-routing.srv6.prefix-sid-type4"); cValue.Exists() {
 				item.SegmentRoutingSrv6PrefixSidType4 = types.BoolValue(true)
 			} else {
-				item.SegmentRoutingSrv6PrefixSidType4 = types.BoolNull()
+				item.SegmentRoutingSrv6PrefixSidType4 = types.BoolValue(false)
 			}
 			if cValue := v.Get("import.stitching-rt"); cValue.Exists() {
 				item.ImportStitchingRt = types.BoolValue(true)
 			} else {
-				item.ImportStitchingRt = types.BoolNull()
+				item.ImportStitchingRt = types.BoolValue(false)
 			}
 			if cValue := v.Get("import.stitching-rt.re-originate"); cValue.Exists() {
 				item.ImportStitchingRtReOriginate = types.BoolValue(true)
 			} else {
-				item.ImportStitchingRtReOriginate = types.BoolNull()
+				item.ImportStitchingRtReOriginate = types.BoolValue(false)
 			}
 			if cValue := v.Get("import.stitching-rt.re-originate.stitching-rt"); cValue.Exists() {
 				item.ImportStitchingRtReOriginateStitchingRt = types.BoolValue(true)
 			} else {
-				item.ImportStitchingRtReOriginateStitchingRt = types.BoolNull()
+				item.ImportStitchingRtReOriginateStitchingRt = types.BoolValue(false)
 			}
 			if cValue := v.Get("import.re-originate"); cValue.Exists() {
 				item.ImportReOriginate = types.BoolValue(true)
 			} else {
-				item.ImportReOriginate = types.BoolNull()
+				item.ImportReOriginate = types.BoolValue(false)
 			}
 			if cValue := v.Get("allowas-in.number-of-occurrences-of-as-number"); cValue.Exists() {
 				item.AllowasIn = types.Int64Value(cValue.Int())
@@ -6704,37 +7256,37 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res gjson.Resu
 			if cValue := v.Get("as-override"); cValue.Exists() {
 				item.AsOverride = types.BoolValue(true)
 			} else {
-				item.AsOverride = types.BoolNull()
+				item.AsOverride = types.BoolValue(false)
 			}
 			if cValue := v.Get("as-override.inheritance-disable"); cValue.Exists() {
 				item.AsOverrideInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.AsOverrideInheritanceDisable = types.BoolNull()
+				item.AsOverrideInheritanceDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("aigp.enable"); cValue.Exists() {
 				item.Aigp = types.BoolValue(true)
 			} else {
-				item.Aigp = types.BoolNull()
+				item.Aigp = types.BoolValue(false)
 			}
 			if cValue := v.Get("aigp.enable.disable"); cValue.Exists() {
 				item.AigpDisable = types.BoolValue(true)
 			} else {
-				item.AigpDisable = types.BoolNull()
+				item.AigpDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("aigp.send.med"); cValue.Exists() {
 				item.AigpSendMed = types.BoolValue(true)
 			} else {
-				item.AigpSendMed = types.BoolNull()
+				item.AigpSendMed = types.BoolValue(false)
 			}
 			if cValue := v.Get("aigp.send.med.disable"); cValue.Exists() {
 				item.AigpSendMedDisable = types.BoolValue(true)
 			} else {
-				item.AigpSendMedDisable = types.BoolNull()
+				item.AigpSendMedDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("aigp.send.cost-community.disable"); cValue.Exists() {
 				item.AigpSendCostCommunityDisable = types.BoolValue(true)
 			} else {
-				item.AigpSendCostCommunityDisable = types.BoolNull()
+				item.AigpSendCostCommunityDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("aigp.send.cost-community.cost-community-id.cost-community-id-number"); cValue.Exists() {
 				item.AigpSendCostCommunityId = types.Int64Value(cValue.Int())
@@ -6742,47 +7294,47 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res gjson.Resu
 			if cValue := v.Get("aigp.send.cost-community.cost-community-id.poi.igp-cost"); cValue.Exists() {
 				item.AigpSendCostCommunityIdPoiIgpCost = types.BoolValue(true)
 			} else {
-				item.AigpSendCostCommunityIdPoiIgpCost = types.BoolNull()
+				item.AigpSendCostCommunityIdPoiIgpCost = types.BoolValue(false)
 			}
 			if cValue := v.Get("aigp.send.cost-community.cost-community-id.poi.igp-cost.transitive"); cValue.Exists() {
 				item.AigpSendCostCommunityIdPoiIgpCostTransitive = types.BoolValue(true)
 			} else {
-				item.AigpSendCostCommunityIdPoiIgpCostTransitive = types.BoolNull()
+				item.AigpSendCostCommunityIdPoiIgpCostTransitive = types.BoolValue(false)
 			}
 			if cValue := v.Get("aigp.send.cost-community.cost-community-id.poi.pre-bestpath"); cValue.Exists() {
 				item.AigpSendCostCommunityIdPoiPreBestpath = types.BoolValue(true)
 			} else {
-				item.AigpSendCostCommunityIdPoiPreBestpath = types.BoolNull()
+				item.AigpSendCostCommunityIdPoiPreBestpath = types.BoolValue(false)
 			}
 			if cValue := v.Get("aigp.send.cost-community.cost-community-id.poi.pre-bestpath.transitive"); cValue.Exists() {
 				item.AigpSendCostCommunityIdPoiPreBestpathTransitive = types.BoolValue(true)
 			} else {
-				item.AigpSendCostCommunityIdPoiPreBestpathTransitive = types.BoolNull()
+				item.AigpSendCostCommunityIdPoiPreBestpathTransitive = types.BoolValue(false)
 			}
 			if cValue := v.Get("send-multicast-attributes"); cValue.Exists() {
 				item.SendMulticastAttributes = types.BoolValue(true)
 			} else {
-				item.SendMulticastAttributes = types.BoolNull()
+				item.SendMulticastAttributes = types.BoolValue(false)
 			}
 			if cValue := v.Get("send-multicast-attributes.disable"); cValue.Exists() {
 				item.SendMulticastAttributesDisable = types.BoolValue(true)
 			} else {
-				item.SendMulticastAttributesDisable = types.BoolNull()
+				item.SendMulticastAttributesDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("accept-own"); cValue.Exists() {
 				item.AcceptOwn = types.BoolValue(true)
 			} else {
-				item.AcceptOwn = types.BoolNull()
+				item.AcceptOwn = types.BoolValue(false)
 			}
 			if cValue := v.Get("accept-own.inheritance-disable"); cValue.Exists() {
 				item.AcceptOwnInheritanceDisable = types.BoolValue(true)
 			} else {
-				item.AcceptOwnInheritanceDisable = types.BoolNull()
+				item.AcceptOwnInheritanceDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("slow-peer.dynamic"); cValue.Exists() {
 				item.SlowPeerDynamic = types.BoolValue(true)
 			} else {
-				item.SlowPeerDynamic = types.BoolNull()
+				item.SlowPeerDynamic = types.BoolValue(false)
 			}
 			if cValue := v.Get("slow-peer.dynamic.threshold"); cValue.Exists() {
 				item.SlowPeerDynamicThreshold = types.Int64Value(cValue.Int())
@@ -6790,22 +7342,22 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res gjson.Resu
 			if cValue := v.Get("slow-peer.dynamic.disable"); cValue.Exists() {
 				item.SlowPeerDynamicDisable = types.BoolValue(true)
 			} else {
-				item.SlowPeerDynamicDisable = types.BoolNull()
+				item.SlowPeerDynamicDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("slow-peer.static"); cValue.Exists() {
 				item.SlowPeerStatic = types.BoolValue(true)
 			} else {
-				item.SlowPeerStatic = types.BoolNull()
+				item.SlowPeerStatic = types.BoolValue(false)
 			}
 			if cValue := v.Get("origin-as.validation.disable"); cValue.Exists() {
 				item.OriginAsValidationDisable = types.BoolValue(true)
 			} else {
-				item.OriginAsValidationDisable = types.BoolNull()
+				item.OriginAsValidationDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("bestpath.origin-as.allow.invalid"); cValue.Exists() {
 				item.BestpathOriginAsAllowInvalid = types.BoolValue(true)
 			} else {
-				item.BestpathOriginAsAllowInvalid = types.BoolNull()
+				item.BestpathOriginAsAllowInvalid = types.BoolValue(false)
 			}
 			data.AddressFamily = append(data.AddressFamily, item)
 			return true

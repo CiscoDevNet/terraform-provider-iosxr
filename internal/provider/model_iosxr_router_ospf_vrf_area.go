@@ -967,23 +967,39 @@ func (data *RouterOSPFVRFArea) updateFromBody(ctx context.Context, res []byte) {
 			data.Ranges[i].Mask = types.StringNull()
 		}
 		if value := r.Get("advertise"); value.Exists() {
-			if !data.Ranges[i].Advertise.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Ranges[i].Advertise.IsNull() && !data.Ranges[i].Advertise.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Ranges[i].Advertise = types.BoolValue(false)
+			} else if !data.Ranges[i].Advertise.IsNull() {
 				data.Ranges[i].Advertise = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Ranges[i].Advertise.IsNull() {
 				data.Ranges[i].Advertise = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Ranges[i].Advertise = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("not-advertise"); value.Exists() {
-			if !data.Ranges[i].NotAdvertise.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Ranges[i].NotAdvertise.IsNull() && !data.Ranges[i].NotAdvertise.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Ranges[i].NotAdvertise = types.BoolValue(false)
+			} else if !data.Ranges[i].NotAdvertise.IsNull() {
 				data.Ranges[i].NotAdvertise = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Ranges[i].NotAdvertise.IsNull() {
 				data.Ranges[i].NotAdvertise = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Ranges[i].NotAdvertise = types.BoolValue(false)
 			}
 		}
 	}
@@ -1965,23 +1981,39 @@ func (data *RouterOSPFVRFArea) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		if value := r.Get("authentication"); value.Exists() {
-			if !data.VirtualLinks[i].Authentication.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.VirtualLinks[i].Authentication.IsNull() && !data.VirtualLinks[i].Authentication.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.VirtualLinks[i].Authentication = types.BoolValue(false)
+			} else if !data.VirtualLinks[i].Authentication.IsNull() {
 				data.VirtualLinks[i].Authentication = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.VirtualLinks[i].Authentication.IsNull() {
 				data.VirtualLinks[i].Authentication = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.VirtualLinks[i].Authentication = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("authentication.message-digest"); value.Exists() {
-			if !data.VirtualLinks[i].AuthenticationMessageDigest.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.VirtualLinks[i].AuthenticationMessageDigest.IsNull() && !data.VirtualLinks[i].AuthenticationMessageDigest.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.VirtualLinks[i].AuthenticationMessageDigest = types.BoolValue(false)
+			} else if !data.VirtualLinks[i].AuthenticationMessageDigest.IsNull() {
 				data.VirtualLinks[i].AuthenticationMessageDigest = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.VirtualLinks[i].AuthenticationMessageDigest.IsNull() {
 				data.VirtualLinks[i].AuthenticationMessageDigest = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.VirtualLinks[i].AuthenticationMessageDigest = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("authentication.keychain-name"); value.Exists() && !data.VirtualLinks[i].AuthenticationKeychainName.IsNull() {
@@ -1990,13 +2022,21 @@ func (data *RouterOSPFVRFArea) updateFromBody(ctx context.Context, res []byte) {
 			data.VirtualLinks[i].AuthenticationKeychainName = types.StringNull()
 		}
 		if value := r.Get("authentication.null"); value.Exists() {
-			if !data.VirtualLinks[i].AuthenticationNull.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.VirtualLinks[i].AuthenticationNull.IsNull() && !data.VirtualLinks[i].AuthenticationNull.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.VirtualLinks[i].AuthenticationNull = types.BoolValue(false)
+			} else if !data.VirtualLinks[i].AuthenticationNull.IsNull() {
 				data.VirtualLinks[i].AuthenticationNull = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.VirtualLinks[i].AuthenticationNull.IsNull() {
 				data.VirtualLinks[i].AuthenticationNull = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.VirtualLinks[i].AuthenticationNull = types.BoolValue(false)
 			}
 		}
 	}
@@ -2088,23 +2128,39 @@ func (data *RouterOSPFVRFArea) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		if value := r.Get("authentication"); value.Exists() {
-			if !data.ShamLinks[i].Authentication.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.ShamLinks[i].Authentication.IsNull() && !data.ShamLinks[i].Authentication.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.ShamLinks[i].Authentication = types.BoolValue(false)
+			} else if !data.ShamLinks[i].Authentication.IsNull() {
 				data.ShamLinks[i].Authentication = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.ShamLinks[i].Authentication.IsNull() {
 				data.ShamLinks[i].Authentication = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.ShamLinks[i].Authentication = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("authentication.message-digest"); value.Exists() {
-			if !data.ShamLinks[i].AuthenticationMessageDigest.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.ShamLinks[i].AuthenticationMessageDigest.IsNull() && !data.ShamLinks[i].AuthenticationMessageDigest.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.ShamLinks[i].AuthenticationMessageDigest = types.BoolValue(false)
+			} else if !data.ShamLinks[i].AuthenticationMessageDigest.IsNull() {
 				data.ShamLinks[i].AuthenticationMessageDigest = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.ShamLinks[i].AuthenticationMessageDigest.IsNull() {
 				data.ShamLinks[i].AuthenticationMessageDigest = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.ShamLinks[i].AuthenticationMessageDigest = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("authentication.keychain-name"); value.Exists() && !data.ShamLinks[i].AuthenticationKeychainName.IsNull() {
@@ -2113,13 +2169,21 @@ func (data *RouterOSPFVRFArea) updateFromBody(ctx context.Context, res []byte) {
 			data.ShamLinks[i].AuthenticationKeychainName = types.StringNull()
 		}
 		if value := r.Get("authentication.null"); value.Exists() {
-			if !data.ShamLinks[i].AuthenticationNull.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.ShamLinks[i].AuthenticationNull.IsNull() && !data.ShamLinks[i].AuthenticationNull.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.ShamLinks[i].AuthenticationNull = types.BoolValue(false)
+			} else if !data.ShamLinks[i].AuthenticationNull.IsNull() {
 				data.ShamLinks[i].AuthenticationNull = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.ShamLinks[i].AuthenticationNull.IsNull() {
 				data.ShamLinks[i].AuthenticationNull = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.ShamLinks[i].AuthenticationNull = types.BoolValue(false)
 			}
 		}
 	}
@@ -3832,12 +3896,12 @@ func (data *RouterOSPFVRFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("advertise"); cValue.Exists() {
 				item.Advertise = types.BoolValue(true)
 			} else {
-				item.Advertise = types.BoolNull()
+				item.Advertise = types.BoolValue(false)
 			}
 			if cValue := v.Get("not-advertise"); cValue.Exists() {
 				item.NotAdvertise = types.BoolValue(true)
 			} else {
-				item.NotAdvertise = types.BoolNull()
+				item.NotAdvertise = types.BoolValue(false)
 			}
 			data.Ranges = append(data.Ranges, item)
 			return true
@@ -4326,12 +4390,12 @@ func (data *RouterOSPFVRFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("authentication"); cValue.Exists() {
 				item.Authentication = types.BoolValue(true)
 			} else {
-				item.Authentication = types.BoolNull()
+				item.Authentication = types.BoolValue(false)
 			}
 			if cValue := v.Get("authentication.message-digest"); cValue.Exists() {
 				item.AuthenticationMessageDigest = types.BoolValue(true)
 			} else {
-				item.AuthenticationMessageDigest = types.BoolNull()
+				item.AuthenticationMessageDigest = types.BoolValue(false)
 			}
 			if cValue := v.Get("authentication.keychain-name"); cValue.Exists() {
 				item.AuthenticationKeychainName = types.StringValue(cValue.String())
@@ -4339,7 +4403,7 @@ func (data *RouterOSPFVRFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("authentication.null"); cValue.Exists() {
 				item.AuthenticationNull = types.BoolValue(true)
 			} else {
-				item.AuthenticationNull = types.BoolNull()
+				item.AuthenticationNull = types.BoolValue(false)
 			}
 			data.VirtualLinks = append(data.VirtualLinks, item)
 			return true
@@ -4384,12 +4448,12 @@ func (data *RouterOSPFVRFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("authentication"); cValue.Exists() {
 				item.Authentication = types.BoolValue(true)
 			} else {
-				item.Authentication = types.BoolNull()
+				item.Authentication = types.BoolValue(false)
 			}
 			if cValue := v.Get("authentication.message-digest"); cValue.Exists() {
 				item.AuthenticationMessageDigest = types.BoolValue(true)
 			} else {
-				item.AuthenticationMessageDigest = types.BoolNull()
+				item.AuthenticationMessageDigest = types.BoolValue(false)
 			}
 			if cValue := v.Get("authentication.keychain-name"); cValue.Exists() {
 				item.AuthenticationKeychainName = types.StringValue(cValue.String())
@@ -4397,7 +4461,7 @@ func (data *RouterOSPFVRFArea) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("authentication.null"); cValue.Exists() {
 				item.AuthenticationNull = types.BoolValue(true)
 			} else {
-				item.AuthenticationNull = types.BoolNull()
+				item.AuthenticationNull = types.BoolValue(false)
 			}
 			data.ShamLinks = append(data.ShamLinks, item)
 			return true

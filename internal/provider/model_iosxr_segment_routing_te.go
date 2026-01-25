@@ -965,13 +965,21 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		if value := r.Get("segment-list-srv6.segment-list-srv6-topology-check"); value.Exists() {
-			if !data.SegmentListsSrv6ExplicitSegments[i].Srv6TopologyCheck.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SegmentListsSrv6ExplicitSegments[i].Srv6TopologyCheck.IsNull() && !data.SegmentListsSrv6ExplicitSegments[i].Srv6TopologyCheck.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SegmentListsSrv6ExplicitSegments[i].Srv6TopologyCheck = types.BoolValue(false)
+			} else if !data.SegmentListsSrv6ExplicitSegments[i].Srv6TopologyCheck.IsNull() {
 				data.SegmentListsSrv6ExplicitSegments[i].Srv6TopologyCheck = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SegmentListsSrv6ExplicitSegments[i].Srv6TopologyCheck.IsNull() {
 				data.SegmentListsSrv6ExplicitSegments[i].Srv6TopologyCheck = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SegmentListsSrv6ExplicitSegments[i].Srv6TopologyCheck = types.BoolValue(false)
 			}
 		}
 	}
@@ -1436,43 +1444,75 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 			data.PccProfiles[i].ProfileId = types.Int64Null()
 		}
 		if value := r.Get("steering.invalidation-drop"); value.Exists() {
-			if !data.PccProfiles[i].SteeringInvalidationDrop.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.PccProfiles[i].SteeringInvalidationDrop.IsNull() && !data.PccProfiles[i].SteeringInvalidationDrop.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.PccProfiles[i].SteeringInvalidationDrop = types.BoolValue(false)
+			} else if !data.PccProfiles[i].SteeringInvalidationDrop.IsNull() {
 				data.PccProfiles[i].SteeringInvalidationDrop = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.PccProfiles[i].SteeringInvalidationDrop.IsNull() {
 				data.PccProfiles[i].SteeringInvalidationDrop = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.PccProfiles[i].SteeringInvalidationDrop = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("profile-auto-route.include-all"); value.Exists() {
-			if !data.PccProfiles[i].AutoRouteIncludeAllIpv4.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.PccProfiles[i].AutoRouteIncludeAllIpv4.IsNull() && !data.PccProfiles[i].AutoRouteIncludeAllIpv4.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.PccProfiles[i].AutoRouteIncludeAllIpv4 = types.BoolValue(false)
+			} else if !data.PccProfiles[i].AutoRouteIncludeAllIpv4.IsNull() {
 				data.PccProfiles[i].AutoRouteIncludeAllIpv4 = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.PccProfiles[i].AutoRouteIncludeAllIpv4.IsNull() {
 				data.PccProfiles[i].AutoRouteIncludeAllIpv4 = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.PccProfiles[i].AutoRouteIncludeAllIpv4 = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("profile-auto-route.include-ipv6-all"); value.Exists() {
-			if !data.PccProfiles[i].AutoRouteIncludeAllIpv6.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.PccProfiles[i].AutoRouteIncludeAllIpv6.IsNull() && !data.PccProfiles[i].AutoRouteIncludeAllIpv6.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.PccProfiles[i].AutoRouteIncludeAllIpv6 = types.BoolValue(false)
+			} else if !data.PccProfiles[i].AutoRouteIncludeAllIpv6.IsNull() {
 				data.PccProfiles[i].AutoRouteIncludeAllIpv6 = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.PccProfiles[i].AutoRouteIncludeAllIpv6.IsNull() {
 				data.PccProfiles[i].AutoRouteIncludeAllIpv6 = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.PccProfiles[i].AutoRouteIncludeAllIpv6 = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("profile-auto-route.force-sr-include"); value.Exists() {
-			if !data.PccProfiles[i].AutoRouteForceSrInclude.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.PccProfiles[i].AutoRouteForceSrInclude.IsNull() && !data.PccProfiles[i].AutoRouteForceSrInclude.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.PccProfiles[i].AutoRouteForceSrInclude = types.BoolValue(false)
+			} else if !data.PccProfiles[i].AutoRouteForceSrInclude.IsNull() {
 				data.PccProfiles[i].AutoRouteForceSrInclude = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.PccProfiles[i].AutoRouteForceSrInclude.IsNull() {
 				data.PccProfiles[i].AutoRouteForceSrInclude = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.PccProfiles[i].AutoRouteForceSrInclude = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("profile-auto-route.forward-class"); value.Exists() && !data.PccProfiles[i].AutoRouteForwardClass.IsNull() {
@@ -1702,13 +1742,21 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 			data.CandidatePaths[i].PathType = types.StringNull()
 		}
 		if value := r.Get("candidate-path-type-all-or-candidate-path-type-local-or-candidate-path-type-bgp-odn-or-candidate-path-type-bgp-srte-or-candidate-path-type-pcep.enable"); value.Exists() {
-			if !data.CandidatePaths[i].SourceAddressSelection.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.CandidatePaths[i].SourceAddressSelection.IsNull() && !data.CandidatePaths[i].SourceAddressSelection.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.CandidatePaths[i].SourceAddressSelection = types.BoolValue(false)
+			} else if !data.CandidatePaths[i].SourceAddressSelection.IsNull() {
 				data.CandidatePaths[i].SourceAddressSelection = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.CandidatePaths[i].SourceAddressSelection.IsNull() {
 				data.CandidatePaths[i].SourceAddressSelection = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.CandidatePaths[i].SourceAddressSelection = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("candidate-path-type-all-or-candidate-path-type-local-or-candidate-path-type-bgp-odn-or-candidate-path-type-bgp-srte-or-candidate-path-type-pcep.source-address.ip-address-type"); value.Exists() && !data.CandidatePaths[i].SourceAddressType.IsNull() {
@@ -3327,7 +3375,7 @@ func (data *SegmentRoutingTE) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("segment-list-srv6.segment-list-srv6-topology-check"); cValue.Exists() {
 				item.Srv6TopologyCheck = types.BoolValue(true)
 			} else {
-				item.Srv6TopologyCheck = types.BoolNull()
+				item.Srv6TopologyCheck = types.BoolValue(false)
 			}
 			data.SegmentListsSrv6ExplicitSegments = append(data.SegmentListsSrv6ExplicitSegments, item)
 			return true
@@ -3510,7 +3558,7 @@ func (data *SegmentRoutingTE) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("authentication-option.include-tcp-options"); cValue.Exists() {
 				item.TcpAoIncludeTcpOptions = types.BoolValue(cValue.Bool())
 			} else {
-				item.TcpAoIncludeTcpOptions = types.BoolNull()
+				item.TcpAoIncludeTcpOptions = types.BoolValue(false)
 			}
 			data.PcePeersIpv4 = append(data.PcePeersIpv4, item)
 			return true
@@ -3535,7 +3583,7 @@ func (data *SegmentRoutingTE) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("authentication-option.include-tcp-options"); cValue.Exists() {
 				item.TcpAoIncludeTcpOptions = types.BoolValue(cValue.Bool())
 			} else {
-				item.TcpAoIncludeTcpOptions = types.BoolNull()
+				item.TcpAoIncludeTcpOptions = types.BoolValue(false)
 			}
 			data.PcePeersIpv6 = append(data.PcePeersIpv6, item)
 			return true
@@ -3551,22 +3599,22 @@ func (data *SegmentRoutingTE) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("steering.invalidation-drop"); cValue.Exists() {
 				item.SteeringInvalidationDrop = types.BoolValue(true)
 			} else {
-				item.SteeringInvalidationDrop = types.BoolNull()
+				item.SteeringInvalidationDrop = types.BoolValue(false)
 			}
 			if cValue := v.Get("profile-auto-route.include-all"); cValue.Exists() {
 				item.AutoRouteIncludeAllIpv4 = types.BoolValue(true)
 			} else {
-				item.AutoRouteIncludeAllIpv4 = types.BoolNull()
+				item.AutoRouteIncludeAllIpv4 = types.BoolValue(false)
 			}
 			if cValue := v.Get("profile-auto-route.include-ipv6-all"); cValue.Exists() {
 				item.AutoRouteIncludeAllIpv6 = types.BoolValue(true)
 			} else {
-				item.AutoRouteIncludeAllIpv6 = types.BoolNull()
+				item.AutoRouteIncludeAllIpv6 = types.BoolValue(false)
 			}
 			if cValue := v.Get("profile-auto-route.force-sr-include"); cValue.Exists() {
 				item.AutoRouteForceSrInclude = types.BoolValue(true)
 			} else {
-				item.AutoRouteForceSrInclude = types.BoolNull()
+				item.AutoRouteForceSrInclude = types.BoolValue(false)
 			}
 			if cValue := v.Get("profile-auto-route.forward-class"); cValue.Exists() {
 				item.AutoRouteForwardClass = types.Int64Value(cValue.Int())
@@ -3677,7 +3725,7 @@ func (data *SegmentRoutingTE) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("candidate-path-type-all-or-candidate-path-type-local-or-candidate-path-type-bgp-odn-or-candidate-path-type-bgp-srte-or-candidate-path-type-pcep.enable"); cValue.Exists() {
 				item.SourceAddressSelection = types.BoolValue(true)
 			} else {
-				item.SourceAddressSelection = types.BoolNull()
+				item.SourceAddressSelection = types.BoolValue(false)
 			}
 			if cValue := v.Get("candidate-path-type-all-or-candidate-path-type-local-or-candidate-path-type-bgp-odn-or-candidate-path-type-bgp-srte-or-candidate-path-type-pcep.source-address.ip-address-type"); cValue.Exists() {
 				item.SourceAddressType = types.StringValue(cValue.String())

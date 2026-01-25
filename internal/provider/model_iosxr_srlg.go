@@ -313,13 +313,21 @@ func (data *SRLG) updateFromBody(ctx context.Context, res []byte) {
 			data.Interfaces[i].InterfaceName = types.StringNull()
 		}
 		if value := r.Get("include-optical"); value.Exists() {
-			if !data.Interfaces[i].IncludeOptical.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].IncludeOptical.IsNull() && !data.Interfaces[i].IncludeOptical.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].IncludeOptical = types.BoolValue(false)
+			} else if !data.Interfaces[i].IncludeOptical.IsNull() {
 				data.Interfaces[i].IncludeOptical = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].IncludeOptical.IsNull() {
 				data.Interfaces[i].IncludeOptical = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].IncludeOptical = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("include-optical.priority"); value.Exists() && !data.Interfaces[i].IncludeOpticalPriority.IsNull() {
@@ -1055,7 +1063,7 @@ func (data *SRLG) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("include-optical"); cValue.Exists() {
 				item.IncludeOptical = types.BoolValue(true)
 			} else {
-				item.IncludeOptical = types.BoolNull()
+				item.IncludeOptical = types.BoolValue(false)
 			}
 			if cValue := v.Get("include-optical.priority"); cValue.Exists() {
 				item.IncludeOpticalPriority = types.StringValue(cValue.String())

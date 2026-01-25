@@ -893,13 +893,21 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].PermitSourcePrefixLength = types.Int64Null()
 		}
 		if value := r.Get("permit.source.any"); value.Exists() {
-			if !data.Sequences[i].PermitSourceAny.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Sequences[i].PermitSourceAny.IsNull() && !data.Sequences[i].PermitSourceAny.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Sequences[i].PermitSourceAny = types.BoolValue(false)
+			} else if !data.Sequences[i].PermitSourceAny.IsNull() {
 				data.Sequences[i].PermitSourceAny = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Sequences[i].PermitSourceAny.IsNull() {
 				data.Sequences[i].PermitSourceAny = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Sequences[i].PermitSourceAny = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("permit.source.host"); value.Exists() && !data.Sequences[i].PermitSourceHost.IsNull() {
@@ -963,13 +971,21 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].PermitDestinationPrefixLength = types.Int64Null()
 		}
 		if value := r.Get("permit.destination.any"); value.Exists() {
-			if !data.Sequences[i].PermitDestinationAny.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Sequences[i].PermitDestinationAny.IsNull() && !data.Sequences[i].PermitDestinationAny.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Sequences[i].PermitDestinationAny = types.BoolValue(false)
+			} else if !data.Sequences[i].PermitDestinationAny.IsNull() {
 				data.Sequences[i].PermitDestinationAny = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Sequences[i].PermitDestinationAny.IsNull() {
 				data.Sequences[i].PermitDestinationAny = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Sequences[i].PermitDestinationAny = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("permit.destination.host"); value.Exists() && !data.Sequences[i].PermitDestinationHost.IsNull() {
@@ -1163,13 +1179,21 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].PermitFragmentOffsetRangeEnd = types.Int64Null()
 		}
 		if value := r.Get("permit.fragments"); value.Exists() {
-			if !data.Sequences[i].PermitFragments.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Sequences[i].PermitFragments.IsNull() && !data.Sequences[i].PermitFragments.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Sequences[i].PermitFragments = types.BoolValue(false)
+			} else if !data.Sequences[i].PermitFragments.IsNull() {
 				data.Sequences[i].PermitFragments = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Sequences[i].PermitFragments.IsNull() {
 				data.Sequences[i].PermitFragments = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Sequences[i].PermitFragments = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("permit.police.value"); value.Exists() && !data.Sequences[i].PermitPoliceValue.IsNull() {
@@ -1198,13 +1222,21 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].PermitPolicePriority = types.StringNull()
 		}
 		if value := r.Get("permit.default"); value.Exists() {
-			if !data.Sequences[i].PermitDefault.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Sequences[i].PermitDefault.IsNull() && !data.Sequences[i].PermitDefault.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Sequences[i].PermitDefault = types.BoolValue(false)
+			} else if !data.Sequences[i].PermitDefault.IsNull() {
 				data.Sequences[i].PermitDefault = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Sequences[i].PermitDefault.IsNull() {
 				data.Sequences[i].PermitDefault = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Sequences[i].PermitDefault = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("permit.nexthop1.ipv4"); value.Exists() && !data.Sequences[i].PermitNexthop1Ipv4.IsNull() {
@@ -1253,13 +1285,21 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].PermitNexthop3Vrf = types.StringNull()
 		}
 		if value := r.Get("permit.capture"); value.Exists() {
-			if !data.Sequences[i].PermitCapture.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Sequences[i].PermitCapture.IsNull() && !data.Sequences[i].PermitCapture.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Sequences[i].PermitCapture = types.BoolValue(false)
+			} else if !data.Sequences[i].PermitCapture.IsNull() {
 				data.Sequences[i].PermitCapture = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Sequences[i].PermitCapture.IsNull() {
 				data.Sequences[i].PermitCapture = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Sequences[i].PermitCapture = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("permit.counter"); value.Exists() && !data.Sequences[i].PermitCounter.IsNull() {
@@ -1268,23 +1308,39 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].PermitCounter = types.StringNull()
 		}
 		if value := r.Get("permit.log"); value.Exists() {
-			if !data.Sequences[i].PermitLog.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Sequences[i].PermitLog.IsNull() && !data.Sequences[i].PermitLog.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Sequences[i].PermitLog = types.BoolValue(false)
+			} else if !data.Sequences[i].PermitLog.IsNull() {
 				data.Sequences[i].PermitLog = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Sequences[i].PermitLog.IsNull() {
 				data.Sequences[i].PermitLog = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Sequences[i].PermitLog = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("permit.log-input"); value.Exists() {
-			if !data.Sequences[i].PermitLogInput.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Sequences[i].PermitLogInput.IsNull() && !data.Sequences[i].PermitLogInput.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Sequences[i].PermitLogInput = types.BoolValue(false)
+			} else if !data.Sequences[i].PermitLogInput.IsNull() {
 				data.Sequences[i].PermitLogInput = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Sequences[i].PermitLogInput.IsNull() {
 				data.Sequences[i].PermitLogInput = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Sequences[i].PermitLogInput = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("permit.set.qos-group"); value.Exists() && !data.Sequences[i].PermitSetQosGroup.IsNull() {
@@ -1348,13 +1404,21 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].DenySourcePrefixLength = types.Int64Null()
 		}
 		if value := r.Get("deny.source.any"); value.Exists() {
-			if !data.Sequences[i].DenySourceAny.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Sequences[i].DenySourceAny.IsNull() && !data.Sequences[i].DenySourceAny.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Sequences[i].DenySourceAny = types.BoolValue(false)
+			} else if !data.Sequences[i].DenySourceAny.IsNull() {
 				data.Sequences[i].DenySourceAny = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Sequences[i].DenySourceAny.IsNull() {
 				data.Sequences[i].DenySourceAny = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Sequences[i].DenySourceAny = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("deny.source.host"); value.Exists() && !data.Sequences[i].DenySourceHost.IsNull() {
@@ -1418,13 +1482,21 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].DenyDestinationPrefixLength = types.Int64Null()
 		}
 		if value := r.Get("deny.destination.any"); value.Exists() {
-			if !data.Sequences[i].DenyDestinationAny.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Sequences[i].DenyDestinationAny.IsNull() && !data.Sequences[i].DenyDestinationAny.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Sequences[i].DenyDestinationAny = types.BoolValue(false)
+			} else if !data.Sequences[i].DenyDestinationAny.IsNull() {
 				data.Sequences[i].DenyDestinationAny = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Sequences[i].DenyDestinationAny.IsNull() {
 				data.Sequences[i].DenyDestinationAny = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Sequences[i].DenyDestinationAny = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("deny.destination.host"); value.Exists() && !data.Sequences[i].DenyDestinationHost.IsNull() {
@@ -1618,13 +1690,21 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].DenyFragmentOffsetRangeEnd = types.Int64Null()
 		}
 		if value := r.Get("deny.fragments"); value.Exists() {
-			if !data.Sequences[i].DenyFragments.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Sequences[i].DenyFragments.IsNull() && !data.Sequences[i].DenyFragments.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Sequences[i].DenyFragments = types.BoolValue(false)
+			} else if !data.Sequences[i].DenyFragments.IsNull() {
 				data.Sequences[i].DenyFragments = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Sequences[i].DenyFragments.IsNull() {
 				data.Sequences[i].DenyFragments = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Sequences[i].DenyFragments = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("deny.police.value"); value.Exists() && !data.Sequences[i].DenyPoliceValue.IsNull() {
@@ -1653,13 +1733,21 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].DenyPolicePriority = types.StringNull()
 		}
 		if value := r.Get("deny.default"); value.Exists() {
-			if !data.Sequences[i].DenyDefault.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Sequences[i].DenyDefault.IsNull() && !data.Sequences[i].DenyDefault.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Sequences[i].DenyDefault = types.BoolValue(false)
+			} else if !data.Sequences[i].DenyDefault.IsNull() {
 				data.Sequences[i].DenyDefault = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Sequences[i].DenyDefault.IsNull() {
 				data.Sequences[i].DenyDefault = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Sequences[i].DenyDefault = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("deny.nexthop1.ipv4"); value.Exists() && !data.Sequences[i].DenyNexthop1Ipv4.IsNull() {
@@ -1708,33 +1796,57 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].DenyNexthop3Vrf = types.StringNull()
 		}
 		if value := r.Get("deny.capture"); value.Exists() {
-			if !data.Sequences[i].DenyCapture.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Sequences[i].DenyCapture.IsNull() && !data.Sequences[i].DenyCapture.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Sequences[i].DenyCapture = types.BoolValue(false)
+			} else if !data.Sequences[i].DenyCapture.IsNull() {
 				data.Sequences[i].DenyCapture = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Sequences[i].DenyCapture.IsNull() {
 				data.Sequences[i].DenyCapture = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Sequences[i].DenyCapture = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("deny.log"); value.Exists() {
-			if !data.Sequences[i].DenyLog.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Sequences[i].DenyLog.IsNull() && !data.Sequences[i].DenyLog.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Sequences[i].DenyLog = types.BoolValue(false)
+			} else if !data.Sequences[i].DenyLog.IsNull() {
 				data.Sequences[i].DenyLog = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Sequences[i].DenyLog.IsNull() {
 				data.Sequences[i].DenyLog = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Sequences[i].DenyLog = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("deny.log-input"); value.Exists() {
-			if !data.Sequences[i].DenyLogInput.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Sequences[i].DenyLogInput.IsNull() && !data.Sequences[i].DenyLogInput.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Sequences[i].DenyLogInput = types.BoolValue(false)
+			} else if !data.Sequences[i].DenyLogInput.IsNull() {
 				data.Sequences[i].DenyLogInput = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Sequences[i].DenyLogInput.IsNull() {
 				data.Sequences[i].DenyLogInput = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Sequences[i].DenyLogInput = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("deny.set.qos-group"); value.Exists() && !data.Sequences[i].DenySetQosGroup.IsNull() {
@@ -1748,23 +1860,39 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].DenySetTtl = types.Int64Null()
 		}
 		if value := r.Get("deny.icmp-off"); value.Exists() {
-			if !data.Sequences[i].DenyIcmpOff.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Sequences[i].DenyIcmpOff.IsNull() && !data.Sequences[i].DenyIcmpOff.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Sequences[i].DenyIcmpOff = types.BoolValue(false)
+			} else if !data.Sequences[i].DenyIcmpOff.IsNull() {
 				data.Sequences[i].DenyIcmpOff = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Sequences[i].DenyIcmpOff.IsNull() {
 				data.Sequences[i].DenyIcmpOff = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Sequences[i].DenyIcmpOff = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("deny.icmp-on"); value.Exists() {
-			if !data.Sequences[i].DenyIcmpOn.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Sequences[i].DenyIcmpOn.IsNull() && !data.Sequences[i].DenyIcmpOn.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Sequences[i].DenyIcmpOn = types.BoolValue(false)
+			} else if !data.Sequences[i].DenyIcmpOn.IsNull() {
 				data.Sequences[i].DenyIcmpOn = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Sequences[i].DenyIcmpOn.IsNull() {
 				data.Sequences[i].DenyIcmpOn = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Sequences[i].DenyIcmpOn = types.BoolValue(false)
 			}
 		}
 	}
@@ -3332,7 +3460,7 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("permit.source.any"); cValue.Exists() {
 				item.PermitSourceAny = types.BoolValue(true)
 			} else {
-				item.PermitSourceAny = types.BoolNull()
+				item.PermitSourceAny = types.BoolValue(false)
 			}
 			if cValue := v.Get("permit.source.host"); cValue.Exists() {
 				item.PermitSourceHost = types.StringValue(cValue.String())
@@ -3373,7 +3501,7 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("permit.destination.any"); cValue.Exists() {
 				item.PermitDestinationAny = types.BoolValue(true)
 			} else {
-				item.PermitDestinationAny = types.BoolNull()
+				item.PermitDestinationAny = types.BoolValue(false)
 			}
 			if cValue := v.Get("permit.destination.host"); cValue.Exists() {
 				item.PermitDestinationHost = types.StringValue(cValue.String())
@@ -3492,7 +3620,7 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("permit.fragments"); cValue.Exists() {
 				item.PermitFragments = types.BoolValue(true)
 			} else {
-				item.PermitFragments = types.BoolNull()
+				item.PermitFragments = types.BoolValue(false)
 			}
 			if cValue := v.Get("permit.police.value"); cValue.Exists() {
 				item.PermitPoliceValue = types.Int64Value(cValue.Int())
@@ -3512,7 +3640,7 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("permit.default"); cValue.Exists() {
 				item.PermitDefault = types.BoolValue(true)
 			} else {
-				item.PermitDefault = types.BoolNull()
+				item.PermitDefault = types.BoolValue(false)
 			}
 			if cValue := v.Get("permit.nexthop1.ipv4"); cValue.Exists() {
 				item.PermitNexthop1Ipv4 = types.StringValue(cValue.String())
@@ -3544,7 +3672,7 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("permit.capture"); cValue.Exists() {
 				item.PermitCapture = types.BoolValue(true)
 			} else {
-				item.PermitCapture = types.BoolNull()
+				item.PermitCapture = types.BoolValue(false)
 			}
 			if cValue := v.Get("permit.counter"); cValue.Exists() {
 				item.PermitCounter = types.StringValue(cValue.String())
@@ -3552,12 +3680,12 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("permit.log"); cValue.Exists() {
 				item.PermitLog = types.BoolValue(true)
 			} else {
-				item.PermitLog = types.BoolNull()
+				item.PermitLog = types.BoolValue(false)
 			}
 			if cValue := v.Get("permit.log-input"); cValue.Exists() {
 				item.PermitLogInput = types.BoolValue(true)
 			} else {
-				item.PermitLogInput = types.BoolNull()
+				item.PermitLogInput = types.BoolValue(false)
 			}
 			if cValue := v.Get("permit.set.qos-group"); cValue.Exists() {
 				item.PermitSetQosGroup = types.Int64Value(cValue.Int())
@@ -3598,7 +3726,7 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("deny.source.any"); cValue.Exists() {
 				item.DenySourceAny = types.BoolValue(true)
 			} else {
-				item.DenySourceAny = types.BoolNull()
+				item.DenySourceAny = types.BoolValue(false)
 			}
 			if cValue := v.Get("deny.source.host"); cValue.Exists() {
 				item.DenySourceHost = types.StringValue(cValue.String())
@@ -3639,7 +3767,7 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("deny.destination.any"); cValue.Exists() {
 				item.DenyDestinationAny = types.BoolValue(true)
 			} else {
-				item.DenyDestinationAny = types.BoolNull()
+				item.DenyDestinationAny = types.BoolValue(false)
 			}
 			if cValue := v.Get("deny.destination.host"); cValue.Exists() {
 				item.DenyDestinationHost = types.StringValue(cValue.String())
@@ -3758,7 +3886,7 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("deny.fragments"); cValue.Exists() {
 				item.DenyFragments = types.BoolValue(true)
 			} else {
-				item.DenyFragments = types.BoolNull()
+				item.DenyFragments = types.BoolValue(false)
 			}
 			if cValue := v.Get("deny.police.value"); cValue.Exists() {
 				item.DenyPoliceValue = types.Int64Value(cValue.Int())
@@ -3778,7 +3906,7 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("deny.default"); cValue.Exists() {
 				item.DenyDefault = types.BoolValue(true)
 			} else {
-				item.DenyDefault = types.BoolNull()
+				item.DenyDefault = types.BoolValue(false)
 			}
 			if cValue := v.Get("deny.nexthop1.ipv4"); cValue.Exists() {
 				item.DenyNexthop1Ipv4 = types.StringValue(cValue.String())
@@ -3810,17 +3938,17 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("deny.capture"); cValue.Exists() {
 				item.DenyCapture = types.BoolValue(true)
 			} else {
-				item.DenyCapture = types.BoolNull()
+				item.DenyCapture = types.BoolValue(false)
 			}
 			if cValue := v.Get("deny.log"); cValue.Exists() {
 				item.DenyLog = types.BoolValue(true)
 			} else {
-				item.DenyLog = types.BoolNull()
+				item.DenyLog = types.BoolValue(false)
 			}
 			if cValue := v.Get("deny.log-input"); cValue.Exists() {
 				item.DenyLogInput = types.BoolValue(true)
 			} else {
-				item.DenyLogInput = types.BoolNull()
+				item.DenyLogInput = types.BoolValue(false)
 			}
 			if cValue := v.Get("deny.set.qos-group"); cValue.Exists() {
 				item.DenySetQosGroup = types.Int64Value(cValue.Int())
@@ -3831,12 +3959,12 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("deny.icmp-off"); cValue.Exists() {
 				item.DenyIcmpOff = types.BoolValue(true)
 			} else {
-				item.DenyIcmpOff = types.BoolNull()
+				item.DenyIcmpOff = types.BoolValue(false)
 			}
 			if cValue := v.Get("deny.icmp-on"); cValue.Exists() {
 				item.DenyIcmpOn = types.BoolValue(true)
 			} else {
-				item.DenyIcmpOn = types.BoolNull()
+				item.DenyIcmpOn = types.BoolValue(false)
 			}
 			data.Sequences = append(data.Sequences, item)
 			return true

@@ -626,23 +626,39 @@ func (data *BFD) updateFromBody(ctx context.Context, res []byte) {
 			data.Interfaces[i].EchoIpv4Source = types.StringNull()
 		}
 		if value := r.Get("ipv6.checksum.disable"); value.Exists() {
-			if !data.Interfaces[i].Ipv6ChecksumDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].Ipv6ChecksumDisable.IsNull() && !data.Interfaces[i].Ipv6ChecksumDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].Ipv6ChecksumDisable = types.BoolValue(false)
+			} else if !data.Interfaces[i].Ipv6ChecksumDisable.IsNull() {
 				data.Interfaces[i].Ipv6ChecksumDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].Ipv6ChecksumDisable.IsNull() {
 				data.Interfaces[i].Ipv6ChecksumDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].Ipv6ChecksumDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("disable"); value.Exists() {
-			if !data.Interfaces[i].Disable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].Disable.IsNull() && !data.Interfaces[i].Disable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].Disable = types.BoolValue(false)
+			} else if !data.Interfaces[i].Disable.IsNull() {
 				data.Interfaces[i].Disable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].Disable.IsNull() {
 				data.Interfaces[i].Disable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].Disable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("local-address"); value.Exists() && !data.Interfaces[i].LocalAddress.IsNull() {
@@ -1025,12 +1041,12 @@ func (data *BFD) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("ipv6.checksum.disable"); cValue.Exists() {
 				item.Ipv6ChecksumDisable = types.BoolValue(true)
 			} else {
-				item.Ipv6ChecksumDisable = types.BoolNull()
+				item.Ipv6ChecksumDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("disable"); cValue.Exists() {
 				item.Disable = types.BoolValue(true)
 			} else {
-				item.Disable = types.BoolNull()
+				item.Disable = types.BoolValue(false)
 			}
 			if cValue := v.Get("local-address"); cValue.Exists() {
 				item.LocalAddress = types.StringValue(cValue.String())

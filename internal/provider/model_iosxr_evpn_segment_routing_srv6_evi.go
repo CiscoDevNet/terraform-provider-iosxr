@@ -1263,13 +1263,21 @@ func (data *EVPNSegmentRoutingSRv6EVI) updateFromBody(ctx context.Context, res [
 			data.Locators[i].LocatorName = types.StringNull()
 		}
 		if value := r.Get("usid.allocation.wide-local-id-block"); value.Exists() {
-			if !data.Locators[i].UsidAllocationWideLocalIdBlock.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && !data.Locators[i].UsidAllocationWideLocalIdBlock.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Locators[i].UsidAllocationWideLocalIdBlock = types.BoolValue(false)
+			} else if !data.Locators[i].UsidAllocationWideLocalIdBlock.IsNull() {
 				data.Locators[i].UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Locators[i].UsidAllocationWideLocalIdBlock.IsNull() {
 				data.Locators[i].UsidAllocationWideLocalIdBlock = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Locators[i].UsidAllocationWideLocalIdBlock = types.BoolValue(false)
 			}
 		}
 	}
@@ -2077,7 +2085,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) fromBody(ctx context.Context, res gjson.R
 			if cValue := v.Get("usid.allocation.wide-local-id-block"); cValue.Exists() {
 				item.UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 			} else {
-				item.UsidAllocationWideLocalIdBlock = types.BoolNull()
+				item.UsidAllocationWideLocalIdBlock = types.BoolValue(false)
 			}
 			data.Locators = append(data.Locators, item)
 			return true

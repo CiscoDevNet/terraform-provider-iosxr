@@ -348,13 +348,21 @@ func (data *LPTSPuntPolice) updateFromBody(ctx context.Context, res []byte) {
 			data.Interfaces[i].McastRate = types.Int64Null()
 		}
 		if value := r.Get("mcast.disabled"); value.Exists() {
-			if !data.Interfaces[i].McastDisabled.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].McastDisabled.IsNull() && !data.Interfaces[i].McastDisabled.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].McastDisabled = types.BoolValue(false)
+			} else if !data.Interfaces[i].McastDisabled.IsNull() {
 				data.Interfaces[i].McastDisabled = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].McastDisabled.IsNull() {
 				data.Interfaces[i].McastDisabled = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].McastDisabled = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("bcast.rate"); value.Exists() && !data.Interfaces[i].BcastRate.IsNull() {
@@ -363,13 +371,21 @@ func (data *LPTSPuntPolice) updateFromBody(ctx context.Context, res []byte) {
 			data.Interfaces[i].BcastRate = types.Int64Null()
 		}
 		if value := r.Get("bcast.disabled"); value.Exists() {
-			if !data.Interfaces[i].BcastDisabled.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].BcastDisabled.IsNull() && !data.Interfaces[i].BcastDisabled.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].BcastDisabled = types.BoolValue(false)
+			} else if !data.Interfaces[i].BcastDisabled.IsNull() {
 				data.Interfaces[i].BcastDisabled = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].BcastDisabled.IsNull() {
 				data.Interfaces[i].BcastDisabled = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].BcastDisabled = types.BoolValue(false)
 			}
 		}
 	}
@@ -725,7 +741,7 @@ func (data *LPTSPuntPolice) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("mcast.disabled"); cValue.Exists() {
 				item.McastDisabled = types.BoolValue(true)
 			} else {
-				item.McastDisabled = types.BoolNull()
+				item.McastDisabled = types.BoolValue(false)
 			}
 			if cValue := v.Get("bcast.rate"); cValue.Exists() {
 				item.BcastRate = types.Int64Value(cValue.Int())
@@ -733,7 +749,7 @@ func (data *LPTSPuntPolice) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("bcast.disabled"); cValue.Exists() {
 				item.BcastDisabled = types.BoolValue(true)
 			} else {
-				item.BcastDisabled = types.BoolNull()
+				item.BcastDisabled = types.BoolValue(false)
 			}
 			data.Interfaces = append(data.Interfaces, item)
 			return true

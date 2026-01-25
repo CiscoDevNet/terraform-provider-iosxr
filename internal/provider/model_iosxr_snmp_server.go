@@ -1361,43 +1361,75 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.Communities[i].View = types.StringNull()
 		}
 		if value := r.Get("ro"); value.Exists() {
-			if !data.Communities[i].Ro.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Communities[i].Ro.IsNull() && !data.Communities[i].Ro.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Communities[i].Ro = types.BoolValue(false)
+			} else if !data.Communities[i].Ro.IsNull() {
 				data.Communities[i].Ro = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Communities[i].Ro.IsNull() {
 				data.Communities[i].Ro = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Communities[i].Ro = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("rw"); value.Exists() {
-			if !data.Communities[i].Rw.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Communities[i].Rw.IsNull() && !data.Communities[i].Rw.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Communities[i].Rw = types.BoolValue(false)
+			} else if !data.Communities[i].Rw.IsNull() {
 				data.Communities[i].Rw = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Communities[i].Rw.IsNull() {
 				data.Communities[i].Rw = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Communities[i].Rw = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("sdrowner"); value.Exists() {
-			if !data.Communities[i].Sdrowner.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Communities[i].Sdrowner.IsNull() && !data.Communities[i].Sdrowner.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Communities[i].Sdrowner = types.BoolValue(false)
+			} else if !data.Communities[i].Sdrowner.IsNull() {
 				data.Communities[i].Sdrowner = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Communities[i].Sdrowner.IsNull() {
 				data.Communities[i].Sdrowner = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Communities[i].Sdrowner = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("systemowner"); value.Exists() {
-			if !data.Communities[i].Systemowner.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Communities[i].Systemowner.IsNull() && !data.Communities[i].Systemowner.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Communities[i].Systemowner = types.BoolValue(false)
+			} else if !data.Communities[i].Systemowner.IsNull() {
 				data.Communities[i].Systemowner = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Communities[i].Systemowner.IsNull() {
 				data.Communities[i].Systemowner = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Communities[i].Systemowner = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("ipv4"); value.Exists() && !data.Communities[i].Ipv4.IsNull() {
@@ -2353,13 +2385,18 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 				data.Hosts[i].TrapsUnencryptedStrings[ci].UdpPort = types.Int64Null()
 			}
 			if value := cr.Get("version.v2c"); value.Exists() {
-				if !data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c.IsNull() && !data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c.ValueBool() {
+					data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c = types.BoolValue(false)
+				} else if !data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c.IsNull() {
 					data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c.IsNull() {
 					data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c = types.BoolNull()
+				} else {
+					data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("version.v3.security-level"); value.Exists() && !data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV3SecurityLevel.IsNull() {
@@ -2397,13 +2434,18 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 				data.Hosts[i].InformsUnencryptedStrings[ci].UdpPort = types.Int64Null()
 			}
 			if value := cr.Get("version.v2c"); value.Exists() {
-				if !data.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c.IsNull() && !data.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c.ValueBool() {
+					data.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c = types.BoolValue(false)
+				} else if !data.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c.IsNull() {
 					data.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c.IsNull() {
 					data.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c = types.BoolNull()
+				} else {
+					data.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("version.v3.security-level"); value.Exists() && !data.Hosts[i].InformsUnencryptedStrings[ci].VersionV3SecurityLevel.IsNull() {
@@ -2470,23 +2512,33 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 				data.Views[i].MibViewFamilies[ci].Name = types.StringNull()
 			}
 			if value := cr.Get("included"); value.Exists() {
-				if !data.Views[i].MibViewFamilies[ci].Included.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.Views[i].MibViewFamilies[ci].Included.IsNull() && !data.Views[i].MibViewFamilies[ci].Included.ValueBool() {
+					data.Views[i].MibViewFamilies[ci].Included = types.BoolValue(false)
+				} else if !data.Views[i].MibViewFamilies[ci].Included.IsNull() {
 					data.Views[i].MibViewFamilies[ci].Included = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.Views[i].MibViewFamilies[ci].Included.IsNull() {
 					data.Views[i].MibViewFamilies[ci].Included = types.BoolNull()
+				} else {
+					data.Views[i].MibViewFamilies[ci].Included = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("excluded"); value.Exists() {
-				if !data.Views[i].MibViewFamilies[ci].Excluded.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.Views[i].MibViewFamilies[ci].Excluded.IsNull() && !data.Views[i].MibViewFamilies[ci].Excluded.ValueBool() {
+					data.Views[i].MibViewFamilies[ci].Excluded = types.BoolValue(false)
+				} else if !data.Views[i].MibViewFamilies[ci].Excluded.IsNull() {
 					data.Views[i].MibViewFamilies[ci].Excluded = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.Views[i].MibViewFamilies[ci].Excluded.IsNull() {
 					data.Views[i].MibViewFamilies[ci].Excluded = types.BoolNull()
+				} else {
+					data.Views[i].MibViewFamilies[ci].Excluded = types.BoolValue(false)
 				}
 			}
 		}
@@ -2590,13 +2642,21 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.Groups[i].GroupName = types.StringNull()
 		}
 		if value := r.Get("v1"); value.Exists() {
-			if !data.Groups[i].V1.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Groups[i].V1.IsNull() && !data.Groups[i].V1.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Groups[i].V1 = types.BoolValue(false)
+			} else if !data.Groups[i].V1.IsNull() {
 				data.Groups[i].V1 = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Groups[i].V1.IsNull() {
 				data.Groups[i].V1 = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Groups[i].V1 = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("v1.read"); value.Exists() && !data.Groups[i].V1Read.IsNull() {
@@ -2630,13 +2690,21 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.Groups[i].V1Ipv6 = types.StringNull()
 		}
 		if value := r.Get("v2c"); value.Exists() {
-			if !data.Groups[i].V2c.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Groups[i].V2c.IsNull() && !data.Groups[i].V2c.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Groups[i].V2c = types.BoolValue(false)
+			} else if !data.Groups[i].V2c.IsNull() {
 				data.Groups[i].V2c = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Groups[i].V2c.IsNull() {
 				data.Groups[i].V2c = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Groups[i].V2c = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("v2c.read"); value.Exists() && !data.Groups[i].V2cRead.IsNull() {
@@ -2670,13 +2738,21 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.Groups[i].V2cIpv6 = types.StringNull()
 		}
 		if value := r.Get("v3.priv"); value.Exists() {
-			if !data.Groups[i].V3Priv.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Groups[i].V3Priv.IsNull() && !data.Groups[i].V3Priv.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Groups[i].V3Priv = types.BoolValue(false)
+			} else if !data.Groups[i].V3Priv.IsNull() {
 				data.Groups[i].V3Priv = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Groups[i].V3Priv.IsNull() {
 				data.Groups[i].V3Priv = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Groups[i].V3Priv = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("v3.read"); value.Exists() && !data.Groups[i].V3Read.IsNull() {
@@ -2788,13 +2864,21 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.Users[i].GroupName = types.StringNull()
 		}
 		if value := r.Get("v1"); value.Exists() {
-			if !data.Users[i].V1.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Users[i].V1.IsNull() && !data.Users[i].V1.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Users[i].V1 = types.BoolValue(false)
+			} else if !data.Users[i].V1.IsNull() {
 				data.Users[i].V1 = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Users[i].V1.IsNull() {
 				data.Users[i].V1 = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Users[i].V1 = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("v1.ipv4"); value.Exists() && !data.Users[i].V1Ipv4.IsNull() {
@@ -2808,23 +2892,39 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.Users[i].V1Ipv6 = types.StringNull()
 		}
 		if value := r.Get("v1.systemowner"); value.Exists() {
-			if !data.Users[i].V1Systemowner.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Users[i].V1Systemowner.IsNull() && !data.Users[i].V1Systemowner.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Users[i].V1Systemowner = types.BoolValue(false)
+			} else if !data.Users[i].V1Systemowner.IsNull() {
 				data.Users[i].V1Systemowner = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Users[i].V1Systemowner.IsNull() {
 				data.Users[i].V1Systemowner = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Users[i].V1Systemowner = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("v2c"); value.Exists() {
-			if !data.Users[i].V2c.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Users[i].V2c.IsNull() && !data.Users[i].V2c.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Users[i].V2c = types.BoolValue(false)
+			} else if !data.Users[i].V2c.IsNull() {
 				data.Users[i].V2c = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Users[i].V2c.IsNull() {
 				data.Users[i].V2c = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Users[i].V2c = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("v2c.ipv4"); value.Exists() && !data.Users[i].V2cIpv4.IsNull() {
@@ -2838,23 +2938,39 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.Users[i].V2cIpv6 = types.StringNull()
 		}
 		if value := r.Get("v2c.systemowner"); value.Exists() {
-			if !data.Users[i].V2cSystemowner.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Users[i].V2cSystemowner.IsNull() && !data.Users[i].V2cSystemowner.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Users[i].V2cSystemowner = types.BoolValue(false)
+			} else if !data.Users[i].V2cSystemowner.IsNull() {
 				data.Users[i].V2cSystemowner = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Users[i].V2cSystemowner.IsNull() {
 				data.Users[i].V2cSystemowner = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Users[i].V2cSystemowner = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("v3"); value.Exists() {
-			if !data.Users[i].V3.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Users[i].V3.IsNull() && !data.Users[i].V3.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Users[i].V3 = types.BoolValue(false)
+			} else if !data.Users[i].V3.IsNull() {
 				data.Users[i].V3 = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Users[i].V3.IsNull() {
 				data.Users[i].V3 = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Users[i].V3 = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("v3.ipv4"); value.Exists() && !data.Users[i].V3Ipv4.IsNull() {
@@ -2868,13 +2984,21 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.Users[i].V3Ipv6 = types.StringNull()
 		}
 		if value := r.Get("v3.systemowner"); value.Exists() {
-			if !data.Users[i].V3Systemowner.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Users[i].V3Systemowner.IsNull() && !data.Users[i].V3Systemowner.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Users[i].V3Systemowner = types.BoolValue(false)
+			} else if !data.Users[i].V3Systemowner.IsNull() {
 				data.Users[i].V3Systemowner = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Users[i].V3Systemowner.IsNull() {
 				data.Users[i].V3Systemowner = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Users[i].V3Systemowner = types.BoolValue(false)
 			}
 		}
 	}
@@ -5323,22 +5447,22 @@ func (data *SNMPServer) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("ro"); cValue.Exists() {
 				item.Ro = types.BoolValue(true)
 			} else {
-				item.Ro = types.BoolNull()
+				item.Ro = types.BoolValue(false)
 			}
 			if cValue := v.Get("rw"); cValue.Exists() {
 				item.Rw = types.BoolValue(true)
 			} else {
-				item.Rw = types.BoolNull()
+				item.Rw = types.BoolValue(false)
 			}
 			if cValue := v.Get("sdrowner"); cValue.Exists() {
 				item.Sdrowner = types.BoolValue(true)
 			} else {
-				item.Sdrowner = types.BoolNull()
+				item.Sdrowner = types.BoolValue(false)
 			}
 			if cValue := v.Get("systemowner"); cValue.Exists() {
 				item.Systemowner = types.BoolValue(true)
 			} else {
-				item.Systemowner = types.BoolNull()
+				item.Systemowner = types.BoolValue(false)
 			}
 			if cValue := v.Get("ipv4"); cValue.Exists() {
 				item.Ipv4 = types.StringValue(cValue.String())
@@ -5810,7 +5934,7 @@ func (data *SNMPServer) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("version.v2c"); ccValue.Exists() {
 						cItem.VersionV2c = types.BoolValue(true)
 					} else {
-						cItem.VersionV2c = types.BoolNull()
+						cItem.VersionV2c = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("version.v3.security-level"); ccValue.Exists() {
 						cItem.VersionV3SecurityLevel = types.StringValue(ccValue.String())
@@ -5829,7 +5953,7 @@ func (data *SNMPServer) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("version.v2c"); ccValue.Exists() {
 						cItem.VersionV2c = types.BoolValue(true)
 					} else {
-						cItem.VersionV2c = types.BoolNull()
+						cItem.VersionV2c = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("version.v3.security-level"); ccValue.Exists() {
 						cItem.VersionV3SecurityLevel = types.StringValue(ccValue.String())
@@ -5859,12 +5983,12 @@ func (data *SNMPServer) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("included"); ccValue.Exists() {
 						cItem.Included = types.BoolValue(true)
 					} else {
-						cItem.Included = types.BoolNull()
+						cItem.Included = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("excluded"); ccValue.Exists() {
 						cItem.Excluded = types.BoolValue(true)
 					} else {
-						cItem.Excluded = types.BoolNull()
+						cItem.Excluded = types.BoolValue(false)
 					}
 					item.MibViewFamilies = append(item.MibViewFamilies, cItem)
 					return true
@@ -5924,7 +6048,7 @@ func (data *SNMPServer) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("v1"); cValue.Exists() {
 				item.V1 = types.BoolValue(true)
 			} else {
-				item.V1 = types.BoolNull()
+				item.V1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("v1.read"); cValue.Exists() {
 				item.V1Read = types.StringValue(cValue.String())
@@ -5947,7 +6071,7 @@ func (data *SNMPServer) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("v2c"); cValue.Exists() {
 				item.V2c = types.BoolValue(true)
 			} else {
-				item.V2c = types.BoolNull()
+				item.V2c = types.BoolValue(false)
 			}
 			if cValue := v.Get("v2c.read"); cValue.Exists() {
 				item.V2cRead = types.StringValue(cValue.String())
@@ -5970,7 +6094,7 @@ func (data *SNMPServer) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("v3.priv"); cValue.Exists() {
 				item.V3Priv = types.BoolValue(true)
 			} else {
-				item.V3Priv = types.BoolNull()
+				item.V3Priv = types.BoolValue(false)
 			}
 			if cValue := v.Get("v3.read"); cValue.Exists() {
 				item.V3Read = types.StringValue(cValue.String())
@@ -6027,7 +6151,7 @@ func (data *SNMPServer) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("v1"); cValue.Exists() {
 				item.V1 = types.BoolValue(true)
 			} else {
-				item.V1 = types.BoolNull()
+				item.V1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("v1.ipv4"); cValue.Exists() {
 				item.V1Ipv4 = types.StringValue(cValue.String())
@@ -6038,12 +6162,12 @@ func (data *SNMPServer) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("v1.systemowner"); cValue.Exists() {
 				item.V1Systemowner = types.BoolValue(true)
 			} else {
-				item.V1Systemowner = types.BoolNull()
+				item.V1Systemowner = types.BoolValue(false)
 			}
 			if cValue := v.Get("v2c"); cValue.Exists() {
 				item.V2c = types.BoolValue(true)
 			} else {
-				item.V2c = types.BoolNull()
+				item.V2c = types.BoolValue(false)
 			}
 			if cValue := v.Get("v2c.ipv4"); cValue.Exists() {
 				item.V2cIpv4 = types.StringValue(cValue.String())
@@ -6054,12 +6178,12 @@ func (data *SNMPServer) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("v2c.systemowner"); cValue.Exists() {
 				item.V2cSystemowner = types.BoolValue(true)
 			} else {
-				item.V2cSystemowner = types.BoolNull()
+				item.V2cSystemowner = types.BoolValue(false)
 			}
 			if cValue := v.Get("v3"); cValue.Exists() {
 				item.V3 = types.BoolValue(true)
 			} else {
-				item.V3 = types.BoolNull()
+				item.V3 = types.BoolValue(false)
 			}
 			if cValue := v.Get("v3.ipv4"); cValue.Exists() {
 				item.V3Ipv4 = types.StringValue(cValue.String())
@@ -6070,7 +6194,7 @@ func (data *SNMPServer) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("v3.systemowner"); cValue.Exists() {
 				item.V3Systemowner = types.BoolValue(true)
 			} else {
-				item.V3Systemowner = types.BoolNull()
+				item.V3Systemowner = types.BoolValue(false)
 			}
 			data.Users = append(data.Users, item)
 			return true

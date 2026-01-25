@@ -903,13 +903,21 @@ func (data *RouterOSPFVRFAreaInterface) updateFromBody(ctx context.Context, res 
 			data.Neighbors[i].Address = types.StringNull()
 		}
 		if value := r.Get("database-filter.all.out"); value.Exists() {
-			if !data.Neighbors[i].DatabaseFilterAllOut.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Neighbors[i].DatabaseFilterAllOut.IsNull() && !data.Neighbors[i].DatabaseFilterAllOut.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Neighbors[i].DatabaseFilterAllOut = types.BoolValue(false)
+			} else if !data.Neighbors[i].DatabaseFilterAllOut.IsNull() {
 				data.Neighbors[i].DatabaseFilterAllOut = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Neighbors[i].DatabaseFilterAllOut.IsNull() {
 				data.Neighbors[i].DatabaseFilterAllOut = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Neighbors[i].DatabaseFilterAllOut = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("priority"); value.Exists() && !data.Neighbors[i].Priority.IsNull() {
@@ -1832,23 +1840,39 @@ func (data *RouterOSPFVRFAreaInterface) updateFromBody(ctx context.Context, res 
 			data.PrefixSidAlgorithms[i].Index = types.Int64Null()
 		}
 		if value := r.Get("index.explicit-null"); value.Exists() {
-			if !data.PrefixSidAlgorithms[i].IndexExplicitNull.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.PrefixSidAlgorithms[i].IndexExplicitNull.IsNull() && !data.PrefixSidAlgorithms[i].IndexExplicitNull.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.PrefixSidAlgorithms[i].IndexExplicitNull = types.BoolValue(false)
+			} else if !data.PrefixSidAlgorithms[i].IndexExplicitNull.IsNull() {
 				data.PrefixSidAlgorithms[i].IndexExplicitNull = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.PrefixSidAlgorithms[i].IndexExplicitNull.IsNull() {
 				data.PrefixSidAlgorithms[i].IndexExplicitNull = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.PrefixSidAlgorithms[i].IndexExplicitNull = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("index.n-flag-clear"); value.Exists() {
-			if !data.PrefixSidAlgorithms[i].IndexNFlagClear.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.PrefixSidAlgorithms[i].IndexNFlagClear.IsNull() && !data.PrefixSidAlgorithms[i].IndexNFlagClear.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.PrefixSidAlgorithms[i].IndexNFlagClear = types.BoolValue(false)
+			} else if !data.PrefixSidAlgorithms[i].IndexNFlagClear.IsNull() {
 				data.PrefixSidAlgorithms[i].IndexNFlagClear = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.PrefixSidAlgorithms[i].IndexNFlagClear.IsNull() {
 				data.PrefixSidAlgorithms[i].IndexNFlagClear = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.PrefixSidAlgorithms[i].IndexNFlagClear = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("absolute.sid-label"); value.Exists() && !data.PrefixSidAlgorithms[i].Absolute.IsNull() {
@@ -1857,23 +1881,39 @@ func (data *RouterOSPFVRFAreaInterface) updateFromBody(ctx context.Context, res 
 			data.PrefixSidAlgorithms[i].Absolute = types.Int64Null()
 		}
 		if value := r.Get("absolute.explicit-null"); value.Exists() {
-			if !data.PrefixSidAlgorithms[i].AbsoluteExplicitNull.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.PrefixSidAlgorithms[i].AbsoluteExplicitNull.IsNull() && !data.PrefixSidAlgorithms[i].AbsoluteExplicitNull.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.PrefixSidAlgorithms[i].AbsoluteExplicitNull = types.BoolValue(false)
+			} else if !data.PrefixSidAlgorithms[i].AbsoluteExplicitNull.IsNull() {
 				data.PrefixSidAlgorithms[i].AbsoluteExplicitNull = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.PrefixSidAlgorithms[i].AbsoluteExplicitNull.IsNull() {
 				data.PrefixSidAlgorithms[i].AbsoluteExplicitNull = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.PrefixSidAlgorithms[i].AbsoluteExplicitNull = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("absolute.n-flag-clear"); value.Exists() {
-			if !data.PrefixSidAlgorithms[i].AbsoluteNFlagClear.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.PrefixSidAlgorithms[i].AbsoluteNFlagClear.IsNull() && !data.PrefixSidAlgorithms[i].AbsoluteNFlagClear.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.PrefixSidAlgorithms[i].AbsoluteNFlagClear = types.BoolValue(false)
+			} else if !data.PrefixSidAlgorithms[i].AbsoluteNFlagClear.IsNull() {
 				data.PrefixSidAlgorithms[i].AbsoluteNFlagClear = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.PrefixSidAlgorithms[i].AbsoluteNFlagClear.IsNull() {
 				data.PrefixSidAlgorithms[i].AbsoluteNFlagClear = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.PrefixSidAlgorithms[i].AbsoluteNFlagClear = types.BoolValue(false)
 			}
 		}
 	}
@@ -1906,13 +1946,21 @@ func (data *RouterOSPFVRFAreaInterface) updateFromBody(ctx context.Context, res 
 			data.AdjacencySidIndexes[i].SidIndex = types.Int64Null()
 		}
 		if value := r.Get("protected"); value.Exists() {
-			if !data.AdjacencySidIndexes[i].Protected.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AdjacencySidIndexes[i].Protected.IsNull() && !data.AdjacencySidIndexes[i].Protected.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AdjacencySidIndexes[i].Protected = types.BoolValue(false)
+			} else if !data.AdjacencySidIndexes[i].Protected.IsNull() {
 				data.AdjacencySidIndexes[i].Protected = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AdjacencySidIndexes[i].Protected.IsNull() {
 				data.AdjacencySidIndexes[i].Protected = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AdjacencySidIndexes[i].Protected = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("neighbor-address"); value.Exists() && !data.AdjacencySidIndexes[i].NeighborAddress.IsNull() {
@@ -1950,13 +1998,21 @@ func (data *RouterOSPFVRFAreaInterface) updateFromBody(ctx context.Context, res 
 			data.AdjacencySidAbsolutes[i].SidLabel = types.Int64Null()
 		}
 		if value := r.Get("protected"); value.Exists() {
-			if !data.AdjacencySidAbsolutes[i].Protected.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.AdjacencySidAbsolutes[i].Protected.IsNull() && !data.AdjacencySidAbsolutes[i].Protected.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.AdjacencySidAbsolutes[i].Protected = types.BoolValue(false)
+			} else if !data.AdjacencySidAbsolutes[i].Protected.IsNull() {
 				data.AdjacencySidAbsolutes[i].Protected = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.AdjacencySidAbsolutes[i].Protected.IsNull() {
 				data.AdjacencySidAbsolutes[i].Protected = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.AdjacencySidAbsolutes[i].Protected = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("neighbor-address"); value.Exists() && !data.AdjacencySidAbsolutes[i].NeighborAddress.IsNull() {
@@ -3575,7 +3631,7 @@ func (data *RouterOSPFVRFAreaInterface) fromBody(ctx context.Context, res gjson.
 			if cValue := v.Get("database-filter.all.out"); cValue.Exists() {
 				item.DatabaseFilterAllOut = types.BoolValue(true)
 			} else {
-				item.DatabaseFilterAllOut = types.BoolNull()
+				item.DatabaseFilterAllOut = types.BoolValue(false)
 			}
 			if cValue := v.Get("priority"); cValue.Exists() {
 				item.Priority = types.Int64Value(cValue.Int())
@@ -4037,12 +4093,12 @@ func (data *RouterOSPFVRFAreaInterface) fromBody(ctx context.Context, res gjson.
 			if cValue := v.Get("index.explicit-null"); cValue.Exists() {
 				item.IndexExplicitNull = types.BoolValue(true)
 			} else {
-				item.IndexExplicitNull = types.BoolNull()
+				item.IndexExplicitNull = types.BoolValue(false)
 			}
 			if cValue := v.Get("index.n-flag-clear"); cValue.Exists() {
 				item.IndexNFlagClear = types.BoolValue(true)
 			} else {
-				item.IndexNFlagClear = types.BoolNull()
+				item.IndexNFlagClear = types.BoolValue(false)
 			}
 			if cValue := v.Get("absolute.sid-label"); cValue.Exists() {
 				item.Absolute = types.Int64Value(cValue.Int())
@@ -4050,12 +4106,12 @@ func (data *RouterOSPFVRFAreaInterface) fromBody(ctx context.Context, res gjson.
 			if cValue := v.Get("absolute.explicit-null"); cValue.Exists() {
 				item.AbsoluteExplicitNull = types.BoolValue(true)
 			} else {
-				item.AbsoluteExplicitNull = types.BoolNull()
+				item.AbsoluteExplicitNull = types.BoolValue(false)
 			}
 			if cValue := v.Get("absolute.n-flag-clear"); cValue.Exists() {
 				item.AbsoluteNFlagClear = types.BoolValue(true)
 			} else {
-				item.AbsoluteNFlagClear = types.BoolNull()
+				item.AbsoluteNFlagClear = types.BoolValue(false)
 			}
 			data.PrefixSidAlgorithms = append(data.PrefixSidAlgorithms, item)
 			return true
@@ -4071,7 +4127,7 @@ func (data *RouterOSPFVRFAreaInterface) fromBody(ctx context.Context, res gjson.
 			if cValue := v.Get("protected"); cValue.Exists() {
 				item.Protected = types.BoolValue(true)
 			} else {
-				item.Protected = types.BoolNull()
+				item.Protected = types.BoolValue(false)
 			}
 			if cValue := v.Get("neighbor-address"); cValue.Exists() {
 				item.NeighborAddress = types.StringValue(cValue.String())
@@ -4090,7 +4146,7 @@ func (data *RouterOSPFVRFAreaInterface) fromBody(ctx context.Context, res gjson.
 			if cValue := v.Get("protected"); cValue.Exists() {
 				item.Protected = types.BoolValue(true)
 			} else {
-				item.Protected = types.BoolNull()
+				item.Protected = types.BoolValue(false)
 			}
 			if cValue := v.Get("neighbor-address"); cValue.Exists() {
 				item.NeighborAddress = types.StringValue(cValue.String())

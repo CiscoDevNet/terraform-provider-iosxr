@@ -3475,13 +3475,21 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtInbandInterfaces[i].InterfaceName = types.StringNull()
 		}
 		if value := r.Get("allow.ssh"); value.Exists() {
-			if !data.MgmtInbandInterfaces[i].Ssh.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MgmtInbandInterfaces[i].Ssh.IsNull() && !data.MgmtInbandInterfaces[i].Ssh.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MgmtInbandInterfaces[i].Ssh = types.BoolValue(false)
+			} else if !data.MgmtInbandInterfaces[i].Ssh.IsNull() {
 				data.MgmtInbandInterfaces[i].Ssh = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MgmtInbandInterfaces[i].Ssh.IsNull() {
 				data.MgmtInbandInterfaces[i].Ssh = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MgmtInbandInterfaces[i].Ssh = types.BoolValue(false)
 			}
 		}
 		for ci := range data.MgmtInbandInterfaces[i].SshIpv4Prefixes {
@@ -3611,13 +3619,21 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		if value := r.Get("allow.telnet"); value.Exists() {
-			if !data.MgmtInbandInterfaces[i].Telnet.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MgmtInbandInterfaces[i].Telnet.IsNull() && !data.MgmtInbandInterfaces[i].Telnet.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MgmtInbandInterfaces[i].Telnet = types.BoolValue(false)
+			} else if !data.MgmtInbandInterfaces[i].Telnet.IsNull() {
 				data.MgmtInbandInterfaces[i].Telnet = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MgmtInbandInterfaces[i].Telnet.IsNull() {
 				data.MgmtInbandInterfaces[i].Telnet = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MgmtInbandInterfaces[i].Telnet = types.BoolValue(false)
 			}
 		}
 		for ci := range data.MgmtInbandInterfaces[i].TelnetIpv4Prefixes {
@@ -3747,13 +3763,21 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		if value := r.Get("allow.snmp"); value.Exists() {
-			if !data.MgmtInbandInterfaces[i].Snmp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MgmtInbandInterfaces[i].Snmp.IsNull() && !data.MgmtInbandInterfaces[i].Snmp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MgmtInbandInterfaces[i].Snmp = types.BoolValue(false)
+			} else if !data.MgmtInbandInterfaces[i].Snmp.IsNull() {
 				data.MgmtInbandInterfaces[i].Snmp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MgmtInbandInterfaces[i].Snmp.IsNull() {
 				data.MgmtInbandInterfaces[i].Snmp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MgmtInbandInterfaces[i].Snmp = types.BoolValue(false)
 			}
 		}
 		for ci := range data.MgmtInbandInterfaces[i].SnmpIpv4Prefixes {
@@ -3883,13 +3907,21 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		if value := r.Get("allow.tftp"); value.Exists() {
-			if !data.MgmtInbandInterfaces[i].Tftp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MgmtInbandInterfaces[i].Tftp.IsNull() && !data.MgmtInbandInterfaces[i].Tftp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MgmtInbandInterfaces[i].Tftp = types.BoolValue(false)
+			} else if !data.MgmtInbandInterfaces[i].Tftp.IsNull() {
 				data.MgmtInbandInterfaces[i].Tftp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MgmtInbandInterfaces[i].Tftp.IsNull() {
 				data.MgmtInbandInterfaces[i].Tftp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MgmtInbandInterfaces[i].Tftp = types.BoolValue(false)
 			}
 		}
 		for ci := range data.MgmtInbandInterfaces[i].TftpIpv4Prefixes {
@@ -4019,13 +4051,21 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		if value := r.Get("allow.http"); value.Exists() {
-			if !data.MgmtInbandInterfaces[i].Http.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MgmtInbandInterfaces[i].Http.IsNull() && !data.MgmtInbandInterfaces[i].Http.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MgmtInbandInterfaces[i].Http = types.BoolValue(false)
+			} else if !data.MgmtInbandInterfaces[i].Http.IsNull() {
 				data.MgmtInbandInterfaces[i].Http = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MgmtInbandInterfaces[i].Http.IsNull() {
 				data.MgmtInbandInterfaces[i].Http = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MgmtInbandInterfaces[i].Http = types.BoolValue(false)
 			}
 		}
 		for ci := range data.MgmtInbandInterfaces[i].HttpIpv4Prefixes {
@@ -4092,13 +4132,21 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		if value := r.Get("allow.xr-xml"); value.Exists() {
-			if !data.MgmtInbandInterfaces[i].Xml.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MgmtInbandInterfaces[i].Xml.IsNull() && !data.MgmtInbandInterfaces[i].Xml.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MgmtInbandInterfaces[i].Xml = types.BoolValue(false)
+			} else if !data.MgmtInbandInterfaces[i].Xml.IsNull() {
 				data.MgmtInbandInterfaces[i].Xml = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MgmtInbandInterfaces[i].Xml.IsNull() {
 				data.MgmtInbandInterfaces[i].Xml = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MgmtInbandInterfaces[i].Xml = types.BoolValue(false)
 			}
 		}
 		for ci := range data.MgmtInbandInterfaces[i].XmlIpv4Prefixes {
@@ -4228,13 +4276,21 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		if value := r.Get("allow.netconf"); value.Exists() {
-			if !data.MgmtInbandInterfaces[i].Netconf.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MgmtInbandInterfaces[i].Netconf.IsNull() && !data.MgmtInbandInterfaces[i].Netconf.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MgmtInbandInterfaces[i].Netconf = types.BoolValue(false)
+			} else if !data.MgmtInbandInterfaces[i].Netconf.IsNull() {
 				data.MgmtInbandInterfaces[i].Netconf = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MgmtInbandInterfaces[i].Netconf.IsNull() {
 				data.MgmtInbandInterfaces[i].Netconf = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MgmtInbandInterfaces[i].Netconf = types.BoolValue(false)
 			}
 		}
 		for ci := range data.MgmtInbandInterfaces[i].NetconfIpv4Prefixes {
@@ -4364,13 +4420,21 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		if value := r.Get("allow.all"); value.Exists() {
-			if !data.MgmtInbandInterfaces[i].AllowAll.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MgmtInbandInterfaces[i].AllowAll.IsNull() && !data.MgmtInbandInterfaces[i].AllowAll.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MgmtInbandInterfaces[i].AllowAll = types.BoolValue(false)
+			} else if !data.MgmtInbandInterfaces[i].AllowAll.IsNull() {
 				data.MgmtInbandInterfaces[i].AllowAll = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MgmtInbandInterfaces[i].AllowAll.IsNull() {
 				data.MgmtInbandInterfaces[i].AllowAll = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MgmtInbandInterfaces[i].AllowAll = types.BoolValue(false)
 			}
 		}
 		for ci := range data.MgmtInbandInterfaces[i].AllowAllIpv4Prefixes {
@@ -5554,13 +5618,21 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtOobInterfaces[i].InterfaceName = types.StringNull()
 		}
 		if value := r.Get("allow.ssh"); value.Exists() {
-			if !data.MgmtOobInterfaces[i].Ssh.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MgmtOobInterfaces[i].Ssh.IsNull() && !data.MgmtOobInterfaces[i].Ssh.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MgmtOobInterfaces[i].Ssh = types.BoolValue(false)
+			} else if !data.MgmtOobInterfaces[i].Ssh.IsNull() {
 				data.MgmtOobInterfaces[i].Ssh = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MgmtOobInterfaces[i].Ssh.IsNull() {
 				data.MgmtOobInterfaces[i].Ssh = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MgmtOobInterfaces[i].Ssh = types.BoolValue(false)
 			}
 		}
 		for ci := range data.MgmtOobInterfaces[i].SshIpv4Prefixes {
@@ -5690,13 +5762,21 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		if value := r.Get("allow.telnet"); value.Exists() {
-			if !data.MgmtOobInterfaces[i].Telnet.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MgmtOobInterfaces[i].Telnet.IsNull() && !data.MgmtOobInterfaces[i].Telnet.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MgmtOobInterfaces[i].Telnet = types.BoolValue(false)
+			} else if !data.MgmtOobInterfaces[i].Telnet.IsNull() {
 				data.MgmtOobInterfaces[i].Telnet = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MgmtOobInterfaces[i].Telnet.IsNull() {
 				data.MgmtOobInterfaces[i].Telnet = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MgmtOobInterfaces[i].Telnet = types.BoolValue(false)
 			}
 		}
 		for ci := range data.MgmtOobInterfaces[i].TelnetIpv4Prefixes {
@@ -5826,13 +5906,21 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		if value := r.Get("allow.snmp"); value.Exists() {
-			if !data.MgmtOobInterfaces[i].Snmp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MgmtOobInterfaces[i].Snmp.IsNull() && !data.MgmtOobInterfaces[i].Snmp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MgmtOobInterfaces[i].Snmp = types.BoolValue(false)
+			} else if !data.MgmtOobInterfaces[i].Snmp.IsNull() {
 				data.MgmtOobInterfaces[i].Snmp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MgmtOobInterfaces[i].Snmp.IsNull() {
 				data.MgmtOobInterfaces[i].Snmp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MgmtOobInterfaces[i].Snmp = types.BoolValue(false)
 			}
 		}
 		for ci := range data.MgmtOobInterfaces[i].SnmpIpv4Prefixes {
@@ -5962,13 +6050,21 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		if value := r.Get("allow.tftp"); value.Exists() {
-			if !data.MgmtOobInterfaces[i].Tftp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MgmtOobInterfaces[i].Tftp.IsNull() && !data.MgmtOobInterfaces[i].Tftp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MgmtOobInterfaces[i].Tftp = types.BoolValue(false)
+			} else if !data.MgmtOobInterfaces[i].Tftp.IsNull() {
 				data.MgmtOobInterfaces[i].Tftp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MgmtOobInterfaces[i].Tftp.IsNull() {
 				data.MgmtOobInterfaces[i].Tftp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MgmtOobInterfaces[i].Tftp = types.BoolValue(false)
 			}
 		}
 		for ci := range data.MgmtOobInterfaces[i].TftpIpv4Prefixes {
@@ -6098,13 +6194,21 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		if value := r.Get("allow.http"); value.Exists() {
-			if !data.MgmtOobInterfaces[i].Http.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MgmtOobInterfaces[i].Http.IsNull() && !data.MgmtOobInterfaces[i].Http.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MgmtOobInterfaces[i].Http = types.BoolValue(false)
+			} else if !data.MgmtOobInterfaces[i].Http.IsNull() {
 				data.MgmtOobInterfaces[i].Http = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MgmtOobInterfaces[i].Http.IsNull() {
 				data.MgmtOobInterfaces[i].Http = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MgmtOobInterfaces[i].Http = types.BoolValue(false)
 			}
 		}
 		for ci := range data.MgmtOobInterfaces[i].HttpIpv4Prefixes {
@@ -6171,13 +6275,21 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		if value := r.Get("allow.xr-xml"); value.Exists() {
-			if !data.MgmtOobInterfaces[i].Xml.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MgmtOobInterfaces[i].Xml.IsNull() && !data.MgmtOobInterfaces[i].Xml.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MgmtOobInterfaces[i].Xml = types.BoolValue(false)
+			} else if !data.MgmtOobInterfaces[i].Xml.IsNull() {
 				data.MgmtOobInterfaces[i].Xml = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MgmtOobInterfaces[i].Xml.IsNull() {
 				data.MgmtOobInterfaces[i].Xml = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MgmtOobInterfaces[i].Xml = types.BoolValue(false)
 			}
 		}
 		for ci := range data.MgmtOobInterfaces[i].XmlIpv4Prefixes {
@@ -6307,13 +6419,21 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		if value := r.Get("allow.netconf"); value.Exists() {
-			if !data.MgmtOobInterfaces[i].Netconf.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MgmtOobInterfaces[i].Netconf.IsNull() && !data.MgmtOobInterfaces[i].Netconf.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MgmtOobInterfaces[i].Netconf = types.BoolValue(false)
+			} else if !data.MgmtOobInterfaces[i].Netconf.IsNull() {
 				data.MgmtOobInterfaces[i].Netconf = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MgmtOobInterfaces[i].Netconf.IsNull() {
 				data.MgmtOobInterfaces[i].Netconf = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MgmtOobInterfaces[i].Netconf = types.BoolValue(false)
 			}
 		}
 		for ci := range data.MgmtOobInterfaces[i].NetconfIpv4Prefixes {
@@ -6443,13 +6563,21 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		if value := r.Get("allow.all"); value.Exists() {
-			if !data.MgmtOobInterfaces[i].AllowAll.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MgmtOobInterfaces[i].AllowAll.IsNull() && !data.MgmtOobInterfaces[i].AllowAll.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MgmtOobInterfaces[i].AllowAll = types.BoolValue(false)
+			} else if !data.MgmtOobInterfaces[i].AllowAll.IsNull() {
 				data.MgmtOobInterfaces[i].AllowAll = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MgmtOobInterfaces[i].AllowAll.IsNull() {
 				data.MgmtOobInterfaces[i].AllowAll = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MgmtOobInterfaces[i].AllowAll = types.BoolValue(false)
 			}
 		}
 		for ci := range data.MgmtOobInterfaces[i].AllowAllIpv4Prefixes {
@@ -11770,7 +11898,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.ssh"); cValue.Exists() {
 				item.Ssh = types.BoolValue(true)
 			} else {
-				item.Ssh = types.BoolNull()
+				item.Ssh = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.SshIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesSshIpv4Prefixes, 0)
@@ -11825,7 +11953,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.telnet"); cValue.Exists() {
 				item.Telnet = types.BoolValue(true)
 			} else {
-				item.Telnet = types.BoolNull()
+				item.Telnet = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.TelnetIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesTelnetIpv4Prefixes, 0)
@@ -11880,7 +12008,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.snmp"); cValue.Exists() {
 				item.Snmp = types.BoolValue(true)
 			} else {
-				item.Snmp = types.BoolNull()
+				item.Snmp = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.SnmpIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesSnmpIpv4Prefixes, 0)
@@ -11935,7 +12063,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.tftp"); cValue.Exists() {
 				item.Tftp = types.BoolValue(true)
 			} else {
-				item.Tftp = types.BoolNull()
+				item.Tftp = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.TftpIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesTftpIpv4Prefixes, 0)
@@ -11990,7 +12118,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.http"); cValue.Exists() {
 				item.Http = types.BoolValue(true)
 			} else {
-				item.Http = types.BoolNull()
+				item.Http = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.HttpIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesHttpIpv4Prefixes, 0)
@@ -12020,7 +12148,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.xr-xml"); cValue.Exists() {
 				item.Xml = types.BoolValue(true)
 			} else {
-				item.Xml = types.BoolNull()
+				item.Xml = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.XmlIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesXmlIpv4Prefixes, 0)
@@ -12075,7 +12203,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.netconf"); cValue.Exists() {
 				item.Netconf = types.BoolValue(true)
 			} else {
-				item.Netconf = types.BoolNull()
+				item.Netconf = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.NetconfIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesNetconfIpv4Prefixes, 0)
@@ -12130,7 +12258,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.all"); cValue.Exists() {
 				item.AllowAll = types.BoolValue(true)
 			} else {
-				item.AllowAll = types.BoolNull()
+				item.AllowAll = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.AllowAllIpv4Prefixes = make([]ControlPlaneMgmtInbandInterfacesAllowAllIpv4Prefixes, 0)
@@ -12611,7 +12739,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.ssh"); cValue.Exists() {
 				item.Ssh = types.BoolValue(true)
 			} else {
-				item.Ssh = types.BoolNull()
+				item.Ssh = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.SshIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesSshIpv4Prefixes, 0)
@@ -12666,7 +12794,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.telnet"); cValue.Exists() {
 				item.Telnet = types.BoolValue(true)
 			} else {
-				item.Telnet = types.BoolNull()
+				item.Telnet = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.TelnetIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesTelnetIpv4Prefixes, 0)
@@ -12721,7 +12849,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.snmp"); cValue.Exists() {
 				item.Snmp = types.BoolValue(true)
 			} else {
-				item.Snmp = types.BoolNull()
+				item.Snmp = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.SnmpIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesSnmpIpv4Prefixes, 0)
@@ -12776,7 +12904,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.tftp"); cValue.Exists() {
 				item.Tftp = types.BoolValue(true)
 			} else {
-				item.Tftp = types.BoolNull()
+				item.Tftp = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.TftpIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesTftpIpv4Prefixes, 0)
@@ -12831,7 +12959,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.http"); cValue.Exists() {
 				item.Http = types.BoolValue(true)
 			} else {
-				item.Http = types.BoolNull()
+				item.Http = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.HttpIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesHttpIpv4Prefixes, 0)
@@ -12861,7 +12989,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.xr-xml"); cValue.Exists() {
 				item.Xml = types.BoolValue(true)
 			} else {
-				item.Xml = types.BoolNull()
+				item.Xml = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.XmlIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesXmlIpv4Prefixes, 0)
@@ -12916,7 +13044,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.netconf"); cValue.Exists() {
 				item.Netconf = types.BoolValue(true)
 			} else {
-				item.Netconf = types.BoolNull()
+				item.Netconf = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.NetconfIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesNetconfIpv4Prefixes, 0)
@@ -12971,7 +13099,7 @@ func (data *ControlPlane) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("allow.all"); cValue.Exists() {
 				item.AllowAll = types.BoolValue(true)
 			} else {
-				item.AllowAll = types.BoolNull()
+				item.AllowAll = types.BoolValue(false)
 			}
 			if cValue := v.Get("allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"); cValue.Exists() {
 				item.AllowAllIpv4Prefixes = make([]ControlPlaneMgmtOobInterfacesAllowAllIpv4Prefixes, 0)

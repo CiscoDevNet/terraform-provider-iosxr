@@ -1614,13 +1614,21 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 			data.RedistributeIsis[i].MetricType = types.StringNull()
 		}
 		if value := r.Get("down-flag-clear"); value.Exists() {
-			if !data.RedistributeIsis[i].DownFlagClear.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RedistributeIsis[i].DownFlagClear.IsNull() && !data.RedistributeIsis[i].DownFlagClear.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RedistributeIsis[i].DownFlagClear = types.BoolValue(false)
+			} else if !data.RedistributeIsis[i].DownFlagClear.IsNull() {
 				data.RedistributeIsis[i].DownFlagClear = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RedistributeIsis[i].DownFlagClear.IsNull() {
 				data.RedistributeIsis[i].DownFlagClear = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RedistributeIsis[i].DownFlagClear = types.BoolValue(false)
 			}
 		}
 	}
@@ -1702,23 +1710,39 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 			data.RedistributeOspf[i].InstanceId = types.StringNull()
 		}
 		if value := r.Get("match.internal"); value.Exists() {
-			if !data.RedistributeOspf[i].MatchInternal.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RedistributeOspf[i].MatchInternal.IsNull() && !data.RedistributeOspf[i].MatchInternal.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RedistributeOspf[i].MatchInternal = types.BoolValue(false)
+			} else if !data.RedistributeOspf[i].MatchInternal.IsNull() {
 				data.RedistributeOspf[i].MatchInternal = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RedistributeOspf[i].MatchInternal.IsNull() {
 				data.RedistributeOspf[i].MatchInternal = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RedistributeOspf[i].MatchInternal = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("match.external"); value.Exists() {
-			if !data.RedistributeOspf[i].MatchExternal.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RedistributeOspf[i].MatchExternal.IsNull() && !data.RedistributeOspf[i].MatchExternal.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RedistributeOspf[i].MatchExternal = types.BoolValue(false)
+			} else if !data.RedistributeOspf[i].MatchExternal.IsNull() {
 				data.RedistributeOspf[i].MatchExternal = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RedistributeOspf[i].MatchExternal.IsNull() {
 				data.RedistributeOspf[i].MatchExternal = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RedistributeOspf[i].MatchExternal = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("redistribute-route-level"); value.Exists() && !data.RedistributeOspf[i].Level.IsNull() {
@@ -1856,23 +1880,39 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 			data.SummaryPrefixes[i].Algorithm = types.Int64Null()
 		}
 		if value := r.Get("explicit"); value.Exists() {
-			if !data.SummaryPrefixes[i].Explicit.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SummaryPrefixes[i].Explicit.IsNull() && !data.SummaryPrefixes[i].Explicit.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SummaryPrefixes[i].Explicit = types.BoolValue(false)
+			} else if !data.SummaryPrefixes[i].Explicit.IsNull() {
 				data.SummaryPrefixes[i].Explicit = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SummaryPrefixes[i].Explicit.IsNull() {
 				data.SummaryPrefixes[i].Explicit = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SummaryPrefixes[i].Explicit = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("adv-unreachable"); value.Exists() {
-			if !data.SummaryPrefixes[i].AdvUnreachable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SummaryPrefixes[i].AdvUnreachable.IsNull() && !data.SummaryPrefixes[i].AdvUnreachable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SummaryPrefixes[i].AdvUnreachable = types.BoolValue(false)
+			} else if !data.SummaryPrefixes[i].AdvUnreachable.IsNull() {
 				data.SummaryPrefixes[i].AdvUnreachable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SummaryPrefixes[i].AdvUnreachable.IsNull() {
 				data.SummaryPrefixes[i].AdvUnreachable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SummaryPrefixes[i].AdvUnreachable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("adv-unreachable.unreachable-component-tag.unreachable-component-tag-number"); value.Exists() && !data.SummaryPrefixes[i].UnreachableTag.IsNull() {
@@ -1881,23 +1921,39 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 			data.SummaryPrefixes[i].UnreachableTag = types.Int64Null()
 		}
 		if value := r.Get("adv-unreachable.unreachable-component-tag.exclude"); value.Exists() {
-			if !data.SummaryPrefixes[i].UnreachableTagExcludePrefixes.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SummaryPrefixes[i].UnreachableTagExcludePrefixes.IsNull() && !data.SummaryPrefixes[i].UnreachableTagExcludePrefixes.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SummaryPrefixes[i].UnreachableTagExcludePrefixes = types.BoolValue(false)
+			} else if !data.SummaryPrefixes[i].UnreachableTagExcludePrefixes.IsNull() {
 				data.SummaryPrefixes[i].UnreachableTagExcludePrefixes = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SummaryPrefixes[i].UnreachableTagExcludePrefixes.IsNull() {
 				data.SummaryPrefixes[i].UnreachableTagExcludePrefixes = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SummaryPrefixes[i].UnreachableTagExcludePrefixes = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("partition-repair"); value.Exists() {
-			if !data.SummaryPrefixes[i].PartitionRepair.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SummaryPrefixes[i].PartitionRepair.IsNull() && !data.SummaryPrefixes[i].PartitionRepair.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SummaryPrefixes[i].PartitionRepair = types.BoolValue(false)
+			} else if !data.SummaryPrefixes[i].PartitionRepair.IsNull() {
 				data.SummaryPrefixes[i].PartitionRepair = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SummaryPrefixes[i].PartitionRepair.IsNull() {
 				data.SummaryPrefixes[i].PartitionRepair = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SummaryPrefixes[i].PartitionRepair = types.BoolValue(false)
 			}
 		}
 	}
@@ -2019,53 +2075,93 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 			data.MetricStyleLevels[i].LevelNumber = types.Int64Null()
 		}
 		if value := r.Get("narrow"); value.Exists() {
-			if !data.MetricStyleLevels[i].Narrow.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MetricStyleLevels[i].Narrow.IsNull() && !data.MetricStyleLevels[i].Narrow.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MetricStyleLevels[i].Narrow = types.BoolValue(false)
+			} else if !data.MetricStyleLevels[i].Narrow.IsNull() {
 				data.MetricStyleLevels[i].Narrow = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MetricStyleLevels[i].Narrow.IsNull() {
 				data.MetricStyleLevels[i].Narrow = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MetricStyleLevels[i].Narrow = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("narrow.transition"); value.Exists() {
-			if !data.MetricStyleLevels[i].NarrowTransition.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MetricStyleLevels[i].NarrowTransition.IsNull() && !data.MetricStyleLevels[i].NarrowTransition.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MetricStyleLevels[i].NarrowTransition = types.BoolValue(false)
+			} else if !data.MetricStyleLevels[i].NarrowTransition.IsNull() {
 				data.MetricStyleLevels[i].NarrowTransition = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MetricStyleLevels[i].NarrowTransition.IsNull() {
 				data.MetricStyleLevels[i].NarrowTransition = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MetricStyleLevels[i].NarrowTransition = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("wide"); value.Exists() {
-			if !data.MetricStyleLevels[i].Wide.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MetricStyleLevels[i].Wide.IsNull() && !data.MetricStyleLevels[i].Wide.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MetricStyleLevels[i].Wide = types.BoolValue(false)
+			} else if !data.MetricStyleLevels[i].Wide.IsNull() {
 				data.MetricStyleLevels[i].Wide = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MetricStyleLevels[i].Wide.IsNull() {
 				data.MetricStyleLevels[i].Wide = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MetricStyleLevels[i].Wide = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("wide.transition"); value.Exists() {
-			if !data.MetricStyleLevels[i].WideTransition.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MetricStyleLevels[i].WideTransition.IsNull() && !data.MetricStyleLevels[i].WideTransition.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MetricStyleLevels[i].WideTransition = types.BoolValue(false)
+			} else if !data.MetricStyleLevels[i].WideTransition.IsNull() {
 				data.MetricStyleLevels[i].WideTransition = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MetricStyleLevels[i].WideTransition.IsNull() {
 				data.MetricStyleLevels[i].WideTransition = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MetricStyleLevels[i].WideTransition = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("transition"); value.Exists() {
-			if !data.MetricStyleLevels[i].Transition.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MetricStyleLevels[i].Transition.IsNull() && !data.MetricStyleLevels[i].Transition.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MetricStyleLevels[i].Transition = types.BoolValue(false)
+			} else if !data.MetricStyleLevels[i].Transition.IsNull() {
 				data.MetricStyleLevels[i].Transition = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MetricStyleLevels[i].Transition.IsNull() {
 				data.MetricStyleLevels[i].Transition = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MetricStyleLevels[i].Transition = types.BoolValue(false)
 			}
 		}
 	}
@@ -2163,13 +2259,21 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 			data.SpfIntervalLevels[i].SecondaryWait = types.Int64Null()
 		}
 		if value := r.Get("ietf"); value.Exists() {
-			if !data.SpfIntervalLevels[i].Ietf.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SpfIntervalLevels[i].Ietf.IsNull() && !data.SpfIntervalLevels[i].Ietf.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SpfIntervalLevels[i].Ietf = types.BoolValue(false)
+			} else if !data.SpfIntervalLevels[i].Ietf.IsNull() {
 				data.SpfIntervalLevels[i].Ietf = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SpfIntervalLevels[i].Ietf.IsNull() {
 				data.SpfIntervalLevels[i].Ietf = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SpfIntervalLevels[i].Ietf = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("ietf.initial-wait"); value.Exists() && !data.SpfIntervalLevels[i].IetfInitialWait.IsNull() {
@@ -2916,23 +3020,39 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexInterface = types.StringNull()
 		}
 		if value := r.Get("index.php-disable"); value.Exists() {
-			if !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexPhpDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexPhpDisable.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexPhpDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexPhpDisable = types.BoolValue(false)
+			} else if !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexPhpDisable.IsNull() {
 				data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexPhpDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexPhpDisable.IsNull() {
 				data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexPhpDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexPhpDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("index.explicit-null"); value.Exists() {
-			if !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexExplicitNull.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexExplicitNull.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexExplicitNull.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexExplicitNull = types.BoolValue(false)
+			} else if !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexExplicitNull.IsNull() {
 				data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexExplicitNull = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexExplicitNull.IsNull() {
 				data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexExplicitNull = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexExplicitNull = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("absolute.absolute-id"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteId.IsNull() {
@@ -2946,23 +3066,39 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteInterface = types.StringNull()
 		}
 		if value := r.Get("absolute.php-disable"); value.Exists() {
-			if !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsolutePhpDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsolutePhpDisable.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsolutePhpDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsolutePhpDisable = types.BoolValue(false)
+			} else if !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsolutePhpDisable.IsNull() {
 				data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsolutePhpDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsolutePhpDisable.IsNull() {
 				data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsolutePhpDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsolutePhpDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("absolute.explicit-null"); value.Exists() {
-			if !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteExplicitNull.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteExplicitNull.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteExplicitNull.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteExplicitNull = types.BoolValue(false)
+			} else if !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteExplicitNull.IsNull() {
 				data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteExplicitNull = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteExplicitNull.IsNull() {
 				data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteExplicitNull = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteExplicitNull = types.BoolValue(false)
 			}
 		}
 	}
@@ -3015,23 +3151,39 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexInterface = types.StringNull()
 		}
 		if value := r.Get("index.php-disable"); value.Exists() {
-			if !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexPhpDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexPhpDisable.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexPhpDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexPhpDisable = types.BoolValue(false)
+			} else if !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexPhpDisable.IsNull() {
 				data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexPhpDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexPhpDisable.IsNull() {
 				data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexPhpDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexPhpDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("index.explicit-null"); value.Exists() {
-			if !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexExplicitNull.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexExplicitNull.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexExplicitNull.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexExplicitNull = types.BoolValue(false)
+			} else if !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexExplicitNull.IsNull() {
 				data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexExplicitNull = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexExplicitNull.IsNull() {
 				data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexExplicitNull = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexExplicitNull = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("absolute.absolute-id"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteId.IsNull() {
@@ -3045,23 +3197,39 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteInterface = types.StringNull()
 		}
 		if value := r.Get("absolute.php-disable"); value.Exists() {
-			if !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsolutePhpDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsolutePhpDisable.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsolutePhpDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsolutePhpDisable = types.BoolValue(false)
+			} else if !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsolutePhpDisable.IsNull() {
 				data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsolutePhpDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsolutePhpDisable.IsNull() {
 				data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsolutePhpDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsolutePhpDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("absolute.explicit-null"); value.Exists() {
-			if !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteExplicitNull.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteExplicitNull.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteExplicitNull.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteExplicitNull = types.BoolValue(false)
+			} else if !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteExplicitNull.IsNull() {
 				data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteExplicitNull = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteExplicitNull.IsNull() {
 				data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteExplicitNull = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteExplicitNull = types.BoolValue(false)
 			}
 		}
 	}
@@ -3109,23 +3277,39 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexInterface = types.StringNull()
 		}
 		if value := r.Get("index.php-disable"); value.Exists() {
-			if !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexPhpDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexPhpDisable.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexPhpDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexPhpDisable = types.BoolValue(false)
+			} else if !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexPhpDisable.IsNull() {
 				data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexPhpDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexPhpDisable.IsNull() {
 				data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexPhpDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexPhpDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("index.explicit-null"); value.Exists() {
-			if !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexExplicitNull.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexExplicitNull.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexExplicitNull.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexExplicitNull = types.BoolValue(false)
+			} else if !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexExplicitNull.IsNull() {
 				data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexExplicitNull = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexExplicitNull.IsNull() {
 				data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexExplicitNull = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexExplicitNull = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("absolute.absolute-id"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteId.IsNull() {
@@ -3139,23 +3323,39 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteInterface = types.StringNull()
 		}
 		if value := r.Get("absolute.php-disable"); value.Exists() {
-			if !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsolutePhpDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsolutePhpDisable.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsolutePhpDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsolutePhpDisable = types.BoolValue(false)
+			} else if !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsolutePhpDisable.IsNull() {
 				data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsolutePhpDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsolutePhpDisable.IsNull() {
 				data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsolutePhpDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsolutePhpDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("absolute.explicit-null"); value.Exists() {
-			if !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteExplicitNull.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteExplicitNull.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteExplicitNull.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteExplicitNull = types.BoolValue(false)
+			} else if !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteExplicitNull.IsNull() {
 				data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteExplicitNull = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteExplicitNull.IsNull() {
 				data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteExplicitNull = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteExplicitNull = types.BoolValue(false)
 			}
 		}
 	}
@@ -3310,23 +3510,39 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 			data.PartitionDetectTracks[i].Address = types.StringNull()
 		}
 		if value := r.Get("ipv4"); value.Exists() {
-			if !data.PartitionDetectTracks[i].Ipv4.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.PartitionDetectTracks[i].Ipv4.IsNull() && !data.PartitionDetectTracks[i].Ipv4.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.PartitionDetectTracks[i].Ipv4 = types.BoolValue(false)
+			} else if !data.PartitionDetectTracks[i].Ipv4.IsNull() {
 				data.PartitionDetectTracks[i].Ipv4 = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.PartitionDetectTracks[i].Ipv4.IsNull() {
 				data.PartitionDetectTracks[i].Ipv4 = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.PartitionDetectTracks[i].Ipv4 = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("ipv6"); value.Exists() {
-			if !data.PartitionDetectTracks[i].Ipv6.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.PartitionDetectTracks[i].Ipv6.IsNull() && !data.PartitionDetectTracks[i].Ipv6.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.PartitionDetectTracks[i].Ipv6 = types.BoolValue(false)
+			} else if !data.PartitionDetectTracks[i].Ipv6.IsNull() {
 				data.PartitionDetectTracks[i].Ipv6 = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.PartitionDetectTracks[i].Ipv6.IsNull() {
 				data.PartitionDetectTracks[i].Ipv6 = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.PartitionDetectTracks[i].Ipv6 = types.BoolValue(false)
 			}
 		}
 	}
@@ -6647,7 +6863,7 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("down-flag-clear"); cValue.Exists() {
 				item.DownFlagClear = types.BoolValue(true)
 			} else {
-				item.DownFlagClear = types.BoolNull()
+				item.DownFlagClear = types.BoolValue(false)
 			}
 			data.RedistributeIsis = append(data.RedistributeIsis, item)
 			return true
@@ -6686,12 +6902,12 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("match.internal"); cValue.Exists() {
 				item.MatchInternal = types.BoolValue(true)
 			} else {
-				item.MatchInternal = types.BoolNull()
+				item.MatchInternal = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.external"); cValue.Exists() {
 				item.MatchExternal = types.BoolValue(true)
 			} else {
-				item.MatchExternal = types.BoolNull()
+				item.MatchExternal = types.BoolValue(false)
 			}
 			if cValue := v.Get("redistribute-route-level"); cValue.Exists() {
 				item.Level = types.StringValue(cValue.String())
@@ -6766,12 +6982,12 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("explicit"); cValue.Exists() {
 				item.Explicit = types.BoolValue(true)
 			} else {
-				item.Explicit = types.BoolNull()
+				item.Explicit = types.BoolValue(false)
 			}
 			if cValue := v.Get("adv-unreachable"); cValue.Exists() {
 				item.AdvUnreachable = types.BoolValue(true)
 			} else {
-				item.AdvUnreachable = types.BoolNull()
+				item.AdvUnreachable = types.BoolValue(false)
 			}
 			if cValue := v.Get("adv-unreachable.unreachable-component-tag.unreachable-component-tag-number"); cValue.Exists() {
 				item.UnreachableTag = types.Int64Value(cValue.Int())
@@ -6779,12 +6995,12 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("adv-unreachable.unreachable-component-tag.exclude"); cValue.Exists() {
 				item.UnreachableTagExcludePrefixes = types.BoolValue(true)
 			} else {
-				item.UnreachableTagExcludePrefixes = types.BoolNull()
+				item.UnreachableTagExcludePrefixes = types.BoolValue(false)
 			}
 			if cValue := v.Get("partition-repair"); cValue.Exists() {
 				item.PartitionRepair = types.BoolValue(true)
 			} else {
-				item.PartitionRepair = types.BoolNull()
+				item.PartitionRepair = types.BoolValue(false)
 			}
 			data.SummaryPrefixes = append(data.SummaryPrefixes, item)
 			return true
@@ -6842,27 +7058,27 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("narrow"); cValue.Exists() {
 				item.Narrow = types.BoolValue(true)
 			} else {
-				item.Narrow = types.BoolNull()
+				item.Narrow = types.BoolValue(false)
 			}
 			if cValue := v.Get("narrow.transition"); cValue.Exists() {
 				item.NarrowTransition = types.BoolValue(true)
 			} else {
-				item.NarrowTransition = types.BoolNull()
+				item.NarrowTransition = types.BoolValue(false)
 			}
 			if cValue := v.Get("wide"); cValue.Exists() {
 				item.Wide = types.BoolValue(true)
 			} else {
-				item.Wide = types.BoolNull()
+				item.Wide = types.BoolValue(false)
 			}
 			if cValue := v.Get("wide.transition"); cValue.Exists() {
 				item.WideTransition = types.BoolValue(true)
 			} else {
-				item.WideTransition = types.BoolNull()
+				item.WideTransition = types.BoolValue(false)
 			}
 			if cValue := v.Get("transition"); cValue.Exists() {
 				item.Transition = types.BoolValue(true)
 			} else {
-				item.Transition = types.BoolNull()
+				item.Transition = types.BoolValue(false)
 			}
 			data.MetricStyleLevels = append(data.MetricStyleLevels, item)
 			return true
@@ -6916,7 +7132,7 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("ietf"); cValue.Exists() {
 				item.Ietf = types.BoolValue(true)
 			} else {
-				item.Ietf = types.BoolNull()
+				item.Ietf = types.BoolValue(false)
 			}
 			if cValue := v.Get("ietf.initial-wait"); cValue.Exists() {
 				item.IetfInitialWait = types.Int64Value(cValue.Int())
@@ -7272,12 +7488,12 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("index.php-disable"); cValue.Exists() {
 				item.IndexPhpDisable = types.BoolValue(true)
 			} else {
-				item.IndexPhpDisable = types.BoolNull()
+				item.IndexPhpDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("index.explicit-null"); cValue.Exists() {
 				item.IndexExplicitNull = types.BoolValue(true)
 			} else {
-				item.IndexExplicitNull = types.BoolNull()
+				item.IndexExplicitNull = types.BoolValue(false)
 			}
 			if cValue := v.Get("absolute.absolute-id"); cValue.Exists() {
 				item.AbsoluteId = types.Int64Value(cValue.Int())
@@ -7288,12 +7504,12 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("absolute.php-disable"); cValue.Exists() {
 				item.AbsolutePhpDisable = types.BoolValue(true)
 			} else {
-				item.AbsolutePhpDisable = types.BoolNull()
+				item.AbsolutePhpDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("absolute.explicit-null"); cValue.Exists() {
 				item.AbsoluteExplicitNull = types.BoolValue(true)
 			} else {
-				item.AbsoluteExplicitNull = types.BoolNull()
+				item.AbsoluteExplicitNull = types.BoolValue(false)
 			}
 			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses = append(data.SegmentRoutingMplsConnectedPrefixSidMapAddresses, item)
 			return true
@@ -7321,12 +7537,12 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("index.php-disable"); cValue.Exists() {
 				item.IndexPhpDisable = types.BoolValue(true)
 			} else {
-				item.IndexPhpDisable = types.BoolNull()
+				item.IndexPhpDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("index.explicit-null"); cValue.Exists() {
 				item.IndexExplicitNull = types.BoolValue(true)
 			} else {
-				item.IndexExplicitNull = types.BoolNull()
+				item.IndexExplicitNull = types.BoolValue(false)
 			}
 			if cValue := v.Get("absolute.absolute-id"); cValue.Exists() {
 				item.AbsoluteId = types.Int64Value(cValue.Int())
@@ -7337,12 +7553,12 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("absolute.php-disable"); cValue.Exists() {
 				item.AbsolutePhpDisable = types.BoolValue(true)
 			} else {
-				item.AbsolutePhpDisable = types.BoolNull()
+				item.AbsolutePhpDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("absolute.explicit-null"); cValue.Exists() {
 				item.AbsoluteExplicitNull = types.BoolValue(true)
 			} else {
-				item.AbsoluteExplicitNull = types.BoolNull()
+				item.AbsoluteExplicitNull = types.BoolValue(false)
 			}
 			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses = append(data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses, item)
 			return true
@@ -7367,12 +7583,12 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("index.php-disable"); cValue.Exists() {
 				item.IndexPhpDisable = types.BoolValue(true)
 			} else {
-				item.IndexPhpDisable = types.BoolNull()
+				item.IndexPhpDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("index.explicit-null"); cValue.Exists() {
 				item.IndexExplicitNull = types.BoolValue(true)
 			} else {
-				item.IndexExplicitNull = types.BoolNull()
+				item.IndexExplicitNull = types.BoolValue(false)
 			}
 			if cValue := v.Get("absolute.absolute-id"); cValue.Exists() {
 				item.AbsoluteId = types.Int64Value(cValue.Int())
@@ -7383,12 +7599,12 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("absolute.php-disable"); cValue.Exists() {
 				item.AbsolutePhpDisable = types.BoolValue(true)
 			} else {
-				item.AbsolutePhpDisable = types.BoolNull()
+				item.AbsolutePhpDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("absolute.explicit-null"); cValue.Exists() {
 				item.AbsoluteExplicitNull = types.BoolValue(true)
 			} else {
-				item.AbsoluteExplicitNull = types.BoolNull()
+				item.AbsoluteExplicitNull = types.BoolValue(false)
 			}
 			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses = append(data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses, item)
 			return true
@@ -7457,12 +7673,12 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("ipv4"); cValue.Exists() {
 				item.Ipv4 = types.BoolValue(true)
 			} else {
-				item.Ipv4 = types.BoolNull()
+				item.Ipv4 = types.BoolValue(false)
 			}
 			if cValue := v.Get("ipv6"); cValue.Exists() {
 				item.Ipv6 = types.BoolValue(true)
 			} else {
-				item.Ipv6 = types.BoolNull()
+				item.Ipv6 = types.BoolValue(false)
 			}
 			data.PartitionDetectTracks = append(data.PartitionDetectTracks, item)
 			return true

@@ -429,13 +429,21 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 			data.NeighborSrPolicies[i].PolicyName = types.StringNull()
 		}
 		if value := r.Get("targeted"); value.Exists() {
-			if !data.NeighborSrPolicies[i].Targeted.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.NeighborSrPolicies[i].Targeted.IsNull() && !data.NeighborSrPolicies[i].Targeted.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.NeighborSrPolicies[i].Targeted = types.BoolValue(false)
+			} else if !data.NeighborSrPolicies[i].Targeted.IsNull() {
 				data.NeighborSrPolicies[i].Targeted = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.NeighborSrPolicies[i].Targeted.IsNull() {
 				data.NeighborSrPolicies[i].Targeted = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.NeighborSrPolicies[i].Targeted = types.BoolValue(false)
 			}
 		}
 	}
@@ -1308,7 +1316,7 @@ func (data *MPLSLDPAddressFamily) fromBody(ctx context.Context, res gjson.Result
 			if cValue := v.Get("targeted"); cValue.Exists() {
 				item.Targeted = types.BoolValue(true)
 			} else {
-				item.Targeted = types.BoolNull()
+				item.Targeted = types.BoolValue(false)
 			}
 			data.NeighborSrPolicies = append(data.NeighborSrPolicies, item)
 			return true

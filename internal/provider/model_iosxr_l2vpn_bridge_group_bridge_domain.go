@@ -1134,103 +1134,183 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.Interfaces[i].InterfaceName = types.StringNull()
 		}
 		if value := r.Get("dynamic-arp-inspection.logging"); value.Exists() {
-			if !data.Interfaces[i].DynamicArpInspectionLogging.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].DynamicArpInspectionLogging.IsNull() && !data.Interfaces[i].DynamicArpInspectionLogging.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].DynamicArpInspectionLogging = types.BoolValue(false)
+			} else if !data.Interfaces[i].DynamicArpInspectionLogging.IsNull() {
 				data.Interfaces[i].DynamicArpInspectionLogging = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].DynamicArpInspectionLogging.IsNull() {
 				data.Interfaces[i].DynamicArpInspectionLogging = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].DynamicArpInspectionLogging = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("dynamic-arp-inspection.logging.disable"); value.Exists() {
-			if !data.Interfaces[i].DynamicArpInspectionLoggingDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].DynamicArpInspectionLoggingDisable.IsNull() && !data.Interfaces[i].DynamicArpInspectionLoggingDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].DynamicArpInspectionLoggingDisable = types.BoolValue(false)
+			} else if !data.Interfaces[i].DynamicArpInspectionLoggingDisable.IsNull() {
 				data.Interfaces[i].DynamicArpInspectionLoggingDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].DynamicArpInspectionLoggingDisable.IsNull() {
 				data.Interfaces[i].DynamicArpInspectionLoggingDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].DynamicArpInspectionLoggingDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("dynamic-arp-inspection.disable"); value.Exists() {
-			if !data.Interfaces[i].DynamicArpInspectionDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].DynamicArpInspectionDisable.IsNull() && !data.Interfaces[i].DynamicArpInspectionDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].DynamicArpInspectionDisable = types.BoolValue(false)
+			} else if !data.Interfaces[i].DynamicArpInspectionDisable.IsNull() {
 				data.Interfaces[i].DynamicArpInspectionDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].DynamicArpInspectionDisable.IsNull() {
 				data.Interfaces[i].DynamicArpInspectionDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].DynamicArpInspectionDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("dynamic-arp-inspection.address-validation.src-mac"); value.Exists() {
-			if !data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMac.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMac.IsNull() && !data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMac.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMac = types.BoolValue(false)
+			} else if !data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMac.IsNull() {
 				data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMac = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMac.IsNull() {
 				data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMac = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMac = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("dynamic-arp-inspection.address-validation.src-mac.disable"); value.Exists() {
-			if !data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMacDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMacDisable.IsNull() && !data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMacDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMacDisable = types.BoolValue(false)
+			} else if !data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMacDisable.IsNull() {
 				data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMacDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMacDisable.IsNull() {
 				data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMacDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].DynamicArpInspectionAddressValidationSrcMacDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("dynamic-arp-inspection.address-validation.dst-mac"); value.Exists() {
-			if !data.Interfaces[i].DynamicArpInspectionAddressValidationDstMac.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].DynamicArpInspectionAddressValidationDstMac.IsNull() && !data.Interfaces[i].DynamicArpInspectionAddressValidationDstMac.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].DynamicArpInspectionAddressValidationDstMac = types.BoolValue(false)
+			} else if !data.Interfaces[i].DynamicArpInspectionAddressValidationDstMac.IsNull() {
 				data.Interfaces[i].DynamicArpInspectionAddressValidationDstMac = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].DynamicArpInspectionAddressValidationDstMac.IsNull() {
 				data.Interfaces[i].DynamicArpInspectionAddressValidationDstMac = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].DynamicArpInspectionAddressValidationDstMac = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("dynamic-arp-inspection.address-validation.dst-mac.disable"); value.Exists() {
-			if !data.Interfaces[i].DynamicArpInspectionAddressValidationDstMacDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].DynamicArpInspectionAddressValidationDstMacDisable.IsNull() && !data.Interfaces[i].DynamicArpInspectionAddressValidationDstMacDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].DynamicArpInspectionAddressValidationDstMacDisable = types.BoolValue(false)
+			} else if !data.Interfaces[i].DynamicArpInspectionAddressValidationDstMacDisable.IsNull() {
 				data.Interfaces[i].DynamicArpInspectionAddressValidationDstMacDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].DynamicArpInspectionAddressValidationDstMacDisable.IsNull() {
 				data.Interfaces[i].DynamicArpInspectionAddressValidationDstMacDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].DynamicArpInspectionAddressValidationDstMacDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("dynamic-arp-inspection.address-validation.ipv4"); value.Exists() {
-			if !data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4.IsNull() && !data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4 = types.BoolValue(false)
+			} else if !data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4.IsNull() {
 				data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4 = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4.IsNull() {
 				data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4 = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4 = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("dynamic-arp-inspection.address-validation.ipv4.disable"); value.Exists() {
-			if !data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4Disable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4Disable.IsNull() && !data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4Disable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4Disable = types.BoolValue(false)
+			} else if !data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4Disable.IsNull() {
 				data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4Disable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4Disable.IsNull() {
 				data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4Disable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].DynamicArpInspectionAddressValidationIpv4Disable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("flooding.disable"); value.Exists() {
-			if !data.Interfaces[i].FloodingDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].FloodingDisable.IsNull() && !data.Interfaces[i].FloodingDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].FloodingDisable = types.BoolValue(false)
+			} else if !data.Interfaces[i].FloodingDisable.IsNull() {
 				data.Interfaces[i].FloodingDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].FloodingDisable.IsNull() {
 				data.Interfaces[i].FloodingDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].FloodingDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("igmp.snooping.profile"); value.Exists() && !data.Interfaces[i].IgmpSnoopingProfile.IsNull() {
@@ -1239,43 +1319,75 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.Interfaces[i].IgmpSnoopingProfile = types.StringNull()
 		}
 		if value := r.Get("ip-source-guard"); value.Exists() {
-			if !data.Interfaces[i].IpSourceGuard.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].IpSourceGuard.IsNull() && !data.Interfaces[i].IpSourceGuard.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].IpSourceGuard = types.BoolValue(false)
+			} else if !data.Interfaces[i].IpSourceGuard.IsNull() {
 				data.Interfaces[i].IpSourceGuard = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].IpSourceGuard.IsNull() {
 				data.Interfaces[i].IpSourceGuard = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].IpSourceGuard = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("ip-source-guard.disable"); value.Exists() {
-			if !data.Interfaces[i].IpSourceGuardDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].IpSourceGuardDisable.IsNull() && !data.Interfaces[i].IpSourceGuardDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].IpSourceGuardDisable = types.BoolValue(false)
+			} else if !data.Interfaces[i].IpSourceGuardDisable.IsNull() {
 				data.Interfaces[i].IpSourceGuardDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].IpSourceGuardDisable.IsNull() {
 				data.Interfaces[i].IpSourceGuardDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].IpSourceGuardDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("ip-source-guard.logging"); value.Exists() {
-			if !data.Interfaces[i].IpSourceGuardLogging.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].IpSourceGuardLogging.IsNull() && !data.Interfaces[i].IpSourceGuardLogging.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].IpSourceGuardLogging = types.BoolValue(false)
+			} else if !data.Interfaces[i].IpSourceGuardLogging.IsNull() {
 				data.Interfaces[i].IpSourceGuardLogging = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].IpSourceGuardLogging.IsNull() {
 				data.Interfaces[i].IpSourceGuardLogging = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].IpSourceGuardLogging = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("ip-source-guard.logging.disable"); value.Exists() {
-			if !data.Interfaces[i].IpSourceGuardLoggingDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].IpSourceGuardLoggingDisable.IsNull() && !data.Interfaces[i].IpSourceGuardLoggingDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].IpSourceGuardLoggingDisable = types.BoolValue(false)
+			} else if !data.Interfaces[i].IpSourceGuardLoggingDisable.IsNull() {
 				data.Interfaces[i].IpSourceGuardLoggingDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].IpSourceGuardLoggingDisable.IsNull() {
 				data.Interfaces[i].IpSourceGuardLoggingDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].IpSourceGuardLoggingDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("mac.aging.time"); value.Exists() && !data.Interfaces[i].MacAgingTime.IsNull() {
@@ -1284,43 +1396,75 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.Interfaces[i].MacAgingTime = types.Int64Null()
 		}
 		if value := r.Get("mac.aging.type.absolute"); value.Exists() {
-			if !data.Interfaces[i].MacAgingTypeAbsolute.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].MacAgingTypeAbsolute.IsNull() && !data.Interfaces[i].MacAgingTypeAbsolute.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].MacAgingTypeAbsolute = types.BoolValue(false)
+			} else if !data.Interfaces[i].MacAgingTypeAbsolute.IsNull() {
 				data.Interfaces[i].MacAgingTypeAbsolute = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].MacAgingTypeAbsolute.IsNull() {
 				data.Interfaces[i].MacAgingTypeAbsolute = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].MacAgingTypeAbsolute = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("mac.aging.type.inactivity"); value.Exists() {
-			if !data.Interfaces[i].MacAgingTypeInactivity.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].MacAgingTypeInactivity.IsNull() && !data.Interfaces[i].MacAgingTypeInactivity.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].MacAgingTypeInactivity = types.BoolValue(false)
+			} else if !data.Interfaces[i].MacAgingTypeInactivity.IsNull() {
 				data.Interfaces[i].MacAgingTypeInactivity = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].MacAgingTypeInactivity.IsNull() {
 				data.Interfaces[i].MacAgingTypeInactivity = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].MacAgingTypeInactivity = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("mac.learning"); value.Exists() {
-			if !data.Interfaces[i].MacLearning.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].MacLearning.IsNull() && !data.Interfaces[i].MacLearning.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].MacLearning = types.BoolValue(false)
+			} else if !data.Interfaces[i].MacLearning.IsNull() {
 				data.Interfaces[i].MacLearning = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].MacLearning.IsNull() {
 				data.Interfaces[i].MacLearning = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].MacLearning = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("mac.learning.disable"); value.Exists() {
-			if !data.Interfaces[i].MacLearningDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].MacLearningDisable.IsNull() && !data.Interfaces[i].MacLearningDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].MacLearningDisable = types.BoolValue(false)
+			} else if !data.Interfaces[i].MacLearningDisable.IsNull() {
 				data.Interfaces[i].MacLearningDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].MacLearningDisable.IsNull() {
 				data.Interfaces[i].MacLearningDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].MacLearningDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("mac.limit.maximum"); value.Exists() && !data.Interfaces[i].MacLimitMaximum.IsNull() {
@@ -1329,163 +1473,291 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.Interfaces[i].MacLimitMaximum = types.Int64Null()
 		}
 		if value := r.Get("mac.limit.action.flood"); value.Exists() {
-			if !data.Interfaces[i].MacLimitActionFlood.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].MacLimitActionFlood.IsNull() && !data.Interfaces[i].MacLimitActionFlood.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].MacLimitActionFlood = types.BoolValue(false)
+			} else if !data.Interfaces[i].MacLimitActionFlood.IsNull() {
 				data.Interfaces[i].MacLimitActionFlood = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].MacLimitActionFlood.IsNull() {
 				data.Interfaces[i].MacLimitActionFlood = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].MacLimitActionFlood = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("mac.limit.action.no-flood"); value.Exists() {
-			if !data.Interfaces[i].MacLimitActionNoFlood.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].MacLimitActionNoFlood.IsNull() && !data.Interfaces[i].MacLimitActionNoFlood.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].MacLimitActionNoFlood = types.BoolValue(false)
+			} else if !data.Interfaces[i].MacLimitActionNoFlood.IsNull() {
 				data.Interfaces[i].MacLimitActionNoFlood = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].MacLimitActionNoFlood.IsNull() {
 				data.Interfaces[i].MacLimitActionNoFlood = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].MacLimitActionNoFlood = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("mac.limit.action.shutdown"); value.Exists() {
-			if !data.Interfaces[i].MacLimitActionShutdown.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].MacLimitActionShutdown.IsNull() && !data.Interfaces[i].MacLimitActionShutdown.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].MacLimitActionShutdown = types.BoolValue(false)
+			} else if !data.Interfaces[i].MacLimitActionShutdown.IsNull() {
 				data.Interfaces[i].MacLimitActionShutdown = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].MacLimitActionShutdown.IsNull() {
 				data.Interfaces[i].MacLimitActionShutdown = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].MacLimitActionShutdown = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("mac.limit.action.none"); value.Exists() {
-			if !data.Interfaces[i].MacLimitActionNone.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].MacLimitActionNone.IsNull() && !data.Interfaces[i].MacLimitActionNone.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].MacLimitActionNone = types.BoolValue(false)
+			} else if !data.Interfaces[i].MacLimitActionNone.IsNull() {
 				data.Interfaces[i].MacLimitActionNone = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].MacLimitActionNone.IsNull() {
 				data.Interfaces[i].MacLimitActionNone = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].MacLimitActionNone = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("mac.limit.notification.trap"); value.Exists() {
-			if !data.Interfaces[i].MacLimitNotificationTrap.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].MacLimitNotificationTrap.IsNull() && !data.Interfaces[i].MacLimitNotificationTrap.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].MacLimitNotificationTrap = types.BoolValue(false)
+			} else if !data.Interfaces[i].MacLimitNotificationTrap.IsNull() {
 				data.Interfaces[i].MacLimitNotificationTrap = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].MacLimitNotificationTrap.IsNull() {
 				data.Interfaces[i].MacLimitNotificationTrap = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].MacLimitNotificationTrap = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("mac.limit.notification.both"); value.Exists() {
-			if !data.Interfaces[i].MacLimitNotificationBoth.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].MacLimitNotificationBoth.IsNull() && !data.Interfaces[i].MacLimitNotificationBoth.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].MacLimitNotificationBoth = types.BoolValue(false)
+			} else if !data.Interfaces[i].MacLimitNotificationBoth.IsNull() {
 				data.Interfaces[i].MacLimitNotificationBoth = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].MacLimitNotificationBoth.IsNull() {
 				data.Interfaces[i].MacLimitNotificationBoth = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].MacLimitNotificationBoth = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("mac.limit.notification.none"); value.Exists() {
-			if !data.Interfaces[i].MacLimitNotificationNone.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].MacLimitNotificationNone.IsNull() && !data.Interfaces[i].MacLimitNotificationNone.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].MacLimitNotificationNone = types.BoolValue(false)
+			} else if !data.Interfaces[i].MacLimitNotificationNone.IsNull() {
 				data.Interfaces[i].MacLimitNotificationNone = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].MacLimitNotificationNone.IsNull() {
 				data.Interfaces[i].MacLimitNotificationNone = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].MacLimitNotificationNone = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("mac.limit.notification.syslog"); value.Exists() {
-			if !data.Interfaces[i].MacLimitNotificationSyslog.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].MacLimitNotificationSyslog.IsNull() && !data.Interfaces[i].MacLimitNotificationSyslog.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].MacLimitNotificationSyslog = types.BoolValue(false)
+			} else if !data.Interfaces[i].MacLimitNotificationSyslog.IsNull() {
 				data.Interfaces[i].MacLimitNotificationSyslog = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].MacLimitNotificationSyslog.IsNull() {
 				data.Interfaces[i].MacLimitNotificationSyslog = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].MacLimitNotificationSyslog = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("mac.port-down.flush.disable"); value.Exists() {
-			if !data.Interfaces[i].MacPortDownFlushDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].MacPortDownFlushDisable.IsNull() && !data.Interfaces[i].MacPortDownFlushDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].MacPortDownFlushDisable = types.BoolValue(false)
+			} else if !data.Interfaces[i].MacPortDownFlushDisable.IsNull() {
 				data.Interfaces[i].MacPortDownFlushDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].MacPortDownFlushDisable.IsNull() {
 				data.Interfaces[i].MacPortDownFlushDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].MacPortDownFlushDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("mac.secure"); value.Exists() {
-			if !data.Interfaces[i].MacSecure.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].MacSecure.IsNull() && !data.Interfaces[i].MacSecure.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].MacSecure = types.BoolValue(false)
+			} else if !data.Interfaces[i].MacSecure.IsNull() {
 				data.Interfaces[i].MacSecure = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].MacSecure.IsNull() {
 				data.Interfaces[i].MacSecure = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].MacSecure = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("mac.secure.logging"); value.Exists() {
-			if !data.Interfaces[i].MacSecureLogging.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].MacSecureLogging.IsNull() && !data.Interfaces[i].MacSecureLogging.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].MacSecureLogging = types.BoolValue(false)
+			} else if !data.Interfaces[i].MacSecureLogging.IsNull() {
 				data.Interfaces[i].MacSecureLogging = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].MacSecureLogging.IsNull() {
 				data.Interfaces[i].MacSecureLogging = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].MacSecureLogging = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("mac.secure.logging.disable"); value.Exists() {
-			if !data.Interfaces[i].MacSecureLoggingDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].MacSecureLoggingDisable.IsNull() && !data.Interfaces[i].MacSecureLoggingDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].MacSecureLoggingDisable = types.BoolValue(false)
+			} else if !data.Interfaces[i].MacSecureLoggingDisable.IsNull() {
 				data.Interfaces[i].MacSecureLoggingDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].MacSecureLoggingDisable.IsNull() {
 				data.Interfaces[i].MacSecureLoggingDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].MacSecureLoggingDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("mac.secure.action.none"); value.Exists() {
-			if !data.Interfaces[i].MacSecureActionNone.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].MacSecureActionNone.IsNull() && !data.Interfaces[i].MacSecureActionNone.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].MacSecureActionNone = types.BoolValue(false)
+			} else if !data.Interfaces[i].MacSecureActionNone.IsNull() {
 				data.Interfaces[i].MacSecureActionNone = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].MacSecureActionNone.IsNull() {
 				data.Interfaces[i].MacSecureActionNone = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].MacSecureActionNone = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("mac.secure.action.shutdown"); value.Exists() {
-			if !data.Interfaces[i].MacSecureActionShutdown.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].MacSecureActionShutdown.IsNull() && !data.Interfaces[i].MacSecureActionShutdown.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].MacSecureActionShutdown = types.BoolValue(false)
+			} else if !data.Interfaces[i].MacSecureActionShutdown.IsNull() {
 				data.Interfaces[i].MacSecureActionShutdown = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].MacSecureActionShutdown.IsNull() {
 				data.Interfaces[i].MacSecureActionShutdown = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].MacSecureActionShutdown = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("mac.secure.action.restrict"); value.Exists() {
-			if !data.Interfaces[i].MacSecureActionRestrict.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].MacSecureActionRestrict.IsNull() && !data.Interfaces[i].MacSecureActionRestrict.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].MacSecureActionRestrict = types.BoolValue(false)
+			} else if !data.Interfaces[i].MacSecureActionRestrict.IsNull() {
 				data.Interfaces[i].MacSecureActionRestrict = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].MacSecureActionRestrict.IsNull() {
 				data.Interfaces[i].MacSecureActionRestrict = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].MacSecureActionRestrict = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("mac.secure.disable"); value.Exists() {
-			if !data.Interfaces[i].MacSecureDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].MacSecureDisable.IsNull() && !data.Interfaces[i].MacSecureDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].MacSecureDisable = types.BoolValue(false)
+			} else if !data.Interfaces[i].MacSecureDisable.IsNull() {
 				data.Interfaces[i].MacSecureDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].MacSecureDisable.IsNull() {
 				data.Interfaces[i].MacSecureDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].MacSecureDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("mac.secure.shutdown-recovery-timeout.recovery-timer-in-second"); value.Exists() && !data.Interfaces[i].MacSecureShutdownRecoveryTimeout.IsNull() {
@@ -1494,13 +1766,21 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.Interfaces[i].MacSecureShutdownRecoveryTimeout = types.Int64Null()
 		}
 		if value := r.Get("mac.secure.shutdown-recovery-timeout.disable"); value.Exists() {
-			if !data.Interfaces[i].MacSecureShutdownRecoveryTimeoutDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].MacSecureShutdownRecoveryTimeoutDisable.IsNull() && !data.Interfaces[i].MacSecureShutdownRecoveryTimeoutDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].MacSecureShutdownRecoveryTimeoutDisable = types.BoolValue(false)
+			} else if !data.Interfaces[i].MacSecureShutdownRecoveryTimeoutDisable.IsNull() {
 				data.Interfaces[i].MacSecureShutdownRecoveryTimeoutDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].MacSecureShutdownRecoveryTimeoutDisable.IsNull() {
 				data.Interfaces[i].MacSecureShutdownRecoveryTimeoutDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].MacSecureShutdownRecoveryTimeoutDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("mld.snooping.profile"); value.Exists() && !data.Interfaces[i].MldSnoopingProfile.IsNull() {
@@ -1539,13 +1819,21 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.Interfaces[i].StormControlUnknownUnicastKbps = types.Int64Null()
 		}
 		if value := r.Get("split-horizon.group"); value.Exists() {
-			if !data.Interfaces[i].SplitHorizonGroup.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Interfaces[i].SplitHorizonGroup.IsNull() && !data.Interfaces[i].SplitHorizonGroup.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Interfaces[i].SplitHorizonGroup = types.BoolValue(false)
+			} else if !data.Interfaces[i].SplitHorizonGroup.IsNull() {
 				data.Interfaces[i].SplitHorizonGroup = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Interfaces[i].SplitHorizonGroup.IsNull() {
 				data.Interfaces[i].SplitHorizonGroup = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Interfaces[i].SplitHorizonGroup = types.BoolValue(false)
 			}
 		}
 		for ci := range data.Interfaces[i].StaticMacAddresses {
@@ -1607,13 +1895,21 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.RoutedInterface[i].InterfaceName = types.StringNull()
 		}
 		if value := r.Get("split-horizon.group.core"); value.Exists() {
-			if !data.RoutedInterface[i].SplitHorizonGroupCore.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RoutedInterface[i].SplitHorizonGroupCore.IsNull() && !data.RoutedInterface[i].SplitHorizonGroupCore.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RoutedInterface[i].SplitHorizonGroupCore = types.BoolValue(false)
+			} else if !data.RoutedInterface[i].SplitHorizonGroupCore.IsNull() {
 				data.RoutedInterface[i].SplitHorizonGroupCore = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RoutedInterface[i].SplitHorizonGroupCore.IsNull() {
 				data.RoutedInterface[i].SplitHorizonGroupCore = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RoutedInterface[i].SplitHorizonGroupCore = types.BoolValue(false)
 			}
 		}
 	}
@@ -1671,13 +1967,21 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.MacStaticAddresses[i].MacAddress = types.StringNull()
 		}
 		if value := r.Get("drop"); value.Exists() {
-			if !data.MacStaticAddresses[i].Drop.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MacStaticAddresses[i].Drop.IsNull() && !data.MacStaticAddresses[i].Drop.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MacStaticAddresses[i].Drop = types.BoolValue(false)
+			} else if !data.MacStaticAddresses[i].Drop.IsNull() {
 				data.MacStaticAddresses[i].Drop = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MacStaticAddresses[i].Drop.IsNull() {
 				data.MacStaticAddresses[i].Drop = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MacStaticAddresses[i].Drop = types.BoolValue(false)
 			}
 		}
 	}
@@ -3790,52 +4094,52 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("dynamic-arp-inspection.logging"); cValue.Exists() {
 				item.DynamicArpInspectionLogging = types.BoolValue(true)
 			} else {
-				item.DynamicArpInspectionLogging = types.BoolNull()
+				item.DynamicArpInspectionLogging = types.BoolValue(false)
 			}
 			if cValue := v.Get("dynamic-arp-inspection.logging.disable"); cValue.Exists() {
 				item.DynamicArpInspectionLoggingDisable = types.BoolValue(true)
 			} else {
-				item.DynamicArpInspectionLoggingDisable = types.BoolNull()
+				item.DynamicArpInspectionLoggingDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("dynamic-arp-inspection.disable"); cValue.Exists() {
 				item.DynamicArpInspectionDisable = types.BoolValue(true)
 			} else {
-				item.DynamicArpInspectionDisable = types.BoolNull()
+				item.DynamicArpInspectionDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("dynamic-arp-inspection.address-validation.src-mac"); cValue.Exists() {
 				item.DynamicArpInspectionAddressValidationSrcMac = types.BoolValue(true)
 			} else {
-				item.DynamicArpInspectionAddressValidationSrcMac = types.BoolNull()
+				item.DynamicArpInspectionAddressValidationSrcMac = types.BoolValue(false)
 			}
 			if cValue := v.Get("dynamic-arp-inspection.address-validation.src-mac.disable"); cValue.Exists() {
 				item.DynamicArpInspectionAddressValidationSrcMacDisable = types.BoolValue(true)
 			} else {
-				item.DynamicArpInspectionAddressValidationSrcMacDisable = types.BoolNull()
+				item.DynamicArpInspectionAddressValidationSrcMacDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("dynamic-arp-inspection.address-validation.dst-mac"); cValue.Exists() {
 				item.DynamicArpInspectionAddressValidationDstMac = types.BoolValue(true)
 			} else {
-				item.DynamicArpInspectionAddressValidationDstMac = types.BoolNull()
+				item.DynamicArpInspectionAddressValidationDstMac = types.BoolValue(false)
 			}
 			if cValue := v.Get("dynamic-arp-inspection.address-validation.dst-mac.disable"); cValue.Exists() {
 				item.DynamicArpInspectionAddressValidationDstMacDisable = types.BoolValue(true)
 			} else {
-				item.DynamicArpInspectionAddressValidationDstMacDisable = types.BoolNull()
+				item.DynamicArpInspectionAddressValidationDstMacDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("dynamic-arp-inspection.address-validation.ipv4"); cValue.Exists() {
 				item.DynamicArpInspectionAddressValidationIpv4 = types.BoolValue(true)
 			} else {
-				item.DynamicArpInspectionAddressValidationIpv4 = types.BoolNull()
+				item.DynamicArpInspectionAddressValidationIpv4 = types.BoolValue(false)
 			}
 			if cValue := v.Get("dynamic-arp-inspection.address-validation.ipv4.disable"); cValue.Exists() {
 				item.DynamicArpInspectionAddressValidationIpv4Disable = types.BoolValue(true)
 			} else {
-				item.DynamicArpInspectionAddressValidationIpv4Disable = types.BoolNull()
+				item.DynamicArpInspectionAddressValidationIpv4Disable = types.BoolValue(false)
 			}
 			if cValue := v.Get("flooding.disable"); cValue.Exists() {
 				item.FloodingDisable = types.BoolValue(true)
 			} else {
-				item.FloodingDisable = types.BoolNull()
+				item.FloodingDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("igmp.snooping.profile"); cValue.Exists() {
 				item.IgmpSnoopingProfile = types.StringValue(cValue.String())
@@ -3843,22 +4147,22 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("ip-source-guard"); cValue.Exists() {
 				item.IpSourceGuard = types.BoolValue(true)
 			} else {
-				item.IpSourceGuard = types.BoolNull()
+				item.IpSourceGuard = types.BoolValue(false)
 			}
 			if cValue := v.Get("ip-source-guard.disable"); cValue.Exists() {
 				item.IpSourceGuardDisable = types.BoolValue(true)
 			} else {
-				item.IpSourceGuardDisable = types.BoolNull()
+				item.IpSourceGuardDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("ip-source-guard.logging"); cValue.Exists() {
 				item.IpSourceGuardLogging = types.BoolValue(true)
 			} else {
-				item.IpSourceGuardLogging = types.BoolNull()
+				item.IpSourceGuardLogging = types.BoolValue(false)
 			}
 			if cValue := v.Get("ip-source-guard.logging.disable"); cValue.Exists() {
 				item.IpSourceGuardLoggingDisable = types.BoolValue(true)
 			} else {
-				item.IpSourceGuardLoggingDisable = types.BoolNull()
+				item.IpSourceGuardLoggingDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.aging.time"); cValue.Exists() {
 				item.MacAgingTime = types.Int64Value(cValue.Int())
@@ -3866,22 +4170,22 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("mac.aging.type.absolute"); cValue.Exists() {
 				item.MacAgingTypeAbsolute = types.BoolValue(true)
 			} else {
-				item.MacAgingTypeAbsolute = types.BoolNull()
+				item.MacAgingTypeAbsolute = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.aging.type.inactivity"); cValue.Exists() {
 				item.MacAgingTypeInactivity = types.BoolValue(true)
 			} else {
-				item.MacAgingTypeInactivity = types.BoolNull()
+				item.MacAgingTypeInactivity = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.learning"); cValue.Exists() {
 				item.MacLearning = types.BoolValue(true)
 			} else {
-				item.MacLearning = types.BoolNull()
+				item.MacLearning = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.learning.disable"); cValue.Exists() {
 				item.MacLearningDisable = types.BoolValue(true)
 			} else {
-				item.MacLearningDisable = types.BoolNull()
+				item.MacLearningDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.limit.maximum"); cValue.Exists() {
 				item.MacLimitMaximum = types.Int64Value(cValue.Int())
@@ -3889,82 +4193,82 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("mac.limit.action.flood"); cValue.Exists() {
 				item.MacLimitActionFlood = types.BoolValue(true)
 			} else {
-				item.MacLimitActionFlood = types.BoolNull()
+				item.MacLimitActionFlood = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.limit.action.no-flood"); cValue.Exists() {
 				item.MacLimitActionNoFlood = types.BoolValue(true)
 			} else {
-				item.MacLimitActionNoFlood = types.BoolNull()
+				item.MacLimitActionNoFlood = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.limit.action.shutdown"); cValue.Exists() {
 				item.MacLimitActionShutdown = types.BoolValue(true)
 			} else {
-				item.MacLimitActionShutdown = types.BoolNull()
+				item.MacLimitActionShutdown = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.limit.action.none"); cValue.Exists() {
 				item.MacLimitActionNone = types.BoolValue(true)
 			} else {
-				item.MacLimitActionNone = types.BoolNull()
+				item.MacLimitActionNone = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.limit.notification.trap"); cValue.Exists() {
 				item.MacLimitNotificationTrap = types.BoolValue(true)
 			} else {
-				item.MacLimitNotificationTrap = types.BoolNull()
+				item.MacLimitNotificationTrap = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.limit.notification.both"); cValue.Exists() {
 				item.MacLimitNotificationBoth = types.BoolValue(true)
 			} else {
-				item.MacLimitNotificationBoth = types.BoolNull()
+				item.MacLimitNotificationBoth = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.limit.notification.none"); cValue.Exists() {
 				item.MacLimitNotificationNone = types.BoolValue(true)
 			} else {
-				item.MacLimitNotificationNone = types.BoolNull()
+				item.MacLimitNotificationNone = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.limit.notification.syslog"); cValue.Exists() {
 				item.MacLimitNotificationSyslog = types.BoolValue(true)
 			} else {
-				item.MacLimitNotificationSyslog = types.BoolNull()
+				item.MacLimitNotificationSyslog = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.port-down.flush.disable"); cValue.Exists() {
 				item.MacPortDownFlushDisable = types.BoolValue(true)
 			} else {
-				item.MacPortDownFlushDisable = types.BoolNull()
+				item.MacPortDownFlushDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.secure"); cValue.Exists() {
 				item.MacSecure = types.BoolValue(true)
 			} else {
-				item.MacSecure = types.BoolNull()
+				item.MacSecure = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.secure.logging"); cValue.Exists() {
 				item.MacSecureLogging = types.BoolValue(true)
 			} else {
-				item.MacSecureLogging = types.BoolNull()
+				item.MacSecureLogging = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.secure.logging.disable"); cValue.Exists() {
 				item.MacSecureLoggingDisable = types.BoolValue(true)
 			} else {
-				item.MacSecureLoggingDisable = types.BoolNull()
+				item.MacSecureLoggingDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.secure.action.none"); cValue.Exists() {
 				item.MacSecureActionNone = types.BoolValue(true)
 			} else {
-				item.MacSecureActionNone = types.BoolNull()
+				item.MacSecureActionNone = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.secure.action.shutdown"); cValue.Exists() {
 				item.MacSecureActionShutdown = types.BoolValue(true)
 			} else {
-				item.MacSecureActionShutdown = types.BoolNull()
+				item.MacSecureActionShutdown = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.secure.action.restrict"); cValue.Exists() {
 				item.MacSecureActionRestrict = types.BoolValue(true)
 			} else {
-				item.MacSecureActionRestrict = types.BoolNull()
+				item.MacSecureActionRestrict = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.secure.disable"); cValue.Exists() {
 				item.MacSecureDisable = types.BoolValue(true)
 			} else {
-				item.MacSecureDisable = types.BoolNull()
+				item.MacSecureDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("mac.secure.shutdown-recovery-timeout.recovery-timer-in-second"); cValue.Exists() {
 				item.MacSecureShutdownRecoveryTimeout = types.Int64Value(cValue.Int())
@@ -3972,7 +4276,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("mac.secure.shutdown-recovery-timeout.disable"); cValue.Exists() {
 				item.MacSecureShutdownRecoveryTimeoutDisable = types.BoolValue(true)
 			} else {
-				item.MacSecureShutdownRecoveryTimeoutDisable = types.BoolNull()
+				item.MacSecureShutdownRecoveryTimeoutDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("mld.snooping.profile"); cValue.Exists() {
 				item.MldSnoopingProfile = types.StringValue(cValue.String())
@@ -3998,7 +4302,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("split-horizon.group"); cValue.Exists() {
 				item.SplitHorizonGroup = types.BoolValue(true)
 			} else {
-				item.SplitHorizonGroup = types.BoolNull()
+				item.SplitHorizonGroup = types.BoolValue(false)
 			}
 			if cValue := v.Get("static-mac-addresses.static-mac-address"); cValue.Exists() {
 				item.StaticMacAddresses = make([]L2VPNBridgeGroupBridgeDomainInterfacesStaticMacAddresses, 0)
@@ -4025,7 +4329,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("split-horizon.group.core"); cValue.Exists() {
 				item.SplitHorizonGroupCore = types.BoolValue(true)
 			} else {
-				item.SplitHorizonGroupCore = types.BoolNull()
+				item.SplitHorizonGroupCore = types.BoolValue(false)
 			}
 			data.RoutedInterface = append(data.RoutedInterface, item)
 			return true
@@ -4054,7 +4358,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res gjso
 			if cValue := v.Get("drop"); cValue.Exists() {
 				item.Drop = types.BoolValue(true)
 			} else {
-				item.Drop = types.BoolNull()
+				item.Drop = types.BoolValue(false)
 			}
 			data.MacStaticAddresses = append(data.MacStaticAddresses, item)
 			return true

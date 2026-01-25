@@ -806,13 +806,21 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.Operations[i].OperationNumber = types.Int64Null()
 		}
 		if value := r.Get("type.icmp.echo"); value.Exists() {
-			if !data.Operations[i].IcmpEcho.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Operations[i].IcmpEcho.IsNull() && !data.Operations[i].IcmpEcho.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Operations[i].IcmpEcho = types.BoolValue(false)
+			} else if !data.Operations[i].IcmpEcho.IsNull() {
 				data.Operations[i].IcmpEcho = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Operations[i].IcmpEcho.IsNull() {
 				data.Operations[i].IcmpEcho = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Operations[i].IcmpEcho = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.icmp.echo.tag"); value.Exists() && !data.Operations[i].IcmpEchoTag.IsNull() {
@@ -871,23 +879,39 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.Operations[i].IcmpEchoHistoryBuckets = types.Int64Null()
 		}
 		if value := r.Get("type.icmp.echo.history.filter.all"); value.Exists() {
-			if !data.Operations[i].IcmpEchoHistoryFilterAll.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Operations[i].IcmpEchoHistoryFilterAll.IsNull() && !data.Operations[i].IcmpEchoHistoryFilterAll.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Operations[i].IcmpEchoHistoryFilterAll = types.BoolValue(false)
+			} else if !data.Operations[i].IcmpEchoHistoryFilterAll.IsNull() {
 				data.Operations[i].IcmpEchoHistoryFilterAll = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Operations[i].IcmpEchoHistoryFilterAll.IsNull() {
 				data.Operations[i].IcmpEchoHistoryFilterAll = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Operations[i].IcmpEchoHistoryFilterAll = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.icmp.echo.history.filter.failures"); value.Exists() {
-			if !data.Operations[i].IcmpEchoHistoryFilterFailures.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Operations[i].IcmpEchoHistoryFilterFailures.IsNull() && !data.Operations[i].IcmpEchoHistoryFilterFailures.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Operations[i].IcmpEchoHistoryFilterFailures = types.BoolValue(false)
+			} else if !data.Operations[i].IcmpEchoHistoryFilterFailures.IsNull() {
 				data.Operations[i].IcmpEchoHistoryFilterFailures = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Operations[i].IcmpEchoHistoryFilterFailures.IsNull() {
 				data.Operations[i].IcmpEchoHistoryFilterFailures = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Operations[i].IcmpEchoHistoryFilterFailures = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.icmp.echo.history.lives"); value.Exists() && !data.Operations[i].IcmpEchoHistoryLives.IsNull() {
@@ -945,13 +969,21 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		if value := r.Get("type.icmp.path-echo"); value.Exists() {
-			if !data.Operations[i].IcmpPathEcho.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Operations[i].IcmpPathEcho.IsNull() && !data.Operations[i].IcmpPathEcho.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Operations[i].IcmpPathEcho = types.BoolValue(false)
+			} else if !data.Operations[i].IcmpPathEcho.IsNull() {
 				data.Operations[i].IcmpPathEcho = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Operations[i].IcmpPathEcho.IsNull() {
 				data.Operations[i].IcmpPathEcho = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Operations[i].IcmpPathEcho = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.icmp.path-echo.tag"); value.Exists() && !data.Operations[i].IcmpPathEchoTag.IsNull() {
@@ -995,23 +1027,39 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.Operations[i].IcmpPathEchoHistoryBuckets = types.Int64Null()
 		}
 		if value := r.Get("type.icmp.path-echo.history.filter.all"); value.Exists() {
-			if !data.Operations[i].IcmpPathEchoHistoryFilterAll.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Operations[i].IcmpPathEchoHistoryFilterAll.IsNull() && !data.Operations[i].IcmpPathEchoHistoryFilterAll.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Operations[i].IcmpPathEchoHistoryFilterAll = types.BoolValue(false)
+			} else if !data.Operations[i].IcmpPathEchoHistoryFilterAll.IsNull() {
 				data.Operations[i].IcmpPathEchoHistoryFilterAll = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Operations[i].IcmpPathEchoHistoryFilterAll.IsNull() {
 				data.Operations[i].IcmpPathEchoHistoryFilterAll = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Operations[i].IcmpPathEchoHistoryFilterAll = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.icmp.path-echo.history.filter.failures"); value.Exists() {
-			if !data.Operations[i].IcmpPathEchoHistoryFilterFailures.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Operations[i].IcmpPathEchoHistoryFilterFailures.IsNull() && !data.Operations[i].IcmpPathEchoHistoryFilterFailures.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Operations[i].IcmpPathEchoHistoryFilterFailures = types.BoolValue(false)
+			} else if !data.Operations[i].IcmpPathEchoHistoryFilterFailures.IsNull() {
 				data.Operations[i].IcmpPathEchoHistoryFilterFailures = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Operations[i].IcmpPathEchoHistoryFilterFailures.IsNull() {
 				data.Operations[i].IcmpPathEchoHistoryFilterFailures = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Operations[i].IcmpPathEchoHistoryFilterFailures = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.icmp.path-echo.history.lives"); value.Exists() && !data.Operations[i].IcmpPathEchoHistoryLives.IsNull() {
@@ -1050,13 +1098,21 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.Operations[i].IcmpPathEchoStatisticsHourlyMaximumPaths = types.Int64Null()
 		}
 		if value := r.Get("type.icmp.path-jitter"); value.Exists() {
-			if !data.Operations[i].IcmpPathJitter.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Operations[i].IcmpPathJitter.IsNull() && !data.Operations[i].IcmpPathJitter.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Operations[i].IcmpPathJitter = types.BoolValue(false)
+			} else if !data.Operations[i].IcmpPathJitter.IsNull() {
 				data.Operations[i].IcmpPathJitter = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Operations[i].IcmpPathJitter.IsNull() {
 				data.Operations[i].IcmpPathJitter = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Operations[i].IcmpPathJitter = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.icmp.path-jitter.tag"); value.Exists() && !data.Operations[i].IcmpPathJitterTag.IsNull() {
@@ -1105,13 +1161,21 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.Operations[i].IcmpPathJitterDestinationIpv4 = types.StringNull()
 		}
 		if value := r.Get("type.udp.echo"); value.Exists() {
-			if !data.Operations[i].UdpEcho.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Operations[i].UdpEcho.IsNull() && !data.Operations[i].UdpEcho.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Operations[i].UdpEcho = types.BoolValue(false)
+			} else if !data.Operations[i].UdpEcho.IsNull() {
 				data.Operations[i].UdpEcho = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Operations[i].UdpEcho.IsNull() {
 				data.Operations[i].UdpEcho = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Operations[i].UdpEcho = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.udp.echo.tag"); value.Exists() && !data.Operations[i].UdpEchoTag.IsNull() {
@@ -1155,23 +1219,39 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.Operations[i].UdpEchoDestinationPort = types.Int64Null()
 		}
 		if value := r.Get("type.udp.echo.control.disable"); value.Exists() {
-			if !data.Operations[i].UdpEchoControlDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Operations[i].UdpEchoControlDisable.IsNull() && !data.Operations[i].UdpEchoControlDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Operations[i].UdpEchoControlDisable = types.BoolValue(false)
+			} else if !data.Operations[i].UdpEchoControlDisable.IsNull() {
 				data.Operations[i].UdpEchoControlDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Operations[i].UdpEchoControlDisable.IsNull() {
 				data.Operations[i].UdpEchoControlDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Operations[i].UdpEchoControlDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.udp.echo.verify-data"); value.Exists() {
-			if !data.Operations[i].UdpEchoVerifyData.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Operations[i].UdpEchoVerifyData.IsNull() && !data.Operations[i].UdpEchoVerifyData.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Operations[i].UdpEchoVerifyData = types.BoolValue(false)
+			} else if !data.Operations[i].UdpEchoVerifyData.IsNull() {
 				data.Operations[i].UdpEchoVerifyData = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Operations[i].UdpEchoVerifyData.IsNull() {
 				data.Operations[i].UdpEchoVerifyData = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Operations[i].UdpEchoVerifyData = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.udp.echo.tos"); value.Exists() && !data.Operations[i].UdpEchoTos.IsNull() {
@@ -1239,23 +1319,39 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.Operations[i].UdpEchoHistoryBuckets = types.Int64Null()
 		}
 		if value := r.Get("type.udp.echo.history.filter.all"); value.Exists() {
-			if !data.Operations[i].UdpEchoHistoryFilterAll.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Operations[i].UdpEchoHistoryFilterAll.IsNull() && !data.Operations[i].UdpEchoHistoryFilterAll.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Operations[i].UdpEchoHistoryFilterAll = types.BoolValue(false)
+			} else if !data.Operations[i].UdpEchoHistoryFilterAll.IsNull() {
 				data.Operations[i].UdpEchoHistoryFilterAll = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Operations[i].UdpEchoHistoryFilterAll.IsNull() {
 				data.Operations[i].UdpEchoHistoryFilterAll = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Operations[i].UdpEchoHistoryFilterAll = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.udp.echo.history.filter.failures"); value.Exists() {
-			if !data.Operations[i].UdpEchoHistoryFilterFailures.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Operations[i].UdpEchoHistoryFilterFailures.IsNull() && !data.Operations[i].UdpEchoHistoryFilterFailures.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Operations[i].UdpEchoHistoryFilterFailures = types.BoolValue(false)
+			} else if !data.Operations[i].UdpEchoHistoryFilterFailures.IsNull() {
 				data.Operations[i].UdpEchoHistoryFilterFailures = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Operations[i].UdpEchoHistoryFilterFailures.IsNull() {
 				data.Operations[i].UdpEchoHistoryFilterFailures = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Operations[i].UdpEchoHistoryFilterFailures = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.udp.echo.history.lives"); value.Exists() && !data.Operations[i].UdpEchoHistoryLives.IsNull() {
@@ -1264,13 +1360,21 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.Operations[i].UdpEchoHistoryLives = types.Int64Null()
 		}
 		if value := r.Get("type.udp.jitter"); value.Exists() {
-			if !data.Operations[i].UdpJitter.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Operations[i].UdpJitter.IsNull() && !data.Operations[i].UdpJitter.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Operations[i].UdpJitter = types.BoolValue(false)
+			} else if !data.Operations[i].UdpJitter.IsNull() {
 				data.Operations[i].UdpJitter = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Operations[i].UdpJitter.IsNull() {
 				data.Operations[i].UdpJitter = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Operations[i].UdpJitter = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.udp.jitter.tag"); value.Exists() && !data.Operations[i].UdpJitterTag.IsNull() {
@@ -1334,23 +1438,39 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.Operations[i].UdpJitterVrf = types.StringNull()
 		}
 		if value := r.Get("type.udp.jitter.control.disable"); value.Exists() {
-			if !data.Operations[i].UdpJitterControlDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Operations[i].UdpJitterControlDisable.IsNull() && !data.Operations[i].UdpJitterControlDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Operations[i].UdpJitterControlDisable = types.BoolValue(false)
+			} else if !data.Operations[i].UdpJitterControlDisable.IsNull() {
 				data.Operations[i].UdpJitterControlDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Operations[i].UdpJitterControlDisable.IsNull() {
 				data.Operations[i].UdpJitterControlDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Operations[i].UdpJitterControlDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.udp.jitter.verify-data"); value.Exists() {
-			if !data.Operations[i].UdpJitterVerifyData.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Operations[i].UdpJitterVerifyData.IsNull() && !data.Operations[i].UdpJitterVerifyData.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Operations[i].UdpJitterVerifyData = types.BoolValue(false)
+			} else if !data.Operations[i].UdpJitterVerifyData.IsNull() {
 				data.Operations[i].UdpJitterVerifyData = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Operations[i].UdpJitterVerifyData.IsNull() {
 				data.Operations[i].UdpJitterVerifyData = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Operations[i].UdpJitterVerifyData = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.udp.jitter.statistics.hourly.buckets"); value.Exists() && !data.Operations[i].UdpJitterStatisticsHourlyBuckets.IsNull() {
@@ -1403,13 +1523,21 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		if value := r.Get("type.mpls.lsp.ping"); value.Exists() {
-			if !data.Operations[i].MplsLspPing.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Operations[i].MplsLspPing.IsNull() && !data.Operations[i].MplsLspPing.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Operations[i].MplsLspPing = types.BoolValue(false)
+			} else if !data.Operations[i].MplsLspPing.IsNull() {
 				data.Operations[i].MplsLspPing = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Operations[i].MplsLspPing.IsNull() {
 				data.Operations[i].MplsLspPing = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Operations[i].MplsLspPing = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.mpls.lsp.ping.tag"); value.Exists() && !data.Operations[i].MplsLspPingTag.IsNull() {
@@ -1512,13 +1640,21 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 		if value := r.Get("type.mpls.lsp.trace"); value.Exists() {
-			if !data.Operations[i].MplsLspTrace.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Operations[i].MplsLspTrace.IsNull() && !data.Operations[i].MplsLspTrace.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Operations[i].MplsLspTrace = types.BoolValue(false)
+			} else if !data.Operations[i].MplsLspTrace.IsNull() {
 				data.Operations[i].MplsLspTrace = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Operations[i].MplsLspTrace.IsNull() {
 				data.Operations[i].MplsLspTrace = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Operations[i].MplsLspTrace = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.mpls.lsp.trace.tag"); value.Exists() && !data.Operations[i].MplsLspTraceTag.IsNull() {
@@ -1611,13 +1747,21 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.Schedules[i].OperationNumber = types.Int64Null()
 		}
 		if value := r.Get("life.forever"); value.Exists() {
-			if !data.Schedules[i].LifeForever.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Schedules[i].LifeForever.IsNull() && !data.Schedules[i].LifeForever.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Schedules[i].LifeForever = types.BoolValue(false)
+			} else if !data.Schedules[i].LifeForever.IsNull() {
 				data.Schedules[i].LifeForever = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Schedules[i].LifeForever.IsNull() {
 				data.Schedules[i].LifeForever = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Schedules[i].LifeForever = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("life.length-of-time"); value.Exists() && !data.Schedules[i].LifeTime.IsNull() {
@@ -1656,13 +1800,21 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.Schedules[i].StartYear = types.Int64Null()
 		}
 		if value := r.Get("start-time.pending"); value.Exists() {
-			if !data.Schedules[i].StartPending.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Schedules[i].StartPending.IsNull() && !data.Schedules[i].StartPending.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Schedules[i].StartPending = types.BoolValue(false)
+			} else if !data.Schedules[i].StartPending.IsNull() {
 				data.Schedules[i].StartPending = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Schedules[i].StartPending.IsNull() {
 				data.Schedules[i].StartPending = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Schedules[i].StartPending = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("start-time.after.time.hour"); value.Exists() && !data.Schedules[i].StartAfterHour.IsNull() {
@@ -1681,23 +1833,39 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.Schedules[i].StartAfterSecond = types.Int64Null()
 		}
 		if value := r.Get("start-time.now"); value.Exists() {
-			if !data.Schedules[i].StartNow.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Schedules[i].StartNow.IsNull() && !data.Schedules[i].StartNow.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Schedules[i].StartNow = types.BoolValue(false)
+			} else if !data.Schedules[i].StartNow.IsNull() {
 				data.Schedules[i].StartNow = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Schedules[i].StartNow.IsNull() {
 				data.Schedules[i].StartNow = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Schedules[i].StartNow = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("recurring"); value.Exists() {
-			if !data.Schedules[i].Recurring.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Schedules[i].Recurring.IsNull() && !data.Schedules[i].Recurring.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Schedules[i].Recurring = types.BoolValue(false)
+			} else if !data.Schedules[i].Recurring.IsNull() {
 				data.Schedules[i].Recurring = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Schedules[i].Recurring.IsNull() {
 				data.Schedules[i].Recurring = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Schedules[i].Recurring = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("ageout"); value.Exists() && !data.Schedules[i].Ageout.IsNull() {
@@ -3223,7 +3391,7 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("type.icmp.echo"); cValue.Exists() {
 				item.IcmpEcho = types.BoolValue(true)
 			} else {
-				item.IcmpEcho = types.BoolNull()
+				item.IcmpEcho = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.icmp.echo.tag"); cValue.Exists() {
 				item.IcmpEchoTag = types.StringValue(cValue.String())
@@ -3261,12 +3429,12 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("type.icmp.echo.history.filter.all"); cValue.Exists() {
 				item.IcmpEchoHistoryFilterAll = types.BoolValue(true)
 			} else {
-				item.IcmpEchoHistoryFilterAll = types.BoolNull()
+				item.IcmpEchoHistoryFilterAll = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.icmp.echo.history.filter.failures"); cValue.Exists() {
 				item.IcmpEchoHistoryFilterFailures = types.BoolValue(true)
 			} else {
-				item.IcmpEchoHistoryFilterFailures = types.BoolNull()
+				item.IcmpEchoHistoryFilterFailures = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.icmp.echo.history.lives"); cValue.Exists() {
 				item.IcmpEchoHistoryLives = types.Int64Value(cValue.Int())
@@ -3297,7 +3465,7 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("type.icmp.path-echo"); cValue.Exists() {
 				item.IcmpPathEcho = types.BoolValue(true)
 			} else {
-				item.IcmpPathEcho = types.BoolNull()
+				item.IcmpPathEcho = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.icmp.path-echo.tag"); cValue.Exists() {
 				item.IcmpPathEchoTag = types.StringValue(cValue.String())
@@ -3326,12 +3494,12 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("type.icmp.path-echo.history.filter.all"); cValue.Exists() {
 				item.IcmpPathEchoHistoryFilterAll = types.BoolValue(true)
 			} else {
-				item.IcmpPathEchoHistoryFilterAll = types.BoolNull()
+				item.IcmpPathEchoHistoryFilterAll = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.icmp.path-echo.history.filter.failures"); cValue.Exists() {
 				item.IcmpPathEchoHistoryFilterFailures = types.BoolValue(true)
 			} else {
-				item.IcmpPathEchoHistoryFilterFailures = types.BoolNull()
+				item.IcmpPathEchoHistoryFilterFailures = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.icmp.path-echo.history.lives"); cValue.Exists() {
 				item.IcmpPathEchoHistoryLives = types.Int64Value(cValue.Int())
@@ -3357,7 +3525,7 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("type.icmp.path-jitter"); cValue.Exists() {
 				item.IcmpPathJitter = types.BoolValue(true)
 			} else {
-				item.IcmpPathJitter = types.BoolNull()
+				item.IcmpPathJitter = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.icmp.path-jitter.tag"); cValue.Exists() {
 				item.IcmpPathJitterTag = types.StringValue(cValue.String())
@@ -3389,7 +3557,7 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("type.udp.echo"); cValue.Exists() {
 				item.UdpEcho = types.BoolValue(true)
 			} else {
-				item.UdpEcho = types.BoolNull()
+				item.UdpEcho = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.udp.echo.tag"); cValue.Exists() {
 				item.UdpEchoTag = types.StringValue(cValue.String())
@@ -3418,12 +3586,12 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("type.udp.echo.control.disable"); cValue.Exists() {
 				item.UdpEchoControlDisable = types.BoolValue(true)
 			} else {
-				item.UdpEchoControlDisable = types.BoolNull()
+				item.UdpEchoControlDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.udp.echo.verify-data"); cValue.Exists() {
 				item.UdpEchoVerifyData = types.BoolValue(true)
 			} else {
-				item.UdpEchoVerifyData = types.BoolNull()
+				item.UdpEchoVerifyData = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.udp.echo.tos"); cValue.Exists() {
 				item.UdpEchoTos = types.Int64Value(cValue.Int())
@@ -3460,12 +3628,12 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("type.udp.echo.history.filter.all"); cValue.Exists() {
 				item.UdpEchoHistoryFilterAll = types.BoolValue(true)
 			} else {
-				item.UdpEchoHistoryFilterAll = types.BoolNull()
+				item.UdpEchoHistoryFilterAll = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.udp.echo.history.filter.failures"); cValue.Exists() {
 				item.UdpEchoHistoryFilterFailures = types.BoolValue(true)
 			} else {
-				item.UdpEchoHistoryFilterFailures = types.BoolNull()
+				item.UdpEchoHistoryFilterFailures = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.udp.echo.history.lives"); cValue.Exists() {
 				item.UdpEchoHistoryLives = types.Int64Value(cValue.Int())
@@ -3473,7 +3641,7 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("type.udp.jitter"); cValue.Exists() {
 				item.UdpJitter = types.BoolValue(true)
 			} else {
-				item.UdpJitter = types.BoolNull()
+				item.UdpJitter = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.udp.jitter.tag"); cValue.Exists() {
 				item.UdpJitterTag = types.StringValue(cValue.String())
@@ -3514,12 +3682,12 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("type.udp.jitter.control.disable"); cValue.Exists() {
 				item.UdpJitterControlDisable = types.BoolValue(true)
 			} else {
-				item.UdpJitterControlDisable = types.BoolNull()
+				item.UdpJitterControlDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.udp.jitter.verify-data"); cValue.Exists() {
 				item.UdpJitterVerifyData = types.BoolValue(true)
 			} else {
-				item.UdpJitterVerifyData = types.BoolNull()
+				item.UdpJitterVerifyData = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.udp.jitter.statistics.hourly.buckets"); cValue.Exists() {
 				item.UdpJitterStatisticsHourlyBuckets = types.Int64Value(cValue.Int())
@@ -3547,7 +3715,7 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("type.mpls.lsp.ping"); cValue.Exists() {
 				item.MplsLspPing = types.BoolValue(true)
 			} else {
-				item.MplsLspPing = types.BoolNull()
+				item.MplsLspPing = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.mpls.lsp.ping.tag"); cValue.Exists() {
 				item.MplsLspPingTag = types.StringValue(cValue.String())
@@ -3605,7 +3773,7 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("type.mpls.lsp.trace"); cValue.Exists() {
 				item.MplsLspTrace = types.BoolValue(true)
 			} else {
-				item.MplsLspTrace = types.BoolNull()
+				item.MplsLspTrace = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.mpls.lsp.trace.tag"); cValue.Exists() {
 				item.MplsLspTraceTag = types.StringValue(cValue.String())
@@ -3657,7 +3825,7 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("life.forever"); cValue.Exists() {
 				item.LifeForever = types.BoolValue(true)
 			} else {
-				item.LifeForever = types.BoolNull()
+				item.LifeForever = types.BoolValue(false)
 			}
 			if cValue := v.Get("life.length-of-time"); cValue.Exists() {
 				item.LifeTime = types.Int64Value(cValue.Int())
@@ -3683,7 +3851,7 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("start-time.pending"); cValue.Exists() {
 				item.StartPending = types.BoolValue(true)
 			} else {
-				item.StartPending = types.BoolNull()
+				item.StartPending = types.BoolValue(false)
 			}
 			if cValue := v.Get("start-time.after.time.hour"); cValue.Exists() {
 				item.StartAfterHour = types.Int64Value(cValue.Int())
@@ -3697,12 +3865,12 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("start-time.now"); cValue.Exists() {
 				item.StartNow = types.BoolValue(true)
 			} else {
-				item.StartNow = types.BoolNull()
+				item.StartNow = types.BoolValue(false)
 			}
 			if cValue := v.Get("recurring"); cValue.Exists() {
 				item.Recurring = types.BoolValue(true)
 			} else {
-				item.Recurring = types.BoolNull()
+				item.Recurring = types.BoolValue(false)
 			}
 			if cValue := v.Get("ageout"); cValue.Exists() {
 				item.Ageout = types.Int64Value(cValue.Int())

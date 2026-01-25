@@ -2521,13 +2521,21 @@ func (data *RouterOSPF) updateFromBody(ctx context.Context, res []byte) {
 			data.RedistributeBgp[i].RoutePolicy = types.StringNull()
 		}
 		if value := r.Get("preserve-med"); value.Exists() {
-			if !data.RedistributeBgp[i].PreserveMed.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RedistributeBgp[i].PreserveMed.IsNull() && !data.RedistributeBgp[i].PreserveMed.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RedistributeBgp[i].PreserveMed = types.BoolValue(false)
+			} else if !data.RedistributeBgp[i].PreserveMed.IsNull() {
 				data.RedistributeBgp[i].PreserveMed = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RedistributeBgp[i].PreserveMed.IsNull() {
 				data.RedistributeBgp[i].PreserveMed = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RedistributeBgp[i].PreserveMed = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("metric.default-metric"); value.Exists() && !data.RedistributeBgp[i].Metric.IsNull() {
@@ -2536,33 +2544,57 @@ func (data *RouterOSPF) updateFromBody(ctx context.Context, res []byte) {
 			data.RedistributeBgp[i].Metric = types.Int64Null()
 		}
 		if value := r.Get("metric.use-rib-metric"); value.Exists() {
-			if !data.RedistributeBgp[i].MetricUseRibMetric.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RedistributeBgp[i].MetricUseRibMetric.IsNull() && !data.RedistributeBgp[i].MetricUseRibMetric.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RedistributeBgp[i].MetricUseRibMetric = types.BoolValue(false)
+			} else if !data.RedistributeBgp[i].MetricUseRibMetric.IsNull() {
 				data.RedistributeBgp[i].MetricUseRibMetric = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RedistributeBgp[i].MetricUseRibMetric.IsNull() {
 				data.RedistributeBgp[i].MetricUseRibMetric = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RedistributeBgp[i].MetricUseRibMetric = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("lsa-type.summary"); value.Exists() {
-			if !data.RedistributeBgp[i].LsaTypeSummary.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RedistributeBgp[i].LsaTypeSummary.IsNull() && !data.RedistributeBgp[i].LsaTypeSummary.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RedistributeBgp[i].LsaTypeSummary = types.BoolValue(false)
+			} else if !data.RedistributeBgp[i].LsaTypeSummary.IsNull() {
 				data.RedistributeBgp[i].LsaTypeSummary = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RedistributeBgp[i].LsaTypeSummary.IsNull() {
 				data.RedistributeBgp[i].LsaTypeSummary = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RedistributeBgp[i].LsaTypeSummary = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("nssa-only"); value.Exists() {
-			if !data.RedistributeBgp[i].NssaOnly.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RedistributeBgp[i].NssaOnly.IsNull() && !data.RedistributeBgp[i].NssaOnly.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RedistributeBgp[i].NssaOnly = types.BoolValue(false)
+			} else if !data.RedistributeBgp[i].NssaOnly.IsNull() {
 				data.RedistributeBgp[i].NssaOnly = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RedistributeBgp[i].NssaOnly.IsNull() {
 				data.RedistributeBgp[i].NssaOnly = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RedistributeBgp[i].NssaOnly = types.BoolValue(false)
 			}
 		}
 	}
@@ -2595,33 +2627,57 @@ func (data *RouterOSPF) updateFromBody(ctx context.Context, res []byte) {
 			data.RedistributeIsis[i].InstanceName = types.StringNull()
 		}
 		if value := r.Get("level-1"); value.Exists() {
-			if !data.RedistributeIsis[i].Level1.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RedistributeIsis[i].Level1.IsNull() && !data.RedistributeIsis[i].Level1.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RedistributeIsis[i].Level1 = types.BoolValue(false)
+			} else if !data.RedistributeIsis[i].Level1.IsNull() {
 				data.RedistributeIsis[i].Level1 = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RedistributeIsis[i].Level1.IsNull() {
 				data.RedistributeIsis[i].Level1 = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RedistributeIsis[i].Level1 = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("level-2"); value.Exists() {
-			if !data.RedistributeIsis[i].Level2.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RedistributeIsis[i].Level2.IsNull() && !data.RedistributeIsis[i].Level2.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RedistributeIsis[i].Level2 = types.BoolValue(false)
+			} else if !data.RedistributeIsis[i].Level2.IsNull() {
 				data.RedistributeIsis[i].Level2 = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RedistributeIsis[i].Level2.IsNull() {
 				data.RedistributeIsis[i].Level2 = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RedistributeIsis[i].Level2 = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("level-1-2"); value.Exists() {
-			if !data.RedistributeIsis[i].Level12.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RedistributeIsis[i].Level12.IsNull() && !data.RedistributeIsis[i].Level12.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RedistributeIsis[i].Level12 = types.BoolValue(false)
+			} else if !data.RedistributeIsis[i].Level12.IsNull() {
 				data.RedistributeIsis[i].Level12 = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RedistributeIsis[i].Level12.IsNull() {
 				data.RedistributeIsis[i].Level12 = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RedistributeIsis[i].Level12 = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("tag"); value.Exists() && !data.RedistributeIsis[i].Tag.IsNull() {
@@ -2645,33 +2701,57 @@ func (data *RouterOSPF) updateFromBody(ctx context.Context, res []byte) {
 			data.RedistributeIsis[i].Metric = types.Int64Null()
 		}
 		if value := r.Get("metric.use-rib-metric"); value.Exists() {
-			if !data.RedistributeIsis[i].MetricUseRibMetric.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RedistributeIsis[i].MetricUseRibMetric.IsNull() && !data.RedistributeIsis[i].MetricUseRibMetric.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RedistributeIsis[i].MetricUseRibMetric = types.BoolValue(false)
+			} else if !data.RedistributeIsis[i].MetricUseRibMetric.IsNull() {
 				data.RedistributeIsis[i].MetricUseRibMetric = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RedistributeIsis[i].MetricUseRibMetric.IsNull() {
 				data.RedistributeIsis[i].MetricUseRibMetric = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RedistributeIsis[i].MetricUseRibMetric = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("lsa-type.summary"); value.Exists() {
-			if !data.RedistributeIsis[i].LsaTypeSummary.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RedistributeIsis[i].LsaTypeSummary.IsNull() && !data.RedistributeIsis[i].LsaTypeSummary.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RedistributeIsis[i].LsaTypeSummary = types.BoolValue(false)
+			} else if !data.RedistributeIsis[i].LsaTypeSummary.IsNull() {
 				data.RedistributeIsis[i].LsaTypeSummary = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RedistributeIsis[i].LsaTypeSummary.IsNull() {
 				data.RedistributeIsis[i].LsaTypeSummary = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RedistributeIsis[i].LsaTypeSummary = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("nssa-only"); value.Exists() {
-			if !data.RedistributeIsis[i].NssaOnly.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RedistributeIsis[i].NssaOnly.IsNull() && !data.RedistributeIsis[i].NssaOnly.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RedistributeIsis[i].NssaOnly = types.BoolValue(false)
+			} else if !data.RedistributeIsis[i].NssaOnly.IsNull() {
 				data.RedistributeIsis[i].NssaOnly = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RedistributeIsis[i].NssaOnly.IsNull() {
 				data.RedistributeIsis[i].NssaOnly = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RedistributeIsis[i].NssaOnly = types.BoolValue(false)
 			}
 		}
 	}
@@ -2719,73 +2799,129 @@ func (data *RouterOSPF) updateFromBody(ctx context.Context, res []byte) {
 			data.RedistributeOspf[i].RoutePolicy = types.StringNull()
 		}
 		if value := r.Get("match.internal"); value.Exists() {
-			if !data.RedistributeOspf[i].MatchInternal.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RedistributeOspf[i].MatchInternal.IsNull() && !data.RedistributeOspf[i].MatchInternal.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RedistributeOspf[i].MatchInternal = types.BoolValue(false)
+			} else if !data.RedistributeOspf[i].MatchInternal.IsNull() {
 				data.RedistributeOspf[i].MatchInternal = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RedistributeOspf[i].MatchInternal.IsNull() {
 				data.RedistributeOspf[i].MatchInternal = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RedistributeOspf[i].MatchInternal = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("match.external"); value.Exists() {
-			if !data.RedistributeOspf[i].MatchExternal.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RedistributeOspf[i].MatchExternal.IsNull() && !data.RedistributeOspf[i].MatchExternal.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RedistributeOspf[i].MatchExternal = types.BoolValue(false)
+			} else if !data.RedistributeOspf[i].MatchExternal.IsNull() {
 				data.RedistributeOspf[i].MatchExternal = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RedistributeOspf[i].MatchExternal.IsNull() {
 				data.RedistributeOspf[i].MatchExternal = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RedistributeOspf[i].MatchExternal = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("match.external.one"); value.Exists() {
-			if !data.RedistributeOspf[i].MatchExternalOne.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RedistributeOspf[i].MatchExternalOne.IsNull() && !data.RedistributeOspf[i].MatchExternalOne.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RedistributeOspf[i].MatchExternalOne = types.BoolValue(false)
+			} else if !data.RedistributeOspf[i].MatchExternalOne.IsNull() {
 				data.RedistributeOspf[i].MatchExternalOne = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RedistributeOspf[i].MatchExternalOne.IsNull() {
 				data.RedistributeOspf[i].MatchExternalOne = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RedistributeOspf[i].MatchExternalOne = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("match.external.two"); value.Exists() {
-			if !data.RedistributeOspf[i].MatchExternalTwo.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RedistributeOspf[i].MatchExternalTwo.IsNull() && !data.RedistributeOspf[i].MatchExternalTwo.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RedistributeOspf[i].MatchExternalTwo = types.BoolValue(false)
+			} else if !data.RedistributeOspf[i].MatchExternalTwo.IsNull() {
 				data.RedistributeOspf[i].MatchExternalTwo = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RedistributeOspf[i].MatchExternalTwo.IsNull() {
 				data.RedistributeOspf[i].MatchExternalTwo = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RedistributeOspf[i].MatchExternalTwo = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("match.nssa-external"); value.Exists() {
-			if !data.RedistributeOspf[i].MatchNssaExternal.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RedistributeOspf[i].MatchNssaExternal.IsNull() && !data.RedistributeOspf[i].MatchNssaExternal.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RedistributeOspf[i].MatchNssaExternal = types.BoolValue(false)
+			} else if !data.RedistributeOspf[i].MatchNssaExternal.IsNull() {
 				data.RedistributeOspf[i].MatchNssaExternal = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RedistributeOspf[i].MatchNssaExternal.IsNull() {
 				data.RedistributeOspf[i].MatchNssaExternal = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RedistributeOspf[i].MatchNssaExternal = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("match.nssa-external.one"); value.Exists() {
-			if !data.RedistributeOspf[i].MatchNssaExternalOne.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RedistributeOspf[i].MatchNssaExternalOne.IsNull() && !data.RedistributeOspf[i].MatchNssaExternalOne.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RedistributeOspf[i].MatchNssaExternalOne = types.BoolValue(false)
+			} else if !data.RedistributeOspf[i].MatchNssaExternalOne.IsNull() {
 				data.RedistributeOspf[i].MatchNssaExternalOne = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RedistributeOspf[i].MatchNssaExternalOne.IsNull() {
 				data.RedistributeOspf[i].MatchNssaExternalOne = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RedistributeOspf[i].MatchNssaExternalOne = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("match.nssa-external.two"); value.Exists() {
-			if !data.RedistributeOspf[i].MatchNssaExternalTwo.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RedistributeOspf[i].MatchNssaExternalTwo.IsNull() && !data.RedistributeOspf[i].MatchNssaExternalTwo.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RedistributeOspf[i].MatchNssaExternalTwo = types.BoolValue(false)
+			} else if !data.RedistributeOspf[i].MatchNssaExternalTwo.IsNull() {
 				data.RedistributeOspf[i].MatchNssaExternalTwo = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RedistributeOspf[i].MatchNssaExternalTwo.IsNull() {
 				data.RedistributeOspf[i].MatchNssaExternalTwo = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RedistributeOspf[i].MatchNssaExternalTwo = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("metric.default-metric"); value.Exists() && !data.RedistributeOspf[i].Metric.IsNull() {
@@ -2794,33 +2930,57 @@ func (data *RouterOSPF) updateFromBody(ctx context.Context, res []byte) {
 			data.RedistributeOspf[i].Metric = types.Int64Null()
 		}
 		if value := r.Get("metric.use-rib-metric"); value.Exists() {
-			if !data.RedistributeOspf[i].MetricUseRibMetric.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RedistributeOspf[i].MetricUseRibMetric.IsNull() && !data.RedistributeOspf[i].MetricUseRibMetric.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RedistributeOspf[i].MetricUseRibMetric = types.BoolValue(false)
+			} else if !data.RedistributeOspf[i].MetricUseRibMetric.IsNull() {
 				data.RedistributeOspf[i].MetricUseRibMetric = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RedistributeOspf[i].MetricUseRibMetric.IsNull() {
 				data.RedistributeOspf[i].MetricUseRibMetric = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RedistributeOspf[i].MetricUseRibMetric = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("lsa-type.summary"); value.Exists() {
-			if !data.RedistributeOspf[i].LsaTypeSummary.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RedistributeOspf[i].LsaTypeSummary.IsNull() && !data.RedistributeOspf[i].LsaTypeSummary.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RedistributeOspf[i].LsaTypeSummary = types.BoolValue(false)
+			} else if !data.RedistributeOspf[i].LsaTypeSummary.IsNull() {
 				data.RedistributeOspf[i].LsaTypeSummary = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RedistributeOspf[i].LsaTypeSummary.IsNull() {
 				data.RedistributeOspf[i].LsaTypeSummary = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RedistributeOspf[i].LsaTypeSummary = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("nssa-only"); value.Exists() {
-			if !data.RedistributeOspf[i].NssaOnly.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.RedistributeOspf[i].NssaOnly.IsNull() && !data.RedistributeOspf[i].NssaOnly.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.RedistributeOspf[i].NssaOnly = types.BoolValue(false)
+			} else if !data.RedistributeOspf[i].NssaOnly.IsNull() {
 				data.RedistributeOspf[i].NssaOnly = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.RedistributeOspf[i].NssaOnly.IsNull() {
 				data.RedistributeOspf[i].NssaOnly = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.RedistributeOspf[i].NssaOnly = types.BoolValue(false)
 			}
 		}
 	}
@@ -3582,13 +3742,21 @@ func (data *RouterOSPF) updateFromBody(ctx context.Context, res []byte) {
 			data.SummaryPrefixes[i].Mask = types.StringNull()
 		}
 		if value := r.Get("not-advertise"); value.Exists() {
-			if !data.SummaryPrefixes[i].NotAdvertise.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SummaryPrefixes[i].NotAdvertise.IsNull() && !data.SummaryPrefixes[i].NotAdvertise.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SummaryPrefixes[i].NotAdvertise = types.BoolValue(false)
+			} else if !data.SummaryPrefixes[i].NotAdvertise.IsNull() {
 				data.SummaryPrefixes[i].NotAdvertise = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SummaryPrefixes[i].NotAdvertise.IsNull() {
 				data.SummaryPrefixes[i].NotAdvertise = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SummaryPrefixes[i].NotAdvertise = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("tag"); value.Exists() && !data.SummaryPrefixes[i].Tag.IsNull() {
@@ -4266,63 +4434,111 @@ func (data *RouterOSPF) updateFromBody(ctx context.Context, res []byte) {
 			data.FlexAlgos[i].Priority = types.Int64Null()
 		}
 		if value := r.Get("microloop.avoidance.disable"); value.Exists() {
-			if !data.FlexAlgos[i].MicroloopAvoidanceDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.FlexAlgos[i].MicroloopAvoidanceDisable.IsNull() && !data.FlexAlgos[i].MicroloopAvoidanceDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.FlexAlgos[i].MicroloopAvoidanceDisable = types.BoolValue(false)
+			} else if !data.FlexAlgos[i].MicroloopAvoidanceDisable.IsNull() {
 				data.FlexAlgos[i].MicroloopAvoidanceDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.FlexAlgos[i].MicroloopAvoidanceDisable.IsNull() {
 				data.FlexAlgos[i].MicroloopAvoidanceDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.FlexAlgos[i].MicroloopAvoidanceDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("prefix-metric"); value.Exists() {
-			if !data.FlexAlgos[i].PrefixMetric.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.FlexAlgos[i].PrefixMetric.IsNull() && !data.FlexAlgos[i].PrefixMetric.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.FlexAlgos[i].PrefixMetric = types.BoolValue(false)
+			} else if !data.FlexAlgos[i].PrefixMetric.IsNull() {
 				data.FlexAlgos[i].PrefixMetric = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.FlexAlgos[i].PrefixMetric.IsNull() {
 				data.FlexAlgos[i].PrefixMetric = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.FlexAlgos[i].PrefixMetric = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("metric-type.delay"); value.Exists() {
-			if !data.FlexAlgos[i].MetricTypeDelay.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.FlexAlgos[i].MetricTypeDelay.IsNull() && !data.FlexAlgos[i].MetricTypeDelay.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.FlexAlgos[i].MetricTypeDelay = types.BoolValue(false)
+			} else if !data.FlexAlgos[i].MetricTypeDelay.IsNull() {
 				data.FlexAlgos[i].MetricTypeDelay = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.FlexAlgos[i].MetricTypeDelay.IsNull() {
 				data.FlexAlgos[i].MetricTypeDelay = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.FlexAlgos[i].MetricTypeDelay = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("metric-type.te-metric"); value.Exists() {
-			if !data.FlexAlgos[i].MetricTypeTeMetric.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.FlexAlgos[i].MetricTypeTeMetric.IsNull() && !data.FlexAlgos[i].MetricTypeTeMetric.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.FlexAlgos[i].MetricTypeTeMetric = types.BoolValue(false)
+			} else if !data.FlexAlgos[i].MetricTypeTeMetric.IsNull() {
 				data.FlexAlgos[i].MetricTypeTeMetric = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.FlexAlgos[i].MetricTypeTeMetric.IsNull() {
 				data.FlexAlgos[i].MetricTypeTeMetric = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.FlexAlgos[i].MetricTypeTeMetric = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("advertise-definition"); value.Exists() {
-			if !data.FlexAlgos[i].AdvertiseDefinition.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.FlexAlgos[i].AdvertiseDefinition.IsNull() && !data.FlexAlgos[i].AdvertiseDefinition.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.FlexAlgos[i].AdvertiseDefinition = types.BoolValue(false)
+			} else if !data.FlexAlgos[i].AdvertiseDefinition.IsNull() {
 				data.FlexAlgos[i].AdvertiseDefinition = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.FlexAlgos[i].AdvertiseDefinition.IsNull() {
 				data.FlexAlgos[i].AdvertiseDefinition = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.FlexAlgos[i].AdvertiseDefinition = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("fast-reroute.disable"); value.Exists() {
-			if !data.FlexAlgos[i].FastRerouteDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.FlexAlgos[i].FastRerouteDisable.IsNull() && !data.FlexAlgos[i].FastRerouteDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.FlexAlgos[i].FastRerouteDisable = types.BoolValue(false)
+			} else if !data.FlexAlgos[i].FastRerouteDisable.IsNull() {
 				data.FlexAlgos[i].FastRerouteDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.FlexAlgos[i].FastRerouteDisable.IsNull() {
 				data.FlexAlgos[i].FastRerouteDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.FlexAlgos[i].FastRerouteDisable = types.BoolValue(false)
 			}
 		}
 		for ci := range data.FlexAlgos[i].AffinityExcludeAny {
@@ -9063,7 +9279,7 @@ func (data *RouterOSPF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("preserve-med"); cValue.Exists() {
 				item.PreserveMed = types.BoolValue(true)
 			} else {
-				item.PreserveMed = types.BoolNull()
+				item.PreserveMed = types.BoolValue(false)
 			}
 			if cValue := v.Get("metric.default-metric"); cValue.Exists() {
 				item.Metric = types.Int64Value(cValue.Int())
@@ -9071,17 +9287,17 @@ func (data *RouterOSPF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("metric.use-rib-metric"); cValue.Exists() {
 				item.MetricUseRibMetric = types.BoolValue(true)
 			} else {
-				item.MetricUseRibMetric = types.BoolNull()
+				item.MetricUseRibMetric = types.BoolValue(false)
 			}
 			if cValue := v.Get("lsa-type.summary"); cValue.Exists() {
 				item.LsaTypeSummary = types.BoolValue(true)
 			} else {
-				item.LsaTypeSummary = types.BoolNull()
+				item.LsaTypeSummary = types.BoolValue(false)
 			}
 			if cValue := v.Get("nssa-only"); cValue.Exists() {
 				item.NssaOnly = types.BoolValue(true)
 			} else {
-				item.NssaOnly = types.BoolNull()
+				item.NssaOnly = types.BoolValue(false)
 			}
 			data.RedistributeBgp = append(data.RedistributeBgp, item)
 			return true
@@ -9097,17 +9313,17 @@ func (data *RouterOSPF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("level-1"); cValue.Exists() {
 				item.Level1 = types.BoolValue(true)
 			} else {
-				item.Level1 = types.BoolNull()
+				item.Level1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("level-2"); cValue.Exists() {
 				item.Level2 = types.BoolValue(true)
 			} else {
-				item.Level2 = types.BoolNull()
+				item.Level2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("level-1-2"); cValue.Exists() {
 				item.Level12 = types.BoolValue(true)
 			} else {
-				item.Level12 = types.BoolNull()
+				item.Level12 = types.BoolValue(false)
 			}
 			if cValue := v.Get("tag"); cValue.Exists() {
 				item.Tag = types.Int64Value(cValue.Int())
@@ -9124,17 +9340,17 @@ func (data *RouterOSPF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("metric.use-rib-metric"); cValue.Exists() {
 				item.MetricUseRibMetric = types.BoolValue(true)
 			} else {
-				item.MetricUseRibMetric = types.BoolNull()
+				item.MetricUseRibMetric = types.BoolValue(false)
 			}
 			if cValue := v.Get("lsa-type.summary"); cValue.Exists() {
 				item.LsaTypeSummary = types.BoolValue(true)
 			} else {
-				item.LsaTypeSummary = types.BoolNull()
+				item.LsaTypeSummary = types.BoolValue(false)
 			}
 			if cValue := v.Get("nssa-only"); cValue.Exists() {
 				item.NssaOnly = types.BoolValue(true)
 			} else {
-				item.NssaOnly = types.BoolNull()
+				item.NssaOnly = types.BoolValue(false)
 			}
 			data.RedistributeIsis = append(data.RedistributeIsis, item)
 			return true
@@ -9159,37 +9375,37 @@ func (data *RouterOSPF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("match.internal"); cValue.Exists() {
 				item.MatchInternal = types.BoolValue(true)
 			} else {
-				item.MatchInternal = types.BoolNull()
+				item.MatchInternal = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.external"); cValue.Exists() {
 				item.MatchExternal = types.BoolValue(true)
 			} else {
-				item.MatchExternal = types.BoolNull()
+				item.MatchExternal = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.external.one"); cValue.Exists() {
 				item.MatchExternalOne = types.BoolValue(true)
 			} else {
-				item.MatchExternalOne = types.BoolNull()
+				item.MatchExternalOne = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.external.two"); cValue.Exists() {
 				item.MatchExternalTwo = types.BoolValue(true)
 			} else {
-				item.MatchExternalTwo = types.BoolNull()
+				item.MatchExternalTwo = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.nssa-external"); cValue.Exists() {
 				item.MatchNssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchNssaExternal = types.BoolNull()
+				item.MatchNssaExternal = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.nssa-external.one"); cValue.Exists() {
 				item.MatchNssaExternalOne = types.BoolValue(true)
 			} else {
-				item.MatchNssaExternalOne = types.BoolNull()
+				item.MatchNssaExternalOne = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.nssa-external.two"); cValue.Exists() {
 				item.MatchNssaExternalTwo = types.BoolValue(true)
 			} else {
-				item.MatchNssaExternalTwo = types.BoolNull()
+				item.MatchNssaExternalTwo = types.BoolValue(false)
 			}
 			if cValue := v.Get("metric.default-metric"); cValue.Exists() {
 				item.Metric = types.Int64Value(cValue.Int())
@@ -9197,17 +9413,17 @@ func (data *RouterOSPF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("metric.use-rib-metric"); cValue.Exists() {
 				item.MetricUseRibMetric = types.BoolValue(true)
 			} else {
-				item.MetricUseRibMetric = types.BoolNull()
+				item.MetricUseRibMetric = types.BoolValue(false)
 			}
 			if cValue := v.Get("lsa-type.summary"); cValue.Exists() {
 				item.LsaTypeSummary = types.BoolValue(true)
 			} else {
-				item.LsaTypeSummary = types.BoolNull()
+				item.LsaTypeSummary = types.BoolValue(false)
 			}
 			if cValue := v.Get("nssa-only"); cValue.Exists() {
 				item.NssaOnly = types.BoolValue(true)
 			} else {
-				item.NssaOnly = types.BoolNull()
+				item.NssaOnly = types.BoolValue(false)
 			}
 			data.RedistributeOspf = append(data.RedistributeOspf, item)
 			return true
@@ -9618,7 +9834,7 @@ func (data *RouterOSPF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("not-advertise"); cValue.Exists() {
 				item.NotAdvertise = types.BoolValue(true)
 			} else {
-				item.NotAdvertise = types.BoolNull()
+				item.NotAdvertise = types.BoolValue(false)
 			}
 			if cValue := v.Get("tag"); cValue.Exists() {
 				item.Tag = types.Int64Value(cValue.Int())
@@ -9949,32 +10165,32 @@ func (data *RouterOSPF) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("microloop.avoidance.disable"); cValue.Exists() {
 				item.MicroloopAvoidanceDisable = types.BoolValue(true)
 			} else {
-				item.MicroloopAvoidanceDisable = types.BoolNull()
+				item.MicroloopAvoidanceDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("prefix-metric"); cValue.Exists() {
 				item.PrefixMetric = types.BoolValue(true)
 			} else {
-				item.PrefixMetric = types.BoolNull()
+				item.PrefixMetric = types.BoolValue(false)
 			}
 			if cValue := v.Get("metric-type.delay"); cValue.Exists() {
 				item.MetricTypeDelay = types.BoolValue(true)
 			} else {
-				item.MetricTypeDelay = types.BoolNull()
+				item.MetricTypeDelay = types.BoolValue(false)
 			}
 			if cValue := v.Get("metric-type.te-metric"); cValue.Exists() {
 				item.MetricTypeTeMetric = types.BoolValue(true)
 			} else {
-				item.MetricTypeTeMetric = types.BoolNull()
+				item.MetricTypeTeMetric = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertise-definition"); cValue.Exists() {
 				item.AdvertiseDefinition = types.BoolValue(true)
 			} else {
-				item.AdvertiseDefinition = types.BoolNull()
+				item.AdvertiseDefinition = types.BoolValue(false)
 			}
 			if cValue := v.Get("fast-reroute.disable"); cValue.Exists() {
 				item.FastRerouteDisable = types.BoolValue(true)
 			} else {
-				item.FastRerouteDisable = types.BoolNull()
+				item.FastRerouteDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("affinity.exclude-any.affinity-attributes.affinity-attribute"); cValue.Exists() {
 				item.AffinityExcludeAny = make([]RouterOSPFFlexAlgosAffinityExcludeAny, 0)

@@ -202,13 +202,18 @@ func (data *SegmentRoutingMappingServer) updateFromBody(ctx context.Context, res
 				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Range = types.Int64Null()
 			}
 			if value := cr.Get("attached"); value.Exists() {
-				if !data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached.IsNull() && !data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached.ValueBool() {
+					data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached = types.BoolValue(false)
+				} else if !data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached.IsNull() {
 					data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached.IsNull() {
 					data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached = types.BoolNull()
+				} else {
+					data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached = types.BoolValue(false)
 				}
 			}
 		}
@@ -379,7 +384,7 @@ func (data *SegmentRoutingMappingServer) fromBody(ctx context.Context, res gjson
 					if ccValue := cv.Get("attached"); ccValue.Exists() {
 						cItem.Attached = types.BoolValue(true)
 					} else {
-						cItem.Attached = types.BoolNull()
+						cItem.Attached = types.BoolValue(false)
 					}
 					item.PrefixAddresses = append(item.PrefixAddresses, cItem)
 					return true

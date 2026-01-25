@@ -1318,33 +1318,57 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 			data.SetOverloadBitLevels[i].OnStartupTimeToAdvertise = types.Int64Null()
 		}
 		if value := r.Get("on-startup.wait-for-bgp"); value.Exists() {
-			if !data.SetOverloadBitLevels[i].OnStartupWaitForBgp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SetOverloadBitLevels[i].OnStartupWaitForBgp.IsNull() && !data.SetOverloadBitLevels[i].OnStartupWaitForBgp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SetOverloadBitLevels[i].OnStartupWaitForBgp = types.BoolValue(false)
+			} else if !data.SetOverloadBitLevels[i].OnStartupWaitForBgp.IsNull() {
 				data.SetOverloadBitLevels[i].OnStartupWaitForBgp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SetOverloadBitLevels[i].OnStartupWaitForBgp.IsNull() {
 				data.SetOverloadBitLevels[i].OnStartupWaitForBgp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SetOverloadBitLevels[i].OnStartupWaitForBgp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("advertise.external"); value.Exists() {
-			if !data.SetOverloadBitLevels[i].AdvertiseExternal.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SetOverloadBitLevels[i].AdvertiseExternal.IsNull() && !data.SetOverloadBitLevels[i].AdvertiseExternal.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SetOverloadBitLevels[i].AdvertiseExternal = types.BoolValue(false)
+			} else if !data.SetOverloadBitLevels[i].AdvertiseExternal.IsNull() {
 				data.SetOverloadBitLevels[i].AdvertiseExternal = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SetOverloadBitLevels[i].AdvertiseExternal.IsNull() {
 				data.SetOverloadBitLevels[i].AdvertiseExternal = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SetOverloadBitLevels[i].AdvertiseExternal = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("advertise.interlevel"); value.Exists() {
-			if !data.SetOverloadBitLevels[i].AdvertiseInterlevel.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.SetOverloadBitLevels[i].AdvertiseInterlevel.IsNull() && !data.SetOverloadBitLevels[i].AdvertiseInterlevel.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.SetOverloadBitLevels[i].AdvertiseInterlevel = types.BoolValue(false)
+			} else if !data.SetOverloadBitLevels[i].AdvertiseInterlevel.IsNull() {
 				data.SetOverloadBitLevels[i].AdvertiseInterlevel = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.SetOverloadBitLevels[i].AdvertiseInterlevel.IsNull() {
 				data.SetOverloadBitLevels[i].AdvertiseInterlevel = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.SetOverloadBitLevels[i].AdvertiseInterlevel = types.BoolValue(false)
 			}
 		}
 	}
@@ -1644,33 +1668,57 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 			data.MultiPartTlvDisableLevels[i].LevelNumber = types.Int64Null()
 		}
 		if value := r.Get("neighbor"); value.Exists() {
-			if !data.MultiPartTlvDisableLevels[i].Neighbor.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiPartTlvDisableLevels[i].Neighbor.IsNull() && !data.MultiPartTlvDisableLevels[i].Neighbor.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiPartTlvDisableLevels[i].Neighbor = types.BoolValue(false)
+			} else if !data.MultiPartTlvDisableLevels[i].Neighbor.IsNull() {
 				data.MultiPartTlvDisableLevels[i].Neighbor = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiPartTlvDisableLevels[i].Neighbor.IsNull() {
 				data.MultiPartTlvDisableLevels[i].Neighbor = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiPartTlvDisableLevels[i].Neighbor = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("prefix-tlvs"); value.Exists() {
-			if !data.MultiPartTlvDisableLevels[i].PrefixTlvs.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiPartTlvDisableLevels[i].PrefixTlvs.IsNull() && !data.MultiPartTlvDisableLevels[i].PrefixTlvs.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiPartTlvDisableLevels[i].PrefixTlvs = types.BoolValue(false)
+			} else if !data.MultiPartTlvDisableLevels[i].PrefixTlvs.IsNull() {
 				data.MultiPartTlvDisableLevels[i].PrefixTlvs = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiPartTlvDisableLevels[i].PrefixTlvs.IsNull() {
 				data.MultiPartTlvDisableLevels[i].PrefixTlvs = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiPartTlvDisableLevels[i].PrefixTlvs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("router-capability"); value.Exists() {
-			if !data.MultiPartTlvDisableLevels[i].RouterCapability.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MultiPartTlvDisableLevels[i].RouterCapability.IsNull() && !data.MultiPartTlvDisableLevels[i].RouterCapability.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MultiPartTlvDisableLevels[i].RouterCapability = types.BoolValue(false)
+			} else if !data.MultiPartTlvDisableLevels[i].RouterCapability.IsNull() {
 				data.MultiPartTlvDisableLevels[i].RouterCapability = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MultiPartTlvDisableLevels[i].RouterCapability.IsNull() {
 				data.MultiPartTlvDisableLevels[i].RouterCapability = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MultiPartTlvDisableLevels[i].RouterCapability = types.BoolValue(false)
 			}
 		}
 	}
@@ -1891,63 +1939,111 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 			data.LspPasswordLevels[i].LevelNumber = types.Int64Null()
 		}
 		if value := r.Get("text.password-options.send-only"); value.Exists() {
-			if !data.LspPasswordLevels[i].TextSendOnly.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.LspPasswordLevels[i].TextSendOnly.IsNull() && !data.LspPasswordLevels[i].TextSendOnly.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.LspPasswordLevels[i].TextSendOnly = types.BoolValue(false)
+			} else if !data.LspPasswordLevels[i].TextSendOnly.IsNull() {
 				data.LspPasswordLevels[i].TextSendOnly = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.LspPasswordLevels[i].TextSendOnly.IsNull() {
 				data.LspPasswordLevels[i].TextSendOnly = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.LspPasswordLevels[i].TextSendOnly = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("text.password-options.snp.send-only"); value.Exists() {
-			if !data.LspPasswordLevels[i].TextSnpSendOnly.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.LspPasswordLevels[i].TextSnpSendOnly.IsNull() && !data.LspPasswordLevels[i].TextSnpSendOnly.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.LspPasswordLevels[i].TextSnpSendOnly = types.BoolValue(false)
+			} else if !data.LspPasswordLevels[i].TextSnpSendOnly.IsNull() {
 				data.LspPasswordLevels[i].TextSnpSendOnly = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.LspPasswordLevels[i].TextSnpSendOnly.IsNull() {
 				data.LspPasswordLevels[i].TextSnpSendOnly = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.LspPasswordLevels[i].TextSnpSendOnly = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("text.password-options.enable-poi"); value.Exists() {
-			if !data.LspPasswordLevels[i].TextEnablePoi.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.LspPasswordLevels[i].TextEnablePoi.IsNull() && !data.LspPasswordLevels[i].TextEnablePoi.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.LspPasswordLevels[i].TextEnablePoi = types.BoolValue(false)
+			} else if !data.LspPasswordLevels[i].TextEnablePoi.IsNull() {
 				data.LspPasswordLevels[i].TextEnablePoi = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.LspPasswordLevels[i].TextEnablePoi.IsNull() {
 				data.LspPasswordLevels[i].TextEnablePoi = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.LspPasswordLevels[i].TextEnablePoi = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("hmac-md5.password-options.send-only"); value.Exists() {
-			if !data.LspPasswordLevels[i].HmacMd5SendOnly.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.LspPasswordLevels[i].HmacMd5SendOnly.IsNull() && !data.LspPasswordLevels[i].HmacMd5SendOnly.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.LspPasswordLevels[i].HmacMd5SendOnly = types.BoolValue(false)
+			} else if !data.LspPasswordLevels[i].HmacMd5SendOnly.IsNull() {
 				data.LspPasswordLevels[i].HmacMd5SendOnly = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.LspPasswordLevels[i].HmacMd5SendOnly.IsNull() {
 				data.LspPasswordLevels[i].HmacMd5SendOnly = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.LspPasswordLevels[i].HmacMd5SendOnly = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("hmac-md5.password-options.snp.send-only"); value.Exists() {
-			if !data.LspPasswordLevels[i].HmacMd5SnpSendOnly.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.LspPasswordLevels[i].HmacMd5SnpSendOnly.IsNull() && !data.LspPasswordLevels[i].HmacMd5SnpSendOnly.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.LspPasswordLevels[i].HmacMd5SnpSendOnly = types.BoolValue(false)
+			} else if !data.LspPasswordLevels[i].HmacMd5SnpSendOnly.IsNull() {
 				data.LspPasswordLevels[i].HmacMd5SnpSendOnly = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.LspPasswordLevels[i].HmacMd5SnpSendOnly.IsNull() {
 				data.LspPasswordLevels[i].HmacMd5SnpSendOnly = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.LspPasswordLevels[i].HmacMd5SnpSendOnly = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("hmac-md5.password-options.enable-poi"); value.Exists() {
-			if !data.LspPasswordLevels[i].HmacMd5EnablePoi.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.LspPasswordLevels[i].HmacMd5EnablePoi.IsNull() && !data.LspPasswordLevels[i].HmacMd5EnablePoi.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.LspPasswordLevels[i].HmacMd5EnablePoi = types.BoolValue(false)
+			} else if !data.LspPasswordLevels[i].HmacMd5EnablePoi.IsNull() {
 				data.LspPasswordLevels[i].HmacMd5EnablePoi = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.LspPasswordLevels[i].HmacMd5EnablePoi.IsNull() {
 				data.LspPasswordLevels[i].HmacMd5EnablePoi = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.LspPasswordLevels[i].HmacMd5EnablePoi = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("keychain.keychain-name"); value.Exists() && !data.LspPasswordLevels[i].KeychainName.IsNull() {
@@ -1956,33 +2052,57 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 			data.LspPasswordLevels[i].KeychainName = types.StringNull()
 		}
 		if value := r.Get("keychain.send-only"); value.Exists() {
-			if !data.LspPasswordLevels[i].KeychainSendOnly.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.LspPasswordLevels[i].KeychainSendOnly.IsNull() && !data.LspPasswordLevels[i].KeychainSendOnly.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.LspPasswordLevels[i].KeychainSendOnly = types.BoolValue(false)
+			} else if !data.LspPasswordLevels[i].KeychainSendOnly.IsNull() {
 				data.LspPasswordLevels[i].KeychainSendOnly = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.LspPasswordLevels[i].KeychainSendOnly.IsNull() {
 				data.LspPasswordLevels[i].KeychainSendOnly = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.LspPasswordLevels[i].KeychainSendOnly = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("keychain.snp.send-only"); value.Exists() {
-			if !data.LspPasswordLevels[i].KeychainSnpSendOnly.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.LspPasswordLevels[i].KeychainSnpSendOnly.IsNull() && !data.LspPasswordLevels[i].KeychainSnpSendOnly.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.LspPasswordLevels[i].KeychainSnpSendOnly = types.BoolValue(false)
+			} else if !data.LspPasswordLevels[i].KeychainSnpSendOnly.IsNull() {
 				data.LspPasswordLevels[i].KeychainSnpSendOnly = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.LspPasswordLevels[i].KeychainSnpSendOnly.IsNull() {
 				data.LspPasswordLevels[i].KeychainSnpSendOnly = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.LspPasswordLevels[i].KeychainSnpSendOnly = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("keychain.enable-poi"); value.Exists() {
-			if !data.LspPasswordLevels[i].KeychainEnablePoi.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.LspPasswordLevels[i].KeychainEnablePoi.IsNull() && !data.LspPasswordLevels[i].KeychainEnablePoi.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.LspPasswordLevels[i].KeychainEnablePoi = types.BoolValue(false)
+			} else if !data.LspPasswordLevels[i].KeychainEnablePoi.IsNull() {
 				data.LspPasswordLevels[i].KeychainEnablePoi = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.LspPasswordLevels[i].KeychainEnablePoi.IsNull() {
 				data.LspPasswordLevels[i].KeychainEnablePoi = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.LspPasswordLevels[i].KeychainEnablePoi = types.BoolValue(false)
 			}
 		}
 	}
@@ -2209,73 +2329,129 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 			data.MaxMetricLevels[i].OnStartupAdvertise = types.Int64Null()
 		}
 		if value := r.Get("on-startup.wait-for-bgp"); value.Exists() {
-			if !data.MaxMetricLevels[i].OnStartupWaitForBgp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MaxMetricLevels[i].OnStartupWaitForBgp.IsNull() && !data.MaxMetricLevels[i].OnStartupWaitForBgp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MaxMetricLevels[i].OnStartupWaitForBgp = types.BoolValue(false)
+			} else if !data.MaxMetricLevels[i].OnStartupWaitForBgp.IsNull() {
 				data.MaxMetricLevels[i].OnStartupWaitForBgp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MaxMetricLevels[i].OnStartupWaitForBgp.IsNull() {
 				data.MaxMetricLevels[i].OnStartupWaitForBgp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MaxMetricLevels[i].OnStartupWaitForBgp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("external"); value.Exists() {
-			if !data.MaxMetricLevels[i].External.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MaxMetricLevels[i].External.IsNull() && !data.MaxMetricLevels[i].External.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MaxMetricLevels[i].External = types.BoolValue(false)
+			} else if !data.MaxMetricLevels[i].External.IsNull() {
 				data.MaxMetricLevels[i].External = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MaxMetricLevels[i].External.IsNull() {
 				data.MaxMetricLevels[i].External = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MaxMetricLevels[i].External = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("interlevel"); value.Exists() {
-			if !data.MaxMetricLevels[i].Interlevel.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MaxMetricLevels[i].Interlevel.IsNull() && !data.MaxMetricLevels[i].Interlevel.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MaxMetricLevels[i].Interlevel = types.BoolValue(false)
+			} else if !data.MaxMetricLevels[i].Interlevel.IsNull() {
 				data.MaxMetricLevels[i].Interlevel = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MaxMetricLevels[i].Interlevel.IsNull() {
 				data.MaxMetricLevels[i].Interlevel = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MaxMetricLevels[i].Interlevel = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("default-route"); value.Exists() {
-			if !data.MaxMetricLevels[i].DefaultRoute.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MaxMetricLevels[i].DefaultRoute.IsNull() && !data.MaxMetricLevels[i].DefaultRoute.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MaxMetricLevels[i].DefaultRoute = types.BoolValue(false)
+			} else if !data.MaxMetricLevels[i].DefaultRoute.IsNull() {
 				data.MaxMetricLevels[i].DefaultRoute = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MaxMetricLevels[i].DefaultRoute.IsNull() {
 				data.MaxMetricLevels[i].DefaultRoute = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MaxMetricLevels[i].DefaultRoute = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("srv6-locator"); value.Exists() {
-			if !data.MaxMetricLevels[i].Srv6Locator.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MaxMetricLevels[i].Srv6Locator.IsNull() && !data.MaxMetricLevels[i].Srv6Locator.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MaxMetricLevels[i].Srv6Locator = types.BoolValue(false)
+			} else if !data.MaxMetricLevels[i].Srv6Locator.IsNull() {
 				data.MaxMetricLevels[i].Srv6Locator = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MaxMetricLevels[i].Srv6Locator.IsNull() {
 				data.MaxMetricLevels[i].Srv6Locator = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MaxMetricLevels[i].Srv6Locator = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("te"); value.Exists() {
-			if !data.MaxMetricLevels[i].Te.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MaxMetricLevels[i].Te.IsNull() && !data.MaxMetricLevels[i].Te.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MaxMetricLevels[i].Te = types.BoolValue(false)
+			} else if !data.MaxMetricLevels[i].Te.IsNull() {
 				data.MaxMetricLevels[i].Te = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MaxMetricLevels[i].Te.IsNull() {
 				data.MaxMetricLevels[i].Te = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MaxMetricLevels[i].Te = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("delay"); value.Exists() {
-			if !data.MaxMetricLevels[i].Delay.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.MaxMetricLevels[i].Delay.IsNull() && !data.MaxMetricLevels[i].Delay.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.MaxMetricLevels[i].Delay = types.BoolValue(false)
+			} else if !data.MaxMetricLevels[i].Delay.IsNull() {
 				data.MaxMetricLevels[i].Delay = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.MaxMetricLevels[i].Delay.IsNull() {
 				data.MaxMetricLevels[i].Delay = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.MaxMetricLevels[i].Delay = types.BoolValue(false)
 			}
 		}
 	}
@@ -2613,23 +2789,39 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 			data.FlexAlgos[i].MetricType = types.StringNull()
 		}
 		if value := r.Get("advertise-definition"); value.Exists() {
-			if !data.FlexAlgos[i].AdvertiseDefinition.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.FlexAlgos[i].AdvertiseDefinition.IsNull() && !data.FlexAlgos[i].AdvertiseDefinition.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.FlexAlgos[i].AdvertiseDefinition = types.BoolValue(false)
+			} else if !data.FlexAlgos[i].AdvertiseDefinition.IsNull() {
 				data.FlexAlgos[i].AdvertiseDefinition = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.FlexAlgos[i].AdvertiseDefinition.IsNull() {
 				data.FlexAlgos[i].AdvertiseDefinition = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.FlexAlgos[i].AdvertiseDefinition = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("prefix-metric"); value.Exists() {
-			if !data.FlexAlgos[i].PrefixMetric.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.FlexAlgos[i].PrefixMetric.IsNull() && !data.FlexAlgos[i].PrefixMetric.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.FlexAlgos[i].PrefixMetric = types.BoolValue(false)
+			} else if !data.FlexAlgos[i].PrefixMetric.IsNull() {
 				data.FlexAlgos[i].PrefixMetric = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.FlexAlgos[i].PrefixMetric.IsNull() {
 				data.FlexAlgos[i].PrefixMetric = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.FlexAlgos[i].PrefixMetric = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("auto-cost.reference.reference-bandwidth.reference-bandwidth-number"); value.Exists() && !data.FlexAlgos[i].AutoCostReferenceBandwidth.IsNull() {
@@ -2643,13 +2835,21 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 			data.FlexAlgos[i].AutoCostReferenceBandwidthGranularity = types.Int64Null()
 		}
 		if value := r.Get("auto-cost.reference.group-mode"); value.Exists() {
-			if !data.FlexAlgos[i].AutoCostReferenceGroupMode.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.FlexAlgos[i].AutoCostReferenceGroupMode.IsNull() && !data.FlexAlgos[i].AutoCostReferenceGroupMode.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.FlexAlgos[i].AutoCostReferenceGroupMode = types.BoolValue(false)
+			} else if !data.FlexAlgos[i].AutoCostReferenceGroupMode.IsNull() {
 				data.FlexAlgos[i].AutoCostReferenceGroupMode = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.FlexAlgos[i].AutoCostReferenceGroupMode.IsNull() {
 				data.FlexAlgos[i].AutoCostReferenceGroupMode = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.FlexAlgos[i].AutoCostReferenceGroupMode = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("affinity.exclude-any.exclude-any-argument"); value.Exists() && !data.FlexAlgos[i].AffinityExcludeAny.IsNull() {
@@ -2688,53 +2888,93 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 			data.FlexAlgos[i].SrlgExcludeAny = types.ListNull(types.StringType)
 		}
 		if value := r.Get("fast-reroute.disable"); value.Exists() {
-			if !data.FlexAlgos[i].FastRerouteDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.FlexAlgos[i].FastRerouteDisable.IsNull() && !data.FlexAlgos[i].FastRerouteDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.FlexAlgos[i].FastRerouteDisable = types.BoolValue(false)
+			} else if !data.FlexAlgos[i].FastRerouteDisable.IsNull() {
 				data.FlexAlgos[i].FastRerouteDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.FlexAlgos[i].FastRerouteDisable.IsNull() {
 				data.FlexAlgos[i].FastRerouteDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.FlexAlgos[i].FastRerouteDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("microloop.avoidance.disable"); value.Exists() {
-			if !data.FlexAlgos[i].MicroloopAvoidanceDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.FlexAlgos[i].MicroloopAvoidanceDisable.IsNull() && !data.FlexAlgos[i].MicroloopAvoidanceDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.FlexAlgos[i].MicroloopAvoidanceDisable = types.BoolValue(false)
+			} else if !data.FlexAlgos[i].MicroloopAvoidanceDisable.IsNull() {
 				data.FlexAlgos[i].MicroloopAvoidanceDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.FlexAlgos[i].MicroloopAvoidanceDisable.IsNull() {
 				data.FlexAlgos[i].MicroloopAvoidanceDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.FlexAlgos[i].MicroloopAvoidanceDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("data-plane.segment-routing"); value.Exists() {
-			if !data.FlexAlgos[i].DataPlaneSegmentRouting.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.FlexAlgos[i].DataPlaneSegmentRouting.IsNull() && !data.FlexAlgos[i].DataPlaneSegmentRouting.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.FlexAlgos[i].DataPlaneSegmentRouting = types.BoolValue(false)
+			} else if !data.FlexAlgos[i].DataPlaneSegmentRouting.IsNull() {
 				data.FlexAlgos[i].DataPlaneSegmentRouting = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.FlexAlgos[i].DataPlaneSegmentRouting.IsNull() {
 				data.FlexAlgos[i].DataPlaneSegmentRouting = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.FlexAlgos[i].DataPlaneSegmentRouting = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("data-plane.ip"); value.Exists() {
-			if !data.FlexAlgos[i].DataPlaneIp.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.FlexAlgos[i].DataPlaneIp.IsNull() && !data.FlexAlgos[i].DataPlaneIp.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.FlexAlgos[i].DataPlaneIp = types.BoolValue(false)
+			} else if !data.FlexAlgos[i].DataPlaneIp.IsNull() {
 				data.FlexAlgos[i].DataPlaneIp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.FlexAlgos[i].DataPlaneIp.IsNull() {
 				data.FlexAlgos[i].DataPlaneIp = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.FlexAlgos[i].DataPlaneIp = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("ucmp.disable"); value.Exists() {
-			if !data.FlexAlgos[i].UcmpDisable.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.FlexAlgos[i].UcmpDisable.IsNull() && !data.FlexAlgos[i].UcmpDisable.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.FlexAlgos[i].UcmpDisable = types.BoolValue(false)
+			} else if !data.FlexAlgos[i].UcmpDisable.IsNull() {
 				data.FlexAlgos[i].UcmpDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.FlexAlgos[i].UcmpDisable.IsNull() {
 				data.FlexAlgos[i].UcmpDisable = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.FlexAlgos[i].UcmpDisable = types.BoolValue(false)
 			}
 		}
 		for ci := range data.FlexAlgos[i].AddressFamily {
@@ -5174,17 +5414,17 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("on-startup.wait-for-bgp"); cValue.Exists() {
 				item.OnStartupWaitForBgp = types.BoolValue(true)
 			} else {
-				item.OnStartupWaitForBgp = types.BoolNull()
+				item.OnStartupWaitForBgp = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertise.external"); cValue.Exists() {
 				item.AdvertiseExternal = types.BoolValue(true)
 			} else {
-				item.AdvertiseExternal = types.BoolNull()
+				item.AdvertiseExternal = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertise.interlevel"); cValue.Exists() {
 				item.AdvertiseInterlevel = types.BoolValue(true)
 			} else {
-				item.AdvertiseInterlevel = types.BoolNull()
+				item.AdvertiseInterlevel = types.BoolValue(false)
 			}
 			data.SetOverloadBitLevels = append(data.SetOverloadBitLevels, item)
 			return true
@@ -5332,17 +5572,17 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("neighbor"); cValue.Exists() {
 				item.Neighbor = types.BoolValue(true)
 			} else {
-				item.Neighbor = types.BoolNull()
+				item.Neighbor = types.BoolValue(false)
 			}
 			if cValue := v.Get("prefix-tlvs"); cValue.Exists() {
 				item.PrefixTlvs = types.BoolValue(true)
 			} else {
-				item.PrefixTlvs = types.BoolNull()
+				item.PrefixTlvs = types.BoolValue(false)
 			}
 			if cValue := v.Get("router-capability"); cValue.Exists() {
 				item.RouterCapability = types.BoolValue(true)
 			} else {
-				item.RouterCapability = types.BoolNull()
+				item.RouterCapability = types.BoolValue(false)
 			}
 			data.MultiPartTlvDisableLevels = append(data.MultiPartTlvDisableLevels, item)
 			return true
@@ -5446,32 +5686,32 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("text.password-options.send-only"); cValue.Exists() {
 				item.TextSendOnly = types.BoolValue(true)
 			} else {
-				item.TextSendOnly = types.BoolNull()
+				item.TextSendOnly = types.BoolValue(false)
 			}
 			if cValue := v.Get("text.password-options.snp.send-only"); cValue.Exists() {
 				item.TextSnpSendOnly = types.BoolValue(true)
 			} else {
-				item.TextSnpSendOnly = types.BoolNull()
+				item.TextSnpSendOnly = types.BoolValue(false)
 			}
 			if cValue := v.Get("text.password-options.enable-poi"); cValue.Exists() {
 				item.TextEnablePoi = types.BoolValue(true)
 			} else {
-				item.TextEnablePoi = types.BoolNull()
+				item.TextEnablePoi = types.BoolValue(false)
 			}
 			if cValue := v.Get("hmac-md5.password-options.send-only"); cValue.Exists() {
 				item.HmacMd5SendOnly = types.BoolValue(true)
 			} else {
-				item.HmacMd5SendOnly = types.BoolNull()
+				item.HmacMd5SendOnly = types.BoolValue(false)
 			}
 			if cValue := v.Get("hmac-md5.password-options.snp.send-only"); cValue.Exists() {
 				item.HmacMd5SnpSendOnly = types.BoolValue(true)
 			} else {
-				item.HmacMd5SnpSendOnly = types.BoolNull()
+				item.HmacMd5SnpSendOnly = types.BoolValue(false)
 			}
 			if cValue := v.Get("hmac-md5.password-options.enable-poi"); cValue.Exists() {
 				item.HmacMd5EnablePoi = types.BoolValue(true)
 			} else {
-				item.HmacMd5EnablePoi = types.BoolNull()
+				item.HmacMd5EnablePoi = types.BoolValue(false)
 			}
 			if cValue := v.Get("keychain.keychain-name"); cValue.Exists() {
 				item.KeychainName = types.StringValue(cValue.String())
@@ -5479,17 +5719,17 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("keychain.send-only"); cValue.Exists() {
 				item.KeychainSendOnly = types.BoolValue(true)
 			} else {
-				item.KeychainSendOnly = types.BoolNull()
+				item.KeychainSendOnly = types.BoolValue(false)
 			}
 			if cValue := v.Get("keychain.snp.send-only"); cValue.Exists() {
 				item.KeychainSnpSendOnly = types.BoolValue(true)
 			} else {
-				item.KeychainSnpSendOnly = types.BoolNull()
+				item.KeychainSnpSendOnly = types.BoolValue(false)
 			}
 			if cValue := v.Get("keychain.enable-poi"); cValue.Exists() {
 				item.KeychainEnablePoi = types.BoolValue(true)
 			} else {
-				item.KeychainEnablePoi = types.BoolNull()
+				item.KeychainEnablePoi = types.BoolValue(false)
 			}
 			data.LspPasswordLevels = append(data.LspPasswordLevels, item)
 			return true
@@ -5603,37 +5843,37 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("on-startup.wait-for-bgp"); cValue.Exists() {
 				item.OnStartupWaitForBgp = types.BoolValue(true)
 			} else {
-				item.OnStartupWaitForBgp = types.BoolNull()
+				item.OnStartupWaitForBgp = types.BoolValue(false)
 			}
 			if cValue := v.Get("external"); cValue.Exists() {
 				item.External = types.BoolValue(true)
 			} else {
-				item.External = types.BoolNull()
+				item.External = types.BoolValue(false)
 			}
 			if cValue := v.Get("interlevel"); cValue.Exists() {
 				item.Interlevel = types.BoolValue(true)
 			} else {
-				item.Interlevel = types.BoolNull()
+				item.Interlevel = types.BoolValue(false)
 			}
 			if cValue := v.Get("default-route"); cValue.Exists() {
 				item.DefaultRoute = types.BoolValue(true)
 			} else {
-				item.DefaultRoute = types.BoolNull()
+				item.DefaultRoute = types.BoolValue(false)
 			}
 			if cValue := v.Get("srv6-locator"); cValue.Exists() {
 				item.Srv6Locator = types.BoolValue(true)
 			} else {
-				item.Srv6Locator = types.BoolNull()
+				item.Srv6Locator = types.BoolValue(false)
 			}
 			if cValue := v.Get("te"); cValue.Exists() {
 				item.Te = types.BoolValue(true)
 			} else {
-				item.Te = types.BoolNull()
+				item.Te = types.BoolValue(false)
 			}
 			if cValue := v.Get("delay"); cValue.Exists() {
 				item.Delay = types.BoolValue(true)
 			} else {
-				item.Delay = types.BoolNull()
+				item.Delay = types.BoolValue(false)
 			}
 			data.MaxMetricLevels = append(data.MaxMetricLevels, item)
 			return true
@@ -5794,12 +6034,12 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("advertise-definition"); cValue.Exists() {
 				item.AdvertiseDefinition = types.BoolValue(true)
 			} else {
-				item.AdvertiseDefinition = types.BoolNull()
+				item.AdvertiseDefinition = types.BoolValue(false)
 			}
 			if cValue := v.Get("prefix-metric"); cValue.Exists() {
 				item.PrefixMetric = types.BoolValue(true)
 			} else {
-				item.PrefixMetric = types.BoolNull()
+				item.PrefixMetric = types.BoolValue(false)
 			}
 			if cValue := v.Get("auto-cost.reference.reference-bandwidth.reference-bandwidth-number"); cValue.Exists() {
 				item.AutoCostReferenceBandwidth = types.Int64Value(cValue.Int())
@@ -5810,7 +6050,7 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("auto-cost.reference.group-mode"); cValue.Exists() {
 				item.AutoCostReferenceGroupMode = types.BoolValue(true)
 			} else {
-				item.AutoCostReferenceGroupMode = types.BoolNull()
+				item.AutoCostReferenceGroupMode = types.BoolValue(false)
 			}
 			if cValue := v.Get("affinity.exclude-any.exclude-any-argument"); cValue.Exists() {
 				item.AffinityExcludeAny = helpers.GetStringList(cValue.Array())
@@ -5850,27 +6090,27 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("fast-reroute.disable"); cValue.Exists() {
 				item.FastRerouteDisable = types.BoolValue(true)
 			} else {
-				item.FastRerouteDisable = types.BoolNull()
+				item.FastRerouteDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("microloop.avoidance.disable"); cValue.Exists() {
 				item.MicroloopAvoidanceDisable = types.BoolValue(true)
 			} else {
-				item.MicroloopAvoidanceDisable = types.BoolNull()
+				item.MicroloopAvoidanceDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("data-plane.segment-routing"); cValue.Exists() {
 				item.DataPlaneSegmentRouting = types.BoolValue(true)
 			} else {
-				item.DataPlaneSegmentRouting = types.BoolNull()
+				item.DataPlaneSegmentRouting = types.BoolValue(false)
 			}
 			if cValue := v.Get("data-plane.ip"); cValue.Exists() {
 				item.DataPlaneIp = types.BoolValue(true)
 			} else {
-				item.DataPlaneIp = types.BoolNull()
+				item.DataPlaneIp = types.BoolValue(false)
 			}
 			if cValue := v.Get("ucmp.disable"); cValue.Exists() {
 				item.UcmpDisable = types.BoolValue(true)
 			} else {
-				item.UcmpDisable = types.BoolNull()
+				item.UcmpDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("address-families.address-family"); cValue.Exists() {
 				item.AddressFamily = make([]RouterISISFlexAlgosAddressFamily, 0)

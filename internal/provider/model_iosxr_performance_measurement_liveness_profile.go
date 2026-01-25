@@ -476,13 +476,21 @@ func (data *PerformanceMeasurementLivenessProfile) updateFromBody(ctx context.Co
 			data.Profiles[i].LivenessDetectionMultiplier = types.Int64Null()
 		}
 		if value := r.Get("liveness-detection.logging.state-change"); value.Exists() {
-			if !data.Profiles[i].LivenessDetectionLoggingStateChange.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Profiles[i].LivenessDetectionLoggingStateChange.IsNull() && !data.Profiles[i].LivenessDetectionLoggingStateChange.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Profiles[i].LivenessDetectionLoggingStateChange = types.BoolValue(false)
+			} else if !data.Profiles[i].LivenessDetectionLoggingStateChange.IsNull() {
 				data.Profiles[i].LivenessDetectionLoggingStateChange = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Profiles[i].LivenessDetectionLoggingStateChange.IsNull() {
 				data.Profiles[i].LivenessDetectionLoggingStateChange = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Profiles[i].LivenessDetectionLoggingStateChange = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("probe.tx-interval"); value.Exists() && !data.Profiles[i].ProbeTxInterval.IsNull() {
@@ -491,13 +499,21 @@ func (data *PerformanceMeasurementLivenessProfile) updateFromBody(ctx context.Co
 			data.Profiles[i].ProbeTxInterval = types.Int64Null()
 		}
 		if value := r.Get("probe.flow-label.explicits"); value.Exists() {
-			if !data.Profiles[i].ProbeFlowLabelExplicit.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Profiles[i].ProbeFlowLabelExplicit.IsNull() && !data.Profiles[i].ProbeFlowLabelExplicit.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Profiles[i].ProbeFlowLabelExplicit = types.BoolValue(false)
+			} else if !data.Profiles[i].ProbeFlowLabelExplicit.IsNull() {
 				data.Profiles[i].ProbeFlowLabelExplicit = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Profiles[i].ProbeFlowLabelExplicit.IsNull() {
 				data.Profiles[i].ProbeFlowLabelExplicit = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Profiles[i].ProbeFlowLabelExplicit = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("probe.flow-label.explicits.explicit"); value.Exists() && !data.Profiles[i].ProbeFlowLabelExplicitList.IsNull() {
@@ -536,13 +552,21 @@ func (data *PerformanceMeasurementLivenessProfile) updateFromBody(ctx context.Co
 			data.Profiles[i].ProbeTosDscp = types.Int64Null()
 		}
 		if value := r.Get("npu-offload"); value.Exists() {
-			if !data.Profiles[i].NpuOffload.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Profiles[i].NpuOffload.IsNull() && !data.Profiles[i].NpuOffload.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Profiles[i].NpuOffload = types.BoolValue(false)
+			} else if !data.Profiles[i].NpuOffload.IsNull() {
 				data.Profiles[i].NpuOffload = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Profiles[i].NpuOffload.IsNull() {
 				data.Profiles[i].NpuOffload = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Profiles[i].NpuOffload = types.BoolValue(false)
 			}
 		}
 	}
@@ -1061,7 +1085,7 @@ func (data *PerformanceMeasurementLivenessProfile) fromBody(ctx context.Context,
 			if cValue := v.Get("liveness-detection.logging.state-change"); cValue.Exists() {
 				item.LivenessDetectionLoggingStateChange = types.BoolValue(true)
 			} else {
-				item.LivenessDetectionLoggingStateChange = types.BoolNull()
+				item.LivenessDetectionLoggingStateChange = types.BoolValue(false)
 			}
 			if cValue := v.Get("probe.tx-interval"); cValue.Exists() {
 				item.ProbeTxInterval = types.Int64Value(cValue.Int())
@@ -1069,7 +1093,7 @@ func (data *PerformanceMeasurementLivenessProfile) fromBody(ctx context.Context,
 			if cValue := v.Get("probe.flow-label.explicits"); cValue.Exists() {
 				item.ProbeFlowLabelExplicit = types.BoolValue(true)
 			} else {
-				item.ProbeFlowLabelExplicit = types.BoolNull()
+				item.ProbeFlowLabelExplicit = types.BoolValue(false)
 			}
 			if cValue := v.Get("probe.flow-label.explicits.explicit"); cValue.Exists() {
 				item.ProbeFlowLabelExplicitList = helpers.GetInt64List(cValue.Array())
@@ -1097,7 +1121,7 @@ func (data *PerformanceMeasurementLivenessProfile) fromBody(ctx context.Context,
 			if cValue := v.Get("npu-offload"); cValue.Exists() {
 				item.NpuOffload = types.BoolValue(true)
 			} else {
-				item.NpuOffload = types.BoolNull()
+				item.NpuOffload = types.BoolValue(false)
 			}
 			data.Profiles = append(data.Profiles, item)
 			return true

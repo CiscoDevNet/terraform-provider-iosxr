@@ -280,13 +280,21 @@ func (data *TPA) updateFromBody(ctx context.Context, res []byte) {
 			data.Vrfs[i].VrfName = types.StringNull()
 		}
 		if value := r.Get("address-family.ipv4.update-source.dataports.active-management"); value.Exists() {
-			if !data.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement.IsNull() && !data.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement = types.BoolValue(false)
+			} else if !data.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement.IsNull() {
 				data.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement.IsNull() {
 				data.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("address-family.ipv4.update-source.dataports.interface"); value.Exists() && !data.Vrfs[i].Ipv4UpdateSourceDataports.IsNull() {
@@ -295,23 +303,39 @@ func (data *TPA) updateFromBody(ctx context.Context, res []byte) {
 			data.Vrfs[i].Ipv4UpdateSourceDataports = types.StringNull()
 		}
 		if value := r.Get("address-family.ipv4.default-route.mgmt"); value.Exists() {
-			if !data.Vrfs[i].Ipv4DefaultRouteMgmt.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Vrfs[i].Ipv4DefaultRouteMgmt.IsNull() && !data.Vrfs[i].Ipv4DefaultRouteMgmt.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Vrfs[i].Ipv4DefaultRouteMgmt = types.BoolValue(false)
+			} else if !data.Vrfs[i].Ipv4DefaultRouteMgmt.IsNull() {
 				data.Vrfs[i].Ipv4DefaultRouteMgmt = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Vrfs[i].Ipv4DefaultRouteMgmt.IsNull() {
 				data.Vrfs[i].Ipv4DefaultRouteMgmt = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Vrfs[i].Ipv4DefaultRouteMgmt = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("address-family.ipv6.update-source.dataports.active-management"); value.Exists() {
-			if !data.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement.IsNull() && !data.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement = types.BoolValue(false)
+			} else if !data.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement.IsNull() {
 				data.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement.IsNull() {
 				data.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("address-family.ipv6.update-source.dataports.interface"); value.Exists() && !data.Vrfs[i].Ipv6UpdateSourceDataports.IsNull() {
@@ -320,13 +344,21 @@ func (data *TPA) updateFromBody(ctx context.Context, res []byte) {
 			data.Vrfs[i].Ipv6UpdateSourceDataports = types.StringNull()
 		}
 		if value := r.Get("address-family.ipv6.default-route.mgmt"); value.Exists() {
-			if !data.Vrfs[i].Ipv6DefaultRouteMgmt.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Vrfs[i].Ipv6DefaultRouteMgmt.IsNull() && !data.Vrfs[i].Ipv6DefaultRouteMgmt.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Vrfs[i].Ipv6DefaultRouteMgmt = types.BoolValue(false)
+			} else if !data.Vrfs[i].Ipv6DefaultRouteMgmt.IsNull() {
 				data.Vrfs[i].Ipv6DefaultRouteMgmt = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.Vrfs[i].Ipv6DefaultRouteMgmt.IsNull() {
 				data.Vrfs[i].Ipv6DefaultRouteMgmt = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Vrfs[i].Ipv6DefaultRouteMgmt = types.BoolValue(false)
 			}
 		}
 		for ci := range data.Vrfs[i].Ipv4UpdateSourceDestinations {
@@ -800,7 +832,7 @@ func (data *TPA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("address-family.ipv4.update-source.dataports.active-management"); cValue.Exists() {
 				item.Ipv4UpdateSourceDataportsActiveManagement = types.BoolValue(true)
 			} else {
-				item.Ipv4UpdateSourceDataportsActiveManagement = types.BoolNull()
+				item.Ipv4UpdateSourceDataportsActiveManagement = types.BoolValue(false)
 			}
 			if cValue := v.Get("address-family.ipv4.update-source.dataports.interface"); cValue.Exists() {
 				item.Ipv4UpdateSourceDataports = types.StringValue(cValue.String())
@@ -808,12 +840,12 @@ func (data *TPA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("address-family.ipv4.default-route.mgmt"); cValue.Exists() {
 				item.Ipv4DefaultRouteMgmt = types.BoolValue(true)
 			} else {
-				item.Ipv4DefaultRouteMgmt = types.BoolNull()
+				item.Ipv4DefaultRouteMgmt = types.BoolValue(false)
 			}
 			if cValue := v.Get("address-family.ipv6.update-source.dataports.active-management"); cValue.Exists() {
 				item.Ipv6UpdateSourceDataportsActiveManagement = types.BoolValue(true)
 			} else {
-				item.Ipv6UpdateSourceDataportsActiveManagement = types.BoolNull()
+				item.Ipv6UpdateSourceDataportsActiveManagement = types.BoolValue(false)
 			}
 			if cValue := v.Get("address-family.ipv6.update-source.dataports.interface"); cValue.Exists() {
 				item.Ipv6UpdateSourceDataports = types.StringValue(cValue.String())
@@ -821,7 +853,7 @@ func (data *TPA) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("address-family.ipv6.default-route.mgmt"); cValue.Exists() {
 				item.Ipv6DefaultRouteMgmt = types.BoolValue(true)
 			} else {
-				item.Ipv6DefaultRouteMgmt = types.BoolNull()
+				item.Ipv6DefaultRouteMgmt = types.BoolValue(false)
 			}
 			if cValue := v.Get("address-family.ipv4.update-source.destinations.destination"); cValue.Exists() {
 				item.Ipv4UpdateSourceDestinations = make([]TPAVrfsIpv4UpdateSourceDestinations, 0)

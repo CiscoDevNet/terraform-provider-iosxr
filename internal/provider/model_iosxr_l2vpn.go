@@ -458,13 +458,18 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 				data.RedundancyIccpGroups[i].Interfaces[ci].SecondaryVlan = types.StringNull()
 			}
 			if value := cr.Get("mac-flush.stp-tcn"); value.Exists() {
-				if !data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.IsNull() {
+				// For presence-based booleans: if state has explicit false, preserve it
+				if !data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.IsNull() && !data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.ValueBool() {
+					data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn = types.BoolValue(false)
+				} else if !data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.IsNull() {
 					data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn = types.BoolValue(true)
 				}
 			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
+				// Element doesn't exist on device
 				if data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.IsNull() {
 					data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn = types.BoolNull()
+				} else {
+					data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn = types.BoolValue(false)
 				}
 			}
 			if value := cr.Get("recovery.delay"); value.Exists() {
@@ -1549,7 +1554,7 @@ func (data *L2VPN) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("mac-flush.stp-tcn"); ccValue.Exists() {
 						cItem.MacFlushStpTcn = types.BoolValue(true)
 					} else {
-						cItem.MacFlushStpTcn = types.BoolNull()
+						cItem.MacFlushStpTcn = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("recovery.delay"); ccValue.Exists() {
 						cItem.RecoveryDelay = types.Int64Value(ccValue.Int())

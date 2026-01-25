@@ -1198,13 +1198,21 @@ func (data *InterfaceTunnelTE) updateFromBody(ctx context.Context, res []byte) {
 			data.PathOptions[i].Preference = types.Int64Null()
 		}
 		if value := r.Get("dynamic"); value.Exists() {
-			if !data.PathOptions[i].Dynamic.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.PathOptions[i].Dynamic.IsNull() && !data.PathOptions[i].Dynamic.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.PathOptions[i].Dynamic = types.BoolValue(false)
+			} else if !data.PathOptions[i].Dynamic.IsNull() {
 				data.PathOptions[i].Dynamic = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.PathOptions[i].Dynamic.IsNull() {
 				data.PathOptions[i].Dynamic = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.PathOptions[i].Dynamic = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("explicit.identifier"); value.Exists() && !data.PathOptions[i].ExplicitPathId.IsNull() {
@@ -1218,13 +1226,21 @@ func (data *InterfaceTunnelTE) updateFromBody(ctx context.Context, res []byte) {
 			data.PathOptions[i].ExplicitPathName = types.StringNull()
 		}
 		if value := r.Get("explicit.verbatim"); value.Exists() {
-			if !data.PathOptions[i].ExplicitPathVerbatim.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.PathOptions[i].ExplicitPathVerbatim.IsNull() && !data.PathOptions[i].ExplicitPathVerbatim.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.PathOptions[i].ExplicitPathVerbatim = types.BoolValue(false)
+			} else if !data.PathOptions[i].ExplicitPathVerbatim.IsNull() {
 				data.PathOptions[i].ExplicitPathVerbatim = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.PathOptions[i].ExplicitPathVerbatim.IsNull() {
 				data.PathOptions[i].ExplicitPathVerbatim = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.PathOptions[i].ExplicitPathVerbatim = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("ospf.instance-name"); value.Exists() && !data.PathOptions[i].OspfInstance.IsNull() {
@@ -1268,23 +1284,39 @@ func (data *InterfaceTunnelTE) updateFromBody(ctx context.Context, res []byte) {
 			data.PathOptions[i].ProtectedByIndexSecondary = types.Int64Null()
 		}
 		if value := r.Get("lockdown"); value.Exists() {
-			if !data.PathOptions[i].Lockdown.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.PathOptions[i].Lockdown.IsNull() && !data.PathOptions[i].Lockdown.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.PathOptions[i].Lockdown = types.BoolValue(false)
+			} else if !data.PathOptions[i].Lockdown.IsNull() {
 				data.PathOptions[i].Lockdown = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.PathOptions[i].Lockdown.IsNull() {
 				data.PathOptions[i].Lockdown = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.PathOptions[i].Lockdown = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("lockdown.sticky"); value.Exists() {
-			if !data.PathOptions[i].LockdownSticky.IsNull() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.PathOptions[i].LockdownSticky.IsNull() && !data.PathOptions[i].LockdownSticky.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.PathOptions[i].LockdownSticky = types.BoolValue(false)
+			} else if !data.PathOptions[i].LockdownSticky.IsNull() {
 				data.PathOptions[i].LockdownSticky = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// Element doesn't exist on device
 			if data.PathOptions[i].LockdownSticky.IsNull() {
 				data.PathOptions[i].LockdownSticky = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.PathOptions[i].LockdownSticky = types.BoolValue(false)
 			}
 		}
 	}
@@ -3119,7 +3151,7 @@ func (data *InterfaceTunnelTE) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("dynamic"); cValue.Exists() {
 				item.Dynamic = types.BoolValue(true)
 			} else {
-				item.Dynamic = types.BoolNull()
+				item.Dynamic = types.BoolValue(false)
 			}
 			if cValue := v.Get("explicit.identifier"); cValue.Exists() {
 				item.ExplicitPathId = types.Int64Value(cValue.Int())
@@ -3130,7 +3162,7 @@ func (data *InterfaceTunnelTE) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("explicit.verbatim"); cValue.Exists() {
 				item.ExplicitPathVerbatim = types.BoolValue(true)
 			} else {
-				item.ExplicitPathVerbatim = types.BoolNull()
+				item.ExplicitPathVerbatim = types.BoolValue(false)
 			}
 			if cValue := v.Get("ospf.instance-name"); cValue.Exists() {
 				item.OspfInstance = types.StringValue(cValue.String())
@@ -3159,12 +3191,12 @@ func (data *InterfaceTunnelTE) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("lockdown"); cValue.Exists() {
 				item.Lockdown = types.BoolValue(true)
 			} else {
-				item.Lockdown = types.BoolNull()
+				item.Lockdown = types.BoolValue(false)
 			}
 			if cValue := v.Get("lockdown.sticky"); cValue.Exists() {
 				item.LockdownSticky = types.BoolValue(true)
 			} else {
-				item.LockdownSticky = types.BoolNull()
+				item.LockdownSticky = types.BoolValue(false)
 			}
 			data.PathOptions = append(data.PathOptions, item)
 			return true

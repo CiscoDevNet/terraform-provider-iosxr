@@ -24,7 +24,11 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -58,6 +62,19 @@ func (data BannerData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-banner-cfg:/banners/banner[banner-type=%s]", data.BannerType.ValueString())
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data Banner) getXPath() string {
+	path := "Cisco-IOS-XR-um-banner-cfg:/banners/banner[banner-type=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.BannerType.ValueString()))
+	return path
+}
+
+func (data BannerData) getXPath() string {
+	path := "Cisco-IOS-XR-um-banner-cfg:/banners/banner[banner-type=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.BannerType.ValueString()))
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -75,6 +92,25 @@ func (data Banner) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data Banner) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.BannerType.IsNull() && !data.BannerType.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/banner-type", data.BannerType.ValueString())
+	}
+	if !data.Line.IsNull() && !data.Line.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/line", data.Line.ValueString())
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *Banner) updateFromBody(ctx context.Context, res []byte) {
@@ -87,10 +123,31 @@ func (data *Banner) updateFromBody(ctx context.Context, res []byte) {
 
 // End of section. //template:end updateFromBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *Banner) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/banner-type"); value.Exists() {
+		data.BannerType = types.StringValue(value.String())
+	} else if data.BannerType.IsNull() {
+		data.BannerType = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/line"); value.Exists() {
+		data.Line = types.StringValue(value.String())
+	} else if data.Line.IsNull() {
+		data.Line = types.StringNull()
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *Banner) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "line"); value.Exists() {
+func (data *Banner) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "line"); value.Exists() {
 		data.Line = types.StringValue(value.String())
 	}
 }
@@ -99,13 +156,37 @@ func (data *Banner) fromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *BannerData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "line"); value.Exists() {
+func (data *BannerData) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "line"); value.Exists() {
 		data.Line = types.StringValue(value.String())
 	}
 }
 
 // End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *Banner) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/line"); value.Exists() {
+		data.Line = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *BannerData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/line"); value.Exists() {
+		data.Line = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
@@ -121,7 +202,7 @@ func (data *Banner) getDeletedItems(ctx context.Context, state Banner) []string 
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *Banner) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *Banner) getEmptyLeafsDelete(ctx context.Context, state *Banner) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
 }
@@ -135,7 +216,43 @@ func (data *Banner) getDeletePaths(ctx context.Context) []string {
 	if !data.Line.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/line", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *Banner) addDeletedItemsXML(ctx context.Context, state Banner, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.Line.IsNull() && data.Line.IsNull() {
+		deletePath := state.getXPath() + "/line"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *Banner) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.Line.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/line")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

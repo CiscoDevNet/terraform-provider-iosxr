@@ -25,8 +25,13 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
+	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -80,6 +85,17 @@ func (data AAAAuthentication) getPath() string {
 
 func (data AAAAuthenticationData) getPath() string {
 	return "Cisco-IOS-XR-um-aaa-cfg:/aaa/authentication"
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data AAAAuthentication) getXPath() string {
+	path := "Cisco-IOS-XR-um-aaa-cfg:/aaa/authentication"
+	return path
+}
+
+func (data AAAAuthenticationData) getXPath() string {
+	path := "Cisco-IOS-XR-um-aaa-cfg:/aaa/authentication"
+	return path
 }
 
 // End of section. //template:end getPath
@@ -193,6 +209,122 @@ func (data AAAAuthentication) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data AAAAuthentication) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if len(data.Login) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.Login {
+			cBody := netconf.Body{}
+			if !item.List.IsNull() && !item.List.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "list-name", item.List.ValueString())
+			}
+			if !item.A1Local.IsNull() && !item.A1Local.IsUnknown() {
+				if item.A1Local.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "local", "")
+				}
+			}
+			if !item.A1Line.IsNull() && !item.A1Line.IsUnknown() {
+				if item.A1Line.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "line", "")
+				}
+			}
+			if !item.A1Tacacs.IsNull() && !item.A1Tacacs.IsUnknown() {
+				if item.A1Tacacs.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "groups/group-1/tacacs", "")
+				}
+			}
+			if !item.A1Radius.IsNull() && !item.A1Radius.IsUnknown() {
+				if item.A1Radius.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "groups/group-1/radius", "")
+				}
+			}
+			if !item.A1Group.IsNull() && !item.A1Group.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "groups/group-1/server-group-name", item.A1Group.ValueString())
+			}
+			if !item.A2Local.IsNull() && !item.A2Local.IsUnknown() {
+				if item.A2Local.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "groups/group-2/local", "")
+				}
+			}
+			if !item.A2Line.IsNull() && !item.A2Line.IsUnknown() {
+				if item.A2Line.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "groups/group-2/line", "")
+				}
+			}
+			if !item.A2Tacacs.IsNull() && !item.A2Tacacs.IsUnknown() {
+				if item.A2Tacacs.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "groups/group-2/tacacs", "")
+				}
+			}
+			if !item.A2Radius.IsNull() && !item.A2Radius.IsUnknown() {
+				if item.A2Radius.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "groups/group-2/radius", "")
+				}
+			}
+			if !item.A2Group.IsNull() && !item.A2Group.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "groups/group-2/server-group-name", item.A2Group.ValueString())
+			}
+			if !item.A3Local.IsNull() && !item.A3Local.IsUnknown() {
+				if item.A3Local.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "groups/group-3/local", "")
+				}
+			}
+			if !item.A3Line.IsNull() && !item.A3Line.IsUnknown() {
+				if item.A3Line.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "groups/group-3/line", "")
+				}
+			}
+			if !item.A3Tacacs.IsNull() && !item.A3Tacacs.IsUnknown() {
+				if item.A3Tacacs.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "groups/group-3/tacacs", "")
+				}
+			}
+			if !item.A3Radius.IsNull() && !item.A3Radius.IsUnknown() {
+				if item.A3Radius.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "groups/group-3/radius", "")
+				}
+			}
+			if !item.A3Group.IsNull() && !item.A3Group.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "groups/group-3/server-group-name", item.A3Group.ValueString())
+			}
+			if !item.A4Local.IsNull() && !item.A4Local.IsUnknown() {
+				if item.A4Local.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "groups/group-4/local", "")
+				}
+			}
+			if !item.A4Line.IsNull() && !item.A4Line.IsUnknown() {
+				if item.A4Line.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "groups/group-4/line", "")
+				}
+			}
+			if !item.A4Tacacs.IsNull() && !item.A4Tacacs.IsUnknown() {
+				if item.A4Tacacs.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "groups/group-4/tacacs", "")
+				}
+			}
+			if !item.A4Radius.IsNull() && !item.A4Radius.IsUnknown() {
+				if item.A4Radius.ValueBool() {
+					cBody = helpers.SetFromXPath(cBody, "groups/group-4/radius", "")
+				}
+			}
+			if !item.A4Group.IsNull() && !item.A4Group.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "groups/group-4/server-group-name", item.A4Group.ValueString())
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"login/authentication-list", cBody.Res())
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *AAAAuthentication) updateFromBody(ctx context.Context, res []byte) {
@@ -224,164 +356,308 @@ func (data *AAAAuthentication) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Login[i].List = types.StringNull()
 		}
-		if value := r.Get("local"); !data.Login[i].A1Local.IsNull() {
-			if value.Exists() {
+		if value := r.Get("local"); value.Exists() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Login[i].A1Local.IsNull() && !data.Login[i].A1Local.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Login[i].A1Local = types.BoolValue(false)
+			} else if !data.Login[i].A1Local.IsNull() {
 				data.Login[i].A1Local = types.BoolValue(true)
+			}
+		} else {
+			// Element doesn't exist on device
+			if data.Login[i].A1Local.IsNull() {
+				data.Login[i].A1Local = types.BoolNull()
 			} else {
+				// Preserve false value from state when element doesn't exist
 				data.Login[i].A1Local = types.BoolValue(false)
 			}
-		} else {
-			data.Login[i].A1Local = types.BoolNull()
 		}
-		if value := r.Get("line"); !data.Login[i].A1Line.IsNull() {
-			if value.Exists() {
+		if value := r.Get("line"); value.Exists() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Login[i].A1Line.IsNull() && !data.Login[i].A1Line.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Login[i].A1Line = types.BoolValue(false)
+			} else if !data.Login[i].A1Line.IsNull() {
 				data.Login[i].A1Line = types.BoolValue(true)
+			}
+		} else {
+			// Element doesn't exist on device
+			if data.Login[i].A1Line.IsNull() {
+				data.Login[i].A1Line = types.BoolNull()
 			} else {
+				// Preserve false value from state when element doesn't exist
 				data.Login[i].A1Line = types.BoolValue(false)
 			}
-		} else {
-			data.Login[i].A1Line = types.BoolNull()
 		}
-		if value := r.Get("groups.group-1.tacacs"); !data.Login[i].A1Tacacs.IsNull() {
-			if value.Exists() {
+		if value := r.Get("groups.group-1.tacacs"); value.Exists() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Login[i].A1Tacacs.IsNull() && !data.Login[i].A1Tacacs.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Login[i].A1Tacacs = types.BoolValue(false)
+			} else if !data.Login[i].A1Tacacs.IsNull() {
 				data.Login[i].A1Tacacs = types.BoolValue(true)
+			}
+		} else {
+			// Element doesn't exist on device
+			if data.Login[i].A1Tacacs.IsNull() {
+				data.Login[i].A1Tacacs = types.BoolNull()
 			} else {
+				// Preserve false value from state when element doesn't exist
 				data.Login[i].A1Tacacs = types.BoolValue(false)
 			}
-		} else {
-			data.Login[i].A1Tacacs = types.BoolNull()
 		}
-		if value := r.Get("groups.group-1.radius"); !data.Login[i].A1Radius.IsNull() {
-			if value.Exists() {
-				data.Login[i].A1Radius = types.BoolValue(true)
-			} else {
+		if value := r.Get("groups.group-1.radius"); value.Exists() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Login[i].A1Radius.IsNull() && !data.Login[i].A1Radius.ValueBool() {
+				// Keep false value from state even though element exists on device
 				data.Login[i].A1Radius = types.BoolValue(false)
+			} else if !data.Login[i].A1Radius.IsNull() {
+				data.Login[i].A1Radius = types.BoolValue(true)
 			}
 		} else {
-			data.Login[i].A1Radius = types.BoolNull()
+			// Element doesn't exist on device
+			if data.Login[i].A1Radius.IsNull() {
+				data.Login[i].A1Radius = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Login[i].A1Radius = types.BoolValue(false)
+			}
 		}
 		if value := r.Get("groups.group-1.server-group-name"); value.Exists() && !data.Login[i].A1Group.IsNull() {
 			data.Login[i].A1Group = types.StringValue(value.String())
 		} else {
 			data.Login[i].A1Group = types.StringNull()
 		}
-		if value := r.Get("groups.group-2.local"); !data.Login[i].A2Local.IsNull() {
-			if value.Exists() {
+		if value := r.Get("groups.group-2.local"); value.Exists() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Login[i].A2Local.IsNull() && !data.Login[i].A2Local.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Login[i].A2Local = types.BoolValue(false)
+			} else if !data.Login[i].A2Local.IsNull() {
 				data.Login[i].A2Local = types.BoolValue(true)
+			}
+		} else {
+			// Element doesn't exist on device
+			if data.Login[i].A2Local.IsNull() {
+				data.Login[i].A2Local = types.BoolNull()
 			} else {
+				// Preserve false value from state when element doesn't exist
 				data.Login[i].A2Local = types.BoolValue(false)
 			}
-		} else {
-			data.Login[i].A2Local = types.BoolNull()
 		}
-		if value := r.Get("groups.group-2.line"); !data.Login[i].A2Line.IsNull() {
-			if value.Exists() {
+		if value := r.Get("groups.group-2.line"); value.Exists() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Login[i].A2Line.IsNull() && !data.Login[i].A2Line.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Login[i].A2Line = types.BoolValue(false)
+			} else if !data.Login[i].A2Line.IsNull() {
 				data.Login[i].A2Line = types.BoolValue(true)
+			}
+		} else {
+			// Element doesn't exist on device
+			if data.Login[i].A2Line.IsNull() {
+				data.Login[i].A2Line = types.BoolNull()
 			} else {
+				// Preserve false value from state when element doesn't exist
 				data.Login[i].A2Line = types.BoolValue(false)
 			}
-		} else {
-			data.Login[i].A2Line = types.BoolNull()
 		}
-		if value := r.Get("groups.group-2.tacacs"); !data.Login[i].A2Tacacs.IsNull() {
-			if value.Exists() {
+		if value := r.Get("groups.group-2.tacacs"); value.Exists() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Login[i].A2Tacacs.IsNull() && !data.Login[i].A2Tacacs.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Login[i].A2Tacacs = types.BoolValue(false)
+			} else if !data.Login[i].A2Tacacs.IsNull() {
 				data.Login[i].A2Tacacs = types.BoolValue(true)
+			}
+		} else {
+			// Element doesn't exist on device
+			if data.Login[i].A2Tacacs.IsNull() {
+				data.Login[i].A2Tacacs = types.BoolNull()
 			} else {
+				// Preserve false value from state when element doesn't exist
 				data.Login[i].A2Tacacs = types.BoolValue(false)
 			}
-		} else {
-			data.Login[i].A2Tacacs = types.BoolNull()
 		}
-		if value := r.Get("groups.group-2.radius"); !data.Login[i].A2Radius.IsNull() {
-			if value.Exists() {
-				data.Login[i].A2Radius = types.BoolValue(true)
-			} else {
+		if value := r.Get("groups.group-2.radius"); value.Exists() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Login[i].A2Radius.IsNull() && !data.Login[i].A2Radius.ValueBool() {
+				// Keep false value from state even though element exists on device
 				data.Login[i].A2Radius = types.BoolValue(false)
+			} else if !data.Login[i].A2Radius.IsNull() {
+				data.Login[i].A2Radius = types.BoolValue(true)
 			}
 		} else {
-			data.Login[i].A2Radius = types.BoolNull()
+			// Element doesn't exist on device
+			if data.Login[i].A2Radius.IsNull() {
+				data.Login[i].A2Radius = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Login[i].A2Radius = types.BoolValue(false)
+			}
 		}
 		if value := r.Get("groups.group-2.server-group-name"); value.Exists() && !data.Login[i].A2Group.IsNull() {
 			data.Login[i].A2Group = types.StringValue(value.String())
 		} else {
 			data.Login[i].A2Group = types.StringNull()
 		}
-		if value := r.Get("groups.group-3.local"); !data.Login[i].A3Local.IsNull() {
-			if value.Exists() {
+		if value := r.Get("groups.group-3.local"); value.Exists() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Login[i].A3Local.IsNull() && !data.Login[i].A3Local.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Login[i].A3Local = types.BoolValue(false)
+			} else if !data.Login[i].A3Local.IsNull() {
 				data.Login[i].A3Local = types.BoolValue(true)
+			}
+		} else {
+			// Element doesn't exist on device
+			if data.Login[i].A3Local.IsNull() {
+				data.Login[i].A3Local = types.BoolNull()
 			} else {
+				// Preserve false value from state when element doesn't exist
 				data.Login[i].A3Local = types.BoolValue(false)
 			}
-		} else {
-			data.Login[i].A3Local = types.BoolNull()
 		}
-		if value := r.Get("groups.group-3.line"); !data.Login[i].A3Line.IsNull() {
-			if value.Exists() {
+		if value := r.Get("groups.group-3.line"); value.Exists() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Login[i].A3Line.IsNull() && !data.Login[i].A3Line.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Login[i].A3Line = types.BoolValue(false)
+			} else if !data.Login[i].A3Line.IsNull() {
 				data.Login[i].A3Line = types.BoolValue(true)
+			}
+		} else {
+			// Element doesn't exist on device
+			if data.Login[i].A3Line.IsNull() {
+				data.Login[i].A3Line = types.BoolNull()
 			} else {
+				// Preserve false value from state when element doesn't exist
 				data.Login[i].A3Line = types.BoolValue(false)
 			}
-		} else {
-			data.Login[i].A3Line = types.BoolNull()
 		}
-		if value := r.Get("groups.group-3.tacacs"); !data.Login[i].A3Tacacs.IsNull() {
-			if value.Exists() {
+		if value := r.Get("groups.group-3.tacacs"); value.Exists() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Login[i].A3Tacacs.IsNull() && !data.Login[i].A3Tacacs.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Login[i].A3Tacacs = types.BoolValue(false)
+			} else if !data.Login[i].A3Tacacs.IsNull() {
 				data.Login[i].A3Tacacs = types.BoolValue(true)
+			}
+		} else {
+			// Element doesn't exist on device
+			if data.Login[i].A3Tacacs.IsNull() {
+				data.Login[i].A3Tacacs = types.BoolNull()
 			} else {
+				// Preserve false value from state when element doesn't exist
 				data.Login[i].A3Tacacs = types.BoolValue(false)
 			}
-		} else {
-			data.Login[i].A3Tacacs = types.BoolNull()
 		}
-		if value := r.Get("groups.group-3.radius"); !data.Login[i].A3Radius.IsNull() {
-			if value.Exists() {
-				data.Login[i].A3Radius = types.BoolValue(true)
-			} else {
+		if value := r.Get("groups.group-3.radius"); value.Exists() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Login[i].A3Radius.IsNull() && !data.Login[i].A3Radius.ValueBool() {
+				// Keep false value from state even though element exists on device
 				data.Login[i].A3Radius = types.BoolValue(false)
+			} else if !data.Login[i].A3Radius.IsNull() {
+				data.Login[i].A3Radius = types.BoolValue(true)
 			}
 		} else {
-			data.Login[i].A3Radius = types.BoolNull()
+			// Element doesn't exist on device
+			if data.Login[i].A3Radius.IsNull() {
+				data.Login[i].A3Radius = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Login[i].A3Radius = types.BoolValue(false)
+			}
 		}
 		if value := r.Get("groups.group-3.server-group-name"); value.Exists() && !data.Login[i].A3Group.IsNull() {
 			data.Login[i].A3Group = types.StringValue(value.String())
 		} else {
 			data.Login[i].A3Group = types.StringNull()
 		}
-		if value := r.Get("groups.group-4.local"); !data.Login[i].A4Local.IsNull() {
-			if value.Exists() {
+		if value := r.Get("groups.group-4.local"); value.Exists() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Login[i].A4Local.IsNull() && !data.Login[i].A4Local.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Login[i].A4Local = types.BoolValue(false)
+			} else if !data.Login[i].A4Local.IsNull() {
 				data.Login[i].A4Local = types.BoolValue(true)
+			}
+		} else {
+			// Element doesn't exist on device
+			if data.Login[i].A4Local.IsNull() {
+				data.Login[i].A4Local = types.BoolNull()
 			} else {
+				// Preserve false value from state when element doesn't exist
 				data.Login[i].A4Local = types.BoolValue(false)
 			}
-		} else {
-			data.Login[i].A4Local = types.BoolNull()
 		}
-		if value := r.Get("groups.group-4.line"); !data.Login[i].A4Line.IsNull() {
-			if value.Exists() {
+		if value := r.Get("groups.group-4.line"); value.Exists() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Login[i].A4Line.IsNull() && !data.Login[i].A4Line.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Login[i].A4Line = types.BoolValue(false)
+			} else if !data.Login[i].A4Line.IsNull() {
 				data.Login[i].A4Line = types.BoolValue(true)
+			}
+		} else {
+			// Element doesn't exist on device
+			if data.Login[i].A4Line.IsNull() {
+				data.Login[i].A4Line = types.BoolNull()
 			} else {
+				// Preserve false value from state when element doesn't exist
 				data.Login[i].A4Line = types.BoolValue(false)
 			}
-		} else {
-			data.Login[i].A4Line = types.BoolNull()
 		}
-		if value := r.Get("groups.group-4.tacacs"); !data.Login[i].A4Tacacs.IsNull() {
-			if value.Exists() {
+		if value := r.Get("groups.group-4.tacacs"); value.Exists() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Login[i].A4Tacacs.IsNull() && !data.Login[i].A4Tacacs.ValueBool() {
+				// Keep false value from state even though element exists on device
+				data.Login[i].A4Tacacs = types.BoolValue(false)
+			} else if !data.Login[i].A4Tacacs.IsNull() {
 				data.Login[i].A4Tacacs = types.BoolValue(true)
+			}
+		} else {
+			// Element doesn't exist on device
+			if data.Login[i].A4Tacacs.IsNull() {
+				data.Login[i].A4Tacacs = types.BoolNull()
 			} else {
+				// Preserve false value from state when element doesn't exist
 				data.Login[i].A4Tacacs = types.BoolValue(false)
 			}
-		} else {
-			data.Login[i].A4Tacacs = types.BoolNull()
 		}
-		if value := r.Get("groups.group-4.radius"); !data.Login[i].A4Radius.IsNull() {
-			if value.Exists() {
-				data.Login[i].A4Radius = types.BoolValue(true)
-			} else {
+		if value := r.Get("groups.group-4.radius"); value.Exists() {
+			// For presence-based booleans: if state has explicit false, preserve it
+			// Otherwise set to true since element exists on device
+			if !data.Login[i].A4Radius.IsNull() && !data.Login[i].A4Radius.ValueBool() {
+				// Keep false value from state even though element exists on device
 				data.Login[i].A4Radius = types.BoolValue(false)
+			} else if !data.Login[i].A4Radius.IsNull() {
+				data.Login[i].A4Radius = types.BoolValue(true)
 			}
 		} else {
-			data.Login[i].A4Radius = types.BoolNull()
+			// Element doesn't exist on device
+			if data.Login[i].A4Radius.IsNull() {
+				data.Login[i].A4Radius = types.BoolNull()
+			} else {
+				// Preserve false value from state when element doesn't exist
+				data.Login[i].A4Radius = types.BoolValue(false)
+			}
 		}
 		if value := r.Get("groups.group-4.server-group-name"); value.Exists() && !data.Login[i].A4Group.IsNull() {
 			data.Login[i].A4Group = types.StringValue(value.String())
@@ -393,10 +669,214 @@ func (data *AAAAuthentication) updateFromBody(ctx context.Context, res []byte) {
 
 // End of section. //template:end updateFromBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *AAAAuthentication) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	for i := range data.Login {
+		keys := [...]string{"list-name"}
+		keyValues := [...]string{data.Login[i].List.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/login/authentication-list").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "list-name"); value.Exists() {
+			data.Login[i].List = types.StringValue(value.String())
+		} else if data.Login[i].List.IsNull() {
+			data.Login[i].List = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "local"); value.Exists() {
+			data.Login[i].A1Local = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Login[i].A1Local.IsNull() {
+				data.Login[i].A1Local = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "line"); value.Exists() {
+			data.Login[i].A1Line = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Login[i].A1Line.IsNull() {
+				data.Login[i].A1Line = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "groups/group-1/tacacs"); value.Exists() {
+			data.Login[i].A1Tacacs = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Login[i].A1Tacacs.IsNull() {
+				data.Login[i].A1Tacacs = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "groups/group-1/radius"); value.Exists() {
+			data.Login[i].A1Radius = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Login[i].A1Radius.IsNull() {
+				data.Login[i].A1Radius = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "groups/group-1/server-group-name"); value.Exists() {
+			data.Login[i].A1Group = types.StringValue(value.String())
+		} else if data.Login[i].A1Group.IsNull() {
+			data.Login[i].A1Group = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "groups/group-2/local"); value.Exists() {
+			data.Login[i].A2Local = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Login[i].A2Local.IsNull() {
+				data.Login[i].A2Local = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "groups/group-2/line"); value.Exists() {
+			data.Login[i].A2Line = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Login[i].A2Line.IsNull() {
+				data.Login[i].A2Line = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "groups/group-2/tacacs"); value.Exists() {
+			data.Login[i].A2Tacacs = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Login[i].A2Tacacs.IsNull() {
+				data.Login[i].A2Tacacs = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "groups/group-2/radius"); value.Exists() {
+			data.Login[i].A2Radius = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Login[i].A2Radius.IsNull() {
+				data.Login[i].A2Radius = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "groups/group-2/server-group-name"); value.Exists() {
+			data.Login[i].A2Group = types.StringValue(value.String())
+		} else if data.Login[i].A2Group.IsNull() {
+			data.Login[i].A2Group = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "groups/group-3/local"); value.Exists() {
+			data.Login[i].A3Local = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Login[i].A3Local.IsNull() {
+				data.Login[i].A3Local = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "groups/group-3/line"); value.Exists() {
+			data.Login[i].A3Line = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Login[i].A3Line.IsNull() {
+				data.Login[i].A3Line = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "groups/group-3/tacacs"); value.Exists() {
+			data.Login[i].A3Tacacs = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Login[i].A3Tacacs.IsNull() {
+				data.Login[i].A3Tacacs = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "groups/group-3/radius"); value.Exists() {
+			data.Login[i].A3Radius = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Login[i].A3Radius.IsNull() {
+				data.Login[i].A3Radius = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "groups/group-3/server-group-name"); value.Exists() {
+			data.Login[i].A3Group = types.StringValue(value.String())
+		} else if data.Login[i].A3Group.IsNull() {
+			data.Login[i].A3Group = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "groups/group-4/local"); value.Exists() {
+			data.Login[i].A4Local = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Login[i].A4Local.IsNull() {
+				data.Login[i].A4Local = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "groups/group-4/line"); value.Exists() {
+			data.Login[i].A4Line = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Login[i].A4Line.IsNull() {
+				data.Login[i].A4Line = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "groups/group-4/tacacs"); value.Exists() {
+			data.Login[i].A4Tacacs = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Login[i].A4Tacacs.IsNull() {
+				data.Login[i].A4Tacacs = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "groups/group-4/radius"); value.Exists() {
+			data.Login[i].A4Radius = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Login[i].A4Radius.IsNull() {
+				data.Login[i].A4Radius = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "groups/group-4/server-group-name"); value.Exists() {
+			data.Login[i].A4Group = types.StringValue(value.String())
+		} else if data.Login[i].A4Group.IsNull() {
+			data.Login[i].A4Group = types.StringNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *AAAAuthentication) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "login.authentication-list"); value.Exists() {
+func (data *AAAAuthentication) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "login.authentication-list"); value.Exists() {
 		data.Login = make([]AAAAuthenticationLogin, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := AAAAuthenticationLogin{}
@@ -505,8 +985,12 @@ func (data *AAAAuthentication) fromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *AAAAuthenticationData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "login.authentication-list"); value.Exists() {
+func (data *AAAAuthenticationData) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "login.authentication-list"); value.Exists() {
 		data.Login = make([]AAAAuthenticationLogin, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := AAAAuthenticationLogin{}
@@ -516,22 +1000,22 @@ func (data *AAAAuthenticationData) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("local"); cValue.Exists() {
 				item.A1Local = types.BoolValue(true)
 			} else {
-				item.A1Local = types.BoolValue(false)
+				item.A1Local = types.BoolNull()
 			}
 			if cValue := v.Get("line"); cValue.Exists() {
 				item.A1Line = types.BoolValue(true)
 			} else {
-				item.A1Line = types.BoolValue(false)
+				item.A1Line = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-1.tacacs"); cValue.Exists() {
 				item.A1Tacacs = types.BoolValue(true)
 			} else {
-				item.A1Tacacs = types.BoolValue(false)
+				item.A1Tacacs = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-1.radius"); cValue.Exists() {
 				item.A1Radius = types.BoolValue(true)
 			} else {
-				item.A1Radius = types.BoolValue(false)
+				item.A1Radius = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-1.server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
@@ -539,22 +1023,22 @@ func (data *AAAAuthenticationData) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("groups.group-2.local"); cValue.Exists() {
 				item.A2Local = types.BoolValue(true)
 			} else {
-				item.A2Local = types.BoolValue(false)
+				item.A2Local = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-2.line"); cValue.Exists() {
 				item.A2Line = types.BoolValue(true)
 			} else {
-				item.A2Line = types.BoolValue(false)
+				item.A2Line = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-2.tacacs"); cValue.Exists() {
 				item.A2Tacacs = types.BoolValue(true)
 			} else {
-				item.A2Tacacs = types.BoolValue(false)
+				item.A2Tacacs = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-2.radius"); cValue.Exists() {
 				item.A2Radius = types.BoolValue(true)
 			} else {
-				item.A2Radius = types.BoolValue(false)
+				item.A2Radius = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-2.server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
@@ -562,22 +1046,22 @@ func (data *AAAAuthenticationData) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("groups.group-3.local"); cValue.Exists() {
 				item.A3Local = types.BoolValue(true)
 			} else {
-				item.A3Local = types.BoolValue(false)
+				item.A3Local = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-3.line"); cValue.Exists() {
 				item.A3Line = types.BoolValue(true)
 			} else {
-				item.A3Line = types.BoolValue(false)
+				item.A3Line = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-3.tacacs"); cValue.Exists() {
 				item.A3Tacacs = types.BoolValue(true)
 			} else {
-				item.A3Tacacs = types.BoolValue(false)
+				item.A3Tacacs = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-3.radius"); cValue.Exists() {
 				item.A3Radius = types.BoolValue(true)
 			} else {
-				item.A3Radius = types.BoolValue(false)
+				item.A3Radius = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-3.server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
@@ -585,22 +1069,22 @@ func (data *AAAAuthenticationData) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("groups.group-4.local"); cValue.Exists() {
 				item.A4Local = types.BoolValue(true)
 			} else {
-				item.A4Local = types.BoolValue(false)
+				item.A4Local = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-4.line"); cValue.Exists() {
 				item.A4Line = types.BoolValue(true)
 			} else {
-				item.A4Line = types.BoolValue(false)
+				item.A4Line = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-4.tacacs"); cValue.Exists() {
 				item.A4Tacacs = types.BoolValue(true)
 			} else {
-				item.A4Tacacs = types.BoolValue(false)
+				item.A4Tacacs = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-4.radius"); cValue.Exists() {
 				item.A4Radius = types.BoolValue(true)
 			} else {
-				item.A4Radius = types.BoolValue(false)
+				item.A4Radius = types.BoolNull()
 			}
 			if cValue := v.Get("groups.group-4.server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())
@@ -612,6 +1096,226 @@ func (data *AAAAuthenticationData) fromBody(ctx context.Context, res []byte) {
 }
 
 // End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *AAAAuthentication) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/login/authentication-list"); value.Exists() {
+		data.Login = make([]AAAAuthenticationLogin, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := AAAAuthenticationLogin{}
+			if cValue := helpers.GetFromXPath(v, "list-name"); cValue.Exists() {
+				item.List = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "local"); cValue.Exists() {
+				item.A1Local = types.BoolValue(true)
+			} else {
+				item.A1Local = types.BoolNull()
+			}
+			if cValue := helpers.GetFromXPath(v, "line"); cValue.Exists() {
+				item.A1Line = types.BoolValue(true)
+			} else {
+				item.A1Line = types.BoolNull()
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
+				item.A1Tacacs = types.BoolValue(true)
+			} else {
+				item.A1Tacacs = types.BoolNull()
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-1/radius"); cValue.Exists() {
+				item.A1Radius = types.BoolValue(true)
+			} else {
+				item.A1Radius = types.BoolNull()
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-1/server-group-name"); cValue.Exists() {
+				item.A1Group = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/local"); cValue.Exists() {
+				item.A2Local = types.BoolValue(true)
+			} else {
+				item.A2Local = types.BoolNull()
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/line"); cValue.Exists() {
+				item.A2Line = types.BoolValue(true)
+			} else {
+				item.A2Line = types.BoolNull()
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
+				item.A2Tacacs = types.BoolValue(true)
+			} else {
+				item.A2Tacacs = types.BoolNull()
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/radius"); cValue.Exists() {
+				item.A2Radius = types.BoolValue(true)
+			} else {
+				item.A2Radius = types.BoolNull()
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/server-group-name"); cValue.Exists() {
+				item.A2Group = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/local"); cValue.Exists() {
+				item.A3Local = types.BoolValue(true)
+			} else {
+				item.A3Local = types.BoolNull()
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/line"); cValue.Exists() {
+				item.A3Line = types.BoolValue(true)
+			} else {
+				item.A3Line = types.BoolNull()
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/tacacs"); cValue.Exists() {
+				item.A3Tacacs = types.BoolValue(true)
+			} else {
+				item.A3Tacacs = types.BoolNull()
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/radius"); cValue.Exists() {
+				item.A3Radius = types.BoolValue(true)
+			} else {
+				item.A3Radius = types.BoolNull()
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/server-group-name"); cValue.Exists() {
+				item.A3Group = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/local"); cValue.Exists() {
+				item.A4Local = types.BoolValue(true)
+			} else {
+				item.A4Local = types.BoolNull()
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/line"); cValue.Exists() {
+				item.A4Line = types.BoolValue(true)
+			} else {
+				item.A4Line = types.BoolNull()
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/tacacs"); cValue.Exists() {
+				item.A4Tacacs = types.BoolValue(true)
+			} else {
+				item.A4Tacacs = types.BoolNull()
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/radius"); cValue.Exists() {
+				item.A4Radius = types.BoolValue(true)
+			} else {
+				item.A4Radius = types.BoolNull()
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/server-group-name"); cValue.Exists() {
+				item.A4Group = types.StringValue(cValue.String())
+			}
+			data.Login = append(data.Login, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *AAAAuthenticationData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/login/authentication-list"); value.Exists() {
+		data.Login = make([]AAAAuthenticationLogin, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := AAAAuthenticationLogin{}
+			if cValue := helpers.GetFromXPath(v, "list-name"); cValue.Exists() {
+				item.List = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "local"); cValue.Exists() {
+				item.A1Local = types.BoolValue(true)
+			} else {
+				item.A1Local = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "line"); cValue.Exists() {
+				item.A1Line = types.BoolValue(true)
+			} else {
+				item.A1Line = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
+				item.A1Tacacs = types.BoolValue(true)
+			} else {
+				item.A1Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-1/radius"); cValue.Exists() {
+				item.A1Radius = types.BoolValue(true)
+			} else {
+				item.A1Radius = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-1/server-group-name"); cValue.Exists() {
+				item.A1Group = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/local"); cValue.Exists() {
+				item.A2Local = types.BoolValue(true)
+			} else {
+				item.A2Local = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/line"); cValue.Exists() {
+				item.A2Line = types.BoolValue(true)
+			} else {
+				item.A2Line = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
+				item.A2Tacacs = types.BoolValue(true)
+			} else {
+				item.A2Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/radius"); cValue.Exists() {
+				item.A2Radius = types.BoolValue(true)
+			} else {
+				item.A2Radius = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/server-group-name"); cValue.Exists() {
+				item.A2Group = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/local"); cValue.Exists() {
+				item.A3Local = types.BoolValue(true)
+			} else {
+				item.A3Local = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/line"); cValue.Exists() {
+				item.A3Line = types.BoolValue(true)
+			} else {
+				item.A3Line = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/tacacs"); cValue.Exists() {
+				item.A3Tacacs = types.BoolValue(true)
+			} else {
+				item.A3Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/radius"); cValue.Exists() {
+				item.A3Radius = types.BoolValue(true)
+			} else {
+				item.A3Radius = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/server-group-name"); cValue.Exists() {
+				item.A3Group = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/local"); cValue.Exists() {
+				item.A4Local = types.BoolValue(true)
+			} else {
+				item.A4Local = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/line"); cValue.Exists() {
+				item.A4Line = types.BoolValue(true)
+			} else {
+				item.A4Line = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/tacacs"); cValue.Exists() {
+				item.A4Tacacs = types.BoolValue(true)
+			} else {
+				item.A4Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/radius"); cValue.Exists() {
+				item.A4Radius = types.BoolValue(true)
+			} else {
+				item.A4Radius = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/server-group-name"); cValue.Exists() {
+				item.A4Group = types.StringValue(cValue.String())
+			}
+			data.Login = append(data.Login, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
@@ -714,7 +1418,7 @@ func (data *AAAAuthentication) getDeletedItems(ctx context.Context, state AAAAut
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *AAAAuthentication) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *AAAAuthentication) getEmptyLeafsDelete(ctx context.Context, state *AAAAuthentication) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.Login {
 		keys := [...]string{"list-name"}
@@ -723,53 +1427,117 @@ func (data *AAAAuthentication) getEmptyLeafsDelete(ctx context.Context) []string
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
+		// Only delete if state has true and plan has false
 		if !data.Login[i].A4Radius.IsNull() && !data.Login[i].A4Radius.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/groups/group-4/radius", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.Login) && !state.Login[i].A4Radius.IsNull() && state.Login[i].A4Radius.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/groups/group-4/radius", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.Login[i].A4Tacacs.IsNull() && !data.Login[i].A4Tacacs.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/groups/group-4/tacacs", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.Login) && !state.Login[i].A4Tacacs.IsNull() && state.Login[i].A4Tacacs.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/groups/group-4/tacacs", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.Login[i].A4Line.IsNull() && !data.Login[i].A4Line.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/groups/group-4/line", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.Login) && !state.Login[i].A4Line.IsNull() && state.Login[i].A4Line.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/groups/group-4/line", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.Login[i].A4Local.IsNull() && !data.Login[i].A4Local.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/groups/group-4/local", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.Login) && !state.Login[i].A4Local.IsNull() && state.Login[i].A4Local.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/groups/group-4/local", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.Login[i].A3Radius.IsNull() && !data.Login[i].A3Radius.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/groups/group-3/radius", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.Login) && !state.Login[i].A3Radius.IsNull() && state.Login[i].A3Radius.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/groups/group-3/radius", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.Login[i].A3Tacacs.IsNull() && !data.Login[i].A3Tacacs.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/groups/group-3/tacacs", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.Login) && !state.Login[i].A3Tacacs.IsNull() && state.Login[i].A3Tacacs.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/groups/group-3/tacacs", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.Login[i].A3Line.IsNull() && !data.Login[i].A3Line.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/groups/group-3/line", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.Login) && !state.Login[i].A3Line.IsNull() && state.Login[i].A3Line.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/groups/group-3/line", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.Login[i].A3Local.IsNull() && !data.Login[i].A3Local.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/groups/group-3/local", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.Login) && !state.Login[i].A3Local.IsNull() && state.Login[i].A3Local.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/groups/group-3/local", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.Login[i].A2Radius.IsNull() && !data.Login[i].A2Radius.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/groups/group-2/radius", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.Login) && !state.Login[i].A2Radius.IsNull() && state.Login[i].A2Radius.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/groups/group-2/radius", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.Login[i].A2Tacacs.IsNull() && !data.Login[i].A2Tacacs.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/groups/group-2/tacacs", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.Login) && !state.Login[i].A2Tacacs.IsNull() && state.Login[i].A2Tacacs.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/groups/group-2/tacacs", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.Login[i].A2Line.IsNull() && !data.Login[i].A2Line.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/groups/group-2/line", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.Login) && !state.Login[i].A2Line.IsNull() && state.Login[i].A2Line.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/groups/group-2/line", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.Login[i].A2Local.IsNull() && !data.Login[i].A2Local.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/groups/group-2/local", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.Login) && !state.Login[i].A2Local.IsNull() && state.Login[i].A2Local.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/groups/group-2/local", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.Login[i].A1Radius.IsNull() && !data.Login[i].A1Radius.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/groups/group-1/radius", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.Login) && !state.Login[i].A1Radius.IsNull() && state.Login[i].A1Radius.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/groups/group-1/radius", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.Login[i].A1Tacacs.IsNull() && !data.Login[i].A1Tacacs.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/groups/group-1/tacacs", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.Login) && !state.Login[i].A1Tacacs.IsNull() && state.Login[i].A1Tacacs.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/groups/group-1/tacacs", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.Login[i].A1Line.IsNull() && !data.Login[i].A1Line.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/line", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.Login) && !state.Login[i].A1Line.IsNull() && state.Login[i].A1Line.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/line", data.getXPath(), keyString))
+			}
 		}
+		// Only delete if state has true and plan has false
 		if !data.Login[i].A1Local.IsNull() && !data.Login[i].A1Local.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/local", data.getPath(), keyString))
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.Login) && !state.Login[i].A1Local.IsNull() && state.Login[i].A1Local.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/login/authentication-list%v/local", data.getXPath(), keyString))
+			}
 		}
 	}
 	return emptyLeafsDelete
@@ -782,16 +1550,153 @@ func (data *AAAAuthentication) getEmptyLeafsDelete(ctx context.Context) []string
 func (data *AAAAuthentication) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Login {
-		keys := [...]string{"list-name"}
 		keyValues := [...]string{data.Login[i].List.ValueString()}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/login/authentication-list%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/login/authentication-list=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *AAAAuthentication) addDeletedItemsXML(ctx context.Context, state AAAAuthentication, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.Login {
+		stateKeys := [...]string{"list-name"}
+		stateKeyValues := [...]string{state.Login[i].List.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Login[i].List.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Login {
+			found = true
+			if state.Login[i].List.ValueString() != data.Login[j].List.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.Login[i].A4Group.IsNull() && data.Login[j].A4Group.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/login/authentication-list%v/groups/group-4/server-group-name", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Login[i].A4Radius.IsNull() && state.Login[i].A4Radius.ValueBool() && data.Login[j].A4Radius.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/login/authentication-list%v/groups/group-4/radius", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Login[i].A4Tacacs.IsNull() && state.Login[i].A4Tacacs.ValueBool() && data.Login[j].A4Tacacs.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/login/authentication-list%v/groups/group-4/tacacs", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Login[i].A4Line.IsNull() && state.Login[i].A4Line.ValueBool() && data.Login[j].A4Line.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/login/authentication-list%v/groups/group-4/line", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Login[i].A4Local.IsNull() && state.Login[i].A4Local.ValueBool() && data.Login[j].A4Local.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/login/authentication-list%v/groups/group-4/local", predicates))
+				}
+				if !state.Login[i].A3Group.IsNull() && data.Login[j].A3Group.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/login/authentication-list%v/groups/group-3/server-group-name", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Login[i].A3Radius.IsNull() && state.Login[i].A3Radius.ValueBool() && data.Login[j].A3Radius.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/login/authentication-list%v/groups/group-3/radius", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Login[i].A3Tacacs.IsNull() && state.Login[i].A3Tacacs.ValueBool() && data.Login[j].A3Tacacs.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/login/authentication-list%v/groups/group-3/tacacs", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Login[i].A3Line.IsNull() && state.Login[i].A3Line.ValueBool() && data.Login[j].A3Line.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/login/authentication-list%v/groups/group-3/line", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Login[i].A3Local.IsNull() && state.Login[i].A3Local.ValueBool() && data.Login[j].A3Local.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/login/authentication-list%v/groups/group-3/local", predicates))
+				}
+				if !state.Login[i].A2Group.IsNull() && data.Login[j].A2Group.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/login/authentication-list%v/groups/group-2/server-group-name", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Login[i].A2Radius.IsNull() && state.Login[i].A2Radius.ValueBool() && data.Login[j].A2Radius.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/login/authentication-list%v/groups/group-2/radius", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Login[i].A2Tacacs.IsNull() && state.Login[i].A2Tacacs.ValueBool() && data.Login[j].A2Tacacs.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/login/authentication-list%v/groups/group-2/tacacs", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Login[i].A2Line.IsNull() && state.Login[i].A2Line.ValueBool() && data.Login[j].A2Line.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/login/authentication-list%v/groups/group-2/line", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Login[i].A2Local.IsNull() && state.Login[i].A2Local.ValueBool() && data.Login[j].A2Local.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/login/authentication-list%v/groups/group-2/local", predicates))
+				}
+				if !state.Login[i].A1Group.IsNull() && data.Login[j].A1Group.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/login/authentication-list%v/groups/group-1/server-group-name", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Login[i].A1Radius.IsNull() && state.Login[i].A1Radius.ValueBool() && data.Login[j].A1Radius.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/login/authentication-list%v/groups/group-1/radius", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Login[i].A1Tacacs.IsNull() && state.Login[i].A1Tacacs.ValueBool() && data.Login[j].A1Tacacs.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/login/authentication-list%v/groups/group-1/tacacs", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Login[i].A1Line.IsNull() && state.Login[i].A1Line.ValueBool() && data.Login[j].A1Line.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/login/authentication-list%v/line", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Login[i].A1Local.IsNull() && state.Login[i].A1Local.ValueBool() && data.Login[j].A1Local.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/login/authentication-list%v/local", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/login/authentication-list%v", predicates))
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *AAAAuthentication) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	for i := range data.Login {
+		keys := [...]string{"list-name"}
+		keyValues := [...]string{data.Login[i].List.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/login/authentication-list%v", predicates))
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

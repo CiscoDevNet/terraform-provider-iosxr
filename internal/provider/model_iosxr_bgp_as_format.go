@@ -23,9 +23,14 @@ package provider
 import (
 	"context"
 	"fmt"
-	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
@@ -56,57 +61,184 @@ func (data BGPASFormatData) getPath() string {
 	return "Cisco-IOS-XR-um-router-bgp-cfg:/as-format"
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data BGPASFormat) getXPath() string {
+	path := "Cisco-IOS-XR-um-router-bgp-cfg:/as-format"
+	return path
+}
+
+func (data BGPASFormatData) getXPath() string {
+	path := "Cisco-IOS-XR-um-router-bgp-cfg:/as-format"
+	return path
+}
+
 // End of section. //template:end getPath
 
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
 func (data BGPASFormat) toBody(ctx context.Context) string {
-	body := ""
+	body := "{}"
 	if !data.AsFormat.IsNull() && !data.AsFormat.IsUnknown() {
-		body = `"` + data.AsFormat.ValueString() + `"`
+		body, _ = sjson.Set(body, "", data.AsFormat.ValueString())
 	}
 	return body
 }
 
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data BGPASFormat) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.AsFormat.IsNull() && !data.AsFormat.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/", data.AsFormat.ValueString())
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *BGPASFormat) updateFromBody(ctx context.Context, res []byte) {
-	if value := strings.Trim(string(res), "\""); value != "" && !data.AsFormat.IsNull() {
-		data.AsFormat = types.StringValue(value)
+	if value := gjson.GetBytes(res, ""); value.Exists() && !data.AsFormat.IsNull() {
+		data.AsFormat = types.StringValue(value.String())
 	} else {
 		data.AsFormat = types.StringNull()
 	}
 }
 
-func (data *BGPASFormat) fromBody(ctx context.Context, res []byte) {
-	if value := strings.Trim(string(res), "\""); value != "" {
-		data.AsFormat = types.StringValue(value)
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *BGPASFormat) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+		data.AsFormat = types.StringValue(value.String())
+	} else if data.AsFormat.IsNull() {
+		data.AsFormat = types.StringNull()
 	}
 }
 
-func (data *BGPASFormatData) fromBody(ctx context.Context, res []byte) {
-	if value := strings.Trim(string(res), "\""); value != "" {
-		data.AsFormat = types.StringValue(value)
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *BGPASFormat) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + ""); value.Exists() {
+		data.AsFormat = types.StringValue(value.String())
 	}
 }
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *BGPASFormatData) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + ""); value.Exists() {
+		data.AsFormat = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *BGPASFormat) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+		data.AsFormat = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *BGPASFormatData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+		data.AsFormat = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *BGPASFormat) getDeletedItems(ctx context.Context, state BGPASFormat) []string {
 	deletedItems := make([]string, 0)
 	if !state.AsFormat.IsNull() && data.AsFormat.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
 	}
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *BGPASFormat) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *BGPASFormat) getEmptyLeafsDelete(ctx context.Context, state *BGPASFormat) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
 }
 
 // End of section. //template:end getEmptyLeafsDelete
 
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+
 func (data *BGPASFormat) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.AsFormat.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
 	}
+
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *BGPASFormat) addDeletedItemsXML(ctx context.Context, state BGPASFormat, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.AsFormat.IsNull() && data.AsFormat.IsNull() {
+		deletePath := state.getXPath() + "/"
+		if !deletedPaths[deletePath] {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *BGPASFormat) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.AsFormat.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

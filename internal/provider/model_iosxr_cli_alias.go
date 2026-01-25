@@ -25,8 +25,13 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
+	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -75,6 +80,17 @@ func (data CLIAliasData) getPath() string {
 	return "Cisco-IOS-XR-um-cli-alias-cfg:/alias"
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data CLIAlias) getXPath() string {
+	path := "Cisco-IOS-XR-um-cli-alias-cfg:/alias"
+	return path
+}
+
+func (data CLIAliasData) getXPath() string {
+	path := "Cisco-IOS-XR-um-cli-alias-cfg:/alias"
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -118,6 +134,61 @@ func (data CLIAlias) toBody(ctx context.Context) string {
 }
 
 // End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data CLIAlias) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if len(data.Aliases) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.Aliases {
+			cBody := netconf.Body{}
+			if !item.Name.IsNull() && !item.Name.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "alias-name", item.Name.ValueString())
+			}
+			if !item.Command.IsNull() && !item.Command.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "alias-body", item.Command.ValueString())
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"aliases/alias", cBody.Res())
+		}
+	}
+	if len(data.ExecAliases) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.ExecAliases {
+			cBody := netconf.Body{}
+			if !item.Name.IsNull() && !item.Name.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "exec-alias-name", item.Name.ValueString())
+			}
+			if !item.Command.IsNull() && !item.Command.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "aliased-exec-command", item.Command.ValueString())
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"exec/alias", cBody.Res())
+		}
+	}
+	if len(data.ConfigAliases) > 0 {
+		// Build all list items and append them using AppendFromXPath
+		for _, item := range data.ConfigAliases {
+			cBody := netconf.Body{}
+			if !item.Name.IsNull() && !item.Name.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "config-alias-name", item.Name.ValueString())
+			}
+			if !item.Command.IsNull() && !item.Command.IsUnknown() {
+				cBody = helpers.SetFromXPath(cBody, "aliased-config-command", item.Command.ValueString())
+			}
+			// Append each list item to the parent path using AppendFromXPath with raw XML
+			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"config/alias", cBody.Res())
+		}
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
@@ -228,10 +299,123 @@ func (data *CLIAlias) updateFromBody(ctx context.Context, res []byte) {
 
 // End of section. //template:end updateFromBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *CLIAlias) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	for i := range data.Aliases {
+		keys := [...]string{"alias-name"}
+		keyValues := [...]string{data.Aliases[i].Name.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/aliases/alias").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "alias-name"); value.Exists() {
+			data.Aliases[i].Name = types.StringValue(value.String())
+		} else if data.Aliases[i].Name.IsNull() {
+			data.Aliases[i].Name = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "alias-body"); value.Exists() {
+			data.Aliases[i].Command = types.StringValue(value.String())
+		} else if data.Aliases[i].Command.IsNull() {
+			data.Aliases[i].Command = types.StringNull()
+		}
+	}
+	for i := range data.ExecAliases {
+		keys := [...]string{"exec-alias-name"}
+		keyValues := [...]string{data.ExecAliases[i].Name.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/exec/alias").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "exec-alias-name"); value.Exists() {
+			data.ExecAliases[i].Name = types.StringValue(value.String())
+		} else if data.ExecAliases[i].Name.IsNull() {
+			data.ExecAliases[i].Name = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "aliased-exec-command"); value.Exists() {
+			data.ExecAliases[i].Command = types.StringValue(value.String())
+		} else if data.ExecAliases[i].Command.IsNull() {
+			data.ExecAliases[i].Command = types.StringNull()
+		}
+	}
+	for i := range data.ConfigAliases {
+		keys := [...]string{"config-alias-name"}
+		keyValues := [...]string{data.ConfigAliases[i].Name.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data"+data.getXPath()+"/config/alias").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "config-alias-name"); value.Exists() {
+			data.ConfigAliases[i].Name = types.StringValue(value.String())
+		} else if data.ConfigAliases[i].Name.IsNull() {
+			data.ConfigAliases[i].Name = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "aliased-config-command"); value.Exists() {
+			data.ConfigAliases[i].Command = types.StringValue(value.String())
+		} else if data.ConfigAliases[i].Command.IsNull() {
+			data.ConfigAliases[i].Command = types.StringNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *CLIAlias) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "aliases.alias"); value.Exists() {
+func (data *CLIAlias) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "aliases.alias"); value.Exists() {
 		data.Aliases = make([]CLIAliasAliases, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := CLIAliasAliases{}
@@ -245,7 +429,7 @@ func (data *CLIAlias) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "exec.alias"); value.Exists() {
+	if value := res.Get(prefix + "exec.alias"); value.Exists() {
 		data.ExecAliases = make([]CLIAliasExecAliases, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := CLIAliasExecAliases{}
@@ -259,7 +443,7 @@ func (data *CLIAlias) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "config.alias"); value.Exists() {
+	if value := res.Get(prefix + "config.alias"); value.Exists() {
 		data.ConfigAliases = make([]CLIAliasConfigAliases, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := CLIAliasConfigAliases{}
@@ -279,8 +463,12 @@ func (data *CLIAlias) fromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *CLIAliasData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "aliases.alias"); value.Exists() {
+func (data *CLIAliasData) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	if value := res.Get(prefix + "aliases.alias"); value.Exists() {
 		data.Aliases = make([]CLIAliasAliases, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := CLIAliasAliases{}
@@ -294,7 +482,7 @@ func (data *CLIAliasData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "exec.alias"); value.Exists() {
+	if value := res.Get(prefix + "exec.alias"); value.Exists() {
 		data.ExecAliases = make([]CLIAliasExecAliases, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := CLIAliasExecAliases{}
@@ -308,7 +496,7 @@ func (data *CLIAliasData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "config.alias"); value.Exists() {
+	if value := res.Get(prefix + "config.alias"); value.Exists() {
 		data.ConfigAliases = make([]CLIAliasConfigAliases, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := CLIAliasConfigAliases{}
@@ -325,6 +513,104 @@ func (data *CLIAliasData) fromBody(ctx context.Context, res []byte) {
 }
 
 // End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *CLIAlias) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/aliases/alias"); value.Exists() {
+		data.Aliases = make([]CLIAliasAliases, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := CLIAliasAliases{}
+			if cValue := helpers.GetFromXPath(v, "alias-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "alias-body"); cValue.Exists() {
+				item.Command = types.StringValue(cValue.String())
+			}
+			data.Aliases = append(data.Aliases, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/exec/alias"); value.Exists() {
+		data.ExecAliases = make([]CLIAliasExecAliases, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := CLIAliasExecAliases{}
+			if cValue := helpers.GetFromXPath(v, "exec-alias-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "aliased-exec-command"); cValue.Exists() {
+				item.Command = types.StringValue(cValue.String())
+			}
+			data.ExecAliases = append(data.ExecAliases, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/config/alias"); value.Exists() {
+		data.ConfigAliases = make([]CLIAliasConfigAliases, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := CLIAliasConfigAliases{}
+			if cValue := helpers.GetFromXPath(v, "config-alias-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "aliased-config-command"); cValue.Exists() {
+				item.Command = types.StringValue(cValue.String())
+			}
+			data.ConfigAliases = append(data.ConfigAliases, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *CLIAliasData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/aliases/alias"); value.Exists() {
+		data.Aliases = make([]CLIAliasAliases, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := CLIAliasAliases{}
+			if cValue := helpers.GetFromXPath(v, "alias-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "alias-body"); cValue.Exists() {
+				item.Command = types.StringValue(cValue.String())
+			}
+			data.Aliases = append(data.Aliases, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/exec/alias"); value.Exists() {
+		data.ExecAliases = make([]CLIAliasExecAliases, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := CLIAliasExecAliases{}
+			if cValue := helpers.GetFromXPath(v, "exec-alias-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "aliased-exec-command"); cValue.Exists() {
+				item.Command = types.StringValue(cValue.String())
+			}
+			data.ExecAliases = append(data.ExecAliases, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/config/alias"); value.Exists() {
+		data.ConfigAliases = make([]CLIAliasConfigAliases, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := CLIAliasConfigAliases{}
+			if cValue := helpers.GetFromXPath(v, "config-alias-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "aliased-config-command"); cValue.Exists() {
+				item.Command = types.StringValue(cValue.String())
+			}
+			data.ConfigAliases = append(data.ConfigAliases, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
@@ -436,7 +722,7 @@ func (data *CLIAlias) getDeletedItems(ctx context.Context, state CLIAlias) []str
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *CLIAlias) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *CLIAlias) getEmptyLeafsDelete(ctx context.Context, state *CLIAlias) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.ConfigAliases {
 		keys := [...]string{"config-alias-name"}
@@ -472,36 +758,176 @@ func (data *CLIAlias) getEmptyLeafsDelete(ctx context.Context) []string {
 func (data *CLIAlias) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.ConfigAliases {
-		keys := [...]string{"config-alias-name"}
 		keyValues := [...]string{data.ConfigAliases[i].Name.ValueString()}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/config/alias%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/config/alias=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.ExecAliases {
-		keys := [...]string{"exec-alias-name"}
 		keyValues := [...]string{data.ExecAliases[i].Name.ValueString()}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/exec/alias%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/exec/alias=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
 	for i := range data.Aliases {
-		keys := [...]string{"alias-name"}
 		keyValues := [...]string{data.Aliases[i].Name.ValueString()}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/aliases/alias%v", data.getPath(), keyString))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/aliases/alias=%v", data.getPath(), strings.Join(keyValues[:], ",")))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *CLIAlias) addDeletedItemsXML(ctx context.Context, state CLIAlias, body string) string {
+	deleteXml := ""
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.ConfigAliases {
+		stateKeys := [...]string{"config-alias-name"}
+		stateKeyValues := [...]string{state.ConfigAliases[i].Name.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.ConfigAliases[i].Name.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.ConfigAliases {
+			found = true
+			if state.ConfigAliases[i].Name.ValueString() != data.ConfigAliases[j].Name.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.ConfigAliases[i].Command.IsNull() && data.ConfigAliases[j].Command.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/config/alias%v/aliased-config-command", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/config/alias%v", predicates))
+		}
+	}
+	for i := range state.ExecAliases {
+		stateKeys := [...]string{"exec-alias-name"}
+		stateKeyValues := [...]string{state.ExecAliases[i].Name.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.ExecAliases[i].Name.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.ExecAliases {
+			found = true
+			if state.ExecAliases[i].Name.ValueString() != data.ExecAliases[j].Name.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.ExecAliases[i].Command.IsNull() && data.ExecAliases[j].Command.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/alias%v/aliased-exec-command", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/exec/alias%v", predicates))
+		}
+	}
+	for i := range state.Aliases {
+		stateKeys := [...]string{"alias-name"}
+		stateKeyValues := [...]string{state.Aliases[i].Name.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Aliases[i].Name.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Aliases {
+			found = true
+			if state.Aliases[i].Name.ValueString() != data.Aliases[j].Name.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.Aliases[i].Command.IsNull() && data.Aliases[j].Command.IsNull() {
+					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/aliases/alias%v/alias-body", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/aliases/alias%v", predicates))
+		}
+	}
+
+	b := netconf.NewBody(deleteXml)
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *CLIAlias) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	for i := range data.ConfigAliases {
+		keys := [...]string{"config-alias-name"}
+		keyValues := [...]string{data.ConfigAliases[i].Name.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/config/alias%v", predicates))
+	}
+	for i := range data.ExecAliases {
+		keys := [...]string{"exec-alias-name"}
+		keyValues := [...]string{data.ExecAliases[i].Name.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/exec/alias%v", predicates))
+	}
+	for i := range data.Aliases {
+		keys := [...]string{"alias-name"}
+		keyValues := [...]string{data.Aliases[i].Name.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/aliases/alias%v", predicates))
+	}
+
+	b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

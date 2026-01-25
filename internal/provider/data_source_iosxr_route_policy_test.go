@@ -28,6 +28,19 @@ import (
 
 // End of section. //template:end imports
 
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccDataSourceIosxrRoutePolicyPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/prefix-sets/prefix-set[set-name=PREFIX_SET_1]"
+	attributes = {
+		"set-name" = "PREFIX_SET_1"
+		"rpl-prefix-set" = "prefix-set PREFIX_SET_1\n  10.1.1.0/26 ge 26,\n  10.1.2.0/26 ge 26\nend-set\n"
+	}
+}
+
+`
+
+// End of section. //template:end testPrerequisites
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 
 func TestAccDataSourceIosxrRoutePolicy(t *testing.T) {
@@ -46,21 +59,6 @@ func TestAccDataSourceIosxrRoutePolicy(t *testing.T) {
 }
 
 // End of section. //template:end testAccDataSource
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccDataSourceIosxrRoutePolicyPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/prefix-sets/prefix-set[set-name=PREFIX_SET_1]"
-	attributes = {
-		"set-name" = "PREFIX_SET_1"
-		"rpl-prefix-set" = "prefix-set PREFIX_SET_1\n  10.1.1.0/26 ge 26,\n  10.1.2.0/26 ge 26\nend-set\n"
-	}
-}
-
-`
-
-// End of section. //template:end testPrerequisites
-
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 
 func testAccDataSourceIosxrRoutePolicyConfig() string {

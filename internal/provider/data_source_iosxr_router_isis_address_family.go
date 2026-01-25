@@ -253,6 +253,42 @@ func (d *RouterISISAddressFamilyDataSource) Schema(ctx context.Context, req data
 					},
 				},
 			},
+			"redistribute_ospfv3": schema.ListNestedAttribute{
+				MarkdownDescription: "Open Shortest Path First (OSPFv3)",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"instance_id": schema.StringAttribute{
+							MarkdownDescription: "OSPFv3 process ID",
+							Computed:            true,
+						},
+						"match_internal": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF internal routes",
+							Computed:            true,
+						},
+						"match_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF external routes",
+							Computed:            true,
+						},
+						"level": schema.StringAttribute{
+							MarkdownDescription: "Redistribute routes into both levels",
+							Computed:            true,
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: "Metric for redistributed routes",
+							Computed:            true,
+						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: "Route policy reference",
+							Computed:            true,
+						},
+						"metric_type": schema.StringAttribute{
+							MarkdownDescription: "IS-IS metric type for redistributed routes",
+							Computed:            true,
+						},
+					},
+				},
+			},
 			"maximum_paths": schema.Int64Attribute{
 				MarkdownDescription: "Maximum number of active parallel paths per route",
 				Computed:            true,

@@ -42,8 +42,8 @@ func TestAccDataSourceIosxrRouterBGPVRF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "nexthop_mpls_forwarding_ibgp", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "nexthop_resolution_allow_default", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "timers_bgp_keepalive_interval", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "timers_bgp_keepalive_zero", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "timers_bgp_keepalive_zero_holdtime_zero", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "timers_bgp_holddown_zero", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "timers_bgp_holddown_zero_minimum_acceptable_zero", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "bgp_redistribute_internal", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "bgp_router_id", "22.22.22.22"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "bgp_unsafe_ebgp_policy", "true"))
@@ -98,8 +98,8 @@ func TestAccDataSourceIosxrRouterBGPVRF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.fast_fallover", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.shutdown", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.timers_keepalive_interval", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.timers_keepalive_zero", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.timers_keepalive_zero_minimum_acceptable_holdtime", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.timers_holddown_zero", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.timers_holddown_zero_minimum_acceptable_holdtime", "30"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.local_address", "192.168.1.1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.log_neighbor_changes_detail", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.log_message_in_size", "256"))
@@ -202,8 +202,8 @@ func testAccDataSourceIosxrRouterBGPVRFConfig() string {
 	config += `	nexthop_mpls_forwarding_ibgp = true` + "\n"
 	config += `	nexthop_resolution_allow_default = true` + "\n"
 	config += `	timers_bgp_keepalive_interval = 0` + "\n"
-	config += `	timers_bgp_keepalive_zero = true` + "\n"
-	config += `	timers_bgp_keepalive_zero_holdtime_zero = true` + "\n"
+	config += `	timers_bgp_holddown_zero = true` + "\n"
+	config += `	timers_bgp_holddown_zero_minimum_acceptable_zero = true` + "\n"
 	config += `	bgp_redistribute_internal = true` + "\n"
 	config += `	bgp_router_id = "22.22.22.22"` + "\n"
 	config += `	bgp_unsafe_ebgp_policy = true` + "\n"
@@ -262,8 +262,8 @@ func testAccDataSourceIosxrRouterBGPVRFConfig() string {
 	config += `		fast_fallover = true` + "\n"
 	config += `		shutdown = false` + "\n"
 	config += `		timers_keepalive_interval = 0` + "\n"
-	config += `		timers_keepalive_zero = true` + "\n"
-	config += `		timers_keepalive_zero_minimum_acceptable_holdtime = 30` + "\n"
+	config += `		timers_holddown_zero = true` + "\n"
+	config += `		timers_holddown_zero_minimum_acceptable_holdtime = 30` + "\n"
 	config += `		local_address = "192.168.1.1"` + "\n"
 	config += `		log_neighbor_changes_detail = true` + "\n"
 	config += `		log_message_in_size = 256` + "\n"

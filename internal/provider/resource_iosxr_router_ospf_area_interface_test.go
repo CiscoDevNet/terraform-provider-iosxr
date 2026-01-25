@@ -62,7 +62,7 @@ func TestAccIosxrRouterOSPFAreaInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area_interface.test", "mtu_ignore_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area_interface.test", "database_filter_all_out_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area_interface.test", "passive_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area_interface.test", "distribute_list_acl", "ACL_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area_interface.test", "distribute_list_in_acl", "ACL_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area_interface.test", "packet_size", "1400"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area_interface.test", "bfd_fast_detect", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area_interface.test", "bfd_fast_detect_strict_mode", "true"))
@@ -96,7 +96,7 @@ func TestAccIosxrRouterOSPFAreaInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area_interface.test", "prefix_sid_strict_spf_index", "300"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area_interface.test", "prefix_sid_strict_spf_index_explicit_null", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area_interface.test", "prefix_sid_strict_spf_index_n_flag_clear", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area_interface.test", "prefix_sid_algorithms.0.algorithm_number", "128"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area_interface.test", "prefix_sid_algorithms.0.number", "128"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area_interface.test", "prefix_sid_algorithms.0.index", "400"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area_interface.test", "prefix_sid_algorithms.0.index_explicit_null", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area_interface.test", "prefix_sid_algorithms.0.index_n_flag_clear", "true"))
@@ -235,7 +235,7 @@ func testAccIosxrRouterOSPFAreaInterfaceConfig_all() string {
 	config += `	mtu_ignore_enable = true` + "\n"
 	config += `	database_filter_all_out_enable = true` + "\n"
 	config += `	passive_disable = true` + "\n"
-	config += `	distribute_list_acl = "ACL_1"` + "\n"
+	config += `	distribute_list_in_acl = "ACL_1"` + "\n"
 	config += `	packet_size = 1400` + "\n"
 	config += `	bfd_fast_detect = true` + "\n"
 	config += `	bfd_fast_detect_strict_mode = true` + "\n"
@@ -278,7 +278,7 @@ func testAccIosxrRouterOSPFAreaInterfaceConfig_all() string {
 	config += `	prefix_sid_strict_spf_index_explicit_null = true` + "\n"
 	config += `	prefix_sid_strict_spf_index_n_flag_clear = true` + "\n"
 	config += `	prefix_sid_algorithms = [{` + "\n"
-	config += `		algorithm_number = 128` + "\n"
+	config += `		number = 128` + "\n"
 	config += `		index = 400` + "\n"
 	config += `		index_explicit_null = true` + "\n"
 	config += `		index_n_flag_clear = true` + "\n"

@@ -1299,6 +1299,10 @@ func (d *RouterOSPFDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Specify keychain name",
 				Computed:            true,
 			},
+			"authentication_keychain": schema.BoolAttribute{
+				MarkdownDescription: "Use keychain",
+				Computed:            true,
+			},
 			"authentication_null": schema.BoolAttribute{
 				MarkdownDescription: "Use no authentication",
 				Computed:            true,

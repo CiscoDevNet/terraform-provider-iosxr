@@ -359,15 +359,15 @@ func (r *RouterBGPNeighborGroupResource) Schema(ctx context.Context, req resourc
 					int64validator.Between(0, 65535),
 				},
 			},
-			"timers_keepalive_zero": schema.BoolAttribute{
+			"timers_holddown_zero": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Disable keepalives/hold time").String,
 				Optional:            true,
 			},
-			"timers_keepalive_zero_holdtime_zero": schema.BoolAttribute{
+			"timers_holddown_zero_minimum_acceptable_zero": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Disable keepalives/hold time").String,
 				Optional:            true,
 			},
-			"timers_keepalive_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
+			"timers_holddown_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Minimum acceptable holdtime from neighbor").AddIntegerRangeDescription(3, 65535).String,
 				Optional:            true,
 				Validators: []validator.Int64{

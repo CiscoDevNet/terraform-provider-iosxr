@@ -149,6 +149,9 @@ attributes:
   - yang_name: send-extended-community-ebgp/inheritance-disable
     exclude_test: true
     example: true
+  - yang_name: soft-reconfiguration/inbound
+    exclude_test: true
+    example: true
   - yang_name: soft-reconfiguration/inbound/always
     example: true
   - yang_name: update/out/originator-loopcheck

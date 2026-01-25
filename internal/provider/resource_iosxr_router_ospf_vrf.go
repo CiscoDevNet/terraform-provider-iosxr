@@ -1415,6 +1415,10 @@ func (r *RouterOSPFVRFResource) Schema(ctx context.Context, req resource.SchemaR
 					stringvalidator.LengthBetween(1, 32),
 				},
 			},
+			"authentication_keychain": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use keychain").String,
+				Optional:            true,
+			},
 			"authentication_null": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Use no authentication").String,
 				Optional:            true,

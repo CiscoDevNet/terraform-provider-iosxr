@@ -696,22 +696,6 @@ func renderTemplate(templatePath, outputPath string, config interface{}) {
 			}
 		}
 
-		// Append any new sections from template that weren't in the existing file
-		templateContent := string(output.Bytes())
-		templateScanner := bufio.NewScanner(strings.NewReader(templateContent))
-		for templateScanner.Scan() {
-			line := templateScanner.Text()
-			matches := beginRegex.FindStringSubmatch(line)
-			if len(matches) > 1 && matches[1] != "" {
-				sectionName := matches[1]
-				if !processedSections[sectionName] {
-					newSection := getTemplateSection(templateContent, sectionName)
-					newContent += newSection
-					processedSections[sectionName] = true
-				}
-			}
-		}
-
 		output = bytes.NewBufferString(newContent)
 	}
 	// write to output file

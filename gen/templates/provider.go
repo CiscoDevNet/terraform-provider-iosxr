@@ -753,7 +753,8 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 
 func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
-		//NewGnmiResource,
+		NewGnmiResource,
+		NewCliResource,
 		{{- range .}}
 		New{{camelCase .Name}}Resource,
 		{{- end}}

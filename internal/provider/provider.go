@@ -751,7 +751,8 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 
 func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
-		//NewGnmiResource,
+		NewGnmiResource,
+		NewCliResource,
 		NewAAAResource,
 		NewAAAAccountingResource,
 		NewAAAAuthenticationResource,
@@ -809,7 +810,6 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 		NewHWModuleProfile8000Resource,
 		NewHWModuleShutdownResource,
 		NewICMPResource,
-		NewInterfaceResource,
 		NewInterfaceBundleEtherResource,
 		NewInterfaceBundleEtherSubinterfaceResource,
 		NewInterfaceBVIResource,
@@ -1013,7 +1013,6 @@ func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.Dat
 		NewHWModuleProfile8000DataSource,
 		NewHWModuleShutdownDataSource,
 		NewICMPDataSource,
-		NewInterfaceDataSource,
 		NewInterfaceBundleEtherDataSource,
 		NewInterfaceBundleEtherSubinterfaceDataSource,
 		NewInterfaceBVIDataSource,

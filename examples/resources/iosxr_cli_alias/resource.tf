@@ -1,19 +1,19 @@
 resource "iosxr_cli_alias" "example" {
   aliases = [
     {
-      name = "show-version"
+      name    = "show-version"
       command = "show version"
     }
   ]
   exec_aliases = [
     {
-      name = "sv"
+      name    = "sv"
       command = "show version"
     }
   ]
   config_aliases = [
     {
-      name = "int-config"
+      name    = "int-config"
       command = "interface GigabitEthernet0/0/0/0"
     }
   ]

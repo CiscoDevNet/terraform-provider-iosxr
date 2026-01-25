@@ -1,198 +1,198 @@
 resource "iosxr_router_ospf" "example" {
-  process_name = "OSPF1"
-  mpls_traffic_eng_router_id_ipv4_address = "10.1.1.1"
-  mpls_traffic_eng_multicast_intact = true
+  process_name                                    = "OSPF1"
+  mpls_traffic_eng_router_id_ipv4_address         = "10.1.1.1"
+  mpls_traffic_eng_multicast_intact               = true
   mpls_traffic_eng_autoroute_exclude_route_policy = "ROUTE_POLICY_1"
-  mpls_traffic_eng_igp_intact = true
-  mpls_traffic_eng_ldp_sync_update = true
-  mpls_ldp_sync = false
-  mpls_ldp_sync_igp_shortcuts = false
-  mpls_ldp_auto_config = true
-  cost = 5000
-  cost_fallback_anomaly_delay_igp_metric_value = 500
-  cost_fallback_anomaly_delay_te_metric_value = 600
-  hello_interval = 10
-  dead_interval = 40
-  priority = 10
-  retransmit_interval = 1000
-  transmit_delay = 100
-  flood_reduction_enable = true
-  demand_circuit_enable = true
-  mtu_ignore_enable = true
-  database_filter_all_out_enable = true
-  passive_disable = true
-  log_adjacency_changes_detail = true
-  router_id = "10.11.12.13"
-  redistribute_connected = true
-  redistribute_connected_tag = 1
-  redistribute_connected_metric_type = "1"
-  redistribute_connected_route_policy = "ROUTE_POLICY_1"
-  redistribute_connected_metric = 100
-  redistribute_connected_lsa_type_summary = true
-  redistribute_connected_nssa_only = true
-  redistribute_static = true
-  redistribute_static_tag = 2
-  redistribute_static_metric_type = "1"
-  redistribute_static_route_policy = "ROUTE_POLICY_1"
-  redistribute_static_metric_use_rib_metric = true
-  redistribute_static_lsa_type_summary = true
-  redistribute_static_nssa_only = true
+  mpls_traffic_eng_igp_intact                     = true
+  mpls_traffic_eng_ldp_sync_update                = true
+  mpls_ldp_sync                                   = false
+  mpls_ldp_sync_igp_shortcuts                     = false
+  mpls_ldp_auto_config                            = true
+  cost                                            = 5000
+  cost_fallback_anomaly_delay_igp_metric_value    = 500
+  cost_fallback_anomaly_delay_te_metric_value     = 600
+  hello_interval                                  = 10
+  dead_interval                                   = 40
+  priority                                        = 10
+  retransmit_interval                             = 1000
+  transmit_delay                                  = 100
+  flood_reduction_enable                          = true
+  demand_circuit_enable                           = true
+  mtu_ignore_enable                               = true
+  database_filter_all_out_enable                  = true
+  passive_disable                                 = true
+  log_adjacency_changes_detail                    = true
+  router_id                                       = "10.11.12.13"
+  redistribute_connected                          = true
+  redistribute_connected_tag                      = 1
+  redistribute_connected_metric_type              = "1"
+  redistribute_connected_route_policy             = "ROUTE_POLICY_1"
+  redistribute_connected_metric                   = 100
+  redistribute_connected_lsa_type_summary         = true
+  redistribute_connected_nssa_only                = true
+  redistribute_static                             = true
+  redistribute_static_tag                         = 2
+  redistribute_static_metric_type                 = "1"
+  redistribute_static_route_policy                = "ROUTE_POLICY_1"
+  redistribute_static_metric_use_rib_metric       = true
+  redistribute_static_lsa_type_summary            = true
+  redistribute_static_nssa_only                   = true
   redistribute_bgp = [
     {
-      as_number = "65001"
-      tag = 3
-      metric_type = "1"
-      route_policy = "ROUTE_POLICY_1"
-      preserve_med = true
-      metric = 100
+      as_number        = "65001"
+      tag              = 3
+      metric_type      = "1"
+      route_policy     = "ROUTE_POLICY_1"
+      preserve_med     = true
+      metric           = 100
       lsa_type_summary = true
-      nssa_only = true
+      nssa_only        = true
     }
   ]
   redistribute_isis = [
     {
-      instance_name = "P1"
-      level_1_2 = true
-      tag = 3
-      metric_type = "1"
-      route_policy = "ROUTE_POLICY_1"
-      metric = 100
+      instance_name    = "P1"
+      level_1_2        = true
+      tag              = 3
+      metric_type      = "1"
+      route_policy     = "ROUTE_POLICY_1"
+      metric           = 100
       lsa_type_summary = true
-      nssa_only = true
+      nssa_only        = true
     }
   ]
   redistribute_ospf = [
     {
-      instance_name = "OSPF2"
-      tag = 4
-      metric_type = "1"
-      route_policy = "ROUTE_POLICY_1"
-      match_internal = true
-      match_external_two = true
+      instance_name           = "OSPF2"
+      tag                     = 4
+      metric_type             = "1"
+      route_policy            = "ROUTE_POLICY_1"
+      match_internal          = true
+      match_external_two      = true
       match_nssa_external_two = true
-      metric = 100
-      lsa_type_summary = true
-      nssa_only = true
+      metric                  = 100
+      lsa_type_summary        = true
+      nssa_only               = true
     }
   ]
-  distribute_list_in_acl = "ACL_1"
-  distribute_list_out_acl = "ACL_1"
-  distribute_list_out_connected_acl = "ACL_1"
-  distribute_list_out_static_acl = "ACL_1"
-  distribute_list_out_bgp_as = "65001"
-  distribute_list_out_bgp_acl = "ACL_1"
-  distribute_list_out_ospf_instance_name = "OSPF2"
-  distribute_list_out_ospf_acl = "ACL_1"
-  packet_size = 1400
-  bfd_fast_detect = true
-  bfd_fast_detect_strict_mode = true
-  bfd_minimum_interval = 300
-  bfd_multiplier = 3
-  security_ttl = true
-  security_ttl_hops = 10
-  prefix_suppression = true
-  prefix_suppression_secondary_address = true
-  default_information_originate_always = true
-  default_information_originate_metric = 100
-  default_information_originate_metric_type = 1
+  distribute_list_in_acl                     = "ACL_1"
+  distribute_list_out_acl                    = "ACL_1"
+  distribute_list_out_connected_acl          = "ACL_1"
+  distribute_list_out_static_acl             = "ACL_1"
+  distribute_list_out_bgp_as                 = "65001"
+  distribute_list_out_bgp_acl                = "ACL_1"
+  distribute_list_out_ospf_instance_name     = "OSPF2"
+  distribute_list_out_ospf_acl               = "ACL_1"
+  packet_size                                = 1400
+  bfd_fast_detect                            = true
+  bfd_fast_detect_strict_mode                = true
+  bfd_minimum_interval                       = 300
+  bfd_multiplier                             = 3
+  security_ttl                               = true
+  security_ttl_hops                          = 10
+  prefix_suppression                         = true
+  prefix_suppression_secondary_address       = true
+  default_information_originate_always       = true
+  default_information_originate_metric       = 100
+  default_information_originate_metric_type  = 1
   default_information_originate_route_policy = "ROUTE_POLICY_1"
-  default_metric = 1000
+  default_metric                             = 1000
   distance_sources = [
     {
-      address = "192.168.1.0"
+      address  = "192.168.1.0"
       wildcard = "0.0.0.255"
       distance = 100
-      acl = "ACL_1"
+      acl      = "ACL_1"
     }
   ]
-  distance_ospf_intra_area = 101
-  distance_ospf_inter_area = 102
-  distance_ospf_external = 103
-  auto_cost_reference_bandwidth = 100000
-  auto_cost_disable = false
-  ignore_lsa_mospf = true
-  capability_type7_prefer = true
-  max_metric_router_lsa = true
-  max_metric_router_lsa_include_stub = true
-  max_metric_router_lsa_summary_lsa = true
-  max_metric_router_lsa_summary_lsa_metric = 1000
-  max_metric_router_lsa_external_lsa = true
-  max_metric_router_lsa_external_lsa_metric = 2000
-  max_metric_router_lsa_on_startup_time = 300
-  max_metric_router_lsa_on_startup_include_stub = true
-  max_metric_router_lsa_on_startup_summary_lsa = true
-  max_metric_router_lsa_on_startup_summary_lsa_metric = 1000
-  max_metric_router_lsa_on_startup_external_lsa = true
-  max_metric_router_lsa_on_startup_external_lsa_metric = 2000
-  max_metric_router_lsa_on_switchover_time = 300
-  max_metric_router_lsa_on_switchover_include_stub = true
-  max_metric_router_lsa_on_switchover_summary_lsa = true
-  max_metric_router_lsa_on_switchover_summary_lsa_metric = 1000
-  max_metric_router_lsa_on_switchover_external_lsa = true
-  max_metric_router_lsa_on_switchover_external_lsa_metric = 2000
-  max_metric_router_lsa_on_proc_restart_time = 300
-  max_metric_router_lsa_on_proc_restart_include_stub = true
-  max_metric_router_lsa_on_proc_restart_summary_lsa = true
-  max_metric_router_lsa_on_proc_restart_summary_lsa_metric = 1000
-  max_metric_router_lsa_on_proc_restart_external_lsa = true
+  distance_ospf_intra_area                                  = 101
+  distance_ospf_inter_area                                  = 102
+  distance_ospf_external                                    = 103
+  auto_cost_reference_bandwidth                             = 100000
+  auto_cost_disable                                         = false
+  ignore_lsa_mospf                                          = true
+  capability_type7_prefer                                   = true
+  max_metric_router_lsa                                     = true
+  max_metric_router_lsa_include_stub                        = true
+  max_metric_router_lsa_summary_lsa                         = true
+  max_metric_router_lsa_summary_lsa_metric                  = 1000
+  max_metric_router_lsa_external_lsa                        = true
+  max_metric_router_lsa_external_lsa_metric                 = 2000
+  max_metric_router_lsa_on_startup_time                     = 300
+  max_metric_router_lsa_on_startup_include_stub             = true
+  max_metric_router_lsa_on_startup_summary_lsa              = true
+  max_metric_router_lsa_on_startup_summary_lsa_metric       = 1000
+  max_metric_router_lsa_on_startup_external_lsa             = true
+  max_metric_router_lsa_on_startup_external_lsa_metric      = 2000
+  max_metric_router_lsa_on_switchover_time                  = 300
+  max_metric_router_lsa_on_switchover_include_stub          = true
+  max_metric_router_lsa_on_switchover_summary_lsa           = true
+  max_metric_router_lsa_on_switchover_summary_lsa_metric    = 1000
+  max_metric_router_lsa_on_switchover_external_lsa          = true
+  max_metric_router_lsa_on_switchover_external_lsa_metric   = 2000
+  max_metric_router_lsa_on_proc_restart_time                = 300
+  max_metric_router_lsa_on_proc_restart_include_stub        = true
+  max_metric_router_lsa_on_proc_restart_summary_lsa         = true
+  max_metric_router_lsa_on_proc_restart_summary_lsa_metric  = 1000
+  max_metric_router_lsa_on_proc_restart_external_lsa        = true
   max_metric_router_lsa_on_proc_restart_external_lsa_metric = 2000
-  max_lsa = 20000
-  max_lsa_threshold = 75
-  max_lsa_ignore_time = 60
-  max_lsa_ignore_count = 10
-  max_lsa_reset_time = 120
-  timers_throttle_spf_initial_delay = 500
-  timers_throttle_spf_second_delay = 1000
-  timers_throttle_spf_maximum_delay = 2000
-  timers_throttle_lsa_all_initial_delay = 500
-  timers_throttle_lsa_all_minimum_delay = 1000
-  timers_throttle_lsa_all_maximum_delay = 2000
-  timers_throttle_fast_reroute = 1000
-  timers_lsa_group_pacing = 60
-  timers_lsa_min_arrival = 60
-  timers_lsa_refresh = 2100
-  timers_pacing_flood = 10
-  timers_graceful_shutdown_initial_delay = 60
-  timers_graceful_shutdown_retain_routes = 60
-  nsf_interval = 120
-  nsf_lifetime = 300
-  nsf_flush_delay_time = 60
-  nsf_ietf = true
-  nsf_ietf_strict_lsa_checking = true
-  nsf_ietf_helper_disable = true
-  address_family_ipv4_unicast = true
-  maximum_interfaces = 500
-  maximum_paths = 16
-  maximum_redistributed_prefixes = 1000
-  maximum_redistributed_prefixes_threshold = 75
-  maximum_redistributed_prefixes_warning_only = true
-  queue_limit_high = 1000
-  queue_limit_medium = 1000
-  queue_limit_low = 1000
-  queue_dispatch_incoming = 60
-  queue_dispatch_rate_limited_lsa = 60
-  queue_dispatch_flush_lsa = 120
-  queue_dispatch_spf_lsa_limit = 120
+  max_lsa                                                   = 20000
+  max_lsa_threshold                                         = 75
+  max_lsa_ignore_time                                       = 60
+  max_lsa_ignore_count                                      = 10
+  max_lsa_reset_time                                        = 120
+  timers_throttle_spf_initial_delay                         = 500
+  timers_throttle_spf_second_delay                          = 1000
+  timers_throttle_spf_maximum_delay                         = 2000
+  timers_throttle_lsa_all_initial_delay                     = 500
+  timers_throttle_lsa_all_minimum_delay                     = 1000
+  timers_throttle_lsa_all_maximum_delay                     = 2000
+  timers_throttle_fast_reroute                              = 1000
+  timers_lsa_group_pacing                                   = 60
+  timers_lsa_min_arrival                                    = 60
+  timers_lsa_refresh                                        = 2100
+  timers_pacing_flood                                       = 10
+  timers_graceful_shutdown_initial_delay                    = 60
+  timers_graceful_shutdown_retain_routes                    = 60
+  nsf_interval                                              = 120
+  nsf_lifetime                                              = 300
+  nsf_flush_delay_time                                      = 60
+  nsf_ietf                                                  = true
+  nsf_ietf_strict_lsa_checking                              = true
+  nsf_ietf_helper_disable                                   = true
+  address_family_ipv4_unicast                               = true
+  maximum_interfaces                                        = 500
+  maximum_paths                                             = 16
+  maximum_redistributed_prefixes                            = 1000
+  maximum_redistributed_prefixes_threshold                  = 75
+  maximum_redistributed_prefixes_warning_only               = true
+  queue_limit_high                                          = 1000
+  queue_limit_medium                                        = 1000
+  queue_limit_low                                           = 1000
+  queue_dispatch_incoming                                   = 60
+  queue_dispatch_rate_limited_lsa                           = 60
+  queue_dispatch_flush_lsa                                  = 120
+  queue_dispatch_spf_lsa_limit                              = 120
   summary_prefixes = [
     {
-      address = "192.168.1.0"
-      mask = "255.255.255.0"
+      address       = "192.168.1.0"
+      mask          = "255.255.255.0"
       not_advertise = true
     }
   ]
-  spf_prefix_priority_route_policy = "ROUTE_POLICY_1"
-  fast_reroute_per_prefix = true
-  fast_reroute_per_prefix_priority_limit_medium = true
-  fast_reroute_per_prefix_tiebreaker_downstream_index = 10
-  fast_reroute_per_prefix_tiebreaker_lc_disjoint_index = 20
+  spf_prefix_priority_route_policy                              = "ROUTE_POLICY_1"
+  fast_reroute_per_prefix                                       = true
+  fast_reroute_per_prefix_priority_limit_medium                 = true
+  fast_reroute_per_prefix_tiebreaker_downstream_index           = 10
+  fast_reroute_per_prefix_tiebreaker_lc_disjoint_index          = 20
   fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_index = 30
-  fast_reroute_per_prefix_tiebreaker_node_protecting_index = 40
-  fast_reroute_per_prefix_tiebreaker_primary_path_index = 50
-  fast_reroute_per_prefix_tiebreaker_secondary_path_index = 60
-  fast_reroute_per_prefix_tiebreaker_interface_disjoint_index = 70
-  fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index = 80
-  fast_reroute_per_prefix_load_sharing_disable = true
-  fast_reroute_per_prefix_srlg_protection_weighted_global = true
+  fast_reroute_per_prefix_tiebreaker_node_protecting_index      = 40
+  fast_reroute_per_prefix_tiebreaker_primary_path_index         = 50
+  fast_reroute_per_prefix_tiebreaker_secondary_path_index       = 60
+  fast_reroute_per_prefix_tiebreaker_interface_disjoint_index   = 70
+  fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index        = 80
+  fast_reroute_per_prefix_load_sharing_disable                  = true
+  fast_reroute_per_prefix_srlg_protection_weighted_global       = true
   fast_reroute_per_prefix_exclude_interfaces = [
     {
       interface_name = "GigabitEthernet0/0/0/1"
@@ -203,11 +203,11 @@ resource "iosxr_router_ospf" "example" {
       interface_name = "GigabitEthernet0/0/0/2"
     }
   ]
-  fast_reroute_per_prefix_use_candidate_only_enable = true
+  fast_reroute_per_prefix_use_candidate_only_enable  = true
   fast_reroute_per_prefix_remote_lfa_tunnel_mpls_ldp = true
-  fast_reroute_per_prefix_remote_lfa_maximum_cost = 500
-  fast_reroute_per_prefix_ti_lfa_enable = true
-  fast_reroute_per_link_priority_limit_medium = true
+  fast_reroute_per_prefix_remote_lfa_maximum_cost    = 500
+  fast_reroute_per_prefix_ti_lfa_enable              = true
+  fast_reroute_per_link_priority_limit_medium        = true
   fast_reroute_per_link_exclude_interfaces = [
     {
       interface_name = "GigabitEthernet0/0/0/3"
@@ -219,107 +219,107 @@ resource "iosxr_router_ospf" "example" {
     }
   ]
   fast_reroute_per_link_use_candidate_only_enable = true
-  loopback_stub_network_enable = true
-  link_down_fast_detect = true
-  weight = 1000
-  microloop_avoidance = true
-  microloop_avoidance_segment_routing = true
-  microloop_avoidance_rib_update_delay = 3000
-  segment_routing_mpls = true
-  segment_routing_global_block_lower_bound = 16000
-  segment_routing_global_block_upper_bound = 32000
-  segment_routing_prefix_sid_map_advertise_local = true
-  segment_routing_prefix_sid_map_receive_disable = true
-  segment_routing_sr_prefer = true
-  segment_routing_sr_prefer_prefix_list = "PREFIX_LIST_1"
-  segment_routing_forwarding_mpls = true
+  loopback_stub_network_enable                    = true
+  link_down_fast_detect                           = true
+  weight                                          = 1000
+  microloop_avoidance                             = true
+  microloop_avoidance_segment_routing             = true
+  microloop_avoidance_rib_update_delay            = 3000
+  segment_routing_mpls                            = true
+  segment_routing_global_block_lower_bound        = 16000
+  segment_routing_global_block_upper_bound        = 32000
+  segment_routing_prefix_sid_map_advertise_local  = true
+  segment_routing_prefix_sid_map_receive_disable  = true
+  segment_routing_sr_prefer                       = true
+  segment_routing_sr_prefer_prefix_list           = "PREFIX_LIST_1"
+  segment_routing_forwarding_mpls                 = true
   affinity_maps = [
     {
       affinity_name = "AFFINITY_1"
-      bit_position = 1
+      bit_position  = 1
     }
   ]
   flex_algos = [
     {
-      number = 128
-      priority = 10
+      number                      = 128
+      priority                    = 10
       microloop_avoidance_disable = true
-      prefix_metric = true
-      metric_type_delay = true
-      advertise_definition = true
-      fast_reroute_disable = true
-        affinity_exclude_any = [
-          {
-            affinity_name = "AFFINITY-1"
-          }
-        ]
-        affinity_include_any = [
-          {
-            affinity_name = "AFFINITY-1"
-          }
-        ]
-        affinity_include_all = [
-          {
-            affinity_name = "AFFINITY-1"
-          }
-        ]
-        srlg_exclude_any = [
-          {
-            srlg_name = "SRLG-EXCLUDE-1"
-          }
-        ]
+      prefix_metric               = true
+      metric_type_delay           = true
+      advertise_definition        = true
+      fast_reroute_disable        = true
+      affinity_exclude_any = [
+        {
+          affinity_name = "AFFINITY-1"
+        }
+      ]
+      affinity_include_any = [
+        {
+          affinity_name = "AFFINITY-1"
+        }
+      ]
+      affinity_include_all = [
+        {
+          affinity_name = "AFFINITY-1"
+        }
+      ]
+      srlg_exclude_any = [
+        {
+          srlg_name = "SRLG-EXCLUDE-1"
+        }
+      ]
     }
   ]
   authentication_key_encrypted = "110A1016141D4B"
   message_digest_keys = [
     {
-      key_id = 1
+      key_id        = 1
       md5_encrypted = "01100F175804"
     }
   ]
-  authentication = true
-  authentication_message_digest = true
-  authentication_keychain_name = "KEY1"
-  network_point_to_point = true
-  external_out_enable = true
-  summary_in_enable = true
-  adjacency_stagger_initial_neighbors = 10
-  adjacency_stagger_simultaneous_neighbors = 20
-  snmp_context = "CONTEXT1"
-  snmp_trap_rate_limit = 30
-  snmp_trap_rate_limit_max = 100
-  monitor_convergence = true
-  monitor_convergence_prefix_list = "PREFIX_LIST_1"
-  monitor_convergence_track_summary_routes = true
+  authentication                            = true
+  authentication_message_digest             = true
+  authentication_keychain_name              = "KEY1"
+  network_point_to_point                    = true
+  external_out_enable                       = true
+  summary_in_enable                         = true
+  adjacency_stagger_initial_neighbors       = 10
+  adjacency_stagger_simultaneous_neighbors  = 20
+  snmp_context                              = "CONTEXT1"
+  snmp_trap_rate_limit                      = 30
+  snmp_trap_rate_limit_max                  = 100
+  monitor_convergence                       = true
+  monitor_convergence_prefix_list           = "PREFIX_LIST_1"
+  monitor_convergence_track_summary_routes  = true
   monitor_convergence_track_external_routes = true
-  monitor_convergence_track_ip_frr = true
-  ucmp_prefix_list = "PREFIX_LIST_1"
+  monitor_convergence_track_ip_frr          = true
+  ucmp_prefix_list                          = "PREFIX_LIST_1"
   ucmp_exclude_interfaces = [
     {
       interface_name = "GigabitEthernet0/0/0/1"
     }
   ]
   ucmp_delay_interval = 2000
-  srlg_admin_weight = 10
+  srlg_admin_weight   = 10
   srlg_names = [
     {
-      srlg_name = "SRLG-1"
+      srlg_name    = "SRLG-1"
       admin_weight = 5
     }
   ]
-  max_external_lsa = 1000
-  max_external_lsa_threshold = 75
-  max_external_lsa_suppress_neighbor = true
-  exchange_timer = 60
-  exchange_timer_hold_time = 120
-  exchange_timer_recovery_count = 10
-  distribute_link_state = true
-  distribute_link_state_instance_id = 1
-  distribute_link_state_throttle = 60
-  distribute_link_state_excl_external = true
+  max_external_lsa                                = 1000
+  max_external_lsa_threshold                      = 75
+  max_external_lsa_suppress_neighbor              = true
+  exchange_timer                                  = 60
+  exchange_timer_hold_time                        = 120
+  exchange_timer_recovery_count                   = 10
+  distribute_link_state                           = true
+  distribute_link_state_instance_id               = 1
+  distribute_link_state_throttle                  = 60
+  distribute_link_state_excl_external             = true
   distribute_link_state_allow_prefix_route_policy = "ROUTE_POLICY_1"
-  distribute_link_state_follow_on = 1200
-  nsr = true
-  protocol_shutdown = true
-  protocol_shutdown_on_reload = true
+  distribute_link_state_follow_on                 = 1200
+  nsr                                             = true
+  protocol_shutdown                               = true
+  protocol_shutdown_on_reload                     = true
 }

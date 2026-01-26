@@ -33,7 +33,8 @@ builds:
       goarch: arm
   binary: '{{ .ProjectName }}_v{{ .Version }}'
 archives:
-- formats: zip
+- formats:
+  - zip
   name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
 checksum:
   extra_files:

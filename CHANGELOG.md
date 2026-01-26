@@ -1,4 +1,4 @@
-## 0.7.0
+## Unreleased
 
 - BREAKING CHANGE: Rename `purge_transmit_strict_strict_value` to `purge_transmit_strict_value` in `iosxr_router_isis` resource and data source
 - BREAKING CHANGE: Rename `distribute_list_acl` to `distribute_list_in_acl` in `iosxr_router_ospf_area_interface`, `iosxr_router_ospf_area`, `iosxr_router_ospf_vrf_area_interface`, `iosxr_router_ospf_vrf_area` resource and data source
